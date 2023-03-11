@@ -1,5 +1,5 @@
-name: contributor-guide
-title: Contributor Guide
+name: user-manual
+title: User Manual
 version: ~
 nav:
   - modules/ROOT/nav.adoc
