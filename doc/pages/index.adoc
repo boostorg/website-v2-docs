@@ -1,4 +1,4 @@
-= Boost Manual
+= Boost Contributor Manual
 :toc: left
 :toclevels: 3
 :idprefix:
@@ -10,4 +10,4 @@
 
 :leveloffset: +1
 
-include::boost-manual/intro.adoc[]
+include::intro.adoc[]

@@ -4,14 +4,14 @@
 
 import asciidoctor ;
 
-html boost-manual.html : doc/boost-manual.adoc ;
+html boost-contributor-manual.html : doc/pages/index.adoc ;
 
-install html_ : boost-manual.html : <location>html ;
+install html_ : boost-contributor-manual.html : <location>html ;
 
-pdf boost-manual.pdf : doc/boost-manual.adoc ;
-explicit boost-manual.pdf ;
+pdf boost-contributor-manual.pdf : doc/boost-contributor-manual.adoc ;
+explicit boost-contributor-manual.pdf ;
 
-install pdf_ : boost-manual.pdf : <location>pdf ;
+install pdf_ : boost-contributor-manual.pdf : <location>pdf ;
 explicit pdf_ ;
 
 ###############################################################################
