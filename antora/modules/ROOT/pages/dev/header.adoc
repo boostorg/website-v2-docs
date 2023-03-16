@@ -1,0 +1,97 @@
+= Boost Header policy
+:idprefix:
+:idseparator: -
+
+Header files are the place where a library comes into
+ contact with user code and other libraries. To co-exist
+ peacefully and productively, headers must be "good
+ neighbors".
+
+
+Here are the standards for boost headers. Many of these are
+ also reasonable guidelines for general use.
+
+
+* Header filenames should have a .hpp (lowercase)
+ extension.
+* Unless multiple inclusion is intended, wrap the header in
+ #ifndef guards. Use a naming convention that minimizes the
+ chance of clashes with macro names from other's code. The
+ [sample header](#SampleHeader) uses the Boost
+ convention of all uppercase letters, with the header name
+ prefixed by the namespace name, and suffixed with HPP,
+ separated by underscores.
+* Wrap the header contents in a namespace to prevent global
+ namespace pollution. The namespace approach to pollution
+ control is strongly preferred to older approaches such as
+ adding funny prefixes to global names. Libraries which are
+ designed to work well with other Boost libraries should be
+ placed in namespace boost.
+* Make sure that a translation unit consisting of just the
+ contents of the header file will compile successfully.
+* Place the header file in a sub-directory to prevent
+ conflict with identically named header files in other
+ libraries. The parent directory is added to the compiler's
+ include search path. Then both your code and user code
+ specifies the sub-directory in #include directives.
+ Thus the header [sample header](#SampleHeader)
+ would be included by #include
+ <boost/furball.hpp>. (Note, including from current
+ file directory using #include "furball.hpp" syntax
+ is discouraged .)
+* The preferred ordering for class definitions is public
+ members, protected members, and finally private members.
+* Include the boost/config.hpp [configuration
+ header](/doc/libs/release/libs/config/config.htm) if there is a need to deal with compiler or
+ platform configuration issues.
+
+
+== Sample Header
+
+```
+
+//  Boost general library furball.hpp header file ---------------------------//
+
+  < *html) >
+
+//  See https://www.boost.org/ for latest version.
+
+#ifndef BOOST\_FURBALL\_HPP
+#define BOOST\_FURBALL\_HPP
+
+namespace boost {
+
+//  Furball class declaration  -----------------------------------------------//
+
+  class furball
+  {
+    public: 
+      void throw\_up();
+    private:
+      int whatever;
+  };  // furball
+
+} // namespace
+
+#endif  // include guard
+
+```
+
+Coding Style
+------------
+
+
+The alert reader will have noticed that the [sample header](#SampleHeader) employs a certain coding
+ style for indentation, positioning braces, commenting ending
+ braces, and similar formatting issues. These stylistic issues
+ are viewed as personal preferences and are not part of the
+ Boost Header Policy.
+
+
+
+
+
+
+
+
+

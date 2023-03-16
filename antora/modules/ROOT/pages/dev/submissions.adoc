@@ -1,0 +1,330 @@
+= Boost Library Submission Process
+:idprefix:
+:idseparator: -
+
+
+This page describes the process a library developer goes
+ through to get a library accepted by Boost.
+
+
+See the [Boost Library
+ Requirements and Guidelines](requirements.html) page for issues of content.
+
+
+## Steps for getting a library accepted by Boost:
+
+
+* [1. Learn about Boost](#Learn)
+* [2. Determine interest](#interest)
+* [3. Start Development](#Development)
+* [4. Refinement](#Refinement)
+* [5. Getting seconded for review](#Seconded)
+* [6. Seek a Review Manager](#Seeking)
+* [7. Formal Review](#Review)
+* [8. Web site posting](#SitePosting)
+* [9. People page](#People)
+* [10. Lifecycle](#Lifecycle)
+
+
+Learn about Boost
+-----------------
+
+
+Follow posts on the [main
+ developers mailing list](/community/groups.html#main) for a while, or look through the
+ [archives](/community/groups.html#archive). Explore
+ the [web site](/). Learn the [Requirements](requirements.html). Read the rest of this
+ page to learn about the process. Search the web to get an idea
+ of the commitment required to get a library into Boost.
+ 
+
+
+There is a culture associated with Boost, aimed at
+ encouraging high quality libraries by a process of discussion
+ and refinement. Some libraries get past community review
+ in less than two years from first concept, but most take longer,
+ sometimes a lot longer. Five to ten years to get a library past
+ review and into Boost is not unheard of, and you should prepare
+ yourself for the personal investment required.
+
+
+Determine interest
+------------------
+
+
+While participation in reviews for other submissions is not a
+ prerequisite for submitting a library to Boost, it is highly
+ recommended; it will acquaint you with the process and the
+ emotional demands of a formal review. There's nothing that quite
+ deflates the ego like having brilliant members of the C++
+ community critiquing your work, but, alas, it's worth it!
+
+
+Potential library submitters should be careful to
+ research the prior art before beginning to design a
+ new library. Unfortunately, now and then folks arrive at Boost
+ with a new library into which they have invested many hours, only
+ to find that Boost already has that functionality, and sometimes
+ has had it for years. Candidates should also research libraries being
+ developed by others intended for Boost - if you have an itch
+ to scratch, often so have had others and collaboration
+ developing their library is usually considerably more efficient
+ than going at it alone.
+
+
+Potential library submitters should also be careful to
+ publicise, canvas for, and gauge interest in their library,
+ ideally before beginning it, but certainly before submitting it
+ for review. Even a superbly designed library can fail review if
+ there isn't enough interest in the subject matter; We can only
+ review libraries with enough appeal to form a viable peer
+ review. Ensuring that enough people are interested in your
+ potential library goes a long way to ensure that.
+
+
+There are many places to publicise and canvas for a library.
+ The Boost developers [mailing
+ list](/community/groups.html) ought to be your first stop in gauging interest
+ in a possible new C++ library. Be prepared to pivot your design
+ and focus until your proposed library finds traction. Other
+ places useful for gauging interest in a library might be [Reddit/r/cpp](https://www.reddit.com/r/cpp/).
+
+
+A message to the Boost developers mailing list
+ might be as simple as "Is there any interest in a
+ library which solves Travelling Salesperson problems in linear
+ time?"
+
+
+A bit of further description or snippet of code may be
+ helpful. By the way, the preferred format for messages on the
+ mailing list is plain text; not rich text, HTML, etc.
+
+
+Avoid posting lengthy descriptions, documentation,
+ or code to the mailing list, and, please, no attachments.
+ The best place to provide lengthy material is via. a web link.
+ Project hosting services such as sourceforge, github, google
+ code, and bitbucket serve well for this purpose.
+
+
+Start Development
+-----------------
+
+
+If response to an initial query indicates interest, then
+ by all means make your library publicly available if you haven't
+ already done so.
+
+
+Please commit your code to a version control system such as
+ Git, and make your documentation available in HTML format on
+ a public website such as Github. An issue tracker such as the one
+ provided by Github is also highly recommended.
+
+
+Your library should contain material as if it were on the
+ boost.org web site. The closer your library reflects the
+ final directory structure and format of the web site, the
+ better. This makes it possible for reviewers to simply copy
+ your code into the Boost distribution for testing.
+
+
+Please verify that your library compiles and runs under
+ at least two compilers. This flushes out obvious portability
+ problems.
+
+
+It is recommended that you release your code under the Boost
+ Software License; see the [Requirements](requirements.html) page for more
+ information.
+
+
+Refinement
+----------
+
+
+Discuss, refine, rewrite. Repeat until satisfied.
+
+
+The exact details of this process varies a lot. Usually it
+ is public, on the mailing list, but frequently discussion
+ happens in private emails. For some libraries the process is
+ over quickly, but for others it goes on for months. It's
+ often challenging, and sometimes veers into completely
+ unexpected directions.
+
+
+The [archive](/community/groups.html#archive) of
+ past messages is one way to see how this process worked for
+ other Boost libraries.
+
+
+To get an idea of best practices with some samples of script
+ and code in existing Boost libraries, see the
+ [Best Practices Handbook](https://svn.boost.org/trac/boost/wiki/BestPracticeHandbook) on the Boost wiki.
+
+
+Getting seconded for review
+---------------------------
+
+
+When you feel that your library is ready for entry into Boost,
+ you need to find at least one member (but preferably several) of
+ the Boost community who is willing to publicly endorse your
+ library for entry into Boost. A simple method of achieving this
+ is to post to [the Boost
+ developers mailing list](/community/groups.html) a short description of your
+ library, links to its github and documentation, and a request for
+ endorsements.
+
+
+It is expected that those who endorse a library for review
+ will have performed at least a cursory check of the library's
+ suitability for Boost in terms of documentation, fit with
+ the rest of Boost and usefulness. A public endorsement of a
+ library for review means that from an initial glance, they
+ believe that the library has a reasonable chance to be accepted
+ during a formal review. The expectation is that these endorsers
+ will themselves review of the library during formal review
+ period, though this is not binding.
+
+
+Once you have a list of people who have publicly endorsed
+ your library for review, email [the Review Wizards](/community/reviews.html#Wizard)
+ to request that your library be added to [the review queue](/community/review_schedule.html)
+ where the following information will be shown:
+
+
+* Submission
+* Submitter
+* Links to Source (GitHub), Documentation (HTML website)
+ and any Incubator entry
+* Names of members who endorse this submission for review
+* Review Manager
+* Review Dates
+
+
+Seek a Review Manager
+---------------------
+
+
+In order to schedule a formal review, the author must find a
+ capable volunteer to manage the review. This should be someone
+ with knowledge of the library domain, and experience with the
+ review process. See [Formal
+ Review Process](/community/reviews.html) for the responsibilities of the review
+ manager.
+
+
+Authors can find community members interested in managing
+ reviews through discussion of the library on the developer
+ list. If no one steps forward to volunteer to manage the
+ review, it is appropriate to contact an experienced Boost
+ member who showed interest in the library. Be considerate that
+ managing a review is a serious commitment; for this reason,
+ it's better to contact the member off-list.
+
+
+If you cannot find a review manager after 3 weeks using the
+ means above, and your submission is targeting eventual
+ standardization, there is a list of Boost regulars who are also
+ WG21 committee members who have volunteered to act as review
+ managers in such cases. Please try them in the order listed.
+ They are: Zach Laine, Micheal Caisse, Matt Calabrese, Edward
+ Diener, Louis Dionne, Vinnie Falco, Glen Fernandes, and David
+ Sankel.
+
+
+Once a potential review manager has been identified, [contact the
+ review wizards](/community/reviews.html#Wizard) for approval. The wizards approve review
+ managers based on their level of participation in the Boost
+ community.
+
+
+The review wizards will coordinate with both the author and
+ review manager to schedule a date convenient for both.
+
+
+See [Formal Review
+ Process](/community/reviews.html) for details.
+
+
+Formal Review
+-------------
+
+
+Before your formal review begins, double-, triple-, and
+ quadruple-check your library. Verify that every code example
+ works, that all unit tests pass on at least two compilers on at
+ least two major operating systems, and run your documentation
+ through a spelling and grammar checker.
+
+
+Please do not modify your library on its master branch
+ during a review. Instead, modify a separate develop branch in
+ response to feedback and reviews. For bigger ticket items of
+ work, open issues on your issue tracker so interested people can
+ track the fixing of specific issues raised.
+
+
+The review manager will consider all the reviews made by
+ members of the community and arrive at a decision on
+ whether your library is rejected, conditionally accepted or
+ unconditionally accepted. They will post a report summarising
+ the decision publicly. If conditions are attached to
+ acceptance, you will need to implement those conditions or
+ else undergo an additional formal review.
+
+
+Boost web site posting
+----------------------
+
+
+Once an accepted library is ready for inclusion on the Boost
+ web site, the submitter is typically given Boost repository
+ write access, and expected to check-in and maintain the library
+ there. Contact the moderators if you need write access or
+ direct use of the repository isn't possible for you.
+
+
+People page
+-----------
+
+
+If the boost.org web site doesn't already have your capsule
+ biography and picture (optional, with not-too-serious pictures
+ preferred!), please send them to the Boost webmaster. It is up
+ to you as to whether or not the biography includes your email
+ address or other contact information. The preferred picture
+ format is .jpg, but other common formats are acceptable. The
+ preferred image size is 500x375 but the webmaster has photo
+ editing software and can do the image preparation if
+ necessary.
+
+
+Lifecycle
+---------
+
+
+Libraries are software; they lose their value over time if
+ not maintained. Postings on the Boost developers or users
+ mailing lists can alert you to potential maintenance needs;
+ please plan to maintain your library over time. If you no
+ longer can or wish to maintain your library, please post a
+ message on the Boost developers mailing list asking for a new
+ maintainer to volunteer and then spend the time to help them
+ take over.
+
+
+Orphaned libraries will be put in the care of the [Community
+ Maintenance Team](https://svn.boost.org/trac/boost/wiki/CommunityMaintenance).
+
+
+
+
+
+
+
+
+

@@ -7,7 +7,4 @@
 :source-language: c++
 :nofooter:
 :sectlinks:
-
-:leveloffset: +1
-
-include::intro.adoc[]
+:doctype: article

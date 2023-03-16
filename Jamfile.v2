@@ -4,18 +4,9 @@
 
 import asciidoctor ;
 
-html boost-contributor-manual.html : doc/pages/index.adoc ;
+html index.html
+    : antora/modules/ROOT/pages/index.adoc
+      #[ glob antora/modules/ROOT/pages/*.adoc ]
+    ;
 
-install html_ : boost-contributor-manual.html : <location>html ;
-
-pdf boost-contributor-manual.pdf : doc/boost-contributor-manual.adoc ;
-explicit boost-contributor-manual.pdf ;
-
-install pdf_ : boost-contributor-manual.pdf : <location>pdf ;
-explicit pdf_ ;
-
-###############################################################################
-alias boostdoc ;
-explicit boostdoc ;
-alias boostrelease : html_ ;
-explicit boostrelease ;
+install html_ : index.html : <location>bin ;

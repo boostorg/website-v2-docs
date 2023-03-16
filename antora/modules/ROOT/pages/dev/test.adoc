@@ -1,0 +1,116 @@
+= Boost Test Policies and Protocols
+:idprefix:
+:idseparator: -
+
+The Boost libraries are intended to be both reliable and
+ portable. Every experienced programmer knows that means each
+ library must be tested against a suitable number of test cases,
+ on a wide range of platforms, and then tested again (regression
+ tested) every time a change is made and before every
+ release.
+
+
+"Quality assurance based on a wide range of targeted tests"
+ as one of the key answers to C.A.R Hoare's question "How did
+ software get so reliable without proof."
+
+
+Regression test
+---------------
+
+
+Boost uses an automatic [regression
+ test suite](/doc/tools/regression/index.html) which generates HTML [compiler status
+ tables](/development/testing.html#RegressionTesting).
+
+
+Test Policy
+-----------
+
+
+### Required
+
+
+* Every Boost library should supply one or more suitable
+ test programs to be exercised by the Boost [regression
+ test suite](/doc/tools/regression/index.html). In addition to the usual compile-link-run
+ tests expecting successful completion, compile-only or
+ compile-and-link-only tests may be performed, and success for
+ the test may be defined as failure of the steps.
+* Test program execution must report errors by returning a
+ non-zero value. They may also write to stdout or stderr, but
+ that output should be relatively brief. Regardless of other
+ output, a non-zero return value is the only way the
+ regression test framework will recognize an error has
+ occurred. Note that test programs to be included in the
+ status tables must compile, link, and run quickly since the
+ tests are executed many, many, times.
+* Libraries with time consuming tests should be divided
+ into a fast-execution basic test program for the status
+ tables, and a separate full-coverage test program for
+ exhaustive test cases. The basic test should concentrate on
+ compilation issues so that the status tables accurately
+ reflect the library's likelihood of correct compilation on a
+ platform.
+* If for any reason the usual test policies do not apply to
+ a particular library, an alternate test strategy must be
+ implemented.
+* A [Jamfile](/doc/tools/regression/index.html#Adding_new_test) to drive the regression tests for the
+ library.
+
+
+### Optional (but highly recommended)
+
+
+The [Boost
+ Test Library](/doc/libs/release/libs/test/index.html) provides many useful components which ease the
+ construction of test programs.
+
+
+* Use the library's [Test Tools](/doc/libs/release/libs/test/doc/html/boost_test/testing_tools.html) for the construction of simple test programs
+ that do not need much structure.
+* Use the library's [Unit
+ Test Framework](/doc/libs/release/libs/test/doc/html/boost_test/tests_organization.html) for the construction of more complex test
+ programs that need to be structured into individual tests and
+ test suites.
+
+
+Suggested Protocol for Fixing Bugs or Adding Features.
+------------------------------------------------------
+
+
+* First, add regression test cases that detects the bug or
+ tests the feature. Sometimes adding one case suggests similar
+ untested cases, and they are added too.
+* Second, for bugs, run the regression test and verify that
+ the bug is now detected.
+* Third, then, and only then, fix the bug or add the
+ feature.
+* Finally, rerun the full regression tests - sometimes the
+ change breaks something else.
+
+
+History
+-------
+
+
+[See Regression Test History](/doc/tools/regression/index.html#History).
+
+
+Acknowledgements
+----------------
+
+
+Written by Beman Dawes. Jens Maurer, Paul Moore, Gary Powell
+ and Jeremy Siek contributed helpful suggestions.
+
+---
+
+
+
+
+
+
+
+
+

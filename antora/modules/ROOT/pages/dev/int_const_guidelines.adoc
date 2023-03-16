@@ -1,0 +1,391 @@
+= Coding Guidelines for Integral Constant Expressions
+:idprefix:
+:idseparator: -
+
+== What is an Integral Constant Expression?
+
+Integral Constant Expressions are used in many places in
+ C++; as array bounds, as bit-field lengths, as enumerator
+ initialisers, and as arguments to non-type template parameters.
+ However many compilers have problems handling integral constant
+ expressions; as a result of this, programming using non-type
+ template parameters in particular can be fraught with
+ difficulty, often leading to the incorrect assumption that
+ non-type template parameters are unsupported by a particular
+ compiler. This short article is designed to provide a set of
+ guidelines and workarounds that, if followed, will allow
+ integral constant expressions to be used in a manner portable
+ to all the compilers currently supported by boost. Although
+ this article is mainly targeted at boost library authors, it
+ may also be useful for users who want to understand why boost
+ code is written in a particular way, or who want to write
+ portable code themselves.
+
+
+
+Integral constant expressions are described in section 5.19
+ of the standard, and are sometimes referred to as "compile time
+ constants". An integral constant expression can be one of the
+ following:
+
+
+1. A literal integral value, for example `0u` or
+ `3L`.
+2. An enumerator value.
+3. Global integral constants, for example:
+    ```
+    const int my\_INTEGRAL\_CONSTANT = 3;
+    ```
+4. Static member constants, for example:
+    ```
+    struct myclass
+    { static const int value = 0; };
+    ```
+5. Member enumerator values, for example:
+    ```
+    struct myclass
+    { enum{ value = 0 }; };
+    ```
+6. Non-type template parameters of integral or enumerator
+type.
+7. The result of a `sizeof` expression, for
+example:
+    ```
+    sizeof(foo(a, b, c))
+    ```
+8. The result of a `static_cast`, where the
+target type is an integral or enumerator type, and the
+argument is either another integral constant expression, or a
+floating-point literal.
+9. The result of applying a binary operator to two integral
+constant expressions:
+    ```
+    INTEGRAL\_CONSTANT1 op INTEGRAL\_CONSTANT2
+    ```
+provided that the operator is not an assignment operator, or comma
+operator.
+10. The result of applying a unary operator to an integral
+ constant expression:
+    ```
+    op INTEGRAL\_CONSTANT1
+    ```
+provided that the operator is not the increment or decrement operator.
+
+
+== Coding Guidelines
+
+
+The following guidelines are declared in no particular order
+ (in other words you need to obey all of them - sorry!), and may
+ also be incomplete, more guidelines may be added as compilers
+ change and/or more problems are encountered.
+
+
+### When declaring constants that are class members always use
+ the macro `BOOST_STATIC_CONSTANT.`
+```
+
+template <class T>
+struct myclass
+{
+   BOOST\_STATIC\_CONSTANT(int, value = sizeof(T));
+};
+
+```
+
+Rationale: not all compilers support inline initialisation
+ of member constants, others treat member enumerators in strange
+ ways (they're not always treated as integral constant
+ expressions). The BOOST\_STATIC\_CONSTANT macro uses the most
+ appropriate method for the compiler in question.
+
+
+### Don't declare integral constant expressions whose type is
+ wider than int.
+
+
+Rationale: while in theory all integral types are usable in
+ integral constant expressions, in practice many compilers limit
+ integral constant expressions to types no wider than
+ `int`.
+
+
+### Don't use logical operators in integral constant
+ expressions; use template meta-programming instead.
+
+
+The header `<boost/type_traits/ice.hpp>`
+ contains a number of workaround templates, that fulfil the role
+ of logical operators, for example instead of:
+```
+
+INTEGRAL\_CONSTANT1 || INTEGRAL\_CONSTANT2
+
+```
+
+Use:
+```
+
+::boost::type\_traits::ice\_or<INTEGRAL\_CONSTANT1,INTEGRAL\_CONSTANT2>::value
+
+```
+
+Rationale: A number of compilers (particularly the Borland
+ and Microsoft compilers), tend to not to recognise integral
+ constant expressions involving logical operators as genuine
+ integral constant expressions. The problem generally only shows
+ up when the integral constant expression is nested deep inside
+ template code, and is hard to reproduce and diagnose.
+
+
+### Don't use any operators in an integral constant expression
+ used as a non-type template parameter
+
+
+Rather than:
+```
+
+typedef myclass<INTEGRAL\_CONSTANT1 ==
+              INTEGRAL\_CONSTANT2> mytypedef;
+
+```
+
+Use:
+```
+
+typedef myclass< some\_symbol>
+              mytypedef;
+
+```
+
+Where `some_symbol` is the symbolic name of a an
+ integral constant expression whose value is
+ `(INTEGRAL_CONSTANT1 == INTEGRAL_CONSTANT2).`
+
+
+Rationale: the older EDG based compilers (some of which are
+ used in the most recent version of that platform's compiler),
+ don't recognise expressions containing operators as non-type
+ template parameters, even though such expressions can be used
+ as integral constant expressions elsewhere.
+
+
+### Always use a fully qualified name to refer to an integral
+ constant expression.
+
+
+For example:
+```
+
+typedef myclass< ::boost::is\_integral<some\_type>::value> mytypedef;
+
+```
+
+Rationale: at least one compiler (Borland's), doesn't
+ recognise the name of a constant as an integral constant
+ expression unless the name is fully qualified (which is to say
+ it starts with `::`).
+
+
+### Always leave a space after a '`<`' and before
+ '`::`'
+
+
+For example:
+```
+
+typedef myclass< ::boost::is\_integral<some\_type>::value> mytypedef;
+                ^
+                ensure there is space here!
+
+```
+
+Rationale: `<:` is a legal digraph in it's own
+ right, so `<::` is interpreted as the same as
+ `[:`.
+
+
+### Don't use local names as integral constant expressions
+
+
+Example:
+```
+
+template <class T>
+struct foobar
+{
+   BOOST\_STATIC\_CONSTANT(int, temp = computed\_value);
+   typedef myclass<temp> mytypedef;  // error
+};
+
+```
+
+Rationale: At least one compiler (Borland's) doesn't accept
+ this.
+
+
+Although it is possible to fix this by using:
+```
+
+template <class T>
+struct foobar
+{
+   BOOST\_STATIC\_CONSTANT(int, temp = computed\_value);
+   typedef foobar self\_type;
+   typedef myclass<(self\_type::temp)> mytypedef;  // OK
+};
+
+```
+
+This breaks at least one other compiler (VC6), it is better
+ to move the integral constant expression computation out into a
+ separate traits class:
+```
+
+template <class T>
+struct foobar\_helper
+{
+   BOOST\_STATIC\_CONSTANT(int, value = computed\_value);
+};
+
+template <class T>
+struct foobar
+{
+   typedef myclass< ::foobar\_helper<T>::value> mytypedef;  // OK
+};
+
+```
+
+### Don't use dependent default parameters for non-type
+ template parameters.
+
+
+For example:
+```
+
+template <class T, int I = ::boost::is\_integral<T>::value>  // Error can't deduce value of I in some cases.
+struct foobar;
+
+```
+
+Rationale: this kind of usage fails for Borland C++. Note
+ that this is only an issue where the default value is dependent
+ upon a previous template parameter, for example the following
+ is fine:
+```
+
+template <class T, int I = 3>  // OK, default value is not dependent
+struct foobar;
+
+```
+
+== Unresolved Issues
+
+The following issues are either unresolved or have fixes
+ that are compiler specific, and/or break one or more of the
+ coding guidelines.
+
+
+### Be careful of numeric\_limits
+
+
+There are three issues here:
+
+
+1. The header <limits> may be absent - it is
+ recommended that you never include <limits> directly
+ but use <boost/pending/limits.hpp> instead. This header
+ includes the "real" <limits> header if it is available,
+ otherwise it supplies it's own std::numeric\_limits
+ definition. Boost also defines the macro BOOST\_NO\_LIMITS if
+ <limits> is absent.
+2. The implementation of std::numeric\_limits may be defined
+ in such a way that its static-const members may not be usable
+ as integral constant expressions. This contradicts the
+ standard but seems to be a bug that affects at least two
+ standard library vendors; boost defines
+ BOOST\_NO\_LIMITS\_COMPILE\_TIME\_CONSTANTS in
+ <boost/config.hpp> when this is the case.
+3. There is a strange bug in VC6, where the members of
+ std::numeric\_limits can be "prematurely evaluated" in
+ template code, for example:
+```
+
+template <class T>
+struct limits\_test
+{
+   BOOST\_STATIC\_ASSERT(::std::numeric\_limits<T>::is\_specialized);
+};
+
+```
+
+This code fails to compile with VC6 even though no instances
+ of the template are ever created; for some bizarre reason
+ `::std::numeric_limits<T>::is_specialized`
+ always evaluates to false, irrespective of what the template
+ parameter T is. The problem seems to be confined to expressions
+ which depend on std::numeric\_limts: for example if you replace
+ `::std::numeric_limits<T>::is_specialized`
+ with `::boost::is_arithmetic<T>::value`, then
+ everything is fine. The following workaround also works but
+ conflicts with the coding guidelines:
+```
+
+template <class T>
+struct limits\_test
+{
+   BOOST\_STATIC\_CONSTANT(bool, check = ::std::numeric\_limits<T>::is\_specialized);
+   BOOST\_STATIC\_ASSERT(check);
+};
+
+```
+
+So it is probably best to resort to something like this:
+```
+
+template <class T>
+struct limits\_test
+{
+#ifdef BOOST\_MSVC
+   BOOST\_STATIC\_CONSTANT(bool, check = ::std::numeric\_limits<T>::is\_specialized);
+   BOOST\_STATIC\_ASSERT(check);
+#else
+   BOOST\_STATIC\_ASSERT(::std::numeric\_limits<T>::is\_specialized);
+#endif
+};
+
+```
+
+### Be careful how you use the sizeof operator
+
+
+As far as I can tell, all compilers treat sizeof expressions
+ correctly when the argument is the name of a type (or a
+ template-id), however problems can occur if:
+
+
+1. The argument is the name of a member-variable, or a local
+ variable (code may not compile with VC6).
+2. The argument is an expression which involves the creation
+ of a temporary (code will not compile with Borland C++).
+3. The argument is an expression involving an overloaded
+ function call (code compiles but the result is a garbage
+ value with Metroworks C++).
+
+
+### Don't use boost::is\_convertible unless you have to
+
+
+Since is\_convertible is implemented in terms of the sizeof
+ operator, it consistently gives the wrong value when used with
+ the Metroworks compiler, and may not compile with the Borland's
+ compiler (depending upon the template arguments used).
+
+
+
+
+
+
+
+
+

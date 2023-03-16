@@ -1,0 +1,49 @@
+= Bugs
+:idprefix:
+:idseparator: -
+:leveloffset: +1
+
+
+
+
+
+Reporting Boost bugs
+====================
+
+
+1. If you know where to look in the source code, make sure
+ the bug isn't already fixed in the latest sources. The most
+ recent version of everything on the Boost web site is
+ available from the [git repositories](https://github.com/boostorg/wiki/wiki/Getting-Started).
+2. [Search the issues](https://github.com/boostorg/)
+ on GitHub to make sure we don't already know about the bug.
+ If we do, you can add further information to an existing bug ticket.
+3. [Create a new issues](https://github.com/boostorg/)
+ in the repository of the particular library of your interest.
+
+
+If possible,
+
+	* Describe the problem carefully, including steps required to
+	 reproduce it by a library maintainers.
+	* Attach a *minimal* and *complete*
+	 program that reproduces the problem. Aside from helping
+	 the library maintainer fix the problem, you may find
+	 the bug in your own code, which can avoid a costly
+	 delay waiting for a response.
+
+If You Have a Fix for the Bug
+-----------------------------
+
+After completing the steps above, please submit a patch
+ or a pull request as described in
+ [the wiki](https://svn.boost.org/trac/boost/wiki/StartModPatchAndPullReq "Getting Started with Patches and Pull Requests").
+
+
+
+
+
+Copyright [Aleksey
+ Gurtovoy](/users/people/aleksey_gurtovoy.html) 2002
+
+

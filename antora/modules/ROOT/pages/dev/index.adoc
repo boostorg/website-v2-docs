@@ -1,0 +1,66 @@
+= Boost Development
+:idprefix:
+:idseparator: -
+:leveloffset: +1
+
+/\*<![CDATA[\*/
+ #content .section .openhub > div {
+ background: transparent !important;
+ }
+ #content .section .openhub table {
+ background: transparent !important;
+ clear: none !important;
+ border-spacing: 0em !important;
+ margin-bottom: 0.25em !important;
+ }
+ #content .section .openhub table tr td {
+ border: none !important;
+ }
+ #content .section #openhub-cost table tr td {
+ background: transparent !important;
+ border-bottom: 1px #DDD solid !important;
+ }
+ #content .section .openhub img {
+ border: none !important;
+ padding: 0em !important;
+ }
+ /\*]]>\*/
+ 
+
+
+Development
+===========
+
+Boost sources are on
+ [GitHub](https://github.com/boostorg).
+
+
+Boost developers constitute a wide array of people
+ throughout much of the world. Over the years much work has gone
+ into the quantity and quality of the C++ libraries and tools
+ that make up Boost. There are many ways to become part of the
+ Boost developer community, all starting with getting involved
+ in the development discussion. But if you are looking for an
+ "easy" place to get your feet wet is to volunteer [testing](testing.html) resources. The wonderful people at
+ [Black Duck
+ Open Hub](http://www.openhub.net/) provide a peek into what goes into Boost:
+
+
+* 
+* 
+
+Release Schedule
+================
+
+Below is a community maintained calendar of Boost related
+ events. The release managers try to keep the release related
+ portion of the calendar up to date.
+
+
+
+
+
+
+
+
+

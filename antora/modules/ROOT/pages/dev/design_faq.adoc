@@ -1,0 +1,52 @@
+= Boost Website Design FAQ
+:idprefix:
+:idseparator: -
+:leveloffset: +1
+
+
+* Links
+	+ [Why are links
+	 "underlined"?](#faq-links-1)
+	+ [Why are not "standard"
+	 underlines used for links?](#faq-links-2)
+	+ [Why are not all links
+	 underlined?](#faq-links-3)
+
+
+Why are links
+ "underlined"? The website follows some simple design
+ principles to make the site as widely accessible as practical.
+ The style for links within document text are underlined to have
+ a non-color, clear, visual indicator that it is a link.
+ Underlines provide the most familiar indicator to people
+ because of the historical default usage by web browsers.
+
+
+Why are not
+ "standard" underlines used for links? The use of the
+ bottom border provides for considerable more flexibility in
+ style than the underline font style. It is important to have
+ such freedom to be able to indicate the various states links
+ can be in. In the case of the Boost design the bottom border
+ underline is used to represent the difference between internal
+ vs. external links, and between visited and unvisited links.
+ All of which are orthogonal to the text being a link.
+
+
+Why are not all
+ links underlined? When it is clear from the context that
+ the text is a link the underline is ommited to reduce visual
+ clutter, as this is also within a context under which the text
+ is already a collection of links. For such situations the
+ design uses a link box context. All such links are placed
+ within a light grey bordered box to indicate that the items
+ within it are links.
+
+
+
+
+
+
+
+
+
