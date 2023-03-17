@@ -1,26 +1,65 @@
-* xref:intro.adoc[Introduction]
-* Development
-** xref:dev/borland_cpp.adoc[]
-** xref:dev/bugs.adoc[]
-** xref:dev/design_faq.adoc[]
-** xref:dev/exemplar.adoc[]
-** xref:dev/header.adoc[]
-** xref:dev/index.adoc[]
-** xref:dev/int_const_guidelines.adoc[]
-** xref:dev/library_metadata.adoc[]
-** xref:dev/report-apr-2006.adoc[]
-** xref:dev/report-dec-2009.adoc[]
-** xref:dev/report-jan-2006.adoc[]
-** xref:dev/report-jun-2009.adoc[]
-** xref:dev/report-may-2008.adoc[]
-** xref:dev/report-nov-2007.adoc[]
-** xref:dev/report-nov-2008.adoc[]
-** xref:dev/report-sep-2007.adoc[]
-** xref:dev/requirements.adoc[]
-** xref:dev/reuse.adoc[]
-** xref:dev/running_regression_tests.adoc[]
-** xref:dev/separate_compilation.adoc[]
-** xref:dev/submissions.adoc[]
-** xref:dev/test.adoc[]
-** xref:dev/testing.adoc[]
-** xref:dev/website_updating.adoc[]
+* xref:docs.adoc[]
+** Legacy Toolchain
+** Antora Toolchain
+*** Enabling a Repo
+*** The Playbook
+*** Using `bdoc`
+*** UI Bundles
+** Doc Versioning
+* Possible Topics
+** Source Control
+*** Using Git
+*** Using GitHub
+** Proposing a New Library
+** Writing a Review
+** Managing a Review
+** Maintaining a Library
+** Compiler Workarounds
+** Writing Unit Tests
+** Writing Documentation
+** Continuous Integration
+** Code Coverage
+** The Superproject
+** Master and Develop
+** Layout of a Repository
+** Library Metadata
+** Header-only Libraries
+** Source Code Conventions
+** Submitting Pull Requests
+** Managing Dependencies
+** Copyright Attribution
+** Using External Code
+** Handling Old Compilers
+** Deprecating Interfaces
+** Abandoned Libraries
+** Backward Compatibility
+** Collective Decision-Making
+** The Release Process
+** Release Notes
+** Packaging Boost
+* Legacy Content
+** xref:intro.adoc[Introduction]
+** xref:prev/borland_cpp.adoc[]
+** xref:prev/bugs.adoc[]
+** xref:prev/design_faq.adoc[]
+** xref:prev/exemplar.adoc[]
+** xref:prev/header.adoc[]
+** xref:prev/index.adoc[]
+** xref:prev/int_const_guidelines.adoc[]
+** xref:prev/library_metadata.adoc[]
+** xref:prev/report-apr-2006.adoc[]
+** xref:prev/report-dec-2009.adoc[]
+** xref:prev/report-jan-2006.adoc[]
+** xref:prev/report-jun-2009.adoc[]
+** xref:prev/report-may-2008.adoc[]
+** xref:prev/report-nov-2007.adoc[]
+** xref:prev/report-nov-2008.adoc[]
+** xref:prev/report-sep-2007.adoc[]
+** xref:prev/requirements.adoc[]
+** xref:prev/reuse.adoc[]
+** xref:prev/running_regression_tests.adoc[]
+** xref:prev/separate_compilation.adoc[]
+** xref:prev/submissions.adoc[]
+** xref:prev/test.adoc[]
+** xref:prev/testing.adoc[]
+** xref:prev/website_updating.adoc[]

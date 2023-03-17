@@ -1,0 +1,6 @@
+= Documentation
+:idprefix:
+:idseparator: -
+:leveloffset: +1
+
+This explains how the docs work.
