@@ -1,5 +1,5 @@
-name: user-manual
-title: User Manual
+name: user-guide
+title: User Guide
 version: ~
 nav:
   - modules/ROOT/nav.adoc

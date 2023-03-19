@@ -1,7 +1,0 @@
-[#intro]
-= Introduction
-
-:idprefix: intro_
-
-Boost is a collection of peer-reviewed and high-quality libraries that aim to
-make application development simple and straight-forward for everyone!
