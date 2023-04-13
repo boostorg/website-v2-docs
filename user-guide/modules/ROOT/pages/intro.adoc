@@ -1,0 +1,7 @@
+= Introduction
+:idprefix:
+:idseparator: -
+:leveloffset: +1
+
+Boost is a collection of peer-reviewed and high-quality libraries that aim to
+make application development simple and straight-forward for everyone!
