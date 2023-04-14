@@ -1,1 +1,3 @@
 = User Guide
+
+image::cpp-runtime-error.png[]
