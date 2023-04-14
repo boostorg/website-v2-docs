@@ -1,7 +1,38 @@
-= Introduction
 :idprefix:
 :idseparator: -
 :leveloffset: +1
 
-Boost is a collection of peer-reviewed and high-quality libraries that aim to
-make application development simple and straight-forward for everyone!
+= Introduction
+
+Boost is a collection of peer-reviewed and high-quality libraries that aim to make application development more productive for all C++ developers.
+
+Currently, there are over 180 libraries, and this number increases with regular new releases and updates.
+
+== Advantages of using Boost
+
+There are many advantages to using Boost in your C++ projects, the main one being using Boost avoids reinventing the wheel if there is a library that implements functions that you would otherwise have to write yourself. And of course the libraries are well engineered and tested, and not home-brewed. In addition to this:
+
+[circle]
+* Boost does not compete with the Standard Template Library (STL) for C++. Rather it complements the STL libraries with exciting new functionality. Many libraries that are now part of the STL started as Boost libraries.
+* Boost is open-source, and available for you to use in any of your projects. It is free, including for commercial projects.
+* Boost allows for cross-platform development, with single source code. Boost supports: Windows, Linux variants, Apple OS X, IOS, Android, and Xbox.
+* There a few exceptions, but mostly Boost libraries are not dependant on each other, so you need only link the components your require.
+* Particular strengths of the Boost libraries include smart pointers, unit tests, lambda functions, function binding, regex, a file system, to name a few.
+* Boost libraries are peer reviewed, well designed, and extensively tested.
+* Some Boost libraries can be referenced from Python.
+* Boost allows for all libraries to be installed and inspected. Alternatively a package manager can be used to install a specific collection of libraries.
+* Through _template metaprogramming_ Boost libraries are a good platform for building other libraries.
+* Boost can be used in conjunction with graphics and games SDKs, such as OpenGL and DirectX, and with game development engines such as the Unreal Engine.
+
+
+== Challenges when using Boost
+
+The libraries implement a modern approach to C++ programming, generally prioritizing performance, correctness, cross-platform portability, efficiency and reusability. Boost offers building blocks, rather than a high-level app framework. 
+
+Of lower priority is readability and compile times. Boost is template-heavy, in order to provide portability and reusability, but this does make for dense syntax, which can take some getting used to.
+
+Boost libraries are written by one, or a team, of independent developers. There will be differences in portability, standards, documentation, error reporting, and other aspects, between the libraries.
+
+== Summary
+
+The purpose of the Boost libraries is to evangelize and support C++ development. You can take advantage of thousands of lines of high performance code.
