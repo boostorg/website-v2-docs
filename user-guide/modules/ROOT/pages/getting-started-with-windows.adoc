@@ -9,17 +9,51 @@ This section explains how to get your first Boost app running on Windows. The en
 
 * The Boost library is currently just under 200 MB. Make sure you have ample disk space to download and extract the full library. Downloading and installing specific libraries is explained in the "Getting Started with Windows and a Package Manager".
 
-== Download and Extract the Full Boost Library
+== 1. Download and Extract the Full Boost Library Package
+
+To install the full set of Boost libraries on Windows:
+
+. Navigate to https://www.boost.org/users/download/.
+
+. Under *Current Release/Downloads*, click the Windows .zip option.
+
+. After the download has completed (in your *Downloads* folder), right-click on the zip file and extract it to a folder. Consider extracting it to your *Documents* folder.
+
+NOTE: Extracting the zip takes some time. If you have a .7z extractor application, you can download the .7z version. This uses less space, and extracts quicker, than the .zip alternative. 
+
+== 2. Bootstrap the Boost Build App
+
+. Open up a command line terminal, and navigate to the folder containing the *bootstrap.bat* file. If you used the folder location specified above, this would mean entering `cd documents\boost-libraries`.
+
+. The Boost libraries are built using a custom build app called *b2.exe*. This app itself is built by running `.\bootstrap.bat` in your command window. 
+
+NOTE:: You do not need read the build documentation to complete this guide, however, for more information, refer to the https://www.boost.org/doc/libs/1_81_0/tools/build/doc/html/index.html[B2 User Manual].
+
+== 3. Build and Install the Boost Libraries
+
+Building and installing Boost libraries also takes some time.
+
+. In the folder now containing the *b2.exe* app, run the app by entering `.\b2.exe`. This builds the libraries, but does not yet install them.
+
+. Now enter `.\b2.exe --prefix=<YOUR-FOLDER> -d0 install`. This installs the libraries to your selected folder. The option `-d0` suppresses most of the command line warnings and messages. 
+
+NOTE:: We break the build and install into separate steps, in order to get better diagnostics when building the libraries, and to suppress too many messages when installing the libraries. The single command `.\b2.exe --prefix=<YOUR-FOLDER> -d0 install` will both build and install, but suppresses too many messages during the build process. If something goes wrong, it will probably be during the build process, and we want to know about it.
+
+. The build process creates all variants of each library. For example, there may be _Release_ and _Debug_ variants, or possibly _Multithreaded_ and _Static_ runtime variants. Also, libraries that are _header-only_ (in other words, do not require being built) are copied to your installation folder. Quickly examine your installation folder to see that it is well populated, or enter `.\b2.exe --show libraries` in your command window.
+
+=== Troubleshooting the Build and Install Process
+
+enter error
+
+== 4. Create and Run a "Hello World" App
+
+== 5. Create and Run a JSON App
 
 
-
-
-
-
-
-
+== Summary
 
 
 == Next Steps
 
-Getting Started with Windows and a Package Manager
+[square]
+* xref:Getting Started with Windows and a Package Manager
