@@ -1,0 +1,25 @@
+= Getting Started with Windows
+
+This section explains how to get your first Boost app running on Windows. The entire set of libraries is installed, which gives you the chance to explore the features and functionality available.
+
+== Prerequisites
+
+[circle]
+* Microsoft Visual Studio 2022 (Community Edition) is used as the IDE and C++ compiler in the examples. If you are using a different system, you will need to investigate and adjust the steps accordingly.
+
+* The Boost library is currently just under 200 MB. Make sure you have ample disk space to download and extract the full library. Downloading and installing specific libraries is explained in the "Getting Started with Windows and a Package Manager".
+
+== Download and Extract the Full Boost Library
+
+
+
+
+
+
+
+
+
+
+== Next Steps
+
+Getting Started with Windows and a Package Manager
