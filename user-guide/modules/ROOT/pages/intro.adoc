@@ -8,6 +8,10 @@ Boost is a collection of peer-reviewed and high-quality libraries that aim to ma
 
 Currently, there are over 180 libraries, and this number increases with regular new releases and updates.
 
+Boost is publicly released three times per year (April, August, and December). Each new release has updates to existing libraries, and possibly new libraries that pass the rigorous acceptance process.
+
+Feedback from the developer community is encouraged and taken seriously.
+
 == Advantages of using Boost
 
 There are many advantages to using Boost in your C++ projects, the main one being using Boost avoids reinventing the wheel if there is a library that implements functions that you would otherwise have to write yourself. And of course the libraries are well engineered and tested, and not home-brewed. In addition to this:
@@ -77,5 +81,6 @@ The purpose of the Boost libraries is to evangelize and support C++ development.
 
 If you are new to Boost, the recommended next step is to download the entire library for your selected OS, and build a few small sample programs.
 
-- Getting Started with Windows
-- Getting Started with Linux
+[square]
+* xref:getting-started-with-windows.adoc[Getting Started with Windows]
+
