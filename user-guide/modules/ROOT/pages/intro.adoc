@@ -33,6 +33,41 @@ Of lower priority is readability and compile times. Boost is template-heavy, in 
 
 Boost libraries are written by one, or a team, of independent developers. There will be differences in portability, standards, documentation, error reporting, and other aspects, between the libraries.
 
+== Library Categories
+
+The current Boost libraries are categorized as follows.
+
+[cols="1,1"]
+|===
+|Category |Description
+|Algorithms | description.
+|Broken compiler workarounds | description.
+|Concurrent Programming | description.
+|Correctness and testing | description.
+|Data structures | description.
+|Domain Specific | description.
+|Error handling and recovery | description.
+|Function objects and higher-order programming | description.
+|Generic Programming | description.
+|Image processing | description.
+|Input/Output | description.
+|Inter-language support | description.
+|Iterators | description.
+|Language Features Emulation | description.
+|Math and numerics | description.
+|Memory | description.
+|Parsing | description.
+|Patterns and Idioms | description.
+|Preprocessor Metaprogramming | description.
+|Programming Interfaces | description.
+|State Machines | description.
+|String and text processing | description.
+|System | description.
+|Template Metaprogramming | description.
+|Miscellaneous | description.
+|===
+
+
 == Summary
 
 The purpose of the Boost libraries is to evangelize and support C++ development. You can take advantage of thousands of lines of high performance code.
