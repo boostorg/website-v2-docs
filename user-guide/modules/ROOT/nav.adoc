@@ -1,5 +1,10 @@
-* Legacy Content
+* New Content
 ** xref:intro.adoc[Introduction]
+** xref:getting-started-with-windows.adoc[Getting Started with Windows]
+** xref:getting-started-with-linux.adoc[Getting Started with Linux]
+** xref:use-boost-with-windows-package-manager.adoc[Use Boost with Windows and a Package Manager]
+** xref:use-boost-with-linux-package-manager.adoc[Use Boost with Linux and a Package Manager]
+* Legacy Content
 ** xref:prev/borland_cpp.adoc[]
 ** xref:prev/bugs.adoc[]
 ** xref:prev/design_faq.adoc[]
