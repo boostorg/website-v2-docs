@@ -1,2 +1,2 @@
-* X
+xref:intro.adoc[Introduction to becoming a Boost Contributor]
 
