@@ -1,7 +1,47 @@
-= Introduction
 :idprefix:
 :idseparator: -
 :leveloffset: +1
 
-Boost is a collection of peer-reviewed and high-quality libraries that aim to
-make application development simple and straight-forward for everyone!
+= Introduction to becoming a Boost Contributor
+
+This section describes the requirements and guidelines for the content of a library submitted to Boost.
+
+Boost developers constitute a wide array of people throughout much of the world. Over the years much work has gone into the quantity and quality of the C++ libraries and tools that make up Boost. There are many ways to become part of the Boost developer community, all starting with getting involved in the development discussion. But if you are looking for an
+ easier place to start than developing a library, consider volunteering as a tester.
+
+As a first step to developing a library, read the Requirements Overview for Boost.
+
+== Requirements Overview
+
+To avoid a proposed library being rejected, it must meet these requirements:
+
+. The license must meet the <<License Requirements>>. Restricted licenses like the GPL and LGPL are not acceptable.
+. The <<Copyright Ownership>> must be clear.
+. The library should be useful to a general audience.
+. The library must meet the <<Portability Requirements>>.
+. The library should preferably meet the <<Organization Requirements>>. But is only required to meet them after acceptance.
+. The library must come reasonably close to meeting the
+ <<Design Guidelines>>.
+. The author must be willing to participate in discussions
+ on the mailing list, and to refine the library accordingly.
+
+TIP:: There's no requirement that an author read the mailing list
+ for a time before making a submission. It has been noted,
+ however, that submissions which begin "I just started to read
+ this mailing list ..." seem to fail, often embarrassingly.
+
+== License Requirements
+
+== Copyright Ownership
+
+== Portability Requirements
+
+== Organization Requirements
+
+== Design Guidelines
+
+== See Also
+
+* https://stage.antora.cppalliance.org/doc/user-guide/index.html[User Guide]
+* https://stage.antora.cppalliance.org/doc/formal-reviews/intro.html[Formal Reviews]
+* https://stage.antora.cppalliance.org/doc/release-process/intro.html[Release Process]
