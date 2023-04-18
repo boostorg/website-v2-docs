@@ -93,14 +93,47 @@ image::additional-library-directories.png[]
 
 image:first-app-running.png[]
 
-== Create and Run a JSON App
+== Create and Run a GitHub Example App
+
+In this section, we will locate an example from a folder on GitHub, and then build and run a project based on the example.
+
+For most Boost libraries, there is an *example* subfolder containing a range of runnable examples. For this guide, we will locate an example that reads a JSON file, and pretty-prints the contents.
+
+. Create a new Visual Studio C++ Console App. Name it JsonPrint.
+
+. Update both the additional include directories, and additional library directories, as you did for the previous section.
+
+. Copy all the code from https://github.com/boostorg/json/blob/develop/example/pretty.cpp, and use it to replace all the default content of the project's cpp file.
+
+. Add to your project a file called file.hpp, then copy all the content from https://github.com/boostorg/json/blob/develop/example/file.hpp into that file.
+
+. Search your computer for any JSON file, unless you have one you would like to use already. Record the full path to that file.
+
+. In Visual Studio, locate and select *Build Solution*. 
+
+. In a Command Window, navigate to where the .exe file for the solution has been built. This will often be `C:\Users\YOUR NAME\source\repos\JsonPrint\x64\Debug`.
+
+. In the command window, type `JsonPrint PATH`, where PATH is the full path to your JSON file, including the filename. You should get neatly formatted output:
 
 image:json-example-running.png[]
 
+=== Troubleshooting Create and Run a GitHub Example App
+
+[circle]
+* If your JSON included symbols such as the umlaut, these will not be rendered correctly unless you change the format of your command window to UTF-8. By default, a command window supports a code page numbered 437. To change the code page to UTF-8, type `chcp 65001`.
+
+* If you get compile errors such as `cannot open file 'libboost_json-vc143-mt-gd-x64-1_81.lib'` you have probably not entered the *Additional Library Directories* correctly.
+
+
 == Summary
 
+Although the samples you have now built and run are quite simple, if you have got this far successfully, it means your build and installation and project linking are all working correctly. Great job!
 
 == Next Steps
 
+You might like to scan the examples folders of some of the other libraries that you are interested in, and create and run projects to get them running.
+
+Once you are more experienced with Boost, you might like to build and install only those libraries you require. This process is best managed by a _Package Manager_.
+
 [square]
-* xref:Use Boost with Windows and a Package Manager
+* xref:use-boost-with-windows-package-manager.adoc[Use Boost with Windows and a Package Manager]
