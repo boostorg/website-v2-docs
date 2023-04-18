@@ -17,7 +17,7 @@ To install the full set of Boost libraries on Windows:
 
 . Under *Current Release/Downloads*, click the Windows .zip option.
 
-. After the download has completed (in your *Downloads* folder), right-click on the zip file and extract it to a folder. It does not matter where you extract it to, but consider extracting it to your *Documents* folder, just so that it is easy to locate from a command window.
+. After the download has completed (in your *Downloads* folder), right-click on the zip file and extract it to a folder. It does not matter where you extract it to, but consider extracting it to your *Documents* folder, just so that it is easy to locate from a Command Prompt.
 
 NOTE: Extracting the zip takes some time. If you have a .7z extractor application, you can download the .7z version. This uses less space, and extracts quicker, than the .zip alternative. Refer to https://7-zip.org/.
 
@@ -25,7 +25,7 @@ NOTE: Extracting the zip takes some time. If you have a .7z extractor applicatio
 
 . Open up a command line terminal, and navigate to the folder containing the *bootstrap.bat* file. If you used the folder location specified above, this would mean entering `cd documents\boost-libraries`.
 
-. The Boost libraries are built using a custom build app called *b2.exe*. This app itself is built by running `.\bootstrap.bat` in your command window. 
+. The Boost libraries are built using a custom build app called *b2.exe*. This app itself is built by running `.\bootstrap.bat` in your Command Prompt. 
 
 NOTE:: You do not need read the build documentation to complete this guide, however, for more information, refer to the https://www.boost.org/doc/libs/1_81_0/tools/build/doc/html/index.html[B2 User Manual].
 
@@ -35,13 +35,13 @@ Building and installing Boost libraries also takes some time.
 
 . Decide where you are going to install the libraries to, most locations are OK, something like *Documents/Boost-libraries* is fine. If your location has a space in the name, you will need to surround the path in quotes in the commands that follow.
 
-. In the Command Window folder now containing the *b2.exe* app, run the app by entering `.\b2.exe`. This builds the libraries, but does not yet install them. Refer to <<Troubleshooting the Build and Install Process>>, if you get any errors.
+. In the older now containing the *b2.exe* app, run the app by entering `.\b2.exe` in the Command Prompt. This builds the libraries, but does not yet install them. Refer to <<Troubleshooting the Build and Install Process>>, if you get any errors.
 
 . Now enter `.\b2.exe --prefix=<YOUR-INSTALL-FOLDER> -d0 install`. This installs the libraries to your selected folder. The option `-d0` suppresses most of the command line warnings and messages. 
 
 NOTE:: We break the build and install into separate steps, in order to get better diagnostics when building the libraries, and to suppress too many messages when installing the libraries. The single command `.\b2.exe --prefix=<YOUR-INSTALL-FOLDER> -d0 install` will both build and install, but suppresses too many messages during the build process. If something goes wrong, it will probably be during the build process, and we want to know about it.
 
-. The build process creates all variants of each library. For example, there may be _Release_ and _Debug_ variants, or possibly _Multithreaded_ and _Static_ runtime variants. Also, libraries that are _header-only_ (in other words, do not require being built) are copied to your installation folder. Quickly examine your installation folder to see that it is well populated, or enter `.\b2.exe --show libraries` in your command window.
+. The build process creates all variants of each library. For example, there may be _Release_ and _Debug_ variants, or possibly _Multithreaded_ and _Static_ runtime variants. Also, libraries that are _header-only_ (in other words, do not require being built) are copied to your installation folder. Quickly examine your installation folder to see that it is well populated, or enter `.\b2.exe --show libraries` in your Command Prompt.
 
 === Troubleshooting the Build and Install Process
 
@@ -87,7 +87,7 @@ image::additional-library-directories.png[]
 
 . Click *OK* to accept your input, and then in the *Debug* menu, select *Start Without Debugging*, or press the F5 key.
 
-. A command window should open up, so enter a list of numbers separated by spaces, and then *Enter*.
+. A Command Prompt should open up, so enter a list of numbers separated by spaces, and then *Enter*.
 
 . You should get a line of numbers, your originals multiplied by 3.
 
@@ -111,16 +111,16 @@ For most Boost libraries, there is an *example* subfolder containing a range of 
 
 . In Visual Studio, locate and select *Build Solution*. 
 
-. In a Command Window, navigate to where the .exe file for the solution has been built. This will often be `C:\Users\YOUR NAME\source\repos\JsonPrint\x64\Debug`.
+. In a Command Prompt, navigate to where the .exe file for the solution has been built. This will often be `C:\Users\YOUR NAME\source\repos\JsonPrint\x64\Debug`.
 
-. In the command window, type `JsonPrint PATH`, where PATH is the full path to your JSON file, including the filename. You should get neatly formatted output:
+. In the Command Prompt, type `JsonPrint PATH`, where PATH is the full path to your JSON file, including the filename. You should get neatly formatted output:
 
 image:json-example-running.png[]
 
 === Troubleshooting Create and Run a GitHub Example App
 
 [circle]
-* If your JSON included symbols such as the umlaut, these will not be rendered correctly unless you change the format of your command window to UTF-8. By default, a command window supports a code page numbered 437. To change the code page to UTF-8, type `chcp 65001`.
+* If your JSON included symbols such as the umlaut, these will not be rendered correctly unless you change the format of your Command Prompt to UTF-8. By default, a Command Prompt supports a code page numbered 437. To change the code page to UTF-8, type `chcp 65001`.
 
 * If you get compile errors such as `cannot open file 'libboost_json-vc143-mt-gd-x64-1_81.lib'` you have probably not entered the *Additional Library Directories* correctly.
 
