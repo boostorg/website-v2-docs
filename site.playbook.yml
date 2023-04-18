@@ -1,0 +1,29 @@
+site:
+  url: https://antora.cppalliance.org/
+  title: Guides
+  start_page: user-guide::index.adoc
+
+content:
+  sources:
+  - url: .
+    start_path: user-guide
+  - url: .
+    start_path: formal-reviews
+  - url: .
+    start_path: release-process
+
+  #---
+  # distributed component version
+  - url: .
+    start_path: contributor-guide
+  - url: ./antora/
+    start_path: antora
+  #---
+
+ui:
+  bundle:
+    url: https://github.com/cppalliance/antora-ui/releases/download/ui-master/ui-bundle.zip
+    snapshot: true
+
+output:
+  dir: ./build
