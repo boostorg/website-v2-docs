@@ -1,13 +1,11 @@
 = Contributor Guide
 
-:toc: left
-:toclevels: 3
-:idprefix:
-:docinfo: private-footer
-:source-highlighter: rouge
-:source-language: c++
-:nofooter:
-:sectlinks:
-:doctype: article
+This Contributor Guide is for C++ developers who wish to submit a library to the Boost collection. Or to contribute in some other way, such as testing or evaluating library submissions.
 
-xref:intro.adoc[Introduction to becoming a Boost Contributor]
+== Feedback
+
+Feedback on this guide is encouraged, and is available HERE.
+
+== First Steps
+
+Start by reading the xref:intro.adoc[Introduction to becoming a Boost Contributor].

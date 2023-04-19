@@ -1,7 +1,3 @@
-:idprefix:
-:idseparator: -
-:leveloffset: +1
-
 = Introduction to becoming a Boost Contributor
 
 This section describes the requirements and guidelines for the content of a library submitted to Boost.

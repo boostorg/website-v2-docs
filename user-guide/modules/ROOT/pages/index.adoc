@@ -1,7 +1,14 @@
 = User Guide
 
-* xref:intro.adoc[Introduction to Boost]
-* xref:getting-started-with-windows.adoc[Getting Started with Windows]
-* xref:getting-started-with-linux.adoc[Getting Started with Linux]
-* xref:use-boost-with-windows-package-manager.adoc[Use Boost with Windows and a Package Manager]
-* xref:use-boost-with-linux-package-manager.adoc[Use Boost with Linux and a Package Manager]
+This User Guide is for all C++ developers using or evaluating Boost libraries.
+
+Each individual library has its' own specific user documentation. This User Guide covers all aspects of the libraries that are generic to the entire set. 
+
+== Feedback
+
+Feedback on the libraries, or any aspect of the documentation, is encouraged, and is available HERE.
+
+== First Steps
+
+Start by reading the xref:intro.adoc[Introduction to Boost].
+
