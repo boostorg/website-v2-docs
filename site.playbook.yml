@@ -1,6 +1,7 @@
 site:
   url: https://antora.cppalliance.org/
   title: Guides
+  start_page: user-guide::index.adoc
 
 content:
   sources:
