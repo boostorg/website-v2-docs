@@ -6,7 +6,7 @@ Each individual library has its' own specific user documentation. This User Guid
 
 == Feedback
 
-Feedback on the libraries, or any aspect of the documentation, is encouraged, and is available HERE.
+Feedback on the libraries, or any aspect of the documentation, is encouraged, and is available by creating a https://github.com/cppalliance/site-docs/issues[New Issue].
 
 == First Steps
 

@@ -4,7 +4,7 @@ This Contributor Guide is for C++ developers who wish to submit a library to the
 
 == Feedback
 
-Feedback on this guide is encouraged, and is available HERE.
+Feedback on this guide is encouraged, and is available by creating a https://github.com/cppalliance/site-docs/issues[New Issue].
 
 == First Steps
 
