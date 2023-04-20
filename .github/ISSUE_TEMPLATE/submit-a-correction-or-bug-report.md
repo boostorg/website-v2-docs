@@ -1,9 +1,9 @@
 ---
-name: Correction or Bug report
-about: Typos, grammar, formatting, HTML, or CSS style problems.
+name: Submit a Correction or Bug report
+about: This is for typos, grammar, formatting, UI, HTML, or CSS style problems.
 title: ''
-labels: ''
-assignees: ''
+labels: Bug
+assignees: vinniefalco
 
 ---
 
