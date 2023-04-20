@@ -8,10 +8,4 @@ assignees: ''
 
 ---
 
-** What type of issue is this? **
-- [ ] New Topic
-- [ ] Enhancement
-- [ ] Information
 
-** Provide additional information **
-Please add as much detailed information as possible for the maintainers to take action on your issue.
