@@ -52,4 +52,4 @@ If issues are found with a release candidate that are important enough to addres
 
 * https://stage.antora.cppalliance.org/doc/user-guide/index.html[User Guide]
 * https://stage.antora.cppalliance.org/doc/contributor-guide/index.html[Contributor Guide]
-* https://stage.antora.cppalliance.org/doc/formal-reviews/intro.html[Formal Reviews]
+* https://stage.antora.cppalliance.org/doc/formal-reviews/index.html[Formal Reviews]

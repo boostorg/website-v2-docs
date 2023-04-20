@@ -99,6 +99,6 @@ Once an accepted library is ready for inclusion on the Boost
 
 == See Also
 
- * https://stage.antora.cppalliance.org/doc/user-guide/index.html[User Guide]
+* https://stage.antora.cppalliance.org/doc/user-guide/index.html[User Guide]
 * https://stage.antora.cppalliance.org/doc/contributor-guide/index.html[Contributor Guide]
-* https://stage.antora.cppalliance.org/doc/release-process/intro.html[Release Process]
+* https://stage.antora.cppalliance.org/doc/release-process/index.html[Release Process]

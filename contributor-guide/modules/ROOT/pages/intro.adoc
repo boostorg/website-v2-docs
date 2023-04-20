@@ -36,8 +36,3 @@ TIP:: There's no requirement that an author read the mailing list
 
 == Design Guidelines
 
-== See Also
-
-* https://stage.antora.cppalliance.org/doc/user-guide/index.html[User Guide]
-* https://stage.antora.cppalliance.org/doc/formal-reviews/intro.html[Formal Reviews]
-* https://stage.antora.cppalliance.org/doc/release-process/intro.html[Release Process]
