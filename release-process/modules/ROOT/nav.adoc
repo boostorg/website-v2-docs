@@ -1,1 +1,1 @@
-* xref:intro.adoc[Introduction to the Boost Release Process]
+* xref:index.adoc[Introduction to the Boost Release Process]

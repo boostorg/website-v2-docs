@@ -1,1 +1,1 @@
-* xref:intro.adoc[Introduction to Boost Formal Reviews]
+* xref:index.adoc[Introduction to Boost Formal Reviews]
