@@ -1,5 +1,41 @@
 = Getting Started with Linux
 
+To install the Boost libraries on a Linux system, you can either use the package manager provided by your distribution or compile and install Boost from the source code. Here's a step-by-step guide for both methods:
+
+== Method 1: Using the Package Manager
+
+. Open a terminal window. Update your package manager's repository cache. For example, if you're using Ubuntu or Debian-based distributions, use the following command: `sudo apt update`.
+
+. Install the Boost development libraries using your package manager. For Ubuntu or Debian-based distributions, you can use the following command: `sudo apt install libboost-all-dev`. This command installs all the Boost development libraries available in the package repository.
+
+== Method 2: Installing from source
+
+. Open a terminal window. Install the necessary build tools and libraries. For Ubuntu or Debian-based distributions, use the following command: `sudo apt install build-essential g++ python-dev autotools-dev libicu-dev libbz2-dev libtool`
+
+. Download the latest Boost source code from the official website (https://www.boost.org/users/download/), or use `wget` to download it directly: `wget https://boostorg.jfrog.io/artifactory/main/release/1.77.0/source/boost_1_82_0.tar.bz2`. Replace the URL and version number (1.82.0) with the latest version available.
+
+. Extract the downloaded archive: `tar xvfj boost_1_82_0.tar.bz2`.
+
+. Change to the extracted directory: `cd boost_1_82_0`. 
+
+. Run the bootstrap script to prepare for building Boost: `./bootstrap.sh --prefix=/usr/local`. The --prefix option specifies the installation directory. You can change this to your preferred location.
+
+. Build and install Boost: `sudo ./b2 install`. This command builds and installs the Boost libraries to the specified prefix directory.
+
+. (Optional) To use the installed Boost libraries, you may need to update your environment variables:
++
+For LD_LIBRARY_PATH: `export LD_LIBRARY_PATH=/usr/local/lib:$LD_LIBRARY_PATH`.
+For CPLUS_INCLUDE_PATH: `export CPLUS_INCLUDE_PATH=/usr/local/include:$CPLUS_INCLUDE_PATH`.
+Replace /usr/local with the prefix directory you specified during the installation, if different.
+
+You can add these `export` commands to your `~/.bashrc` or `~/.profile` file to make the changes permanent.
+
+After completing either method, you should have the Boost libraries installed on your Linux system.
+
+
+
+
+
 
 
 == Next Steps
