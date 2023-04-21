@@ -1,1 +1,42 @@
 = Use Boost with Linux and a Package Manager
+
+Yes, you can use vcpkg on Linux. To install vcpkg on a Linux system, follow these steps:
+
+Open a terminal.
+
+Install the necessary packages for building vcpkg by running the following command (for Ubuntu or Debian-based systems):
+
+sql
+Copy code
+sudo apt-get update
+sudo apt-get install build-essential tar curl zip unzip git
+For other Linux distributions, install the equivalent packages using the appropriate package manager, such as yum, dnf, or pacman.
+
+Clone the vcpkg repository from GitHub by running the following command:
+bash
+Copy code
+git clone https://github.com/microsoft/vcpkg.git
+This command will create a new directory named "vcpkg" in your current directory and clone the repository into it.
+
+Change to the "vcpkg" directory using the "cd" command:
+bash
+Copy code
+cd vcpkg
+Run the bootstrap script to build the vcpkg executable:
+bash
+Copy code
+./bootstrap-vcpkg.sh
+This script will download and build the necessary components for vcpkg. It might take a few minutes to complete.
+
+(Optional) Add the vcpkg executable to your system's PATH environment variable. This step makes it easier to run vcpkg from any directory. Run the following command:
+bash
+Copy code
+export PATH=$PATH:$(pwd)
+To make this change permanent, add the above export command to your shell's configuration file, such as ~/.bashrc or ~/.bash_profile for the Bash shell.
+
+Now, vcpkg is installed on your Linux system, and you can start using it to manage your C++ project dependencies. To install a package, you can run a command like:
+
+bash
+Copy code
+./vcpkg install <package-name>
+Replace <package-name> with the name of the package you want to install.
