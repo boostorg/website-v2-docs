@@ -1,0 +1,31 @@
+= \{\{Library}} Index File Template
+
+== Contents
+
+xref:templates/overview-template.adoc[Overview]
+
+=== Reference
+
+xref:templates/header-template.adoc[\{\{header}}]
+
+xref:templates/configuration-template.adoc[Configuration Information]
+
+xref:templates/rationale-template.adoc[Rationale]
+
+xref:templates/definitions-template.adoc[Definitions]
+
+xref:templates/faq-template.adoc[Frequently Asked Questions (FAQs)]
+
+xref:templates/bibliography-template.adoc[Bibliography]
+
+xref:templates/acknowledgements-template.adoc[Acknowledgements]
+
+'''''
+
+Revised 04 December, 2006
+
+_Copyright © 2006 mailto:%7B%7Baddress%7D%7D[\{\{author}}]_
+
+_Distributed under the Boost Software License, Version 1.0. (See
+http://www.boost.org/LICENSE_1_0.txt)_.
+

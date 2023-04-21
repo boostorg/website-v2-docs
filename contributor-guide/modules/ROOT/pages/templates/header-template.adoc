@@ -1,0 +1,220 @@
+= Header Template
+
+== \{\{library}} Header <\{\{header}}>
+
+== Introduction
+
+\{\{Introductory text}}
+
+== Macros
+
+[#macro-spec]##\{\{Macro specifications}}
+
+== Values
+
+[#value-spec]##\{\{Value specifications}}
+
+== Types
+
+[#type-spec]##\{\{Type specifications}}
+
+== Classes
+
+=== Class `{{class name}}`
+
+\{\{class overview text}}
+
+==== Class `{{class name}}` synopsis
+
+....
+namespace boost
+{
+    class {{class name}}
+        {
+        };
+};
+....
+
+==== Class `{{class name}}` constructors and destructor
+
+....
+{{constructor}}
+....
+
+*Requires:* \{\{text}}
+
+*Effects:* \{\{text}}
+
+*Postconditions:* \{\{text}}
+
+*Returns:* \{\{text}}
+
+*Throws:* \{\{text}}
+
+*Complexity:* \{\{text}}
+
+*Note:* \{\{text}}
+
+*Danger:* \{\{text}}
+
+*Rationale:* \{\{text}}
+
+....
+{{destructor}}
+....
+
+*Requires:* \{\{text}}
+
+*Effects:* \{\{text}}
+
+*Postconditions:* \{\{text}}
+
+*Returns:* \{\{text}}
+
+*Throws:* \{\{text}}
+
+*Complexity:* \{\{text}}
+
+*Note:* \{\{text}}
+
+*Danger:* \{\{text}}
+
+*Rationale:* \{\{text}}
+
+==== Class `{{class name}}` comparison functions
+
+....
+{{function}}
+....
+
+*Requires:* \{\{text}}
+
+*Effects:* \{\{text}}
+
+*Postconditions:* \{\{text}}
+
+*Returns:* \{\{text}}
+
+*Throws:* \{\{text}}
+
+*Complexity:* \{\{text}}
+
+*Note:* \{\{text}}
+
+*Danger:* \{\{text}}
+
+*Rationale:* \{\{text}}
+
+==== Class `{{class name}}` modifier functions
+
+....
+{{function}}
+....
+
+*Requires:* \{\{text}}
+
+*Effects:* \{\{text}}
+
+*Postconditions:* \{\{text}}
+
+*Returns:* \{\{text}}
+
+*Throws:* \{\{text}}
+
+*Complexity:* \{\{text}}
+
+*Note:* \{\{text}}
+
+*Danger:* \{\{text}}
+
+*Rationale:* \{\{text}}
+
+==== Class `{{class name}}` observer functions
+
+....
+{{function}}
+....
+
+*Requires:* \{\{text}}
+
+*Effects:* \{\{text}}
+
+*Postconditions:* \{\{text}}
+
+*Returns:* \{\{text}}
+
+*Throws:* \{\{text}}
+
+*Complexity:* \{\{text}}
+
+*Note:* \{\{text}}
+
+*Danger:* \{\{text}}
+
+*Rationale:* \{\{text}}
+
+==== Class `{{class name}}` static functions
+
+....
+{{function}}
+....
+
+*Requires:* \{\{text}}
+
+*Effects:* \{\{text}}
+
+*Postconditions:* \{\{text}}
+
+*Returns:* \{\{text}}
+
+*Throws:* \{\{text}}
+
+*Complexity:* \{\{text}}
+
+*Note:* \{\{text}}
+
+*Danger:* \{\{text}}
+
+*Rationale:* \{\{text}}
+
+== Functions
+
+....
+{{function}}
+....
+
+*Requires:* \{\{text}}
+
+*Effects:* \{\{text}}
+
+*Postconditions:* \{\{text}}
+
+*Returns:* \{\{text}}
+
+*Throws:* \{\{text}}
+
+*Complexity:* \{\{text}}
+
+*Note:* \{\{text}}
+
+*Danger:* \{\{text}}
+
+*Rationale:* \{\{text}}
+
+== Objects
+
+[#object-spec]
+\{\{Object specifications}}
+
+== Examples
+
+\{\{Example(s)}}
+
+'''''
+
+Revised 04 December, 2006
+
+_Copyright © 2006 mailto:%7B%7Baddress%7D%7D[\{\{author}}]_
+
+_Distributed under the Boost Software License, Version 1.0. (See
+http://www.boost.org/LICENSE_1_0.txt)_.

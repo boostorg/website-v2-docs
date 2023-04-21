@@ -1,0 +1,22 @@
+= FAQ Template
+
+== \{\{Library}} Frequently Asked Questions (FAQs)
+
+'''''
+
+== \{\{question1}}
+
+\{\{answer}}
+
+== \{\{question2}}
+
+\{\{answer}}
+
+'''''
+
+Revised 04 December, 2006
+
+_Copyright © 2006 mailto:%7B%7Baddress%7D%7D[\{\{author}}]_
+
+_Distributed under the Boost Software License, Version 1.0. (See
+http://www.boost.org/LICENSE_1_0.txt)_.
