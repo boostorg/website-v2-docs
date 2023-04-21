@@ -8,11 +8,20 @@ To install the Boost libraries on a Linux system, you can either use the package
 
 . Install the Boost development libraries using your package manager. For Ubuntu or Debian-based distributions, you can use the following command: `sudo apt install libboost-all-dev`. This command installs all the Boost development libraries available in the package repository.
 
-== Method 2: Installing from source
+== Method 2: Installing from Source
 
 . Open a terminal window. Install the necessary build tools and libraries. For Ubuntu or Debian-based distributions, use the following command: `sudo apt install build-essential g++ python-dev autotools-dev libicu-dev libbz2-dev libtool`
 
-. Download the latest Boost source code from the official website (https://www.boost.org/users/download/), or use `wget` to download it directly: `wget https://boostorg.jfrog.io/artifactory/main/release/1.77.0/source/boost_1_82_0.tar.bz2`. Replace the URL and version number (1.82.0) with the latest version available.
+. Download the latest Boost source code from the official website (https://www.boost.org/users/download/), or use `wget` to download it directly: 
+
++
+[source]
+----
+`wget https://boostorg.jfrog.io/artifactory/main/release/1.77.0/source/boost_1_82_0.tar.bz2`
+----
+
++
+Replace the URL and version number (1.82.0) with the latest version available.
 
 . Extract the downloaded archive: `tar xvfj boost_1_82_0.tar.bz2`.
 
@@ -26,17 +35,11 @@ To install the Boost libraries on a Linux system, you can either use the package
 +
 For LD_LIBRARY_PATH: `export LD_LIBRARY_PATH=/usr/local/lib:$LD_LIBRARY_PATH`.
 For CPLUS_INCLUDE_PATH: `export CPLUS_INCLUDE_PATH=/usr/local/include:$CPLUS_INCLUDE_PATH`.
-Replace /usr/local with the prefix directory you specified during the installation, if different.
+Replace `/usr/local` with the prefix directory you specified during the installation, if different.
 
 You can add these `export` commands to your `~/.bashrc` or `~/.profile` file to make the changes permanent.
 
 After completing either method, you should have the Boost libraries installed on your Linux system.
-
-
-
-
-
-
 
 == Next Steps
 

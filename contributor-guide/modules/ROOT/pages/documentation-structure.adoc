@@ -1,0 +1,300 @@
+= Writing Documentation for Boost - Documentation Structure
+
+== [#introduction]#Introduction#
+
+Boost does not require any specific documentation structure. However,
+there are some important considerations that influence content and
+structure. For example, many Boost libraries wind up being proposed for
+inclusion in the C++ Standard, so writing them initially with text
+suitable for inclusion in the Standard may be helpful. Also, Boost
+library documentation is often accessed via the World Wide Web,
+including via search engines, so context is often important for every
+page. Finally, Boost libraries should provide additional documentation,
+such as introductory, tutorial, example, and rationale content. With
+those things in mind, we suggest the following guidelines for Boost
+library documentation.
+
+== [#standards-conforming]#Standards Conforming# Documentation
+
+The documentation structure required for the C++ Standard is an
+effective way to describe the technical specifications for a library.
+Although terse, that format is familiar to many Boost users and is far
+more precise than most ad hoc formats. The following description is
+based upon §17.3 of the Standard. (Note that while final Standard
+proposals must include full standardese wording, which the committee
+will not do for you, that level of detail is not expected of Boost
+library documentation.)
+
+=== [#elements]#Document elements#
+
+[#footnote1-location]
+Each document contains the following elements, as
+applicable. link:#footnote1[(1)]:
+
+* link:#summary[Summary]
+* link:#requirements[Requirements]
+* link:#detailed-specs[Detailed specifications]
+* link:#ref-cpp[References to the Standard C++ library]
+* link:#ref-c[References to the Standard C library]
+
+==== [#summary]#Summary#
+
+The Summary provides a synopsis of the category, and introduces the
+first-level subclauses. Each subclause also provides a summary, listing
+the headers specified in the subclause and the library entities provided
+in each header.
+
+Paragraphs labeled "Note(s):" or "Example(s):" are informative, other
+paragraphs are normative.
+
+The summary and the detailed specifications are presented in the order:
+
+* Macros
+* Values
+* Types
+* Classes
+* Functions
+* Objects
+
+==== [#requirements]#Requirements#
+
+The library can be extended by a C++ program. Each clause, as
+applicable, describes the requirements that such extensions must meet.
+Such extensions are generally one of the following:
+
+* Template arguments
+* Derived classes
+* Containers, iterators, and/or algorithms that meet an interface
+convention
+
+Interface convention requirements are stated as generally as possible.
+Instead of stating "`class X` has to define a member function
+`operator++()`," the interface requires "for any object `x` of
+`class X`, `++x` is defined." That is, whether the operator is a member
+is unspecified.
+
+Requirements are stated in terms of well-defined expressions, which
+define valid terms of the types that satisfy the requirements. For every
+set of requirements there is a table that specifies an initial set of
+the valid expressions and their semantics. Any generic algorithm that
+uses the requirements is described in terms of the valid expressions for
+its formal type parameters.
+
+Template argument requirements are sometimes referenced by name.
+
+[#footnote2-location]
+In some cases the semantic requirements are presented as C++ code. Such
+code is intended as a specification of equivalence of a construct to
+another construct, not necessarily as the way the construct must be
+implemented.link:#footnote2[(2)]
+
+==== [#detailed-specs]#Detailed specification#
+
+The detailed specifications each contain the following elements:
+
+* Name and brief description
+* Synopsis (class definition or function prototype, as appropriate)
+* Restrictions on template arguments, if any
+* Description of class invariants
+* Description of function semantics
+
+[#footnote3-location]
+Descriptions of class member functions follow the order (as
+appropriate) link:#footnote3[(3)]:
+
+* Constructor(s) and destructor
+* Copying and assignment functions
+* Comparison functions
+* Modifier functions
+* Observer functions
+* Operators and other non-member functions
+
+[#footnote4-location]
+Descriptions of function semantics contain the following
+elements (as appropriate) link:#footnote4[(4):]
+
+*link:#requires[Requires:]* the preconditions for calling the function
+
+*link:#effects[Effects:]* the actions performed by the function
+
+*link:#postconditions[Postconditions:]* the observable results
+established by the function
+
+*link:#returns[Returns:]* a description of the value(s) returned by the
+function
+
+*link:#throws[Throws:]* any exceptions thrown by the function, and the
+conditions that would cause the exception
+
+*link:#complexity[Complexity:]* the time and/or space complexity of the
+function
+
+*link:#rationale[Rationale:]* the rationale for the function's design or
+existence
+
+Complexity requirements specified in the library clauses are upper
+bounds, and implementations that provide better complexity guarantees
+satisfy the requirements.
+
+==== [#ref-cpp]#References to the C++ Standard library#
+
+==== [#ref-c]#References to the C Standard library#
+
+=== [#other]#Other conventions#
+
+These conventions are for describing implementation-defined types, and
+member functions.
+
+==== [#type-descs]#Type descriptions#
+
+The Requirements subclauses may describe names that are used to specify
+constraints on template arguments.
+
+== [#more]#More Information#
+
+=== [#function-semantic-explanations]#Function semantic element explanations#
+
+The function semantic element description above is taken directly from the C++ standard, and is quite terse. Here is a
+more detailed explanation of each of the elements.
+
+Note the use of the `<code> ... </code>` font tag to distinguish actual
+C++ usage from English prose.
+
+==== [#requires]#Requires#
+
+Preconditions for calling the function, typically expressed as
+predicates. The most common preconditions are requirements on the value
+of arguments, often in the form of C++ expressions. For example,
+
+....
+ 
+void limit( int * p, int min, int max );
+....
+
+*Requires:* `p != 0 && min <= max`
+
+Requirements already enforced by the C++ language rules (such as the
+type of arguments) are not repeated in Requires paragraphs.
+
+==== [#effects]#Effects#
+
+The actions performed by the function, described either in prose or in
+C++. A description in prose is often less limiting on implementors, but
+is often less precise than C++ code.
+
+If an effect is specified in one of the other elements, particularly
+_postconditions_, _returns_, or _throws_, it is not also described in
+the _effects_ paragraph. Having only a single description ensures that
+there is one and only one specification, and thus eliminates the risk of
+divergence.
+
+==== [#postconditions]#Postconditions#
+
+The observable results of the function, such as the value of variables.
+Postconditions are often expressed as predicates that are true after the
+function completes, in the form of C++ expressions. For example:
+
+....
+ 
+void make_zero_if_negative( int & x );
+....
+
+*Postcondition:* `x >= 0`
+
+==== [#returns]#Returns#
+
+The value returned by the function, usually in the form of a C++
+expression. For example:
+
+....
+int sum( int x, int y );
+....
+
+*Returns:* `x + y`
+
+Only specify the return value; the type is already dictated by C++
+language rules.
+
+==== [#throws]#Throws#
+
+Specify both the type of exception thrown, and the condition that causes
+the exception to be thrown. For example, the `std::basic_string` class
+specifies:
+
+....
+ 
+void resize(size_type n, charT c);
+....
+
+*Throws:* `length_error` if `n > max_size()`.
+
+==== [#complexity]#Complexity#
+
+Specifying the time and/or space complexity of a function is often not
+desirable because it over-constrains implementors and is hard to specify
+correctly. Complexity is thus often best left as a quality of
+implementation issue.
+
+A library component, however, can become effectively non-portable if
+there is wide variation in performance between conforming
+implementations. Containers are a prime example. In these cases it
+becomes worthwhile to specify complexity.
+
+Complexity is often specified in generalized
+https://web.mit.edu/16.070/www/lecture/big_o.pdf["Big-O" notation].
+
+==== [#rationale]#Rationale#
+
+Specifying the rationale for a function's design or existence can often
+give users a lot of insight into why a library is designed the way it
+is. More importantly, it can help prevent "fixing" something that wasn't
+really broken as the library matures.
+
+[[web]]
+== Web Reference Documentation
+
+Boost library documentation is often accessed via the World Web. Using
+search engines, a page deep in the reference content could be viewed
+without any further context. Therefore, it is helpful to add extra
+context, such as the following, to each page:
+
+* Describe the enclosing namespace or use fully scoped identifiers.
+* Document required headers for each type or function.
+* Link to relevant tutorial information.
+* Link to related example code.
+* Include the library name.
+* Include navigation elements to the beginning of the documentation.
+
+It is also useful to consider the effectiveness of a description in
+search engines. Terse or cryptic descriptions are less likely to help
+the curious find a relevant function or type.
+
+== [#footnotes]#Footnotes#
+
+[#footnote1]
+link:#footnote1-location[(1)] To save space, items that do not apply to
+a clause are omitted. For example, if a clause does not specify any
+requirements, there will be no "Requirements" subclause.
+
+[#footnote2]
+link:#footnote2-location[(2)] Although in some cases the code is
+unambiguously the optimum implementation.
+
+[#footnote3]
+link:#footnote3-location[(3)] To save space, items that do not apply to
+a class are omitted. For example, if a class does not specify any
+comparison functions, there will be no "Comparison functions" subclause.
+
+[#footnote4]
+link:#footnote4-location[(4)] To save space, items that do not apply to
+a function are omitted. For example, if a function does not specify any
+precondition, there will be no "Requires" paragraph.
+
+'''''
+
+Revised 04 December, 2006
+
+_Copyright © 2001 mailto:williamkempf@hotmail.com[William E. Kempf]_
+
+_Distributed under the Boost Software License, Version 1.0. (See
+http://www.boost.org/LICENSE_1_0.txt)_.
