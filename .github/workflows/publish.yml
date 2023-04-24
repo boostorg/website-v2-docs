@@ -60,7 +60,7 @@ jobs:
           SOURCE_DIR: ${{ format('build/{0}', steps.docs-dir.outputs.boost_docs_basename) }}
           DEST_DIR: ${{ format('site-docs/{0}', (github.ref_name == 'develop' && 'develop') || (github.ref_name == 'master' && 'master') || github.ref_name_name) }}
 
-      - name: AWS Sync (staging on GKE)
+      - name: AWS Sync (production on GKE)
         if: (github.ref == 'refs/heads/master' || github.ref == 'refs/heads/develop') && github.event_name == 'push' && github.repository == 'cppalliance/site-docs'
         uses: jakejarvis/s3-sync-action@master
         with:
