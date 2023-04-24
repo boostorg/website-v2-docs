@@ -20,22 +20,23 @@ if [ -z "$node_version" ]; then
   echo "Node.js is not installed"play
   exit 1
 fi
-#major_version=$(echo $node_version | egrep -o "v([0-9]+)\." | cut -c 2- | rev | cut -c 2- | rev)
-#if [ "$major_version" -lt "16" ]; then
-#  echo "Node.js version $node_version is not supported. Please upgrade to version 16 or higher."
-#  node_path=$(which node)
-#  echo "node_path=${node_path}"
-#  exit 1
-#fi
+major_version=$(echo $node_version | egrep -o "v([0-9]+)\." | cut -c 2- | rev | cut -c 2- | rev)
+if [ "$major_version" -lt "16" ]; then
+  echo "Node.js version $node_version is not supported. Please upgrade to version 16 or higher."
+  node_path=$(which node)
+  echo "node_path=${node_path}"
+fi
 
-if [ -x antora ]; then
+antora_version=$(antora --version 2>/dev/null)
+if [ -n "$antora_version" ]; then
   ANTORA_CMD='antora'
 else
   npx_version=$(npx --version 2>/dev/null)
-  ANTORA_CMD='npx antora'
   if [ -z "$npx_version" ]; then
     echo "Neither antora nor npx are installed"
     exit 1
+  else
+    ANTORA_CMD='npx antora'
   fi
 fi
 
