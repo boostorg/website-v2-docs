@@ -1,0 +1,45 @@
+name: Build and Upload Antora Docs
+on:
+  push:
+    branches:
+      - '*'
+  pull_request:
+    branches:
+      - master
+      - develop
+
+concurrency:
+  group: ${{format('publish-{0}:{1}', github.repository, github.ref)}}
+  cancel-in-progress: true
+
+jobs:
+  build:
+    name: Publish Antora Docs
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+
+      - name: Antora Setup
+        uses: ./.github/actions/antora_publish
+        with:
+          setup_only: true
+
+      - name: Build
+        run: |
+          ./libdoc.sh "${{ (startsWith(github.ref, 'refs/heads/develop') && 'develop') || 'master' }}"
+          ./sitedoc.sh "${{ (startsWith(github.ref, 'refs/heads/develop') && 'develop') || 'master' }}"
+
+#      - name: AWS Sync
+#        if: github.event_name == 'push' && (startsWith(github.ref, 'refs/heads/develop') || startsWith(github.ref, 'refs/heads/master'))
+#        uses: jakejarvis/s3-sync-action@master
+#        with:
+#          args: --follow-symlinks --delete
+#        env:
+#          AWS_S3_BUCKET: ${{ (startsWith(github.ref, 'refs/heads/develop') && secrets.AWS_DEVELOP_S3_BUCKET) || secrets.AWS_MASTER_S3_BUCKET }}
+#          AWS_ACCESS_KEY_ID: ${{ (startsWith(github.ref, 'refs/heads/develop') && secrets.AWS_DEVELOP_ACCESS_KEY_ID) || secrets.AWS_MASTER_ACCESS_KEY_ID }}
+#          AWS_SECRET_ACCESS_KEY: ${{ (startsWith(github.ref, 'refs/heads/develop') && secrets.AWS_DEVELOP_SECRET_ACCESS_KEY) || secrets.AWS_MASTER_SECRET_ACCESS_KEY }}
+#          AWS_REGION: 'us-east-2'
+#          SOURCE_DIR: ${{ format('build/{0}', (startsWith(github.ref, 'refs/heads/develop') && 'develop') || 'master') }}
+#          DEST_DIR: ${{ format('site/{0}', (startsWith(github.ref, 'refs/heads/develop') && 'develop') || 'master') }}
+

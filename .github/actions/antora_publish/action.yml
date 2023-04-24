@@ -1,0 +1,79 @@
+name: 'Antora Publish'
+description: 'Build and Publish an Antora documentation website'
+inputs:
+  playbook:
+    description: 'The playbook file.'
+    required: false
+    default: 'playbook.yml'
+  artifact:
+    description: 'Name of the artifact with the Antora website'
+    required: false
+    default: ''
+  options:
+    description: 'Extra antora options'
+    required: false
+    default: ''
+  extensions:
+    description: 'A comma separated list of antora extensions to install (ex: @antora/lunr-extension)'
+    required: false
+    default: ''
+  publish_pages:
+    description: 'Publish to GitHub Pages'
+    required: false
+    default: 'false'
+  github_token:
+    description: 'The GitHub token for GitHub Pages'
+    required: false
+    default: ''
+  setup_only:
+    description: 'If true, we only setup antora but do not run it'
+    required: false
+    default: 'false'
+
+runs:
+  using: "composite"
+  steps:
+    - name: Setup Node.js
+      uses: actions/setup-node@v3
+      with:
+        node-version: '16'
+
+    - name: Install package.json
+      shell: bash
+      run: |
+        if test -f "package.json"; then
+            npm install
+        fi
+
+    - name: Install Antora
+      shell: bash
+      run: npm i antora
+
+    - name: Install Antora Extensions
+      if: inputs.extensions != ''
+      shell: bash
+      run: |
+        extensions=${{ inputs.extensions }}
+        for extension in ${extensions//,/ }
+        do
+            npm i "$extension"
+        done
+
+    - name: Generate Site
+      if: inputs.setup_only != 'true'
+      shell: bash
+      run: npx antora ${{ inputs.options }} ${{ inputs.playbook }}
+
+    - name: Publish as Artifact
+      if: inputs.artifact != '' && inputs.setup_only != 'true'
+      uses: actions/upload-artifact@v3
+      with:
+        name: ${{ inputs.artifact }}
+        path: build
+
+    - name: Publish to GitHub Pages
+      if: inputs.github_token != '' && inputs.publish_pages != false && inputs.setup_only != 'true'
+      uses: peaceiris/actions-gh-pages@v3
+      with:
+        github_token: ${{ inputs.github_token }}
+        publish_dir: build

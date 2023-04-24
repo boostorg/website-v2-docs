@@ -1,28 +1,50 @@
+# This configures Antora for building site docs
+#
+# website link structure:
+#
+# /libs/{name}                          Redirect to /{version}/lib/{name}
+# /{version}/lib/{name}                 library docs
+# /{version}/lib/user-guide             User Guide
+# /doc/contributor-guide
+# /doc/boost-formal-review
+# /develop/doc/contributor-guide
+# /develop/doc/boost-formal-review
+#
+# /doc/libs/{old-version}/libs/{name}   redirect to versioned legacy lib docs
+#
+# name:         library-name
+# version:      "master" | "develop" | {semantic-version}
+# old-version:  DIGIT+ '_' DIGIT+ '_' DIGIT+
+#
+
+asciidoc:
+  attributes:
+    page-boost-branch: develop
+
 site:
-  url: https://antora.cppalliance.org/
+  url: https://antora.cppalliance.org
   title: Boost Site Docs
   start_page: user-guide::index.adoc
 
+antora:
+  extensions:
+    - require: ./boost.js
+
 content:
   sources:
-  - url: .
-    start_path: user-guide
-  - url: .
-    start_path: formal-reviews
-  - url: .
-    start_path: release-process
-
-  #---
-  # distributed component version
-  - url: .
-    start_path: contributor-guide
-  - url: ./antora/
-    start_path: antora
-  #---
+    - url: https://github.com/cppalliance/site-docs
+      start_path: user-guide
+    - url: https://github.com/cppalliance/site-docs
+      start_path: formal-reviews
+    - url: https://github.com/cppalliance/site-docs
+      start_path: release-process
+    - url: https://github.com/cppalliance/site-docs
+      start_path: contributor-guide
 
 ui:
   bundle:
-    url: https://github.com/cppalliance/antora-ui/releases/download/ui-master/ui-bundle.zip
+    # url: https://github.com/cppalliance/antora-ui/releases/download/ui-${page-boost-branch}/ui-bundle.zip
+    url: ./antora-ui/build/ui-bundle.zip
     snapshot: true
 
 output:

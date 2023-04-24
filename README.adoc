@@ -1,2 +1,237 @@
-# Boost User's Guide
+= Antora Guide
+:idprefix:
+:idseparator: -
+:leveloffset: +0
+
+== Antora
+
+This tool renders the documentation for Boost modules whose documentation use asciidoc.
+
+== Demo
+
+- https://antora.cppalliance.org/develop/libs/mp11/
+
+== Installing Antora
+
+CAUTION: The workflow may change in the future.
+
+=== Dependencies
+
+Antora requires Node.js:
+
+[source,bash]
+----
+$ node -v
+----
+
+This command should return an active Node.js LTS version number:
+
+[source,console]
+----
+v16.18.0
+----
+
+If you have Node.js installed, but it isn’t an active LTS version, you need to upgrade Node.js.
+
+[source,bash]
+----
+$ nvm install --lts
+----
+
+=== Install Antora
+
+After cloning the project, you need to https://docs.antora.org/antora/latest/install/install-antora/[install] Antora command line interface (CLI) and the Antora site generator describe in the `package.json` file:
+
+[source,bash]
+----
+$ npm install
+----
+
+Verify the antora command is now available by running:
+
+[source,bash]
+----
+$ npx antora -v
+----
+
+[source,console]
+----
+@antora/cli: 3.1.2
+@antora/site-generator: 3.1.2
+----
+
+You also have the option of installing Antora globally so that the antora command is available on your `PATH`.
+
+[source,bash]
+----
+$ npm i -g @antora/cli@3.1 @antora/site-generator@3.1
+----
+
+[source,bash]
+----
+$ antora -v
+----
+
+[source,console]
+----
+@antora/cli: 3.1.2
+@antora/site-generator: 3.1.2
+----
+
+Read more about antora on their https://docs.antora.org/antora/latest/install-and-run-quickstart/[Quickstart guide]
+
+== Generating the website
+
+The website is composed of components defined in the `content.sources` field of its playbook file
+`site.playbook.yml`.
+To generate the `develop` version of the website, run the Antora command with the following options:
+
+[source,bash]
+----
+npx antora --fetch --attribute boost_version=develop --attribute boost_site_prefix=develop/ site.playbook.yml
+----
+
+This should build the website in `build/develop/doc/`.
+
+[IMPORTANT]
+====
+Notice the `--attribute` options.
+Instead of using the Antora versioning control system, we render the documentation for a single version.
+To achieve this, we use an Antora extension that let us render the playbook for a single documentation version via these attributes.
+By setting `--attribute boost_version=develop`, the Antora playbook will fetch the develop branch of each documentation component.
+====
+
+To simplify the process of setting these attributes, you should use the `sitedoc.sh` script.
+Let us generate the `develop` and `master` versions of the documentation:
+
+[source,bash]
+----
+./sitedoc.sh develop
+./sitedoc.sh master
+----
+
+[source,console]
+----
+Site generation complete!
+Open file:///home/user/path/to/antora/build/develop/doc in a browser to view your site.
+Site generation complete!
+Open file:///home/user/path/to/antora/build/doc in a browser to view your site.
+----
+
+== Generating the library documentation
+
+The process for generating the documentation for all libraries is similar.
+Each library documentation is defined as a component in the playbook file `libs.playbook.yml`:
+
+[source,yml]
+----
+content:
+  sources:
+  - url: https://github.com/cppalliance/user-guide
+    start_path: antora
+  - url: https://github.com/vinniefalco/mp11
+    start_path: antora
+  # ...
+----
+
+To simplify the process of setting attributes, you should use the `libdoc.sh` script:
+
+[source,bash]
+----
+./sitedoc.sh develop
+./sitedoc.sh master
+----
+
+[source,console]
+----
+Site generation complete!
+Open file:///home/user/path/to/antora/build/develop/libs/index.html in a browser to view your site.
+Site generation complete!
+Open file:///home/user/path/to/antora/build/master/libs/index.html in a browser to view your site.
+----
+
+The complete `libdoc.sh` command syntax is:
+
+[source,console]
+----
+Usage: ./libdoc.sh { branch | version | 'release' | 'all' }...
+
+    branch : 'develop' | 'master' | 'release'
+    version: [0-9]+ '.' [0-9]+ '.' [0-9]+
+    'release': builds master to build/doc/html
+    'all': rebuilds develop, master, and every version
+
+Examples:
+
+    ./libdoc.sh develop master      # build develop and master
+    ./libdoc.sh 1.83.0              # build tagged version boost-1.83.0
+----
+
+The first positional argument is the only parameter, which identifies which version should be built.
+
+* `branch`: valid arguments are `master` or `develop`.
+Builds the `master` or `develop` versions of the documentation in `build/master/libs` or `build/develop/libs`.
+It checks out all libraries in their `master` or `develop` branches.
+* `version`: a semver version, such as `1.82.0` describing a Boost version.
+This allows us to generate the documentation content of an old Boost version with the current version of the Antora UI.
+* `'release'`: generate the `master` version to `build/doc/html` with the `release` UI layout.
+This layout omits the header, Google analytics, and Edit this Page.
+This version of the documentation is meant to be distributed with sources files in the Boost release.
+* `'all'`: retroactively iterate and generate the documentation for all versions of Boost
+with the most recent Antora UI. This command iterates each playbook in the `history` directory.
+
+The master/develop branches of the library documentation are designed to co-exist alongside the per-release documentation and thus the branch name (or release version) does appear in its URLs.
+
+== Working on a single component
+
+Each Antora-enabled library includes the https://docs.antora.org/antora/latest/organize-content-files/[component version descriptor file] `antora/antora.yml`.
+Each library should contain an `antora.yml` describing the component.
+For instance,
+
+[source,yml]
+----
+name: mp11
+title: Boost.Mp11
+version: ~
+nav:
+  - modules/ROOT/nav.adoc
+----
+
+By checking `antora/antora.yml` and the `modules` directory into git, the repository is identified as an Antora content source, which can be listed in `libs.playbook.yml` of this repository.
+When working locally on an individual component, it's the developers responsibility to adjust and maintain a local playbook.
+
+=== Adjusting the local playbook
+
+To render the documentation locally using the local filesystem.
+Modify and include a local version of `lib.playbook.yml` as `local.playbook.yml` for your repository.
+
+==== Boost library candidates
+
+When writing a Boost library proposal, include your library in the local playbook.
+For instance, supposed you are proposing a boost library installed in the `boost/libs`
+directory:
+
+[source,yml]
+----
+- url: /boost/libs/proposed-lib
+  start_path: antora
+----
+
+==== Boost libraries
+
+When working on an existing Boost library, the `url` field cannot be set to `/path/to/boost/libs/my_library`
+because the subdirectories of `boost/libs` are submodules.
+Instead, change the URL for one or more content sources to point to the boost superproject and adjust the start path accordingly:
+
+[source,yml]
+----
+- url: /path/to/boost
+  start_path: libs/existing-lib/antora
+----
+
+This local version will include your repository only.
+Run `npx antora --fetch playbook.yml` and similar antora commands described above to build the docs.
+
+- See https://docs.antora.org/antora/latest/install-and-run-quickstart/
+- The output automatically goes in `build/site/`
 

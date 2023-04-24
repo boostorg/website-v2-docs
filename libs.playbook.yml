@@ -1,0 +1,60 @@
+# This configures Antora for building library docs
+#
+#
+# Stable, indexed
+#
+#   /doc/                                         # aliased to /master/doc/
+#   /lib/doc/                                     # aliased to /current/doc/
+#
+# Unversioned
+#
+#   /master/doc/boost-review-process
+#   /master/doc/contributor-guide
+#   /master/doc/release-process
+#   /develop/doc/boost-review-process
+#   /develop/doc/contributor-guide
+#   /develop/doc/release-process
+#
+# Stable, versioned
+#
+#   /${version}/lib/index.html                    # List of libraries (release)
+#   /${version}/lib/${name}.html                  # Library info (release)
+#   /${version}/lib/doc/${name}/                  # Library docs
+#   /${version}/lib/doc/user-guide/               # User's Guide
+#
+# version:    "master" | "develop" | {semantic-version}
+#
+
+asciidoc:
+  attributes:
+    page-boost-branch: develop
+    page-boost-ui-branch: develop
+    page-boost-is-release: ''
+
+site:
+  url: https://antora.cppalliance.org/${page-boost-branch}/lib/doc
+  title: Boost Libraries Documentation
+  robots: allow
+
+antora:
+  extensions:
+    - require: ./boost.js
+
+content:
+  sources:
+  - url: https://github.com/vinniefalco/mp11
+    start_path: antora
+  - url: https://github.com/vinniefalco/predef
+    start_path: antora
+  - url: https://github.com/vinniefalco/qvm
+    start_path: antora
+  - url: https://github.com/vinniefalco/unordered
+    start_path: antora
+
+ui:
+  bundle:
+    url: ./antora-ui/build/ui-bundle.zip
+    snapshot: true
+
+output:
+  dir: ./build/lib/doc

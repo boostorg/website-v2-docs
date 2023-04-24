@@ -1,0 +1,45 @@
+name: Publish Antora-UI bundle
+
+on:
+  push:
+    branches: [ "master", "develop" ]
+  pull_request:
+    branches: [ "master", "develop" ]
+
+concurrency:
+  group: ${{format('ui-release-{0}:{1}', github.repository, github.ref)}}
+  cancel-in-progress: true
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    if: ${{ (github.ref == 'refs/heads/master' || github.ref == 'refs/heads/develop') && github.event_name == 'push' }}
+    permissions:
+      contents: write
+
+    strategy:
+      matrix:
+        node-version: [18.x]
+
+    steps:
+    - uses: actions/checkout@v3
+
+    - name: Use Node.js ${{ matrix.node-version }}
+      uses: actions/setup-node@v3
+      with:
+        node-version: ${{ matrix.node-version }}
+
+    - name: Build
+      working-directory: antora-ui
+      run: |
+        npm install
+        gulp bundle
+
+    - name: Bundle
+      uses: svenstaro/upload-release-action@2.5.0
+      with:
+        tag: ui-${{ github.ref_name }}
+        file: antora-ui/build/ui-bundle.zip
+        asset_name: ui-bundle.zip
+        repo_token: ${{ secrets.GITHUB_TOKEN }}
+        overwrite: true
