@@ -12,3 +12,5 @@
 *** xref:templates/header-template.adoc[Header Template]
 *** xref:templates/overview-template.adoc[Overview Template]
 *** xref:templates/rationale-template.adoc[Rationale Template]
+* xref:index.adoc[Contributor Guide]
+* xref:antora.adoc[Antora Guide]
