@@ -30,16 +30,58 @@ jobs:
           ./libdoc.sh "${{ (startsWith(github.ref, 'refs/heads/develop') && 'develop') || 'master' }}"
           ./sitedoc.sh "${{ (startsWith(github.ref, 'refs/heads/develop') && 'develop') || 'master' }}"
 
-#      - name: AWS Sync
-#        if: github.event_name == 'push' && (startsWith(github.ref, 'refs/heads/develop') || startsWith(github.ref, 'refs/heads/master'))
-#        uses: jakejarvis/s3-sync-action@master
-#        with:
-#          args: --follow-symlinks --delete
-#        env:
-#          AWS_S3_BUCKET: ${{ (startsWith(github.ref, 'refs/heads/develop') && secrets.AWS_DEVELOP_S3_BUCKET) || secrets.AWS_MASTER_S3_BUCKET }}
-#          AWS_ACCESS_KEY_ID: ${{ (startsWith(github.ref, 'refs/heads/develop') && secrets.AWS_DEVELOP_ACCESS_KEY_ID) || secrets.AWS_MASTER_ACCESS_KEY_ID }}
-#          AWS_SECRET_ACCESS_KEY: ${{ (startsWith(github.ref, 'refs/heads/develop') && secrets.AWS_DEVELOP_SECRET_ACCESS_KEY) || secrets.AWS_MASTER_SECRET_ACCESS_KEY }}
-#          AWS_REGION: 'us-east-2'
-#          SOURCE_DIR: ${{ format('build/{0}', (startsWith(github.ref, 'refs/heads/develop') && 'develop') || 'master') }}
-#          DEST_DIR: ${{ format('site/{0}', (startsWith(github.ref, 'refs/heads/develop') && 'develop') || 'master') }}
+      - name: Remove lib dirs
+        working-directory: build
+        run: find "lib" -mindepth 1 -maxdepth 1 -type d -exec rm -r {} +
 
+      - name: AWS Sync (revsys cluster)
+        if: (github.ref == 'refs/heads/master' || github.ref == 'refs/heads/develop') && github.event_name == 'push' && github.repository == 'cppalliance/site-docs'
+        uses: jakejarvis/s3-sync-action@master
+        with:
+          args: --follow-symlinks --delete --exclude '.git/*' --exclude 'build/lib/*'
+        env:
+          AWS_S3_BUCKET: ${{ secrets.REVSYS_BUCKET }}
+          AWS_ACCESS_KEY_ID: ${{ secrets.REVSYS_KEY_ID }}
+          AWS_SECRET_ACCESS_KEY: ${{ secrets.REVSYS_ACCESS_KEY }}
+          AWS_REGION: 'us-east-2'
+          SOURCE_DIR: ${{ format('build/{0}', steps.docs-dir.outputs.boost_docs_basename) }}
+          DEST_DIR: ${{ format('site-docs/{0}', (github.ref_name == 'develop' && 'develop') || (github.ref_name == 'master' && 'master') || github.ref_name_name) }}
+
+      - name: AWS Sync (staging on GKE)
+        if: (github.ref == 'refs/heads/master' || github.ref == 'refs/heads/develop') && github.event_name == 'push' && github.repository == 'cppalliance/site-docs'
+        uses: jakejarvis/s3-sync-action@master
+        with:
+          args: --follow-symlinks --delete --exclude '.git/*' --exclude 'build/lib/*'
+        env:
+          AWS_S3_BUCKET: ${{ secrets.BOOST_STAGE_BUCKET }}
+          AWS_ACCESS_KEY_ID: ${{ secrets.BOOST_STAGE_KEY_ID }}
+          AWS_SECRET_ACCESS_KEY: ${{ secrets.BOOST_STAGE_ACCESS_KEY }}
+          AWS_REGION: 'us-east-2'
+          SOURCE_DIR: ${{ format('build/{0}', steps.docs-dir.outputs.boost_docs_basename) }}
+          DEST_DIR: ${{ format('site-docs/{0}', (github.ref_name == 'develop' && 'develop') || (github.ref_name == 'master' && 'master') || github.ref_name_name) }}
+
+      - name: AWS Sync (staging on GKE)
+        if: (github.ref == 'refs/heads/master' || github.ref == 'refs/heads/develop') && github.event_name == 'push' && github.repository == 'cppalliance/site-docs'
+        uses: jakejarvis/s3-sync-action@master
+        with:
+          args: --follow-symlinks --delete --exclude '.git/*' --exclude 'build/lib/*'
+        env:
+          AWS_S3_BUCKET: ${{ secrets.BOOST_PRODUCTION_BUCKET }}
+          AWS_ACCESS_KEY_ID: ${{ secrets.BOOST_PRODUCTION_KEY_ID }}
+          AWS_SECRET_ACCESS_KEY: ${{ secrets.BOOST_PRODUCTION_ACCESS_KEY }}
+          AWS_REGION: 'us-east-2'
+          SOURCE_DIR: ${{ format('build/{0}', steps.docs-dir.outputs.boost_docs_basename) }}
+          DEST_DIR: ${{ format('site-docs/{0}', (github.ref_name == 'develop' && 'develop') || (github.ref_name == 'master' && 'master') || github.ref_name_name) }}
+
+      - name: Publish Releases as Artifacts
+        if: github.event_name == 'push'
+        uses: actions/upload-artifact@v3
+        with:
+          name: site-docs
+          path: build
+
+      - uses: softprops/action-gh-release@v1
+        if: startsWith(github.ref, 'refs/tags/boost-')
+        with:
+          files: |
+            build/${{ github.ref_name }}*.*
