@@ -1,8 +1,8 @@
 * New Content
 * xref:intro.adoc[Introduction to becoming a Boost Contributor]
 * Legacy Content
-** xref:documentation-structure.adoc[Writing Documentation for Boost - Documentation Structure]
-** xref:index-file-template.adoc[Index File Template]
+** xref:documentation-overview.adoc[Writing Documentation for Boost - Documentation Structure]
+** xref:documentation-structure-guidelines.adoc[Boost Library Documentation Guidelines]
 ** Templates
 *** xref:templates/acknowledgements-template.adoc[Acknowledgments Template]
 *** xref:templates/bibliography-template.adoc[Bibliography Template]
@@ -14,3 +14,4 @@
 *** xref:templates/rationale-template.adoc[Rationale Template]
 * xref:index.adoc[Contributor Guide]
 * xref:antora.adoc[Antora Guide]
+

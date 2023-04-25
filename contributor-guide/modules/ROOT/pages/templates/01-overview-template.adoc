@@ -1,0 +1,49 @@
+= Overview Template
+
+Provide a brief overview of the focus and features of your library.
+
+Mention the portability of the library, platforms and compilers. List dependencies.
+
+A developer should have a good idea if the library is right for their project, after reading your Overview.
+
+Note that footnote references link to the footnotes section, and the entries in the footnote section link back to the references.
+
+[source,txt]
+----
+
+== Introduction
+
+Add an introduction to your library here. Refer to previous libraries on the content of an Overview.
+
+== First Topic
+
+[#footnote1-location]
+text
+text that requires a footnote. link:#footnote1[(1)]
+
+== Second Topic
+
+[#footnote2-location]
+text
+text that requires a footnote. link:#footnote2[(2)]
+
+== Third Topic
+
+text
+
+
+== Footnotes
+
+[#footnote1]
+link:#footnote1-location[(1)]: footnote 1 text
+
+[#footnote2]
+link:#footnote2-location[(2)]: footnote 2 text
+
+----
+
+Revised April, 2023
+
+_Distributed under the Boost Software License, Version 1.0. (See
+http://www.boost.org/LICENSE_1_0.txt)_.
+

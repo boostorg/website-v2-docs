@@ -1,0 +1,32 @@
+= Acknowledgements Template
+
+If acknowledgements are required for your library, add an acknowledgements section to the documentation. As a rule of thumb, the acknowledgements should be ordered with the most important contributions coming first. Links can be included, if required.
+
+Copy the source below into your AsciiDocs source documentation. 
+
+== AsciiDocs Source
+
+[source,txt]
+----
+
+=== Acknowledgements
+
+The author appreciates the contributions to the library made by the following:
+
+* text1
+* text2
+
+----
+
+== Example
+
+The author appreciates the contributions to the library made by the following:
+
+* John Doe and Jane Doe for editing the original draft documentation.
+* John Doe for input on the architecture and design of the API interfaces.
+* Jane Doe for numerous improvements and suggestions on the text of the error messages.
+
+Revised April, 2023
+
+_Distributed under the Boost Software License, Version 1.0. (See
+http://www.boost.org/LICENSE_1_0.txt)_.
