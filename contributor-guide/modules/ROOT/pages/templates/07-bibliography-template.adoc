@@ -1,0 +1,26 @@
+= Bibliography Template
+
+If bibliographic references are required in your documentation for your library, add a bibliography to the documentation.
+
+Copy the source below into your AsciiDocs source documentation. The book title can be text, or can be a link to a site too if the text of the book is available online. The ISBN number can be replaced by another reference number if the reference is to academic papers, or other references that were not published in book form.
+
+Ideally, list the bibliography in alphabetical order.
+
+== AsciiDocs Source
+
+[source,txt]
+----
+=== Bibliography
+[Surname/s] Authors full names. _Book title_. ISBN number, Publication date.
+[Surname/s] Authors full names. _Book title_. ISBN number, Publication date.
+----
+
+== Example
+
+[Turcan, Wasson] Peter Turcan, Mike Wasson. _Fundamentals of Audio and Video Programming for Games_. ISBN: 073561945X, 2003.
+
+
+Revised April, 2023
+
+_Distributed under the Boost Software License, Version 1.0. (See
+http://www.boost.org/LICENSE_1_0.txt)_.

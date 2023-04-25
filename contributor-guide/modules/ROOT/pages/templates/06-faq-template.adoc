@@ -1,0 +1,39 @@
+= Frequently Asked Questions (FAQs) Template
+
+If a Frequently Asked Questions (FAQ) would add value to your documentation, by aiding developers with answers to known issues or complexities, then copy the source below into your AsciiDocs source documentation.
+
+If there are a large number of questions and answers, group them into sections with headings such as *Errors and Exceptions*, *Performance*, and so on.
+
+Note that every question is in bold, and always ends with a question mark.
+
+== AsciiDocs Source
+
+[source,txt]
+----
+=== FAQ
+
+==== *question1?*
+
+* answer1
+
+==== *question2?*
+
+* answer2
+----
+
+== Example
+
+=== FAQ
+
+==== *Does this library work with COM methods?*
+
+* Yes, if you add `#define BOOST_ENABLE_STDCALL` to your code.
+
+==== *Does this library support Windows earlier than Windows 10?*
+
+* No, the only supported versions of Windows supported are 10 and 11.
+
+Revised April, 2023
+
+_Distributed under the Boost Software License, Version 1.0. (See
+http://www.boost.org/LICENSE_1_0.txt)_.

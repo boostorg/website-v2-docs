@@ -1,0 +1,155 @@
+= Header Organization and Compiled Binaries
+
+This section covers the basics of the organization of Boost libraries in the folder structure, a list of libraries requiring compilation into binaries, or optionally using compilation, and the tools which you might use to compile the headers.
+
+== Header Organization
+
+The organization of Boost library headers isn't entirely uniform, but
+most libraries follow a few patterns:
+
+* Some older libraries and most very small libraries place all public
+headers directly into Boost.
+
+* Most libraries' public headers live in a subdirectory of *boost*,
+named after the library. For example, you'll find the Python library's
+`def.hpp` header in `boost/python/def.hpp`.
+
+* Some libraries have an “aggregate header” in boost that
+includes all of the library's other headers. For example,
+https://www.boost.org/doc/libs/1_82_0/libs/python/doc/html/index.html[Python]'s aggregate header is `boost/python.hpp`.
+
+* Most libraries place private headers in a subdirectory called
+*detail*, or *aux*. Don't expect to find anything you can use in
+these directories.
+
+It's important to note the following:
+
+. The path to the *boost root directory* (often
+*/usr/local/boost_1_82_0*) is sometimes referred to as `$BOOST_ROOT`
+in documentation and mailing lists.
+
+. To compile anything in Boost, you need a directory containing the
+*boost* subdirectory in your `#include` path.
+
+. Since all of Boost's header files have the `.hpp` extension, and live in the *boost* subdirectory of the boost root, your Boost `#include`
+directives will look like: `#include <boost/whatever.hpp>` or `#include "boost/whatever.hpp"`, depending on your preference regarding the use of angle bracket includes.
+
+. Don't be distracted by the *doc* subdirectory; it only contains a
+subset of the Boost documentation. Start with `libs/index.html` if
+you're looking for the whole enchilada.
+
+== Required Compiled Headers
+
+Most Boost libraries are *header-only*: they consist _entirely of header
+files_ containing templates and inline functions, and require no
+separately-compiled library binaries or special treatment when linking.
+
+The only Boost libraries that _must_ be built separately are:
+
+* https://www.boost.org/doc/libs/1_82_0/doc/html/chrono.html[Chrono]
+
+* https://www.boost.org/doc/libs/1_82_0/libs/context/doc/html/index.html[Context]
+
+* https://www.boost.org/doc/libs/1_82_0/libs/filesystem/doc/index.htm[Filesystem]
+
+* https://www.boost.org/doc/libs/1_82_0/libs/graph_parallel/doc/html/index.html[GraphParallel]
+
+* https://www.boost.org/doc/libs/1_82_0/libs/iostreams/doc/index.html[IOStreams]
+
+* https://www.boost.org/doc/libs/1_82_0/libs/locale/doc/html/index.html[Locale]
+
+* https://www.boost.org/doc/libs/1_82_0/libs/log/doc/html/index.html[Log] (see https://www.boost.org/build/doc/html/index.html[build
+documentation])
+
+* https://www.boost.org/doc/libs/1_82_0/doc/html/mpi.html[MPI]
+
+* https://www.boost.org/doc/libs/1_82_0/doc/html/program_options.html[ProgramOptions]
+
+* https://www.boost.org/doc/libs/1_82_0/libs/python/doc/html/index.html[Python] (see the
+https://www.boost.org/doc/libs/1_58_0/libs/python/doc/building.html[Boost.Python build
+documentation] before building and installing)
+
+* https://www.boost.org/doc/libs/1_82_0/libs/regex/doc/html/index.html[Regex]
+
+* https://www.boost.org/doc/libs/1_82_0/libs/serialization/doc/index.html[Serialization]
+
+* https://www.boost.org/doc/libs/1_82_0/doc/html/thread.html[Thread]
+
+* https://www.boost.org/doc/libs/1_82_0/libs/timer/doc/index.htmll[Timer]
+
+* https://www.boost.org/doc/libs/1_82_0/libs/wave/index.html[Wave]
+
+== Optional Compiled Headers
+
+A few libraries have optional separately-compiled binaries:
+
+* https://www.boost.org/doc/libs/1_82_0/libs/exception/doc/boost-exception.html[Exception] provides non-intrusive implementation of exception_ptr for 32-bit `_MSC_VER==1310`
+and `_MSC_VER==1400` which requires a separately-compiled binary. This is
+enabled by `#define BOOST_ENABLE_NON_INTRUSIVE_EXCEPTION_PTR`.
+
+* https://www.boost.org/doc/libs/1_82_0/libs/graph/doc/index.html[Graph] also has a binary
+component that is only needed if you intend to parse GraphViz files.
+
+* https://www.boost.org/doc/libs/1_82_0/libs/math/doc/html/index.html[Math] has binary components for
+the TR1 and C99 cmath functions.
+
+* https://www.boost.org/doc/libs/1_82_0/doc/html/boost_random.html[Random] has a binary component
+which is only needed if you're using `random_device`.
+
+* https://www.boost.org/doc/libs/1_82_0/libs/system/doc/html/system.html[System] is header-only since
+Boost 1.69. A stub library is still built for compatibility, but linking
+to it is no longer necessary.
+
+* https://www.boost.org/doc/libs/1_82_0/libs/test/doc/html/index.html[Test] can be used in
+“header-only” or “separately compiled” mode, although *separate
+compilation is recommended for serious use*.
+
+== Identify Your Toolset
+
+In order to build binaries from source, find the toolset corresponding to your compiler in the following table (an up-to-date list is also available in https://www.boost.org/build/doc/html/bbv2/reference/tools.html[Builtin tools]).
+
+Note::
+If you previously chose a toolset for the purposes of building b2, you should assume it won't work and instead choose newly from the table below.
+
+[#toolset]
+[width="100%",cols="12%,22%,66%",options="header",]
+|===
+|Toolset Name |Vendor |Notes
+|`acc` |Hewlett Packard |Only very recent versions are known to work
+well with Boost
+
+|`borland` |Borland |
+
+|`como` |Comeau Computing |Using this toolset may require configuring another toolset to act as its backend.
+
+|`darwin` |Apple Computer |Apple's version of the GCC toolchain with
+support for Darwin and MacOS X features such as frameworks.
+
+|`gcc` |The Gnu Project |Includes support for Cygwin and MinGW
+compilers.
+
+|`hp_cxx` |Hewlett Packard |Targeted at the Tru64 operating system.
+
+|`intel` |Intel |
+
+|`msvc` |Microsoft |
+
+|`sun` |Oracle | Only very recent versions are known to work well with
+Boost. Note that the Oracle/Sun compiler has a large number of options
+which effect binary compatibility. It is vital that the libraries are
+built with the same options that your application will use. In particular
+be aware that the default standard library may not work well with Boost,
+unless you are building for Cpp11. 
+
+The particular compiler options you need can be injected with the b2 command line options `cxxflags=` and `linkflags=`. For example to build with the Apache standard library in Cpp03 mode use:
+
+`b2 cxxflags=-library=stdcxx4 linkflags=-library=stdcxx4`.
+
+|`vacpp` |IBM |The VisualAge C++ compiler.
+|===
+
+If you have multiple versions of a particular compiler installed, you
+can append the version number to the toolset name, preceded by a hyphen,
+e.g. `intel-9.0`  or `borland-5.4.3`.
+
+On Windows, append a version number even if you only have one version installed (unless you are using the msvc or gcc toolsets, which have special version detection code) or auto-linking will fail.

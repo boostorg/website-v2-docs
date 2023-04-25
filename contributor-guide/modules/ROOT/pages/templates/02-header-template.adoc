@@ -1,0 +1,226 @@
+= Header Template
+
+Provide a complete API reference to your library.
+
+[source,txt]
+----
+
+== Introduction
+
+Introductory text
+
+== Macros
+
+=== Macro1
+
+=== Macro2
+
+== Values
+
+=== Value1
+
+=== Value2
+
+== Types
+
+=== Type1
+
+=== Type2
+
+== Classes
+
+=== Class `class name`
+
+class overview text
+
+==== Class `class name` synopsis
+
+....
+namespace boost
+{
+    class <class name>
+        {
+        };
+};
+....
+
+==== Class `class name` constructors and destructor
+
+....
+constructor
+....
+
+*Requires:* text
+
+*Effects:* text
+
+*Post-conditions:* text
+
+*Returns:* text
+
+*Throws:* text
+
+*Complexity:* text
+
+*Note:* text
+
+*Danger:* text
+
+*Rationale:* text
+
+....
+destructor
+....
+
+*Requires:* text
+
+*Effects:* text
+
+*Post-conditions:* text
+
+*Returns:* text
+
+*Throws:* text
+
+*Complexity:* text
+
+*Note:* text
+
+*Danger:* text
+
+*Rationale:* text
+
+==== Class `class name` comparison functions
+
+....
+comparison-function
+....
+
+*Requires:* text
+
+*Effects:* text
+
+*Post-conditions:* text
+
+*Returns:* text
+
+*Throws:* text
+
+*Complexity:* text
+
+*Note:* text
+
+*Danger:* text
+
+*Rationale:* text
+
+==== Class `class name` modifier functions
+
+....
+modifier-function
+....
+
+*Requires:* text
+
+*Effects:* text
+
+*Post-conditions:* text
+
+*Returns:* text
+
+*Throws:* text
+
+*Complexity:* text
+
+*Note:* text
+
+*Danger:* text
+
+*Rationale:* text
+
+==== Class `class name` observer functions
+
+....
+observer-function
+....
+
+*Requires:* text
+
+*Effects:* text
+
+*Post-conditions:* text
+
+*Returns:* text
+
+*Throws:* text
+
+*Complexity:* text
+
+*Note:* text
+
+*Danger:* text
+
+*Rationale:* text
+
+==== Class `class name` static functions
+
+....
+static-function
+....
+
+*Requires:* text
+
+*Effects:* text
+
+*Post-conditions:* text
+
+*Returns:* text
+
+*Throws:* text
+
+*Complexity:* text
+
+*Note:* text
+
+*Danger:* text
+
+*Rationale:* text
+
+== Functions
+
+....
+function1
+....
+
+*Requires:* text
+
+*Effects:* text
+
+*Post-conditions:* text
+
+*Returns:* text
+
+*Throws:* text
+
+*Complexity:* text
+
+*Note:* text
+
+*Danger:* text
+
+*Rationale:* text
+
+== Objects
+
+
+== Object specifications
+
+== Examples
+
+----
+
+
+Revised April, 2023
+
+_Distributed under the Boost Software License, Version 1.0. (See
+http://www.boost.org/LICENSE_1_0.txt)_.
