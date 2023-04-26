@@ -8,7 +8,7 @@ A developer should have a good idea if the library is right for their project, a
 
 Note that footnote references link to the footnotes section, and the entries in the footnote section link back to the references.
 
-[source,txt]
+[source,t]
 ----
 
 == Introduction

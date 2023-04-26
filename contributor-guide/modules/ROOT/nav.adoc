@@ -1,17 +1,19 @@
 * New Content
+* xref:index.adoc[Contributor Guide]
 * xref:intro.adoc[Introduction to becoming a Boost Contributor]
+* xref:antora.adoc[Antora Guide]
 * Legacy Content
 ** xref:documentation-overview.adoc[Writing Documentation for Boost - Documentation Structure]
 ** xref:documentation-structure-guidelines.adoc[Boost Library Documentation Guidelines]
 ** Templates
-*** xref:templates/acknowledgements-template.adoc[Acknowledgments Template]
-*** xref:templates/bibliography-template.adoc[Bibliography Template]
-*** xref:templates/configuration-template.adoc[Configuration Template]
-*** xref:templates/definitions-template.adoc[Definitions Template]
-*** xref:templates/faq-template.adoc[FAQ Template]
-*** xref:templates/header-template.adoc[Header Template]
-*** xref:templates/overview-template.adoc[Overview Template]
-*** xref:templates/rationale-template.adoc[Rationale Template]
-* xref:index.adoc[Contributor Guide]
-* xref:antora.adoc[Antora Guide]
+*** xref:templates/01-overview-template.adoc[Overview Template]
+*** xref:templates/02-header-template.adoc[Header Template]
+*** xref:templates/03-configuration-template.adoc[Configuration Template]
+*** xref:templates/04-rationale-template.adoc[Rationale Template]
+*** xref:templates/05-definitions-template.adoc[Definitions Template]
+*** xref:templates/06-faq-template.adoc[FAQ Template]
+*** xref:templates/07-bibliography-template.adoc[Bibliography Template]
+*** xref:templates/08-acknowledgements-template.adoc[Acknowledgments Template]
+
+
 
