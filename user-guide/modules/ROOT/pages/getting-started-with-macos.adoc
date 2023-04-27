@@ -1,6 +1,45 @@
 = Getting Started with macOS
 
-To install Boost libraries on macOS, you can use Homebrew, a popular package manager for macOS that simplifies the installation of software packages. Here's a step-by-step guide to installing the Boost libraries using Homebrew.
+To install and build Boost libraries on macOS, you can either use CMake, or install and use a package manager such as Homebrew, a popular package manager for macOS that simplifies the installation of software packages. 
+
+== Install Boost using CMake
+
+If you do not wish to use an package manager, installing Boost libraries on macOS using CMake involves several steps. Here's an outline of the process:
+
+. Open a terminal window and navigate to the directory where you extracted the Boost library files.
+
+. Run the bootstrap.sh script to generate the build system files for your platform. For example, to build Boost with clang on macOS, run:
+
+[source,txt]
+----
+./bootstrap.sh --with-toolset=clang
+----
+
+. After the bootstrap process completes, run the following command to build and install the Boost libraries: .`/b2 install`.
+
+. Once the Boost libraries are installed, you can use CMake to configure your project to use them. Here's an example CMakeLists.txt file that uses Boost:
+
+[source, cmake]
+----
+cmake_minimum_required(VERSION 3.0)
+project(MyProject)
+
+find_package(Boost REQUIRED COMPONENTS system)
+
+add_executable(MyProject main.cpp)
+
+target_link_libraries(MyProject Boost::system)
+----
+
+. This CMakeLists.txt file assumes that your main.cpp file uses the Boost system library. You may need to modify it to use other Boost libraries depending on your project's requirements.
+
+. Run CMake to generate the build system files for your project: `cmake .`
+
+. After the CMake configuration process completes, you can build your project using your preferred build system (e.g. make, ninja, etc.): `make`.
+
+== Install Boost using Homebrew
+
+Here's a step-by-step guide to installing the Boost libraries using Homebrew.
 
 == Prerequisites
 
@@ -43,3 +82,5 @@ This command will download and execute the Homebrew installation script. Follow 
 Now the Boost libraries are installed on your macOS system, and you can use them in your projects.
 
 To use Boost in your projects, you may need to configure your build system (e.g., CMake, Makefile, Xcode) to include the appropriate header files and link against the Boost libraries. The specific configuration depends on the build system and the Boost libraries you're using.
+
+

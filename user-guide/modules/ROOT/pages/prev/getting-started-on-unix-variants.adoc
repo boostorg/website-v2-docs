@@ -1,4 +1,4 @@
-= Boost Getting Started on Unix Variants
+= Getting Started on Unix Variants
 
 == Get Boost
 

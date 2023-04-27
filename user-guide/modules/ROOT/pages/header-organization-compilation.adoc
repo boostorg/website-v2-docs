@@ -38,7 +38,7 @@ directives will look like: `#include <boost/whatever.hpp>` or `#include "boost/w
 subset of the Boost documentation. Start with `libs/index.html` if
 you're looking for the whole enchilada.
 
-== Required Compiled Headers
+== Required Compiled Binaries
 
 Most Boost libraries are *header-only*: they consist _entirely of header
 files_ containing templates and inline functions, and require no
@@ -79,7 +79,7 @@ documentation] before building and installing)
 
 * https://www.boost.org/doc/libs/1_82_0/libs/wave/index.html[Wave]
 
-== Optional Compiled Headers
+== Optional Compiled Binaries
 
 A few libraries have optional separately-compiled binaries:
 
