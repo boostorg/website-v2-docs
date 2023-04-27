@@ -6,7 +6,7 @@
 * xref:use-boost-with-linux-package-manager.adoc[Use Boost with Linux and a Package Manager]
 
 * Reference
-** xref:library-naming.adoc[Library Names]
+** xref:library-naming.adoc[Library Naming]
 ** xref:header-organization-compilation.adoc[Header Organization and Compiled Binaries]
 
 * Legacy Content
