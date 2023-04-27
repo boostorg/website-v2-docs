@@ -1,4 +1,4 @@
-= Library Names
+= Library Naming
 
 If your compiler supports auto-linking, such as Visual C++, then there is no need to understand the details of library binary naming. 
 
