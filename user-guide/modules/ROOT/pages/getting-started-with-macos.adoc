@@ -4,7 +4,7 @@ To install and build Boost libraries on macOS, you can either use CMake, or inst
 
 == Install Boost using CMake
 
-If you do not wish to use an package manager, installing Boost libraries on macOS using CMake involves several steps. Here's an outline of the process:
+If you do not wish to use a package manager, installing Boost libraries on macOS using CMake involves several steps. Here's an outline of the process:
 
 . Open a terminal window and navigate to the directory where you extracted the Boost library files.
 
@@ -12,7 +12,7 @@ If you do not wish to use an package manager, installing Boost libraries on macO
 
 [source,txt]
 ----
-./bootstrap.sh --with-toolset=clang
+./bootstrap.sh toolset=clang
 ----
 
 . After the bootstrap process completes, run the following command to build and install the Boost libraries: .`/b2 install`.
