@@ -11,13 +11,18 @@ As a first step to developing a library, read the Requirements Overview for Boos
 
 To avoid a proposed library being rejected, it must meet these requirements:
 
-. The license must meet the <<License Requirements>>. Restricted licenses like the GPL and LGPL are not acceptable.
-. The <<Copyright Ownership>> must be clear.
+. The license must meet the xref:license-requirements.adoc[License Requirements]. Restricted licenses like the GPL and LGPL are not acceptable.
+. The <<Ownership>> (copyright) must be clear.
+
 . The library should be useful to a general audience.
-. The library must meet the <<Portability Requirements>>.
-. The library should preferably meet the <<Organization Requirements>>. But is only required to meet them after acceptance.
+
+. The library must meet the xref:portability-requirements.adoc[Portability Requirements].
+
+. The library should preferably meet the xref:organization-requirements.adoc[Organization Requirements]. But is only required to meet them after acceptance.
+
 . The library must come reasonably close to meeting the
- <<Design Guidelines>>.
+ xref:library-design-guidelines.adoc[Library Design Guidelines].
+
 . The author must be willing to participate in discussions
  on the mailing list, and to refine the library accordingly.
 
@@ -26,13 +31,12 @@ TIP:: There's no requirement that an author read the mailing list
  however, that submissions which begin "I just started to read
  this mailing list ..." seem to fail, often embarrassingly.
 
-== License Requirements
+== Ownership
 
-== Copyright Ownership
+Before proceeding, are you sure you own the library you are thinking of submitting? In the book *How to Copyright Software*" by MJ Salone, Nolo Press, 1990 says:
 
-== Portability Requirements
+_"Doing work on your own time that is very similar to programming you do for your employer on company time can raise nasty legal problems. In this situation, it's best to get a written release from your employer in advance."_
 
-== Organization Requirements
+Place a copyright notice in all the important files you submit. Boost won't accept libraries without clear copyright information.
 
-== Design Guidelines
 

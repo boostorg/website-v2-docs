@@ -11,8 +11,14 @@ Where you see `<LibraryName>` in the templates, replace with the name of your li
 == Contents
 
 . xref:templates/01-overview-template.adoc[Overview]
+
 +
-*Reference*
+*Library Guide*
+. Basic Tutorials or Examples
+. How to compile and link
+. How to test and debug
++
+*Library Reference*
 
 . xref:templates/02-header-template.adoc[\{\{header}}]
 
@@ -22,7 +28,7 @@ Where you see `<LibraryName>` in the templates, replace with the name of your li
 
 . xref:templates/05-definitions-template.adoc[Definitions]
 
-. Tutorials or Examples
+. More Advanced Tutorials or Examples
 
 . Advanced Topics
 

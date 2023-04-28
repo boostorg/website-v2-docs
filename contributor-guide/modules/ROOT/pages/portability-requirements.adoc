@@ -1,0 +1,9 @@
+= Portability Requirements
+
+* A library's interface must be portable and not restricted to a particular compiler or operating system.
+* A library's implementation must if possible be portable and not restricted to a particular compiler or operating system. If a portable implementation is not possible, non-portable constructions are acceptable if reasonably easy to port to other environments, and implementations are provided for at least two popular operating systems (such as UNIX and Windows).
+* A library runs on at least two C++ compilers implementing the latest ISO standard.
+* There is no requirement that a library run on C++ compilers which do not conform to the ISO standard.
+* There is no requirement that a library run on any particular C++ compiler. Boost contributors often try to ensure their libraries work with popular compilers. The `boost/config.hpp` configuration header is the preferred mechanism for working around compiler deficiencies.
+
+Since there is no absolute way to prove portability, many boost submissions demonstrate practical portability by compiling and executing correctly with two different C++ compilers, often under different operating systems. Otherwise reviewers may disbelieve that porting is in fact practical.

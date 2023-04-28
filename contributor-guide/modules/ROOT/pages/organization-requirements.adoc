@@ -1,0 +1,92 @@
+= Organization Requirements
+
+The quality of the Boost libraries is not just about the APIs and code design. But also about presenting a consistent view to users of the libraries as a whole. Upon acceptance libraries must adhere to this directory and file structure:
+
+== Boost Standard Library Organization
+
+[cols="1,5,2",options="header"]
+|===
+|Sub-directory or file	|Contents	|Required
+|*build*	|Library build files such as a Jamfile, IDE projects, Makefiles, Cmake files, etc.	|Required if the library has sources to build.
+|*config*	|Files used for build-time configuration checks. This directory may contain source files and build system scripts to be used when building the library, tests or examples to check if the target system satisfies certain conditions. For example, a check may test if the compiler implements a certain feature, or if the target system supports a certain API.	|Optional.
+|*doc*	|Sources to build with and built documentation for the library. If the library needs to build documentation from non-HTML files this location must be build-able with Boost Build.	|Required for all libraries.
+|*doc/html*	|Documentation (HTML) files.	|Required for all libraries with pregenerated documentation. And generated documentation must be generated here.
+|*example*	|Sample program files.	|Required if library has sample files. Which is highly recommended.
+|*index.html*	|Redirection to HTML documentation. See "Redirection" for a template for this file.	|Required for all libraries.
+|*include/boost/library*	|Header files for the library.	|Required for all libraries.
+|*meta*	|Meta-data about the library.	|Required for all libraries.
+|*meta/libraries.json*	|A JSON file containing information about the library used to generate website and documentation for the Boost C++ Libraries collection.	|Required for all libraries.
+|*meta/explicit-failures-markup.xml*	|XML file describing expected test failures, used to generate the test report.	|Optional
+|*src*	|Source files which must be compiled to build the library.	|Required if the library has source files to build.
+|*test*	|Regression or other test programs or scripts. This is the only location considered for automated testing. If you have additional locations that need to be part of automated testing it is required that this location refer to the additional test locations.	|Required for all libraries.
+|*tools*	|Tools used, or offered, by the library. The structure within this is up to the library, but it's recommended to use similar structure as a regular Boost library or tool.	|Required for libraries that have run-able tools.
+|===
+
+== Integration
+
+Once a library is accepted as part of the Boost Libraries it is required that it integrate properly into the development, testing, documentation, and release processes. This integration increases the eventual quality of all the libraries and is integral to the expected quality of the whole of the Boost C++ Libraries from users. In addition to the organization requirements above the following integration is required:
+
+=== Building Sources
+
+The library needs to provide a Boost Build project that the user, and the top level Boost project, can use to build the library if it has sources to build. The Jamfile for the source build needs to minimally declare the project, the library target(s), and register the target(s) for installation. For example:
+
+[source,bash]
+----
+project boost/my_lib ;
+
+lib boost_my_lib : a.cpp ;
+
+boost-install boost_my_lib ;
+----
+
+=== Testing
+
+The library needs to provide a Boost Build project that the user, and the root Boost test script, can use to build and run the tests for the library. The testing build project must reside in the project-root/test directory and must be build-able from this or another directory (for example, b2 libs/library/test from the Boost root must work.)
+
+An example test/Jamfile is given below:
+[source,bash]
+----
+import testing ;
+
+run default_constructor.cpp ;
+run copy_constructor.cpp ;
+compile nested_value_type.cpp ;
+compile-fail invalid_conversion_1.cpp ;
+----
+
+WARNING:: This is the only location considered for testing by the top level testing script. If you want to test additional locations you must declare such that they are built as dependencies or by using build-project.
+
+If the library requires a level of C++ conformance that precludes certain compilers or configurations from working, it's possible (and recommended) to declare these requirements in the test Jamfile so that the tests aren't run, to conserve test resources, as given in the example below:
+
+[source,bash]
+----
+import testing ;
+import ../../config/checks/config : requires ;
+
+project : requirements [ requires cxx11_variadic_templates cxx11_template_aliases ] ;
+
+run cpp11_test.cpp ;
+----
+
+For more information, see the documentation of Boost.Config.
+
+=== Building Documentation
+
+The library needs to provide a Boost Build project for building the documentation for the library. The project-root/doc project is the only location referred to by the top level documentation build scripts and the release building scripts. The documentation build project must have the following two features:
+
+Define a boostdoc target. This target should likely be an alias that looks roughly like:
+
+[source,bash]
+----
+alias boostdoc : my_boostbook_target
+    : : : <implicit-dependency>my_boostbook_target ;
+----
+
+But if your project doesn't integrate into the global documentation book you can use an empty alias like:
+
+[source,bash]
+----
+alias boostdoc ;
+----
+
+The project must default to building standalone documentation if it has any. The release scripts build this default so as to guarantee all projects have up to date documentation.
