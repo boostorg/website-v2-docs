@@ -1,0 +1,12 @@
+= License Requirements
+
+The preferred way to meet the license requirements is to use the https://www.boost.org/LICENSE_1_0.txt[Boost Software License]. See license information. If for any reason you do not intend to use the Boost Software License, please discuss the issues on the Boost developers mailing list first.
+
+The license requirements:
+
+* Must be simple to read and understand.
+* Must grant permission without fee to copy, use and modify the software for any use (commercial and non-commercial).
+* Must require that the license appear on all copies of the software source code.
+* Must not require that the license appear with executables or other binary uses of the library.
+* Must not require that the source code be available for execution or other binary uses of the library.
+* May restrict the use of the name and description of the library to the standard version found on the Boost web site.

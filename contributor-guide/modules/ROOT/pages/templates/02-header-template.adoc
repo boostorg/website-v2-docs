@@ -2,6 +2,8 @@
 
 Provide a complete API reference to your library.
 
+== AsciiDocs Source
+
 [source,txt]
 ----
 

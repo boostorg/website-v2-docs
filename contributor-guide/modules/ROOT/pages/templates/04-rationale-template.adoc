@@ -4,6 +4,8 @@ A Rationale provides a description of the motivation behind the library. Describ
 
 Note that footnote references link to the footnotes section, and the entries in the footnote section link back to the references.
 
+== AsciiDocs Source
+
 [source,txt]
 ----
 
