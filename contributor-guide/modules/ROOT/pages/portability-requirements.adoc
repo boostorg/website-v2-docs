@@ -1,4 +1,5 @@
 = Portability Requirements
+:navtitle: Portability Requirements
 
 * A library's interface must be portable and not restricted to a particular compiler or operating system.
 * A library's implementation must if possible be portable and not restricted to a particular compiler or operating system. If a portable implementation is not possible, non-portable constructions are acceptable if reasonably easy to port to other environments, and implementations are provided for at least two popular operating systems (such as UNIX and Windows).

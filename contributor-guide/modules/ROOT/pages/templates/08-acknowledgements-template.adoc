@@ -1,4 +1,5 @@
 = Acknowledgements Template
+:navtitle: Acknowledgements
 
 If acknowledgements are required for your library, add an acknowledgements section to the documentation. As a rule of thumb, the acknowledgements should be ordered with the most important contributions coming first. Links can be included, if required.
 

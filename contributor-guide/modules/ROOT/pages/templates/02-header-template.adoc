@@ -1,4 +1,5 @@
 = Header Template
+:navtitle: Header
 
 Provide a complete API reference to your library.
 

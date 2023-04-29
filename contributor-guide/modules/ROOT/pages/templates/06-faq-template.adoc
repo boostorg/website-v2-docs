@@ -1,4 +1,5 @@
 = Frequently Asked Questions (FAQs) Template
+:navtitle: FAQ
 
 If a Frequently Asked Questions (FAQ) would add value to your documentation, by aiding developers with answers to known issues or complexities, then copy the source below into your AsciiDocs source documentation.
 

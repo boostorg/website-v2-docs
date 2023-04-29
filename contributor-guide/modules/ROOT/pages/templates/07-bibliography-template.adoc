@@ -1,4 +1,5 @@
 = Bibliography Template
+:navtitle: Bibliography
 
 If bibliographic references are required in your documentation for your library, add a bibliography to the documentation.
 

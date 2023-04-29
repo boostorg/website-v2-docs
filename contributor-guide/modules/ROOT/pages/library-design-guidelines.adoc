@@ -1,4 +1,5 @@
 = Library Design Guidelines
+:navtitle: Library Design Guidelines
 
 Please use these guidelines as a checklist for preparing the content a library submission. Not every guideline applies to every library, but a reasonable effort to comply is expected.
 

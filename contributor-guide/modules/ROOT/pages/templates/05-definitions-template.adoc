@@ -1,4 +1,5 @@
 = Definitions Template
+:navtitle: Definitions
 
 If you library uses any terminology that might benefit from a description, consider adding Definitions to your documentation.
 

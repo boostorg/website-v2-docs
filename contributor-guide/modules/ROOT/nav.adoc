@@ -1,23 +1,23 @@
 
 
-* xref:intro.adoc[Introduction to becoming a Boost Contributor]
-** xref:license-requirements.adoc[License Requirements]
-** xref:portability-requirements.adoc[Portability Requirements]
-** xref:organization-requirements.adoc[Organization Requirements]
-** xref:library-design-guidelines.adoc[Library Design Guidelines]
+* xref:intro.adoc[]
+** xref:license-requirements.adoc[]
+** xref:portability-requirements.adoc[]
+** xref:organization-requirements.adoc[]
+** xref:library-design-guidelines.adoc[]
 * xref:antora.adoc[Antora Guide]
 * Legacy Content
-** xref:documentation-overview.adoc[Writing Documentation for Boost - Documentation Structure]
-** xref:documentation-structure-guidelines.adoc[Boost Library Documentation Guidelines]
+** xref:documentation-overview.adoc[]
+** xref:documentation-structure-guidelines.adoc[]
 ** Templates
-*** xref:templates/01-overview-template.adoc[Overview Template]
-*** xref:templates/02-header-template.adoc[Header Template]
-*** xref:templates/03-configuration-template.adoc[Configuration Template]
-*** xref:templates/04-rationale-template.adoc[Rationale Template]
-*** xref:templates/05-definitions-template.adoc[Definitions Template]
-*** xref:templates/06-faq-template.adoc[FAQ Template]
-*** xref:templates/07-bibliography-template.adoc[Bibliography Template]
-*** xref:templates/08-acknowledgements-template.adoc[Acknowledgments Template]
+*** xref:templates/01-overview-template.adoc[]
+*** xref:templates/02-header-template.adoc[]
+*** xref:templates/03-configuration-template.adoc[]
+*** xref:templates/04-rationale-template.adoc[]
+*** xref:templates/05-definitions-template.adoc[]
+*** xref:templates/06-faq-template.adoc[]
+*** xref:templates/07-bibliography-template.adoc[]
+*** xref:templates/08-acknowledgements-template.adoc[]
 
 
 

@@ -1,4 +1,5 @@
 =  Rationale Template
+:navtitle: Rationale
 
 A Rationale provides a description of the motivation behind the library. Describe the current problems that exist, and the goals of the library in addressing those problems.
 
