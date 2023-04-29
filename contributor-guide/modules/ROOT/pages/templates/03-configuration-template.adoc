@@ -1,4 +1,5 @@
 = Configuration Template
+:navtitle: Configuration
 
 Describe the configuration macros that are used in your library.
 
@@ -19,9 +20,9 @@ http://www.boost.org/libs/config/config.htm[<boost/config.hpp>], as well as conf
 These are the macros that may be defined by an application using
 `<LibraryName>`.
 
-[cols="1,2"]
+[cols="1,2",options="header",stripes=even]
 |===
-|*Macro* |*Meaning*
+| Macro  | Meaning
 |`macro` |meaning text
 |`macro` |meaning text
 |===
@@ -30,9 +31,9 @@ These are the macros that may be defined by an application using
 
 These macros are defined by `<LibraryName>`, but are expected to be used by application code.
 
-[cols="1,2"]
+[cols="1,2",options="header",stripes=even]
 |===
-|*Macro* |*Meaning*
+| Macro  | Meaning
 |`macro` |meaning text
 |`macro` |meaning text
 |===
@@ -41,9 +42,9 @@ These macros are defined by `<LibraryName>`, but are expected to be used by appl
 
 These macros are defined by `<LibraryName>` and are implementation details of interest only to implementers.
 
-[cols="1,2"]
+[cols="1,2",options="header",stripes=even]
 |===
-|*Macro* |*Meaning*
+| Macro  | Meaning
 |`macro` |meaning text
 |`macro` |meaning text
 |===
@@ -57,9 +58,9 @@ These macros are defined by `<LibraryName>` and are implementation details of in
 These are the macros that may be defined by an application using
 `<LibraryName>`.
 
-[cols="1,2"]
+[cols="1,2",options="header",stripes=even]
 |===
-|*Macro* |*Meaning*
+| Macro  | Meaning
 |`add(x,y)` | The x and y values are added together.
 |`mult(x,y)` | The x and Y values are multiplied together.
 |===

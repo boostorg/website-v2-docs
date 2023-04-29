@@ -1,4 +1,5 @@
 = Introduction to becoming a Boost Contributor
+:navtitle: Becoming a Boost Contributor
 
 This section describes the requirements and guidelines for the content of a library submitted to Boost.
 

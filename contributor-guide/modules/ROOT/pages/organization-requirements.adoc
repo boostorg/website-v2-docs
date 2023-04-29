@@ -1,4 +1,5 @@
 = Organization Requirements
+:navtitle: Organization Requirements
 
 The quality of the Boost libraries is not just about the APIs and code design. But also about presenting a consistent view to users of the libraries as a whole. Upon acceptance libraries must adhere to this directory and file structure:
 

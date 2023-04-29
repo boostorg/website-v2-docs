@@ -1,4 +1,5 @@
 = Overview Template
+:navtitle: Overview
 
 Provide a brief overview of the focus and features of your library.
 
