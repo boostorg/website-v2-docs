@@ -1,4 +1,5 @@
-= Library Naming
+= Library Names and Organization
+:navtitle: Library Names and Organization
 
 If your compiler supports auto-linking, such as Visual C++, then there is no need to understand the details of library binary naming. 
 
@@ -12,31 +13,30 @@ composed of a common sequence of elements that describe how it was
 built. For example, `libboost_regex-vc71-mt-d-x86-1_34.lib`  can
 be broken down into the following elements:
 
-[#footnote4-location]
+[#footnote1-location]
 `lib`::
   _Prefix_: except on Microsoft Windows, every Boost library name begins
   with this string. On Windows, only ordinary static libraries use the
-  `lib` prefix; import libraries and DLLs do not. link:#footnote4[(4)]
+  `lib` prefix; import libraries and DLLs do not. link:#footnote1[(1)]
 
 `boost_regex`::
   _Library name_: all boost library filenames begin with `boost_`.
 
-`-vc71` ::
-  _Toolset tag_: identifies the BROKEN <<toolset>> and version used
-  to build the binary.
+`-vc71`::
+  _Toolset tag_: identifies the xref:header-organization-compilation.adoc#toolset[toolset] and version used to build the binary.
 
-`-mt` ::
+`-mt`::
   _Threading tag_: indicates that the library was built with
   multithreading support enabled. Libraries built without multithreading
   support can be identified by the absence of `-mt` .
 
-[#footnote5-location]
-`-d` ::
+[#footnote2-location]
+`-d`::
   _ABI tag_: encodes details that affect the library's interoperability
   with other compiled code. For each such feature, a single letter is
   added to the tag:
 
-[cols="1,5,2",options="header"]
+[cols="1,5,2",options="header",stripes=even]
 |===
 |Key |Use this library when: |Boost.Build option
 |`s` |linking statically to the C++ standard library and compiler
@@ -44,7 +44,7 @@ runtime support libraries. |`runtime-link=static`
 |`g` |using debug versions of the standard and runtime support
 libraries. |`runtime-debugging=on`
 |`y` |using a special https://www.boost.org/doc/libs/1_58_0/libs/python/doc/building.html[debug build of Python]. |`python-debugging=on`
-|`d` |building a debug version of your code. link:#footnote5[(5)]
+|`d` |building a debug version of your code. link:#footnote2[(2)]
 |`variant=debug`
 |`p` |using the STLPort standard library rather than the default one
 supplied with your compiler. |`stdlib=stlport`
@@ -55,11 +55,11 @@ debug versions of the static runtime library and the STLPort standard
 library, the tag would be: `-sgdp` . If none of the above
 apply, the ABI tag is omitted.
 
-`-x86` ::
+`-x86`::
   _Architecture and address model tag_: in the first letter, encodes the
   architecture as follows:
 
-[width="100%",cols="1,3,4",options="header",]
+[width="100%",cols="1,3,4",options="header",stripes=even]
 |===
 |Key |Architecture |Boost.Build option
 |`x` |x86-32, x86-64 | `architecture=x86`
@@ -73,14 +73,14 @@ apply, the ABI tag is omitted.
 The two digits following the letter encode the address model as
 follows:
 
-[width="100%",cols="1,3,4",options="header",]
+[width="100%",cols="1,3,4",options="header",stripes=even]
 |===
 |Key |Address model |Boost.Build option
 |`32` |32 bit |`address-model=32`
 |`64` |64 bit |`address-model=64`
 |===
 
-`-1_34` ::
+`-1_34`::
 _Version tag_: the full Boost release number, with periods replaced by
 underscores. For example, version 1.31.1 would be tagged as `-1_31_1`.
 
@@ -94,20 +94,56 @@ unix variants, a full version extension is added (e.g. ".so.1.34") and
 a symbolic link to the library file, named without the trailing
 version number, will also be created.
 
+== Installed Library Names
+
+When libraries are installed using the B2 app, the actual name can vary from the full name described above. 
+
+The `--layout=<layout>` option determines how the library name is handled, and the appropriate header locations so that multiple versions of Boost, or multiple compilers, can be used on the same system.
+
+[cols="1,3,1",options="header",stripes=even]
+|===
+|Layout |Description | Default on
+|`versioned` | The names of Boost binaries include the Boost version number, name and version of the compiler, and encoded build properties. Boost headers are installed in a subdirectory of `<HDRDIR>` whose name contains the Boost version number. | Windows
+|`tagged` | Names of boost binaries include the encoded build properties such as variant and threading, but do not including compiler name and version, or Boost version. This option is useful if you build several variants of Boost, using the same compiler. | none
+|`system` | Binaries names do not include the Boost version number or the name and version number of the compiler. Boost headers are installed directly into `<HDRDIR>`. This option is intended for system integrators building distribution packages. | Unix
+|===
+
+== The Boost Distribution
+
+After installing Boost, this is the resulting directory structure, in the *boost_1_82_0* root:
+
+[cols="1,1,4",options="header",stripes=even]
+|===
+|Root Level |Lower Level | Description
+|*bin.v2*| *libs* | Mainly contains the compiled binaries for those libraries that require compilation.
+|*boost* | library folders | All Boost header files
+|*doc*   | | A subset of all Boost library docs
+|*libs*  | library folders | Tests, .cpps, docs, etc., by library
+|*more*  | *getting_started*  *writingdoc* | Policy, getting started, and Contributor Guide documentation
+|*stage* | *lib* | CMake files for each library
+|*status*| | Boost-wide test suite
+|*tools* | tool folders |Utilities: Boost.Build, quickbook, bcp, etc.
+|b2.exe| | Boost install app, and supporting files
+|index.htm | | A copy of www.boost.org starts here
+|===
+
 == Footnotes
 
-[#footnote4]
-link:#footnote4-location[(4)]::
+[#footnote1]
+link:#footnote1-location[(1)]::
 This convention distinguishes the static version of a
 Boost library from the import library for an identically-configured
 Boost DLL, which would otherwise have the same name.
 
-[#footnote5]
-link:#footnote5-location[(5)]::
+[#footnote2]
+link:#footnote2-location[(2)]::
 These libraries were compiled without optimization or
 inlining, with full debug symbols enabled, and without `#define NDEBUG`. Although it's true that sometimes these choices don't affect
 binary compatibility with other compiled code, you can't count on that
 with Boost libraries.
 
+== See Also
 
+[square]
+* xref:header-organization-compilation.adoc[]
 

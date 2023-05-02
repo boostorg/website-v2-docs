@@ -1,16 +1,16 @@
 * xref:intro.adoc[Introduction to Boost]
-* xref:getting-started-with-windows.adoc[Getting Started with Windows]
-* xref:getting-started-with-linux.adoc[Getting Started with Linux]
-* xref:getting-started-with-macos.adoc[Getting Started with macOS]
-* xref:use-boost-with-windows-package-manager.adoc[Use Boost with Windows and a Package Manager]
-* xref:use-boost-with-linux-package-manager.adoc[Use Boost with Linux and a Package Manager]
+* xref:getting-started-with-windows.adoc[]
+* xref:getting-started-with-linux.adoc[]
+* xref:getting-started-with-macos.adoc[]
+* xref:use-boost-with-windows-package-manager.adoc[]
+* xref:use-boost-with-linux-package-manager.adoc[]
 
 * Reference
-** xref:library-naming.adoc[Library Naming]
-** xref:header-organization-compilation.adoc[Header Organization and Compiled Binaries]
+** xref:library-naming.adoc[]
+** xref:header-organization-compilation.adoc[]
 
 * Legacy Content
-** xref:prev/getting-started-on-unix-variants.adoc[Getting Started on Unix Variants]
+** xref:prev/getting-started-on-unix-variants.adoc[]
 ** xref:prev/borland_cpp.adoc[]
 ** xref:prev/bugs.adoc[]
 ** xref:prev/design_faq.adoc[]

@@ -1,4 +1,5 @@
 = Getting Started with Windows
+:navtitle: Getting Started Windows
 
 This section explains how to get your first Boost app running on Windows. The entire set of libraries is installed, which gives you the chance to explore the features and functionality available.
 
@@ -105,7 +106,7 @@ For most Boost libraries, there is an *example* subfolder containing a range of 
 
 . Copy all the code from https://github.com/boostorg/json/blob/develop/example/pretty.cpp, and use it to replace all the default content of the project's cpp file.
 
-. Add to your project a file called file.hpp, then copy all the content from https://github.com/boostorg/json/blob/develop/example/file.hpp into that file.
+. Add to your project a file called *file.hpp*, then copy all the content from https://github.com/boostorg/json/blob/develop/example/file.hpp into that file.
 
 . Search your computer for any JSON file, unless you have one you would like to use already. Record the full path to that file.
 
@@ -123,7 +124,6 @@ image:json-example-running.png[]
 * If your JSON included symbols such as the umlaut, these will not be rendered correctly unless you change the format of your Command Prompt to UTF-8. By default, a Command Prompt supports a code page numbered 437. To change the code page to UTF-8, type `chcp 65001`.
 
 * If you get compile errors such as `cannot open file 'libboost_json-vc143-mt-gd-x64-1_81.lib'` you have probably not entered the *Additional Library Directories* correctly.
-
 
 == Summary
 
