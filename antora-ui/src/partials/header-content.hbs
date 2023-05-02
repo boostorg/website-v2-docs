@@ -21,6 +21,16 @@
     </div>
     <div id="topbar-nav" class="navbar-menu">
       <div class="navbar-end">
+        <div class="navbar-item has-dropdown is-hoverable">
+          <a class="navbar-link" href="#">{{page.component.title}}</a>
+          <div class="navbar-dropdown">
+            {{#each site.components}}
+              {{#if (ne this @root.page.component)}}
+                <a class="navbar-item" href="{{{relativize ./url}}}">{{{./title}}}</a>
+              {{/if}}
+            {{/each}}
+          </div>
+        </div>
         <!--
         <a class="navbar-item" href="#">Home</a>
         <div class="navbar-item has-dropdown is-hoverable">
