@@ -39,6 +39,7 @@ site:
 antora:
   extensions:
     - require: ./boost.js
+    - require: '@antora/lunr-extension'
 
 content:
   sources:
