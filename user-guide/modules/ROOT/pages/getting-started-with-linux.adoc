@@ -1,46 +1,157 @@
 = Getting Started with Linux
+:navtitle: Getting Started Linux
 
-To install the Boost libraries on a Linux system, you can either use the package manager provided by your distribution or compile and install Boost from the source code. Here's a step-by-step guide for both methods:
+To install the Boost libraries on a Linux system, you can either use the package manager provided by your distribution or compile and install Boost from the source code. Here's a step-by-step guide for installing from source.
 
-== Method 1: Using the Package Manager
+If you are used to working with a package manager, refer to xref:use-boost-with-linux-package-manager.adoc[Use Boost with Linux and a Package Manager].
 
-. Open a terminal window. Update your package manager's repository cache. For example, if you're using Ubuntu or Debian-based distributions, use the following command: `sudo apt update`.
+== Installing from Source
 
-. Install the Boost development libraries using your package manager. For Ubuntu or Debian-based distributions, you can use the following command: `sudo apt install libboost-all-dev`. This command installs all the Boost development libraries available in the package repository.
+. Open a terminal window. 
 
-== Method 2: Installing from Source
+. Install the necessary build tools and libraries. For Ubuntu or Debian-based distributions, use the following commands: 
 
-. Open a terminal window. Install the necessary build tools and libraries. For Ubuntu or Debian-based distributions, use the following command: `sudo apt install build-essential g++ python-dev autotools-dev libicu-dev libbz2-dev libtool`
++
+[source]
+----
+sudo apt update
+sudo apt install build-essential python3 libbz2-dev libz-dev libicu-dev
+----
++
+For Fedora systems, use the following commands:
++
+[source]
+----
+sudo dnf update
+sudo dnf install gcc-c++ python3 bzip2-devel zlib-devel libicu-devel
+----
++
+For CentOS systems, use the following commands:
++
+[source]
+----
+sudo yum update
+sudo yum install gcc-c++ python3 bzip2-devel zlib-devel libicu-devel
+----
++
+For Arch-based systems (Arch Linux, Manjaro, etc.), use the following commands:
++
+[source]
+----
+sudo pacman -Syu
+sudo pacman -S base-devel python3 bzip2 zlib icu
+----
+
 
 . Download the latest Boost source code from the official website (https://www.boost.org/users/download/), or use `wget` to download it directly: 
 
 +
 [source]
 ----
-`wget https://boostorg.jfrog.io/artifactory/main/release/1.77.0/source/boost_1_82_0.tar.bz2`
+wget https://boostorg.jfrog.io/artifactory/main/release/1.82.0/source/boost_1_82_0.tar.bz2
 ----
 
 +
 Replace the URL and version number (1.82.0) with the latest version available.
 
-. Extract the downloaded archive: `tar xvfj boost_1_82_0.tar.bz2`.
+. Extract the downloaded archive:
++
+[source]
+----
+tar xvfj boost_1_82_0.tar.bz2
+----
 
-. Change to the extracted directory: `cd boost_1_82_0`. 
+. Change to the extracted directory:
 
-. Run the bootstrap script to prepare for building Boost: `./bootstrap.sh --prefix=/usr/local`. The --prefix option specifies the installation directory. You can change this to your preferred location.
++
+[source]
+----
+cd boost_1_82_0
+----
+
+. Run the bootstrap script to prepare for building Boost:
+
++
+[source]
+----
+./bootstrap.sh --prefix=/usr/local
+----
++
+The --prefix option specifies the installation directory. You can change this to your preferred location.
 
 . Build and install Boost: `sudo ./b2 install`. This command builds and installs the Boost libraries to the specified prefix directory.
 
 . (Optional) To use the installed Boost libraries, you may need to update your environment variables:
 +
-For LD_LIBRARY_PATH: `export LD_LIBRARY_PATH=/usr/local/lib:$LD_LIBRARY_PATH`.
-For CPLUS_INCLUDE_PATH: `export CPLUS_INCLUDE_PATH=/usr/local/include:$CPLUS_INCLUDE_PATH`.
+For LD_LIBRARY_PATH:
++
+[source]
+----
+export LD_LIBRARY_PATH=/usr/local/lib:$LD_LIBRARY_PATH
+----
++
+For CPLUS_INCLUDE_PATH:
++
+[source]
+----
+export CPLUS_INCLUDE_PATH=/usr/local/include:$CPLUS_INCLUDE_PATH
+----
++
 Replace `/usr/local` with the prefix directory you specified during the installation, if different.
-
++
 You can add these `export` commands to your `~/.bashrc` or `~/.profile` file to make the changes permanent.
 
 After completing either method, you should have the Boost libraries installed on your Linux system.
 
-== Next Steps
+[#your-first-app]
+== Your First App
 
-* xref:use-boost-with-linux-package-manager.adoc[Use Boost with Linux and a Package Manager]
+To keep things simple, let’s start by using a header-only library. The following program reads a sequence of integers from standard input, uses Boost.Lambda to multiply each number by three, and writes them to standard output:
+
+. Copy the following program into a file called *example.cpp*.
++
+[source,C++]
+----
+#include <boost/lambda/lambda.hpp>
+#include <iostream>
+#include <iterator>
+#include <algorithm>
+
+int main()
+{
+    using namespace boost::lambda;
+    typedef std::istream_iterator<int> in;
+
+    std::for_each(
+        in(std::cin), in(), std::cout << (_1 * 3) << " ");
+}
+----
+
+. Now, in the directory where you saved *example.cpp*, issue the following command:
+
++
+[source]
+----
+c++ -I path/to/boost_1_82_0 example.cpp -o example
+----
+
+. To test the result, type:
++
+[source]
+----
+echo 1 2 3 | ./example
+----
+
+. Did you get the expected result?
+
+== Create and Run a GitHub Example App
+
+In this section, we will locate an example from a folder on GitHub, and then build and run a project based on the example.
+
+For most Boost libraries, there is an *example* subfolder containing a range of runnable examples. For this guide, we will locate an example that reads a JSON file, and pretty-prints the contents.
+
+. Copy all the code from https://github.com/boostorg/json/blob/develop/example/pretty.cpp, and use it to replace all the default content of the project's cpp file.
+
+. Add to your project a file called *file.hpp*, then copy all the content from https://github.com/boostorg/json/blob/develop/example/file.hpp into that file.
+
+. Search your computer for any JSON file, unless you have one you would like to use already. Record the full path to that file.

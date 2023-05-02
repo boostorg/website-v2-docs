@@ -1,4 +1,5 @@
 = Getting Started on Unix Variants
+:navtitle: Getting Started on Unix Variants
 
 == Get Boost
 
@@ -7,7 +8,7 @@ distribution from
 http://www.boost.org/users/history/version_1_82_0.html[SourceForge]:
 
 . Download
-http://www.boost.org/users/history/version_1_82_0.html[`boost_1_82_0``.tar.bz2`].
+http://www.boost.org/users/history/version_1_82_0.html[boost_1_82_0.tar.bz2].
 . In the directory where you want to put the Boost installation, execute
 +
 [source,literal-block]
@@ -54,6 +55,7 @@ For details on Boost header organization, and the libraries that need, or can be
 The organization of Boost library headers isn't entirely uniform, but
 most libraries follow a few patterns:
 
+[disc]
 * Some older libraries and most very small libraries place all public
 headers directly into Boost.
 
@@ -97,6 +99,7 @@ separately-compiled library binaries or special treatment when linking.
 
 The only Boost libraries that _must_ be built separately are:
 
+[disc]
 * https://www.boost.org/doc/libs/1_82_0/doc/html/chrono.html[Chrono]
 
 * https://www.boost.org/doc/libs/1_82_0/libs/context/doc/html/index.html[Context]
@@ -368,6 +371,7 @@ type: `b2 --help`.
 In particular, to limit the amount of time spent building, you may be
 interested in:
 
+[disc]
 * reviewing the list of library names with `--show-libraries` 
 * limiting which libraries get built with the
 `--with-` _library-name_ or `--without-` _library-name_
@@ -386,6 +390,7 @@ might redirect the output into a file by appending
 During the process of building Boost libraries, you can expect to see
 some messages printed on the console. These may include
 
+[disc]
 * Notices about Boost library configuration—for example, the Regex
 library outputs a message about ICU when built without Unicode support,
 and the Python library may be skipped without error (but with a notice)
@@ -464,7 +469,7 @@ There are two main ways to link to libraries:
 $ c++ -I path/to/boost_1_82_0 example.cpp -o example \
    ~/boost/stage/lib/libboost_regex-gcc34-mt-d-1_36.a
 ----
-
++
 [#footnote2-location]
 . You can separately specify a directory to search (with
 `-L` _directory_) and a library name to search for (with

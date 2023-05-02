@@ -1,4 +1,5 @@
 = Header Organization and Compiled Binaries
+:navtitle: Header Organization and Compiled Binaries
 
 This section covers the basics of the organization of Boost libraries in the folder structure, a list of libraries requiring compilation into binaries, or optionally using compilation, and the tools which you might use to compile the headers.
 
@@ -7,6 +8,7 @@ This section covers the basics of the organization of Boost libraries in the fol
 The organization of Boost library headers isn't entirely uniform, but
 most libraries follow a few patterns:
 
+[disc]
 * Some older libraries and most very small libraries place all public
 headers directly into Boost.
 
@@ -46,22 +48,40 @@ separately-compiled library binaries or special treatment when linking.
 
 The only Boost libraries that _must_ be built separately are:
 
+[disc]
+* https://www.boost.org/libs/atomic/[Atomic]
+
 * https://www.boost.org/libs/chrono[Chrono]
 
+* https://www.boost.org/libs/container[Container]
+
 * https://www.boost.org/libs/context[Context]
+
+* https://www.boost.org/libs/contract[Contract]
+
+* https://www.boost.org/libs/coroutine[Coroutine]
+
+* https://www.boost.org/libs/date_time[Date_Time]
+
+* https://www.boost.org/libs/fiber[Fiber]
 
 * https://www.boost.org/libs/filesystem[Filesystem]
 
 * https://www.boost.org/libs/graph_parallel[GraphParallel]
 
+* *Headers* - headers is special, not a compiled library, but an interface library representing all other libraries. 
+
 * https://www.boost.org/libs/iostreams[IOStreams]
+
+* https://www.boost.org/libs/json[Json]
 
 * https://www.boost.org/libs/locale[Locale]
 
-* https://www.boost.org/libs/log[Log] (see https://www.boost.org/build[build
-documentation])
+* https://www.boost.org/libs/log[Log] (see https://www.boost.org/build[build documentation])
 
 * https://www.boost.org/libs/mpi[MPI]
+
+* https://www.boost.org/libs/nowide[Nowide]
 
 * https://www.boost.org/libs/program_options[ProgramOptions]
 
@@ -73,11 +93,18 @@ documentation] before building and installing)
 
 * https://www.boost.org/libs/serialization[Serialization]
 
+* https://www.boost.org/libs/stacktrace[Stacktrace]
+
 * https://www.boost.org/libs/thread[Thread]
 
 * https://www.boost.org/libs/timer[Timer]
 
+* https://www.boost.org/doc/libs/1_82_0/doc/html/boost_typeerasure.html[Type_Erasure]
+
+* https://www.boost.org/libs/url[Url]
+
 * https://www.boost.org/libs/wave[Wave]
+
 
 == Optional Compiled Binaries
 
@@ -96,7 +123,7 @@ the TR1 and C99 cmath functions.
 * https://www.boost.org/libs/random[Random] has a binary component
 which is only needed if you're using `random_device`.
 
-* https://www.boost.org/libs/system/doc/html/system.html[System] is header-only since
+* https://www.boost.org/libs/system[System] is header-only since
 Boost 1.69. A stub library is still built for compatibility, but linking
 to it is no longer necessary.
 
@@ -112,7 +139,7 @@ Note::
 If you previously chose a toolset for the purposes of building b2, you should assume it won't work and instead choose newly from the table below.
 
 [#toolset]
-[width="100%",cols="12%,22%,66%",options="header",]
+[width="100%",cols="12%,22%,66%",options="header",stripes=even]
 |===
 |Toolset Name |Vendor |Notes
 |`acc` |Hewlett Packard |Only very recent versions are known to work
@@ -122,11 +149,9 @@ well with Boost
 
 |`como` |Comeau Computing |Using this toolset may require configuring another toolset to act as its backend.
 
-|`darwin` |Apple Computer |Apple's version of the GCC toolchain with
-support for Darwin and MacOS X features such as frameworks.
+|`darwin` |Apple Computer |Apple's version of the GCC toolchain with support for Darwin and MacOS X features such as frameworks.
 
-|`gcc` |The Gnu Project |Includes support for Cygwin and MinGW
-compilers.
+|`gcc` |The Gnu Project |Includes support for Cygwin and MinGW compilers.
 
 |`hp_cxx` |Hewlett Packard |Targeted at the Tru64 operating system.
 
@@ -153,3 +178,8 @@ can append the version number to the toolset name, preceded by a hyphen,
 e.g. `intel-9.0`  or `borland-5.4.3`.
 
 On Windows, append a version number even if you only have one version installed (unless you are using the msvc or gcc toolsets, which have special version detection code) or auto-linking will fail.
+
+== See Also
+
+[square]
+* xref:library-naming.adoc[Library Names and Organization]

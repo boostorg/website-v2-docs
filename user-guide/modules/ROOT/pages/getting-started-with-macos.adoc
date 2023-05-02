@@ -1,4 +1,5 @@
 = Getting Started with macOS
+:navtitle: Getting Started macOS
 
 To install and build Boost libraries on macOS, you can either use CMake, or install and use a package manager such as Homebrew, a popular package manager for macOS that simplifies the installation of software packages. 
 
