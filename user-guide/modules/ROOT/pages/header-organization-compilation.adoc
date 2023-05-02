@@ -16,7 +16,7 @@ named after the library. For example, you'll find the Python library's
 
 * Some libraries have an “aggregate header” in boost that
 includes all of the library's other headers. For example,
-https://www.boost.org/doc/libs/1_82_0/libs/python/doc/html/index.html[Python]'s aggregate header is `boost/python.hpp`.
+https://www.boost.org/libs/python[Python]'s aggregate header is `boost/python.hpp`.
 
 * Most libraries place private headers in a subdirectory called
 *detail*, or *aux*. Don't expect to find anything you can use in
@@ -46,61 +46,61 @@ separately-compiled library binaries or special treatment when linking.
 
 The only Boost libraries that _must_ be built separately are:
 
-* https://www.boost.org/doc/libs/1_82_0/doc/html/chrono.html[Chrono]
+* https://www.boost.org/libs/chrono[Chrono]
 
-* https://www.boost.org/doc/libs/1_82_0/libs/context/doc/html/index.html[Context]
+* https://www.boost.org/libs/context[Context]
 
-* https://www.boost.org/doc/libs/1_82_0/libs/filesystem/doc/index.htm[Filesystem]
+* https://www.boost.org/libs/filesystem[Filesystem]
 
-* https://www.boost.org/doc/libs/1_82_0/libs/graph_parallel/doc/html/index.html[GraphParallel]
+* https://www.boost.org/libs/graph_parallel[GraphParallel]
 
-* https://www.boost.org/doc/libs/1_82_0/libs/iostreams/doc/index.html[IOStreams]
+* https://www.boost.org/libs/iostreams[IOStreams]
 
-* https://www.boost.org/doc/libs/1_82_0/libs/locale/doc/html/index.html[Locale]
+* https://www.boost.org/libs/locale[Locale]
 
-* https://www.boost.org/doc/libs/1_82_0/libs/log/doc/html/index.html[Log] (see https://www.boost.org/build/doc/html/index.html[build
+* https://www.boost.org/libs/log[Log] (see https://www.boost.org/build[build
 documentation])
 
-* https://www.boost.org/doc/libs/1_82_0/doc/html/mpi.html[MPI]
+* https://www.boost.org/libs/mpi[MPI]
 
-* https://www.boost.org/doc/libs/1_82_0/doc/html/program_options.html[ProgramOptions]
+* https://www.boost.org/libs/program_options[ProgramOptions]
 
-* https://www.boost.org/doc/libs/1_82_0/libs/python/doc/html/index.html[Python] (see the
-https://www.boost.org/doc/libs/1_58_0/libs/python/doc/building.html[Boost.Python build
+* https://www.boost.org/libs/python[Python] (see the
+https://www.boost.org/doc/libs/master/libs/python/doc/html/building.html[Boost.Python build
 documentation] before building and installing)
 
-* https://www.boost.org/doc/libs/1_82_0/libs/regex/doc/html/index.html[Regex]
+* https://www.boost.org/libs/regex[Regex]
 
-* https://www.boost.org/doc/libs/1_82_0/libs/serialization/doc/index.html[Serialization]
+* https://www.boost.org/libs/serialization[Serialization]
 
-* https://www.boost.org/doc/libs/1_82_0/doc/html/thread.html[Thread]
+* https://www.boost.org/libs/thread[Thread]
 
-* https://www.boost.org/doc/libs/1_82_0/libs/timer/doc/index.htmll[Timer]
+* https://www.boost.org/libs/timer[Timer]
 
-* https://www.boost.org/doc/libs/1_82_0/libs/wave/index.html[Wave]
+* https://www.boost.org/libs/wave[Wave]
 
 == Optional Compiled Binaries
 
 A few libraries have optional separately-compiled binaries:
 
-* https://www.boost.org/doc/libs/1_82_0/libs/exception/doc/boost-exception.html[Exception] provides non-intrusive implementation of exception_ptr for 32-bit `_MSC_VER==1310`
+* https://www.boost.org/libs/exception[Exception] provides non-intrusive implementation of exception_ptr for 32-bit `_MSC_VER==1310`
 and `_MSC_VER==1400` which requires a separately-compiled binary. This is
 enabled by `#define BOOST_ENABLE_NON_INTRUSIVE_EXCEPTION_PTR`.
 
-* https://www.boost.org/doc/libs/1_82_0/libs/graph/doc/index.html[Graph] also has a binary
+* https://www.boost.org/libs/graph[Graph] also has a binary
 component that is only needed if you intend to parse GraphViz files.
 
-* https://www.boost.org/doc/libs/1_82_0/libs/math/doc/html/index.html[Math] has binary components for
+* https://www.boost.org/libs/math[Math] has binary components for
 the TR1 and C99 cmath functions.
 
-* https://www.boost.org/doc/libs/1_82_0/doc/html/boost_random.html[Random] has a binary component
+* https://www.boost.org/libs/random[Random] has a binary component
 which is only needed if you're using `random_device`.
 
-* https://www.boost.org/doc/libs/1_82_0/libs/system/doc/html/system.html[System] is header-only since
+* https://www.boost.org/libs/system/doc/html/system.html[System] is header-only since
 Boost 1.69. A stub library is still built for compatibility, but linking
 to it is no longer necessary.
 
-* https://www.boost.org/doc/libs/1_82_0/libs/test/doc/html/index.html[Test] can be used in
+* https://www.boost.org/libs/test[Test] can be used in
 “header-only” or “separately compiled” mode, although *separate
 compilation is recommended for serious use*.
 
@@ -139,7 +139,7 @@ Boost. Note that the Oracle/Sun compiler has a large number of options
 which effect binary compatibility. It is vital that the libraries are
 built with the same options that your application will use. In particular
 be aware that the default standard library may not work well with Boost,
-unless you are building for Cpp11. 
+unless you are building for Cpp11.
 
 The particular compiler options you need can be injected with the b2 command line options `cxxflags=` and `linkflags=`. For example to build with the Apache standard library in Cpp03 mode use:
 
