@@ -52,7 +52,7 @@ fi
 
 if command -v git >/dev/null && git rev-parse --is-inside-work-tree >/dev/null 2>&1; then
   commit_id=$(git rev-parse HEAD)
-  commit_id=$(expr substr "$commit_id" $(expr length "$commit_id" - 7) 8)
+  commit_id=$(expr substr "$commit_id" 1 7)
 else
   commit_id=""
 fi
