@@ -5,15 +5,15 @@
 
 The most reliable way to get a copy of Boost is to download a
 distribution from
-http://www.boost.org/users/history/version_1_82_0.html[SourceForge]:
+https://www.boost.org/[Boost], and select *Current Release*.
 
-. Download
-http://www.boost.org/users/history/version_1_82_0.html[boost_1_82_0.tar.bz2].
-. In the directory where you want to put the Boost installation, execute
+. Download the current release.
+
+. In the directory where you want to put the Boost installation, execute (replacing _NN_ with the Boost version number your downloaded):
 +
 [source,literal-block]
 ----
-tar --bzip2 -xf /path/to/boost_1_82_0.tar.bz2
+tar --bzip2 -xf /path/to/boost_1_NN_0.tar.bz2
 ----
 
 Other Packages
@@ -32,7 +32,7 @@ This is a sketch of the resulting directory structure:
 
 [source,literal-block]
 ----
-boost_1_82_0/ .................The “boost root directory”
+boost_1_NN_0/ .................The “boost root directory”
    index.htm .........A copy of www.boost.org starts here
    boost/ .........................All Boost Header files
 
@@ -65,7 +65,7 @@ named after the library. For example, you'll find the Python library's
 
 * Some libraries have an “aggregate header” in boost that
 includes all of the library's other headers. For example,
-https://www.boost.org/doc/libs/1_82_0/libs/python/doc/html/index.html[Python]'s aggregate header is `boost/python.hpp`.
+https://www.boost.org/libs/python[Python]'s aggregate header is `boost/python.hpp`.
 
 * Most libraries place private headers in a subdirectory called
 *detail*, or *aux*. Don't expect to find anything you can use in
@@ -74,7 +74,7 @@ these directories.
 It's important to note the following:
 
 . The path to the *boost root directory* (often
-*/usr/local/boost_1_82_0*) is sometimes referred to as `$BOOST_ROOT`
+*/usr/local/boost_1_NN_0*) is sometimes referred to as `$BOOST_ROOT`
 in documentation and mailing lists.
 
 . To compile anything in Boost, you need a directory containing the
@@ -100,62 +100,78 @@ separately-compiled library binaries or special treatment when linking.
 The only Boost libraries that _must_ be built separately are:
 
 [disc]
-* https://www.boost.org/doc/libs/1_82_0/doc/html/chrono.html[Chrono]
+* https://www.boost.org/libs/atomic/[Atomic]
 
-* https://www.boost.org/doc/libs/1_82_0/libs/context/doc/html/index.html[Context]
+* https://www.boost.org/libs/chrono[Chrono]
 
-* https://www.boost.org/doc/libs/1_82_0/libs/filesystem/doc/index.htm[Filesystem]
+* https://www.boost.org/libs/container[Container]
 
-* https://www.boost.org/doc/libs/1_82_0/libs/graph_parallel/doc/html/index.html[GraphParallel]
+* https://www.boost.org/libs/context[Context]
 
-* https://www.boost.org/doc/libs/1_82_0/libs/iostreams/doc/index.html[IOStreams]
+* https://www.boost.org/libs/contract[Contract]
 
-* https://www.boost.org/doc/libs/1_82_0/libs/locale/doc/html/index.html[Locale]
+* https://www.boost.org/libs/coroutine[Coroutine]
 
-* https://www.boost.org/doc/libs/1_82_0/libs/log/doc/html/index.html[Log] (see https://www.boost.org/build/doc/html/index.html[build
-documentation])
+* https://www.boost.org/libs/date_time[Date_Time]
 
-* https://www.boost.org/doc/libs/1_82_0/doc/html/mpi.html[MPI]
+* https://www.boost.org/libs/fiber[Fiber]
 
-* https://www.boost.org/doc/libs/1_82_0/doc/html/program_options.html[ProgramOptions]
+* https://www.boost.org/libs/filesystem[Filesystem]
 
-* https://www.boost.org/doc/libs/1_82_0/libs/python/doc/html/index.html[Python] (see the
-https://www.boost.org/doc/libs/1_58_0/libs/python/doc/building.html[Boost.Python build
-documentation] before building and installing it)
+* https://www.boost.org/libs/graph_parallel[GraphParallel]
 
-* https://www.boost.org/doc/libs/1_82_0/libs/regex/doc/html/index.html[Regex]
+* *Headers* - headers is special, not a compiled library, but an interface library representing all other libraries. 
 
-* https://www.boost.org/doc/libs/1_82_0/libs/serialization/doc/index.html[Serialization]
+* https://www.boost.org/libs/iostreams[IOStreams]
 
-* https://www.boost.org/doc/libs/1_82_0/doc/html/thread.html[Thread]
+* https://www.boost.org/libs/json[Json]
 
-* https://www.boost.org/doc/libs/1_82_0/libs/timer/doc/index.htmll[Timer]
+* https://www.boost.org/libs/locale[Locale]
 
-* https://www.boost.org/doc/libs/1_82_0/libs/wave/index.html[Wave]
+* https://www.boost.org/libs/log[Log] (see https://www.boost.org/build[build documentation])
+
+* https://www.boost.org/libs/mpi[MPI]
+
+* https://www.boost.org/libs/nowide[Nowide]
+
+* https://www.boost.org/libs/program_options[ProgramOptions]
+
+* https://www.boost.org/libs/python[Python] (see the
+https://www.boost.org/doc/libs/master/libs/python/doc/html/building.html[Boost.Python build
+documentation] before building and installing)
+
+* https://www.boost.org/libs/regex[Regex]
+
+* https://www.boost.org/libs/serialization[Serialization]
+
+* https://www.boost.org/libs/stacktrace[Stacktrace]
+
+* https://www.boost.org/libs/thread[Thread]
+
+* https://www.boost.org/libs/timer[Timer]
+
+* https://boost.org/libs/type_erasure[Type_Erasure]
+
+* https://www.boost.org/libs/url[Url]
+
+* https://www.boost.org/libs/wave[Wave]
 
 A few libraries have optional separately-compiled binaries:
 
-* https://www.boost.org/doc/libs/1_82_0/libs/exception/doc/boost-exception.html[Exception] provides
-non-intrusive implementation of exception_ptr for 32-bit _MSC_VER==1310
-and _MSC_VER==1400 which requires a separately-compiled binary. This is
-enabled by #define BOOST_ENABLE_NON_INTRUSIVE_EXCEPTION_PTR.
+* https://www.boost.org/libs/exception[Exception] provides non-intrusive implementation of exception_ptr for 32-bit `_MSC_VER==1310`
+and `_MSC_VER==1400` which requires a separately-compiled binary. This is enabled by `#define BOOST_ENABLE_NON_INTRUSIVE_EXCEPTION_PTR`.
 
-* https://www.boost.org/doc/libs/1_82_0/libs/graph/doc/index.html[Graph] also has a binary
-component that is only needed if you intend to parse GraphViz files.
+* https://www.boost.org/libs/graph[Graph] also has a binary component that is only needed if you intend to parse GraphViz files.
 
-* https://www.boost.org/doc/libs/1_82_0/libs/math/doc/html/index.html[Math] has binary components for
-the TR1 and C99 cmath functions.
+* https://www.boost.org/libs/math[Math] has binary components for the TR1 and C99 cmath functions.
 
-* https://www.boost.org/doc/libs/1_82_0/doc/html/boost_random.html[Random] has a binary component
-which is only needed if you're using `random_device`.
+* https://www.boost.org/libs/random[Random] has a binary component which is only needed if you're using `random_device`.
 
-* https://www.boost.org/doc/libs/1_82_0/libs/system/doc/html/system.html[System] is header-only since
-Boost 1.69. A stub library is still built for compatibility, but linking
-to it is no longer necessary.
+* https://www.boost.org/libs/system[System] is header-only since
+Boost 1.69. A stub library is still built for compatibility, but linking to it is no longer necessary.
 
-* https://www.boost.org/doc/libs/1_82_0/libs/test/doc/html/index.html[Test] can be used in
-“header-only” or “separately compiled” mode, although *separate
-compilation is recommended for serious use*.
+* https://www.boost.org/libs/test[Test] can be used in
+“header-only” or “separately compiled” mode, although *separate compilation is recommended for serious use*.
 
 == Build a Simple Program Using Boost
 
@@ -183,12 +199,11 @@ int main()
 
 Copy the text of this program into a file called `example.cpp`.
 
-Now, in the directory where you saved `example.cpp`, issue the following
-command:
+Now, in the directory where you saved `example.cpp`, issue the following command (replacing _NN_ with the Boost version number you are using):
 
 [source,literal-block]
 ----
-c++ -I path/to/boost_1_82_0 example.cpp -o example
+c++ -I path/to/boost_1_NN_0 example.cpp -o example
 ----
 
 To test the result, type:
@@ -215,11 +230,11 @@ you'll need to acquire library binaries.
 === Easy Build and Install
 
 Issue the following commands in the shell (don't type `$`; that
-represents the shell's prompt):
+represents the shell's prompt, and _NN_ is the Boost version number):
 
 [source,literal-block]
 ----
-$ cd path/to/boost_1_82_0
+$ cd path/to/boost_1_NN_0
 $ ./bootstrap.sh --help
 ----
 
@@ -344,11 +359,11 @@ For a complete description of these and other invocation options, see the
 https://www.boost.org/build/doc/html/index.html[Boost.Build
 documentation].
 
-For example, your session might look like this:
+For example, your session might look like this (replace _NN_ with the Boost version number you are using):
 
 [source,literal-block]
 ----
-$ cd ~/boost_1_82_0
+$ cd ~/boost_1_NN_0
 $ b2 --build-dir=/tmp/build-boost toolset=gcc stage
 ----
 
@@ -411,7 +426,7 @@ toolset-name.c++ long/path/to/file/being/built
 
 The only error messages you see when building Boost — if any — should be
 related to the IOStreams library's support of zip and bzip2 formats as
-described https://www.boost.org/doc/libs/1_82_0/libs/iostreams/doc/index.html[here]. Install
+described https://www.boost.org/libs/iostreams[here]. Install
 the relevant development packages for libz and libbz2 if you need those
 features. Other errors when building Boost libraries are cause for
 concern.
@@ -429,7 +444,7 @@ Users' mailing list].
 
 To demonstrate linking with a Boost binary library, we'll use the
 following simple program that extracts the subject lines from emails. It
-uses the https://www.boost.org/doc/libs/1_82_0/libs/regex/doc/html/index.html[Boost.Regex] library, which
+uses the https://www.boost.org/libs/regex[Boost.Regex] library, which
 has a separately-compiled binary component.
 
 [source,cpp]
@@ -462,11 +477,11 @@ compile configuration is compatible with the rest of your project.
 
 There are two main ways to link to libraries:
 
-. You can specify the full path to each library:
+. You can specify the full path to each library (replace _NN_ with the Boost version number you are using):
 +
 [source,literal-block]
 ----
-$ c++ -I path/to/boost_1_82_0 example.cpp -o example \
+$ c++ -I path/to/boost_1_NN_0 example.cpp -o example \
    ~/boost/stage/lib/libboost_regex-gcc34-mt-d-1_36.a
 ----
 +
@@ -478,7 +493,7 @@ leading `lib` and trailing suffix (`.a` in this case):
 +
 [source,literal-block]
 ----
-$ c++ -I path/to/boost_1_82_0 example.cpp -o example \
+$ c++ -I path/to/boost_1_NN_0 example.cpp -o example \
    -L~/boost/stage/lib/ -lboost_regex-gcc34-mt-d-1_36
 ----
 +
@@ -640,7 +655,7 @@ please post it to the
 http://www.boost.org/more/mailing_lists.htm#users[Boost Users' mailing list].
 
 * https://www.boost.org/build/doc/html/index.html[Boost.Build reference manual]
-* https://www.boost.org/doc/libs/1_82_0/libs/libraries.htm[Index of all Boost library documentation]
+* https://www.boost.org/libs/[Index of all Boost library documentation]
 
 Onward
 
