@@ -55,18 +55,27 @@ if ! [ -e "$script_dir/antora-ui/build/ui-bundle.zip" ]; then
   cd "$cwd" || exit
 fi
 
+if command -v git >/dev/null && git rev-parse --is-inside-work-tree >/dev/null 2>&1; then
+  commit_id=$(git rev-parse HEAD)
+  commit_id=$(expr substr "$commit_id" $(expr length "$commit_id" - 7) 8)
+else
+  commit_id=""
+fi
+
 # Run antora command
 while test $# -gt 0; do
   if [ "$1" = "develop" ] || [ "$1" = "master" ]; then
     $ANTORA_CMD --fetch \
       --attribute page-boost-branch=$1 \
       --attribute page-boost-ui-branch=$1 \
+      --attribute page-commit-id="$commit_id" \
       libs.playbook.yml
 
   elif [ "$1" = "release" ]; then
     $ANTORA_CMD --fetch \
       --attribute page-boost-branch=master \
       --attribute page-boost-ui-branch=master \
+      --attribute page-commit-id="$commit_id" \
       --attribute page-boost-is-release=true \
       libs.playbook.yml
 
@@ -77,6 +86,7 @@ while test $# -gt 0; do
       $ANTORA_CMD --fetch \
       --attribute page-boost-branch=$1 \
       --attribute page-boost-ui-branch=master \
+      --attribute page-commit-id="$commit_id" \
         "$f"
     else
       echo "Playbook \"$f\" does not exist"
