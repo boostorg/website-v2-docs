@@ -127,7 +127,7 @@ int main()
 }
 ----
 
-. Now, in the directory where you saved *example.cpp*, issue the following command (replacing _NN_ with the Boost version number you are using):
+. Now, in the directory where you saved *example.cpp*, issue the following command (replacing _1_82_0_ with the Boost version number you are using):
 
 +
 [source]

@@ -9,14 +9,16 @@ https://www.boost.org/[Boost], and select *Current Release*.
 
 . Download the current release.
 
-. In the directory where you want to put the Boost installation, execute (replacing _NN_ with the Boost version number your downloaded):
+. In the directory where you want to put the Boost installation, execute:
 +
 [source,literal-block]
 ----
 tar --bzip2 -xf /path/to/boost_1_82_0.tar.bz2
 ----
++
+If necessary, replace  _1_82_0_ with the Boost version number you downloaded.
 
-Other Packages
+=== Other Packages
 
 [#footnote1-location]
 RedHat, Debian, and other distribution packagers supply Boost library
@@ -199,7 +201,7 @@ int main()
 
 Copy the text of this program into a file called `example.cpp`.
 
-Now, in the directory where you saved `example.cpp`, issue the following command (replacing _NN_ with the Boost version number you are using):
+Now, in the directory where you saved `example.cpp`, issue the following command:
 
 [source,literal-block]
 ----
@@ -230,7 +232,7 @@ you'll need to acquire library binaries.
 === Easy Build and Install
 
 Issue the following commands in the shell (don't type `$`; that
-represents the shell's prompt, and _NN_ is the Boost version number):
+represents the shell's prompt):
 
 [source,literal-block]
 ----
@@ -359,7 +361,7 @@ For a complete description of these and other invocation options, see the
 https://www.boost.org/build/doc/html/index.html[Boost.Build
 documentation].
 
-For example, your session might look like this (replace _NN_ with the Boost version number you are using):
+For example, your session might look like this:
 
 [source,literal-block]
 ----
@@ -477,7 +479,7 @@ compile configuration is compatible with the rest of your project.
 
 There are two main ways to link to libraries:
 
-. You can specify the full path to each library (replace _NN_ with the Boost version number you are using):
+. You can specify the full path to each library:
 +
 [source,literal-block]
 ----
