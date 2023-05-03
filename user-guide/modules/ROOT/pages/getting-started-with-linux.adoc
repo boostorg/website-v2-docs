@@ -48,17 +48,17 @@ sudo pacman -S base-devel python3 bzip2 zlib icu
 +
 [source]
 ----
-wget https://boostorg.jfrog.io/artifactory/main/release/1.82.0/source/boost_1_82_0.tar.bz2
+wget https://boostorg.jfrog.io/artifactory/main/release/1.NN.0/source/boost_1_NN_0.tar.bz2
 ----
 
 +
-Replace the URL and version number (1.82.0) with the latest version available.
+*Replace the URL and version number (1.NN.0) with the latest version available.*
 
 . Extract the downloaded archive:
 +
 [source]
 ----
-tar xvfj boost_1_82_0.tar.bz2
+tar xvfj boost_1_NN_0.tar.bz2
 ----
 
 . Change to the extracted directory:
@@ -66,7 +66,7 @@ tar xvfj boost_1_82_0.tar.bz2
 +
 [source]
 ----
-cd boost_1_82_0
+cd boost_1_NN_0
 ----
 
 . Run the bootstrap script to prepare for building Boost:
@@ -127,12 +127,12 @@ int main()
 }
 ----
 
-. Now, in the directory where you saved *example.cpp*, issue the following command:
+. Now, in the directory where you saved *example.cpp*, issue the following command (replacing _NN_ with the Boost version number you are using):
 
 +
 [source]
 ----
-c++ -I path/to/boost_1_82_0 example.cpp -o example
+c++ -I path/to/boost_1_NN_0 example.cpp -o example
 ----
 
 . To test the result, type:
