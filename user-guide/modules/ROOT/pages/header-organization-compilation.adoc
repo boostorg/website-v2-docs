@@ -27,7 +27,7 @@ these directories.
 It's important to note the following:
 
 . The path to the *boost root directory* (often
-*/usr/local/boost_1_NN_0*) is sometimes referred to as `$BOOST_ROOT`
+*/usr/local/boost_1_82_0*) is sometimes referred to as `$BOOST_ROOT`
 in documentation and mailing lists.
 
 . To compile anything in Boost, you need a directory containing the

@@ -13,7 +13,7 @@ https://www.boost.org/[Boost], and select *Current Release*.
 +
 [source,literal-block]
 ----
-tar --bzip2 -xf /path/to/boost_1_NN_0.tar.bz2
+tar --bzip2 -xf /path/to/boost_1_82_0.tar.bz2
 ----
 
 Other Packages
@@ -32,7 +32,7 @@ This is a sketch of the resulting directory structure:
 
 [source,literal-block]
 ----
-boost_1_NN_0/ .................The “boost root directory”
+boost_1_82_0/ .................The “boost root directory”
    index.htm .........A copy of www.boost.org starts here
    boost/ .........................All Boost Header files
 
@@ -74,7 +74,7 @@ these directories.
 It's important to note the following:
 
 . The path to the *boost root directory* (often
-*/usr/local/boost_1_NN_0*) is sometimes referred to as `$BOOST_ROOT`
+*/usr/local/boost_1_82_0*) is sometimes referred to as `$BOOST_ROOT`
 in documentation and mailing lists.
 
 . To compile anything in Boost, you need a directory containing the
@@ -203,7 +203,7 @@ Now, in the directory where you saved `example.cpp`, issue the following command
 
 [source,literal-block]
 ----
-c++ -I path/to/boost_1_NN_0 example.cpp -o example
+c++ -I path/to/boost_1_82_0 example.cpp -o example
 ----
 
 To test the result, type:
@@ -234,7 +234,7 @@ represents the shell's prompt, and _NN_ is the Boost version number):
 
 [source,literal-block]
 ----
-$ cd path/to/boost_1_NN_0
+$ cd path/to/boost_1_82_0
 $ ./bootstrap.sh --help
 ----
 
@@ -363,7 +363,7 @@ For example, your session might look like this (replace _NN_ with the Boost vers
 
 [source,literal-block]
 ----
-$ cd ~/boost_1_NN_0
+$ cd ~/boost_1_82_0
 $ b2 --build-dir=/tmp/build-boost toolset=gcc stage
 ----
 
@@ -481,7 +481,7 @@ There are two main ways to link to libraries:
 +
 [source,literal-block]
 ----
-$ c++ -I path/to/boost_1_NN_0 example.cpp -o example \
+$ c++ -I path/to/boost_1_82_0 example.cpp -o example \
    ~/boost/stage/lib/libboost_regex-gcc34-mt-d-1_36.a
 ----
 +
@@ -493,7 +493,7 @@ leading `lib` and trailing suffix (`.a` in this case):
 +
 [source,literal-block]
 ----
-$ c++ -I path/to/boost_1_NN_0 example.cpp -o example \
+$ c++ -I path/to/boost_1_82_0 example.cpp -o example \
    -L~/boost/stage/lib/ -lboost_regex-gcc34-mt-d-1_36
 ----
 +

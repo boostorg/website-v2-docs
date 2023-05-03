@@ -110,7 +110,7 @@ The `--layout=<layout>` option determines how the library name is handled, and t
 
 == The Boost Distribution
 
-After installing Boost, this is the resulting directory structure, in the *boost_1_NN_0* root:
+After installing Boost, this is the resulting directory structure, in the *boost_1_82_0* root:
 
 [cols="1,1,4",options="header",stripes=even]
 |===

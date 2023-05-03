@@ -5,7 +5,7 @@ This section describes how to manage Boost libraries using the *vcpkg* package m
 
 == Advantages of using vcpkg
 
-A package manager like vcpkg adds value by simplifying and streamlining the process of managing dependencies in a software project. It can be particularly helpful in C++ projects, which often have complex dependency chains. Some of the key benefits of using vcpkg include:
+A package manager like vcpkg can add value by streamlining the process of managing dependencies in a software project. It can be particularly helpful in C++ projects, which often have complex dependency chains. Some of the key benefits of using vcpkg include:
 
 [disc]
 * Simplified dependency management: vcpkg automates the process of downloading, building, and installing libraries, saving developers time and effort.
