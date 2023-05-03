@@ -30,6 +30,7 @@ asciidoc:
     page-boost-branch: develop
     page-boost-ui-branch: develop
     page-boost-is-release: ''
+    page-commit-id: ''
 
 site:
   url: https://antora.cppalliance.org/${page-boost-branch}/lib/doc

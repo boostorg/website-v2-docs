@@ -7,11 +7,15 @@ if [ -z "$npm_version" ]; then
   echo "npm is not installed"
   exit 1
 fi
+
 gulp_version=$(gulp --version 2>/dev/null)
 if [ -z "$gulp_version" ]; then
   echo "gulp is not installed"
   exit 1
 fi
 
-npm install
+if [ ! -d "node_modules" ] || [ "$(find package.json -prune -printf '%T@\n' | cut -d . -f 1)" -gt "$(find node_modules -prune -printf '%T@\n' | cut -d . -f 1)" ]; then
+  npm install
+fi
+
 gulp bundle

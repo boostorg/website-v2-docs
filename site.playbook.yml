@@ -20,6 +20,7 @@
 asciidoc:
   attributes:
     page-boost-branch: develop
+    page-commit-id: ''
 
 site:
   url: https://antora.cppalliance.org

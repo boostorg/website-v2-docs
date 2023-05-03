@@ -42,23 +42,27 @@ fi
 
 cwd=$(pwd)
 script_dir=$(dirname "$(readlink -f "$0")")
-if ! [ -e "$script_dir/antora-ui/build/ui-bundle.zip" ]; then
+if ! [ -e "$script_dir/antora-ui/build/ui-bundle.zip" ] || \
+   find "$script_dir/antora-ui" -newer "$script_dir/antora-ui/build/ui-bundle.zip" -print -quit | grep -q .
+then
   cd "$script_dir/antora-ui" || exit
   ./build.sh
   cd "$cwd" || exit
 fi
 
-while test $# -gt 0; do
-  if [ "$1" = "develop" ]; then
-    $ANTORA_CMD --fetch \
-      --attribute page-boost-branch=$1 \
-      site.playbook.yml
-  elif [ "$1" = "master" ]; then
-    $ANTORA_CMD --fetch \
-      --attribute page-boost-branch=$1 \
-      site.playbook.yml
-  else
-    echo "invalid argument: '$1'"
-  fi
-  shift
-done
+if command -v git >/dev/null && git rev-parse --is-inside-work-tree >/dev/null 2>&1; then
+  commit_id=$(git rev-parse HEAD)
+  commit_id=$(expr substr "$commit_id" $(expr length "$commit_id" - 7) 8)
+else
+  commit_id=""
+fi
+
+if [ "$1" != "develop" ] && [ "$1" != "master" ]; then
+  echo "invalid argument: '$1'"
+  exit 1
+fi
+
+$ANTORA_CMD --fetch \
+  --attribute page-boost-branch="$1" \
+  --attribute page-commit-id="$commit_id" \
+  site.playbook.yml
