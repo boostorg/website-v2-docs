@@ -42,7 +42,7 @@ target_link_libraries(MyProject Boost::system)
 
 Here's a step-by-step guide to installing the Boost libraries using Homebrew.
 
-== Prerequisites
+=== Prerequisites
 
 Homebrew has a few prerequisites, one of which is the Xcode Command Line Tools. The Xcode Command Line Tools include essential developer tools, like compilers and build utilities, that Homebrew needs to function properly.
 
@@ -58,7 +58,7 @@ Once the Xcode Command Line Tools are installed, you can proceed with installing
 
 It's important to note that the full Xcode application is not required to use Homebrew, but it can be beneficial for developers who need additional development tools or want to create macOS and iOS applications. You can download and install the full Xcode application from the Mac App Store if you need it.
 
-== Install Homebrew
+=== Install Homebrew
 
 You can skip step 1 if you have already installed Homebrew.
 
@@ -72,9 +72,9 @@ You can skip step 1 if you have already installed Homebrew.
 +
 This command will download and execute the Homebrew installation script. Follow the prompts to complete the installation.
 
-. Update Homebrew. Before installing the Boost libraries, it's a good idea to update Homebrew to ensure you have the latest package information. Run the following command: `brew update`.
+. Update Homebrew. Before installing the Boost libraries, it's a good idea to update Homebrew to ensure you have the latest package information. Run the following commands: `brew update` followed by `brew upgrade` if there are outdated formulae.
 
-== Install Boost
+=== Install Boost
 
 . Now you can install the Boost libraries using Homebrew. Run the following command: `brew install boost`. Homebrew will download and install the Boost libraries and their dependencies.
 
