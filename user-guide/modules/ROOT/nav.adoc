@@ -4,6 +4,7 @@
 * xref:getting-started-with-macos.adoc[]
 * xref:use-boost-with-windows-package-manager.adoc[]
 * xref:use-boost-with-linux-package-manager.adoc[]
+* xref:boost-history.adoc[]
 
 * Reference
 ** xref:library-naming.adoc[]

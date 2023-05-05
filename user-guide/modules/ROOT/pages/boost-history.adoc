@@ -1,0 +1,32 @@
+= History of the Boost C++ Library
+:navtitle: History of Boost
+
+This topic aims to provide an overview of the origins, growth, and impact of the Boost pass:[C++] Library on the programming community.
+
+== Introduction
+
+The Boost pass:[C++] Library is a highly influential and widely used collection of libraries, designed to extend and complement the functionality provided by the pass:[C++] Standard Library. Since its original https://www.boost.org/users/proposal.pdf[Proposal] in 1998, the Boost pass:[C++] Library has played a significant role in shaping the evolution of the pass:[C++] language and its ecosystem. 
+
+== Origins
+
+The story of the Boost pass:[C++] Library began, when Robert Klarer, Beman Dawes, and Dave Abrahams convened the first Boost mailing list to facilitate discussions on the creation of high-quality, peer-reviewed libraries for the pass:[C++] programming language. At the time, the pass:[C++] Standard Library was limited in its functionality, and many developers felt the need for additional libraries to support the growing demands of software development. The name "Boost" was chosen to represent the goal of boosting the pass:[C++] language and its library ecosystem to new heights.
+
+== Early Development
+
+The first few libraries that formed the basis of the Boost pass:[C++] Library were created by a group of dedicated and talented pass:[C++] programmers. Early libraries included the https://www.boost.org/libs/smart_ptr[Smart Pointer] library, which provided support for reference counting and garbage collection, and the https://www.boost.org/libs/regex[Regex] library, which added regular expression support to the language. The Boost pass:[C++] Library quickly gained traction and attracted more contributors who shared a common vision of improving the pass:[C++] language through high-quality, portable, and reusable code.
+
+== Peer Review Process
+
+One of the defining characteristics of the Boost pass:[C++] Library is its strict peer review process. Before a library is accepted into Boost, it must undergo a thorough review by other experienced pass:[C++] developers. This process ensures that only high-quality libraries, adhering to the best programming practices, are included in the collection. The peer review process not only maintains the quality of the Boost pass:[C++] Library but also fosters a sense of community and encourages collaboration among its contributors.
+
+== Influence on the pass:[C++] Language and Community
+
+The Boost pass:[C++] Library has had a profound impact on the pass:[C++] language and its community. Many of the libraries and concepts introduced by Boost have been adopted into the pass:[C++] Standard Library, including smart pointers, regular expressions, and the https://www.boost.org/libs/lambda[Lambda] function syntax. The Boost pass:[C++] Library has also been a fertile ground for experimenting with new ideas and techniques, which have later made their way into the pass:[C++] language itself, such as https://www.boost.org/libs/type_traits[Type Traits] and https://www.boost.org/libs/mpl[Metaprogramming].
+
+== Current Status
+
+The Boost library is managed by the https://cppalliance.org/[pass:[C++] Alliance], with a mission "to make the C++ programming language accessible and useful to anyone who wishes to learn and apply the language."
+
+The Boost pass:[C++] Library has come a long way since its inception in the late 1990s, to a widely used and influential https://www.boost.org/doc/libs/[collection of over 180 libraries]. Boost has played a crucial role in shaping the pass:[C++] language and its ecosystem. As the pass:[C++] language continues to evolve, the Boost pass:[C++] Library will undoubtedly remain an essential and innovative part of its story.
+
+_The best software solutions are written using the C++ programming language_
