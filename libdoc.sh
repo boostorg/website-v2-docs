@@ -62,6 +62,10 @@ else
   commit_id=""
 fi
 
+if [ ! -d "node_modules" ] || [ "$(find package.json -prune -printf '%T@\n' | cut -d . -f 1)" -gt "$(find node_modules -prune -printf '%T@\n' | cut -d . -f 1)" ]; then
+  npm install
+fi
+
 # Run antora command
 while test $# -gt 0; do
   if [ "$1" = "develop" ] || [ "$1" = "master" ]; then
