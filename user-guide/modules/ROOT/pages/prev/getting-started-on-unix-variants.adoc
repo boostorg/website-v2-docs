@@ -67,7 +67,7 @@ named after the library. For example, you'll find the Python library's
 
 * Some libraries have an “aggregate header” in boost that
 includes all of the library's other headers. For example,
-https://www.boost.org/libs/python[Python]'s aggregate header is `boost/python.hpp`.
+boost:python[]'s aggregate header is `boost/python.hpp`.
 
 * Most libraries place private headers in a subdirectory called
 *detail*, or *aux*. Don't expect to find anything you can use in
@@ -102,77 +102,77 @@ separately-compiled library binaries or special treatment when linking.
 The only Boost libraries that _must_ be built separately are:
 
 [disc]
-* https://www.boost.org/libs/atomic/[Atomic]
+* boost:atomic[]
 
-* https://www.boost.org/libs/chrono[Chrono]
+* boost:chrono[]
 
-* https://www.boost.org/libs/container[Container]
+* boost:container[]
 
-* https://www.boost.org/libs/context[Context]
+* boost:context[]
 
-* https://www.boost.org/libs/contract[Contract]
+* boost:contract[]
 
-* https://www.boost.org/libs/coroutine[Coroutine]
+* boost:coroutine[]
 
-* https://www.boost.org/libs/date_time[Date_Time]
+* boost:date_time[]
 
-* https://www.boost.org/libs/fiber[Fiber]
+* boost:fiber[]
 
-* https://www.boost.org/libs/filesystem[Filesystem]
+* boost:filesystem[]
 
-* https://www.boost.org/libs/graph_parallel[GraphParallel]
+* boost:graph_parallel[]
 
-* *Headers* - headers is special, not a compiled library, but an interface library representing all other libraries. 
+* *Headers* - headers is special, not a compiled library, but an interface library representing all other libraries.
 
-* https://www.boost.org/libs/iostreams[IOStreams]
+* boost:iostreams[]
 
-* https://www.boost.org/libs/json[Json]
+* boost:json[]
 
-* https://www.boost.org/libs/locale[Locale]
+* boost:locale[]
 
-* https://www.boost.org/libs/log[Log] (see https://www.boost.org/build[build documentation])
+* boost:log[] (see https://www.boost.org/build[build documentation])
 
-* https://www.boost.org/libs/mpi[MPI]
+* boost:mpi[]
 
-* https://www.boost.org/libs/nowide[Nowide]
+* boost:nowide[]
 
-* https://www.boost.org/libs/program_options[ProgramOptions]
+* boost:program_options[]
 
-* https://www.boost.org/libs/python[Python] (see the
+* boost:python[] (see the
 https://www.boost.org/doc/libs/master/libs/python/doc/html/building.html[Boost.Python build
 documentation] before building and installing)
 
-* https://www.boost.org/libs/regex[Regex]
+* boost:regex[]
 
-* https://www.boost.org/libs/serialization[Serialization]
+* boost:serialization[]
 
-* https://www.boost.org/libs/stacktrace[Stacktrace]
+* boost:stacktrace[]
 
-* https://www.boost.org/libs/thread[Thread]
+* boost:thread[]
 
-* https://www.boost.org/libs/timer[Timer]
+* boost:timer[]
 
 * https://boost.org/libs/type_erasure[Type_Erasure]
 
-* https://www.boost.org/libs/url[Url]
+* boost:url[]
 
-* https://www.boost.org/libs/wave[Wave]
+* boost:wave[]
 
 A few libraries have optional separately-compiled binaries:
 
-* https://www.boost.org/libs/exception[Exception] provides non-intrusive implementation of exception_ptr for 32-bit `_MSC_VER==1310`
+* boost:exception[] provides non-intrusive implementation of exception_ptr for 32-bit `_MSC_VER==1310`
 and `_MSC_VER==1400` which requires a separately-compiled binary. This is enabled by `#define BOOST_ENABLE_NON_INTRUSIVE_EXCEPTION_PTR`.
 
-* https://www.boost.org/libs/graph[Graph] also has a binary component that is only needed if you intend to parse GraphViz files.
+* boost:graph[] also has a binary component that is only needed if you intend to parse GraphViz files.
 
-* https://www.boost.org/libs/math[Math] has binary components for the TR1 and C99 cmath functions.
+* boost:math[] has binary components for the TR1 and C99 cmath functions.
 
-* https://www.boost.org/libs/random[Random] has a binary component which is only needed if you're using `random_device`.
+* boost:random[] has a binary component which is only needed if you're using `random_device`.
 
-* https://www.boost.org/libs/system[System] is header-only since
+* boost:system[] is header-only since
 Boost 1.69. A stub library is still built for compatibility, but linking to it is no longer necessary.
 
-* https://www.boost.org/libs/test[Test] can be used in
+* boost:test[] can be used in
 “header-only” or “separately compiled” mode, although *separate compilation is recommended for serious use*.
 
 == Build a Simple Program Using Boost
@@ -328,7 +328,7 @@ Boost. Note that the Oracle/Sun compiler has a large number of options
 which effect binary compatibility. It is vital that the libraries are
 built with the same options that your application will use. In particular
 be aware that the default standard library may not work well with Boost,
-unless you are building for Cpp11. 
+unless you are building for Cpp11.
 
 The particular compiler options you need can be injected with the b2 command line options `cxxflags=` and `linkflags=`. For example to build with the Apache standard library in Cpp03 mode use:
 
@@ -339,7 +339,7 @@ The particular compiler options you need can be injected with the b2 command lin
 
 If you have multiple versions of a particular compiler installed, you
 can append the version number to the toolset name, preceded by a hyphen,
-e.g. `intel-9.0`  or `borland-5.4.3` . 
+e.g. `intel-9.0`  or `borland-5.4.3` .
 
 ==== Select a Build Directory
 
@@ -389,7 +389,7 @@ In particular, to limit the amount of time spent building, you may be
 interested in:
 
 [disc]
-* reviewing the list of library names with `--show-libraries` 
+* reviewing the list of library names with `--show-libraries`
 * limiting which libraries get built with the
 `--with-` _library-name_ or `--without-` _library-name_
 options
@@ -428,7 +428,7 @@ toolset-name.c++ long/path/to/file/being/built
 
 The only error messages you see when building Boost — if any — should be
 related to the IOStreams library's support of zip and bzip2 formats as
-described https://www.boost.org/libs/iostreams[here]. Install
+described boost:iostreams[here]. Install
 the relevant development packages for libz and libbz2 if you need those
 features. Other errors when building Boost libraries are cause for
 concern.
@@ -553,7 +553,7 @@ libraries. |runtime-debugging=on
 |`p` |using the STLPort standard library rather than the default one
 supplied with your compiler. |stdlib=stlport
 |===
-  
+
 For example, if you build a debug version of your code for use with
 debug versions of the static runtime library and the STLPort standard
 library, the tag would be: `-sgdp` . If none of the above
