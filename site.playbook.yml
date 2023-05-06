@@ -17,11 +17,6 @@
 # old-version:  DIGIT+ '_' DIGIT+ '_' DIGIT+
 #
 
-asciidoc:
-  attributes:
-    page-boost-branch: develop
-    page-commit-id: ''
-
 site:
   url: https://antora.cppalliance.org
   title: Boost Site Docs
@@ -29,7 +24,7 @@ site:
 
 antora:
   extensions:
-    - require: ./boost.js
+    - require: ./extensions/boost.js
     - require: '@antora/lunr-extension'
 
 content:

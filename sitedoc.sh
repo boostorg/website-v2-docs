@@ -57,12 +57,10 @@ else
   commit_id=""
 fi
 
-if [ "$1" != "develop" ] && [ "$1" != "master" ]; then
-  echo "invalid argument: '$1'"
-  exit 1
+if [ ! -d "node_modules" ] || [ "$(find package.json -prune -printf '%T@\n' | cut -d . -f 1)" -gt "$(find node_modules -prune -printf '%T@\n' | cut -d . -f 1)" ]; then
+  npm install
 fi
 
-$ANTORA_CMD --fetch \
-  --attribute page-boost-branch="$1" \
-  --attribute page-commit-id="$commit_id" \
-  site.playbook.yml
+echo $ANTORA_CMD --fetch --attribute page-boost-branch="$1" --attribute page-commit-id="$commit_id" site.playbook.yml
+$ANTORA_CMD --fetch --attribute page-boost-branch="$1" --attribute page-commit-id="$commit_id" site.playbook.yml
+
