@@ -2,11 +2,13 @@
 
 This User Guide is for all C++ developers using or evaluating Boost libraries.
 
-Each individual library has its' own specific user documentation. This User Guide covers all aspects of the libraries that are generic to the entire set. 
+Each individual library has its' own specific user documentation.
+This User Guide covers all aspects of the libraries that are generic to the entire set.
 
 == Feedback
 
-Feedback on any aspect of the documentation is encouraged, and is available by creating a https://github.com/cppalliance/site-docs/issues[New Issue]. Also, if you have feedback on any particular library, create an issue in the repo for that library.
+Feedback on any aspect of the documentation is encouraged, and is available by creating a https://github.com/cppalliance/site-docs/issues[New Issue].
+Also, if you have feedback on any particular library, create an issue in the repo for that library.
 
 == First Steps
 
