@@ -36,18 +36,18 @@ _The best software solutions are written using the C++ programming language_
 === Proposal
 
 [circle]
-* https://www.boost.org/users/proposal.pdf[Proposal for a C++ Library Repository Web Site]
+- https://www.boost.org/users/proposal.pdf[Proposal for a C++ Library Repository Web Site]
 
 
 === Status Reports
 
 [circle]
-* https://github.com/boostorg/website/blob/master/development/report-jan-2006.rst[Review Wizard Status Report for January 2006]
-* https://github.com/boostorg/website/blob/master/development/report-apr-2006.rst[Review Wizard Status Report for April 2006]
-* https://github.com/boostorg/website/blob/master/development/report-sep-2007.rst[Review Wizard Status Report for September 2007]
-* https://github.com/boostorg/website/blob/master/development/report-nov-2007.rst[Review Wizard Status Report for November 2007]
-* https://github.com/boostorg/website/blob/master/development/report-apr-2008.rst[Review Wizard Status Report for April 2008]
-* https://github.com/boostorg/website/blob/master/development/report-may-2008.rst[Review Wizard Status Report for May 2008]
-* https://github.com/boostorg/website/blob/master/development/report-nov-2008.rst[Review Wizard Status Report for November 2008]
-* https://github.com/boostorg/website/blob/master/development/report-jun-2009.rst[Review Wizard Status Report for June 2009]
-* https://github.com/boostorg/website/blob/master/development/report-dec-2009.rst[Review Wizard Status Report for December 2009]
+- https://github.com/boostorg/website/blob/master/development/report-jan-2006.rst[Review Wizard Status Report for January 2006]
+- https://github.com/boostorg/website/blob/master/development/report-apr-2006.rst[Review Wizard Status Report for April 2006]
+- https://github.com/boostorg/website/blob/master/development/report-sep-2007.rst[Review Wizard Status Report for September 2007]
+- https://github.com/boostorg/website/blob/master/development/report-nov-2007.rst[Review Wizard Status Report for November 2007]
+- https://github.com/boostorg/website/blob/master/development/report-apr-2008.rst[Review Wizard Status Report for April 2008]
+- https://github.com/boostorg/website/blob/master/development/report-may-2008.rst[Review Wizard Status Report for May 2008]
+- https://github.com/boostorg/website/blob/master/development/report-nov-2008.rst[Review Wizard Status Report for November 2008]
+- https://github.com/boostorg/website/blob/master/development/report-jun-2009.rst[Review Wizard Status Report for June 2009]
+- https://github.com/boostorg/website/blob/master/development/report-dec-2009.rst[Review Wizard Status Report for December 2009]
