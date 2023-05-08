@@ -14,7 +14,7 @@ To install the Boost C++ libraries onto Debian-based systems (such as Debian, Ub
 +
 [source]
 ----
-`sudo apt update`
+sudo apt update
 ----
 
 . Install the Boost development libraries using your package manager. For Ubuntu or Debian-based distributions, you can use the following command: 
@@ -22,7 +22,7 @@ To install the Boost C++ libraries onto Debian-based systems (such as Debian, Ub
 +
 [source]
 ----
-`sudo apt install libboost-all-dev`
+sudo apt install libboost-all-dev
 ----
 
 +

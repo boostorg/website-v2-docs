@@ -30,3 +30,24 @@ The Boost library is managed by the https://cppalliance.org/[pass:[C++] Alliance
 The Boost pass:[C++] Library has come a long way since its inception in the late 1990s, to a widely used and influential https://www.boost.org/doc/libs/[collection of over 180 libraries]. Boost has played a crucial role in shaping the pass:[C++] language and its ecosystem. As the pass:[C++] language continues to evolve, the Boost pass:[C++] Library will undoubtedly remain an essential and innovative part of its story.
 
 _The best software solutions are written using the C++ programming language_
+
+== References
+
+=== Proposal
+
+[circle]
+* xref:https://www.boost.org/users/proposal.pdf[Proposal for a C++ Library Repository Web Site]
+
+
+=== Status Reports
+
+[circle]
+* xref:https://github.com/boostorg/website/blob/master/development/report-jan-2006.rst[Review Wizard Status Report for January 2006]
+* xref:https://github.com/boostorg/website/blob/master/development/report-apr-2006.rst[Review Wizard Status Report for April 2006]
+* xref:https://github.com/boostorg/website/blob/master/development/report-sep-2007.rst[Review Wizard Status Report for September 2007]
+* xref:https://github.com/boostorg/website/blob/master/development/report-nov-2007.rst[Review Wizard Status Report for November 2007]
+* xref:https://github.com/boostorg/website/blob/master/development/report-apr-2008.rst[Review Wizard Status Report for April 2008]
+* xref:https://github.com/boostorg/website/blob/master/development/report-may-2008.rst[Review Wizard Status Report for May 2008]
+* xref:https://github.com/boostorg/website/blob/master/development/report-nov-2008.rst[Review Wizard Status Report for November 2008]
+* xref:https://github.com/boostorg/website/blob/master/development/report-jun-2009.rst[Review Wizard Status Report for June 2009]
+* xref:https://github.com/boostorg/website/blob/master/development/report-dec-2009.rst[Review Wizard Status Report for December 2009]
