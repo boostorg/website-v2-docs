@@ -5,48 +5,88 @@ This section describes how to manage Boost libraries using the *vcpkg* package m
 
 == Advantages of using vcpkg
 
-A package manager like vcpkg can add value by streamlining the process of managing dependencies in a software project. It can be particularly helpful in C++ projects, which often have complex dependency chains. Some of the key benefits of using vcpkg include:
+A package manager like *vcpkg* can add value by streamlining the process of managing dependencies in a software project. It can be particularly helpful in C++ projects, which often have complex dependency chains. Some of the key benefits of using *vcpkg* include:
 
 [disc]
-* Simplified dependency management: vcpkg automates the process of downloading, building, and installing libraries, saving developers time and effort.
+* Simplified dependency management: *vcpkg* automates the process of downloading, building, and installing libraries, saving developers time and effort.
 
-* Consistent environment: vcpkg ensures that all developers on a team use the same library versions, helping to avoid inconsistencies and bugs that can arise from using different library versions in different environments.
+* Consistent environment: *vcpkg* ensures that all developers on a team use the same library versions, helping to avoid inconsistencies and bugs that can arise from using different library versions in different environments.
 
-* Cross-platform support: vcpkg supports multiple platforms, including Windows, macOS, and Linux, making it easier to develop cross-platform projects.
+* Cross-platform support: *vcpkg* supports multiple platforms, including Windows, macOS, and Linux, making it easier to develop cross-platform projects.
 
-* Binary caching: vcpkg caches compiled binaries, speeding up subsequent builds and installations of the same libraries across different projects.
+* Binary caching: *vcpkg* caches compiled binaries, speeding up subsequent builds and installations of the same libraries across different projects.
 
-* Version control: vcpkg allows developers to specify the exact version of a library they want to use, ensuring that updates to libraries do not introduce breaking changes to their projects.
+* Version control: *vcpkg* allows developers to specify the exact version of a library they want to use, ensuring that updates to libraries do not introduce breaking changes to their projects.
 
-* Library discovery: vcpkg has a large catalog of available libraries, making it easy for developers to discover and use new libraries in their projects.
+* Library discovery: *vcpkg* has a large catalog of available libraries, making it easy for developers to discover and use new libraries in their projects.
 
-* Integration with build systems: vcpkg integrates with popular build systems like CMake, simplifying the process of adding dependencies to a project.
+* Integration with build systems: *vcpkg* integrates with popular build systems like CMake, simplifying the process of adding dependencies to a project.
 
-* Regular updates and maintenance: vcpkg is actively maintained and updated by Microsoft, ensuring that the package manager and its libraries stay current and compatible with the latest development tools and practices.
+* Regular updates and maintenance: *vcpkg* is actively maintained and updated by Microsoft, ensuring that the package manager and its libraries stay current and compatible with the latest development tools and practices.
 
-By providing these benefits, a package manager like vcpkg helps developers to focus on writing code and building features, rather than spending time on managing dependencies manually.
+By providing these benefits, a package manager like *vcpkg* helps developers to focus on writing code and building features, rather than spending time on managing dependencies manually.
 
 == Install the Package Manager
 
-To install vcpkg on a Windows PC, follow these steps:
+To install *vcpkg* on a Windows PC, follow these steps:
 
 . Open a Command Prompt or PowerShell with administrative privileges. You can do this by searching for *cmd* or *PowerShell* in the Start menu, right-clicking on the relevant result, and choosing *Run as administrator*.
 
-. Clone the vcpkg repository from GitHub by running the following command: `it clone https://github.com/microsoft/vcpkg.git`. This command will create a new directory named *vcpkg* in your current directory and clone the repository into it. If you don't have Git installed, you can download it from https://git-scm.com/downloads and install it.
+. Clone the *vcpkg* repository from GitHub by running the following command: 
++
+[source]
+----
+git clone https://github.com/microsoft/vcpkg.git
+----
++
+This command will create a new directory named *vcpkg* in your current directory and clone the repository into it. If you don't have Git installed, you can download it from https://git-scm.com/downloads and install it.
 
-. Change to the *vcpkg* directory using the `cd` command: `cd vcpkg`.
+. Change to the *vcpkg* directory using the `cd` command: 
++
+[source]
+----
+cd vcpkg
+----
 
-. Run the bootstrap script to build the vcpkg executable: `.\bootstrap-vcpkg.bat`. This script will download and build the necessary components for vcpkg. It might take a few minutes to complete.
+. Run the bootstrap script to build the *vcpkg* executable: 
++
+[source]
+----
+.\bootstrap-vcpkg.bat
+----
++
+This script will download and build the necessary components for vcpkg. It might take a few minutes to complete.
 
-. (Optional) Add the vcpkg executable to your system's PATH environment variable. This step makes it easier to run vcpkg from any directory. Run the following command: `.\vcpkg integrate install`. After running this command, you'll see a message with instructions on how to add vcpkg to your user-wide environment. Follow the instructions to ensure you can use vcpkg from any directory.
+. (Optional) Add the *vcpkg* executable to your system's PATH environment variable. This step makes it easier to run *vcpkg* from any directory. Run the following command:
++
+[source]
+----
+.\vcpkg integrate install
+----
++
+After running this command, you'll see a message with instructions on how to add *vcpkg* to your user-wide environment. Follow the instructions to ensure you can use *vcpkg* from any directory.
 
 == Using the Package Manager
 
-Now, vcpkg is installed on your Windows PC, and you can start using it to manage your C++ project dependencies. 
+Now, *vcpkg* is installed on your Windows PC, and you can start using it to manage your C++ project dependencies. 
 
-. To install a package, you can run a command like: `.\vcpkg install <package-name>`, replacing <package-name> with the name of the package you want to install.
+. To install a package, you can run a command like:
++
+[source]
+----
+.\vcpkg install boost
+----
++
+Replace `boost` with the name of any additional package you want to install.
 
-. To verify access to Boost libraries, enter `vcpkg search boost`. You should see a full list of the Boost libraries you have installed.
+. To verify access to Boost libraries, enter:
++
+[source]
+----
+.\vcpkg search boost
+----
++
+You should see a full list of the Boost libraries you have installed.
 
 
 
