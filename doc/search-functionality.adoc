@@ -51,7 +51,7 @@ NOTE: Antora Lunr Extension is already integrated into the demo site https://doc
 
 Free Algolia search service for developer docs.
 
-Requires investigation (http://docsearch.algolia.com/[link-to-website]).
+We are currently investigating this in https://github.com/cppalliance/site-docs/pull/54[this pull request].
 
 ==== Typesense
 
