@@ -1,7 +1,53 @@
+{{#if env.ALGOLIA_API_KEY}}
+<script src="https://cdn.jsdelivr.net/npm/docsearch.js@2.5.2/dist/cdn/docsearch.min.js"></script>
+<script>
+  function setupAlgoliaDocsearch(){
+    document.getElementById('search-input').hidden = true;
+    document.getElementById('search-input-algolia').hidden = false;
+    var search = docsearch({
+      {{#with env.ALGOLIA_APP_ID}}
+      appId: '{{this}}',
+      {{/with}}
+      apiKey: '{{env.ALGOLIA_API_KEY}}',
+      indexName: '{{env.ALGOLIA_IDX_NAME}}',
+      inputSelector: '#search-input-algolia',
+      autocompleteOptions: { hint: false, keyboardShortcuts: ['s'] },
+      algoliaOptions: { hitsPerPage: 10 ,facetFilters: ['version:{{page.componentVersion.displayVersion}}'] },
+    }).autocomplete
+    search.on('autocomplete:closed', function () { search.autocomplete.setVal() });
+  }
+
+  function setCookie(name, value) {
+    document.cookie = name + "=" + (value || "") + "; path=/";
+  }
+
+  function getCookie(name) {
+    var nameEQ = name + "=";
+    var ca = document.cookie.split(';');
+    for (var i = 0; i < ca.length; i++) {
+      var c = ca[i];
+      while (c.charAt(0) == ' ') c = c.substring(1, c.length);
+      if (c.indexOf(nameEQ) == 0) return c.substring(nameEQ.length, c.length);
+    }
+    return null;
+  }
+
+  const urlParams = new URLSearchParams(window.location.search);
+  const search = urlParams.get('search');
+
+  if (search === 'algolia') {
+    setCookie('search','algolia');
+    setupAlgoliaDocsearch();
+  } else if (search === 'lunr') {
+    setCookie('search','lunr');
+  } else if (getCookie('search') === 'algolia') {
+    setupAlgoliaDocsearch();
+  }
+</script>
+{{/if}}
 <script id="site-script" src="{{{uiRootPath}}}/js/site.js" data-ui-root-path="{{{uiRootPath}}}"></script>
 <script async src="{{{uiRootPath}}}/js/vendor/highlight.js"></script>
 {{#if env.SITE_SEARCH_PROVIDER}}
 {{> search-scripts}}
 {{/if}}
 <script async src="{{{uiRootPath}}}/js/vendor/tabs.js" data-sync-storage-key="preferred-tab"></script>
-

@@ -1,19 +1,15 @@
 {{#with page.navigation}}
 <div class="nav-panel-menu is-active" data-panel="menu">
-<div class="navbar-item search hide-for-print">
-  <div id="search-field" class="field has-filter">
-    <div style="display: flex; flex-direction: column;">
-      <div style="display: flex; margin-bottom: 10px;">
-        <input id="search-input" type="text" placeholder="Search the docs" {{#if @root.page.home}} autofocus{{/if}} style="flex: 1;">
-      </div>
-      <div style="display: flex;">
-        <label class="filter checkbox" style="background: none; border: none; margin-right: 10px;">
-          <input type="checkbox" data-facet-filter="component:{{@root.page.component.name}}"> &nbsp; Only in {{@root.page.component.name}}
-        </label>
+  <div class="navbar-item search hide-for-print">
+    <div id="search-field" class="field has-filter">
+      <div style="display: flex; flex-direction: column;">
+        <div style="display: flex; margin-bottom: 10px;">
+          <input id="search-input" type="text" placeholder="Search the docs [Lunr]"{{#if page.home}} autofocus{{/if}} style="flex: 1;">
+          <input id="search-input-algolia" type="text" placeholder="Search the docs [Algolia]"{{#if page.home}} autofocus{{/if}} hidden style="flex: 1;">
+        </div>
       </div>
     </div>
   </div>
-</div>
   <nav class="nav-menu">
     {{#with @root.page.componentVersion}}
     <h3 class="title"><a href="{{{relativize ./url}}}">{{./title}}</a></h3>
