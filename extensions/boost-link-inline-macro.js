@@ -71,7 +71,8 @@ module.exports = function (registry) {
         const self = this;
         self.process(function (parent, target, attr) {
             let title = attr.$positional ? attr.$positional[0] : `Boost.${toPascalCase(target)}`;
-            let text = `https://www.boost.org/libs/${toSnakeCase(target)}[${title}]`;
+            let is_tool = ['auto_index', 'bcp', 'boostbook', 'boostdep', 'boost_install', 'build', 'check_build', 'cmake', 'docca', 'inspect', 'litre', 'quickbook'].includes(toSnakeCase(target));
+            let text = `https://www.boost.org/${is_tool ? 'tools' : 'libs'}/${toSnakeCase(target)}[${title}]`;
             return self.createInline(parent, 'quoted', text);
         });
     });

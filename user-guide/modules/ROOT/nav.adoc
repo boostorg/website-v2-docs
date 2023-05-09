@@ -1,9 +1,5 @@
 * xref:intro.adoc[Introduction to Boost]
-* xref:getting-started-with-windows.adoc[]
-* xref:getting-started-with-linux.adoc[]
-* xref:getting-started-with-macos.adoc[]
-* xref:use-boost-with-windows-package-manager.adoc[]
-* xref:use-boost-with-linux-package-manager.adoc[]
+* xref:getting-started.adoc[]
 * xref:boost-history.adoc[]
 
 * Reference

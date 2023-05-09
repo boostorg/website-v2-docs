@@ -5,7 +5,7 @@ This topic aims to provide an overview of the origins, growth, and impact of the
 
 == Introduction
 
-The Boost pass:[C++] Library is a highly influential and widely used collection of libraries, designed to extend and complement the functionality provided by the pass:[C++] Standard Library. Since its original https://www.boost.org/users/proposal.pdf[Proposal] in 1998, the Boost pass:[C++] Library has played a significant role in shaping the evolution of the pass:[C++] language and its ecosystem. 
+The Boost pass:[C++] Library is a highly influential and widely used collection of libraries, designed to extend and complement the functionality provided by the pass:[C++] Standard Library. Since its original https://www.boost.org/users/proposal.pdf[Proposal] in 1998, the Boost pass:[C++] Library has played a significant role in shaping the evolution of the pass:[C++] language and its ecosystem.
 
 == Origins
 

@@ -32,7 +32,7 @@ There are many advantages to using Boost in your C++ projects, the main one bein
 
 == Considerations when using Boost
 
-The libraries implement a modern approach to C++ programming, generally prioritizing performance, correctness, cross-platform portability, efficiency and reusability. Boost offers building blocks, rather than a high-level app framework. 
+The libraries implement a modern approach to C++ programming, generally prioritizing performance, correctness, cross-platform portability, efficiency and reusability. Boost offers building blocks, rather than a high-level app framework.
 
 Boost is template-heavy, in order to provide portability and reusability, but this does make for dense syntax, which can take some getting used to.
 
@@ -83,6 +83,4 @@ The purpose of the Boost libraries is to evangelize and support C++ development.
 If you are new to Boost, the recommended next step is to download the entire library for your selected OS, and build a few small sample programs.
 
 [square]
-* xref:getting-started-with-windows.adoc[Getting Started with Windows]
-* xref:getting-started-with-linux.adoc[Getting Started with Linux]
-* xref:getting-started-with-macos.adoc[Getting Started with macOS]
+* xref:getting-started.adoc[]
