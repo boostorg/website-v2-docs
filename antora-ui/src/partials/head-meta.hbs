@@ -1,1 +1,3 @@
-    {{!-- Add additional meta tags here --}}
+    {{#if env.ALGOLIA_API_KEY}}
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/docsearch.js@2.5.2/dist/cdn/docsearch.min.css">
+    {{/if}}
