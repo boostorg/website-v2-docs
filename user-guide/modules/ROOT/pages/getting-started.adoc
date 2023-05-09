@@ -1,0 +1,865 @@
+= Getting Started
+:navtitle: Getting Started
+:latest_tag: 1_82_0
+:latest_version: 1.82.0
+:release_basename: boost_{latest_tag}
+:release_filename: {release_basename}.tar.bz2
+:release_zip_filename: {release_basename}.zip
+:release_url: https://boostorg.jfrog.io/artifactory/main/release/{latest_version}/source/{release_filename}
+:release_zip_url: https://boostorg.jfrog.io/artifactory/main/release/{latest_version}/source/{release_zip_filename}
+:linkattrs:
+
+This section explains how to get your first Boost app running.
+Here's a step-by-step guide for installing from source.
+
+== Prerequisites
+
+The only prerequisite for installing boost is a pass:[C++] compiler.
+If you already have that set-up, please skip to the xref:#installing[] section.
+
+If you don't have access to a pass:[C++] compiler yet, here are a few ways to get started:
+
+:tabs-sync-option:
+
+[tabs,sync-group-id=os]
+====
+Windows::
++
+--
+Users on Windows usually get started with the Visual Studio compiler.
+You can download the https://visualstudio.microsoft.com/downloads/[Microsoft Visual Studio 2022] (Community Edition) as the IDE and pass:[C++] compiler in these examples.
+--
+
+Linux::
++
+--
+Users on Linux usually get started with GCC.
+You can check if GCC is already installed with:
+
+[source,bash]
+----
+g++ --version
+----
+
+Otherwise, you need to install the necessary build tools and libraries.
+For Ubuntu or Debian-based distributions, use the following commands:
+
+[source,bash]
+----
+sudo apt update
+sudo apt install build-essential python3 libbz2-dev libz-dev libicu-dev
+----
+
+For Fedora systems, use the following commands:
+
+[source,bash]
+----
+sudo dnf update
+sudo dnf install gcc-c++ python3 bzip2-devel zlib-devel libicu-devel
+----
+
+For CentOS systems, use the following commands:
+
+[source,bash]
+----
+sudo yum update
+sudo yum install gcc-c++ python3 bzip2-devel zlib-devel libicu-devel
+----
+
+For Arch-based systems (Arch Linux, Manjaro, etc.), use the following commands:
+
+[source,bash]
+----
+sudo pacman -Syu
+sudo pacman -S base-devel python3 bzip2 zlib icu
+----
+--
+
+macOS::
++
+--
+Users on macOS usually get started with Clang.
+You can check if Clang is already installed with:
+
+[source,bash]
+----
+clang++ --version
+----
+--
+====
+
+[#installing]
+== Installing
+
+=== Download Boost
+
+[tabs,sync-group-id=build]
+====
+Boost.Build::
++
+--
+. Navigate to https://www.boost.org/users/download/ and under *Current Release/Downloads*, download the Boost distribution.
+For instance:
+.. Windows: {release_zip_url}[boost_{latest_tag}.zip]
+.. Unix variants: {release_url}[boost_{latest_tag}.tar.bz2]
+
+. After the download has completed in your *Downloads* folder, right-click on the compressed file and extract it to a folder.
+
+TIP: boost:build[] is the officially supported build system used by the Boost libraries.
+--
+
+CMake::
++
+--
+The Boost distribution for CMake has a different layout.
+
+. Navigate to https://github.com/boostorg/boost/releases and under *Releases*, download the Boost distribution.
+For instance:
+.. Windows: https://github.com/boostorg/boost/releases/download/boost-{latest_version}/boost-{latest_version}.zip[boost-{latest_tag}.zip]
+.. Unix variants: https://github.com/boostorg/boost/releases/download/boost-{latest_version}/boost-{latest_version}.tar.gz[boost-{latest_tag}.tar.bz2]
+
+. After the download has completed in your *Downloads* folder, right-click on the compressed file and extract it to a folder.
+
+TIP: TIP: You don't need to *build* Boost with CMake to be able to *use* Boost with CMake.
+CMake integration will work fine even if you install Boost with boost:build[].
+--
+====
+
+Or you can streamline the whole process directly from the command line:
+
+[tabs,sync-group-id=os]
+====
+Windows::
++
+--
+[source,none,subs="attributes+"]
+----
+curl {release_zip_url} <1>
+7z x {release_filename} <2>
+cd {release_basename} <3>
+----
+
+<.> Download the boost distribution `{release_zip_filename}`
+<.> Extract the files into `{release_basename}`
+<.> Change the current working directory to `{release_basename}`
+
+Note that these instructions assume you have https://curl.se/[Curl,window="_blank"] and https://www.7-zip.org/[7-Zip,window="_blank"] installed on your system.
+
+--
+
+Linux::
++
+--
+[source,bash,subs="attributes+"]
+----
+wget {release_url} <1>
+tar xvfj {release_filename} <2>
+cd {release_basename} <3>
+----
+
+<.> Download the boost distribution `{release_filename}`
+<.> Extract the files into `{release_basename}`
+<.> Change the current working directory to `{release_basename}`
+--
+
+macOS::
++
+--
+[source,bash,subs="attributes+"]
+----
+curl {release_url} <1>
+tar xvfj {release_filename} <2>
+cd {release_basename} <3>
+----
+
+<.> Download the boost distribution `{release_filename}`
+<.> Extract the files into `{release_basename}`
+<.> Change the current working directory to `{release_basename}`
+--
+
+Git::
++
+--
+You can clone and initialize the complete Boost super-project directly from GitHub with:
+
+[source,bash,subs="attributes+"]
+----
+git clone https://github.com/boostorg/boost.git -b boost-{latest_version} {release_basename} --depth 1 <1>
+cd {release_basename}
+git submodule update --depth 1 --init --recursive <2>
+----
+
+<.> Clone the Boost super-project
+<.> Initialize all boost modules
+--
+====
+
+=== Downloading Boost Modules
+
+The process above downloads all boost libraries, which is the usual process in a local installation.
+In projects where only a subset of the Boost libraries is required, which is usually desired in Continuous Integration Systems, the following procedure can be used:
+
+[source,bash,subs="attributes+"]
+.Downloading boost:unordered[] and internal dependencies
+----
+git clone https://github.com/boostorg/boost.git -b boost-{latest_version} {release_basename} --depth 1 <1>
+git submodule update --depth 1 -q --init tools/boostdep <2>
+git submodule update --depth 1 -q --init libs/unordered <3>
+python tools/boostdep/depinst/depinst.py -X test -g "--depth 1" unordered <4>
+----
+
+<1> Download the Boost super-project, which contains references to all Boost libraries
+<2> Initialize boost:boostdep[] used to determine internal boost dependencies
+<3> Initialize boost:unordered[].
+Repeat this step for any other modules you need.
+<4> Initialize any dependencies of boost:unordered[].
+Repeat this step for any other modules you need.
+
+This procedure requires `git` and `python`.
+The following steps in this document apply to both methods of installing Boost.
+The only difference is what libraries will be available.
+
+=== Bootstrap
+
+If you followed the steps above, your current working directory should be `{release_basename}`.
+Otherwise, open up a command line terminal, and navigate to the boost folder you extracted.
+
+[tabs,sync-group-id=build]
+====
+Boost.Build::
++
+--
+The Boost libraries are built using a custom build app called boost:build[].
+This app itself is built by running the bootstrap script.
+
+This is the usual procedure to configure, build and install Boost with boost:build[]:
+
+If your location has a space in the name, you will need to surround the path in quotes in the commands that follow.
+
+Windows:
+
+[source]
+----
+bootstrap.bat
+b2
+b2 install --prefix=C:\Boost
+----
+
+If you get an error during the build process such as the following, you probably do not have an up to date and full installation of pass:[C++] on your machine.
+Go back to <<Prerequisites>> and install or update your version of Visual Studio.
+
+image::cpp-runtime-error.png[]
+
+Unix variants:
+
+[source]
+----
+./bootstrap.sh
+./b2
+./b2 install --prefix=/usr/local
+----
+
+You can adjust the installation `prefix` to your preference in this command.
+
+The build process creates all variants of each library.
+For example, there may be _Release_ and _Debug_ variants, or possibly _Multithreaded_ and _Static_ runtime variants.
+Also, libraries that are _header-only_ (in other words, do not require being built) are copied to your installation folder.
+
+TIP: Consider using the `--show-libraries` and `--with-library=library-a --with-library=library-b` options if you want to limit the wait instead of building everything.
+--
+
+CMake::
++
+--
+You can also build the Boost libraries with CMake.
+This is the usual procedure to build and install Boost with CMake:
+
+[source]
+----
+mkdir __build
+cd __build
+cmake ..
+cmake --build .
+cmake --build . --target install
+----
+
+If you are using a multi-config generator, such as Visual Studio, you can install the Debug and Release variants of the library separately with:
+
+[source]
+----
+cmake --build . --target install --config Debug
+cmake --build . --target install --config Release
+----
+
+Although both the boost:build[] and the CMake scripts work fine, the final installed libraries will have different layouts for historical reasons.
+Both the CMake integration scripts and the libraries will be installed under different paths and this can create incompatibilities between Boost installations.
+
+TIP: You don't need to *build* Boost with CMake to be able to *use* Boost with CMake.
+CMake integration will work fine even if you install Boost with boost:build[].
+
+You can find more information about the limitations of a CMake infrastructure on https://github.com/boostorg/cmake[boostorg/cmake,window="_blank"]
+--
+====
+
+=== Environment variables
+
+We recommend you update your environment variables after installing Boost.
+When you update your environment variables, you are telling your operating system and other tools where to look for the Boost libraries and headers.
+
+[tabs,sync-group-id=os]
+====
+Windows::
++
+--
+
+[source]
+----
+set BOOST_ROOT=C:\boost <1>
+----
+
+<1> Specify the root directory of the Boost pass:[C++] libraries so other tools can find it
+
+IMPORTANT: Replace `C:\boost` with the prefix directory you specified during the installation, if different.
+
+--
+
+Linux::
++
+--
+
+[source,bash]
+----
+export BOOST_ROOT=/usr/local <1>
+export LD_LIBRARY_PATH=/usr/local/lib:$LD_LIBRARY_PATH <2>
+export CPLUS_INCLUDE_PATH=/usr/local/include:$CPLUS_INCLUDE_PATH <3>
+----
+
+<1> Specify the root directory of the Boost pass:[C++] libraries so other tools can find it
+<2> Specify additional directories to search for shared libraries when executing a program
+<3> Specify additional directories to search for pass:[C++] header files
+
+IMPORTANT: Replace `/usr/local` with the prefix directory you specified during the installation, if different.
+
+You can add these `export` commands to your `~/.bashrc` or `~/.profile` file to make the changes permanent.
+
+--
+
+macOS::
++
+--
+
+[source,bash]
+----
+export BOOST_ROOT=/usr/local <1>
+----
+
+<1> Specify the root directory of the Boost pass:[C++] libraries so other tools can find it
+
+IMPORTANT: Replace `/usr/local` with the prefix directory you specified during the installation, if different.
+
+You can add these `export` commands to your `~/.bashrc` or `~/.profile` file to make the changes permanent.
+
+--
+====
+
+[#your-first-app]
+== Your First App
+
+=== Header-only libraries
+
+Let’s start by using a header-only library.
+Copy the following program into a file called `example.cpp`.
+
+[source,C++]
+.example.cpp
+----
+#include <boost/lambda/lambda.hpp> <1>
+#include <iostream>
+#include <iterator>
+#include <algorithm>
+
+int main()
+{
+    using namespace boost::lambda;
+    typedef std::istream_iterator<int> in;
+
+    std::for_each(
+        in(std::cin), in(), std::cout << (_1 * 3) << " "); <2>
+}
+----
+
+<1> Including a header from the boost:lambda[] library
+<2> Reads a sequence of integers from standard input, using boost:lambda[] to multiply each number by three and write it to the standard output
+
+We can now compile this program:
+
+[tabs,sync-group-id=build]
+========
+CMake::
++
+--
+You can use https://cmake.org/[CMake,window="_blank"] to configure a project to use Boost and your `example.cpp`.
+Here's an example `CMakeLists.txt` file that uses Boost:
+
+[source,cmake]
+.CMakeLists.txt
+----
+cmake_minimum_required(VERSION 3.0)
+project(MyProject)
+
+find_package(Boost REQUIRED)
+add_executable(MyProject example.cpp)
+target_link_libraries(MyProject Boost::headers)
+----
+
+Store this file next to your `example.cpp` and run the basic CMake workflow:
+
+[source,none,subs="attributes+"]
+----
+mkdir build <1>
+cd build <2>
+cmake .. -D BOOST_ROOT=path/to/{release_basename} <3>
+cmake --build . <4>
+----
+
+<1> Create a `build` directory which should store the results
+<2> Change the current working directory to `build`
+<3> Run the CMake configure step, providing it with the Boost directory
+<4> Build the project
+
+If using CMake >=3.13, this can be simplified to:
+
+[source,none,subs="attributes+"]
+----
+cmake -S . -B build -D BOOST_ROOT=path/to/{release_basename}
+cmake --build build
+----
+
+In either case, the resulting executable should be available in the `build` directory.
+
+--
+
+Visual Studio::
++
+--
+
+* Open Visual Studio and select *Create a new project*
+* Choose *Console App* from the range of project templates.
+* Change the names in the *Configure your new project* dialog, or leave the defaults, and click *Create*.
+* Replace all the boilerplate content of the .cpp file with the contents of the `example.cpp` file, noting the inclusion of the header from Boost: *lambda.hpp*.
+* Right-click on the name of the project in the *Solution Explorer* pane, and select *Properties*.
+* Under *C/C++* select *General*, then click on *Additional Include Directories*
+* Add the path to your Boost *include* folder, that will have been built in the previous section.
+
+image::additional-include-directories.png[]
+
+* Next, still in the project properties, select *Linker*, then *General*, and locate the *Additional Library Directories*
+* Add the path to the Boost *lib* folder.
+
+image::additional-library-directories.png[]
+
+* Click *OK* to accept your input.
+
+You can already run your example from Visual Studio:
+
+* In the *Debug* menu, select *Start Without Debugging*, or press the F5 key.
+* A Command Prompt should open up, so enter a list of numbers separated by spaces, and then *Enter*.
+* You should get a line of numbers, your originals multiplied by 3.
+
+image:first-app-running.png[]
+
+[TIP]
+====
+Visual Studio provides support for CMake since Visual Studio 2017. CMake is a cross-platform build system that can generate build files for a variety of build tools, including Visual Studio solutions, makefiles, and ninja files.
+By supporting CMake, Visual Studio is able to provide a consistent development experience across multiple platforms and build tools.
+Additionally, the ability to generate CMake projects from Visual Studio allows developers to take advantage of Visual Studio's debugging and profiling tools while still using their preferred build system.
+
+While Visual Studio provides a user friendly environment for building software, it may not always be the best choice for managing complex projects with multiple dependencies.
+In such cases, it is recommended to consider using CMake, a popular and flexible build system that can generate build files for a variety of build tools.
+You can have the option of using CMake to manage your complex projects, while still using Visual Studio's robust development and debugging features.
+====
+
+--
+
+By Hand::
++
+--
+In the directory where you saved *example.cpp*, issue the following command:
+
+Visual Studio Compiler:
+
+[source,none,subs="attributes+"]
+----
+cl /I C:\boost\include example.cpp
+----
+
+GCC:
+
+[source,none,subs="attributes+"]
+----
+g++ -I /usr/local/include example.cpp -o example
+----
+
+Clang:
+
+[source,none,subs="attributes+"]
+----
+clang++ -I /usr/local/include example.cpp -o example
+----
+
+NOTE: Replace `C:\boost` or `/usr/local` with your Boost installation prefix if necessary.
+
+[TIP]
+====
+It is generally not recommended to use these commands by hand for complex projects, as managing all the compile and link options can quickly become unwieldy.
+Using a build system like CMake or Make can greatly simplify the process of building and managing a project, particularly when dealing with large codebases or dependencies.
+
+Using a build system also has other advantages, such as easier dependency management, the ability to easily configure the build for different platforms or compilers, and the ability to easily integrate with other tools such as version control systems and automated testing frameworks.
+====
+
+--
+========
+
+To test the result, run the executable from the path where it was built:
+
+[tabs,sync-group-id=os]
+====
+Windows::
++
+--
+[source]
+----
+echo 1 2 3 | example
+----
+--
+
+Linux::
++
+--
+[source]
+----
+echo 1 2 3 | ./example
+----
+--
+
+macOS::
++
+--
+[source]
+----
+echo 1 2 3 | ./example
+----
+--
+====
+
+Did you get the expected result?
+
+=== Compiled Libraries
+
+In this section, we will locate an example from GitHub, and then build and run a project based on the example.
+
+For most Boost libraries, there is an `example` sub-folder containing a range of examples.
+For this guide, we will locate an example that reads a JSON file, and pretty-prints its contents.
+
+Copy all the code from https://github.com/boostorg/json/blob/develop/example/pretty.cpp[`json/example/pretty.cpp`,window="_blank"] into your `example.cpp`.
+Let's compile it:
+
+[tabs,sync-group-id=build]
+========
+CMake::
++
+--
+Edit the contents of `CMakeLists.txt`:
+
+[source,cmake]
+.CMakeLists.txt
+----
+cmake_minimum_required(VERSION 3.0)
+project(MyProject)
+
+find_package(Boost REQUIRED COMPONENTS json)
+add_executable(MyProject main.cpp)
+target_link_libraries(MyProject Boost::json)
+----
+
+In this example, we explicitly require `json` as boost:json[] is a compiled library.
+Compiled libraries need to be explicitly required and linked separately.
+
+Run the commands for the usual CMake workflow once more to build the executable.
+
+NOTE: Note how the difference between header-only and compiled libraries is transparent when using a build system.
+--
+
+Visual Studio::
++
+--
+. Create a new Visual Studio pass:[C++] Console App.
+Name it JsonPrint.
+. Update both the additional include directories, and additional library directories, as you did for the previous section.
+. Copy all the code from https://github.com/boostorg/json/blob/develop/example/pretty.cpp, and use it to replace all the default content of the project's cpp file.
+
+You can already run your example from Visual Studio:
+
+. Search your computer for any JSON file, unless you have one you would like to use already.
+Record the full path to that file.
+
+. In Visual Studio, locate and select *Build Solution*.
+
+You should get neatly formatted output:
+
+image:json-example-running.png[]
+
+[circle]
+* If your JSON included symbols such as the umlaut, these will not be rendered correctly unless you change the format of your Command Prompt to UTF-8. By default, a Command Prompt supports a code page numbered 437. To change the code page to UTF-8, type `chcp 65001`.
+
+* If you get compile errors such as `cannot open file 'libboost_json-vc143-mt-gd-x64-1_81.lib'` you have probably not entered the *Additional Library Directories* correctly.
+--
+
+By Hand::
++
+--
+Repeat the instructions to read the compile the executable:
+
+In the directory where you saved `example.cpp`, issue the following command:
+
+Visual Studio Compiler:
+
+[source,none,subs="attributes+"]
+----
+cl /I C:\boost\include /link C:\boost\lib\libboost_json-vc71-mt-d-x86-1_34.lib example.cpp
+----
+
+GCC:
+
+[source,none,subs="attributes+"]
+----
+g++ -I /usr/local/include example.cpp -L /usr/local/libboost_json.a -o example
+----
+
+Clang:
+
+[source,none,subs="attributes+"]
+----
+clang++ -I /usr/local/include example.cpp -L /usr/local/libboost_json.a -o example
+----
+
+NOTE: Replace `C:\boost` or `/usr/local` with your Boost installation prefix if necessary.
+
+As boost:json[] is a compiled library, we need the linker option in our example.
+The name of the library file might vary according to your architecture and the options provided to `b2` while installing boost.
+Check the `lib` in your installation prefix.
+--
+========
+
+Search your computer for any JSON file, unless you have one you would like to use already.
+Record the full path to that file and run the example with:
+
+[tabs,sync-group-id=os]
+====
+Windows::
++
+--
+[source]
+----
+example "path/to/json/file.json"
+----
+--
+
+Linux::
++
+--
+[source]
+----
+./example "path/to/json/file.json"
+----
+--
+
+macOS::
++
+--
+[source]
+----
+./example "path/to/json/file.json"
+----
+--
+====
+
+Did you get the expected result?
+
+=== Summary
+
+Although the samples you have now built and run are quite simple, if you have got this far successfully, it means your build, installation and project linking are all working correctly.
+Great job!
+
+=== Next Steps
+
+You might like to scan the examples folders of some of the other libraries that you are interested in, and create and run projects to get them running.
+
+Once you are more experienced with Boost, you might like to build and install only those libraries you require.
+
+== Package Managers
+
+While we provide instructions for downloading and building the libraries from source, installing Boost using a package manager might simplify the process and ensure that all dependencies are installed correctly in some cases.
+In this guide, we will discuss two types of package managers: pass:[C++] package managers such as Conan and Vcpkg, and system package managers such as Homebrew and APT.
+
+While using a package manager can simplify the installation process, there are some potential downsides to consider, such as a lack of control over the installation process and potential version conflicts with other installed software.
+We will discuss these in more detail below.
+
+=== pass:[C++] Package Managers
+
+pass:[C++] package managers are a popular choice for managing dependencies in pass:[C++] projects.
+They provide a simple and consistent way to download, configure, and install libraries and their dependencies that's replicable on various platforms.
+However, these installation methods are not officially supported, which means the packages are not regularly tested by Boost authors.
+
+[tabs]
+========
+Vcpkg::
++
+--
+To install Boost with Vcpkg, you can run a command like:
+
+[source]
+----
+vcpkg install boost
+----
+
+You can also install individual boost modules by providing their name as a suffix:
+
+[source]
+----
+vcpkg install boost-variant2
+----
+
+To verify access to Boost libraries, enter:
+
+[source]
+----
+vcpkg search boost
+----
+
+You should see a full list of the Boost libraries you have installed.
+
+A better approach, however, is adding these dependencies to your project manifest file.
+Follow the instruction in https://learn.microsoft.com/en-us/vcpkg/users/manifests[the introduction guide] to manifest files.
+--
+
+Conan::
++
+--
+You can install Boost with Conan through the https://conan.io/center/boost[boost] package.
+--
+========
+
+=== System Package Managers
+
+Depending on your operating system, you may have different package managers available.
+For instance, on Debian-based Linux distributions, APT is a popular choice, while macOS users often use Homebrew, and Windows users may prefer Chocolatey.
+Depending on your variant of Unix, you can use a package manager such as *apt*, *dnf*, *yum*, or *pacman*.
+While using a system package manager has its advantages, there are also some drawbacks to consider.
+These include potential version conflicts with system libraries, lack of control over the installation process, and the high likelihood of using outdated or unsupported versions of the Boost libraries, which may be several years old.
+
+[tabs]
+========
+Ubuntu::
++
+--
+To install the Boost pass:[C++] libraries onto Debian-based systems (such as Debian, Ubuntu), you can use the package manager apt.
+
+[source]
+----
+# Update your package list
+sudo apt update
+# Install the Boost development libraries
+sudo apt install libboost-all-dev
+----
+--
+
+Fedora::
++
+--
+To install the Boost pass:[C++] libraries on Fedora, you can use the package manager *dnf*.
+
+[source]
+----
+# Update your package list
+sudo dnf update
+# Install the Boost development libraries
+sudo dnf install boost-devel
+----
+
+The Boost libraries are usually available as pre-compiled packages in the official Fedora repositories.
+--
+
+CentOS::
++
+--
+To install the Boost pass:[C++] libraries on CentOS, you can use the package manager *yum*.
+
+Note::
+If you are using CentOS 8 or later, you might need to enable the PowerTools repository to get the Boost development libraries:
+
+[source]
+----
+sudo yum config-manager --set-enabled powertools
+----
+
+[source]
+----
+# Update your package list
+sudo yum update
+# Install the Boost development libraries
+sudo yum install boost-devel
+----
+
+The Boost libraries are usually available as pre-compiled packages in the official CentOS repositories.
+--
+
+Arch::
++
+--
+To install the Boost pass:[C++] libraries onto Arch-based systems (such as Arch Linux, Manjaro), you can use the package manager *pacman*.
+
+[source]
+----
+# Update your package list
+sudo yum update
+# Install the Boost development libraries
+sudo pacman -S boost
+----
+--
+
+Homebrew::
++
+--
+https://brew.sh/[Homebrew,window="_blank"] is a package manager for macOS that allows users to easily install, manage, and update a wide range of software packages and libraries from the command line.
+
+[source]
+----
+# Update your package list
+brew update
+brew upgrade
+# Install the Boost development libraries
+brew install boost
+----
+
+Homebrew will download and install the Boost libraries and their dependencies.
+To verify that the Boost libraries are installed correctly, you can run the following command:
+
+[source]
+----
+brew list boost
+----
+--
+========
+
+Once the installation is complete, the Boost libraries will be installed on your system, typically in `/usr`.
+To verify that the Boost libraries have been installed correctly, you can check the version number:
+
+[source]
+----
+cat /usr/include/boost/version.hpp | grep "BOOST_LIB_VERSION"
+----
+
+This command should output the Boost version installed on your system.
+
+

@@ -17,6 +17,17 @@ Vis no velit audiam, sonet <<dependencies,praesent>> eum ne.
 Integer diam enim, dignissim eget eros et, ultricies mattis odio.
 --
 
+[tabs]
+======
+Tab A::
++
+====
+Example block in Tab A.
+====
+
+Tab B:: Just text.
+======
+
 Vestibulum consectetur nec urna a luctus.
 Quisque pharetra tristique arcu fringilla dapibus.
 https://example.org[Curabitur,role=unresolved] ut massa aliquam, cursus enim et, accumsan lectus.

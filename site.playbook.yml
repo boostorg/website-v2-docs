@@ -29,6 +29,7 @@ antora:
 asciidoc:
   extensions:
     - ./extensions/boost-link-inline-macro.js
+    - '@asciidoctor/tabs'
 
 content:
   sources:
