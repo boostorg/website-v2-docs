@@ -10,16 +10,22 @@ If you do not wish to use a package manager, installing Boost libraries on macOS
 . Open a terminal window and navigate to the directory where you extracted the Boost library files.
 
 . Run the bootstrap.sh script to generate the build system files for your platform. For example, to build Boost with clang on macOS, run:
-
++
 [source,txt]
 ----
 ./bootstrap.sh toolset=clang
 ----
 
-. After the bootstrap process completes, run the following command to build and install the Boost libraries: .`/b2 install`.
+. After the bootstrap process completes, run the following command to build and install the Boost libraries:
+
++
+[source,txt]
+----
+/b2 install
+----
 
 . Once the Boost libraries are installed, you can use CMake to configure your project to use them. Here's an example CMakeLists.txt file that uses Boost:
-
++
 [source, cmake]
 ----
 cmake_minimum_required(VERSION 3.0)
@@ -34,9 +40,19 @@ target_link_libraries(MyProject Boost::system)
 
 . This CMakeLists.txt file assumes that your main.cpp file uses the Boost system library. You may need to modify it to use other Boost libraries depending on your project's requirements.
 
-. Run CMake to generate the build system files for your project: `cmake .`
+. Run CMake to generate the build system files for your project: `
++
+[source,txt]
+----
+cmake
+----
 
-. After the CMake configuration process completes, you can build your project using your preferred build system (e.g. make, ninja, etc.): `make`.
+. After the CMake configuration process completes, you can build your project using your preferred build system (e.g. make, ninja, etc.):
++
+[source,txt]
+----
+make
+----
 
 == Install Boost using Homebrew
 
@@ -72,13 +88,33 @@ You can skip step 1 if you have already installed Homebrew.
 +
 This command will download and execute the Homebrew installation script. Follow the prompts to complete the installation.
 
-. Update Homebrew. Before installing the Boost libraries, it's a good idea to update Homebrew to ensure you have the latest package information. Run the following commands: `brew update` followed by `brew upgrade` if there are outdated formulae.
+. Update Homebrew. Before installing the Boost libraries, it's a good idea to update Homebrew to ensure you have the latest package information. Run the following commands:
++
+[source,txt]
+----
+brew update
+brew upgrade
+----
 
 === Install Boost
 
-. Now you can install the Boost libraries using Homebrew. Run the following command: `brew install boost`. Homebrew will download and install the Boost libraries and their dependencies.
+. Now you can install the Boost libraries using Homebrew. Run the following command:
++
+[source,txt]
+----
+brew install boost
+----
++
+Homebrew will download and install the Boost libraries and their dependencies.
 
-. To verify that the Boost libraries are installed correctly, you can run the following command: `brew list boost`. This command will show the installed files for the Boost libraries.
+. To verify that the Boost libraries are installed correctly, you can run the following command:
++
+[source,txt]
+----
+brew list boost
+----
++
+This command will show the installed files for the Boost libraries.
 
 Now the Boost libraries are installed on your macOS system, and you can use them in your projects.
 

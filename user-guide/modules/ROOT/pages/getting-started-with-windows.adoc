@@ -46,6 +46,7 @@ NOTE:: We break the build and install into separate steps, in order to get bette
 
 === Troubleshooting the Build and Install Process
 
+[disc]
 * If you get an error during the build process such as the following, you probably do not have an up to date and full installation of C++ on your machine. Go back to <<Prerequisites>> and install or update your version of Visual Studio. 
 
 image::cpp-runtime-error.png[]
@@ -79,11 +80,11 @@ int main()
 . Right-click on the name of the project in the *Solution Explorer* pane, and select *Properties*.
 
 . Under *C/C++* select *General*, then click on *Additional Include Directories*. Add the path to your Boost *include* folder, that will have been built in the previous section.
-
++
 image::additional-include-directories.png[]
 
 . Next, still in the project properties, select *Linker*, then *General*, and locate the *Additional Library Directories*. Add the path to the Boost *lib* folder.
-
++
 image::additional-library-directories.png[]
 
 . Click *OK* to accept your input, and then in the *Debug* menu, select *Start Without Debugging*, or press the F5 key.

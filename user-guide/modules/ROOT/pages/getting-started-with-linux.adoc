@@ -79,7 +79,14 @@ cd boost_1_82_0
 +
 The --prefix option specifies the installation directory. You can change this to your preferred location.
 
-. Build and install Boost: `sudo ./b2 install`. This command builds and installs the Boost libraries to the specified prefix directory.
+. Build and install Boost:
++
+[source,txt]
+----
+sudo ./b2 install
+----
++
+This command builds and installs the Boost libraries to the specified prefix directory.
 
 . (Optional) To use the installed Boost libraries, you may need to update your environment variables:
 +
