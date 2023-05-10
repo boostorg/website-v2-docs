@@ -1,11 +1,13 @@
+@import url('https://fonts.googleapis.com/css2?family=Cairo:wght@200;300;400;500;600;700;800;900;1000&display=swap');
+
 :root {
   /* colors */
   --color-white: #fff;
   --color-smoke-10: #fefefe;
-  --color-smoke-30: #fafafa;
-  --color-smoke-50: #f5f5f5;
+  --color-smoke-30: #eaf0f3;
+  --color-smoke-50: #eaf0f3;
   --color-smoke-70: #f0f0f0;
-  --color-smoke-90: #e1e1e1;
+  --color-smoke-90: #eaf0f3;
   --color-gray-10: #c1c1c1;
   --color-gray-30: #9c9c9c;
   --color-gray-40: #8e8e8e;
@@ -13,9 +15,9 @@
   --color-gray-70: #5d5d5d;
   --color-jet-20: #4a4a4a;
   --color-jet-30: #424242;
-  --color-jet-50: #333;
-  --color-jet-70: #222;
-  --color-jet-80: #191919;
+  --color-jet-50: rgb(49 74 87);
+  --color-jet-70: rgb(49 74 87);
+  --color-jet-80: rgb(49 74 87);
   --color-black: #000;
   /* fonts */
   --rem-base: 18; /* used to compute rem value from desired pixel value (e.g., calc(18 / var(--rem-base) * 1rem) = 18px) */
@@ -24,7 +26,7 @@
   --body-font-size--print: 0.9375em; /* 15px */
   --body-line-height: 1.15;
   --body-font-color: var(--color-jet-70);
-  --body-font-family: "Roboto", sans-serif;
+  --body-font-family: "Cairo", sans-serif;
   --body-font-weight-bold: 500;
   --monospace-font-family: "Roboto Mono", monospace;
   --monospace-font-weight-bold: 500;
@@ -36,12 +38,12 @@
   --scrollbar-thumb-color: var(--color-gray-10);
   --scrollbar_hover-thumb-color: var(--color-gray-30);
   /* navbar */
-  --navbar-background: var(--color-jet-80);
-  --navbar-font-color: var(--color-white);
-  --navbar_hover-background: var(--color-black);
-  --navbar-button-background: var(--color-white);
+  --navbar-background: #eaf0f3;
+  --navbar-font-color: var(--color-jet-80);
+  --navbar_hover-background: #eaf0f3;
+  --navbar-button-background: rgb(255 159 0);
   --navbar-button-border-color: var(--panel-border-color);
-  --navbar-button-font-color: var(--body-font-color);
+  --navbar-button-font-color: var(--color-white);
   --navbar-menu-border-color: var(--panel-border-color);
   --navbar-menu-background: var(--color-white);
   --navbar-menu-font-color: var(--body-font-color);
@@ -83,8 +85,8 @@
   --heading-font-weight: normal;
   --alt-heading-font-weight: var(--body-font-weight-bold);
   --section-divider-color: var(--panel-border-color);
-  --link-font-color: #1565c0;
-  --link_hover-font-color: #104d92;
+  --link-font-color: #ff9f00;
+  --link_hover-font-color: #a76804;
   --link_unresolved-font-color: var(--important-color);
   --abstract-background: var(--color-smoke-70);
   --abstract-font-color: var(--color-jet-20);

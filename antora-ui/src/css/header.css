@@ -15,6 +15,7 @@ body {
   top: 0;
   width: 100%;
   z-index: var(--z-index-navbar);
+  border-bottom: 2px solid rgb(209 213 219);
 }
 
 .navbar a {
