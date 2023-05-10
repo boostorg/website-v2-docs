@@ -66,7 +66,7 @@ page:
   origin:
     private: false
   previous:
-    content: Quickstart
+    content: User Guide
     url: '#'
     urlType: 'internal'
   next:
@@ -74,7 +74,7 @@ page:
     url: '#'
     urlType: 'internal'
   breadcrumbs:
-  - content: Quickstart
+  - content: User Guide
     url: '#'
     urlType: fragment
   - content: Brand&#8217;s Hardware &amp; Software Requirements
@@ -97,33 +97,105 @@ page:
   navigation:
   - root: true
     items:
-    - content: Quickstart
+    - content: User Guide
       url: '#'
       urlType: fragment
       items:
-      - content: Brand&#8217;s Hardware &amp; Software Requirements
+      - content: Get the Release
         url: /xyz/5.2/index.html
         urlType: internal
-      - content: Cu Solet
+      - content: Using Bjam
         url: '/xyz/5.2/index.html#cu-solet'
         urlType: internal
-      - content: English + 中文
+      - content: Reporting Issues
         url: '/xyz/5.2/index.html#english+中文'
         urlType: internal
-    - content: Liber Recusabo
-      url: '#liber-recusabo'
-      urlType: fragment
-    - content: Reference
+      - content: Build the Libraries
+        url: '/xyz/5.2/index.html#english+中文'
+        urlType: internal
+      - content: Using CMake
+        url: '/xyz/5.2/index.html#english+中文'
+        urlType: internal
+      - content: Requesting Features
+        url: '/xyz/5.2/index.html#english+中文'
+        urlType: internal
+      - content: Including Headers
+        url: '/xyz/5.2/index.html#english+中文'
+        urlType: internal
+      - content: Running Tests
+        url: '/xyz/5.2/index.html#english+中文'
+        urlType: internal
+      - content: Library Documentation
+        url: '/xyz/5.2/index.html#english+中文'
+        urlType: internal
+      - content: Linking Your Program
+        url: '/xyz/5.2/index.html#english+中文'
+        urlType: internal
+      - content: Using Bjam
+        url: '/xyz/5.2/index.html#english+中文'
+        urlType: internal
+      - content: Toolsets
+        url: '/xyz/5.2/index.html#english+中文'
+        urlType: internal
+    - content: Contributor Guide
       items:
-      - content: Keyboard Shortcuts
+      - content: Get the Release
         url: '#'
         urlType: fragment
-      - content: Importing and Exporting
+      - content: Using Bjam
         url: '#'
         urlType: fragment
-      - content: Some Code
+      - content: Reporting Issues
         url: '/xyz/5.2/index.html#some-code'
         urlType: internal
-asciidoc:
-  extensions:
-    - '@asciidoctor/tabs'
+      - content: Build the Libraries
+        url: '/xyz/5.2/index.html#some-code'
+        urlType: internal
+      - content: Using CMake
+        url: '/xyz/5.2/index.html#some-code'
+        urlType: internal
+      - content: Requesting Features
+        url: '/xyz/5.2/index.html#some-code'
+        urlType: internal
+      - content: Including Headers
+        url: '/xyz/5.2/index.html#some-code'
+        urlType: internal
+      - content: Running Tests
+        url: '/xyz/5.2/index.html#some-code'
+        urlType: internal
+      - content: Library Documentation
+        url: '/xyz/5.2/index.html#some-code'
+        urlType: internal
+      - content: Linking Your Program
+        url: '/xyz/5.2/index.html#some-code'
+        urlType: internal
+      - content: Using Bjam
+        url: '/xyz/5.2/index.html#some-code'
+        urlType: internal
+      - content: Toolsets
+        url: '/xyz/5.2/index.html#some-code'
+        urlType: internal
+    - content: Becoming a Boost Contributor
+      items:
+      - content: License Requirements
+        url: '#'
+        urlType: fragment
+      - content: Portability Requirements
+        url: '#'
+        urlType: fragment
+      - content: Organization Requirements
+        url: '#'
+        urlType: fragment
+      - content: Library Design Requirements
+        url: '#'
+        urlType: fragment
+    - content: Formal Reviews
+      items:
+      - content: Introduction to Boost Formal Reviews
+        url: '#'
+        urlType: fragment
+    - content: Release Process
+      items:
+      - content: Introduction to Boost Release Process
+        url: '#'
+        urlType: fragment
