@@ -9,6 +9,18 @@ The Boost libraries are released publicly three times per year:
 
 Each release will contain updates to existing libraries, and some releases will contain new libraries. The release is built from the *master* branch of Boost's GitHub site: https://github.com/cppalliance.
 
+== Preparing for a Boost Release
+
+The release managers set the release timeline, which involves planning deadlines for library submissions, reviews, and incorporation into the repository.
+
+Once the release timeline is set, library maintainers work to prepare their libraries for the release. This involves updating documentation, fixing bugs, and addressing any compatibility issues. Additionally, library maintainers ensure that their libraries pass the Boost regression tests, which help identify potential problems before the release.
+
+== Boost Regression Testing
+
+Boost regression testing is an essential part of the release process, ensuring the quality and compatibility of the libraries. The Boost community maintains a set of regression tests, which are run on a diverse range of platforms and compilers. The tests are performed by volunteers who contribute their computing resources to the project.
+
+The results of the regression tests are published on the Boost website, providing library maintainers and users with up-to-date information about the library's compatibility and performance. Library maintainers use this information to identify and fix any issues before the release.
+
 == Milestones in the Release Cycle
 
 There is a strict countdown to a public release.
