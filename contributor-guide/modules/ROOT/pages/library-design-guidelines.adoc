@@ -19,7 +19,7 @@ Boost libraries generally have a large and diverse user base. To ensure successf
 
 == Design and Programming
 
-[circle]
+[disc]
 * Aim first for clarity and correctness; optimization should be only a secondary concern in most Boost libraries.
 
 * Aim for ISO Standard C++. Than means making effective use of the standard features of the language, and avoiding non-standard compiler extensions. It also means using the Standard Library where applicable.
@@ -86,7 +86,7 @@ If you want to add runtime assertions to your code (you should!), avoid C's `ass
 
 Make sure your code compiles in the presence of the `min()` and `max()` macros. Some platform headers define `min()` and `max() ` macros which cause some common C++ constructs to fail to compile. Some simple tricks can protect your code from inappropriate macro substitution:
 
-[circle]
+[disc]
 * If you want to call `std::min()` or `std::max()`: 
 
   ** If you do not require argument-dependent look-up, use `(std::min)(a,b)`.
@@ -109,7 +109,7 @@ Make sure your code compiles in the presence of the `min()` and `max()` macros. 
 
 Naming requirements ensure that file and directory names are relatively portable, including to ISO 9660:1999 (with extensions) and other relatively limited file systems. Superscript links are provided to detailed rationale for each choice.
 
-[circle]
+[disc]
 
 [#footnote2-location]
 * Names must contain only lowercase link:#footnote1[(1)] ASCII letters ('a'-'z'), numbers ('0'-'9'), underscores ('_'), hyphens ('-'), and periods ('.'). Spaces are not allowed link:#footnote2[(2)].
@@ -132,7 +132,7 @@ link:#footnote4[(4)].
 
 Other conventions ease communication:
 
-[circle]
+[disc]
 * Files intended to be processed by a C++ compiler as part of a translation unit should have a three-letter filename extension ending in "pp". Other files should not use extensions ending in "pp". This convention makes it easy to identify all of the source in Boost.
 
 * All libraries have at their highest level a primary directory named for the particular library. See Naming consistency. The primary directory may have sub-directories.
@@ -193,17 +193,22 @@ As library developers and users have gained experience with Boost, the following
 
 Here is how it works. The library is given a name that describes the contents of the library. Cryptic abbreviations are strongly discouraged. Following the practice of the C++ Standard Library, names are usually singular rather than plural. For example, a library dealing with file systems might chose the name "filesystem", but not "filesystems", "fs" or "nicecode".
 
-[circle]
+[disc]
 * The library's primary directory (in parent *boost-root/libs*) is given that same name. For example, *boost-root/libs/filesystem*.
+
 * The library's primary header directory (in *boost-root/libs/name/include*) is given that same name. For example, *boost-root/libs/filesystem/boost/filesystem*.
+
 * The library's primary namespace (in parent *::boost*) is given that same name, except when there's a component with that name (e.g., *boost::tuple*), in which case the namespace name is pluralized. For example, *::boost::filesystem*.
 
 When documenting Boost libraries, follow these conventions (see also the following section of this document):
 
-[circle]
+[disc]
 * The library name is set in roman type.
+
 * The first letter of the library name is capitalized.
+
 * A period between "Boost" and the library name (e.g., Boost.Bind) is used if and only if the library name is not followed by the word "library".
+
 * The word "library" is not part of the library name and is therefore lowercased.
 
 Here are a few example sentences of how to apply these conventions:
@@ -244,7 +249,7 @@ A non-inline function is the one place a "throws nothing" exception-specificatio
 
 The C++ standard committee's Library Working Group discussed this issue in detail, and over a long period of time. The discussion was repeated again in early Boost postings. A short summary:
 
-[circle]
+[disc]
 * Naming conventions are contentious, and although several are widely used, no one style predominates.
 
 * Given the intent to propose portions of boost for the next revision of the C++ standard library, boost decided to follow the standard library's conventions.
@@ -263,12 +268,17 @@ Tabs are banned because of the practical problems caused by tabs in multi-develo
 
 Before the 1.29.0 release, two Boost libraries added ECMAScript/JavaScript documentation. Controversy followed (see mailing list archives), and the developers were asked to remove the ECMAScript/JavaScript. Reasons given for banning included:
 
-[square]
+[disc]
 * Incompatible with some older browsers and some text based browsers.
+
 * Makes printing docs pages difficult.
+
 * Often results in really bad user interface design.
+
 * "It's just annoying in general."
+
 * Would require Boost to test web pages for ECMAScript/JavaScript compliance.
+
 * Makes docs maintenance by other than the original developer more difficult.
 
 Please consider those reasons if you decide that JavaScript is something you must use. In particular please keep in mind that the Boost community is not responsible for testing your use of JavaScript. And hence it is up to you to ensure that the above issues are fully resolved in your use case.
