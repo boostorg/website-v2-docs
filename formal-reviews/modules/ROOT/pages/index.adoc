@@ -82,7 +82,7 @@ It is possible that in the review process some issues might need to be fixed as 
 
 Before submitting a library, it will probably help to understand the role of the Review Manager.
 
-. Before a library can be scheduled for formal review, an active Boost member (not connected with the library submission) must volunteer to be the _Review Manager_ for the library. Members may contact a library author on- or off-list to express interest in managing the review. The library author has to accept a person as a Review Manager.
+Before a library can be scheduled for formal review, an active Boost member (not connected with the library submission) must volunteer to be the _Review Manager_ for the library. Members may contact a library author on- or off-list to express interest in managing the review. The library author has to accept a person as a Review Manager.
 
 The Review Manager then:
 
