@@ -18,7 +18,7 @@
 #
 
 site:
-  url: https://antora.cppalliance.org
+  url: https://boost.revsys.dev/
   title: Boost Site Docs
   start_page: user-guide::index.adoc
 
