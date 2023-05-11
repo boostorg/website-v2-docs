@@ -19,15 +19,53 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v3
+        with:
+          fetch-depth: 10
 
       - name: Build
+        id: build
         run: |
-          ./libdoc.sh "${{ (startsWith(github.ref, 'refs/heads/develop') && 'develop') || 'master' }}"
+          # Involved IDs
+          before_id="${{ (github.event_name == 'pull_request' && github.event.pull_request.base.sha) || github.event.before }}"
+          after_id="${{ (github.event_name == 'pull_request' && github.event.pull_request.head.sha) || github.event.after }}"
+          
+          # Sanitize before ID
+          if ! git cat-file -e "$before_id" >/dev/null 2>&1; then
+          echo "before_id is invalid"
+          before_id=$(git rev-parse HEAD^)
+          echo "before_id is now $before_id"
+          fi
+          
+          if git cat-file -e "$before_id" >/dev/null 2>&1; then
+              # Before ID is valid, compare files
+              changed_files=$(git diff --name-only "$before_id" "$after_id" | tr '\n' ' ')
+              changed_ui=$(echo "$changed_files" | grep -q "antora-ui/" && echo true || echo false)
+              changed_ext=$(echo "$changed_files" | grep -q "extensions/" && echo true || echo false)
+              changed_actions=$(echo "$changed_files" | grep -q ".github/" && echo true || echo false)
+              changed_libs=$(echo "$changed_files" | grep -q "libs.playbook.yml" && echo true || echo false)
+          else
+              # Assume anything might have changed
+              changed_ui=true
+              changed_ext=true
+              changed_actions=true
+              changed_libs=true
+          fi
+          
+          # Only build lib playbook if it changed
+          if [ "$changed_ui" = true ] || [ "$changed_ext" = true ] || [ "$changed_libs" = true ] || [ "$changed_actions" = true ]; then
+              ./libdoc.sh "${{ (startsWith(github.ref, 'refs/heads/develop') && 'develop') || 'master' }}"
+              echo "built_libs=true" >> $GITHUB_OUTPUT
+          else
+              echo "built_libs=false" >> $GITHUB_OUTPUT
+          fi
+          
+          # Always build sitedoc because all other changes affect it
           ./sitedoc.sh ${{ github.ref_name }}
 
       - name: Remove lib dirs
+        if: steps.build.outputs.built_libs == 'true'
         working-directory: build
-        run: | 
+        run: |
           find "lib" -mindepth 1 -maxdepth 1 -type d -exec rm -r {} +
 
       - name: AWS Sync (revsys cluster)
