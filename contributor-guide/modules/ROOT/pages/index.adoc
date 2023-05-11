@@ -12,6 +12,6 @@ Start by reading the xref:intro.adoc[Introduction to becoming a Boost Contributo
 
 == See Also
 
-* https://stage.antora.cppalliance.org/doc/user-guide/index.html[User Guide]
-* https://stage.antora.cppalliance.org/doc/formal-reviews/index.html[Formal Reviews]
-* https://stage.antora.cppalliance.org/doc/release-process/index.html[Release Process]
+* https://docs.cppalliance.org/user-guide/index.html[User Guide]
+* https://docs.cppalliance.org/formal-reviews/index.html[Formal Reviews]
+* https://docs.cppalliance.org/release-process/index.html[Release Process]
