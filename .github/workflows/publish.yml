@@ -23,11 +23,12 @@ jobs:
       - name: Build
         run: |
           ./libdoc.sh "${{ (startsWith(github.ref, 'refs/heads/develop') && 'develop') || 'master' }}"
-          ./sitedoc.sh ${{ github.ref }}
+          ./sitedoc.sh ${{ github.ref_name }}
 
       - name: Remove lib dirs
         working-directory: build
-        run: find "lib" -mindepth 1 -maxdepth 1 -type d -exec rm -r {} +
+        run: | 
+          find "lib" -mindepth 1 -maxdepth 1 -type d -exec rm -r {} +
 
       - name: AWS Sync (revsys cluster)
         if: (github.ref == 'refs/heads/master' || github.ref == 'refs/heads/develop') && github.event_name == 'push' && github.repository == 'cppalliance/site-docs'
