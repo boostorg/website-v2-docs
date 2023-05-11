@@ -1,11 +1,21 @@
 <footer class="footer">
   <p>This page was built using the Antora default UI.</p>
   <p>The source code for this UI is licensed under the terms of the MPL-2.0 license.</p>
-  <p><a href="https://github.com/cppalliance/site-docs">https://github.com/cppalliance/site-docs</a></p>
-  {{#if page.attributes.boost-branch}}
-    <p>boost-branch: {{ page.attributes.boost-branch }}</p>
-  {{/if}}
-  {{#if page.attributes.commit-id}}
-    <p>commit-id: {{ page.attributes.commit-id }}</p>
-  {{/if}}
+  <p>
+    <a href="https://github.com/cppalliance/site-docs" target="_blank">https://github.com/cppalliance/site-docs</a>
+    {{#if
+      (and (and page.attributes.boost-branch page.attributes.commit-id) (ne page.attributes.boost-branch 'HEAD'))}}
+      ({{ page.attributes.boost-branch }}: <a
+      href="https://github.com/cppalliance/site-docs/commit/{{ page.attributes.commit-id }}"
+      target="_blank">{{ page.attributes.commit-id }})</a>
+    {{ else }}
+      {{#if (and page.attributes.boost-branch (ne page.attributes.boost-branch 'HEAD'))}}
+        ({{ page.attributes.boost-branch }})
+      {{/if}}
+      {{#if page.attributes.commit-id }}
+        (<a href="https://github.com/cppalliance/site-docs/commit/{{ page.attributes.commit-id }}"
+            target="_blank">{{ page.attributes.commit-id }})</a>)
+      {{/if}}
+    {{/if}}
+  </p>
 </footer>
