@@ -2,5 +2,4 @@
 
 This is the help page.
 
-You can submit content for this page here:
-[https://github.com/cppalliance/site-docs](https://github.com/cppalliance/site-docs).
+You can submit content for this page here: https://github.com/cppalliance/site-docs.
