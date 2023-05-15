@@ -7,5 +7,26 @@
 {{> header}}
 {{> body}}
 {{> footer}}
+  <script>
+    var element = document.querySelector('.search-result-dropdown-menu');
+    if (element) {
+      element.style.position = 'absolute';
+      element.style.zIndex = '100';
+      element.style.display = 'block';
+      element.style.right = '0';
+      element.style.left = 'inherit';
+      element.style.top = '100%';
+      element.style.borderRadius = '4px';
+      element.style.margin = '6px 0 0';
+      element.style.padding = '0';
+      element.style.textAlign = 'left';
+      element.style.height = 'auto';
+      element.style.background = 'transparent';
+      element.style.border = 'none';
+      element.style.maxWidth = '600px';
+      element.style.minWidth = '50px';
+      element.style.boxShadow = '0 1px 0 0 rgba(0, 0, 0, 0.2), 0 2px 3px 0 rgba(0, 0, 0, 0.1)';
+    }
+  </script>
   </body>
 </html>
