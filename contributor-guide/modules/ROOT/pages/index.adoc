@@ -8,10 +8,9 @@ Feedback on any aspect of the documentation is encouraged, and is available by c
 
 == First Steps
 
-Start by reading the xref:intro.adoc[Introduction to becoming a Boost Contributor].
+Start by reading about xref:getting-involved.adoc[how to get involved in Boost].
 
 == See Also
 
 * https://docs.cppalliance.org/user-guide/index.html[User Guide]
 * https://docs.cppalliance.org/formal-reviews/index.html[Formal Reviews]
-* https://docs.cppalliance.org/release-process/index.html[Release Process]

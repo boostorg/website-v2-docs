@@ -1,0 +1,220 @@
+= Testing in Boost
+:idprefix:
+:idseparator: -
+
+@anarthal: this is taken verbatim from old content. It may be outdated. Conversion to asciidoc is not complete.
+
+The Boost libraries are intended to be both reliable and
+ portable. Every experienced programmer knows that means each
+ library must be tested against a suitable number of test cases,
+ on a wide range of platforms, and then tested again (regression
+ tested) every time a change is made and before every
+ release.
+
+
+"Quality assurance based on a wide range of targeted tests"
+ as one of the key answers to C.A.R Hoare's question "How did
+ software get so reliable without proof."
+
+
+== Regression test
+
+
+Boost uses an automatic [regression
+ test suite](/doc/tools/regression/index.html) which generates HTML [compiler status
+ tables](/development/testing.html#RegressionTesting).
+
+
+== Test Policy
+
+
+=== Required
+
+
+* Every Boost library should supply one or more suitable
+ test programs to be exercised by the Boost [regression
+ test suite](/doc/tools/regression/index.html). In addition to the usual compile-link-run
+ tests expecting successful completion, compile-only or
+ compile-and-link-only tests may be performed, and success for
+ the test may be defined as failure of the steps.
+* Test program execution must report errors by returning a
+ non-zero value. They may also write to stdout or stderr, but
+ that output should be relatively brief. Regardless of other
+ output, a non-zero return value is the only way the
+ regression test framework will recognize an error has
+ occurred. Note that test programs to be included in the
+ status tables must compile, link, and run quickly since the
+ tests are executed many, many, times.
+* Libraries with time consuming tests should be divided
+ into a fast-execution basic test program for the status
+ tables, and a separate full-coverage test program for
+ exhaustive test cases. The basic test should concentrate on
+ compilation issues so that the status tables accurately
+ reflect the library's likelihood of correct compilation on a
+ platform.
+* If for any reason the usual test policies do not apply to
+ a particular library, an alternate test strategy must be
+ implemented.
+* A [Jamfile](/doc/tools/regression/index.html#Adding_new_test) to drive the regression tests for the
+ library.
+
+
+=== Optional (but highly recommended)
+
+
+The [Boost
+ Test Library](/doc/libs/release/libs/test/index.html) provides many useful components which ease the
+ construction of test programs.
+
+
+* Use the library's [Test Tools](/doc/libs/release/libs/test/doc/html/boost_test/testing_tools.html) for the construction of simple test programs
+ that do not need much structure.
+* Use the library's [Unit
+ Test Framework](/doc/libs/release/libs/test/doc/html/boost_test/tests_organization.html) for the construction of more complex test
+ programs that need to be structured into individual tests and
+ test suites.
+
+
+== Suggested Protocol for Fixing Bugs or Adding Features.
+
+
+* First, add regression test cases that detects the bug or
+ tests the feature. Sometimes adding one case suggests similar
+ untested cases, and they are added too.
+* Second, for bugs, run the regression test and verify that
+ the bug is now detected.
+* Third, then, and only then, fix the bug or add the
+ feature.
+* Finally, rerun the full regression tests - sometimes the
+ change breaks something else.
+
+
+== History
+
+[See Regression Test History](/doc/tools/regression/index.html#History).
+
+
+== Acknowledgements
+
+
+Written by Beman Dawes. Jens Maurer, Paul Moore, Gary Powell
+ and Jeremy Siek contributed helpful suggestions.
+
+
+
+@anarthal: this is taken verbatim from old content. It may be outdated. Conversion to asciidoc is not complete.
+           Please merge this with the above
+
+
+== Regression Tests
+
+
+A group of volunteers donate CPU cycles and large amounts of
+ disk space to collectively produce the regression testing
+ result tables. Various Boost repository versions are tested for
+ the benefit of library developers and interested users:
+
+| Version | Developers |
+| --- | --- |
+| Develop branch | [Summary](tests/develop/developer/summary.html) | [Unresolved
+ Issues](tests/develop/developer/issues.html) |
+| Master branch | [Summary](tests/master/developer/summary.html) | [Unresolved
+ Issues](tests/master/developer/issues.html) |
+
+
+== Snapshots
+
+
+Snapshots are used for quality control checks.  The
+ Unix tarballs and Windows zipballs are identical except for the
+ line endings exported from Git.
+
+
+Because the snapshots represent work-in-process, they may
+ not be suitable for production use.
+
+| Version | Download | Documentation |
+| --- | --- | --- |
+| Master branch | [Sourceforge](https://sourceforge.net/projects/boost/files/boost/snapshots/master/ "Boost master branch snapshots on sourceforge"), [JFrog.io](https://boostorg.jfrog.io/artifactory/main/master/ "Boost master branch snapshots on JFrog.io"). | [Documentation](/doc/libs/master/ "Boost master branch documentation snapshot") |
+| Develop branch | [Sourceforge](https://sourceforge.net/projects/boost/files/boost/snapshots/develop/ "Boost develop branch snapshots on sourceforge"), [JFrog.io](https://boostorg.jfrog.io/artifactory/main/develop "Boost develop branch snapshots on JFrog.io"). | [Documentation](/doc/libs/develop/ "Boost develop branch documentation snapshot") |
+
+
+The Git master branch can be checked out from <https://github.com/boostorg/boost>.
+
+
+== Inspection Reports
+
+
+The Boost snapshots are inspected daily to detect problems
+ such as missing copyrights or licenses. The Boost Inspection
+ Report tells all!
+
+| Version |
+| --- |
+| [Develop
+ branch](http://boost.cowic.de/rc/docs-inspect-develop.html) |
+| [Master
+ branch](http://boost.cowic.de/rc/docs-inspect-master.html) |
+
+
+== More about regression tests
+
+
+Will all Boost libraries work with your compiler? 
+ Unfortunately, the answer is "it depends". See the [regression testing results](#RegressionTesting) to see
+ exactly what works and what doesn't.
+
+
+Boost libraries rely on modern C++ features such as
+ templates and the C++ Standard Library.  Most modern
+ compilers support those major features fairly well. But even
+ today, years after the adoption of the C++ Standard, some
+ compilers still don't support important minor features like
+ partial template specialization.
+
+
+Boost library authors often expend a great deal of effort
+ trying to work around compiler deficiencies. 
+ Nevertheless, some libraries will not compile at all with
+ certain compilers or may have crippled functionality. 
+ Even if the current release of a compiler supports a boost
+ library, older versions of the compiler may not work
+ properly.
+
+
+Boost releases are run through regression tests which
+ automatically generates compiler status tables for various
+ platforms. Unless otherwise indicated, the C++ Standard Library
+ implementation is the one shipped with the compiler.
+
+
+=== Warnings
+
+
+* These tables are not a good indication of a particular
+ compiler's compliance with the C++ Standard.  The Boost
+ libraries often contain workarounds which mask compiler
+ deficiencies.
+* Some regression tests are run only occasionally, and so
+ are relatively out-of-date.  Check the date and revision
+ in the column heading.
+
+
+The development code is being updated several times a day,
+ so it may contain bug fixes, compiler workarounds, new
+ features, and even whole new libraries. It may be unstable,
+ however.
+
+
+A list of some of the organizations helping with testing is
+ listed on the [Acknowledgements
+ page](/community/acknowledgements.html#testing).
+
+
+
+
+
+
+
+
+

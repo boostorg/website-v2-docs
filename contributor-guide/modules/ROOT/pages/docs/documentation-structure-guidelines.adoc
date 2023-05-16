@@ -1,0 +1,60 @@
+= Boost Library Documentation Guidelines
+:navtitle: General Documentation Guidelines
+
+It is not a requirement for a Boost library for the documentation to adhere to the following structure. However, it is listed here as a guide, if needed.
+
+The following structure for Boost library documentation should work for most libraries. Take each template in the order listed below, and fill in the details for your library.
+
+The format for documentation on the new website is https://docs.asciidoctor.org/asciidoc/latest/syntax-quick-reference/[AsciiDocs].
+
+Where you see `<LibraryName>` in the templates, replace with the name of your library.
+
+== Contents
+
+. xref:./templates/01-overview-template.adoc[Overview]
+
++
+*Library Guide*
+. Basic Tutorials or Examples
+. How to compile and link
+. How to test and debug
++
+*Library Reference*
+
+. xref:./templates/02-header-template.adoc[\{\{header}}]
+
+. xref:./templates/03-configuration-template.adoc[Configuration Information]
+
+. xref:./templates/04-rationale-template.adoc[Rationale]
+
+. xref:./templates/05-definitions-template.adoc[Definitions]
+
+. More Advanced Tutorials or Examples
+
+. Advanced Topics
+
+    * Porting Guide
+    * Customization
+    * Synchronization
+    * Performance Tuning
+    * Complex Examples
+
+. xref:./templates/06-faq-template.adoc[Frequently Asked Questions (FAQs)]
+
+    * Troubleshooting
+
+. Versioning and Release Notes
+
+. xref:./templates/07-bibliography-template.adoc[Bibliography]
+
+. xref:./templates/08-acknowledgements-template.adoc[Acknowledgements]
+
+. Appendices
+
+
+
+Revised April, 2023
+
+_Distributed under the Boost Software License, Version 1.0. (See
+http://www.boost.org/LICENSE_1_0.txt)_.
+

@@ -1,0 +1,197 @@
+= Library Metadata
+:idprefix:
+:idseparator: -
+
+@anarthal: this is taken verbatim from old content. It may be outdated. Conversion to asciidoc is not complete.
+           I don't know if this is still relevant with the new webpage.
+
+A module can contain an optional file which describes the
+ libraries that it contains. This is located at
+ `meta/libraries.json`. It either contains a single
+ json object for a single library, or a list or json objects for
+ any number of libraries.
+
+
+For example, for a single library:
+```
+
+{
+    "key": "unordered",
+    "name": "Unordered",
+    "authors": [ "Daniel James" ],
+    "maintainers": [ "Daniel James <dnljms -at- gmail.com>" ],
+    "description": "Unordered associative containers.",
+    "category": [
+        "Containers"
+    ]
+}
+
+
+```
+
+An example for multiple libraries:
+```
+
+[
+    {
+        "key": "functional",
+        "name": "Functional",
+        "authors": [ "Mark Rodgers" ],
+        "description": "The Boost.Function library contains a family of class templates that are function object wrappers.",
+        "category": [
+            "Function-objects"
+        ]
+    },
+    {
+        "key": "functional/factory",
+        "name": "Functional/Factory",
+        "authors": [ "Tobias Schwinger" ],
+        "maintainers": [ "Tobias Schwinger <tschwinger -at- isonews2.com>" ],
+        "description": "Function object templates for dynamic and static object creation",
+        "documentation": "factory/",
+        "category": [
+            "Function-objects"
+        ]
+    },
+]
+
+
+```
+
+== Json fields
+
+
+=== `key`
+
+
+This is a unique identifier for the library, typically the
+ path to it from the `libs` directory.
+
+
+=== `name`
+
+
+Human readable name of the library
+
+
+=== `status`
+
+
+Used for libraries with special statuses, currently can have
+ value `deprecated` for deprecated libraries, and
+ `hidden` for libraries which shouldn't be displayed to
+ the user.
+
+
+=== `authors`
+
+
+Either a string, or a list of strings, containing the names
+ of the authors
+
+
+=== `description`
+
+
+A brief description of what the library does
+
+
+=== `category`
+
+
+A list of categories that the library belongs to, the full
+ list is below.
+
+
+=== `documentation`
+
+
+Path to the documentation, defaults to the root of the
+ module.
+
+
+=== `cxxstd`
+
+
+The minimum C++ standard compilation level at which
+ all, or the large majority, of the functionality in
+ the library is usable. The possible values are: 
+
+
+* 98 = C++98
+* 03 = C++98/C++03
+* 11 = C++11
+* 14 = C++14
+* 17 = C++17
+* 20 = C++20
+
+
+The level only indicates the minimum level, which
+ means that the functionality of the library can be
+ used when compiling at that level or at a higher
+ level. There may be some functionality in the library
+ which will need a higher C++ standard compilation
+ level than is indicated by this value, but the
+ information about that specific functionality will be
+ provided for the end-user within the documentation for
+ that library. If a library does not have this field it
+ indicates that the end-user will have to read the
+ library documentation to understand what C++ standard
+ compilation level is needed to use the library. 
+
+
+== Available categories
+
+String
+String and text processing
+Containers
+Containers
+Iterators
+Iterators
+Algorithms
+Algorithms
+Function-objects
+Function objects and higher-order programming
+Generic
+Generic Programming
+Metaprogramming
+Template Metaprogramming
+Preprocessor
+Preprocessor Metaprogramming
+Concurrent
+Concurrent Programming
+Math
+Math and numerics
+Correctness
+Correctness and testing
+Error-handling
+Error handling and recovery
+Data
+Data structures
+Domain
+Domain Specific
+Image-processing
+Image processing
+IO
+Input/Output
+Inter-language
+Inter-language support
+Emulation
+Language Features Emulation
+Memory
+Memory
+Parsing
+Parsing
+Patterns
+Patterns and Idioms
+Programming
+Programming Interfaces
+State
+State Machines
+System
+System
+Miscellaneous
+Miscellaneous
+workarounds
+Broken compiler workarounds
+

@@ -1,1 +1,4 @@
 * xref:index.adoc[Introduction to Boost Formal Reviews]
+* xref:submissions.adoc[]
+* xref:writing-reviews.adoc[]
+* xref:managing-reviews.adoc[]

@@ -1,0 +1,9 @@
+= Building Boost: advanced uses cases
+
+@anarthal: content suggestions:
+
+* How can I build Boost with a non-default compiler (i.e. `toolset=xxx`).
+* How can I build Boost with the old/new ABI (gcc)?
+* How can I use pass:[libc++] instead of pass:[libstdc++]?
+* How can I use `link=static` vs `link=dynamic`?
+* Consider moving the "building Boost with CMake" discussion here
