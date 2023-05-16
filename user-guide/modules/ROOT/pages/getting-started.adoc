@@ -15,7 +15,7 @@ Here's a step-by-step guide for installing from source.
 == Prerequisites
 
 The only prerequisite for installing boost is a pass:[C++] compiler.
-If you already have that set-up, please skip to the xref:#installing[] section.
+If you already have that set-up, please skip to the xref:#binaries[] or xref:#from-source[] section.
 
 If you don't have access to a pass:[C++] compiler yet, here are a few ways to get started:
 
@@ -88,14 +88,213 @@ clang++ --version
 --
 ====
 
-[#installing]
-== Installing
+[#binaries]
+== Binaries
+
+Installing Boost with a package manager might simplify the process and ensure that all dependencies are installed correctly.
+In this guide, we will discuss two types of package managers: xref:#cpp-package-managers[] package managers such as Conan and Vcpkg, and xref:#cpp-package-managers[System Package Managers], such as APT and Homebrew.
+
+[NOTE]
+====
+While using a package manager can simplify the installation process, there are some potential downsides to consider, such as a lack of control over the installation process and potential version conflicts with other installed software.
+We will discuss these in more detail in the sections below.
+
+If you want to ensure you have the latest version Boost, see the instructions to build and install Boost xref:from-source[from source].
+====
+
+[#cpp-package-managers]
+=== pass:[C++] Package Managers
+
+pass:[C++] package managers are a popular choice for managing dependencies in pass:[C++] projects.
+They provide a simple and consistent way to download, configure, and install libraries as a process that is replicable on various platforms.
+
+[tabs]
+========
+Vcpkg::
++
+--
+To install Boost with Vcpkg, you can run a command like:
+
+[source]
+----
+vcpkg install boost
+----
+
+or adding `boost` to your `vcpkg.json` manifest file:
+
+[source,json]
+----
+{
+    "$schema": "https://raw.githubusercontent.com/microsoft/vcpkg-tool/main/docs/vcpkg.schema.json",
+    "name": "my-application",
+    "version": "0.15.2",
+    "dependencies": [
+        "boost"
+    ]
+}
+----
+
+You can also install individual boost modules by providing their names as a suffix:
+
+[source]
+----
+vcpkg install boost-variant2 boost-describe
+----
+
+or adding the modules to your `vcpkg.json` manifest file.
+
+[source,json]
+----
+{
+    "$schema": "https://raw.githubusercontent.com/microsoft/vcpkg-tool/main/docs/vcpkg.schema.json",
+    "name": "my-application",
+    "version": "0.15.2",
+    "dependencies": [
+        "boost-variant2",
+        "boost-describe"
+    ]
+}
+----
+
+For most users, Vcpkg recommends Manifest mode.
+Follow the instructions in https://learn.microsoft.com/en-us/vcpkg/users/manifests[the introduction guide] to manifest files.
+
+To consume the libraries transparently from CMake, one can use the https://learn.microsoft.com/en-us/vcpkg/users/buildsystems/cmake-integration[Vcpkg toolchain] with the `CMAKE_TOOLCHAIN_FILE` configuration option.
+--
+
+Conan::
++
+--
+You can install Boost with Conan through the https://conan.io/center/boost[boost] package.
+--
+========
+
+However, these installation methods are not officially supported, which means the packages are not regularly tested by Boost authors.
+
+=== System-Level Installation
+
+Depending on your operating system, you may have different package managers available.
+For instance, on Debian-based Linux distributions, APT is a popular choice, while macOS users often use Homebrew, and Windows users may prefer Chocolatey.
+Depending on your variant of Unix, you can use a package manager such as *apt*, *dnf*, *yum*, or *pacman*.
+
+[NOTE]
+====
+While using a system package manager has its advantages, there are also some drawbacks to consider.
+These include lack of control over the installation process, and the high likelihood of using outdated or unsupported versions of the Boost libraries, which may be several years old.
+====
+
+[tabs]
+========
+Ubuntu::
++
+--
+To install the Boost pass:[C++] libraries onto Debian-based systems (such as Debian, Ubuntu), you can use the package manager apt.
+
+[source]
+----
+# Update your package list
+sudo apt update
+# Install the Boost development libraries
+sudo apt install libboost-all-dev
+----
+--
+
+Fedora::
++
+--
+To install the Boost pass:[C++] libraries on Fedora, you can use the package manager *dnf*.
+
+[source]
+----
+# Update your package list
+sudo dnf update
+# Install the Boost development libraries
+sudo dnf install boost-devel
+----
+
+The Boost libraries are usually available as pre-compiled packages in the official Fedora repositories.
+--
+
+CentOS::
++
+--
+To install the Boost pass:[C++] libraries on CentOS, you can use the package manager *yum*.
+
+Note::
+If you are using CentOS 8 or later, you might need to enable the PowerTools repository to get the Boost development libraries:
+
+[source]
+----
+sudo yum config-manager --set-enabled powertools
+----
+
+[source]
+----
+# Update your package list
+sudo yum update
+# Install the Boost development libraries
+sudo yum install boost-devel
+----
+
+The Boost libraries are usually available as pre-compiled packages in the official CentOS repositories.
+--
+
+Arch::
++
+--
+To install the Boost pass:[C++] libraries onto Arch-based systems (such as Arch Linux, Manjaro), you can use the package manager *pacman*.
+
+[source]
+----
+# Update your package list
+sudo yum update
+# Install the Boost development libraries
+sudo pacman -S boost
+----
+--
+
+Homebrew::
++
+--
+https://brew.sh/[Homebrew,window="_blank"] is a package manager for macOS that allows users to easily install, manage, and update a wide range of software packages and libraries from the command line.
+
+[source]
+----
+# Update your package list
+brew update
+brew upgrade
+# Install the Boost development libraries
+brew install boost
+----
+
+Homebrew will download and install the Boost libraries and their dependencies.
+To verify that the Boost libraries are installed correctly, you can run the following command:
+
+[source]
+----
+brew list boost
+----
+--
+========
+
+Once the installation is complete, the Boost libraries will be installed on your system, typically in `/usr`.
+To verify that the Boost libraries have been installed correctly, you can check the version number:
+
+[source]
+----
+cat /usr/include/boost/version.hpp | grep "BOOST_LIB_VERSION"
+----
+
+This command should output the Boost version installed on your system.
+
+[#from-source]
+== From Source
 
 === Download Boost
 
 [tabs,sync-group-id=build]
 ====
-Boost.Build::
+Boost.Build (Recommended)::
 +
 --
 . Navigate to https://www.boost.org/users/download/ and under *Current Release/Downloads*, download the Boost distribution.
@@ -111,8 +310,6 @@ TIP: boost:build[] is the officially supported build system used by the Boost li
 CMake::
 +
 --
-The Boost distribution for CMake has a different layout.
-
 . Navigate to https://github.com/boostorg/boost/releases and under *Releases*, download the Boost distribution.
 For instance:
 .. Windows: https://github.com/boostorg/boost/releases/download/boost-{latest_version}/boost-{latest_version}.zip[boost-{latest_tag}.zip]
@@ -120,7 +317,7 @@ For instance:
 
 . After the download has completed in your *Downloads* folder, right-click on the compressed file and extract it to a folder.
 
-TIP: TIP: You don't need to *build* Boost with CMake to be able to *use* Boost with CMake.
+TIP: You don't need to *build* Boost with CMake to be able to *use* Boost with CMake.
 CMake integration will work fine even if you install Boost with boost:build[].
 --
 ====
@@ -194,7 +391,7 @@ git submodule update --depth 1 --init --recursive <2>
 --
 ====
 
-=== Downloading Boost Modules
+=== Individual Modules
 
 The process above downloads all boost libraries, which is the usual process in a local installation.
 In projects where only a subset of the Boost libraries is required, which is usually desired in Continuous Integration Systems, the following procedure can be used:
@@ -226,7 +423,7 @@ Otherwise, open up a command line terminal, and navigate to the boost folder you
 
 [tabs,sync-group-id=build]
 ====
-Boost.Build::
+Boost.Build (Recommended)::
 +
 --
 The Boost libraries are built using a custom build app called boost:build[].
@@ -696,170 +893,5 @@ Great job!
 You might like to scan the examples folders of some of the other libraries that you are interested in, and create and run projects to get them running.
 
 Once you are more experienced with Boost, you might like to build and install only those libraries you require.
-
-== Package Managers
-
-While we provide instructions for downloading and building the libraries from source, installing Boost using a package manager might simplify the process and ensure that all dependencies are installed correctly in some cases.
-In this guide, we will discuss two types of package managers: pass:[C++] package managers such as Conan and Vcpkg, and system package managers such as Homebrew and APT.
-
-While using a package manager can simplify the installation process, there are some potential downsides to consider, such as a lack of control over the installation process and potential version conflicts with other installed software.
-We will discuss these in more detail below.
-
-=== pass:[C++] Package Managers
-
-pass:[C++] package managers are a popular choice for managing dependencies in pass:[C++] projects.
-They provide a simple and consistent way to download, configure, and install libraries and their dependencies that's replicable on various platforms.
-However, these installation methods are not officially supported, which means the packages are not regularly tested by Boost authors.
-
-[tabs]
-========
-Vcpkg::
-+
---
-To install Boost with Vcpkg, you can run a command like:
-
-[source]
-----
-vcpkg install boost
-----
-
-You can also install individual boost modules by providing their name as a suffix:
-
-[source]
-----
-vcpkg install boost-variant2
-----
-
-To verify access to Boost libraries, enter:
-
-[source]
-----
-vcpkg search boost
-----
-
-You should see a full list of the Boost libraries you have installed.
-
-A better approach, however, is adding these dependencies to your project manifest file.
-Follow the instruction in https://learn.microsoft.com/en-us/vcpkg/users/manifests[the introduction guide] to manifest files.
---
-
-Conan::
-+
---
-You can install Boost with Conan through the https://conan.io/center/boost[boost] package.
---
-========
-
-=== System Package Managers
-
-Depending on your operating system, you may have different package managers available.
-For instance, on Debian-based Linux distributions, APT is a popular choice, while macOS users often use Homebrew, and Windows users may prefer Chocolatey.
-Depending on your variant of Unix, you can use a package manager such as *apt*, *dnf*, *yum*, or *pacman*.
-While using a system package manager has its advantages, there are also some drawbacks to consider.
-These include potential version conflicts with system libraries, lack of control over the installation process, and the high likelihood of using outdated or unsupported versions of the Boost libraries, which may be several years old.
-
-[tabs]
-========
-Ubuntu::
-+
---
-To install the Boost pass:[C++] libraries onto Debian-based systems (such as Debian, Ubuntu), you can use the package manager apt.
-
-[source]
-----
-# Update your package list
-sudo apt update
-# Install the Boost development libraries
-sudo apt install libboost-all-dev
-----
---
-
-Fedora::
-+
---
-To install the Boost pass:[C++] libraries on Fedora, you can use the package manager *dnf*.
-
-[source]
-----
-# Update your package list
-sudo dnf update
-# Install the Boost development libraries
-sudo dnf install boost-devel
-----
-
-The Boost libraries are usually available as pre-compiled packages in the official Fedora repositories.
---
-
-CentOS::
-+
---
-To install the Boost pass:[C++] libraries on CentOS, you can use the package manager *yum*.
-
-Note::
-If you are using CentOS 8 or later, you might need to enable the PowerTools repository to get the Boost development libraries:
-
-[source]
-----
-sudo yum config-manager --set-enabled powertools
-----
-
-[source]
-----
-# Update your package list
-sudo yum update
-# Install the Boost development libraries
-sudo yum install boost-devel
-----
-
-The Boost libraries are usually available as pre-compiled packages in the official CentOS repositories.
---
-
-Arch::
-+
---
-To install the Boost pass:[C++] libraries onto Arch-based systems (such as Arch Linux, Manjaro), you can use the package manager *pacman*.
-
-[source]
-----
-# Update your package list
-sudo yum update
-# Install the Boost development libraries
-sudo pacman -S boost
-----
---
-
-Homebrew::
-+
---
-https://brew.sh/[Homebrew,window="_blank"] is a package manager for macOS that allows users to easily install, manage, and update a wide range of software packages and libraries from the command line.
-
-[source]
-----
-# Update your package list
-brew update
-brew upgrade
-# Install the Boost development libraries
-brew install boost
-----
-
-Homebrew will download and install the Boost libraries and their dependencies.
-To verify that the Boost libraries are installed correctly, you can run the following command:
-
-[source]
-----
-brew list boost
-----
---
-========
-
-Once the installation is complete, the Boost libraries will be installed on your system, typically in `/usr`.
-To verify that the Boost libraries have been installed correctly, you can check the version number:
-
-[source]
-----
-cat /usr/include/boost/version.hpp | grep "BOOST_LIB_VERSION"
-----
-
-This command should output the Boost version installed on your system.
 
 
