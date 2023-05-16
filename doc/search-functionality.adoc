@@ -85,3 +85,62 @@ const itemTypes = [
 The search results are narrowed down into Names, Parameters, and Return Types. An example of the search page (searching socket in the Tokio library) can be found at https://docs.rs/tokio/1.28.0/tokio/?search=socket.
 
 The search-index.js file for each crate is not loaded until the user clicks on the search bar to reduce page size.
+
+
+=== Large Language Model and Semantic Search
+
+We have done some exploration on the possibility of leveraging LLMs for C++ and Boost-related content to create an interactive learning platform where users can ask complex questions in natural language and receive accurate and high-quality answers in return. We aim to create a more engaging and interactive learning experience for users. 
+
+Here are the findings so far:
+
+* LLMs come in different sizes. For example, https://github.com/facebookresearch/llama/blob/main/MODEL_CARD.md#quantitative-analysis[LLaMA] is available in four different parameter configurations: 7B, 13B, 33B, and 65B. The same is true for other models like MPT and BLOOM.
+* Models with 6B or 7B parameters are more popular because they can run on a single GPU with 24 to 32 GB of VRAM, which makes their deployment cheaper.
+* Project https://github.com/ggerganov/llama.cpp[llama.cpp] tries to reduce the size of a model with quantization while maintaining accuracy, making it possible to run them on CPU as well.
+* These models are not usable as they are; they need to be fine-tuned for a specific task, such as instruction-following or chat. This is where projects like https://crfm.stanford.edu/2023/03/13/alpaca.html[Stanford Alpaca], https://lmsys.org/blog/2023-03-30-vicuna/[vicuna], and https://bair.berkeley.edu/blog/2023/04/03/koala/[Koala] come into play.
+* Running 7B or 13B models require at least one NVIDIA A100 40GB, which costs around $1000 per month. With this setup, they are capable of producing approximately 30 words per second.
+* Here you can interacts with these models: https://chat.lmsys.org/.
+* Models are stateless, to enable them to engage in conversation, previous prompts and responses are sent along with the new prompt. This approach is used to trick the models into maintaining context. Consequently, when large histories are involved, Models respond slower.
+
+
+==== Fine-tuning LLMs
+
+Fine-tuning is a process for teaching patterns to these models to do a specific task, such as aligning LLaMA to follow instructions, doing QA, and writing code or JSON data. It is not used for teaching new information to these models. although models can learn part of the information during the process but it is very limited.
+
+Fine-tuning is done by preparing a list of prompts and completions, for example, stanford_alpaca has used https://github.com/tatsu-lab/stanford_alpaca/blob/main/alpaca_data.json[52K instruction-following prompts and completions] for fine-tuning LLaMA-7B and LLaMA-13B.
+
+Here is an example of such data:
+
+[, JSON]
+----
+{
+    "instruction": "Give three tips for staying healthy.",
+    "input": "",
+    "output": "1.Eat a balanced diet and make sure to include plenty of fruits and vegetables. \n2. Exercise regularly to keep your body active and strong. \n3. Get enough sleep and maintain a consistent sleep schedule."
+}
+----
+
+==== Leveraging LLMs on Domain-Specific Knowledge-Bases
+
+To effectively engage with LLMs on domain-specific data, it is necessary to retrieve pertinent contextual information and provide it to the model.
+
+This process can be done in the following steps:
+
+* Creating https://en.wikipedia.org/wiki/Word_embedding[embeddings] for each document.
+* Storing documents and embeddings in a vector database like https://docs.trychroma.com/[Chroma].
+* Creating embeddings for the questions in the prompt.
+* Retrieving the documents related to the embeddings generated from the prompt (by searching in the vector database).
+* Providing the model with the documents related to the question + the question itself to generate a response.
+
+Generating embeddings is accomplished by utilizing models specifically trained for that task. Therefore, the entire process might require the use of two or more models to be completed.
+
+For example, https://platform.openai.com/docs/guides/embeddings/what-are-embeddings[text-embedding-ada-002] is OpenAI's embedding model for such tasks.
+
+https://github.com/hwchase17/langchain[LangChain] is an open-source language model integration framework for creating such services.
+
+
+==== The Feasibility of Deploying LLMs
+
+After evaluating the expenses associated with deploying LLMs (even small models with 13B parameters), and considering their underwhelming performance, we have concluded that deploying our LLMs would not yield any significant benefits.
+
+Considering the rapid advancements in this field, it is highly likely to witness a viable solution emerging within the next one or two years. However, it is also foreseeable that retrieval augmentation capabilities in existing chatbots could render the deployment of such a service unnecessary.
+
