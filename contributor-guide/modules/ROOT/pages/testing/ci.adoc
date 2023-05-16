@@ -1,0 +1,10 @@
+= Using CIs
+
+@anarthal: content suggestion:
+
+* What are CIs and why you should probably use them
+* GitHub actions and Drone
+* Which compilers should I cover?
+* Setting up valgrind and sanitizers
+* Code coverage
+* Tips for reducing CI times (e.g. PCHs, ccache, docker)

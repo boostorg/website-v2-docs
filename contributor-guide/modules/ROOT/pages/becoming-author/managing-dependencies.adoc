@@ -1,0 +1,80 @@
+= Managing dependencies
+:idprefix:
+:idseparator: -
+
+@anarthal: this is taken verbatim from old content. It may be outdated. Conversion to asciidoc is not complete.
+@anarthal: some parts of this are not correct. In particular, Boost libraries may depend on zlib and openssl and that's OK
+
+A Boost library **should not** use libraries
+ other than Boost or the C++ Standard Library.
+
+
+A Boost library **should** use other Boost
+ Libraries or the C++ Standard Library, but only when the
+ benefits outweigh the costs.
+
+
+The benefits of using components from other libraries may
+ include clearer, more understandable code, reduced development
+ and maintenance costs, and the assurance which comes from
+ reusing well-known and trusted building blocks.
+
+
+The costs may include undesirable coupling between
+ components, and added compilation and runtime costs. If the
+ interface to the additional component is complex, using it may
+ make code less readable, and thus actually increase development
+ and maintenance costs.
+
+
+Negative effects of coupling become obvious when one library
+ uses a second library which uses a third, and so on. The worst
+ form of coupling requires the user understand each of the
+ coupled libraries. Coupling may also reduce the portability of
+ a library - even in case when all used libraries are
+ self-sufficient (see example of questionable usage of
+ <iostream> library below).
+
+
+**Example where another boost component should
+ certainly be used:** boost::noncopyable (in [boost/utility.hpp](/doc/libs/release/boost/utility.hpp))
+ has considerable benefits; it simplifies code, improves
+ readability, and signals intent. Costs are low as coupling is
+ limited; noncopyable itself uses no other classes and its
+ header includes only the lightweight headers
+ <boost/config.hpp> and <cstddef>. There are no
+ runtime costs at all. With costs so low and benefits so high,
+ other boost libraries should use boost::noncopyable when the
+ need arises except in exceptional circumstances.
+
+
+**Example where a standard library component might
+ possibly be used:** Providing diagnostic output as a
+ debugging aid can be a nice feature for a library. Yet using
+ Standard Library <iostream> can involve a lot of
+ additional cost, particularly if <iostream> is unlikely
+ to be used elsewhere in the application. In certain GUI or
+ embedded applications, coupling to <iostream> would be a
+ disqualification. Consider redesign of the boost library in
+ question so that the user supplies the diagnostic output
+ mechanism.
+
+
+**Example where another boost component should not be
+ used:** The boost dir\_it library has considerable
+ coupling and runtime costs, not to mention portability issues
+ for unsupported operating systems. While completely appropriate
+ when directory iteration is required, it would not be
+ reasonable for another boost library to use dir\_it just to
+ check that a file is available before opening. C++ Standard
+ Library file open functionality does this at lower cost. Don't
+ use dir\_it just for the sake of using a boost library.
+
+
+
+
+
+
+
+
+

@@ -1,0 +1,6 @@
+= Source control
+
+@anarthal: content suggestion:
+
+Talk about git, GitHub, issue templates, discussions, PRs, reviews, etc.
+Talk about the boostorg account and the boostorg/boost superproject

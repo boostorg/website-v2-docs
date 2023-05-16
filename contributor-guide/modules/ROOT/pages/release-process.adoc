@@ -1,0 +1,67 @@
+= The Boost Release Process
+
+The Boost libraries are released publicly three times per year:
+
+[circle]
+* 2nd April
+* 2nd August
+* 2nd December
+
+Each release will contain updates to existing libraries, and some releases will contain new libraries. The release is built from the *master* branch of Boost's GitHub site: https://github.com/cppalliance.
+
+== Preparing for a Boost Release
+
+The release managers set the release timeline, which involves planning deadlines for library submissions, reviews, and incorporation into the repository.
+
+Once the release timeline is set, library maintainers work to prepare their libraries for the release. This involves updating documentation, fixing bugs, and addressing any compatibility issues. Additionally, library maintainers ensure that their libraries pass the Boost regression tests, which help identify potential problems before the release.
+
+== Boost Regression Testing
+
+Boost regression testing is an essential part of the release process, ensuring the quality and compatibility of the libraries. The Boost community maintains a set of regression tests, which are run on a diverse range of platforms and compilers. The tests are performed by volunteers who contribute their computing resources to the project.
+
+The results of the regression tests are published on the Boost website, providing library maintainers and users with up-to-date information about the library's compatibility and performance. Library maintainers use this information to identify and fix any issues before the release.
+
+== Milestones in the Release Cycle
+
+There is a strict countdown to a public release.
+
+7 Weeks Prior to Release Date::
+
+The *master* branch is closed to all check ins, except bug fixes and quality checks.
+
+6 Weeks Prior to Release Date::
+
+The *master* branch is closed to major code changes. There can be no rewrites of code, even to fix issues.
+
+5 Weeks Prior to Release Date::
+
+The *master* branch is closed to all check ins, except with permission from the release committee.
+
+4 days Prior to Beta Release Date::
+
+The *master* branch is closed. Beta release candidates are built.
+
+4 Weeks Prior to Release Date::
+
+The Beta release is published to the Boost site. The *master* branch is opened to small bug fixes and documentation changes. Permission from the release committee is required for larger changes.
+
+1 Week Prior to Release Date::
+
+The *master* branch is closed to all check ins, except high-priority fixes.
+
+4 Days Prior to Release Date::
+
+The *master* branch is closed. Release candidates are built.
+
+Day of Release::
+
+The release candidate is published to the Boost site. The *master* branch is opened for all check ins.
+
++
+If issues are found with a release candidate that are important enough to address quickly (that is, before the next full public release), then a point release will be built when fixes are available and tested. This will not typically result in the *master* branch being closed to other check ins.
+
+== See Also
+
+* https://docs.cppalliance.org/user-guide/index.html[User Guide]
+* https://docs.cppalliance.org/contributor-guide/index.html[Contributor Guide]
+* https://docs.cppalliance.org/formal-reviews/index.html[Formal Reviews]

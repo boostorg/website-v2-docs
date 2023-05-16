@@ -1,0 +1,3 @@
+= The Boost Software License
+
+@anarthal: Why do we have it? How is it different to other open-source licenses like BSD, GPL or MIT?

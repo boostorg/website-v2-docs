@@ -38,8 +38,6 @@ content:
     - url: https://github.com/cppalliance/site-docs
       start_path: formal-reviews
     - url: https://github.com/cppalliance/site-docs
-      start_path: release-process
-    - url: https://github.com/cppalliance/site-docs
       start_path: contributor-guide
 
 ui:

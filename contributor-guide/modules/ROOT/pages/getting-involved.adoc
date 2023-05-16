@@ -1,0 +1,10 @@
+= Getting involved
+
+@anarthal: content suggestion: How can you contribute to Boost?
+
+* What's the mailing list, what prupose does it serve and how do I subscribe
+* How to report issues or possible improvements (there's a section on this in the user guide, keep short and provide a link)
+* Contributing to an existing library with fixes and improvements
+* Becoming the maintainer of an existing library: how can you do it, what does it involve, and list of libraries that need a maintainer
+* Getting involved in the review process (there are sections about this in the formal review document, link to them)
+* Becoming a library author (that's what the next section is about, link to it)
