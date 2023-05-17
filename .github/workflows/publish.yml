@@ -68,7 +68,7 @@ jobs:
         run: |
           find "lib" -mindepth 1 -maxdepth 1 -type d -exec rm -r {} +
 
-      - name: AWS Sync (revsys cluster)
+      - name: AWS Sync site-docs (revsys cluster)
         if: (github.ref == 'refs/heads/master' || github.ref == 'refs/heads/develop') && github.event_name == 'push' && github.repository == 'cppalliance/site-docs'
         uses: jakejarvis/s3-sync-action@master
         with:
@@ -78,10 +78,23 @@ jobs:
           AWS_ACCESS_KEY_ID: ${{ secrets.REVSYS_KEY_ID }}
           AWS_SECRET_ACCESS_KEY: ${{ secrets.REVSYS_ACCESS_KEY }}
           AWS_REGION: 'us-east-2'
-          SOURCE_DIR: ${{ format('build/{0}', steps.docs-dir.outputs.boost_docs_basename) }}
-          DEST_DIR: ${{ format('site-docs/{0}', (github.ref_name == 'develop' && 'develop') || (github.ref_name == 'master' && 'master') || github.ref_name_name) }}
+          SOURCE_DIR: build/
+          DEST_DIR: ${{ format('site-docs/{0}', github.ref_name) }}
 
-      - name: AWS Sync (staging on GKE)
+      - name: AWS Sync site-pages (revsys cluster)
+        if: (github.ref == 'refs/heads/master' || github.ref == 'refs/heads/develop') && github.event_name == 'push' && github.repository == 'cppalliance/site-docs'
+        uses: jakejarvis/s3-sync-action@master
+        with:
+          args: --follow-symlinks --delete --exclude '.git/*' --exclude 'build/lib/*'
+        env:
+          AWS_S3_BUCKET: ${{ secrets.REVSYS_BUCKET }}
+          AWS_ACCESS_KEY_ID: ${{ secrets.REVSYS_KEY_ID }}
+          AWS_SECRET_ACCESS_KEY: ${{ secrets.REVSYS_ACCESS_KEY }}
+          AWS_REGION: 'us-east-2'
+          SOURCE_DIR: site-pages/
+          DEST_DIR: ${{ format('site-pages/{0}', github.ref_name) }}
+
+      - name: AWS Sync site-docs (staging on GKE)
         if: (github.ref == 'refs/heads/master' || github.ref == 'refs/heads/develop') && github.event_name == 'push' && github.repository == 'cppalliance/site-docs'
         uses: jakejarvis/s3-sync-action@master
         with:
@@ -91,10 +104,10 @@ jobs:
           AWS_ACCESS_KEY_ID: ${{ secrets.BOOST_STAGE_KEY_ID }}
           AWS_SECRET_ACCESS_KEY: ${{ secrets.BOOST_STAGE_ACCESS_KEY }}
           AWS_REGION: 'us-east-2'
-          SOURCE_DIR: ${{ format('build/{0}', steps.docs-dir.outputs.boost_docs_basename) }}
-          DEST_DIR: ${{ format('site-docs/{0}', (github.ref_name == 'develop' && 'develop') || (github.ref_name == 'master' && 'master') || github.ref_name_name) }}
+          SOURCE_DIR: build/
+          DEST_DIR: ${{ format('site-docs/{0}', github.ref_name) }}
 
-      - name: AWS Sync (production on GKE)
+      - name: AWS Sync site-docs (production on GKE)
         if: (github.ref == 'refs/heads/master' || github.ref == 'refs/heads/develop') && github.event_name == 'push' && github.repository == 'cppalliance/site-docs'
         uses: jakejarvis/s3-sync-action@master
         with:
@@ -104,8 +117,8 @@ jobs:
           AWS_ACCESS_KEY_ID: ${{ secrets.BOOST_PRODUCTION_KEY_ID }}
           AWS_SECRET_ACCESS_KEY: ${{ secrets.BOOST_PRODUCTION_ACCESS_KEY }}
           AWS_REGION: 'us-east-2'
-          SOURCE_DIR: ${{ format('build/{0}', steps.docs-dir.outputs.boost_docs_basename) }}
-          DEST_DIR: ${{ format('site-docs/{0}', (github.ref_name == 'develop' && 'develop') || (github.ref_name == 'master' && 'master') || github.ref_name_name) }}
+          SOURCE_DIR: build/
+          DEST_DIR: ${{ format('site-docs/{0}', github.ref_name) }}
 
       - name: Publish Releases as Artifacts
         if: github.event_name == 'push'
