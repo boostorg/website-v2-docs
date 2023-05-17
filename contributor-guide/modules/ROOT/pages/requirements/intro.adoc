@@ -1,4 +1,4 @@
-= Author a Library
+= Library Requirements
 
 This section describes the requirements and guidelines for the content of a library submitted to Boost.
 
@@ -21,7 +21,7 @@ To avoid a proposed library being rejected, it must meet these requirements:
 . The library should preferably meet the xref:./organization-requirements.adoc[Organization Requirements]. But is only required to meet them after acceptance.
 
 . The library must come reasonably close to meeting the
- xref:./design-guide.adoc[Library Design Guidelines].
+ xref:design-guide/intro.adoc[Library Design Guidelines].
 
 . The author must be willing to participate in discussions
  on the mailing list, and to refine the library accordingly.

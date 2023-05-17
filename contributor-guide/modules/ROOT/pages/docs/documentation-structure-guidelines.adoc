@@ -1,5 +1,5 @@
 = Boost Library Documentation Guidelines
-:navtitle: General Documentation Guidelines
+:navtitle: General Guidelines
 
 It is not a requirement for a Boost library for the documentation to adhere to the following structure. However, it is listed here as a guide, if needed.
 

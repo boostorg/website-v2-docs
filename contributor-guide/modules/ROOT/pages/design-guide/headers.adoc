@@ -1,4 +1,4 @@
-= Boost Header Policy
+= Headers
 :idprefix:
 :idseparator: -
 
