@@ -1,0 +1,286 @@
+= Documentation Style Guide
+:navtitle: Style Guide
+
+This section describes the style of writing and formatting to use when contributing to Boost documentation.
+
+== Priorities
+
+Our documentation priorities are:
+
+. Clarity first - clear and accurate.
+. Brevity next.
+. Consistency is good.
+. All else.
+
+== Mark Up
+
+The mark up tool we are using is https://docs.asciidoctor.org/asciidoc/latest/syntax-quick-reference/[AsciiDoc]. Throughout this topic examples of AsciiDoc format follow for each topic.
+
+
+== Headings
+
+Headings are crucial elements to guide readers to find the information they're looking for. 
+
+. *Title Case*: Capitalize all the important words (not: to, and, a, at, with, etc.). In title case, conjunctions, articles, and prepositions typically remain in lowercase unless they're the first or last word in the title. For example: "To Install a Boost Library" is title cased.
+
+. *Top Level*: Use only one top-level heading per page, as the first entry.
+
+. *Engagement*: Use active headings for procedures. For example "Install Boost" is active, "Boost Installation" is inactive.
+
+. *Acronyms and Jargon*: Do not use acronyms in headings. For example, do not use "Working with CI", instead use "Working with Continuous Integration", and then in the text "Continuous Integration (CI) means ....". Avoid jargon too, as it is notoriously confusing for a non-English-as-a-first-language reader.
+
+. *Clarity*: Avoid vague or generic headings.
+
+. *Avoid Overuse*: Too many levels of headings can confuse your readers. Try not to exceed four levels of headings.
+
+=== AsciiDoc Headings
+
+The equals sign is used to determine the heading level.
+
+[source]
+----
+= Top Level
+== Second Level
+=== Third Level
+==== Fourth Level
+----
+
+== Text
+
+The main priorities of brevity and clarity apply as top priority to all text. Avoid jargon altogether, and spell out acronyms on first use. 
+
+. *Active Voice*: Use the active voice as much as possible. It's generally more direct and easier to understand than the passive voice.
+
+. *Logical Flow*: Ensure there's a logical flow from one paragraph to the next. Each paragraph should build on the previous one, adding new information or further detail.
+
+. *Use Contractions*: Contractions make for a chattier and easier to read style. For example, use "doesn't" instead of "does not", or "would've" instead of "would have".
+
+. *Avoid Walls of Text*: Break up large text blocks with images, lists, diagrams where appropriate.
+
+. *Avoid Duplication*: Sometimes duplication is necessary, for example within a tutorial to keep the flow within the tutorial itself. Otherwise, avoid duplication whenever possible, and simply link to one source of truth.
+
+[source]
+----
+Text in AsciiDoc is entered as is. Be sure to leave a blank line between paragraphs.
+
+Next paragraph.
+----
+
+
+== Pages
+
+Generally avoid the off-putting user-experience of over-long pages.
+
+. *Landing Page*: A landing page is best kept fairly short, say around 500 words, though clarity is the top priority.
+
+. *Information Pages*: For Search Engine Optimization (SEO) a length of 1500 to 2000 words per page works well. Avoid over-long pages - split them logically with a clear heading for each section.
+
+== Operating Systems and Tools
+
+We assume the users of Boost are using Windows, macOS, or Linux based systems. Examples of installation and running code examples should be provided for each of these three systems. There are many variants of Linux, and providing examples for the most popular variants is encouraged.
+
+Popular Windows tools are Microsoft Visual C++, Visual Studio Code, and GCC (MinGW or Cygwin). On macOS, Clang is a popular compiler, and on Linux Cmake, GCC and Clang are popular.
+
+The recommendation for Boost examples is to use a _popular_ tool in the various steps and processes, but _not_ to recommend one tool over any other. And to mention other tools that we know work well with Boost.
+
+It is important thet processes in our documentation work, so it will be necessary to state which tool you are using when creating working examples.
+
+== Code Snippets
+
+Our code snippets include pass:[C++] examples on using libraries, but also Command Prompt entries on installing and building, and other text commands.
+
+. *Accuracy*: Remember that code snippets are going to be *copied and pasted* by users, who are going to (rightly or wrongly) assume that the code conforms to best practices.
+
+. *Simplicity*: The code snippet should be as simple as possible. Avoid complex or confusing code structures, as they can distract from the point you're trying to make.
+
+. *Commenting*: Include comments in your code to explain what's happening. This can help readers understand the code, especially if it's complex or non-obvious.
+
+. *Consistency*: Be consistent in your coding style throughout your documentation. This includes things like indentation, naming conventions, comments, and the use of spaces or tabs.
+
+. *Context*: Provide enough context around the code snippet. Explain what the code does and how it relates to the text.
+
+. *Complete*: If a code snippet is intended to be run by the reader, make sure it includes all necessary parts to actually run.
+
+. *Versioning*: Indicate the version of the programming language, library or framework that the code snippet is intended for. This can help prevent confusion or issues with running the code.
+
+=== Ascidocs Code Snippet
+
+Note the four hyphens delimiting the start and finish of the snippet, and the `c++` tag for the `source` to enable syntax highlighting (if available).
+
+[source, c++]
+----
+#include <boost/lambda/lambda.hpp>
+#include <iostream>
+#include <iterator>
+#include <algorithm>
+
+int main()
+{
+    using namespace boost::lambda;
+    typedef std::istream_iterator<int> in;
+
+    std::for_each(
+        in(std::cin), in(), std::cout << (_1 * 3) << " ");
+}
+----
+
+
+== Lists
+
+Whether ordered (with numbers), or unordered (with bullets), these are the general best practices for all lists:
+
+. *Parallelism*: Start each point with the same part of speech (noun, verb, etc.) to keep the list parallel. This makes the list easier to read and understand.
+
+. *Punctuation*: If your points are not complete sentences, they typically do not need to be punctuated. If the points are complete sentences or if each point is a distinct idea that forms a multi-sentence paragraph, use proper punctuation.
+
+. *Length*: Keep your points concise. If a point is running longer than two lines, consider breaking it down further.
+
+. *Introduction*: Always introduce a list with a lead-in sentence or phrase.
+
+=== Numbered Lists
+
+Numbered lists are best used when describing a process, a sequence of steps, or priorities.
+
+If the sequence or order of points does not matter, use a <<Bulleted Lists>> instead. If the sequence matters, use a numbered list (sometimes called "ordered lists").
+
+==== AsciiDoc Numbered Lists
+
+Numbered list entries start with a period (`.`). There is no need to enter any numbers, the renderer will work them out correctly. Be sure to leave a blank line before and after a list. 
+
+[source]
+----
+Introductory sentence.
+
+. point A
+. point B
+.. Point B.1
+.. Point B.2
+. Point C
+. Point D
+----
+
+Introductory sentence.
+
+. point A
+. point B
+.. Point B.1
+.. Point B.2
+. Point C
+. Point D
+
+
+=== Bulleted Lists
+
+If the sequence or order of points matters, use a <<Numbered Lists>> instead. If the sequence doesn’t matter, use a bulleted list (sometimes called "unordered" lists).
+
+. *Order*: Arrange your bullet points logically. This could be in order of importance, chronologically, or in some other meaningful way for the reader.
+
+. *Avoid Overuse*: Bulleted lists are most effective when used sparingly. Too many lists can make your document hard to read.
+
+==== AsciiDoc Bulleted Lists
+
+Note the `[disc]` entry determining the symbol. Alternatives are `[square]` and `[circle]`. Be sure to leave a blank line before and after a list. 
+
+[source]
+----
+Introductory sentence.
+
+[disc]
+* point A
+* point B
+** Point B.1
+** Point B.2
+
+[circle]
+* Point C
+* Point D
+----
+
+Introductory sentence.
+
+[disc]
+* point A
+* point B
+** Point B.1
+** Point B.2
+
+[circle]
+* Point C
+* Point D
+
+== Tables
+
+If content naturally falls into a row/column format, then encapsulate as a table.
+
+. *Title*: Every table should have a clear, concise title that describes its content and purpose.
+
+. *Headers*: Use headers for each column to indicate what information is contained in that column.
+
+. *Consistency*: Maintain consistent formatting and structure across all tables in a document to enhance readability and avoid confusion.
+
+. *Simplicity*: Keep the table as simple as possible. Avoid unnecessary columns or rows, and ensure that the data presented is relevant and necessary.
+
+. *Size*: The table should fit the page size. If the table is too large, consider breaking it down into several smaller tables.
+
+. *Striping*: If your table has many rows, consider using striping (alternating row colors) to make it easier to follow across large tables.
+
+. *Units*: If your table includes measures, ensure to specify the units.
+
+. *Notes and References*: If necessary, include footnotes or references right below the table for any clarifications.
+
+. *Data Order*: Consider the most logical order to present your data. This could be alphabetical, numerical, chronological, or in order of importance.
+
+=== AsciiDoc Tables
+
+The following example asciidoc source would produce the table shown below. Note the relative column widths (1 and 2). This means the first column uses 1/3rd of the width available, and the second column 2/3rds of the width. Also, a header row is required, and zebra striping. Be sure to leave a blank line before and after a table. 
+
+[source]
+----
+
+[cols="1,2",options="header",stripes=even]
+|===
+| Head1  | Head2
+| row1 | text
+| row2 | text
+|===
+
+----
+
+[cols="1,2",options="header",stripes=even]
+|===
+| Head1  | Head2
+| row1 | text
+| row2 | text
+|===
+
+== Images
+
+Images work well in tutorials, and other process-style documentation, where the reader can find visual confirmation that they have followed the correct procedure.
+
+. *Relevance*: Ensure the images used are relevant and directly aid in *understanding* the content. Avoid using images as mere decorations or fillers. Don't overload diagrams or images with *too much information*. They should aid understanding, not create confusion.
+
+. *Quality*: Images should be of *high quality*. They should be clear and easy to read/understand, even when printed.
+
+. *Referencing*: Always reference images in the text. This not only directs the reader's attention to the image but also *clarifies what the image is meant to illustrate*.
+
+. *Accessibility*: Ensure images are accessible for people with *visual impairments*. This can include providing alt text for online documents, and detailed captions for printed documents. Be aware that color choices can have an impact on readability, especially for people with color blindness.
+
+. *Consistency*: Try to maintain a consistent style, quality, and *appearance* for all images throughout the document.
+
+. *File Type and Compression*: Use the correct file type for your images. JPEGs are best for photographs, while PNGs are better for screenshots, SVGs for logos and diagrams. Also, be aware of file size - compress images if they are large, but ensure this doesn't compromise quality.
+
+. *Copyright*: Only use images that you have the *right to use*. Always attribute images correctly according to the terms of the license.
+
+=== AsciiDoc Images
+
+Place the image in the `images` folder, then add the following link in the file. Add an appropriate caption, and alt-text to describe the image to the visually impaired.
+
+[source]
+----
+image::filename.png[caption="Figure 1: caption", alt="alternate text"]
+----
+
+== References
+
+[square]
+* https://mrduguo.github.io/asciidoctor.org/docs/asciidoc-syntax-quick-reference/[AsciiDocs Quick Reference]
