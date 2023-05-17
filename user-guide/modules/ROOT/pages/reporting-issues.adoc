@@ -1,4 +1,4 @@
-= Reporting bugs
+= Reporting issues
 :idprefix:
 :idseparator: -
 

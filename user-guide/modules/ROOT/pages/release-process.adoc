@@ -1,4 +1,4 @@
-= The Boost Release Process
+= Release Process
 
 @anarthal: shorten this and phrase it from a user perspective. Keep the long version for the contributor guide and place a link here
 
