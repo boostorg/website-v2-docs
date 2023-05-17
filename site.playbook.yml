@@ -35,10 +35,13 @@ content:
   sources:
     - url: https://github.com/cppalliance/site-docs
       start_path: user-guide
+      edit_url: '{web_url}/edit/develop/{path}'
     - url: https://github.com/cppalliance/site-docs
       start_path: formal-reviews
+      edit_url: '{web_url}/edit/develop/{path}'
     - url: https://github.com/cppalliance/site-docs
       start_path: contributor-guide
+      edit_url: '{web_url}/edit/develop/{path}'
 
 ui:
   bundle:
