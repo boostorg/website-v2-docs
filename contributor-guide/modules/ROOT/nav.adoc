@@ -26,6 +26,7 @@
 ** xref:docs/documentation-overview.adoc[]
 ** xref:docs/documentation-structure-guidelines.adoc[]
 ** xref:docs/antora.adoc[Antora Guide]
+** xref:docs/style-guide.adoc[]
 ** Templates
 *** xref:docs/templates/01-overview-template.adoc[]
 *** xref:docs/templates/02-header-template.adoc[]
