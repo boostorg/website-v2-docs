@@ -1,4 +1,4 @@
-= Managing dependencies
+= Dependencies
 :idprefix:
 :idseparator: -
 

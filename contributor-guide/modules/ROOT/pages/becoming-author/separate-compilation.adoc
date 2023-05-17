@@ -1,4 +1,4 @@
-= Separate compilation
+= Separate Compilation
 :idprefix:
 :idseparator: -
 

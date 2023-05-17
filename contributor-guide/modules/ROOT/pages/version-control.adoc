@@ -1,4 +1,4 @@
-= Source control
+= Version Control (Git)
 
 @anarthal: content suggestion:
 

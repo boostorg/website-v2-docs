@@ -1,4 +1,4 @@
-= Writing tests
+= Writing Tests
 
 @anarthal: content suggestion:
 
@@ -7,5 +7,5 @@
 * Running tests from b2 and cmake
 * Running examples as tests
 * Running docs snippets as tests
-* What if I have integration tests?
+* Testing libraries that depend on external systems
 * Testing cmake workflows

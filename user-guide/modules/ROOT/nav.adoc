@@ -1,12 +1,15 @@
-* xref:intro.adoc[Introduction to Boost]
+* xref:intro.adoc[]
 * xref:getting-started.adoc[]
-* xref:whats-in-boost.adoc[]
-* xref:bsl.adoc[]
-* xref:reporting-bugs.adoc[]
-* xref:advanced-building-boost.adoc[]
-* xref:release-process.adoc[]
+* xref:whats-inside.adoc[]
+* xref:reporting-issues.adoc[]
+* xref:advanced-builds.adoc[]
 * xref:faq.adoc[]
-* xref:boost-history.adoc[]
+* xref:tutorials.adoc[]
+
+* Community
+** xref:bsl.adoc[]
+** xref:release-process.adoc[] 
+** xref:boost-history.adoc[]
 
 * Reference
 ** xref:library-naming.adoc[]

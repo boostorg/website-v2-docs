@@ -1,4 +1,4 @@
-= Documentation requiremens
+= Documentation Requiremens
 
 @anarthal: this is taken verbatim from old content. It may be outdated.
 

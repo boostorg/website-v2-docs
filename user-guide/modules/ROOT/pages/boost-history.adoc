@@ -1,5 +1,4 @@
-= History of Boost
-:navtitle: History of Boost
+= History
 
 This topic aims to provide an overview of the origins, growth, and impact of Boost on the programming community.
 

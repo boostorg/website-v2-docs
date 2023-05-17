@@ -1,9 +1,7 @@
+= Introduction
 :idprefix:
 :idseparator: -
-:leveloffset: +1
 
-= Introduction to Boost
-:navtitle: Introduction to Boost
 
 Boost is a collection of peer-reviewed and high-quality libraries that aim to make application development more productive for all C++ developers.
 

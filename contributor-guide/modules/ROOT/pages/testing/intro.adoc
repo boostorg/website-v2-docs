@@ -1,4 +1,4 @@
-= Testing in Boost
+= Testing
 :idprefix:
 :idseparator: -
 
