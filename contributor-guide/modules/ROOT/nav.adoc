@@ -1,23 +1,27 @@
 
 * xref:getting-involved.adoc[]
-* xref:becoming-author/intro.adoc[]
-** xref:becoming-author/license-requirements.adoc[]
-** xref:becoming-author/portability-requirements.adoc[]
-** xref:becoming-author/organization-requirements.adoc[]
-** xref:becoming-author/docs-requirements.adoc[]
-** xref:becoming-author/design-guide.adoc[]
-** xref:becoming-author/dependencies.adoc[]
-** xref:becoming-author/separate-compilation.adoc[]
-** xref:becoming-author/header.adoc[]
-** xref:becoming-author/borland.adoc[]
-** xref:becoming-author/library-metadata.adoc[]
-** xref:becoming-author/release-notes.adoc[]
-* xref:version-control.adoc[]
-* xref:cmake.adoc[]
+
+* xref:requirements/intro.adoc[]
+** xref:requirements/license-requirements.adoc[]
+** xref:requirements/portability-requirements.adoc[]
+** xref:requirements/organization-requirements.adoc[]
+** xref:requirements/docs-requirements.adoc[]
+** xref:requirements/library-metadata.adoc[]
+** xref:requirements/release-notes.adoc[]
+
+* xref:design-guide/intro.adoc[]
+** xref:design-guide/code-design.adoc[]
+** xref:design-guide/headers.adoc[]
+** xref:design-guide/backwards-compatibility.adoc[]
+** xref:design-guide/separate-compilation.adoc[]
+** xref:design-guide/dependencies.adoc[]
+** xref:design-guide/borland.adoc[]
+
 * xref:testing/intro.adoc[]
 ** xref:testing/boost-test-matrix.adoc[]
 ** xref:testing/writing-tests.adoc[]
 ** xref:testing/ci.adoc[]
+
 * Documentation
 ** xref:docs/documentation-overview.adoc[]
 ** xref:docs/documentation-structure-guidelines.adoc[]
@@ -31,4 +35,11 @@
 *** xref:docs/templates/06-faq-template.adoc[]
 *** xref:docs/templates/07-bibliography-template.adoc[]
 *** xref:docs/templates/08-acknowledgements-template.adoc[]
+
+* Build Systems
+** xref:build-systems/cmake.adoc[]
+** xref:build-systems/b2.adoc[]
+
+* xref:version-control.adoc[]
+
 * xref:release-process.adoc[]

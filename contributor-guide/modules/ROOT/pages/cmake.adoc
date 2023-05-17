@@ -1,3 +1,0 @@
-= CMake in Boost
-
-@anarthal: consider placing part of what we have here https://github.com/boostorg/cmake

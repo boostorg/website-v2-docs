@@ -1,5 +1,5 @@
 = Writing Documentation for Boost - Documentation Structure
-:navtitle: Standards Documentation Structure
+:navtitle: Documentation Structure
 
 == Introduction
 

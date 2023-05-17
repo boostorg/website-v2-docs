@@ -1,7 +1,6 @@
-= Running Boost Regression Tests (the Boost Test Matrix)
+= Boost Test Matrix
 :idprefix:
 :idseparator: -
-:navtitle: The Boost Test Matrix
 
 @anarthal: this is taken verbatim from old content. It may be outdated. Conversion to asciidoc is not complete.
 

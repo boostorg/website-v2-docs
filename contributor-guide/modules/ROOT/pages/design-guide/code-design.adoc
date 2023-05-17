@@ -2,20 +2,6 @@
 
 Please use these guidelines as a checklist for preparing the content a library submission. Not every guideline applies to every library, but a reasonable effort to comply is expected.
 
-== Backwards Compatibility
-
-Boost libraries generally have a large and diverse user base. To ensure successful transitions from old APIs to newer APIs under those circumstances, library authors are encouraged to follow a few guidelines when introducing breaking changes in their library:
-
-. Non-breaking changes can be done without restriction.
-
-. Small breaking changes can be made, but users should be given notice a few releases before the change is published. Most breaking changes fall into this category.
-
-. For large breaking changes with a migration path from the old API to the new API (for example *boost::filesystem* v2 to v3), the new API should be introduced in a separate directory/namespace, and users should be noticed and given a few releases to move over. The old API can be removed after some time.
-
-. For large breaking changes without a migration path (for example *boost::spirit* v2 to v3), the new API should be provided in a separate directory/namespace, and the old API should be preserved (because there's no migration path). Removing the API should be considered the same as removing a Boost library, which can be done but needs a more extensive deprecation period.
-
-. Large breaking changes that are equivalent to a redesign or rewrite of the library should be treated as a new library and a formal review (or at least a mini review) is encouraged.
-
 == Design and Programming
 
 [disc]

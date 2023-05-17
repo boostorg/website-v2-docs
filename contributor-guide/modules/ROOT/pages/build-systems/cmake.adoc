@@ -1,0 +1,3 @@
+= CMake
+
+@anarthal: consider get some of https://github.com/boostorg/cmake docs (oriented towards the developer)
