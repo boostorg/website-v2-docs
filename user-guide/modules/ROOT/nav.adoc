@@ -5,6 +5,7 @@
 * xref:advanced-builds.adoc[]
 * xref:faq.adoc[]
 * xref:tutorials.adoc[]
+* xref:testing-debugging.adoc[]
 
 * Community
 ** xref:bsl.adoc[]
