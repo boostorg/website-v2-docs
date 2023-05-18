@@ -1,0 +1,162 @@
+= Testing and Debugging
+:navtitle: Testing and Debugging
+
+Debugging code that uses Boost libraries follows the same general principles as debugging any other pass:[C++] code, but with the added assistance of test and logging specific libraries, and integration of these libraries into popular tools.
+
+== Debugging Strategies
+
+Here are some strategies to consider:
+
+. Understanding the Library: Familiarize yourself with the specific Boost libraries that you're using. Boost is a large and diverse collection of libraries, and each library may have unique behaviors, requirements, or quirks. Understanding the libraries you're using will help you spot issues more easily.
+
+. Read the https://www.boost.org/doc/libs[Boost Library Documentation]: Boost has extensive and well-maintained documentation. If you're having trouble with a specific library or function, start by looking up its documentation.
+
+. Use a Debugger: Tools like *gdb* or *lldb* on Unix-like systems, or the *Visual Studio* debugger on Windows, can be incredibly useful. You can step through your code line by line, inspect variables at any point, and generally see exactly what your code is doing.
+
+. Compile Warnings and Errors: Boost code will often make extensive use of templates, and errors in template code can sometimes result in complex and confusing compiler error messages. When confronted with such a message, don't panic. Start at the top and try to decipher what the compiler is telling you. Often, the first few lines of the error message will contain the key to understanding the problem.
+
+. Unit Testing: Boost provides a testing framework, boost:test[], which you can use to write unit tests for your code. Writing tests can help you catch errors and regressions, and it can also help you understand your code better. boost:test[] is integrated and available when using Microsoft Visual Studio. Refer to the <<Using Boost.Test>> section below.
+
+. Logging and Debug Output: Sometimes, it can be useful to have your program output diagnostic information while it's running. You can use `std::cerr`, `std::clog`, or a logging library to output information about your program's state at key points.
+
+. Code Review: If you're still stuck, consider asking a fellow developer to review your code. Sometimes, a fresh pair of eyes can spot issues that you might have missed.
+
+. Online Communities: If you're still stuck after trying the above steps, you can ask for help online. The https://lists.boost.org/mailman/listinfo.cgi/boost[Boost developers community] is large and generally very helpful. There are forums, mailing lists, and https://stackoverflow.com/[Stack Overflow] where you can ask for help.
+
+Remember, debugging is a skill that gets better with practice. The more you work with the Boost libraries, the more you'll learn about their idiosyncrasies and the better you'll become at debugging issues with them.
+
+== Using Boost.Test
+
+boost:test[] is a robust, powerful library designed to facilitate writing unit tests in pass:[C++]. It provides a framework for creating, managing, and running tests, enabling developers to ensure that their code functions as expected.
+
+To start using the Test library, include its header in your test file: 
+
+[source,C++]
+----
+#define BOOST_TEST_MODULE MyTest
+#define BOOST_TEST_DYN_LINK
+#include <boost/test/unit_test.hpp>
+----
+
+This will allow dynamic linking to the test library. The `BOOST_TEST_MODULE` macro creates a main function for your test executable, meaning you don't need to write one yourself.
+
+boost:test[] uses "test cases" for testing. A test case is a function that performs the test. You can define one using the `BOOST_AUTO_TEST_CASE(test_case_name)` macro. The macro parameter becomes the test case's name. For example:
+
+[source,C++]
+----
+BOOST_AUTO_TEST_CASE(MyTestCase) {
+    BOOST_TEST(true); // A simple test that always passes
+}
+----
+
+In this example, `MyTestCase` is a simple test case. The `BOOST_TEST` macro checks its argument and, if it's false, reports an error.
+
+boost:test[] provides a set of macros for different assertions:
+
+[disc]
+* `BOOST_TEST` for basic testing.
+* `BOOST_CHECK` for non-critical conditions where the test continues even if the check fails.
+* `BOOST_REQUIRE` for critical conditions where the test is aborted if the condition fails.
+
+The suite feature is another strength. It allows you to group test cases, making your tests more organized and manageable. To create a suite, you can use the `BOOST_AUTO_TEST_SUITE(suite_name)` macro:
+
+[source,C++]
+----
+BOOST_AUTO_TEST_SUITE(MyTestSuite)
+
+BOOST_AUTO_TEST_CASE(TestCase1) {
+    // Test code here
+}
+
+BOOST_AUTO_TEST_CASE(TestCase2) {
+    // Test code here
+}
+
+BOOST_AUTO_TEST_SUITE_END()
+----
+
+In this snippet, `MyTestSuite` is a test suite that contains `TestCase1` and `TestCase2`.
+
+Another powerful feature is the fixture. Fixtures are useful when you want to perform setup and teardown operations for your tests. You can create a fixture class and use `BOOST_FIXTURE_TEST_CASE` to apply it to a test case:
+
+[source,C++]
+----
+struct MyFixture {
+    MyFixture() {
+        // Setup code here
+    }
+
+    ~MyFixture() {
+        // Teardown code here
+    }
+};
+
+BOOST_FIXTURE_TEST_CASE(TestCaseWithFixture, MyFixture) {
+    // Test code here
+}
+----
+
+In this example, `MyFixture` is a fixture class. Its constructor and destructor are called before and after `TestCaseWithFixture`, respectively.
+
+boost:test[] also supports parameterized and data-driven tests, exception handling, and custom log formatting.
+
+To compile and run your tests, use your preferred C++ compiler to compile the test source file and the Test library. Then, run the resulting executable to execute your tests.
+
+== Using Boost.Log
+
+Logging can be a helpful part of debugging, so consider using boost:log[], as it provides a flexible and customizable logging system. It allows you to log messages from different parts of your application to various targets (e.g., console, file, etc.) and with different severity levels or categories.
+
+Here is a simple example of how you might use Log:
+
+[source,C++]
+----
+#include <boost/log/trivial.hpp>
+
+int main(int, char*[])
+{
+    BOOST_LOG_TRIVIAL(trace) << "A trace severity message";
+    BOOST_LOG_TRIVIAL(debug) << "A debug severity message";
+    BOOST_LOG_TRIVIAL(info) << "An informational severity message";
+    BOOST_LOG_TRIVIAL(warning) << "A warning severity message";
+    BOOST_LOG_TRIVIAL(error) << "An error severity message";
+    BOOST_LOG_TRIVIAL(fatal) << "A fatal severity message";
+
+    return 0;
+}
+----
+
+In this example, `BOOST_LOG_TRIVIAL` is a simple macro that logs a message with a specified severity level.
+
+Severity levels are provided for log messages that you can use to indicate the importance or urgency of different logs. In basic usage, these severity levels are represented by an enumeration type.
+
+In the example provided above, the severity levels are defined as follows:
+
+[source,C++]
+----
+namespace trivial = boost::log::trivial;
+enum severity_level
+{
+    trace,
+    debug,
+    info,
+    warning,
+    error,
+    fatal
+};
+----
+
+Each of these levels can be used to log messages of different importance:
+
+. `trace`: Very detailed logs, typically used for debugging complex issues.
+
+. `debug`: Detailed logs useful for development and debugging.
+
+. `info`: Information about the normal operation of the program.
+
+. `warning`: Indications of potential problems that are not immediate errors.
+
+. `error`: Error conditions that may still allow the program to continue running.
+
+. `fatal`: Severe errors that may prevent the program from continuing to run.
+
+You can customize these levels to fit your app, and you can also filter logs based on their severity level. For example, in a production environment, you might ignore `trace` and `debug` logs and only record `info`, `warning`, `error`, and `fatal` logs.
