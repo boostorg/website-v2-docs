@@ -1,4 +1,4 @@
-name: Build and Upload Antora Docs
+name: Build, Test and Upload Antora Docs
 on:
   push:
     branches:
@@ -14,8 +14,13 @@ concurrency:
 
 jobs:
   build:
-    name: Publish Antora Docs
-    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        include:
+          - { name: 'Ubuntu', os: ubuntu-22.04, publish: true }
+          - { name: 'Windows', os: windows-2022 }
+    name: Publish Antora Docs (${{ matrix.name }})
+    runs-on: ${{ matrix.os }}
     steps:
       - name: Checkout
         uses: actions/checkout@v3
@@ -24,6 +29,7 @@ jobs:
 
       - name: Build
         id: build
+        shell: bash
         run: |
           # Involved IDs
           before_id="${{ (github.event_name == 'pull_request' && github.event.pull_request.base.sha) || github.event.before }}"
@@ -64,12 +70,13 @@ jobs:
 
       - name: Remove lib dirs
         if: steps.build.outputs.built_libs == 'true'
+        shell: bash
         working-directory: build
         run: |
           find "lib" -mindepth 1 -maxdepth 1 -type d -exec rm -r {} +
 
       - name: AWS Sync site-docs (revsys cluster)
-        if: (github.ref == 'refs/heads/master' || github.ref == 'refs/heads/develop') && github.event_name == 'push' && github.repository == 'cppalliance/site-docs'
+        if: matrix.publish && (github.ref == 'refs/heads/master' || github.ref == 'refs/heads/develop') && github.event_name == 'push' && github.repository == 'cppalliance/site-docs'
         uses: jakejarvis/s3-sync-action@master
         with:
           args: --follow-symlinks --delete --exclude '.git/*' --exclude 'build/lib/*'
@@ -82,7 +89,7 @@ jobs:
           DEST_DIR: ${{ format('site-docs/{0}', github.ref_name) }}
 
       - name: AWS Sync site-pages (revsys cluster)
-        if: (github.ref == 'refs/heads/master' || github.ref == 'refs/heads/develop') && github.event_name == 'push' && github.repository == 'cppalliance/site-docs'
+        if: matrix.publish && (github.ref == 'refs/heads/master' || github.ref == 'refs/heads/develop') && github.event_name == 'push' && github.repository == 'cppalliance/site-docs'
         uses: jakejarvis/s3-sync-action@master
         with:
           args: --follow-symlinks --delete --exclude '.git/*' --exclude 'build/lib/*'
@@ -95,7 +102,7 @@ jobs:
           DEST_DIR: ${{ format('site-pages/{0}', github.ref_name) }}
 
       - name: AWS Sync site-docs (staging on GKE)
-        if: (github.ref == 'refs/heads/master' || github.ref == 'refs/heads/develop') && github.event_name == 'push' && github.repository == 'cppalliance/site-docs'
+        if: matrix.publish && (github.ref == 'refs/heads/master' || github.ref == 'refs/heads/develop') && github.event_name == 'push' && github.repository == 'cppalliance/site-docs'
         uses: jakejarvis/s3-sync-action@master
         with:
           args: --follow-symlinks --delete --exclude '.git/*' --exclude 'build/lib/*'
@@ -108,7 +115,7 @@ jobs:
           DEST_DIR: ${{ format('site-docs/{0}', github.ref_name) }}
 
       - name: AWS Sync site-docs (production on GKE)
-        if: (github.ref == 'refs/heads/master' || github.ref == 'refs/heads/develop') && github.event_name == 'push' && github.repository == 'cppalliance/site-docs'
+        if: matrix.publish && (github.ref == 'refs/heads/master' || github.ref == 'refs/heads/develop') && github.event_name == 'push' && github.repository == 'cppalliance/site-docs'
         uses: jakejarvis/s3-sync-action@master
         with:
           args: --follow-symlinks --delete --exclude '.git/*' --exclude 'build/lib/*'
@@ -121,14 +128,14 @@ jobs:
           DEST_DIR: ${{ format('site-docs/{0}', github.ref_name) }}
 
       - name: Publish Releases as Artifacts
-        if: github.event_name == 'push'
+        if: matrix.publish && github.event_name == 'push'
         uses: actions/upload-artifact@v3
         with:
           name: site-docs
           path: build
 
       - uses: softprops/action-gh-release@v1
-        if: startsWith(github.ref, 'refs/tags/boost-')
+        if: matrix.publish && startsWith(github.ref, 'refs/tags/boost-')
         with:
           files: |
             build/${{ github.ref_name }}*.*
