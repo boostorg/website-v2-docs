@@ -31,18 +31,6 @@
     }
     return null;
   }
-
-  const urlParams = new URLSearchParams(window.location.search);
-  const search = urlParams.get('search');
-
-  if (search === 'algolia') {
-    setCookie('search','algolia');
-    setupAlgoliaDocsearch();
-  } else if (search === 'lunr') {
-    setCookie('search','lunr');
-  } else if (getCookie('search') === 'algolia') {
-    setupAlgoliaDocsearch();
-  }
 </script>
 {{/if}}
 <script id="site-script" src="{{{uiRootPath}}}/js/site.js" data-ui-root-path="{{{uiRootPath}}}"></script>
