@@ -1,11 +1,17 @@
 * xref:intro.adoc[]
-* xref:getting-started.adoc[]
 * xref:whats-inside.adoc[]
-* xref:reporting-issues.adoc[]
-* xref:advanced-builds.adoc[]
-* xref:faq.adoc[]
-* xref:tutorials.adoc[]
-* xref:testing-debugging.adoc[]
+* xref:getting-started.adoc[]
+
+* Common Scenarios
+** xref:reporting-issues.adoc[]
+** xref:faq.adoc[]
+** xref:testing-debugging.adoc[]
+
+* Tutorials
+** xref:boost-test-tutorial.adoc[]
+
+* Advanced Scenarios
+** xref:advanced-builds.adoc[]
 
 * Community
 ** xref:bsl.adoc[]
