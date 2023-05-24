@@ -29,6 +29,7 @@
   hyphens: none;
   line-height: 1.3;
   margin: 1rem 0 0;
+  font-size: revert;
 }
 
 .doc > h1.page:first-child {
