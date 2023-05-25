@@ -1,43 +1,23 @@
-= Reporting issues
+= Reporting Issues
 :idprefix:
 :idseparator: -
+:navtitle: Reporting Issues
 
-@anarthal: this is taken verbatim from old content. It may be outdated.
+If you come across a bug, or other issue, with one of the libraries, go through the following process to report it:
 
-== Reporting Bugs
+. If you know where to look in the source code, make sure the bug isn't already fixed in the latest sources, refer to the https://github.com/boostorg[Boost.org repositories].
 
-1. If you know where to look in the source code, make sure
- the bug isn't already fixed in the latest sources. The most
- recent version of everything on the Boost web site is
- available from the https://github.com/boostorg/wiki/wiki/Getting-Started:[git repositories].
-2. https://github.com/boostorg/:[Search the issues]
- on GitHub to make sure we don't already know about the bug.
- If we do, you can add further information to an existing bug ticket.
-3. https://github.com/boostorg/:[Create a new issues]
- in the repository of the particular library of your interest.
+. https://github.com/boostorg/boost/issues[Search the issues] on GitHub to make sure we don't already know about the bug. If we do, you can certainly add further information to an existing bug ticket.
 
+. If the bug has not been fixed already, and there is no relevant issue, then https://github.com/boostorg/boost/issues/new[Create a New Issue], either in the repository of the particular library of interest, or in the boost super-project.
 
 If possible,
 
-	* Describe the problem carefully, including steps required to
-	 reproduce it by a library maintainers.
-	* Attach a *minimal* and *complete*
-	 program that reproduces the problem. Aside from helping
-	 the library maintainer fix the problem, you may find
-	 the bug in your own code, which can avoid a costly
-	 delay waiting for a response.
+[disc]
+* Describe the problem carefully, including steps required to reproduce it by a library maintainers.
+
+* Attach a _minimal_ and _complete_ program that reproduces the problem. Aside from helping the library maintainer fix the problem, you may find the bug in your own code, which can avoid a costly delay waiting for a response.
 
 
-== If You Have a Fix for the Bug
-
-After completing the steps above, please submit a patch
- or a pull request as described in
- https://svn.boost.org/trac/boost/wiki/StartModPatchAndPullReq:[the wiki "Getting Started with Patches and Pull Requests"].
-
-
-
-
-
-Copyright Aleksey Gurtovoy(/users/people/aleksey_gurtovoy.html) 2002
 
 

@@ -29,6 +29,5 @@ If issues are found with a release that has gone public, and the issues are impo
 
 == See Also
 
-For details of the Release Process that are pertinent to contributors, refer to the 
-link:../contributor-guide/release-process.html[Contributor Guide Release Process].
+For details of the Release Process that are pertinent to contributors, refer to the Contributor Guide xref:contributor-guide:ROOT:release-process.adoc[].
 

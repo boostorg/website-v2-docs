@@ -12,5 +12,5 @@ Start by reading about xref:getting-involved.adoc[how to get involved in Boost].
 
 == See Also
 
-* https://docs.cppalliance.org/user-guide/index.html[User Guide]
-* https://docs.cppalliance.org/formal-reviews/index.html[Formal Reviews]
+* xref:user-guide:ROOT:index.adoc[]
+
