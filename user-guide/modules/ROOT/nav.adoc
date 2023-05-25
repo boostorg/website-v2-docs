@@ -3,7 +3,6 @@
 * xref:getting-started.adoc[]
 
 * Common Scenarios
-** xref:reporting-issues.adoc[]
 ** xref:faq.adoc[]
 ** xref:testing-debugging.adoc[]
 
@@ -14,6 +13,7 @@
 ** xref:advanced-builds.adoc[]
 
 * Community
+** xref:reporting-issues.adoc[]
 ** xref:bsl.adoc[]
 ** xref:release-process.adoc[] 
 ** xref:boost-history.adoc[]

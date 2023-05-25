@@ -60,8 +60,7 @@ The release candidate is published to the Boost site. The *master* branch is ope
 +
 If issues are found with a release candidate that are important enough to address quickly (that is, before the next full public release), then a point release will be built when fixes are available and tested. This will not typically result in the *master* branch being closed to other check ins.
 
-== See Also
+== See Also 
 
-* https://docs.cppalliance.org/user-guide/index.html[User Guide]
-* https://docs.cppalliance.org/contributor-guide/index.html[Contributor Guide]
-* https://docs.cppalliance.org/formal-reviews/index.html[Formal Reviews]
+For details of the Release Process that are pertinent to users, refer to the 
+User Guide xref:user-guide:ROOT:release-process.adoc[].
