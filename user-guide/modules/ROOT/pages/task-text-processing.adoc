@@ -1,0 +1,25 @@
+= Text Processing
+:navtitle: Text Processing
+
+Developing a word processor, or other text based app, involves handling text, GUI (Graphical User Interface), file operations, and possibly networking for cloud features. Boost does not provide a library for creating a GUI. You may want to consider using a library like Qt or wxWidgets for the GUI part of your word processor. Here are some Boost libraries that might assist you in this task:
+
+[circle]
+* boost:locale[] : This library provides a way of handling and manipulating text in a culturally-aware manner. It provides localization and internationalization facilities, allowing your word processor to be used by people with different languages and locales.
+
+* boost:filesystem[] : This library provides a way of manipulating files and directories. This would be critical in a word processor for opening, saving, and managing documents.
+
+* boost:spirit[] : This library is a parser framework that can parse complex data structures. If you're creating a word processor, it could be useful to interpret different markup and file formats.
+
+* boost:asio[] : If your word processor has network-related features, such as real-time collaboration or cloud-based storage, boost:asio[] provides a consistent asynchronous model for network programming.
+
+* boost:serialization[] : This library provides a way of serializing and deserializing data, which could be useful for saving and loading documents in a specific format.
+
+* boost:regex[] or boost:xpressive[] : Both libraries could be useful for implementing features like search and replace, spell-checking, and more.
+
+* boost:algorithm[] : This library includes a variety of algorithms for string and sequence processing, which can be useful for handling text.
+
+* boost:date-time[] : If you need to timestamp changes or edits, or if you're implementing any kind of version history feature, this library can help.
+
+* boost:multi-index[] : This library provides a way of maintaining a set of items sorted according to multiple keys, which could be useful for implementing features like an index or a sorted list of items.
+
+* boost:thread[] : If your application is multithreaded (for example, if you want to save a document while the user continues to work), this library will be useful.
