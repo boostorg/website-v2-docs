@@ -160,3 +160,18 @@ Each of these levels can be used to log messages of different importance:
 . `fatal`: Severe errors that may prevent the program from continuing to run.
 
 You can customize these levels to fit your app, and you can also filter logs based on their severity level. For example, in a production environment, you might ignore `trace` and `debug` logs and only record `info`, `warning`, `error`, and `fatal` logs.
+
+== Other Libraries
+
+Other libraries that might help you with testing and debugging include:
+
+[circle]
+* boost:stacktrace[]: Stacktrace can be used to capture, store, and print sequences of function calls and their arguments. This can be a lifesaver when you need to debug complex code or post-mortem crashes.
+
+* boost:exception[]: This library enhances the error handling capabilities of pass:[C++]. It enables attaching arbitrary data to exceptions, transporting of exceptions between threads, and more, thereby providing richer error information during debugging.
+
+* boost:static_assert[]: It provides a macro, `BOOST_STATIC_ASSERT`, which can be used to perform assertions that are checked at compile time rather than at run time. This can be used to catch programming errors as early as possible.
+
+* boost:bind[] and boost:lambda[]: These libraries allow for the creation of small, unnamed function objects at the point where they are used. These can be useful in writing concise tests.
+
+* boost:mpl[]: A MetaProgramming Library, though not exclusively for testing or debugging, this library can be helpful in writing compile-time tests.

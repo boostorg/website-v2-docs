@@ -1,0 +1,25 @@
+= System Components
+:navtitle: System
+
+Developing a system component for an operating system in pass:[C++] involves a wide range of low-level tasks. The relevant Boost libraries will largely depend on the specifics of your project. Some operating systems may not support all of the features of these libraries, and for low-level tasks, it may be more appropriate to use system APIs directly. Here are some Boost libraries that should be useful:
+
+[circle]
+* boost:asio[] : This library provides a consistent asynchronous model using a modern pass:[C++] approach for network and low-level I/O programming. This might be useful for network-related components or any component that interacts with hardware.
+
+* boost:interprocess[] : This library provides a way of sharing memory and communicating between processes. It's useful for creating shared memory regions, handling inter-process communication, managing shared objects, and synchronizing processes.
+
+* boost:thread[] : This library provides a portable interface for multithreading. It includes features for creating and managing threads, mutexes, condition variables, and futures.
+
+* boost:fiber[] : A fiber is a lightweight thread of execution. boost:fiber[] provides a framework for creating and managing fibers, which can be useful in some system-level programming tasks.
+
+* boost:filesystem[] : This library provides a portable way of querying and manipulating paths, files, and directories. It can be very helpful for system-level tasks that need to interact with the file system.
+
+* boost:program_options[] : This library allows program options to be defined, with types and default values, and their values to be retrieved from the command line, from config files, and programmatically.
+
+* boost:system[] : This library provides simple, light-weight error_code objects that encapsulate system-specific "error codes", distinct from pass:[C++] exceptions.
+
+* boost:container[] : This provides advanced data structures beyond the ones provided by the pass:[C++] standard library, which may be useful in certain scenarios.
+
+* boost:process[] : This library allows you to create child processes, setup their environment and provides means to communicate with them asynchronously through various streams.
+
+* boost:chrono[] : This library provides a set of handy features for measuring time, which might be useful for system-level tasks that need to measure or manipulate time.

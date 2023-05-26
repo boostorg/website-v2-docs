@@ -1,0 +1,33 @@
+= High-Performance Database
+:navtitle: Database
+
+Creating a high-performance database application in pass:[C++] involves a range of tasks, including network communication, concurrent programming, memory management, and more. Here are some Boost libraries that might be useful:
+
+[circle]
+* boost:mysql[]: This library is built on top of boost:asio[], and provides a pass:[C++]11 client for the https://www.mysql.com/[MySQL] and https://mariadb.com/[MariaDB] database servers. As a library it is most useful when your app needs efficient and asynchronous access to one of these servers. 
+
+* boost:asio[] : This library provides a consistent asynchronous model using a modern pass:[C++] approach for network and low-level I/O programming. It supports a variety of network protocols, which could be helpful if your database needs to communicate over a network.
+
+* https://github.com/boostorg/redis[Boost.Redis]: Redis (which stands for _Remote Dictionary Server_) is a popular in-memory data structure store, used in database, cache, and message broker applications. This library implements Redis plain text protocol RESP3. It can multiplex any number of client requests, responses, and server pushes onto a single active socket connection to the Redis server.
+
+* boost:container[] : This library provides STL-compatible containers, including stable vector, flat set/map and more. The containers provided by this library can offer performance benefits over their standard library equivalents, making them a good fit for a high-performance database application.
+
+* boost:serialization[] : If you need to serialize objects for storage, boost:serialization[] can be a useful tool. However, be aware that for many database applications, more specialized serialization formats (like Protocol Buffers, Thrift, etc.) might be more appropriate.
+
+* boost:thread[] : This library provides a portable interface for multithreading, which can be crucial when creating a high-performance database that can handle multiple queries concurrently.
+
+* boost:fiber[] : This library provides a framework for micro-/userland-threads (fibers) scheduled cooperatively. Fibers can be used to simplify asynchronous programming, especially when there are many I/O operations, which is typical in database applications.
+
+* boost:interprocess[] : This library allows for shared memory communication and synchronization between processes. In a database context, this can be useful for inter-process communication (IPC) and shared memory databases.
+
+* boost:lockfree[] : This library provides lock-free data structures which could be useful in multi-threaded database applications where you want to avoid locking overhead.
+
+* boost:polygon[] or boost:geometry[] : For storing and querying spatial data, these libraries can provide the necessary data types and algorithms.
+
+* boost:multiprecision[] : For handling high-precision numbers or calculations, this library can be useful.
+
+* boost:pool[] : This library is used for simple, fast memory allocation and can improve efficiency in some scenarios by managing memory in chunks.
+
+* boost:smart_ptr[] : It provides smart pointer class templates, which can be very helpful in managing resources and preventing memory leaks.
+
+

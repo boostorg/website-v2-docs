@@ -1,0 +1,23 @@
+= Networking
+:navtitle: Networking
+
+Developing a networking application in pass:[C++] involves a lot of different components, and the Boost libraries offer numerous options that might help you. Here are a few that are most directly applicable:
+
+[circle]
+* boost:asio[]: This is the most important library for your needs. boost:asio[] is a cross-platform pass:[C++] library for network and low-level I/O programming. It provides a consistent asynchronous model using a modern pass:[C++] approach. boost:asio[] supports a variety of network protocols, including ICMP, TCP, and UDP, and it can manage other resources such as serial ports, file descriptors, and even regular files.
+
+* boost:beast[]: This is a library built on top of boost:asio[] that provides implementations of HTTP and WebSocket. These are common protocols for network programming, so if your app needs to work with them, boost:beast[] can be a huge help.
+
+* boost:mysql[]: This library is also built on top of boost:asio[], and provides a pass:[C++]11 client for the https://www.mysql.com/[MySQL] and https://mariadb.com/[MariaDB] database servers. As a library it is most useful when your app needs efficient and asynchronous access to one of these servers. 
+
+* https://github.com/boostorg/redis[Boost.Redis]: Redis (which stands for _Remote Dictionary Server_) is a popular in-memory data structure store, used in database, cache, and message broker applications. This library implements Redis plain text protocol RESP3. It can multiplex any number of client requests, responses, and server pushes onto a single active socket connection to the Redis server.
+
+* boost:endian[]: This library provides facilities for dealing with data that is represented in different byte orders. This is a common issue in network programming because different machines may represent multi-byte integers differently.
+
+* boost:spirit[]: If you're creating a new protocol or using a lesser-known one, boost:spirit[], a parser generator framework, could be useful. It allows you to define grammar rules that can parse complex data structures sent over the network.
+
+* boost:thread[]: If your application is multithreaded, this library will be useful. It provides a portable pass:[C++] interface for multithreading.
+
+* boost:smart_ptr[]: This provides smart pointer class templates, including scoped_ptr, shared_ptr, weak_ptr, and intrusive_ptr. Smart pointers can be very helpful in managing resources and preventing memory leaks, especially in an environment where exceptions may be thrown.
+
+* boost:test[]: This library provides support for simple program testing, full unit testing, and for program execution monitoring. Since it's always important to thoroughly test your code, especially when dealing with networking where there are many unpredictable factors, this library can be extremely useful.

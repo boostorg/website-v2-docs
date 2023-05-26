@@ -1,9 +1,13 @@
 * xref:intro.adoc[]
 * xref:whats-inside.adoc[]
 * xref:getting-started.adoc[]
+* xref:faq.adoc[]
 
 * Common Scenarios
-** xref:faq.adoc[]
+** xref:task-networking.adoc[]
+** xref:task-simulation.adoc[]
+** xref:task-system.adoc[]
+** xref:task-text-processing.adoc[]
 ** xref:testing-debugging.adoc[]
 
 * Tutorials
@@ -11,6 +15,10 @@
 
 * Advanced Scenarios
 ** xref:advanced-builds.adoc[]
+** xref:task-database.adoc[]
+** xref:task-machine-learning.adoc[]
+** xref:task-metaprogramming.adoc[]
+** xref:task-natural-language-parsing.adoc[]
 
 * Community
 ** xref:reporting-issues.adoc[]

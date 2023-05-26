@@ -1,0 +1,21 @@
+= Real-Time Simulation
+:navtitle: Simulation
+
+Creating a real-time simulation of vehicles involves various aspects, including physical modeling, concurrent programming for real-time response, data storage and manipulation, networking for multi-vehicle simulation, and perhaps a graphic interface. Here are some libraries that may be helpful:
+
+[circle]
+* boost:chrono[]: Timing is critical in real-time applications. This library can help you measure time intervals, which could be useful for controlling the timing of your simulation.
+
+* boost:geometry[]: For spatial computations and geometric algorithms, which you will likely need for modeling the physical behavior and interactions of your vehicles.
+
+* boost:units[]: This library can help with calculations involving units of measurement. It provides classes and functions that can enforce the correct usage of units and conversions between them, which could be helpful in a physical simulation.
+ 
+* boost:graph[]: In case you need to represent roads or pathways as a graph, this library provides a flexible and powerful way to represent and manipulate graphs. It also includes a number of graph algorithms.
+
+* boost:thread[] or boost:asio[]: To achieve real-time performance, you might need to make use of multi-threading or asynchronous input/output. boost:thread[] provides classes and functions for multi-threading, synchronization, and inter-thread communication. boost:asio[] is a cross-platform library for asynchronous programming and can handle a lot of networking tasks as well.
+
+* boost:interprocess[]: If you need to share data between different processes in real-time, this library can be useful. It supports shared memory, memory-mapped files, semaphores, and more.
+
+* boost:mpi[] or boost:asio[]: For distributed simulations that run across multiple systems, you might need a library for network communication. boost:mpi[] provides a pass:[C++] interface for the Message Passing Interface (MPI) standard for distributed computing. boost:asio[] can also handle networking tasks and it is a bit lower-level.
+
+* boost:serialization[]: To save the state of the simulation or to communicate complex data structures over a network, you might find this library helpful.
