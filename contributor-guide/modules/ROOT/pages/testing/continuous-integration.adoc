@@ -1,3 +1,3 @@
-= CMake
+= Continuous Integration
 
 *Content under construction.*

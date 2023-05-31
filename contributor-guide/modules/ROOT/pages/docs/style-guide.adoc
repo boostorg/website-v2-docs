@@ -79,7 +79,7 @@ Generally avoid the off-putting user-experience of over-long pages.
 
 We assume the users of Boost are using Windows, macOS, or Linux based systems. Examples of installation and running code examples should be provided for each of these three systems. There are many variants of Linux, and providing examples for the most popular variants is encouraged.
 
-Popular Windows tools are Microsoft Visual C++, Visual Studio Code, and GCC (MinGW or Cygwin). On macOS, Clang is a popular compiler, and on Linux Cmake, GCC and Clang are popular.
+Popular Windows tools are Microsoft Visual pass:[C++], Visual Studio Code, and GCC (MinGW or Cygwin). On macOS, Clang is a popular compiler, and on Linux Cmake, GCC and Clang are popular.
 
 The recommendation for Boost examples is to use a _popular_ tool in the various steps and processes, but _not_ to recommend one tool over any other. And to mention other tools that we know work well with Boost.
 

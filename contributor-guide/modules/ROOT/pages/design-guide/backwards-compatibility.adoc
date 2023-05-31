@@ -1,4 +1,5 @@
 = Backwards Compatibility
+:navtitle: Backwards Compatibility
 
 Boost libraries generally have a large and diverse user base. To ensure successful transitions from old APIs to newer APIs under those circumstances, library authors are encouraged to follow a few guidelines when introducing breaking changes in their library:
 

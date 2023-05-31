@@ -1,11 +1,3 @@
 = Writing Tests
 
-@anarthal: content suggestion:
-
-* Using a testing framework vs. executables
-* The framework we can use: Boost.Test and lightweight test. What we can't use and why (gtest, catch2)
-* Running tests from b2 and cmake
-* Running examples as tests
-* Running docs snippets as tests
-* Testing libraries that depend on external systems
-* Testing cmake workflows
+*Content under construction.*

@@ -2,7 +2,7 @@
 :idprefix:
 :idseparator: -
 
-@anarthal: this is taken verbatim from old content. It may be outdated. Conversion to asciidoc is not complete.
+*Legacy content, currently being updated.*
 
 Running Regression Tests Locally
 --------------------------------

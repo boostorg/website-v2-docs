@@ -2,8 +2,8 @@
 :idprefix:
 :idseparator: -
 
-@anarthal: this is taken verbatim from old content. It may be outdated. Conversion to asciidoc is not complete.
-           I don't know if this is still relevant with the new webpage.
+*Legacy content, currently being updated.*
+          
 
 A module can contain an optional file which describes the
  libraries that it contains. This is located at
@@ -113,30 +113,30 @@ Path to the documentation, defaults to the root of the
 === `cxxstd`
 
 
-The minimum C++ standard compilation level at which
+The minimum pass:[C++] standard compilation level at which
  all, or the large majority, of the functionality in
  the library is usable. The possible values are: 
 
 
-* 98 = C++98
-* 03 = C++98/C++03
-* 11 = C++11
-* 14 = C++14
-* 17 = C++17
-* 20 = C++20
+* 98 = pass:[C++]98
+* 03 = pass:[C++]98/pass:[C++]03
+* 11 = pass:[C++]11
+* 14 = pass:[C++]14
+* 17 = pass:[C++]17
+* 20 = pass:[C++]20
 
 
 The level only indicates the minimum level, which
  means that the functionality of the library can be
  used when compiling at that level or at a higher
  level. There may be some functionality in the library
- which will need a higher C++ standard compilation
+ which will need a higher pass:[C++] standard compilation
  level than is indicated by this value, but the
  information about that specific functionality will be
  provided for the end-user within the documentation for
  that library. If a library does not have this field it
  indicates that the end-user will have to read the
- library documentation to understand what C++ standard
+ library documentation to understand what pass:[C++] standard
  compilation level is needed to use the library. 
 
 

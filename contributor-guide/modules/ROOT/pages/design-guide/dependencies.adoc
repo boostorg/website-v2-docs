@@ -1,9 +1,9 @@
 = Dependencies
+:navtitle: Dependencies
 :idprefix:
 :idseparator: -
 
-@anarthal: this is taken verbatim from old content. It may be outdated. Conversion to asciidoc is not complete.
-@anarthal: some parts of this are not correct. In particular, Boost libraries may depend on zlib and openssl and that's OK
+*Legacy content, currently being updated.*
 
 A Boost library **should not** use libraries
  other than Boost or the C++ Standard Library.

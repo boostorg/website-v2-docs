@@ -5,7 +5,7 @@ The quality of the Boost libraries is not just about the APIs and code design. B
 
 == Boost Standard Library Organization
 
-[cols="1,5,2",options="header"]
+[cols="1,5,2",options="header",stripes=even]
 |===
 |Sub-directory or file	|Contents	|Required
 |*build*	|Library build files such as a Jamfile, IDE projects, Makefiles, Cmake files, etc.	|Required if the library has sources to build.

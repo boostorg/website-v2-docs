@@ -1,30 +1,30 @@
 
 * xref:getting-involved.adoc[]
 
-* xref:requirements/intro.adoc[]
+* Requirements
+** xref:requirements/library-requirements.adoc[]
 ** xref:requirements/license-requirements.adoc[]
 ** xref:requirements/portability-requirements.adoc[]
 ** xref:requirements/organization-requirements.adoc[]
-** xref:requirements/docs-requirements.adoc[]
 ** xref:requirements/library-metadata.adoc[]
-** xref:requirements/release-notes.adoc[]
 
-* xref:design-guide/intro.adoc[]
-** xref:design-guide/code-design.adoc[]
+* Design Guide
+** xref:design-guide/design-guide.adoc[]
 ** xref:design-guide/headers.adoc[]
 ** xref:design-guide/backwards-compatibility.adoc[]
 ** xref:design-guide/separate-compilation.adoc[]
 ** xref:design-guide/dependencies.adoc[]
 ** xref:design-guide/borland.adoc[]
 
-* xref:testing/intro.adoc[]
+* Testing
+** xref:testing/intro.adoc[]
 ** xref:testing/boost-test-matrix.adoc[]
 ** xref:testing/writing-tests.adoc[]
-** xref:testing/ci.adoc[]
+** xref:testing/continuous-integration.adoc[]
 
 * Documentation
-** xref:docs/documentation-overview.adoc[]
-** xref:docs/documentation-structure-guidelines.adoc[]
+** xref:docs/documentation-guidelines.adoc[]
+** xref:docs/documentation-components.adoc[]
 ** xref:docs/antora.adoc[Antora Guide]
 ** xref:docs/style-guide.adoc[]
 ** Templates
@@ -41,6 +41,7 @@
 ** xref:build-systems/cmake.adoc[]
 ** xref:build-systems/b2.adoc[]
 
-* xref:version-control.adoc[]
-
-* xref:release-process.adoc[]
+* Releases
+** xref:version-control.adoc[]
+** xref:release-process.adoc[]
+** xref:release-notes.adoc[]
