@@ -23,6 +23,7 @@ The author appreciates the contributions to the library made by the following:
 
 The author appreciates the contributions to the library made by the following:
 
+[disc]
 * John Doe and Jane Doe for editing the original draft documentation.
 * John Doe for input on the architecture and design of the API interfaces.
 * Jane Doe for numerous improvements and suggestions on the text of the error messages.

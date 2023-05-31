@@ -1,4 +1,5 @@
 = Release Process
+:navtitle: Release Process
 
 The Boost libraries are released publicly three times per year:
 

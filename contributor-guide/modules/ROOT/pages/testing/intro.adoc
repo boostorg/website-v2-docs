@@ -2,7 +2,7 @@
 :idprefix:
 :idseparator: -
 
-@anarthal: this is taken verbatim from old content. It may be outdated. Conversion to asciidoc is not complete.
+*Legacy content, currently being updated.*
 
 The Boost libraries are intended to be both reliable and
  portable. Every experienced programmer knows that means each
@@ -100,10 +100,6 @@ The [Boost
 Written by Beman Dawes. Jens Maurer, Paul Moore, Gary Powell
  and Jeremy Siek contributed helpful suggestions.
 
-
-
-@anarthal: this is taken verbatim from old content. It may be outdated. Conversion to asciidoc is not complete.
-           Please merge this with the above
 
 
 == Regression Tests

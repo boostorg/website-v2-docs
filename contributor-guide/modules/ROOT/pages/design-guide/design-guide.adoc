@@ -1,75 +1,85 @@
 = Design Guide
+:navtitle: Design Guide
 
-Please use these guidelines as a checklist for preparing the content a library submission. Not every guideline applies to every library, but a reasonable effort to comply is expected.
+Use these guidelines as a checklist for preparing the content a library submission. Not every guideline applies to every library, but a reasonable effort to comply is expected.
 
 == Design and Programming
+
+This section covers the general best-practices for the design of a new library.
 
 [disc]
 * Aim first for clarity and correctness; optimization should be only a secondary concern in most Boost libraries.
 
-* Aim for ISO Standard C++. Than means making effective use of the standard features of the language, and avoiding non-standard compiler extensions. It also means using the Standard Library where applicable.
+* Aim for ISO Standard pass:[C++]. Than means making effective use of the standard features of the language, and avoiding non-standard compiler extensions. It also means using the Standard Library where applicable.
 
-* Headers should be good neighbors. See the header policy. See <<Naming Consistency>>.
+* Headers should be good neighbors. See the header policy and <<Naming Consistency>>.
 
-* Follow quality programming practices. For example:
+* Follow quality programming practices. Refer to _Effective pass:[C++] 2nd Edition_ and _More Effective pass:[C++]_, both by Scott Meyers and published by Addison Wesley.
 
-  ** Effective C++ 2nd Edition
-  ** More Effective C++
-+
-both by Scott Meyers, published by Addison Wesley.
-
-* Use the C++ Standard Library or other Boost libraries, but only when the benefits outweigh the costs.
-
-* Do not use libraries other than the C++ Standard Library or Boost. See Library reuse.
+* Use the pass:[C++] Standard Library or other Boost libraries, but only when the benefits outweigh the costs. Do not use libraries other than the pass:[C++] Standard Library or Boost.
 
 * Read Implementation Variation to see how to supply performance, platform, or other implementation variations.
 
 * Browse through the Best Practices Handbook for ideas and links to source code in existing Boost libraries.
 
-* Read the guidelines for libraries with separate source to see how to ensure that compiled link libraries meet user expectations.
+* Read the guidelines for libraries with separate source, to see how to ensure that compiled link libraries meet user expectations.
 
-* Use the naming conventions of the C++ Standard Library (See Naming conventions rationale):
+== Source Files
 
-** Names (except as noted below) should be all lowercase, with words separated by underscores.
+[disc]
+* Begin all source files (including programs, headers, scripts, etc.) with:
 
-** Acronyms should be treated as ordinary names (e.g. xml_parser instead of XML_parser).
+  . A comment line describing the contents of the file.
 
-** Template parameter names begin with an uppercase letter.
+  . Comments describing copyright and licensing: again, the preferred form is indicated in the license information page.
 
-** Macro (gasp!) names all uppercase and begin with BOOST_.
+  . Note that developers are allowed to provide a copy of the license text in LICENSE_1_0.txt, LICENSE.txt or LICENSE file within repositories of their libraries.
+  
+  . A comment line referencing your library on the Boost web site. For example:`// See https://www.boost.org/libs/foo` for library home page.
++
+Where foo is the directory name (see below) for the library. As well as aiding users who come across a Boost file detached from its documentation, some of Boost's automatic tools depend on this comment to identify which library header files belong to.
+
+* Although some boost members use proportional fonts, tabs, and unrestricted line lengths in their own code, boost's widely distributed source code should follow more conservative guidelines:
+
+  . Use fixed-width fonts. See <<Source Code Fonts Rationale>>.
+
+  . Use spaces rather than tabs. See <<Tabs Rationale>>.
+
+  . Limit line lengths to 80 characters.
+
+* End all documentation files (HTML or otherwise) with a copyright message and a licensing message. See the license information page for the preferred form.
+
+== Naming
+
+Use the naming conventions of the pass:[C++] Standard Library (See <<Naming Conventions Rationale>>):
+
+[disc]
+* Names (except as noted below) should be all lowercase, with words separated by underscores.
+
+* Acronyms should be treated as ordinary names (e.g. xml_parser instead of XML_parser).
+
+* Template parameter names begin with an uppercase letter.
+
+* Macro (gasp!) names all uppercase and begin with BOOST_.
 
 * Choose meaningful names - explicit is better than implicit, and readability counts. There is a strong preference for clear and descriptive names, even if lengthy.
 
-* Use exceptions to report errors where appropriate, and write code that is safe in the face of exceptions.
+== Testing and Error Handling
 
-* Avoid exception-specifications. See exception-specification rationale.
-
+[disc]
 * Provide sample programs or confidence tests so potential users can see how to use your library.
 
 * Provide a regression test program or programs which follow the Test Policies and Protocols.
 
-* Although some boost members use proportional fonts, tabs, and unrestricted line lengths in their own code, boost's widely distributed source code should follow more conservative guidelines:
+* Use exceptions to report errors where appropriate, and write code that is safe in the face of exceptions.
 
-** Use fixed-width fonts. See fonts rationale.
-** Use spaces rather than tabs. See tabs rationale.
-** Limit line lengths to 80 characters.
-
-* End all documentation files (HTML or otherwise) with a copyright message and a licensing message. See the license information page for the preferred form.
-
-* Begin all source files (including programs, headers, scripts, etc.) with:
-
-** A comment line describing the contents of the file.
-** Comments describing copyright and licensing: again, the preferred form is indicated in the license information page
-** Note that developers are allowed to provide a copy of the license text in LICENSE_1_0.txt, LICENSE.txt or LICENSE file within repositories of their libraries.
-** A comment line referencing your library on the Boost web site. For example:`// See https://www.boost.org/libs/foo` for library home page.
-+
-Where foo is the directory name (see below) for the library. As well as aiding users who come across a Boost file detached from its documentation, some of Boost's automatic tools depend on this comment to identify which library header files belong to.
+* Avoid exception-specifications. See <<Exception Specification Rationale>>.
 
 == Assertions
 
 If you want to add runtime assertions to your code (you should!), avoid C's `assert` macro and use Boost's `BOOST_ASSERT` macro (in boost/assert.hpp ) instead. It is more configurable. Use BOOST_ASSERT in public headers and in library source code (for separately compiled libraries). Use of C's assert macro is ok in examples and in documentation.
 
-Make sure your code compiles in the presence of the `min()` and `max()` macros. Some platform headers define `min()` and `max() ` macros which cause some common C++ constructs to fail to compile. Some simple tricks can protect your code from inappropriate macro substitution:
+Make sure your code compiles in the presence of the `min()` and `max()` macros. Some platform headers define `min()` and `max() ` macros which cause some common pass:[C++] constructs to fail to compile. Some simple tricks can protect your code from inappropriate macro substitution:
 
 [disc]
 * If you want to call `std::min()` or `std::max()`: 
@@ -78,15 +88,15 @@ Make sure your code compiles in the presence of the `min()` and `max()` macros. 
 
   ** If you do require argument-dependent look-up, you should:
 
-    *** `#include <boost/config.hpp>`
+    . `#include <boost/config.hpp>`
 
-    *** Use `BOOST_USING_STD_MIN();` to bring `std::min()` into the current scope.
+    . Use `BOOST_USING_STD_MIN();` to bring `std::min()` into the current scope.
 
-    *** Use min `BOOST_PREVENT_MACRO_SUBSTITUTION (a,b);` to make an argument-dependent call to `min(a,b)`.
+    . Use min `BOOST_PREVENT_MACRO_SUBSTITUTION (a,b);` to make an argument-dependent call to `min(a,b)`.
 
 * If you want to call `std::numeric_limits<int>::max()`, use `(std::numeric_limits<int>::max)()` instead.
 
-* If you want to call a `min()` or `max()` member function, instead to doing `obj.min()`, use `(obj.min)()`.
+* If you want to call a `min()` or `max()` member function, instead of doing `obj.min()`, use `(obj.min)()`.
 
 * If you want to declare or define a function or a member function named min or max, then you must use the `BOOST_PREVENT_MACRO_SUBSTITUTION` macro. Instead of writing `int min() { return 0; }` you should write int min `BOOST_PREVENT_MACRO_SUBSTITUTION () { return 0; }` This is true regardless if the function is a free (namespace scope) function, a member function or a static member function, and it applies for the function declaration as well as for the function definition.
 
@@ -95,30 +105,29 @@ Make sure your code compiles in the presence of the `min()` and `max()` macros. 
 Naming requirements ensure that file and directory names are relatively portable, including to ISO 9660:1999 (with extensions) and other relatively limited file systems. Superscript links are provided to detailed rationale for each choice.
 
 [disc]
-
 [#footnote2-location]
 * Names must contain only lowercase link:#footnote1[(1)] ASCII letters ('a'-'z'), numbers ('0'-'9'), underscores ('_'), hyphens ('-'), and periods ('.'). Spaces are not allowed link:#footnote2[(2)].
-
++
 [#footnote3-location]
 * Directory names must not contain periods ('.') link:#footnote3[(3)].
-
++
 [#footnote4-location]
 * The first and last character of a file name must not be a period ('.') 
 link:#footnote4[(4)].
-
++
 [#footnote5-location]
 * The first character of names must not be a hyphen ('-') link:#footnote5[(5)].
-
++
 [#footnote6-location]
 * The maximum length of directory and file names is 31 characters link:#footnote6[(6)].
-
++
 [#footnote7-location]
 * The total path length must not exceed 207 characters link:#footnote7[(7)].
 
 Other conventions ease communication:
 
 [disc]
-* Files intended to be processed by a C++ compiler as part of a translation unit should have a three-letter filename extension ending in "pp". Other files should not use extensions ending in "pp". This convention makes it easy to identify all of the source in Boost.
+* Files intended to be processed by a pass:[C++] compiler as part of a translation unit should have a three-letter filename extension ending in "pp". Other files should not use extensions ending in "pp". This convention makes it easy to identify all of the source in Boost.
 
 * All libraries have at their highest level a primary directory named for the particular library. See Naming consistency. The primary directory may have sub-directories.
 
@@ -176,7 +185,7 @@ The primary directory index.html file should just do an automatic redirection to
 
 As library developers and users have gained experience with Boost, the following consistent naming approach has come to be viewed as very helpful, particularly for larger libraries that need their own header subdirectories and namespaces.
 
-Here is how it works. The library is given a name that describes the contents of the library. Cryptic abbreviations are strongly discouraged. Following the practice of the C++ Standard Library, names are usually singular rather than plural. For example, a library dealing with file systems might chose the name "filesystem", but not "filesystems", "fs" or "nicecode".
+Here is how it works. The library is given a name that describes the contents of the library. Cryptic abbreviations are strongly discouraged. Following the practice of the pass:[C++] Standard Library, names are usually singular rather than plural. For example, a library dealing with file systems might chose the name "filesystem", but not "filesystems", "fs" or "nicecode".
 
 [disc]
 * The library's primary directory (in parent *boost-root/libs*) is given that same name. For example, *boost-root/libs/filesystem*.
@@ -232,12 +241,12 @@ A non-inline function is the one place a "throws nothing" exception-specificatio
 
 === Naming Conventions Rationale
 
-The C++ standard committee's Library Working Group discussed this issue in detail, and over a long period of time. The discussion was repeated again in early Boost postings. A short summary:
+The pass:[C++] standard committee's Library Working Group discussed this issue in detail, and over a long period of time. The discussion was repeated again in early Boost postings. A short summary:
 
 [disc]
 * Naming conventions are contentious, and although several are widely used, no one style predominates.
 
-* Given the intent to propose portions of boost for the next revision of the C++ standard library, boost decided to follow the standard library's conventions.
+* Given the intent to propose portions of boost for the next revision of the pass:[C++] standard library, boost decided to follow the standard library's conventions.
 
 * Once a library settles on a particular convention, a vast majority of stakeholders want that style to be consistently used.
 

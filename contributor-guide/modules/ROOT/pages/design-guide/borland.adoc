@@ -3,8 +3,7 @@
 :idprefix:
 :idseparator: -
 
-@anarthal: this is taken verbatim from old content. It may be outdated. Conversion to asciidoc is not complete.
-
+*Legacy content, currently being updated.*
 
 It is a general aim for boost libraries to be [portable](/development/requirements.html#Portability). The
  primary means for achieving this goal is to adhere to ISO

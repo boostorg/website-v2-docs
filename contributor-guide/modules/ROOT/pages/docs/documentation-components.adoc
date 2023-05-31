@@ -1,12 +1,12 @@
-= Writing Documentation for Boost - Documentation Structure
-:navtitle: Documentation Structure
+= Documentation Components
+:navtitle: Components
 
 == Introduction
 
 Boost does not require any specific documentation structure. However,
 there are some important considerations that influence content and
 structure. For example, many Boost libraries wind up being proposed for
-inclusion in the C++ Standard, so writing them initially with text
+inclusion in the pass:[C++] Standard, so writing them initially with text
 suitable for inclusion in the Standard may be helpful. 
 
 Also, Boost library documentation is often accessed via the World Wide Web, including via search engines, so context is often important for every page. 
@@ -18,7 +18,7 @@ library documentation.
 
 == Standards Conforming Documentation
 
-The documentation structure required for the C++ Standard is an
+The documentation structure required for the pass:[C++] Standard is an
 effective way to describe the technical specifications for a library.
 Although terse, that format is familiar to many Boost users and is far
 more precise than most ad hoc formats. The following description is
@@ -27,12 +27,13 @@ proposals must include full standard-ese wording, which the committee
 will not do for you, that level of detail is not expected of Boost
 library documentation.)
 
-=== Document elements
+=== Document Elements
 
 [#footnote1-location]
 Each document contains the following elements, as
 applicable. link:#footnote1[(1)]:
 
+[disc]
 * <<Summary>>
 * <<Requirements>>
 * <<Detailed specifications>>
@@ -49,6 +50,7 @@ paragraphs are normative.
 
 The summary and the detailed specifications are presented in the order:
 
+[disc]
 * Macros
 * Values
 * Types
@@ -58,10 +60,11 @@ The summary and the detailed specifications are presented in the order:
 
 ==== Requirements
 
-The library can be extended by a C++ program. Each clause, as
+The library can be extended by a pass:[C++] program. Each clause, as
 applicable, describes the requirements that such extensions must meet.
 Such extensions are generally one of the following:
 
+[disc]
 * Template arguments
 * Derived classes
 * Containers, iterators, and/or algorithms that meet an interface
@@ -80,7 +83,7 @@ uses the requirements is described in terms of the valid expressions for its for
 Template argument requirements are sometimes referenced by name.
 
 [#footnote2-location]
-In some cases the semantic requirements are presented as C++ code. Such
+In some cases the semantic requirements are presented as pass:[C++] code. Such
 code is intended as a specification of equivalence of a construct to
 another construct, not necessarily as the way the construct must be
 implemented.link:#footnote2[(2)]
@@ -89,6 +92,7 @@ implemented.link:#footnote2[(2)]
 
 The detailed specifications each contain the following elements:
 
+[disc]
 * Name and brief description
 * Synopsis (class definition or function prototype, as appropriate)
 * Restrictions on template arguments, if any
@@ -99,6 +103,7 @@ The detailed specifications each contain the following elements:
 Descriptions of class member functions follow the order (as
 appropriate) link:#footnote3[(3)]:
 
+[disc]
 * Constructor(s) and destructor
 * Copying and assignment functions
 * Comparison functions
@@ -110,25 +115,22 @@ appropriate) link:#footnote3[(3)]:
 Descriptions of function semantics contain the following
 elements (as appropriate) link:#footnote4[(4):]
 
+[disc]
 * *<<Requires>>*: the preconditions for calling the function
 
 * *<<Effects>>*: the actions performed by the function
 
-* *<<Post-conditions>>"*: the observable results
-established by the function
+* *<<Post-conditions>>"*: the observable results established by the function
 
 * *<<Returns>>*: a description of the value(s) returned by the function
 
-* *<<Throws>>*: any exceptions thrown by the function, and the
-conditions that would cause the exception
+* *<<Throws>>*: any exceptions thrown by the function, and the conditions that would cause the exception
 
 * *<<Complexity>>*: the time and/or space complexity of the  function
 
 * *<<Rationale>>*: the rationale for the function's design or existence
 
-Complexity requirements specified in the library clauses are upper
-bounds, and implementations that provide better complexity guarantees
-satisfy the requirements.
+Complexity requirements specified in the library clauses are upper bounds, and implementations that provide better complexity guarantees satisfy the requirements.
 
 ==== References to the C++ Standard Library
 
@@ -136,8 +138,7 @@ satisfy the requirements.
 
 === Other Conventions
 
-These conventions are for describing implementation-defined types, and
-member functions.
+These conventions are for describing implementation-defined types, and member functions.
 
 ==== Type descriptions
 
@@ -150,29 +151,28 @@ The Requirements subclauses may describe names that are used to specify constrai
 The function semantic element description above is taken directly from the C++ standard, and is quite terse. Here is a
 more detailed explanation of each of the elements.
 
-Note the use of the `<code> ... </code>` font tag to distinguish actual C++ usage from English prose.
+Note the use of the `<code> ... </code>` font tag to distinguish actual pass:[C++] usage from English prose.
 
 ==== Requires
 
-Preconditions for calling the function, typically expressed as
-predicates. The most common preconditions are requirements on the value
-of arguments, often in the form of C++ expressions. For example,
+Preconditions for calling the function, typically expressed as predicates. The most common preconditions are requirements on the value of arguments, often in the form of pass:[C++] expressions. For example,
 
-....
+[source,cpp]
+----
  
 void limit( int * p, int min, int max );
-....
+----
 
 *Requires:* `p != 0 && min <= max`
 
-Requirements already enforced by the C++ language rules (such as the
+Requirements already enforced by the pass:[C++] language rules (such as the
 type of arguments) are not repeated in Requires paragraphs.
 
 ==== Effects
 
 The actions performed by the function, described either in prose or in
-C++. A description in prose is often less limiting on implementors, but
-is often less precise than C++ code.
+pass:[C++]. A description in prose is often less limiting on implementors, but
+is often less precise than pass:[C++] code.
 
 If an effect is specified in one of the other elements, particularly
 _post-conditions_, _returns_, or _throws_, it is not also described in
@@ -184,27 +184,29 @@ divergence.
 
 The observable results of the function, such as the value of variables.
 Post-conditions are often expressed as predicates that are true after the
-function completes, in the form of C++ expressions. For example:
+function completes, in the form of pass:[C++] expressions. For example:
 
-....
+[source,cpp]
+----
  
 void make_zero_if_negative( int & x );
-....
+----
 
 *Post-condition:* `x >= 0`
 
 ==== Returns
 
-The value returned by the function, usually in the form of a C++
+The value returned by the function, usually in the form of a pass:[C++]
 expression. For example:
 
-....
+[source,cpp]
+----
 int sum( int x, int y );
-....
+----
 
 *Returns*: `x + y`
 
-Only specify the return value; the type is already dictated by C++
+Only specify the return value; the type is already dictated by pass:[C++]
 language rules.
 
 ==== Throws
@@ -213,10 +215,11 @@ Specify both the type of exception thrown, and the condition that causes
 the exception to be thrown. For example, the `std::basic_string` class
 specifies:
 
-....
+[source,cpp]
+----
  
 void resize(size_type n, charT c);
-....
+----
 
 *Throws:* `length_error` if `n > max_size()`.
 
@@ -249,6 +252,7 @@ search engines, a page deep in the reference content could be viewed
 without any further context. Therefore, it is helpful to add extra
 context, such as the following, to each page:
 
+[disc]
 * Describe the enclosing namespace or use fully scoped identifiers.
 * Document required headers for each type or function.
 * Link to relevant tutorial information.
