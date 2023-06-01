@@ -12,7 +12,7 @@ Developing a networking application in pass:[C++] involves a lot of different co
 
 * https://github.com/boostorg/redis[Boost.Redis]: Redis (which stands for _Remote Dictionary Server_) is a popular in-memory data structure store, used in database, cache, and message broker applications. This library implements Redis plain text protocol RESP3. It can multiplex any number of client requests, responses, and server pushes onto a single active socket connection to the Redis server.
 
-* boost:endian[]: This library provides facilities for dealing with data that is represented in different byte orders. This is a common issue in network programming because different machines may represent multi-byte integers differently.
+* boost:endian[]: Provides facilities for dealing with data that is represented in different byte orders. This is a common issue in network programming because different machines may represent multi-byte integers differently.
 
 * boost:spirit[]: If you're creating a new protocol or using a lesser-known one, boost:spirit[], a parser generator framework, could be useful. It allows you to define grammar rules that can parse complex data structures sent over the network.
 
@@ -20,4 +20,4 @@ Developing a networking application in pass:[C++] involves a lot of different co
 
 * boost:smart_ptr[]: This provides smart pointer class templates, including scoped_ptr, shared_ptr, weak_ptr, and intrusive_ptr. Smart pointers can be very helpful in managing resources and preventing memory leaks, especially in an environment where exceptions may be thrown.
 
-* boost:test[]: This library provides support for simple program testing, full unit testing, and for program execution monitoring. Since it's always important to thoroughly test your code, especially when dealing with networking where there are many unpredictable factors, this library can be extremely useful.
+* boost:test[]: Provides support for simple program testing, full unit testing, and for program execution monitoring. Since it's always important to thoroughly test your code, especially when dealing with networking where there are many unpredictable factors, this library can be extremely useful.

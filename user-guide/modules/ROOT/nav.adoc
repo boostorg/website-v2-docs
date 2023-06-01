@@ -19,6 +19,7 @@
 ** xref:task-machine-learning.adoc[]
 ** xref:task-metaprogramming.adoc[]
 ** xref:task-natural-language-parsing.adoc[]
+** xref:task-parallel-computation.adoc[]
 
 * Community
 ** xref:reporting-issues.adoc[]

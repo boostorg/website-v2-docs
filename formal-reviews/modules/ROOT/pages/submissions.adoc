@@ -2,7 +2,7 @@
 :idprefix:
 :idseparator: -
 
-@anarthal: this is taken verbatim from old content. It may be outdated. Conversion to asciidoc is not complete.
+*Legacy content, currently being updated.*
 
 This page describes the process a library developer goes
  through to get a library accepted by Boost.

@@ -1,10 +1,3 @@
 = Explore the Content
 
-@anarthal: TBC: content. Talk about the different useful stuff we have.
-
-Suggestions:
-
-* Talk about STL equivalents that are superior in performance
-* Talk about networking
-* Talk about combining libs for certain use cases (task-based/scenario-based approach), e.g. gaming, server application, embedded, etc.
-* Talk abour projects that are already using Boost (bitcoint-core, mysql server, MongoDB server, React Native)
+*Content under construction.*
