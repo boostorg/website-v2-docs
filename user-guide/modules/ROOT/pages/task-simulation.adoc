@@ -8,7 +8,7 @@ Creating a real-time simulation of vehicles involves various aspects, including 
 
 * boost:geometry[]: For spatial computations and geometric algorithms, which you will likely need for modeling the physical behavior and interactions of your vehicles.
 
-* boost:units[]: This library can help with calculations involving units of measurement. It provides classes and functions that can enforce the correct usage of units and conversions between them, which could be helpful in a physical simulation.
+* boost:units[]: Helps with calculations involving units of measurement. It provides classes and functions that can enforce the correct usage of units and conversions between them, which could be helpful in a physical simulation.
  
 * boost:graph[]: In case you need to represent roads or pathways as a graph, this library provides a flexible and powerful way to represent and manipulate graphs. It also includes a number of graph algorithms.
 

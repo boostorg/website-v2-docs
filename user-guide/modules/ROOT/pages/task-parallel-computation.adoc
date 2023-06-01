@@ -1,0 +1,42 @@
+= Parallel Computation
+:navtitle: Parallel Computation
+
+Parallel computation is an important concept that helps in achieving faster execution by performing multiple operations concurrently. 
+
+Parallel programming can be complex and requires careful handling of shared resources to avoid race conditions, deadlocks, and other concurrency-related bugs. It's also worth noting that not every problem can be efficiently parallelized; the potential speedup from parallelization is largely determined by the proportion of the computation that can be performed concurrently, as described by https://en.wikipedia.org/wiki/Amdahl%27s_law[Amdahl's Law].
+
+== Libraries
+
+The Boost libraries provide several tools that can help in writing parallel code:
+
+[circle]
+* boost:thread[]: Provides components for creating and managing threads, which can be used to perform multiple tasks concurrently on separate CPU cores.
+
+* boost:asio[]: While primarily a xref:task-networking.adoc[] library, this library also provides tools for asynchronous programming, which can be used to write concurrent code that performs multiple tasks at the same time without necessarily using multiple CPU cores.
+
+* boost:mpi[]: Provides message passing interface for parallel programming. This is often used for communication between nodes in a distributed computing environment.
+
+* boost:compute[]: This is a GPU/parallel computing library for pass:[C++] based on OpenCL. The library provides a high-level, STL-like API and is header-only and does not require any special build steps or linking.
+
+* boost:fiber[]: Allows you to write code that works with fibers, which are user-space threads that can be used to write concurrent code. This can be useful in situations where you have many tasks that need to run concurrently but are I/O-bound rather than CPU-bound.
+
+* boost:phoenix[]: A library for functional programming, it supports the ability to create inline functions which can be used for defining parallel algorithms.
+
+== Parallel Computing Applications
+
+Parallel computing has been successful in a wide range of applications, especially those involving large-scale computation or data processing. Here are some key areas where parallel computing has been particularly effective:
+
+[circle]
+* Scientific Computing and xref:task-simulation.adoc[]: Many problems in physics, chemistry, biology, and engineering involve solving complex mathematical models, often represented as systems of differential equations. This includes simulations in fields like fluid dynamics, molecular dynamics, quantum mechanics, and climate modeling.
+
+* Data Analysis and xref:task-machine-learning.adoc[]: Training machine learning models, particularly deep neural networks, involves many similar computations (like matrix multiplications), which can be performed in parallel. Similarly, analyzing large datasets (as in big data applications) can often be parallelized.
+
+* Graphics and Gaming: Modern GPUs (Graphics Processing Units) are essentially parallel processors, capable of performing many computations simultaneously. This is particularly useful in graphics rendering, which involves applying the same operations to many pixels or vertices. Video games, 3D animation, and virtual reality all benefit from parallel computing.
+
+* xref:task-database.adoc[] and Data Warehouses: Many operations in databases, like searches, sorting, and joins, can be parallelized, leading to faster query times. This is particularly important in large-scale data warehouses.
+
+* Cryptocurrency Mining: Cryptocurrencies like Bitcoin require solving complex mathematical problems, a process known as mining. This process is inherently parallel and is typically performed on GPUs or dedicated ASICs (Application-Specific Integrated Circuits).
+
+* Genome Analysis and Bioinformatics: Tasks like genome sequencing, protein folding, and other bioinformatics tasks involve large amounts of data and can be greatly sped up using parallel computing.
+
+* Weather Forecasting and Climate Research: Simulating weather patterns and climate change requires processing vast amounts of data and performing complex calculations, tasks well-suited to parallel computation.

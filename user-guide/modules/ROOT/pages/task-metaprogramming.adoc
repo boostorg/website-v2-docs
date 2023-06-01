@@ -1,4 +1,40 @@
 = Metaprogramming
 :navtitle: Metaprogramming
 
-Content under construction
+Boost provides several libraries that are highly useful in metaprogramming, and can greatly ease the process of building your own metaprogramming-based pass:[C++] library.
+
+Metaprogramming in pass:[C++] is a complex topic that can lead to complex code. It should be used judiciously, as it can make code more difficult to understand and maintain. Also, modern pass:[C++] (pass:[C++]11 and later) provides many features, such as `constexpr` and https://en.wikipedia.org/wiki/Variadic_template[variadic templates], that can achieve at runtime what was previously only possible with metaprogramming, so make sure to familiarize yourself with these features before delving too deeply into metaprogramming.
+
+== Libraries
+
+[circle]
+* boost:mpl[]:  A Metaprogramming library that provides a framework of compile-time algorithms, sequences and metafunctions, that can greatly facilitate metaprogramming tasks.
+
+* boost:fusion[]:  Provides a set of tools for working with tuples, which can be used to work with heterogeneous collections at compile time. It helps to bridge the gap between the compile-time world and the runtime world.
+
+* boost:hana[]:  This is a modern, high-level library for metaprogramming. Like boost:fusion[], it is used for working with heterogeneous collections, but it uses modern pass:[C++] features and can be easier to use than (and can be considered the successor to) both boost:mpl[] and boost:fusion[].
+
+* boost:type-traits[]:  Provides a collection of templates for information about types. This can be useful in many metaprogramming tasks, as it allows for compile-time introspection of types.
+
+* boost:static-assert[]:  Provides a macro for compile-time assertions. This can be useful in metaprogramming to enforce constraints at compile time.
+
+* boost:preprocessor[]:  Provides tools for manipulating preprocessor directives, which can be useful in certain metaprogramming tasks.
+
+== Metaprogramming Applications
+
+Metaprogramming, the practice of writing code that generates or manipulates other code, has several powerful applications, particularly in languages like pass:[C++] that support compile-time metaprogramming. Be careful though, despite its power, metaprogramming can also lead to complex, hard-to-understand code and should be used judiciously. Here are some of the primary applications of metaprogramming:
+
+[circle]
+* Code Generation: One of the most common uses of metaprogramming is to automatically generate code. This can help to reduce boilerplate, prevent repetition, and facilitate the adherence to the DRY (Don't Repeat Yourself) principle.
+
+* Optimization: Metaprogramming can be used to generate specialized versions of algorithms or data structures, which can lead to more efficient code. For example, in pass:[C++], template metaprogramming can be used to generate unrolled versions of loops, which can be faster because they eliminate the overhead of loop control.
+
+* Domain Specific Languages (DSLs): Metaprogramming can be used to create domain-specific languages within a host language. This can make the code more expressive and easier to write and read in specific domains. A classic example in pass:[C++] is boost:spirit[], a library for creating parsers directly in pass:[C++] code.
+
+* Interface Generation: Metaprogramming can be used to generate interfaces, for example, serialization and deserialization methods for a variety of formats. This can greatly simplify the process of implementing such interfaces.
+
+* Reflection and Introspection: Although pass:[C++] does not support reflection directly, metaprogramming can be used to emulate some aspects of reflection, such as type traits and type-based dispatch.
+
+* Policy-based Design: This is a design paradigm in pass:[C++] where behavior is encapsulated in separate classes (policies), and classes are composed by specifying a set of policies as template parameters. This allows for high flexibility and reusability while maintaining performance.
+
+

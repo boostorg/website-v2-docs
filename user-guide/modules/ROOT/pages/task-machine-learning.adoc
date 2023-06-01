@@ -1,4 +1,60 @@
 = Machine Learning
 :navtitle: Machine Learning
 
-Content under construction
+Developing a machine learning library involves tasks such as numerical computation, matrix operations, optimization, and sometimes xref:task-parallel-computation.adoc[].
+
+Developing a machine learning library is a complex task that involves not just programming but also a deep understanding of the underlying mathematical and statistical principles. It's also a field where performance can be crucial, so careful design, implementation, and optimization are important.
+
+== Libraries
+
+Here are some Boost libraries that could be helpful for the supporting tasks:
+
+[circle]
+* https://www.boost.org/doc/libs/1_82_0/libs/numeric/ublas/doc/index.html[Boost.uBLAS]:  This is Boost's library for linear algebra. It provides classes for vectors and matrices and operations on them, which are fundamental in many <<Machine Learning Algorithms>>.
+
+* boost:multiprecision[]:  In some machine learning tasks, especially those involving large datasets or sensitive data, high-precision arithmetic can be necessary. boost:multiprecision[] can provide this functionality.
+
+* boost:math[]:  This library contains many mathematical functions and utilities, some of which are likely to be useful in machine learning, such as statistical distributions and special functions.
+
+* boost:random[]:  Random number generation is often necessary in machine learning, for tasks like initializing weights, shuffling data, and stochastic gradient descent. boost:random[] can provide this functionality.
+
+* boost:compute[]:  For accelerating computations using GPUs or other OpenCL devices, you might find this library useful. 
+
+* boost:thread[] or boost:fiber[]:  These libraries can be useful for parallelizing computations, which can significantly speed up many <<Machine Learning Algorithms>>.
+
+* boost:graph[]:  For <<Machine Learning Algorithms>> that involve graph computations (like some forms of clustering, graphical models, or neural network architectures), boost:graph[] could be useful.
+
+* boost:property-tree[] or boost:spirit[]:  These libraries can be useful for handling input and output, such as reading configuration files or parsing data.
+
+== Machine Learning Algorithms
+
+Here are some widely used and robust algorithms, each having its own strengths and suitable applications. The best way to identify the "most robust" algorithm is through experimentation: try multiple models and select the one that performs best on your specific task. Also, keep in mind that data quality and the way you pre-process and engineer your features often matter more than the choice of algorithm.
+
+[circle]
+* Linear Regression / Logistic Regression: These are simple yet powerful algorithms for regression and classification tasks respectively. They're especially useful for understanding the influence of individual features.
+
+[#footnote1-location]
+[circle]
+* Decision Trees / Random Forests: Decision trees are simple to understand and visualize, and can handle both numerical and categorical data. Random forests, which aggregate the results of many individual decision trees, often have better performance and are less prone to overfitting link:#footnote1[(1)].
+
+[#footnote2-location]
+[circle]
+* Support Vector Machines (SVM): SVMs are effective in high dimensional spaces and are suitable for binary classification tasks. They can handle non-linear classification using what is known as the kernel trick link:#footnote2[(2)].
+
+* Gradient Boosting Machines (like https://en.wikipedia.org/wiki/XGBoost[XGBoost] and https://en.wikipedia.org/wiki/LightGBM[LightGBM]): These are currently among the top performers for structured data (i.e., table-form data), based on their results in machine learning competitions.
+
+* Neural Networks / Deep Learning: These models excel at tasks involving unstructured data, such as image recognition, natural language processing, and more. Convolutional Neural Networks (CNNs) are used for image-related tasks, while Recurrent Neural Networks (RNNs), Long Short-Term Memory (LSTM) units, and Transformers are used for sequential data like text or time series.
+
+* K-Nearest Neighbors (KNN): This is a simple algorithm that stores all available cases and classifies new cases based on a similarity measure (distance functions). It's used in both classification and regression.
+
+* K-Means: This is a widely-used clustering algorithm for dividing data into distinct groups.
+
+== Footnotes
+
+[#footnote1]
+link:#footnote1-location[(1)]
+_Overfitting_ in the context of machine learning refers to a model that has been trained too well on the training data, to the point where it has started to memorize the noise or outliers in the data rather than generalizing from the underlying patterns or trends. As a result, the model will perform very well on the training data, but poorly on new, unseen data (i.e., it will have poor generalization performance). To mitigate overfitting, techniques such as cross-validation, regularization, pruning, or early stopping are often used. Another common strategy is to increase the amount of training data so the model can learn more generalized features.
+
+[#footnote2]
+link:#footnote1-location[(2)]
+The _kernel trick_ is a method used in machine learning to apply a linear classifier to data that is not linearly separable. It works by mapping the original input features into a higher-dimensional space where a linear classifier can be used to separate the data. This mapping is done using a function known as a kernel function. The "trick" part of the kernel trick comes from the fact that the kernel function allows us to operate in the higher-dimensional space without explicitly computing the coordinates of the data in that space. Instead, the kernel function computes only the inner products between the images of all pairs of data in the higher-dimensional space.

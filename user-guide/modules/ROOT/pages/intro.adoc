@@ -20,7 +20,7 @@ There are many advantages to using Boost in your C++ projects, the main one bein
 * Boost does not compete with the Standard Template Library (STL) for C++. Rather it complements the STL libraries with exciting new functionality. Many libraries that are now part of the STL started as Boost libraries.
 * Boost is open-source, and available for you to use in any of your projects. It is free, including for commercial projects. Refer to the https://www.boost.org/users/license.html[Boost Software License].
 * Boost allows for cross-platform development, with single source code. Boost supports: Windows, Linux variants, Apple OS X, IOS, Android, and Xbox.
-* There a few exceptions, but mostly Boost libraries are not dependant on each other, so you need only link the components your require.
+* The Boost Libraries are designed to be as independent as possible so that users can pick and choose the libraries they need without being forced to include unnecessary code. Some libraries do have dependencies on a few others, and typically these other libraries are loaded automatically if just a subset of the full collection of libraries is being installed.
 * Particular strengths of the Boost libraries include smart pointers, unit tests, lambda functions, function binding, regex, a file system, to name a few.
 * Boost allows for all libraries to be installed and inspected. Alternatively a package manager can be used to install a specific collection of libraries.
 * Through _template metaprogramming_ Boost libraries are a good platform for building other libraries.
