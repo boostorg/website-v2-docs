@@ -1,4 +1,63 @@
 = Getting Involved
 :navtitle: Getting Involved
 
-*Content under construction.*
+There are many ways to get involved with Boost, up to and including submitting your own library. In roughly ascending order of time and work commitment, here are the ways you can contribute to Boost:
+
+== Participate in the Boost Developers Mailing List
+
+The Boost mailing list is a platform for discussions and communications related to the Boost Libraries. The mailing list serves several key purposes:
+
+* *Announcements*: The mailing list is a channel for updates, announcements about new releases, bug fixes, events, or any other relevant news.
+
+* *Collaboration*: The mailing list also serves as a platform for collaboration, fostering connections between developers and encouraging team-based projects.
+
+* *Discussion*: Developers discuss ideas, techniques, issues, and potential improvements related to Boost libraries.
+
+* *Support*: Newcomers or users encountering difficulties can seek help from the community. Experienced members provide solutions, advice, and share their experiences.
+
+If you do join, follow the https://www.boost.org/community/policy.html[guidelines and rules] of the mailing list, as it helps in maintaining a respectful and productive environment.
+
+To subscribe to the Developers Mailing List go https://lists.boost.org/mailman/listinfo.cgi/boost[Boost developers' mailing list].
+
+There are other mailing lists you might want to join, such as the https://lists.boost.org/mailman/listinfo.cgi/boost-users[Boost Users mailing list], or project-specific lists. Visit https://www.boost.org/community/groups.html[Boost Mailing Lists] for more details.
+
+== Report Issues and Suggest Improvements
+
+To formally report an issue on an individual library, locate the repo for that library. Many of these repos exist in the https://github.com/cppalliance/boost/tree/master/libs[Boost Super-project] on GitHub. Search under the `libs` folder. For example, to file an issue on the boost:json[] library, click *New Issue* at https://github.com/boostorg/json/issues[]. If you have difficulty locating the correct repo, then ask the question of the https://lists.boost.org/mailman/listinfo.cgi/boost[Boost developers' mailing list].
+
+Before filing an issue, it is good practice to identify the admins (authors or maintainers) of a library. This information can be found in the `meta` folder for the library. For example: https://github.com/boostorg/json/blob/develop/meta/libraries.json[] contains the authors for the boost:json[] library. Also, library documentation and commit history may well specify who is actively involved. Make a connection first to ensure the library admins are open to updates.
+
+To report an issue with the web site, including this documentation, click the *New Issue* button on this GitHub page: https://github.com/cppalliance/site-docs/issues[cppalliance/site-docs]. 
+
+After clicking *New Issue*, you will see a list of issue templates, such as *Submit a Correction or Bug report*, or *Suggest a Topic, Enhancement, or Information*. Select the most appropriate template (which will give you some advice on how to fill out the form), or select *Open a blank issue* if none of the templates applies.
+
+Whichever list you add your issue to, the issue will be addressed in due course. Providing full details, and examples and screenshots where appropriate, should give you the quicker response.
+
+== Contribute to an Existing Library
+
+Rather than report an issue, or suggested improvement, and wait for another developer to address it, you can make the code changes yourself (after verifying with the library admins that they are open to updates). To be successful you will need to be familiar with GitHub, and obviously a competent pass:[C++] developer. After finding the issue, you will need to go to the GitHub repository for that library, and create a fork and clone the library.
+
+With your fork of the library in your own GitHub account, you can make any changes and updates you wish. It is certainly recommended to thoroughly test the changes, and be aware of the test matrix for the library. It is also recommended you thoroughly comment your code changes, potentially every line of code you add should be commented as to its purpose.
+
+When you are satisfied you have met the bar for testing, you can commit the changes, push them to GitHub, and create a Pull Request. Most libraries have Continuous Integration (CI) set up, and will check your changes on several operating systems and compilers. If CI is not set up, there will be more onus on you and your testers to verify the test matrix.
+
+After this, you can take a step back, and the owners or maintainers of the library will review your code. They might ask for some modifications or improvements. Incorporate the feedback provided by the reviewers and push your modifications.
+
+If all goes well, your changes will be merged by the library admins, and you will have made a welcome contribution.
+
+== Engage in the Review Process
+
+All libraries are reviewed by the community before becoming part of Boost. There are several roles in the review process, from managing the steps of the review process, to testing and providing feedback.  Read the xref:formal-reviews:ROOT:index.adoc[] for details.
+
+== Maintain an Existing Library
+
+If you have a deep interest in a particular library that for some reason no longer has an active owner or maintainer, or is being less well maintained than might be ideal (find this out by asking questions on the https://lists.boost.org/mailman/listinfo.cgi/boost[Boost developers' mailing list]), then consider requesting, again via the mailing list, to become a library maintainer. For larger libraries there can certainly be more than one maintainer. 
+
+Maintaining an existing library is similar in steps to <<3. Contribute to an Existing Library>>, in that you will have to create a fork and clone the library. However, more is expected. You will have to spend time educating yourself on the full functionality of the library, and be prepared to make changes to the code anywhere changes are needed. 
+
+For a larger library this education can turn out to be a significant, and perhaps onerous task. It can be quite difficult to reverse engineer in your mind the processes and purpose of code written by another developer, with all the expected personal style and idiosyncrasies that make their way into source code. However, that being said, it can be a valuable contribution to take an existing but deprecated library you are interested in and give it a new lease of life.
+
+
+== Contribute a New Library
+
+This is the big dog of contributions. There are developers who have contributed several libraries to Boost. Start by reading the xref:requirements/library-requirements.adoc[] section, and make sure to engage the Boost community before getting too deep into a massive coding project.
