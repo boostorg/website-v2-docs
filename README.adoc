@@ -138,8 +138,8 @@ To simplify the process of setting attributes, you should use the `libdoc.sh` sc
 
 [source,bash]
 ----
-./sitedoc.sh develop
-./sitedoc.sh master
+./libdoc.sh develop
+./libdoc.sh master
 ----
 
 [source,console]
