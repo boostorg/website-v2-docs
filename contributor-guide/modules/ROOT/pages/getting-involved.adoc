@@ -51,12 +51,13 @@ All libraries are reviewed by the community before becoming part of Boost. There
 
 == Maintain an Existing Library
 
-If you have a deep interest in a particular library that for some reason no longer has an active owner or maintainer, or is being less well maintained than might be ideal (find this out by asking questions on the https://lists.boost.org/mailman/listinfo.cgi/boost[Boost developers' mailing list]), then consider requesting, again via the mailing list, to become a library maintainer. For larger libraries there can certainly be more than one maintainer. 
+There may be an existing library that you have a deep interest in, that for some reason no longer has an active owner or maintainer. Or, perhaps, is being less well maintained than might be ideal. Find what you can out by asking questions of the existing maintainers (listed in the xref:requirements/library-metadata.adoc[] json file) and, if no reply, on the https://lists.boost.org/mailman/listinfo.cgi/boost[Boost developers' mailing list]. If the replies suggest you could take a role, consider requesting, again via the mailing list, to become a library maintainer. For larger libraries there can certainly be more than one maintainer. 
 
-Maintaining an existing library is similar in steps to <<3. Contribute to an Existing Library>>, in that you will have to create a fork and clone the library. However, more is expected. You will have to spend time educating yourself on the full functionality of the library, and be prepared to make changes to the code anywhere changes are needed. 
+Maintaining an existing library is similar in steps to <<Contribute to an Existing Library>>, in that you will have to create a fork and clone the library. However, more is expected. You will have to spend time educating yourself on the full functionality of the library, and be prepared to make changes to the code anywhere changes are needed. 
 
-For a larger library this education can turn out to be a significant, and perhaps onerous task. It can be quite difficult to reverse engineer in your mind the processes and purpose of code written by another developer, with all the expected personal style and idiosyncrasies that make their way into source code. However, that being said, it can be a valuable contribution to take an existing but deprecated library you are interested in and give it a new lease of life.
+For a larger library this education can turn out to be a significant, and perhaps onerous task. It can be quite difficult to reverse engineer in your mind the processes and purpose of code written by another developer, with all the expected personal style and idiosyncrasies that make their way into source code. However, that being said, it can be a valuable contribution to take an existing, but not fully maintained, library you are interested in and give it a new lease of life.
 
+NOTE: All libraries in Boost are tested when the super-project is tested, so even without a dedicated maintainer the libraries must pass a series of automated tests.
 
 == Contribute a New Library
 

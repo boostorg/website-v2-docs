@@ -3,74 +3,53 @@
 :idprefix:
 :idseparator: -
 
-*Legacy content, currently being updated.*
+A Boost library _does not generally_ depend on other libraries, except for Boost or the pass:[C++] Standard Library. There are some exceptions. For example, boost:iostreams[], and boost:beast[], have an optional dependency on https://www.zlib.net/[*zlib*], to provide support for gzip and zlib compression and decompression. If zlib is not available, boost:iostreams[] will still work, but without the ability to handle gzip and zlib formats. Another example is boost:asio[], which has an optional dependency on https://www.openssl.org/[*OpenSSL*], to provide support for SSL and TLS protocols. These protocols are widely used for secure network communications. Again, if OpenSSL is not available, boost:asio[] will still work, but without support for SSL or TLS. 
 
-A Boost library **should not** use libraries
- other than Boost or the C++ Standard Library.
+Other examples include boost:python[] interfaces with the Python C API, so obviously depends on a Python installation. boost:locale[] depends on the International Components for Unicode (https://icu.unicode.org/[*ICU*]) to provide Unicode and localization support. On Unix systems, boost:thread[] relies on the https://www.cs.cmu.edu/afs/cs/academic/class/15492-f07/www/pthreads.html[*pthread*] library. boost:compute[] has a dependency on https://www.khronos.org/opencl/[*OpenCL*].
 
+For other libraries that you might want to take a dependency on, get a discussion going first with the https://lists.boost.org/mailman/listinfo.cgi/boost[Boost developers' mailing list]. The general rule is avoid _unreasonable_ dependencies.
 
-A Boost library **should** use other Boost
- Libraries or the C++ Standard Library, but only when the
- benefits outweigh the costs.
+== Benefits and Effects of Coupling
 
+A Boost library _should_ use other Boost Libraries, or the pass:[C++] Standard Library, when the benefits outweigh the costs. In general, Boost libraries are designed to be as independent as possible, so that users can pick and choose the libraries they need without being forced to include unnecessary code. Many Boost libraries are indeed standalone and can be used separately without any dependencies on other libraries. 
 
-The benefits of using components from other libraries may
- include clearer, more understandable code, reduced development
- and maintenance costs, and the assurance which comes from
- reusing well-known and trusted building blocks.
+The benefits of using components from other libraries may include clearer, more understandable code, reduced development and maintenance costs, and the assurance which comes from reusing well-known and trusted building blocks. The costs may include undesirable coupling between components, and added compilation and runtime costs. If the interface to the additional component is complex, using it may make code less readable, and thus actually increase development and maintenance costs.
 
+Negative effects of coupling become obvious when one library uses a second library which uses a third, and so on. The worst form of coupling requires the user understand each of the coupled libraries. Coupling may also reduce the portability of a library - even in cases when all used libraries are self-sufficient (see <<Examples of Questionable Dependencies>>).
 
-The costs may include undesirable coupling between
- components, and added compilation and runtime costs. If the
- interface to the additional component is complex, using it may
- make code less readable, and thus actually increase development
- and maintenance costs.
+== Examples of Acceptable Dependencies
 
+The boost:graph[] library depends on boost:iterator[] and boost:property-map[]. Similarly, boost:asio[], mentioned above, depends on several other Boost libraries including boost:system[], boost:date-time[], and boost:bind[], and others. boost:asio[] itself is recommended if your library needs networking. 
 
-Negative effects of coupling become obvious when one library
- uses a second library which uses a third, and so on. The worst
- form of coupling requires the user understand each of the
- coupled libraries. Coupling may also reduce the portability of
- a library - even in case when all used libraries are
- self-sufficient (see example of questionable usage of
- <iostream> library below).
+A good example where another boost component should certainly be used is boost:core[], as it has considerable benefits; it simplifies code, improves readability, and signals intent. boost:core[] contains small utilities, usually polyfills for standard components, which you use when targeting pass:[C++] standards where they are not available. Costs are low as coupling is limited; the boost:core[] header includes only lightweight headers. There are no runtime costs at all. With costs so low and benefits so high, other boost libraries should use boost:core[] when the need arises.
 
+Other Boost libraries you might consider as good foundational components include:
 
-**Example where another boost component should
- certainly be used:** boost::noncopyable (in [boost/utility.hpp](/doc/libs/release/boost/utility.hpp))
- has considerable benefits; it simplifies code, improves
- readability, and signals intent. Costs are low as coupling is
- limited; noncopyable itself uses no other classes and its
- header includes only the lightweight headers
- <boost/config.hpp> and <cstddef>. There are no
- runtime costs at all. With costs so low and benefits so high,
- other boost libraries should use boost::noncopyable when the
- need arises except in exceptional circumstances.
+* boost:compatibility[] has been updated recently and has a similar role to boost:core[]. Its' classes provide polyfills from std classes, and have no extensions.
 
+* boost:config[] is used by almost all libraries. It provides macro definitions to make your code portable. It enables you to detect standard levels prior to pass:[C++]17, to check which platform/compiler you are building for, and to add the relevant platform-specific code to create compiled libraries.
 
-**Example where a standard library component might
- possibly be used:** Providing diagnostic output as a
- debugging aid can be a nice feature for a library. Yet using
- Standard Library <iostream> can involve a lot of
- additional cost, particularly if <iostream> is unlikely
- to be used elsewhere in the application. In certain GUI or
- embedded applications, coupling to <iostream> would be a
- disqualification. Consider redesign of the boost library in
- question so that the user supplies the diagnostic output
- mechanism.
+* boost:assert[] is in general recommended over plain `<cassert>`, as it provides a source_location polyfill. boost:assert[] is used by almost all Boost libraries, so using it makes your library more interoperable with the others.
 
+* Similarly, boost:throw-exception[] is in general recommended over plainly throwing exceptions, as it adds more info to the thrown exceptions and makes behavior more configurable. As it too is widely used in exiting Boost libraries, good interoperability applies.
 
-**Example where another boost component should not be
- used:** The boost dir\_it library has considerable
- coupling and runtime costs, not to mention portability issues
- for unsupported operating systems. While completely appropriate
- when directory iteration is required, it would not be
- reasonable for another boost library to use dir\_it just to
- check that a file is available before opening. C++ Standard
- Library file open functionality does this at lower cost. Don't
- use dir\_it just for the sake of using a boost library.
+* boost:utility[] includes several non-templated, non-data structure related classes and functions, such as base-from-member idiom, checked delete, next and prior functions, noncopyable, and result_of.
 
+* boost:concept-check[] provides tools for specifying and checking that types meet the requirements of generic algorithms. It's used by many other libraries to ensure that template parameters meet the necessary requirements.
 
+* For handling data types and structures, one of boost:function-types[], boost:fusion[], boost:any[], boost:variant[], or boost:variant2[] might provide what you need.
+
+* As well as supporting data types, boost:variant2[] is preferred over `std::variant`, as it enforces better invariants and is never valueless, unlike is standard counterpart.
+
+* For metaprogramming, boost:mp11[] is the latest metaprogramming library and provides many of the building blocks for this style of programming. boost:mp11[] should be used in preference over the older boost:mpl[] and boost:preprocessor[].
+
+* boost:describe[] is valuable if you need reflection as part of your interface, which will occur when your library users are passing in user-defined types for your library to process.
+
+== Examples of Questionable Dependencies
+
+An example where another Boost component should _not_ be used is simply where the use of the library is minimal, and does not justify the cost of having the dependency. Or perhaps when a pass:[C++] Standard Library has the same functionality for a lower cost.
+
+Other examples of questionable dependencies, outside of Boost, include libraries with unstable interfaces (libraries that change frequently), libraries that are platform-specific, not widely supported, not public, or are internal in some way. Obviously libraries with heavy runtime requirements should largely be avoided altogether.
 
 
 
