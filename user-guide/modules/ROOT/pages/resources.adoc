@@ -1,0 +1,42 @@
+= Resources
+:navtitle: Resources
+
+For additional resources when it comes to learning about and using Boost, there are some helpful external options. If you like hard-copy format, there is a range of published <<Books>>. If you prefer an online format, there are quite a few tutorials published on <<YouTube>>. These options are good at giving the overall picture, and getting you started. 
+
+If you have very specific technical questions <<Stack Overflow>> may well have the answer.
+
+== Books
+
+There are a number of books published, either on Boost libraries as a set, or on one particular library:
+
+* https://www.amazon.com/Boost-Asio-C-Network-Programming-Cookbook/dp/1783986549/ref=sr_1_1?crid=1YGJW4IZYU1YK&keywords=Book+on+Boost+C%2B%2B+Libraries&qid=1686696508&sprefix=book+on+boost+c%2B%2B+libraries%2Caps%2C135&sr=8-1&ufe=app_do%3Aamzn1.fos.006c50ae-5d4c-4777-9bc0-4513d670b6bc[Boost.Asio C++ Network Programming Cookbook: Over 25 hands-on recipes to create robust and highly-effi cient cross-platform distributed applications with the Boost.Asio library], by Dmytro Radchuk
+
+* https://www.amazon.com/Learning-Boost-Libraries-Arindam-Mukherjee/dp/1783551216/ref=sr_1_2?crid=1YGJW4IZYU1YK&keywords=Book+on+Boost+C%2B%2B+Libraries&qid=1686696626&sprefix=book+on+boost+c%2B%2B+libraries%2Caps%2C135&sr=8-2&ufe=app_do%3Aamzn1.fos.006c50ae-5d4c-4777-9bc0-4513d670b6bc[Learning Boost C++ Libraries: Solve practical programming problems using powerful, portable, and expressive libraries from Boost], by Arindam Mukherjee
+
+
+* https://www.amazon.com/Boost-C-Libraries-Boris-Sch%C3%A4ling-ebook/dp/B00OX0KJOK/ref=sr_1_1?crid=3NHU24UWIKSHZ&keywords=The+Boost+C%2B%2B+Libraries&qid=1687128169&sprefix=the+boost+c%2B%2B+libraries%2Caps%2C194&sr=8-1[The Boost C++ Libraries],
+by Boris Schäling
+
+* https://www.amazon.com/Boost-Graph-Library-Reference-Manual/dp/0201729148/ref=sr_1_1?crid=OQZFAS6ZCSBS&keywords=The+Boost+Graph+Library%3A+User+Guide&qid=1687127851&sprefix=the+boost+graph+library+user+guide+%2Caps%2C216&sr=8-1[The Boost Graph Library: User Guide and Reference Manual], by Lie-Quan Lee, Jeremy G. Siek and Andrew Lumsdaine
+
+
+* https://www.amazon.com/Introduction-Boost-Libraries-II-Advanced/dp/9491028022/ref=asc_df_9491028022/?tag=hyprod-20&linkCode=df0&hvadid=266173100564&hvpos=&hvnetw=g&hvrand=11155108834785857002&hvpone=&hvptwo=&hvqmt=&hvdev=c&hvdvcmdl=&hvlocint=&hvlocphy=9033326&hvtargid=pla-571858518475&psc=1[Introduction to the Boost C++ Libraries; Volume II - Advanced Libraries], by Robert Demming and Daniel J. Duffy
+
+* https://www.amazon.com/Boost-Application-Development-Cookbook-application/dp/1787282244/ref=asc_df_1787282244/?tag=hyprod-20&linkCode=df0&hvadid=312280575053&hvpos=&hvnetw=g&hvrand=11155108834785857002&hvpone=&hvptwo=&hvqmt=&hvdev=c&hvdvcmdl=&hvlocint=&hvlocphy=9033326&hvtargid=pla-415478529500&psc=1[Boost C++ Application Development Cookbook - Second Edition: Recipes to simplify your application development], by Antony Polukhin
+
+
+== YouTube
+
+Consider searching https://www.youtube.com/[YouTube] for online tutorials. There are tutorials on installing Boost, a beginners guide to Boost, introductions to individual libraries (such as boost:variant[] and boost:python[]), and on contributing libraries to Boost.
+
+== Stack Overflow
+
+For more specific technical questions, Stack Overflow has many questions and answers:
+
+* https://stackoverflow.com/search?q=Boost+Library&s=d2d13545-4fbc-4f13-a029-08e8a70d2bdc[stack *overflow*: Boost Library]
+
+== See Also
+
+* xref:explore-the-content.adoc[]
+* xref:faq.adoc[]
+

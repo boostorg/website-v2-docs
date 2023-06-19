@@ -1,6 +1,6 @@
 * xref:intro.adoc[]
-* xref:whats-inside.adoc[]
 * xref:getting-started.adoc[]
+* xref:explore-the-content.adoc[]
 * xref:faq.adoc[]
 
 * Common Scenarios
@@ -9,12 +9,9 @@
 ** xref:task-system.adoc[]
 ** xref:task-text-processing.adoc[]
 ** xref:testing-debugging.adoc[]
-
-* Tutorials
-** xref:boost-test-tutorial.adoc[]
+*** xref:boost-test-tutorial.adoc[]
 
 * Advanced Scenarios
-** xref:advanced-builds.adoc[]
 ** xref:task-database.adoc[]
 ** xref:task-machine-learning.adoc[]
 ** xref:task-metaprogramming.adoc[]
@@ -27,6 +24,9 @@
 ** xref:release-process.adoc[] 
 ** xref:boost-history.adoc[]
 
+* xref:resources.adoc[]
+
 * Reference
 ** xref:library-naming.adoc[]
 ** xref:header-organization-compilation.adoc[]
+** xref:advanced-builds.adoc[]

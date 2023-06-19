@@ -16,8 +16,6 @@ Developing a networking application in pass:[C++] involves a lot of different co
 
 * boost:spirit[]: If you're creating a new protocol or using a lesser-known one, boost:spirit[], a parser generator framework, could be useful. It allows you to define grammar rules that can parse complex data structures sent over the network.
 
-* boost:thread[]: If your application is multithreaded, this library will be useful. It provides a portable pass:[C++] interface for multithreading.
+* boost:json[]: An efficient library for parsing, serializing, and manipulating JSON data. This is useful specifically in client-server communication and web services. Also, if you are working with large JSON payloads, there is support for incremental parsing, so you can feed data to the parser as it arrives over the network.
 
-* boost:smart_ptr[]: This provides smart pointer class templates, including scoped_ptr, shared_ptr, weak_ptr, and intrusive_ptr. Smart pointers can be very helpful in managing resources and preventing memory leaks, especially in an environment where exceptions may be thrown.
-
-* boost:test[]: Provides support for simple program testing, full unit testing, and for program execution monitoring. Since it's always important to thoroughly test your code, especially when dealing with networking where there are many unpredictable factors, this library can be extremely useful.
+* boost:url[]: Parses URL strings into components (scheme, user info, host, port, path, query, and fragment), and provides support for building URLs piece by piece. Also, there is support for modifying an existing URL (changing the query parameters, for example) and handling percent-encoded characters. This library basically makes even complex URLs easy to work with.

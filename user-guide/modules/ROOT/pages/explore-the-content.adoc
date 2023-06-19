@@ -1,0 +1,94 @@
+= Explore the Content
+:navtitle: Explore the Content
+
+There are a number of ways you can approach exploring Boost. Clearly, examining the documentation for any of the https://www.boost.org/doc/libs/1_82_0/libs/libraries.htm[Boost libraries] is a great way to start. However, with 180 or so libraries to choose from, you might want to consider a range of options to get going. This section covers a number of approaches you have to focus your exploration of the libraries, and get deeper into Boost content.
+
+If knowing what others have done before you helps, refer to <<High-Profile users of Boost>>. 
+
+If you are already using, or considering, the Standard Template Library then refer to <<Boost vs the Standard Library>> to get some idea of which to use when similar ones are available in both sets of libraries.
+
+If any of the libraries does pique your interest, consider examining and running working <<Examples>>. 
+
+There are mailing lists you might want to join too, to ask questions and join in the discussion, such as the https://lists.boost.org/mailman/listinfo.cgi/boost-users[Boost Users mailing list], or project-specific lists accessible from the https://www.boost.org/community/groups.html[Boost Mailing Lists] site.
+
+To delve into content for a specific scenario, refer to the *Common Scenarios* topics, such as:
+
+** xref:task-networking.adoc[]
+
+** xref:task-simulation.adoc[]
+
+** xref:testing-debugging.adoc[]
+
+And, to the *Advanced Scenarios* topics such as:
+
+** xref:task-database.adoc[]
+
+** xref:task-machine-learning.adoc[]
+
+** xref:task-parallel-computation.adoc[]
+
+== High-Profile users of Boost
+
+Some well known libraries and applications have used the building blocks that Boost provides. These include:
+
+* https://engineering.fb.com/2012/06/02/developer-tools/folly-the-facebook-open-source-library/[*Folly*], the Facebook Open Source Library, is an open-source library developed by Facebook that is intended to augment the Standard Library and Boost by providing additional features and optimizations, often with a focus on high-performance systems. It is a collection of relatively small and standalone libraries, and its features can be used on an as-needed basis.
++
+Some of these features include string formatting libraries, hash maps, dynamic types, and concurrency utilities. Folly makes extensive use of:
+
+    ** boost:context[] for creating and manipulating execution contexts, which are used in Folly's implementation of coroutines
+
+    ** boost:intrusive[] which provides containers that allow for the insertion and removal of elements in constant time
+
+    ** boost:optional[]  which provides a way to represent optional, or nullable, objects of a given type
++
+Additionally, many parts of Folly are designed to interact seamlessly with Boost and the Standard Library, making it easy to integrate Folly into existing codebases that use these libraries. Folly serves as an example of how Boost libraries can be used in the development of large-scale, high-performance systems. 
+
+* The https://bitcoin.org/en/bitcoin-core/[*Bitcoin Core*] client, which is the reference implementation of the Bitcoin protocol, makes extensive use of the Boost libraries. For example, it uses boost:asio[] for network programming, boost:thread[] for multithreading, and boost:test[] for unit tests.
+
+* https://www.mongodb.com/[*MongoDB*], a popular open-source document database, leverages libraries such as boost:filesystem[] for filesystem interactions, boost:thread[] for threading, and boost:smart_ptr[] for smart pointers.
+
+* The https://llvm.org/[*Low Level Virtual Machine*] (LLVM) project, which is a collection of modular and reusable compiler and toolchain technologies, utilizes Boost in parts of its code base. For instance, it uses boost:mpl[] for its metaprogramming functionality.
+
+NOTE: boost:mpl[] has now been superseded by boost:mp11[].
+
+* Microsoft has integrated boost:test[] into https://visualstudio.microsoft.com/[*Visual Studio*], in particular to enable unit testing.
+
+* Adobe also uses Boost in several of their software products. For instance, https://stlab.adobe.com/[*Adobe Source Libraries*] (ASL) includes and builds upon boost:smart_ptr[], boost:mpl[], boost:lambda[].
+
+* The https://www.ros.org/[*Robot Operating System*] (ROS), a flexible framework for robotics software development, uses Boost in several areas, for instance, boost:python[] to provide Python bindings, and boost:signals2[] for inter-process communication.
+
+* https://reactnative.dev/[*React Native*] is a popular JavaScript framework for building mobile application. Boost libraries are used extensively within JavaScriptCore (used to execute JavaScript within the app), and are a key part of the infrastructure that allows React Native to bridge between JavaScript and native code. The libraries used include boost:optional[], boost:intrusive[], and boost:multi-index[].
+
+* https://www.mysql.com/[*MySQL*] one of the most popular open-source relational database management systems, uses Boost libraries in its build process. It mainly uses the Boost header files, particularly those required for geometry processing operations, such as boost:geometry[].
+
+== Boost vs the Standard Library
+
+There are several Boost libraries that have a Standard Template Library (STL) equivalent but offer more features, better performance, or additional functionality that can make them more compelling in certain situations. When comparing libraries which have similar features, also consider compilation time, binary size, code readability, and the portability of your code.
+
+* boost:any[] is similar to `std::any`, introduced in pass:[C++]17. However, if you're working with a codebase that needs to be compatible with pre-pass:[C++]17 standards, then boost:any[] can be a lifesaver.
+
+* Similar to the situation with boost:any[], boost:optional[] provides functionality similar to `std::optional`, introduced in pass:[C++]17, but works with earlier standards.
+
+* While pass:[C++]11 introduced smart pointers into the standard library (with `std::unique_ptr` and `std::shared_ptr`), boost:smart_ptr[] offers some additional features. These features include the use of `intrusive_ptr` which allows for the customization of the reference-counting mechanism.
+
+* boost:container[] offers some advanced containers like `flat_map`, `small_vector`, `static_vector`, and `stable_vector` that are not available in STL `std::containers`.
+
+* boost:random[] has more extensive features than `std::random`.
+
+* boost:algorithm[] provides some algorithms that are not available in STL `std::algorithms`, such as `boost::algorithm::all_of_equal`.
+
+== Examples
+
+Many Boost libraries, but not all, have an `example` folder that contains runnable source code projects for the library. To locate the examples, first navigate to the https://github.com/boostorg/boost/tree/master/libs[Super-project] containing all the libraries, then select the library that interests you, then its' `example` folder, if one exists.
+
+For example:
+
+* https://github.com/boostorg/algorithm/tree/28dd87b90e79c5e1d9de82835125aa2bcbb3f468/example[algorithm library]
+* https://github.com/boostorg/asio/tree/f5ca167d300a3a18853c29314b03ae0ce91c737a/example[asio library]
+* https://github.com/boostorg/geometry/tree/2ec9d65d1294edb97157b564726fdf56b6ac562f/example[geometry library]
+
+
+== See Also
+
+* xref:faq.adoc[]
+* xref:resources.adoc[]
