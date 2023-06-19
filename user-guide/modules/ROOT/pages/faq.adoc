@@ -19,7 +19,6 @@ Yes, Boost libraries are designed to work with modern pass:[C++] standards inclu
 +
 Boost libraries are generally compatible with most Linux distributions, provided that the distribution has an up-to-date pass:[C++] compiler. This includes:
 +
-[circle]
 * Ubuntu
 * Fedora
 * Debian
@@ -92,15 +91,15 @@ Smart pointers are a feature of pass:[C++] that Boost provides in its boost:smar
 
 . *Does Boost provide a testing framework?*
 +
-Yes, boost:test[] is the unit testing framework provided by Boost. It includes tools for creating test cases, test suites, and for handling expected and unexpected exceptions.
+Yes, boost:test[] is the unit testing framework provided by Boost. It includes tools for creating test cases, test suites, and for handling expected and unexpected exceptions. Refer to xref:testing-debugging.adoc[].
 
 . *What is Boost.Asio?*
 +
 boost:asio[] is a library that provides support for asynchronous input/output (I/O), a programming concept that allows operations to be executed without blocking the execution of the rest of the program.
 
-. *What is Boost.MPL?*
+. *What is Boost.MP11?*
 +
-boost:mpl[] (MetaProgramming Library) is a Boost library designed to bring powerful metaprogramming capabilities to pass:[C++] programs. It includes a variety of templates that can be used to perform compile-time computations and manipulations.
+boost:mp11[] (MetaProgramming Library for pass:[C++]11) is a Boost library designed to bring powerful metaprogramming capabilities to pass:[C++] programs. It includes a variety of templates that can be used to perform compile-time computations and manipulations. Refer to <<Metaprogramming>>.
 
 . *Does Boost provide a library for threading?*
 +
@@ -115,7 +114,6 @@ boost:spirit[] is a library for building recursive-descent parsers directly in p
 Boost libraries offer a wide range of algorithmic and data structure support. Here are five libraries that you might find interesting:
 
 +
-[circle]
 * boost:graph[]: This library provides a way to represent and manipulate graphs. It includes algorithms for breadth-first search, depth-first search, Dijkstra's shortest paths, Kruskal's minimum spanning tree, and much more.
 
 * boost:geometry[]: This library includes algorithms and data structures for working with geometric objects. It includes support for spatial indexing, geometric algorithms (like area calculation, distance calculation, intersections, etc.), and data structures to represent points, polygons, and other geometric objects.
@@ -128,24 +126,7 @@ Boost libraries offer a wide range of algorithmic and data structure support. He
 
 . *I am tasked with building a real-time simulation of vehicles in pass:[C++]. What Boost libraries might give me the performance I need for real-time work, and support a simulation?*
 +
-Creating a real-time simulation of vehicles involves various aspects, including physical modeling, concurrent programming for real-time response, data storage and manipulation, networking for multi-vehicle simulation, and perhaps even a graphic interface. Here are some libraries that may be helpful:
-+
-[circle]
-* boost:chrono[]: Timing is critical in real-time applications. This library can help you measure time intervals, which could be useful for controlling the timing of your simulation.
-
-* boost:geometry[]: For spatial computations and geometric algorithms, which you will likely need for modeling the physical behavior and interactions of your vehicles.
-
-* boost:units[]: This library can help with calculations involving units of measurement. It provides classes and functions that can enforce the correct usage of units and conversions between them, which could be helpful in a physical simulation.
- 
-* boost:graph[]: In case you need to represent roads or pathways as a graph, this library provides a flexible and powerful way to represent and manipulate graphs. It also includes a number of graph algorithms.
-
-* boost:thread[] or boost:asio[]: To achieve real-time performance, you might need to make use of multi-threading or asynchronous input/output. boost:thread[] provides classes and functions for multi-threading, synchronization, and inter-thread communication. boost:asio[] is a cross-platform library for asynchronous programming and can handle a lot of networking tasks as well.
-
-* boost:interprocess[]: If you need to share data between different processes in real-time, this library can be useful. It supports shared memory, memory-mapped files, semaphores, and more.
-
-* boost:mpi[] or boost:asio[]: For distributed simulations that run across multiple systems, you might need a library for network communication. boost:mpi[] provides a pass:[C++] interface for the Message Passing Interface (MPI) standard for distributed computing. boost:asio[] can also handle networking tasks and it is a bit lower-level.
-
-* boost:serialization[]: To save the state of the simulation or to communicate complex data structures over a network, you might find this library helpful.
+Refer to xref:task-simulation.adoc[].
 
 == Licensing 
 
@@ -159,21 +140,58 @@ The Boost libraries are licensed under the Boost Software License, a permissive 
 +
 Metaprogramming is a technique of programming that involves generating and manipulating programs. In the context of Boost and pass:[C++], metaprogramming often refers to template metaprogramming, which uses templates to perform computations at compile-time.
 
-. *What is Boost.MPL?*
+. *What is Boost.MP11?*
 +
-boost:mpl[] is a Boost library designed for metaprogramming. It provides a set of templates and types for compile-time computations and manipulations, effectively extending the pass:[C++] template mechanism.
+boost:mp11[] is a Boost library designed for metaprogramming. It provides a set of templates and types for compile-time computations and manipulations, effectively extending the pass:[C++] template mechanism.
 
-. *What can I achieve with Boost.MPL?*
+. *What can I achieve with Boost.MP11?*
 +
-With boost:mpl[], you can perform computations and logic at compile-time, thus reducing runtime overhead. For example, you can manipulate types, perform iterations, make decisions, and do other computations during the compilation phase.
+With boost:mp11[], you can perform computations and logic at compile-time, thus reducing runtime overhead. For example, you can manipulate types, perform iterations, make decisions, and do other computations during the compilation phase.
 
-. *What is a `typelist` and how can I use it with Boost.MPL?*
+. *What is a `typelist` and how can I use it with Boost.MP11?*
 +
-A `typelist` is a compile-time list of types. In boost:mpl[], you can create a `typelist` using `boost::mpl::vector<>`, `boost::mpl::list<>`, or other sequence types. Typelists can be used for various compile-time operations such as counting the number of types, transforming types, or selecting a type based on a condition.
+A `typelist` is a compile-time container of types. It's a fundamental concept in pass:[C++] template metaprogramming where operations are done at compile time rather than runtime, and types are manipulated in the same way that values are manipulated in regular programming.
++
+In the context of the boost:mp11[] library, a `typelist` is a template class that takes a variadic list of type parameters. Here's an example:
++
+[source,cpp]
+----
+#include <boost/mp11/list.hpp>
 
-. *What are some limitations or challenges of metaprogramming with Boost.MPL?*
+using my_typelist = boost::mp11::mp_list<int, float, double>;
+----
 +
-Metaprogramming with boost:mpl[] can lead to complex and difficult-to-understand code, especially for programmers unfamiliar with the technique. Compile errors can be particularly cryptic due to the way templates are processed. Additionally, heavy use of templates can lead to longer compile times.
+In this example, `my_typelist` is a `typelist` containing the types `int`, `float`, and `double`. Once you have a `typelist`, you can manipulate it using the metaprogramming functions provided by the library. For example:
++
+[source,cpp]
+----
+#include <boost/mp11/list.hpp>
+#include <boost/mp11/algorithm.hpp>
+
+using my_typelist = boost::mp11::mp_list<int, float, double>;
+
+// Get the number of types in the list
+constexpr std::size_t size = boost::mp11::mp_size<my_typelist>::value;
+
+// Check if a type is in the list
+constexpr bool contains_double = boost::mp11::mp_contains<my_typelist, double>::value;
+
+// Add a type to the list
+using extended_typelist = boost::mp11::mp_push_back<my_typelist, char>;
+
+// Get the second type in the list
+using second_type = boost::mp11::mp_at_c<my_typelist, 1>;
+----
++
+In these examples, `mp_size` is used to get the number of types in the list, `mp_contains` checks if a type is in the list, `mp_push_back` adds a type to the list, and `mp_at_c` retrieves a type at a specific index in the list. All these operations are done at compile time.
+
+. *What are some limitations or challenges of metaprogramming with Boost.MP11?*
++
+Metaprogramming with boost:mp11[] can lead to complex and difficult-to-understand code, especially for programmers unfamiliar with the technique. Compile errors can be particularly cryptic due to the way templates are processed. Additionally, heavy use of templates can lead to longer compile times.
++
+Other challenges include lack of runtime flexibility, as decisions are made at compile time. And perhaps issues with portability can occur (say, between compilers) as metaprogramming pushes the boundaries of a computer language to its limits.
+
+NOTE: boost:mp11[] supersedes the earlier boost:mpl[] and boost:preprocessor[] libraries.
 
 == Releases
 
@@ -330,4 +348,9 @@ void sort(T* array, int size) {
 ----
 +
 This function can now be used to sort arrays of any type (that supports the `<` and `>` operators), not just a specific type.
+
+== See Also
+
+* xref:explore-the-content.adoc[]
+* xref:resources.adoc[]
 

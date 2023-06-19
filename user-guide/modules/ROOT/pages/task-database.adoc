@@ -3,12 +3,7 @@
 
 Creating a high-performance database application in pass:[C++] involves a range of tasks, including network communication, concurrent programming, memory management, and more. Here are some Boost libraries that might be useful:
 
-[circle]
-* boost:mysql[]: This library is built on top of boost:asio[], and provides a pass:[C++]11 client for the https://www.mysql.com/[MySQL] and https://mariadb.com/[MariaDB] database servers. As a library it is most useful when your app needs efficient and asynchronous access to one of these servers. 
-
 * boost:asio[] : Provides a consistent asynchronous model using a modern pass:[C++] approach for network and low-level I/O programming. It supports a variety of network protocols, which could be helpful if your database needs to communicate over a network.
-
-* https://github.com/boostorg/redis[Boost.Redis]: Redis (which stands for _Remote Dictionary Server_) is a popular in-memory data structure store, used in database, cache, and message broker applications. This library implements Redis https://redis.io/docs/reference/protocol-spec/[plain text protocol RESP3]. It can multiplex any number of client requests, responses, and server pushes onto a single active socket connection to the Redis server.
 
 * boost:container[] : Provides STL-compatible containers, including stable vector, flat set/map and more. The containers provided by this library can offer performance benefits over their standard library equivalents, making them a good fit for a high-performance database application.
 
@@ -29,5 +24,3 @@ Creating a high-performance database application in pass:[C++] involves a range 
 * boost:pool[] : This library is used for simple, fast memory allocation and can improve efficiency in some scenarios by managing memory in chunks.
 
 * boost:smart_ptr[] : It provides smart pointer class templates, which can be very helpful in managing resources and preventing memory leaks.
-
-

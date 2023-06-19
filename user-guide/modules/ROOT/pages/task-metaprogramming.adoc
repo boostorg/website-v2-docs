@@ -7,8 +7,7 @@ Metaprogramming in pass:[C++] is a complex topic that can lead to complex code. 
 
 == Libraries
 
-[circle]
-* boost:mpl[]:  A Metaprogramming library that provides a framework of compile-time algorithms, sequences and metafunctions, that can greatly facilitate metaprogramming tasks.
+* boost:mp11[]:  A Metaprogramming library that provides a framework of compile-time algorithms, preprocessor directives, sequences and metafunctions, that can greatly facilitate metaprogramming tasks.
 
 * boost:fusion[]:  Provides a set of tools for working with tuples, which can be used to work with heterogeneous collections at compile time. It helps to bridge the gap between the compile-time world and the runtime world.
 
@@ -18,7 +17,7 @@ Metaprogramming in pass:[C++] is a complex topic that can lead to complex code. 
 
 * boost:static-assert[]:  Provides a macro for compile-time assertions. This can be useful in metaprogramming to enforce constraints at compile time.
 
-* boost:preprocessor[]:  Provides tools for manipulating preprocessor directives, which can be useful in certain metaprogramming tasks.
+NOTE: boost:mpl[] and boost:preprocessor[], both still available in the Boost library, have been superseded by boost:mp11[].
 
 == Metaprogramming Applications
 
