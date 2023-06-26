@@ -1,0 +1,4 @@
+= Best Practices
+:navtitle: Best Practices
+
+*Content under construction*

@@ -33,6 +33,7 @@ After clicking *New Issue*, you will see a list of issue templates, such as *Sub
 
 Whichever list you add your issue to, the issue will be addressed in due course. Providing full details, and examples and screenshots where appropriate, should give you the quicker response.
 
+[#contribute]
 == Contribute to an Existing Library
 
 Rather than report an issue, or suggested improvement, and wait for another developer to address it, you can make the code changes yourself (after verifying with the library admins that they are open to updates). To be successful you will need to be familiar with GitHub, and obviously a competent pass:[C++] developer. After finding the issue, you will need to go to the GitHub repository for that library, and create a fork and clone the library.

@@ -9,14 +9,48 @@ If you come across a bug, or other issue, with one of the libraries, go through 
 
 . https://github.com/boostorg/boost/issues[Search the issues] on GitHub to make sure we don't already know about the bug. If we do, you can certainly add further information to an existing bug ticket.
 
-. If the bug has not been fixed already, and there is no relevant issue, then https://github.com/boostorg/boost/issues/new[Create a New Issue], either in the repository of the particular library of interest, or in the boost super-project.
+. If the bug has not been fixed already, and there is no relevant issue, then report it.
 
-If possible,
+== Bug and Issue Reporting
 
-[disc]
-* Describe the problem carefully, including steps required to reproduce it by a library maintainers.
+The repositories use the built-in GitHub issue tracker. With Boost, users are encouraged to use the issue tracker for discussions and feature requests, as well as to report bugs and other issues.
 
-* Attach a _minimal_ and _complete_ program that reproduces the problem. Aside from helping the library maintainer fix the problem, you may find the bug in your own code, which can avoid a costly delay waiting for a response.
+To report an issue, locate the *New Issue* button in the repo for the library. For example, https://github.com/boostorg/json/issues for the boost:json[] library.
+
+When reporting a bug or issue, you might be offered a range of templates to choose from to guide your filing. If there is no template to follow, cut-and-paste the following into the text field for the issue, and replace the text in italics with appropriate details.
+
+[source,markdown]
+----
+### Version of Boost
+
+_Enter the Boost version number, such as `1.82.0`._
+
+### Actual and Expected Behavior
+
+_Describe the result you got, and what you consider the result should be._
+
+_Attach a _minimal_ and _complete_ program that reproduces the problem._
+
+_Aside from helping the library maintainer fix the problem, you may find the bug in your own code, which can avoid a costly delay waiting for a response._
+
+### Steps necessary to reproduce the problem
+
+_Describe the problem carefully, including steps required to reproduce it by library maintainers._
+
+_A small compiling program is the best. If your code is public, you can provide a link to the repository._
+
+### All relevant compiler information
+
+_If you are unable to compile include the type and version of compiler you are using as well as all compiler output including the error message, file, and line numbers involved._
+----
+
+The more information you provide the sooner your issue can get resolved.
+
+Note:: Currently, the Boost Super-project does not use the GitHub Discussion feature. If filing an issue does not seem appropriate, post on the https://lists.boost.org/mailman/listinfo.cgi/boost[Boost developers mailing list].
+
+== See Also
+
+For information on issues from the library contributor's perspective, refer to xref:contributor-guide:ROOT:version-control.adoc[].
 
 
 

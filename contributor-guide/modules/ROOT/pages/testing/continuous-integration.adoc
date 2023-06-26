@@ -1,3 +1,149 @@
 = Continuous Integration
 
-*Content under construction.*
+The Boost project uses Continuous Integration (CI) to ensure the quality and integrity of its code. CI is the practice of merging all developers' working copies to a shared mainline several times a day. The main aim is to prevent integration problems, which are detected and can be fixed as early as possible.
+
+Boost uses several CI services for testing on different platforms and compilers. Many libraries use two or three of the systems described here, as does the https://github.com/boostorg/boost/tree/master[Super-project] itself.
+
+Note:: It is a requirement for a new library submission to Boost to include an appropriate CI system. Refer to the examples for each CI system to better understand what is involved.
+
+== GitHub Actions
+
+Boost has been incorporating GitHub Actions into its testing workflows. This is a Continuous Integration/Continuous Deployment (CI/CD) system platform provided directly by GitHub. It can run tests on a variety of platforms and configurations. Here's a basic outline of how GitHub Actions works for Boost:
+
+. GitHub Actions use YAML files stored in a directory called `.github/workflows/` at the root of the repository to define the build environment and steps. For instance, a workflow file might specify which operating systems and compilers to use, any dependencies to install, and the commands to run for building and testing the code.
+
+. When changes are pushed to the repository, or at scheduled intervals, GitHub Actions automatically initiates the actions defined in the workflow file. This might include building the project and running the test suite.
+
+. After the workflow runs, GitHub Actions reports the result. If any step in the workflow fails, the failure is reported, which helps developers to quickly identify and address issues. The status of each workflow run is displayed on the GitHub interface, allowing anyone to quickly check the status of the project.
+
+Boost also uses GitHub Actions support for matrix builds (allowing Boost to run the same build steps on multiple combinations of operating systems, compilers, etc.), caching of dependencies to speed up builds, and the ability to create custom actions.
+
+=== Example GitHub Workflows
+
+Refer to:
+
+* https://github.com/boostorg/boost/blob/master/.github/workflows/ci.yml[Super-project ci.yml]
+* https://github.com/boostorg/boost/blob/master/.github/workflows/release.yml[Super-project release.yml]
+* https://github.com/boostorg/align/blob/5ad7df63cd792fbdb801d600b93cad1a432f0151/.github/workflows/ci.yml[Align library ci.yml]
+* https://github.com/boostorg/coroutine2/blob/d7e1c1c4abcf8c1e90097279e485edea0b253a80/.github/workflows/ci.yml[Coroutine2 ci.yml]
+* https://github.com/boostorg/mp11/blob/ef7608b463298b881bc82eae4f45a4385ed74fca/.github/workflows/ci.yml[Mp11 library ci.yml]
+
+=== GitHub Actions Reference
+
+* https://docs.github.com/en/actions/using-workflows/workflow-syntax-for-github-actions[Workflow syntax for GitHub Actions]
+
+== Drone
+
+Drone is an open-source CI system built on container technology. Each step in a Drone build usually runs in its own Docker container, allowing it to use any language, tool, or service that can run inside a Docker container. This offers excellent environment consistency and isolation between steps. You can run your Drone pipelines locally on your machine for testing purposes before pushing changes to your repository.
+
+. Drone uses a file named `.drone.jsonnet` or `.drone.star`, and a `.drone` folder, at the root of the repository to define the build pipeline, including the environment, build steps, and notification settings. The environment is typically a Docker container, allowing for a high degree of flexibility and customization.
+
+. When changes are pushed to the repository, Drone automatically runs the build pipeline defined in the `.drone` file. This  involves building the software and running a suite of tests.
+
+. After the pipeline finishes, Drone reports the results. If any step fails, developers can be notified immediately, helping to catch and fix issues early. The status of each pipeline run can also be seen on the Drone dashboard and optionally on the GitHub interface.
+
+Drone also includes support for matrix builds, secrets management (for handling sensitive data), and plugins (for extending functionality).
+
+=== Example .drone Files
+
+Refer to:
+
+* https://github.com/boostorg/smart_ptr/blob/13be03abf880cdb616d0597c38880f53f1b415b8/.drone.jsonnet[Smart Pointer library .drone.jsonnet]
+
+* https://github.com/boostorg/type_traits/blob/89f5011b4a79d91e42735670e39f72cb25c86c72/.drone.star[Type Traits library .drone.star]
+
+* https://github.com/boostorg/variant2/blob/e2546b70ca04d4263f7a5917815506e488b6920f/.drone.jsonnet[Variant2 library .drone.jsonnet]
+
+* https://github.com/boostorg/unordered/blob/9a7d1d336aaa73ad8e5f7c07bdb81b2e793f8d93/.drone.jsonnet[Unordered library .drone.jsonnet]
+
+* https://github.com/boostorg/yap/blob/ae49bf2744586e6bd6c0cedff4500a58a4386860/.drone.star[Yap library .drone.star]
+
+=== Drone Reference
+
+* https://docs.drone.io/[Drone Documentation]
+
+
+== Travis CI
+
+Travis CI is used for testing on Linux and macOS environments. It is a hosted, distributed continuous integration service used to build and test software projects hosted at GitHub. Here's the overall process:
+
+. Travis CI uses a file named `.travis.yml` in the root of the repository to define the build environment and the build steps. This file lists the operating systems and compilers to use, any dependencies to install, and the commands to run for building and testing the code.
+
+. Whenever changes are pushed to the repository on GitHub, Travis CI automatically initiates a build and runs the tests according to the instructions in `.travis.yml`. Boost libraries usually have extensive test suites, and Travis CI helps ensure that changes do not break existing functionality.
+
+. After each build, Travis CI reports the results. If the build or any tests fail, it can notify the developers so that they can fix the issue. On GitHub, the status of the latest build is shown next to each commit, so anyone can quickly see whether the current version of the code is passing all tests.
+
+Boost also uses Travis CI's features for more complex workflows, using the matrix feature to test code with multiple versions of compilers or dependencies, and uses stages to structure their build pipeline into phases like *build*, *test*, and *deploy*.
+
+=== Example .travis.yml Files
+
+Refer to:
+
+* https://github.com/boostorg/boost/blob/master/.travis.yml[Super-project .travis.yml]
+* https://github.com/boostorg/coroutine2/blob/d7e1c1c4abcf8c1e90097279e485edea0b253a80/.travis.yml[Coroutine2 library .travis.yml]
+* https://github.com/boostorg/fiber/blob/2cb72f5dcefdeffbb36636234e6ccb36282f8ae3/.travis.yml[Fiber library .travis.yml]
+* https://github.com/boostorg/iostreams/blob/5fe4de84f863964f7573be1146f524886146a5d3/.travis.yml[IOStreams library .travis.yml]
+
+=== Travis CI Reference
+
+* https://docs.travis-ci.com/user/for-beginners/[Travis CI Core Concepts]
+
+== AppVeyor
+
+AppVeyor is used for testing on Windows. It is a continuous integration service which can be configured to build projects for various systems, including MSVC, MinGW, and Cygwin. The overall process is:
+
+. AppVeyor uses a file named `appveyor.yml` in the root of the repository to define the build environment and the steps for building and testing. This file describes which Windows images to use, any dependencies that need to be installed, and the commands to run for building and testing the code.
+
+. When changes are pushed to the GitHub repository, AppVeyor automatically initiates a build and runs the tests according to the instructions in `appveyor.yml`. The goal of this is to catch and fix any failures or issues that occur in the Windows environment.
+
+. After each build, AppVeyor reports the result. If the build or any tests fail, it notifies the developers, allowing them to address the issues. The status of the latest build can also be seen on GitHub, providing an at-a-glance view of the code's health.
+
+AppVeyor also supports parallel testing, a build cache to speed up builds, and the ability to deploy built artifacts.
+
+=== Example appveyor.yml Files
+
+Refer to:
+
+* https://github.com/boostorg/boost/blob/master/appveyor.yml[Super-project appveyor.yml]
+* https://github.com/boostorg/beast/blob/c316c6bd3571991aeac65f0fc35fca9067bc7906/appveyor.yml[Beast library appveyor.yml]
+* https://github.com/boostorg/iostreams/blob/5fe4de84f863964f7573be1146f524886146a5d3/appveyor.yml[IOStreams library appveyor.yml]
+* https://github.com/boostorg/mp11/blob/ef7608b463298b881bc82eae4f45a4385ed74fca/appveyor.yml[Mp11 library appveyor.yml]
+
+=== Appveyor Reference
+
+* https://www.appveyor.com/docs/[Welcome to Appveyor]
+
+
+== CircleCI
+
+CircleCI is a CI/CD platform that supports a wide range of languages, tools, and services, making it flexible for different testing requirements. It is less commonly used than <<Travis CI>> or <<AppVeyor>>, but is used by the Super-project and a few libraries.
+
+. CircleCI uses a file named `config.yml` stored in a directory called `.circleci` at the root of the repository. This file defines the build environment and steps, such as which Docker images to use, dependencies to install, and the commands for building and testing.
+
+. Upon changes being pushed to the repository or on a schedule, CircleCI automatically executes the instructions in the `config.yml` file. This usually includes building the project and running the test suite.
+
+. After the workflow completes, CircleCI reports the results. If any part of the workflow fails, developers are notified, which allows them to address the issues swiftly. The status of the workflow run is visible on the GitHub interface, providing at-a-glance insights into the project's health.
+
+CircleCI also supports parallel testing, caching of dependencies, and matrix builds.
+
+=== Example config.yml Files
+
+Refer to:
+
+* https://github.com/boostorg/boost/blob/master/.circleci/config.yml[Super-project config.yml]
+* https://github.com/boostorg/beast/blob/c316c6bd3571991aeac65f0fc35fca9067bc7906/.circleci/config.yml[Beast library config.yml]
+* https://github.com/boostorg/geometry/blob/2ec9d65d1294edb97157b564726fdf56b6ac562f/.circleci/config.yml[Geometry library config.yml]
+* https://github.com/boostorg/multiprecision/blob/380aae3c28c646ea2ca1b42156d83732295082d7/.circleci/config.yml[Multiprecision library config.yml]
+
+=== CircleCI Reference
+
+* https://circleci.com/developer[Welcome to CircleCI]
+
+
+== Other CI Systems
+
+Other CI systems can be implemented by library developers. For example, https://learn.microsoft.com/en-us/azure/devops/pipelines/?view=azure-devops[Azure Pipelines] is a cloud service provided by Microsoft to automatically build, test, and deploy applications.
+
+== See Also
+
+* xref:version-control.adoc[]
