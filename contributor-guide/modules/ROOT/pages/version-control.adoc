@@ -1,4 +1,145 @@
-= Version Control (Git)
+= Version Control
 :navtitle: Version Control
 
-*Content under construction.*
+Boost uses the Git version control system for its development. This allows multiple contributors to work on the libraries concurrently, while keeping track of the changes that each person makes. Git is a distributed version control system, which means each contributor has their own local copy of the entire project, including its history.
+
+== Library Repositories
+
+The Boost libraries are modular, and each library has its own separate repository.  This makes it easier to work with the entire collection of Boost libraries.
+
+The official Boost repositories are hosted in GitHub under the https://github.com/boostorg/[] account. Each library has its own repository under this organization. For example, https://github.com/boostorg/json for boost:json[], or https://github.com/boostorg/date_time/ for boost:date_time[].
+
+As with any Git-based project, you can clone the repositories, make changes, commit those changes to your local repository, and push your changes back to the server. If you want to contribute changes to the official Boost libraries, refer to xref:getting-involved.adoc#contribute[Contribute to an Existing Library].
+
+== The Super-project Repository
+
+The Boost https://github.com/boostorg/boost[*Super-project*] repository includes all the libraries as submodules.
+
+In addition to the libraries, you'll find many other repositories under `boostorg` that handle other tasks, for example:
+
+* https://github.com/boostorg/boost/tree/master/tools[boost/tools] includes B2 sources in https://github.com/boostorg/build/tree/bc381862203c9de80d552d93539a1168664e0243[build], and https://github.com/boostorg/cmake[CMake support]
+* https://github.com/boostorg/release-tools[Release tools]
+
+The Super-project has both *master* and *develop* branches, which operate somewhat differently than for individual libraries. 
+
+New features are added and bugs are fixed in library *develop* branches. When the *develop* branch passes its' merging criteria (xref:testing/continuous-integration.adoc[], projects are built correctly, other test processes run without errors, etc.), it is merged with the library *master* branch. 
+
+For the Super-project, the *develop* and *master* branches are independent. Both branches track the latest changes in the corresponding library branch, for all libraries. The Super-project branches are never merged, as this strategy prevents merging. In other words, the Super-project *master* branch is created from the library *master* branches, not from the Super-project *develop* branch (which is primarily used for testing).
+
+When there is a public release of Boost, it is built from the *master* branch after that branch has been closed to updates (refer to the xref:release-process.adoc[]).
+
+=== Working with the Super-project
+
+Usually, a submodule in the Super-project will be created for a library developer by a staff member of Boost.
+
+* Recall that, in Git, when a submodule is added to a project, the submodule references a particular commit. This means that, when developers update their sub-projects, the Super-project _doesn't_ get immediately updated. For this reason, there is a commit bot that runs nightly and updates the commit to which each submodule references in the Super-project. This happens for both the *develop* and *master* branches. 
+
+* As you update your library, and the Super-project *develop* branch is updated by the commit bot, you may affect other developers. For example, if a mistake is made to the MySQL library *develop* branch, then it will affect the CMake module, because this module runs tests to verify that you can use MySQL via CMake.
+
+* As part of Boost testing, xref:testing/continuous-integration.adoc[] (CI) usually clones the Super-project and any required submodules. 
+
+** When testing any branch that is _not_ *master*, the *develop* branch of the Super-project is cloned. 
+** When you're testing *master* (which could be for a release), the *master* branch of the Super-project is cloned. 
++
+While this cloning process is not a _requirement_, most libraries follow it.
+
+If you need to look at the code for the 1.82.0 release, navigate to the relevant repo, and enter:
+
+[source,text]
+----
+git checkout boost-1.82.0 
+----
+
+NOTE:: Developers don't directly create Tags under repositories, when working with Boost. Tags are created by the release scripts, both in the Super-project and the individual repos, so do not add any of your own. This differs from the usual workflow in other non-Boost projects.
++
+
+
+== Breaking Changes
+
+Boost maintains its release versions with https://github.com/boostorg/boost/tags[Tags], where the tag is always the `boost-` prefix followed by a `major.minor.patch` number string that matches the https://semver.org/[Semantic Versioning] string format. The string format is useful because it's something many tools understand, and for most users who just want to find a certain Boost version, that's enough information. However, there is a unique Boost interpretation of the string. 
+
+=== Major Version
+
+Boost has not to date increased its' _major_ version number. This is reserved for when something "big" happens, not for feature improvements nor API breaks.
+
+=== Minor Version
+
+While library maintainers try hard not to break anything, the _minor_ version is increased when:
+
+    * Three months have passed since the last release.
+    * New features have been added because they always are.
+    * A few things might have been broken. Details on new features and discontinued features have to be consulted in the individual libraries' xref:release-notes.adoc[Release Notes]. 
+
+=== Patch Version
+
+The _patch_ number is rarely used, but will be incremented from zero if there is a need for a quick update following a scheduled release. For example, `boost-1.65.1` followed less than one month after `boost-1.65.0`. 
+
+=== Planning for Breaking Changes
+
+One thing library maintainers do to mitigate problems is announce their intention to break something two releases (or six months) in advance. Some maintainers keep a parallel versioning system for their library, for example: 
+
+* https://github.com/boostorg/filesystem/blob/7bb038fcb887442e05619db6f48efc9df71c1fc3/include/boost/filesystem/config.hpp#L23-L25[File system config]
+* https://github.com/boostorg/beast/blob/af5240f6f1a15ba328c763f2c505a60a3cbcb555/CMakeLists.txt#L86[Beast CMakeLists]
+
+Ultimately though, even after checking both a library readme file, and for library announcements, some testing may be necessary to be certain of whether a breaking change occurred, or not.
+
+## Bugs, Issues, Feature Requests and Discussions
+
+The repositories use the built-in GitHub issue tracker. With Boost, users are encouraged to use the issue tracker for discussions and feature requests, as well as to report bugs and other issues.
+
+Consider creating custom templates for your library. The goal of these templates is to ensure that contributors provide enough context and information that you, and the other library authors and maintainers, can understand and reproduce the issue, or fully understand what is being discussed.
+
+### How to Create an Issue Template
+
+Creating an issue template in GitHub can help guide contributors to provide the necessary information when they create new issues with your library.
+
+Here are the steps to create an issue template:
+
+. Navigate to the main page of your repository.
+
+. In the menu bar (`Code`, `Pull Requests`, etc.), click on `Settings`.
+
+. In the `Features` section, ensure that the `Issues` checkbox is selected.
+
+. In the section `Get organized with issue templates`, click on `Set up templates`.
+
+. Click on the down arrow of `Add template: select`, then select `Custom template`. 
+
+. Click on `Preview and edit` for your custom template. Then select the pen icon to bring up the template fields.
+
+. Give your template a descriptive name, perhaps the name of your library followed by "feature request", "performance issue", "bug report" or "discussion". Remember you can enter as many templates as you think appropriate.
+
+. Give the template a full description in the `About` box.
+
+. Then add the meat of the template to the `Template content`. Consider adding the following, in the form of Markdown syntax and example text, to ask your users to enter:
+
+** Boost version number
+** The OS, compiler, hardware they are using
+** A brief summary of the issue/request/discussion topic
+** In the case of a bug or issue: 
+*** Steps to reproduce the issue
+*** Expected behavior
+*** Actual behavior
+*** Screenshots, error messages, output
+** In the case of a feature request or discussion:
+*** Accurately describe the purpose of the request (the use case, not the implementation)
+*** Describe what they are currently doing to address the issue
+** Any other relevant context or information
+
+. Add the `Optional additional items` if they fit the purpose of the template, and perhaps add yourself as one of the `Assignees`.
+
+. When you're done editing, at the top right of the page, click `Propose changes`.
+
+. Click `Commit changes` and create a Pull Request to update your repo.
+
+Once the template is added, users who create new issues in your repository can choose to use one of your templates.
+
+Note:: Currently, the Boost Super-project does not use the GitHub Discussion feature. If filing an issue does not seem appropriate, users are encouraged to post on the https://lists.boost.org/mailman/listinfo.cgi/boost[Boost developers mailing list].
+
+== See Also
+
+For the user's perspective on issues, refer to xref:user-guide:ROOT:reporting-issues.adoc[].
+
+* xref:testing/continuous-integration.adoc[]
+* xref:release-notes.adoc[]
+* xref:release-process.adoc[]

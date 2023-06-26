@@ -2,8 +2,8 @@
 name: Submit a Correction or Bug report
 about: This is for typos, grammar, formatting, UI, HTML, or CSS style problems.
 title: ''
-labels: Bug
-assignees: vinniefalco
+labels: ''
+assignees: ''
 
 ---
 

@@ -16,6 +16,14 @@
 ** xref:design-guide/dependencies.adoc[]
 ** xref:design-guide/borland.adoc[]
 
+* Development
+** xref:version-control.adoc[]
+** xref:best-practices.adoc[]
+
+* Build Systems
+** xref:build-systems/cmake.adoc[]
+** xref:build-systems/b2.adoc[]
+
 * Testing
 ** xref:testing/intro.adoc[]
 ** xref:testing/boost-test-matrix.adoc[]
@@ -37,11 +45,6 @@
 *** xref:docs/templates/07-bibliography-template.adoc[]
 *** xref:docs/templates/08-acknowledgements-template.adoc[]
 
-* Build Systems
-** xref:build-systems/cmake.adoc[]
-** xref:build-systems/b2.adoc[]
-
 * Releases
-** xref:version-control.adoc[]
 ** xref:release-process.adoc[]
 ** xref:release-notes.adoc[]
