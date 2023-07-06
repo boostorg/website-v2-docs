@@ -32,7 +32,7 @@ When there is a public release of Boost, it is built from the *master* branch af
 
 Usually, a submodule in the Super-project will be created for a library developer by a staff member of Boost.
 
-* Recall that, in Git, when a submodule is added to a project, the submodule references a particular commit. This means that, when developers update their sub-projects, the Super-project _doesn't_ get immediately updated. For this reason, there is a commit bot that runs nightly and updates the commit to which each submodule references in the Super-project. This happens for both the *develop* and *master* branches. 
+* Recall that, in Git, when a submodule is added to a project, the submodule references a particular commit. This means that, when developers update their sub-projects, the Super-project _doesn't_ get immediately updated. For this reason, there is a commit bot that runs every 15 minutes and updates the commit to which each submodule references in the Super-project. This happens for both the *develop* and *master* branches. 
 
 * As you update your library, and the Super-project *develop* branch is updated by the commit bot, you may affect other developers. For example, if a mistake is made to the MySQL library *develop* branch, then it will affect the CMake module, because this module runs tests to verify that you can use MySQL via CMake.
 

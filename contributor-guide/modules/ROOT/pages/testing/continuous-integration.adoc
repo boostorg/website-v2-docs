@@ -1,42 +1,76 @@
 = Continuous Integration
 
-The Boost project uses Continuous Integration (CI) to ensure the quality and integrity of its code. CI is the practice of merging all developers' working copies to a shared mainline several times a day. The main aim is to prevent integration problems, which are detected and can be fixed as early as possible.
+
+The Boost project uses Continuous Integration(CI) to ensure the quality and integrity of its code. CI is the practice of merging all developers' working copies into a shared mainline several times a day. The main aim is to prevent integration issues, which can be identified and addressed as early as possible.
 
 Boost uses several CI services for testing on different platforms and compilers. Many libraries use two or three of the systems described here, as does the https://github.com/boostorg/boost/tree/master[Super-project] itself.
 
-Note:: It is a requirement for a new library submission to Boost to include an appropriate CI system. Refer to the examples for each CI system to better understand what is involved.
+Notes:: It is a requirement for a new library submission to Boost to include an appropriate CI system. Refer to the examples for each CI system to better understand what is involved.
++
+Currently, Boost _does not_ use Continuous Deployment(CD) - the release schedule is fixed and libraries are not continuously updated. This is to ensure complete testing and code reliability before any release for public use.
+
+== New Library CI Framework
+
+A recommended process to start a new Boost library is to clone the contents of the https://github.com/boostorg/boost-ci/tree/master[boost-ci] repo. This repo contains the basic CI framework for a new library. Clone it, then adjust and edit it appropriately.
+
+This repository contains scripts that enable CI with:
+
+* <<GitHub Actions>>
+* <<Drone>>
+* <<Travis CI>>
+* <<AppVeyor>>
+* <<Codecov.io>>
+* <<Azure Pipelines>>
+* <<Coverity Scan>>
+
+For step-by-step processes, and tables of supported compilers, refer to the https://github.com/boostorg/boost-ci/blob/master/README.md[boost-ci README.md].
+
+=== Testing Trouble Spots
+
+There are a few areas of CI testing that are fairly unique to Boost, and can present difficulties to newcomers:
+
+. You test with the xref:version-control#_the_super-project_repository[Super-project], cloning it and placing your library inside a submodule. This is unique to Boost, you might expect to consume Boost as a dependency, but this is not how it works.
+. You test with the *develop* or *master* branches of xref:version-control.adoc#_the_super_project_repository[the Super-project Repository], not with the latest stable release.
+. The CMake workflows are not trivial, nor are they the usual CMake steps.
+
+When tackling CI issues, it is expected that you will ask questions on the https://lists.boost.org/mailman/listinfo.cgi/boost[Boost developers mailing list].
 
 == GitHub Actions
 
-Boost has been incorporating GitHub Actions into its testing workflows. This is a Continuous Integration/Continuous Deployment (CI/CD) system platform provided directly by GitHub. It can run tests on a variety of platforms and configurations. Here's a basic outline of how GitHub Actions works for Boost:
+Boost has been incorporating https://docs.github.com/en/actions/using-workflows/workflow-syntax-for-github-actions[GitHub Actions] into its testing workflows. This is a CI/CD system platform provided directly by GitHub. It can run tests on a variety of platforms and configurations. Here's a basic outline of how GitHub Actions works for Boost:
 
-. GitHub Actions use YAML files stored in a directory called `.github/workflows/` at the root of the repository to define the build environment and steps. For instance, a workflow file might specify which operating systems and compilers to use, any dependencies to install, and the commands to run for building and testing the code.
+. GitHub Actions uses YAML files stored in a directory called `.github/workflows/` at the root of the repository to define the build environment and steps. For instance, a workflow file might specify which operating systems and compilers to use, any dependencies to install, and the commands to run for building and testing the code.
 
 . When changes are pushed to the repository, or at scheduled intervals, GitHub Actions automatically initiates the actions defined in the workflow file. This might include building the project and running the test suite.
 
 . After the workflow runs, GitHub Actions reports the result. If any step in the workflow fails, the failure is reported, which helps developers to quickly identify and address issues. The status of each workflow run is displayed on the GitHub interface, allowing anyone to quickly check the status of the project.
 
-Boost also uses GitHub Actions support for matrix builds (allowing Boost to run the same build steps on multiple combinations of operating systems, compilers, etc.), caching of dependencies to speed up builds, and the ability to create custom actions.
+Boost also uses GitHub Actions support for _matrix builds_ (allowing Boost to run the same build steps on multiple combinations of operating systems, compilers, etc.), caching of dependencies to speed up builds, and the ability to create custom actions.
+
+Note:: As there are a lot of libraries under `boostorg`, the quota of GitHub Actions can be reached, and they can take some time to complete.
 
 === Example GitHub Workflows
 
 Refer to:
 
-* https://github.com/boostorg/boost/blob/master/.github/workflows/ci.yml[Super-project ci.yml]
-* https://github.com/boostorg/boost/blob/master/.github/workflows/release.yml[Super-project release.yml]
 * https://github.com/boostorg/align/blob/5ad7df63cd792fbdb801d600b93cad1a432f0151/.github/workflows/ci.yml[Align library ci.yml]
 * https://github.com/boostorg/coroutine2/blob/d7e1c1c4abcf8c1e90097279e485edea0b253a80/.github/workflows/ci.yml[Coroutine2 ci.yml]
 * https://github.com/boostorg/mp11/blob/ef7608b463298b881bc82eae4f45a4385ed74fca/.github/workflows/ci.yml[Mp11 library ci.yml]
-
-=== GitHub Actions Reference
-
-* https://docs.github.com/en/actions/using-workflows/workflow-syntax-for-github-actions[Workflow syntax for GitHub Actions]
+* https://github.com/boostorg/url/blob/f06f595ae760b6626764b8a01e3f8197b4016d6f/.github/workflows/ci.yml[URL library ci.yml] - contains an extensive test matrix
 
 == Drone
 
-Drone is an open-source CI system built on container technology. Each step in a Drone build usually runs in its own Docker container, allowing it to use any language, tool, or service that can run inside a Docker container. This offers excellent environment consistency and isolation between steps. You can run your Drone pipelines locally on your machine for testing purposes before pushing changes to your repository.
+https://docs.drone.io/[Drone] is an open-source CI system built on container technology. Each step in a Drone build usually runs in its own Docker container, allowing it to use any language, tool, or service that can run inside a Docker container. This offers excellent environment consistency and isolation between steps. You can run your Drone pipelines locally on your machine for testing purposes before pushing changes to your repository.
 
-. Drone uses a file named `.drone.jsonnet` or `.drone.star`, and a `.drone` folder, at the root of the repository to define the build pipeline, including the environment, build steps, and notification settings. The environment is typically a Docker container, allowing for a high degree of flexibility and customization.
+Drone can use a simple YAML configuration file, `.drone.yml`, placed at the root of your git repository. However, as pipelines grow in complexity, managing them with YAML can become challenging. This is where `.drone.jsonnet` and .`drone.star` files come in, which are associated with the https://jsonnet.org/[Jsonnet] and https://github.com/bazelbuild/starlark[Starlark] scripting languages respectively. They both serve the purpose of creating more dynamic, reusable, and maintainable pipeline configurations.
+
+* https://jsonnet.org/[Jsonnet] is a data templating language for app configuration. It is a superset of JSON and allows for custom scripting to dynamically produce JSON (and by extension, YAML). With `.drone.jsonnet`, you can create advanced pipeline configurations that aren't feasible with static YAML files.
+
+* https://github.com/bazelbuild/starlark[Starlark] is a Python-inspired language that was created by Google and is used for configuring Bazel build systems. Similar to Jsonnet, it allows you to create more complex and maintainable pipeline configurations.
+
+Both Jsonnet and Starlark allow you to use logic like conditionals and loops in your configuration files, making them a powerful tool for complex CI/CD pipelines. If you have solid Python experience, for example, Starlark's Python-like syntax might be a better choice. If you're working in a JSON-heavy environment, Jsonnet might be more suitable.
+
+. Drone uses a file named `.drone.yml`, `.drone.jsonnet` or `.drone.star`, and a `.drone` folder, at the root of the repository to define the build pipeline, including the environment, build steps, and notification settings. The environment is typically a Docker container, allowing for a high degree of flexibility and customization.
 
 . When changes are pushed to the repository, Drone automatically runs the build pipeline defined in the `.drone` file. This  involves building the software and running a suite of tests.
 
@@ -44,28 +78,31 @@ Drone is an open-source CI system built on container technology. Each step in a 
 
 Drone also includes support for matrix builds, secrets management (for handling sensitive data), and plugins (for extending functionality).
 
-=== Example .drone Files
+Note:: Drone will not be available to a new library developer until the project is whitelisted. This whitelisting is not required for <<GitHub Actions>> and for the other CI systems listed in this section. Refer to https://github.com/CPPAlliance/drone-ci[Drone-ci] for specific details.
+
+=== Example .drone.jsonnet Files
 
 Refer to:
 
 * https://github.com/boostorg/smart_ptr/blob/13be03abf880cdb616d0597c38880f53f1b415b8/.drone.jsonnet[Smart Pointer library .drone.jsonnet]
 
-* https://github.com/boostorg/type_traits/blob/89f5011b4a79d91e42735670e39f72cb25c86c72/.drone.star[Type Traits library .drone.star]
-
 * https://github.com/boostorg/variant2/blob/e2546b70ca04d4263f7a5917815506e488b6920f/.drone.jsonnet[Variant2 library .drone.jsonnet]
 
 * https://github.com/boostorg/unordered/blob/9a7d1d336aaa73ad8e5f7c07bdb81b2e793f8d93/.drone.jsonnet[Unordered library .drone.jsonnet]
 
+=== Example .drone.star Files
+
+Refer to:
+
+* https://github.com/boostorg/exception/blob/b039b4ea18ef752d0c1684b3f715ce493b778060/.drone.star[Exception library .drone.star]
+
+* https://github.com/boostorg/type_traits/blob/89f5011b4a79d91e42735670e39f72cb25c86c72/.drone.star[Type Traits library .drone.star]
+
 * https://github.com/boostorg/yap/blob/ae49bf2744586e6bd6c0cedff4500a58a4386860/.drone.star[Yap library .drone.star]
-
-=== Drone Reference
-
-* https://docs.drone.io/[Drone Documentation]
-
 
 == Travis CI
 
-Travis CI is used for testing on Linux and macOS environments. It is a hosted, distributed continuous integration service used to build and test software projects hosted at GitHub. Here's the overall process:
+https://docs.travis-ci.com/user/for-beginners/[Travis CI] is used for testing on Linux and macOS environments. It is a hosted, distributed continuous integration service used to build and test software projects hosted at GitHub. Here's the overall process:
 
 . Travis CI uses a file named `.travis.yml` in the root of the repository to define the build environment and the build steps. This file lists the operating systems and compilers to use, any dependencies to install, and the commands to run for building and testing the code.
 
@@ -75,22 +112,19 @@ Travis CI is used for testing on Linux and macOS environments. It is a hosted, d
 
 Boost also uses Travis CI's features for more complex workflows, using the matrix feature to test code with multiple versions of compilers or dependencies, and uses stages to structure their build pipeline into phases like *build*, *test*, and *deploy*.
 
+Note:: Although a fair number of libraries use Travis CI, it is not recommended for new libraries, due to some instances of stalling test builds.
+
 === Example .travis.yml Files
 
 Refer to:
 
-* https://github.com/boostorg/boost/blob/master/.travis.yml[Super-project .travis.yml]
 * https://github.com/boostorg/coroutine2/blob/d7e1c1c4abcf8c1e90097279e485edea0b253a80/.travis.yml[Coroutine2 library .travis.yml]
 * https://github.com/boostorg/fiber/blob/2cb72f5dcefdeffbb36636234e6ccb36282f8ae3/.travis.yml[Fiber library .travis.yml]
 * https://github.com/boostorg/iostreams/blob/5fe4de84f863964f7573be1146f524886146a5d3/.travis.yml[IOStreams library .travis.yml]
 
-=== Travis CI Reference
-
-* https://docs.travis-ci.com/user/for-beginners/[Travis CI Core Concepts]
-
 == AppVeyor
 
-AppVeyor is used for testing on Windows. It is a continuous integration service which can be configured to build projects for various systems, including MSVC, MinGW, and Cygwin. The overall process is:
+https://www.appveyor.com/docs/[Appveyor] is used for testing on Windows. It is a continuous integration service which can be configured to build projects for various systems, including MSVC, MinGW, and Cygwin. The overall process is:
 
 . AppVeyor uses a file named `appveyor.yml` in the root of the repository to define the build environment and the steps for building and testing. This file describes which Windows images to use, any dependencies that need to be installed, and the commands to run for building and testing the code.
 
@@ -104,21 +138,15 @@ AppVeyor also supports parallel testing, a build cache to speed up builds, and t
 
 Refer to:
 
-* https://github.com/boostorg/boost/blob/master/appveyor.yml[Super-project appveyor.yml]
 * https://github.com/boostorg/beast/blob/c316c6bd3571991aeac65f0fc35fca9067bc7906/appveyor.yml[Beast library appveyor.yml]
 * https://github.com/boostorg/iostreams/blob/5fe4de84f863964f7573be1146f524886146a5d3/appveyor.yml[IOStreams library appveyor.yml]
 * https://github.com/boostorg/mp11/blob/ef7608b463298b881bc82eae4f45a4385ed74fca/appveyor.yml[Mp11 library appveyor.yml]
 
-=== Appveyor Reference
-
-* https://www.appveyor.com/docs/[Welcome to Appveyor]
-
-
 == CircleCI
 
-CircleCI is a CI/CD platform that supports a wide range of languages, tools, and services, making it flexible for different testing requirements. It is less commonly used than <<Travis CI>> or <<AppVeyor>>, but is used by the Super-project and a few libraries.
+https://circleci.com/developer[CircleCI] is a CI/CD platform that supports a wide range of languages, tools, and services, making it flexible for different testing requirements. It is less commonly used than <<GitHub Actions>> or <<AppVeyor>>, but is used by xref:version-control.adoc#_the_super_project_repository[the Super-project Repository] and a few libraries.
 
-. CircleCI uses a file named `config.yml` stored in a directory called `.circleci` at the root of the repository. This file defines the build environment and steps, such as which Docker images to use, dependencies to install, and the commands for building and testing.
+. CircleCI uses a file named `config.yml` stored in a directory called `.circleci` at the root of the repository. This file defines the build environment and steps, such as which <<Docker>> images to use, dependencies to install, and the commands for building and testing.
 
 . Upon changes being pushed to the repository or on a schedule, CircleCI automatically executes the instructions in the `config.yml` file. This usually includes building the project and running the test suite.
 
@@ -130,20 +158,137 @@ CircleCI also supports parallel testing, caching of dependencies, and matrix bui
 
 Refer to:
 
-* https://github.com/boostorg/boost/blob/master/.circleci/config.yml[Super-project config.yml]
 * https://github.com/boostorg/beast/blob/c316c6bd3571991aeac65f0fc35fca9067bc7906/.circleci/config.yml[Beast library config.yml]
 * https://github.com/boostorg/geometry/blob/2ec9d65d1294edb97157b564726fdf56b6ac562f/.circleci/config.yml[Geometry library config.yml]
 * https://github.com/boostorg/multiprecision/blob/380aae3c28c646ea2ca1b42156d83732295082d7/.circleci/config.yml[Multiprecision library config.yml]
 
-=== CircleCI Reference
-
-* https://circleci.com/developer[Welcome to CircleCI]
 
 
-== Other CI Systems
+== Azure Pipelines
 
-Other CI systems can be implemented by library developers. For example, https://learn.microsoft.com/en-us/azure/devops/pipelines/?view=azure-devops[Azure Pipelines] is a cloud service provided by Microsoft to automatically build, test, and deploy applications.
+https://learn.microsoft.com/en-us/azure/devops/pipelines/?view=azure-devops[Azure Pipelines] is a cloud service provided by Microsoft to automatically build, test, and deploy applications. Here's how it generally works:
+
+. Azure Pipelines uses a file named `.azure-pipelines.yml` at the root of the repository to define the build environment and steps. This file specifies the operating systems and compilers to use, any dependencies to install, and the commands to run for building and testing the code.
+
+. When changes are pushed to the repository, Azure Pipelines automatically triggers a build and runs the tests according to the instructions in the `azure-pipelines.yml` file. This helps ensure that changes do not break existing functionality.
+
+. After each build, Azure Pipelines reports the results. If the build or any tests fail, it notifies the developers, allowing them to address the issues. The status of the latest build can also be seen on GitHub, providing an at-a-glance view of the code's health.
+
+Azure Pipelines provides several additional features, such as support for parallel testing, a build cache to speed up builds, and the ability to deploy built artifacts.
+
+=== Example azure-pipelines.yml Files
+
+* https://github.com/boostorg/boost-ci/blob/master/.azure-pipelines.yml[boost-ci/.azure-pipelines.yml]
+
+== Coverage
+
+Code coverage is a measure used to describe the degree to which the source code of a program is executed when a particular test suite runs. A program with high code coverage, measured as a percentage, has had more of its source code executed during testing, which generally means it has a lower chance of containing undetected  bugs compared to a program with low code coverage.
+
+Code coverage analysis can uncover areas of a library not covered by existing tests, so developers can write new tests to cover these blind spots. It can also highlight areas of over-testing, where the same code is tested redundantly, which could lead to slower test times without providing extra benefit.
+
+There are several types of code coverage, including:
+
+* *Function Coverage* measures if each function or method in the codebase has been called.
+* *Statement Coverage* measures if each statement or instruction in the codebase has been executed.
+* *Branch Coverage* measures if each possible branch from each decision point has been executed. For example, both true and false branches from an `if` statement.
+* *Condition Coverage* measures if each boolean sub-expression has been evaluated to both true and false. For example, given `if (A==B || C==D)`, there are two boolean sub-expressions to evaluate.
+* *Path Coverage* measures if all possible paths (sequence of statements, branches) have been covered. This is generally considered the most comprehensive, but also the most challenging to achieve, especially in complex programs.
+
+In a CI pipeline, code coverage is typically measured (by <<Codecov.io>> or <<Coverity Scan>>) after each change to the codebase. Coverage reports can be generated and reviewed to spot areas of the code that are not well-tested.
+
+=== Codecov.io
+
+https://about.codecov.io/[Codecov.io] is a tool that provides insights about code coverage in a software project. Code coverage is a measure of how much of your code is actually executed when your test suite runs. By highlighting parts of your code that aren't tested, code coverage tools like Codecov help you write better tests and thus improve the quality of your software.
+
+Here's an overview of how Codecov works in the context of a CI pipeline:
+
+. Codecov integrates with GitHub. When you push code to your repository or create a pull request, it triggers your CI pipeline. Codecov uses a `.codecov.yml` (or `codecov.yml`) file to manage its settings. It's placed at the root of your repository.
+
+** You can set minimum coverage thresholds that must be met, and configure how Codecov should behave if the thresholds aren't met. For example, you might want Codecov to fail the status checks if the coverage drops by a certain percentage. 
+** You can specify files or directories that should be ignored by Codecov. And you can customize the comments that Codecov makes on your pull requests. For example, you can change the layout of the comment, or disable comments entirely.
+** Codecov flags allow you to segregate coverage reports for different parts of your project or for different types of tests. Flags can be useful for projects that have multiple test suites or modules. `Carryforward` Flags help to handle reports for parts of the project that are not included in every CI run.
+
+. In your CI pipeline, after your tests run, you'll generate a coverage report. The report is in XML or JSON format.
+
+. The generated coverage report is then uploaded to Codecov. This is usually done by a command-line tool provided by Codecov, which you'll add as a step in your CI pipeline. The tool takes care of finding the report, compressing it, and sending it to Codecov's servers.
+
+. Codecov processes the uploaded report and provides detailed coverage information on its dashboard. It shows overall project coverage, coverage changes over time, coverage for individual files, and more. Codecov can also comment on pull requests, showing how the changes would affect overall coverage.
+
+Codecov also provides a browser extension that overlays coverage data directly on GitHub, so you can see coverage information as you browse your code. 
+
+==== Example .codecov.yml Files
+
+* https://github.com/boostorg/beast/blob/c316c6bd3571991aeac65f0fc35fca9067bc7906/.codecov.yml[Beast library .codecov.yml]
+
+* https://github.com/boostorg/date_time/blob/85e637cb325208c2af9af791c3a1948b4888c6cd/.codecov.yml[Date-time library .codecov.yml]
+
+* https://github.com/boostorg/json/blob/0a7860fcfce7d66c0abe3d96f666540c00c33f73/.codecov.yml[Json library .codecov.yml]
+
+=== Coverity Scan
+
+https://scan.coverity.com/[Coverity Scan] is a static analysis tool that detects defects and vulnerabilities in your source code. It is provided as a free service for open source projects, but there's also a commercial version for private projects. Here's a general workflow of how you can use Coverity Scan:
+
+. First, you need to register your project with Coverity Scan. This involves providing some basic information about your project and agreeing to their terms of service.
+
+. The next step is to build your code and upload it to the Coverity Scan servers. This is typically done in your development environment, and there are a few steps involved:
+
+.. Install the Coverity Scan Tool. This tool is used to "build" your code and analyze it for defects.
+.. Instead of building with your usual build tool (like CMake or Maven), you build with the Coverity tool. This produces a file that contains all the information Coverity needs to analyze your code.
+.. You then upload this file to the Coverity servers. You can automate this step as part of your CI pipeline.
+
+. Once your code is uploaded, Coverity analyzes it for defects and vulnerabilities. This process can take some time, depending on the size of your codebase.
+
+. Once the analysis is complete, you can review the results on the Coverity Scan website. Defects are categorized by type and severity, and you can drill down to see the exact lines of code that are affected.
+
+. Based on the results, you can then fix the defects in your code. After making changes, you'll typically run the Coverity Scan process again to verify the fixes and find any new defects.
+
+Coverity Scan is a powerful tool that can help improve the quality of your code. It's particularly good at finding complex defects that are hard to catch with regular testing. However, it does require some setup and learning to use effectively, particularly when integrating it with a CI pipeline.
+
+==== Example Coverity Calls
+
+Coverity Scan does not directly use a .yml or .yaml file for configuration like the other CI tools discussed here. Instead, Coverity Scan primarily relies on the build commands and Coverity Scan command-line tools to analyze the source code. You include the necessary Coverity Scan commands within the .yml files of your other CI tools, for example:
+
+* https://github.com/boostorg/beast/blob/f9433d22d0662a89a6cf1b84a214680cfd384e3f/.drone.star#L25[Beast library .drone.star] line 25, and https://github.com/boostorg/beast/blob/f9433d22d0662a89a6cf1b84a214680cfd384e3f/.drone/drone.sh#L134[Beast library drone.sh] line 134
+
+* https://github.com/boostorg/json/blob/0a7860fcfce7d66c0abe3d96f666540c00c33f73/.drone.star#L58[Json library .drone.star] line 58, and https://github.com/boostorg/json/blob/0a7860fcfce7d66c0abe3d96f666540c00c33f73/.drone/drone.sh#L110[Json library drone.sh] line 110
+
+== Test with Popular Compilers
+
+Your CI test matrix should include one or more of the most popular compilers for each supported OS.
+
+=== Windows
+
+* https://visualstudio.microsoft.com/downloads/[Microsoft Visual C++] (MSVC): This is Microsoft's own compiler that comes with Visual Studio. It has excellent support for Windows-specific development and great debugging tools.
+
+* https://sourceforge.net/projects/mingw/[MinGW - Minimalist GNU for Windows]: MinGW includes a port of the GCC (GNU Compiler Collection), which includes a pass:[C++] compiler. It's useful for open-source projects and cross-platform development.
+
+* https://clang.llvm.org/[Clang]: Clang is a compiler front end for the C, pass:[C++], and Objective-C programming languages. It uses LLVM as its back end and has been part of the LLVM release cycle since LLVM 2.6.
+
+=== Linux
+
+* https://gcc.gnu.org/[GCC, the GNU Compiler Collection]: GCC is one of the most popular compilers for Linux. It supports multiple programming languages but is most often used as a pass:[C++] compiler. It's open-source and is the default compiler on most Linux distributions.
+
+* https://clang.llvm.org/[Clang]: Clang, part of the LLVM project, is a pass:[C++] compiler that provides a number of advantages over GCC, such as faster compile times and improved performance. It's also known for providing more understandable compile errors.
+
+* https://www.intel.com/content/www/us/en/developer/articles/news/intel-c-compiler-classic-2021-2-1-release.html[Intel Compiler]: While not as common for general use as GCC or Clang, the Intel pass:[C++] Compiler can produce highly optimized code, especially for parallel computation and vector operations. It's often used in high-performance computing scenarios.
+
+=== MacOS
+
+* Clang is the default compiler for macOS and is provided with https://developer.apple.com/xcode/resources/[Xcode], Apple's integrated development environment. It's known for providing more understandable compile errors and faster compile times compared to GCC.
+
+* https://gcc.gnu.org/[GCC, the GNU Compiler Collection]: While not the default, GCC can also be used on macOS. It's typically installed via a package manager like Homebrew. However, it's worth noting that when you install GCC on a Mac, the default "gcc" command often still points to Clang for compatibility reasons, so you might need to use a version-specific command like "gcc-9" to use the real GCC.
+
+* https://www.intel.com/content/www/us/en/developer/articles/news/intel-c-compiler-classic-2021-2-1-release.html[Intel Compiler]: The Intel pass:[C++] Compiler is also available on macOS and can produce highly optimized code, especially for parallel computation and vector operations. Like on Linux, it's often used in high-performance computing scenarios.
+
+== Docker Containers
+
+https://docs.docker.com/get-docker/[Docker] can be used to provide isolation, which can be very useful with certain development environments. For example, when there is a need to replicate an environment which could not be replicated otherwise. For example, we use Ubuntu 16 frequently, but there's no GitHub image for it. As a workaround, the Ubuntu 22 image is used, and a Ubuntu 16 Docker container is run on it.
 
 == See Also
 
+* https://github.com/boostorg/cmake[CMake Support]
+* xref:testing/sanitizers.adoc[]
 * xref:version-control.adoc[]
+
+
+
