@@ -1,0 +1,68 @@
+= Sanitize Your Code
+:navtitle: Sanitizers
+
+Consider using a code sanitizer to check for some of the more mundane, but nevertheless real, bugs and inefficiencies in your library.
+
+All the tools listed have different strengths and are useful in different scenarios, so you might want to use several of them in combination.
+
+== AddressSanitizer
+
+https://clang.llvm.org/docs/AddressSanitizer.html[Clang AddressSanitizer (ASan)] is a fast memory error detector built into LLVM/Clang, gcc and other compilers. As such, it works on Windows, Linux, and MacOS. It can detect out-of-bounds accesses to heap, stack, and globals, use-after-free and use-after-return bugs, and other memory-related errors. AddressSanitizer is generally faster than <<Valgrind>> and can be used in continuous integration without significantly slowing down the test suite.
+
+** To use ASAN, pass the `-fsanitize=address` switch to Clang, or set the `address-sanitizer=on` B2 flag. Under CMake, you need to add the flags manually. 
+
+** The *LeakSanitizer* (LSan) runs with ASAN, and is a memory leak detector. It's integrated into AddressSanitizer.
+
+The sanitizer suite also includes:
+
+* *UndefinedBehaviorSanitizer* (UBSan), which is a runtime undefined behavior detector that can catch misaligned or null pointers, integer overflows, and invalid bit shifts. Set `-fsanitize=undefined` in Clang, or `undefined-sanitizer=on` in B2. For details on the usage and output, refer to https://clang.llvm.org/docs/UndefinedBehaviorSanitizer.html[Clang UndefinedBehaviorSanitizer].
+
+* *MemorySanitizer* (MSan) detects uninitialized reads. This tool is similar to Valgrind, but it's generally faster and can catch some bugs that Valgrind might miss. The xref:testing/continuous-integration#_new_library_ci_framework[New Library CI Framework] doesn't include any build for MSAN, and B2 doesn't have a feature for it, so for either you need to manually specify the setting: `-fsanitize=memory` in Clang, or `memory-santizer=on` in B2. Refer to https://clang.llvm.org/docs/MemorySanitizer.html[Clang MemorySanitizer].
+
+* *ThreadSanitizer* (TSan) detects data races. It's available in Clang and gcc. Set `-fsanitize=thread` in Clang, or `thread-sanitizer=on` in B2. Refer to https://clang.llvm.org/docs/ThreadSanitizer.html[Clang ThreadSanitizer].
+
+
+=== Valgrind
+
+For Linux based systems, https://valgrind.org/docs/manual/quick-start.html[Valgrind] is an open-source software tool suite that helps in debugging memory management and threading bugs, and profiling programs. It is often used to detect memory leaks and uninitialised memory blocks in pass:[C++] programs, among other things.
+
+Here's how you can set it up for your project:
+
+. Depending on your OS, the command will differ. For Ubuntu or Debian, you can use:
++
+[source,txt]
+----
+sudo apt-get install valgrind
+----
++
+For CentOS or Fedora, you can use:
++
+[source,txt]
+----
+sudo yum install valgrind
+----
+
+. After Valgrind is installed, you can use it to run your program. Here's an example:
++
+[source,txt]
+----
+valgrind --leak-check=yes ./your_program
+----
++
+The `--leak-check=yes` option tells Valgrind to perform memory leak checks. Your program runs as usual, but with Valgrind checking its memory usage in the background.
+
+Setting up Valgrind in a CI environment depends on your CI system and might look something like this:
+
+. In your CI configuration file, such as `.github/workflows/workflow.yml` for xref:testing/continuous-integration.adoc#_github_actions[GitHub Actions], you would add a step to install Valgrind in your build environment.
+
+. Next, in your script steps, instead of running your test executable directly, you'd use Valgrind to run it. This will generate a report of any memory issues detected by Valgrind.
+
+NOTE:: Valgrind can significantly slow down your program, so it might not be suitable for all CI use cases, especially for large projects or tests that need to run quickly.
+
+== See Also
+
+* xref:testing/continuous-integration.adoc[]
+* xref:version-control.adoc[]
+
+
+
