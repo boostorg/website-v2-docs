@@ -3,9 +3,7 @@
 This document outlines the style guidelines for the site-docs. Adhering to these
 guidelines will help ensure consistency and cohesion across all pages of the website.
 
-
-== UI Controls
-
+== Color Guidelines
 [disc]
 * Boost Mustard
 
@@ -15,14 +13,21 @@ guidelines will help ensure consistency and cohesion across all pages of the web
 ** never use large areas of this color in illustrations
 ** never used as an endpoint of a color blend
 
-* The word "Boost" should occur no more than one time on the page
-
-** Not counting the logo in the top nav
-** And never twice on the same line
-** User-generated content is excepted of course
+== Wording Guidelines
+[disc]
+* The word "Boost" should occur no more than once per page, not counting logo
+** user generated content excluded
 
 * The word "C++" should occur no more than once on a page
-Except user-generated content
-* Per-library links (e.g. GitHub or docs) show a schemeless URL:
+** user-generated content excluded
+
+== URL Display 
+[disc]
+* Per-library links (e.g. GitHub or docs) should use a schemeless URL:
 
 image::url-style-guide-image.png[]
+
+== Image Display
+[disc]
+* User avatars should never be displayed squared, always with rounded corners
+
