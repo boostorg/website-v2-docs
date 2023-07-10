@@ -29,6 +29,7 @@
 ** xref:testing/boost-test-matrix.adoc[]
 ** xref:testing/writing-tests.adoc[]
 ** xref:testing/continuous-integration.adoc[]
+** xref:testing/fuzzing.adoc[]
 
 * Documentation
 ** xref:docs/documentation-guidelines.adoc[]
