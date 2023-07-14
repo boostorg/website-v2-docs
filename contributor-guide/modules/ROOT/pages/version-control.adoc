@@ -89,6 +89,8 @@ The repositories use the built-in GitHub issue tracker. With Boost, users are en
 
 Consider creating custom templates for your library. The goal of these templates is to ensure that contributors provide enough context and information that you, and the other library authors and maintainers, can understand and reproduce the issue, or fully understand what is being discussed.
 
+Note:: Currently, the Boost Super-project does not use the GitHub Discussion feature. If filing an issue does not seem appropriate, users are encouraged to post on the https://lists.boost.org/mailman/listinfo.cgi/boost[Boost developers mailing list].
+
 ### How to Create an Issue Template
 
 Creating an issue template in GitHub can help guide contributors to provide the necessary information when they create new issues with your library.
@@ -133,8 +135,6 @@ Here are the steps to create an issue template:
 . Click `Commit changes` and create a Pull Request to update your repo.
 
 Once the template is added, users who create new issues in your repository can choose to use one of your templates.
-
-Note:: Currently, the Boost Super-project does not use the GitHub Discussion feature. If filing an issue does not seem appropriate, users are encouraged to post on the https://lists.boost.org/mailman/listinfo.cgi/boost[Boost developers mailing list].
 
 == See Also
 
