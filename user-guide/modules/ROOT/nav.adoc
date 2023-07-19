@@ -4,6 +4,7 @@
 * xref:faq.adoc[]
 
 * Common Scenarios
+** xref:common-introduction.adoc[]
 ** xref:task-networking.adoc[]
 ** xref:task-simulation.adoc[]
 ** xref:task-system.adoc[]
@@ -12,6 +13,7 @@
 *** xref:boost-test-tutorial.adoc[]
 
 * Advanced Scenarios
+** xref:advanced-introduction.adoc[]
 ** xref:task-database.adoc[]
 ** xref:task-machine-learning.adoc[]
 ** xref:task-metaprogramming.adoc[]

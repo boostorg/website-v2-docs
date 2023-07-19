@@ -1,9 +1,9 @@
-= Natural Language Parsing
+= Natural Language Processing
 :navtitle: Natural Language
 
 Developing a natural language parsing model involves tasks such as tokenization, parsing, and possibly dealing with ambiguous or erroneous inputs. 
 
-Natural language parsing is a complex field that goes beyond just programming. It involves knowledge of linguistics, and many parsing tasks can be difficult due to the ambiguity and complexity of natural languages. You may want to look into existing tools and libraries specifically designed for natural language processing, like https://en.wikipedia.org/wiki/Natural_Language_Toolkit[NLTK] or https://en.wikipedia.org/wiki/SpaCy[SpaCy] for Python, in addition to the general-purpose libraries that Boost offers.
+Natural language processing is a complex field that goes beyond just programming. It involves knowledge of linguistics, and many parsing tasks can be difficult due to the ambiguity and complexity of natural languages. You may want to look into existing tools and libraries specifically designed for natural language processing, like https://en.wikipedia.org/wiki/Natural_Language_Toolkit[NLTK] or https://en.wikipedia.org/wiki/SpaCy[SpaCy] for Python, in addition to the general-purpose libraries that Boost offers.
 
 == Libraries
 

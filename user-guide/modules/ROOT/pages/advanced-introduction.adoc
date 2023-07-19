@@ -1,0 +1,18 @@
+= Advanced Scenarios
+:navtitle: Introduction
+
+== Introduction
+
+Advanced scenarios require deep understanding of software programming concepts and working practices.
+
+Developing a xref:task-database.adoc[] is a critical area of software focused on the design, development, implementation, and maintenance of databases. It involves designing database schemas, optimizing queries, managing database servers, and ensuring data integrity and security. Database engineering often requires knowledge of SQL, though NoSQL databases have become increasingly popular. 
+
+xref:task-machine-learning.adoc[] is a subset of artificial intelligence (AI) that enables systems to learn from data and improve their performance over time without being explicitly programmed. This process involves training algorithms on large datasets and using these models to make predictions or decisions. It's widely used in areas like image recognition, natural language processing, and recommendation systems. While Python is a popular language for machine learning pass:[C++] can be used, especially when performance is critical.
+
+xref:task-metaprogramming.adoc[] involves writing code that generates or manipulates other code. It can be used to create more flexible, reusable, and efficient software. The pass:[C++] template system is a form of compile-time metaprogramming, allowing programmers to write generic code.
+
+xref:task-natural-language-parsing.adoc[] (NLP) is another branch of artificial intelligence, this time focusing on the interaction between computers and human language. It involves teaching machines to understand, interpret, generate, and manipulate human language. This can be used in applications like chatbots, translation services, sentiment analysis, and more.
+
+xref:task-parallel-computation.adoc[] is a type of computation in which multiple calculations or processes are carried out simultaneously, leveraging multiple cores or processors. It's particularly useful for tasks that can be broken down into independent subtasks and run concurrently, often leading to significant performance improvements.
+
+These areas each represent advanced fields of software development, requiring a deep understanding of specific concepts and techniques. However, they also offer exciting opportunities to build cutting-edge software applications.
