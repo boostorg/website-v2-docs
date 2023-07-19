@@ -9,7 +9,7 @@ Boost is a highly influential and widely used collection of libraries, designed 
 
 == Origins
 
-The story of Boost began when Robert Klarer and Beman Dawes discussed the idea at the March, 1998, meeting of the pass:[C++] Standards Committee in Sophia Antipolis, France. Joined by Dave Abrahams, they convened the first Boost mailing list to facilitate discussions on the creation of high-quality, peer-reviewed libraries for the pass:[C++] programming language. At the time, the pass:[C++] Standard Library was limited in its functionality, and many developers felt the need for additional libraries to support the growing demands of software development. The name "Boost" was chosen to represent the goal of boosting the pass:[C++] language and its library ecosystem to new heights.
+The story of Boost began when Robert Klarer and Beman Dawes discussed the idea at the March 1998 meeting of the pass:[C++] Standards Committee in Sophia Antipolis, France. Joined by Dave Abrahams, they convened the first Boost mailing list to facilitate discussions on the creation of high-quality, peer-reviewed libraries for the pass:[C++] programming language. At the time, the pass:[C++] Standard Library was limited in its functionality, and many developers felt the need for additional libraries to support the growing demands of software development. The name "Boost" was chosen to represent the goal of boosting the pass:[C++] language and its library ecosystem to new heights.
 
 == Early Development
 
@@ -30,7 +30,7 @@ Boost has had a profound impact on the pass:[C++] language and its community. Ma
 While many Boost libraries have been incorporated into the C++ Standard Library, most others remain exclusive to Boost, and are highly regarded for their capabilities and performance. Some of these noteworthy libraries include:
 
 [square]
-* boost:graph[] : An extensive library for graph data structures and algorithms, enabling developers to work with graphs and network structures, while providing efficient implementations of popular graph algorithms like Dijkstra's, Kruskal's, and more. Released in Boost in *August 2000*.
+* boost:graph[] : An extensive library for graph data structures and algorithms, enabling developers to work with graphs and network structures, while providing efficient implementations of popular graph algorithms like Dijkstra's, Kruskal's, and more. Released in *August 2000*.
 
 * boost:spirit[] : A powerful and flexible parser and generator framework, which uses expression templates and template metaprogramming to create parsers at compile-time. This results in efficient and type-safe parsing code. Added to Boost *February 2003*, though has gone through multiple updates.
 
@@ -44,13 +44,13 @@ While many Boost libraries have been incorporated into the C++ Standard Library,
 
 * boost:json[] : A JSON library for encoding, decoding, and manipulating JSON data. Added to Boost in *January 2021*.
 
-These libraries, among many others, showcase the value and versatility of Boost in providing advanced functionality beyond the scope of the pass:[C++] Standard Library. As well as the xref:common-introduction.adoc[Common] and xref:advanced-introduction.adoc[Advanced] scenarios highlighted in this documentation, Boost libraries are used in highly specialized niche markets, ranging from probability theory to astronomy to mass spectroscopy. Open source isn't just for nerds and researchers. Real world programming challenges, irrespective of whether they are open or closed source, can benefit enormously from the thought and experience that has gone into the libraries.
+These libraries, among many others, showcase the value and versatility of Boost in providing advanced functionality beyond the scope of the pass:[C++] Standard Library. As well as the xref:common-introduction.adoc[Common] and xref:advanced-introduction.adoc[Advanced] scenarios highlighted in this documentation, Boost libraries are used in highly specialized applications, ranging from probability theory to astronomy to mass spectroscopy. Open source isn't just for nerds and researchers. Real world programming challenges, irrespective of whether they are open or closed source, can benefit enormously from the thought and experience that has gone into the libraries.
 
 The source code is always distributed as open source, and released under the Boost Software License, which allows anyone to use, modify, and distribute the libraries for free. The libraries are platform independent and support most popular compilers, as well as many that are less well known.
 
 == Current Status
 
-Boost has come a long way since its inception in 1998, to a widely used and influential https://www.boost.org/doc/libs/[collection of over 180 libraries]. Currently, the Boost mission is threefold:
+Boost has evolved into a widely used and influential https://www.boost.org/doc/libs/[collection of over 180 libraries] since its inception in 1998. Currently, the Boost mission is threefold:
 
 . Develop high-quality, expert-reviewed, open-source pass:[C++] libraries.
 . Incubate pass:[C++] Standard Library enhancements.
