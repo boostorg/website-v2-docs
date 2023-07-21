@@ -25,6 +25,7 @@
 ** xref:bsl.adoc[]
 ** xref:release-process.adoc[] 
 ** xref:boost-history.adoc[]
+** xref:privacy-policy.adoc[]
 
 * xref:resources.adoc[]
 
