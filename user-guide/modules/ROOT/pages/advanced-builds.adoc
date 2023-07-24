@@ -1,3 +1,247 @@
 = Advanced Builds
+:navtitle: Advanced Builds
 
-*Content under construction.*
+This section covers a number of advanced build scenarios that you may come across if your project has complex, legacy, or non-standard, components or processes.
+
+== Build with a Non-default Compiler
+
+Using the `b2` build system, you can specify the compiler you want to use with the `toolset` option. For example, if you want to use the GNU Compiler Collection (GCC), you would specify `toolset=gcc`. If you want to use Clang, you would use `toolset=clang`. For example, to build the Boost libraries with gcc:
+
+[source,txt]
+----
+./b2 toolset=gcc
+----
+
+If you want to use a specific _version_ of a compiler, you can specify it after the compiler name, separated by a dash. For example, to use GCC 7.3, you would use `toolset=gcc-7.3`:
+
+[source,txt]
+----
+./b2 toolset=gcc-7.3
+----
+
+You can also specify the toolset option when you're building your application. This is done in a similar way, by passing `toolset=` to the `b2` command, as part of your build process. Here's an example:
+
+[source,txt]
+----
+b2 toolset=clang
+----
+
+If the compiler is not in your system's PATH, you will need to provide the full path to the compiler executable. If there are spaces in the path, then wrap it in quotes, for example:
+
+[source,txt]
+----
+b2 toolset="C:\Program Files (x86)\Clang\"
+----
+
+== Specify the Application Binary Interface
+
+Building Boost with the old Application Binary Interface (ABI)) refers to compiling the library with a flag to ensure backward compatibility with an older version of an ABI.
+
+The ABI of a system is a specification that defines requirements for binary compatibility between applications and libraries that are built separately. It includes aspects such as calling conventions, byte order, and data structure alignment.
+
+In the context of pass:[C++], this generally comes up with GCC 5.x and later versions, which introduced a new ABI to conform more closely with the pass:[C++11] and pass:[C++14] standards. This new ABI changed the implementations of `std::string` and `std::list`, among other things, which broke binary compatibility with older versions of these libraries. This means that code compiled with the new ABI may _not_ be binary-compatible with code compiled with the old ABI.
+
+To build Boost with the old ABI when using GCC, you'd pass in the `-D_GLIBCXX_USE_CXX11_ABI=0` flag. For example:
+
+[source,txt]
+----
+./b2 toolset=gcc cxxflags="-D_GLIBCXX_USE_CXX11_ABI=0"
+----
+
+This command specifies the compiled Boost libraries are to be linked with code that was also compiled with the old ABI. Setting the flag to 1 will specify the new ABI, though of course this is the default and the flag is unnecessary.
+
+Check compatibility with your entire toolchain and codebase when making decisions about which ABI to use. It's generally best to use the new ABI if all your code and dependencies support it.
+
+== Specify the Standard Library Implementation
+
+When using Boost libraries in a project, you might choose to use `pass:[libc++]` or `pass:[libstdc++]`. These are two different standard library implementations that you can use with your pass:[C++] compiler. The choice between the two depends on the compiler you are using, the platforms you are targeting, the standards and features you are using, and the specific requirements of your project.
+
+. `pass:[libc++]` is the standard library implementation developed by the https://github.com/llvm/llvm-project[LLVM project]. It is the default library for the Clang compiler and is known for its performance and standards compliance. It's also designed to work well with the Clang static analyzer and other LLVM tools. One key feature of `pass:[libc++]` is that it supports deployment to older versions of macOS and iOS.
+
+. `pass:[libstdc++]` is the GNU Standard Library, which comes as the default with the GCC compiler. It is a robust and mature library, supporting many pass:[C++] standards and extensions. It's used by a large number of projects and is available on a wide variety of systems.
+
+You can specify which standard library you want to use by setting the appropriate flags in your build system. This is dependent on the compiler you're using.
+
+If you're using the Clang compiler and you want to use `pass:[libc++]`, you can use the `-stdlib=libc++` compiler flag. For example:
+
+[source,txt]
+----
+clang++ -stdlib=libc++ YOUR_FILE.cpp -lboost_system
+----
+
+If you're using GCC and you want to use  `pass:[libstdc++]`, you don't need to do anything specific because this is the default standard library for GCC. If you're using Clang and want to use  `pass:[libstdc++]`, you can use the `-stdlib=libstdc++` flag:
+
+[source,txt]
+----
+clang++ -stdlib=libstdc++ your_file.cpp -lboost_system
+----
+
+When you're building the Boost libraries themselves, you can also specify the standard library to use with the `cxxflags` and `linkflags` options. The following command will build the Boost libraries using Clang with `pass:[libc++]`.
+
+[source,txt]
+----
+./b2 toolset=clang cxxflags="-stdlib=libc++" linkflags="-stdlib=libc++"
+----
+
+
+
+== Specify Static or Dynamic Linking
+
+The compiler options `link=static` and `link=dynamic` specify how the Boost libraries should be linked to your project. If you do not specify a type of linking, `dynamic` is the default.
+
+. The `link=static` option specifies static linking. When you link statically, the linker takes the object code from the library and includes it in the executable file for the program. This leads to larger executables, but the resulting program is self-contained and does not require the library to be present on the system where the program is run. It can be beneficial when you want to avoid dependencies on shared libraries, particularly when you distribute your software to other systems.
++
+[source,txt]
+----
+./b2 link=static
+----
++
+Apart from distributing applications, the other compelling reasons to use static linking are to avoid dependency or version conflicts, and perhaps improved performance, as the application doesn't need to load shared libraries at runtime.
+
+. The `link=dynamic` option specifies dynamic linking, also known as shared linking. With dynamic linking, the linker only includes a small amount of code to locate and interface with the actual library code, which is kept in a separate file. This results in smaller executables and allows for library code to be shared between multiple programs. However, the resulting program requires that the shared library be available at both build time and run time. The build options `dynamic` and `shared` are synonymous.
++
+[source,txt]
+----
+./b2 link=dynamic
+./b2 link=shared
+----
+
+Not all Boost libraries need to be linked to your program. Many are "header-only", meaning you only need to include their headers in your source files and don't need to worry about linking, as there is nothing to link. 
+
+== Build Boost with CMake
+
+The only supported method of building the Boost libraries is with the `b2` tool. However, there are experimental alternatives, including building with CMake. Refer to the https://github.com/boostorg/cmake[Boost CMake support infrastructure] for full details, including information on general and library-specific configuration variables, testing after building with CMake, using Boost (or an individual Boost library) with the `add_subdirectory` command, and using Boost with the `FetchContent` command.
+
+== Parallel Builds
+
+To speed up the build process, you might want to utilize parallel compilation. This is where multiple compilation tasks are performed concurrently to speed up the build process. You can enable this feature by using the `-j` option followed by the number of tasks you want to run in parallel when invoking `b2`.
+
+For example, let's say you have a Jamroot.jam file at the root of your project that describes how to build your project. The project consists of several source files spread across different directories, and you are working on a multi-core machine where parallel builds could significantly speed up the build time. To build your project using Boost.Build, you would normally navigate to your project's root directory and run `b2`. However, to take advantage of parallel builds, you can specify the `-j` option followed by the number of tasks you want to run concurrently. If you have a quad-core processor, you might run up to four tasks in parallel:
+
+[source,txt]
+----
+b2 -j4
+----
+
+Running concurrent tasks can increase the system load and may not always result in a linear speedup. However, it is a great idea to use your multiple cores, if you have them available.
+
+== Custom Build Steps
+
+Your application might require pre-processing steps before compiling. For instance, you might need to generate some pass:[C++] code based on a configuration file. Custom build steps in Boost.Build can be achieved using _rule definitions_ and _actions_. Rules in Boost.Build are a little like functions in a programming language. You can define your own rule to execute custom commands, and then invoke the rule at the appropriate point in your Jamfile.
+
+Let's consider a scenario where you need to generate a pass:[C++] header file from an XML file before compiling the rest of your source code.
+
+. First, define a rule, in your Jamfile, to describe the transformation. The rule takes an input XML file and produces an output header file:
++
+[source,txt]
+----
+rule GenerateHeader ( xmlFile : hppFile )
+{
+    IMPORT $(xmlFile) : generateHeader : : generate ;
+    generate $(xmlFile) : $(hppFile) ;
+}
+----
++
+This rule imports a Python script (generateHeader.py) that transforms an XML file into a pass:[C++] header file. The `IMPORT` command makes a rule from the Python script available in the Jamfile, and generate is the Python rule responsible for transforming the XML file into the header file.
+
+. The `GenerateHeader` rule can now be used in the sources of your project, for example:
++
+[source,txt]
+----
+GenerateHeader xml/config.xml : include/config.hpp ;
+
+exe myProgram
+    : # sources
+    [ glob src/*.cpp ]
+    include/config.hpp
+    # libraries
+    /boost/filesystem//boost_filesystem
+    /boost/system//boost_system
+    ;
+----
++
+The `exe` rule describes how to build an executable. In this case, it is saying to build an executable named `myProgram` from the source files in `src/` and the generated config.hpp. It also lists the Boost libraries that the program depends on.
++
+The `GenerateHeader` rule will ensure that config.xml is transformed into config.hpp before `myProgram` is compiled. This means that changes to config.xml will cause config.hpp to be regenerated, which in turn will trigger a recompilation of any source files that include config.hpp. To execute this custom build step, navigate to your project's root directory and run `b2`.
+
+== Multi-platform Support
+
+Let’s say you are developing an application that needs to run on multiple platforms, including Linux, Windows, and MacOS. Your app uses boost:asio[] for asynchronous networking, boost:thread[] for multithreading, and boost:filesystem[] for file handling:
+
+. Before you can use Boost libraries, they might need to be compiled. You can use Boost.Build to compile the libraries by navigating to the root directory of Boost and running `b2`. If you want to compile only the required libraries, use the `--with-` option:
+
++
+[source,txt]
+----
+./b2 --with-thread --with-filesystem --with-system
+----
++
+Note:: boost:asio[] is a header-only library, so it doesn't need to be compiled, and boost:system[] is a dependency for both boost:asio[] and boost:filesystem[], so it's included here.
+
+. The main configuration file for Boost.Build is Jamroot.jam at the root directory of your project. It's where you specify what to build and how to build it. This is a basic Jamroot.jam file:
+
++
+[source,txt]
+----
+project my_project
+    : requirements
+    <threading>multi
+    <link>shared
+    ;
+
+lib boost_thread
+    : : <name>boost_thread
+      <search>path/to/boost/libs/thread/build
+    ;
+
+lib boost_filesystem
+    : : <name>boost_filesystem
+      <search>path/to/boost/libs/filesystem/build
+    ;
+
+lib boost_system
+    : : <name>boost_system
+      <search>path/to/boost/libs/system/build
+    ;
+
+exe my_program
+    : [ glob src/*.cpp ]
+    : <library>boost_thread
+      <library>boost_filesystem
+      <library>boost_system
+    ;
+----
+
+. Boost.Build allows you to define platform-specific requirements using conditional properties. For example, you can set different optimization flags for different platforms:
+
++
+[source,txt]
+----
+exe my_program
+    : [ glob src/*.cpp ]
+    : <library>boost_thread
+      <library>boost_filesystem
+      <library>boost_system
+      <os>LINUX:<optimization>space
+      <os>WINDOWS:<optimization>speed
+      <os>MAC:<optimization>speed
+    ;
+----
+
+. With your Jamroot.jam configured correctly, you can navigate to your project's root directory and run `b2` to compile your application. You might take advantage of parallel builds, using the `-j` option described in <<Parallel Builds>>.
+
+That's it! Boost.Build will take care of finding the necessary libraries, compiling your source code, and linking everything together to create your application. It will automatically adjust to the platform on which you run `b2`, making it easy to build your application on different operating systems.
+
+== Integrate Build and Test
+
+There are certainly advanced testing scenarios. Boost.Build can compile and run unit tests as part of the build process, making it easier to verify that your application behaves as expected. Refer to xref:testing-debugging.adoc[].
+
+== See Also
+
+For full details of Boost.Build, refer to the https://www.boost.org/build/doc/html/index.html[Boost.Build User Manual].
+
+* https://github.com/boostorg/cmake[Boost CMake support infrastructure]
+* xref:getting-started.adoc[]
+* xref:resources.adoc[]
+* xref:header-organization-compilation.adoc#toolset[Toolsets]
+
