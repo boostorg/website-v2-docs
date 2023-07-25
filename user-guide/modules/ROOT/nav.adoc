@@ -31,4 +31,4 @@
 * Reference
 ** xref:library-naming.adoc[]
 ** xref:header-organization-compilation.adoc[]
-** xref:advanced-builds.adoc[]
+** xref:build-options.adoc[]
