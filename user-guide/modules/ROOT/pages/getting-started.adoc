@@ -294,7 +294,7 @@ This command should output the Boost version installed on your system.
 
 [tabs,sync-group-id=build]
 ====
-Boost.Build (Recommended)::
+B2 (Recommended)::
 +
 --
 . Navigate to https://www.boost.org/users/download/ and under *Current Release/Downloads*, download the Boost distribution.
@@ -304,7 +304,7 @@ For instance:
 
 . After the download has completed in your *Downloads* folder, right-click on the compressed file and extract it to a folder.
 
-TIP: boost:build[] is the officially supported build system used by the Boost libraries.
+TIP: b2[] is the officially supported build system used by the Boost libraries.
 --
 
 CMake::
@@ -318,7 +318,7 @@ For instance:
 . After the download has completed in your *Downloads* folder, right-click on the compressed file and extract it to a folder.
 
 TIP: You don't need to *build* Boost with CMake to be able to *use* Boost with CMake.
-CMake integration will work fine even if you install Boost with boost:build[].
+CMake integration will work fine even if you install Boost with b2[].
 --
 ====
 
@@ -423,13 +423,13 @@ Otherwise, open up a command line terminal, and navigate to the boost folder you
 
 [tabs,sync-group-id=build]
 ====
-Boost.Build (Recommended)::
+B2 (Recommended)::
 +
 --
-The Boost libraries are built using a custom build app called boost:build[].
+The Boost libraries are built using a custom build app called b2[].
 This app itself is built by running the bootstrap script.
 
-This is the usual procedure to configure, build and install Boost with boost:build[]:
+This is the usual procedure to configure, build and install Boost with b2[]:
 
 If your location has a space in the name, you will need to surround the path in quotes in the commands that follow.
 
@@ -488,11 +488,11 @@ cmake --build . --target install --config Debug
 cmake --build . --target install --config Release
 ----
 
-Although both the boost:build[] and the CMake scripts work fine, the final installed libraries will have different layouts for historical reasons.
+Although both the b2[] and the CMake scripts work fine, the final installed libraries will have different layouts for historical reasons.
 Both the CMake integration scripts and the libraries will be installed under different paths and this can create incompatibilities between Boost installations.
 
 TIP: You don't need to *build* Boost with CMake to be able to *use* Boost with CMake.
-CMake integration will work fine even if you install Boost with boost:build[].
+CMake integration will work fine even if you install Boost with b2[].
 
 You can find more information about the limitations of a CMake infrastructure on https://github.com/boostorg/cmake[boostorg/cmake,window="_blank"]
 --
