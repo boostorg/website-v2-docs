@@ -1,0 +1,1164 @@
+# Library Dependencies
+:navtitle: Library Dependencies
+
+The following table shows the _primary dependencies_ of the current Boost libraries. A primary dependency is a dependency explicitly referenced by the library headers. A _secondary dependency_ is any library that is referenced only by a primary dependency, and not by the library itself. The table also shows whether a library is _buildable_ or not.
+
+The table is based on the output of the https://www.boost.org/doc/libs/master/tools/boostdep/doc/html/[*Boostdep*] tool, for the *1.83.0* release of Boost.
+
+## Table of Dependencies
+
+[cols="1,1,1,1,1,1,1,1,1,1,1,1", frame=none, stripes=none]
+|===
+| <<_a>> | <<_b>> | <<_c>> | <<_d>> | <<_e>> | <<_f>> | <<_g>> | <<_h>> | <<_i>> | <<_j>> | <<_l>> | <<_m>>
+| <<_n>> | <<_o>> | <<_p>> | <<_q>> | <<_r>> | <<_s>> | <<_t>> | <<_u>> | <<_v>> | <<_w>> | <<_x>> | <<_y>> |
+|===
+
+
+## A
+
+### accumulators
+[cols="1,5", grid=none, frame=none, stripes=even]
+|===
+| **Buildable** | **Primary Dependencies** |
+no | <<_array>> <<_assert>> <<_circular_buffer>> <<_concept_check>> <<_config>> <<_core>> <<_fusion>> <<_iterator>> <<_mpl>> <<_numeric_conversion>> <<_numeric_ublas>> <<_parameter>> <<_preprocessor>> <<_range>> <<_serialization>> <<_static_assert>> <<_throw_exception>> <<_tuple>> <<_type_traits>> <<_typeof>> |
+|===
+
+### algorithm
+[cols="1,5", grid=none, frame=none, stripes=even]
+|===
+| **Buildable** | **Primary Dependencies** |
+no |<<_array>> <<_assert>> <<_bind>> <<_concept_check>> <<_config>> <<_core>> <<_exception>> <<_function>> <<_iterator>> <<_mpl>> <<_range>> <<_regex>> <<_static_assert>> <<_throw_exception>> <<_tuple>> <<_type_traits>> <<_unordered>> |
+|===
+
+### align
+[cols="1,5", grid=none, frame=none, stripes=even]
+|===
+| **Buildable** | **Primary Dependencies** |
+no |<<_assert>> <<_config>> <<_core>> <<_static_assert>> |
+|===
+
+### any
+[cols="1,5", grid=none, frame=none, stripes=even]
+|===
+| **Buildable** | **Primary Dependencies** |
+no |<<_assert>> <<_config>> <<_core>> <<_static_assert>> <<_throw_exception>> <<_type_index>> <<_type_traits>> |
+|===
+
+### array
+[cols="1,5", grid=none, frame=none, stripes=even]
+|===
+| **Buildable** | **Primary Dependencies** |
+no |<<_assert>> <<_config>> <<_core>> <<_static_assert>> <<_throw_exception>> |
+|===
+
+### asio
+[cols="1,5", grid=none, frame=none, stripes=even]
+|===
+| **Buildable** | **Primary Dependencies** |
+no |<<_align>> <<_array>> <<_assert>> <<_bind>> <<_chrono>> <<_config>> <<_context>> <<_core>> <<_coroutine>> <<_date_time>> <<_exception>> <<_function>> <<_regex>> <<_smart_ptr>> <<_system>> <<_throw_exception>> <<_type_traits>> <<_utility>> |
+|===
+
+### assert
+[cols="1,5", grid=none, frame=none, stripes=even]
+|===
+| **Buildable** | **Primary Dependencies** |
+no |<<_config>> |
+|===
+
+### assign
+[cols="1,5", grid=none, frame=none, stripes=even]
+|===
+| **Buildable** | **Primary Dependencies** |
+no |<<_array>> <<_config>> <<_core>> <<_move>> <<_preprocessor>> <<_ptr_container>> <<_range>> <<_static_assert>> <<_throw_exception>> <<_tuple>> <<_type_traits>> |
+|===
+
+### atomic
+[cols="1,5", grid=none, frame=none, stripes=even]
+|===
+| **Buildable** | **Primary Dependencies** |
+**Yes** |<<_align>> <<_assert>> <<_config>> <<_predef>> <<_preprocessor>> <<_static_assert>> <<_type_traits>> <<_winapi>> |
+|===
+
+* <<_table_of_dependencies>>
+
+## B
+
+### beast
+[cols="1,5", grid=none, frame=none, stripes=even]
+|===
+| **Buildable** | **Primary Dependencies** |
+no |<<_asio>> <<_assert>> <<_bind>> <<_config>> <<_container>> <<_container_hash>> <<_core>> <<_endian>> <<_intrusive>> <<_logic>> <<_mp11>> <<_optional>> <<_preprocessor>> <<_smart_ptr>> <<_static_assert>> <<_static_string>> <<_system>> <<_throw_exception>> <<_type_index>> <<_type_traits>> <<_winapi>> |
+|===
+
+### bimap
+[cols="1,5", grid=none, frame=none, stripes=even]
+|===
+| **Buildable** | **Primary Dependencies** |
+no |<<_concept_check>> <<_config>> <<_container_hash>> <<_core>> <<_iterator>> <<_lambda>> <<_mpl>> <<_multi_index>> <<_preprocessor>> <<_static_assert>> <<_throw_exception>> <<_type_traits>> <<_utility>> |
+|===
+
+### bind
+[cols="1,5", grid=none, frame=none, stripes=even]
+|===
+| **Buildable** | **Primary Dependencies** |
+no |<<_config>> <<_core>> |
+|===
+
+* <<_table_of_dependencies>>
+
+## C
+
+### callable_traits
+
+[cols="1,5", grid=none, frame=none, stripes=even]
+|===
+| **Buildable** | **Primary Dependencies** |
+no | None |
+|===
+
+
+### chrono
+[cols="1,5", grid=none, frame=none, stripes=even]
+|===
+| **Buildable** | **Primary Dependencies** |
+**Yes** |<<_assert>> <<_config>> <<_core>> <<_integer>> <<_move>> <<_mpl>> <<_predef>> <<_ratio>> <<_static_assert>> <<_system>> <<_throw_exception>> <<_type_traits>> <<_typeof>> <<_utility>> <<_winapi>> |
+|===
+
+### circular_buffer
+[cols="1,5", grid=none, frame=none, stripes=even]
+|===
+| **Buildable** | **Primary Dependencies** |
+no |<<_assert>> <<_concept_check>> <<_config>> <<_core>> <<_move>> <<_static_assert>> <<_throw_exception>> <<_type_traits>> |
+|===
+
+### compatibility
+
+[cols="1,5", grid=none, frame=none, stripes=even]
+|===
+| **Buildable** | **Primary Dependencies** |
+no | None |
+|===
+
+### compute
+[cols="1,5", grid=none, frame=none, stripes=even]
+|===
+| **Buildable** | **Primary Dependencies** |
+no |<<_algorithm>> <<_array>> <<_assert>> <<_chrono>> <<_config>> <<_core>> <<_filesystem>> <<_function>> <<_function_types>> <<_fusion>> <<_iterator>> <<_lexical_cast>> <<_mpl>> <<_optional>> <<_preprocessor>> <<_property_tree>> <<_proto>> <<_range>> <<_smart_ptr>> <<_static_assert>> <<_thread>> <<_throw_exception>> <<_tuple>> <<_type_traits>> <<_typeof>> <<_utility>> <<_uuid>> |
+|===
+
+### concept_check
+[cols="1,5", grid=none, frame=none, stripes=even]
+|===
+| **Buildable** | **Primary Dependencies** |
+no |<<_config>> <<_preprocessor>> <<_static_assert>> <<_type_traits>> |
+|===
+
+### config
+
+[cols="1,5", grid=none, frame=none, stripes=even]
+|===
+| **Buildable** | **Primary Dependencies** |
+no | None |
+|===
+
+### container
+[cols="1,5", grid=none, frame=none, stripes=even]
+|===
+| **Buildable** | **Primary Dependencies** |
+**Yes** |<<_assert>> <<_config>> <<_intrusive>> <<_move>> <<_static_assert>> |
+|===
+
+### container_hash
+[cols="1,5", grid=none, frame=none, stripes=even]
+|===
+| **Buildable** | **Primary Dependencies** |
+no |<<_config>> <<_describe>> <<_mp11>> <<_type_traits>> |
+|===
+
+### context
+[cols="1,5", grid=none, frame=none, stripes=even]
+|===
+| **Buildable** | **Primary Dependencies** |
+**Yes** |<<_assert>> <<_config>> <<_core>> <<_mp11>> <<_pool>> <<_predef>> <<_smart_ptr>> |
+|===
+
+### contract
+[cols="1,5", grid=none, frame=none, stripes=even]
+|===
+| **Buildable** | **Primary Dependencies** |
+**Yes** |<<_any>> <<_assert>> <<_config>> <<_core>> <<_exception>> <<_function>> <<_function_types>> <<_mpl>> <<_optional>> <<_preprocessor>> <<_smart_ptr>> <<_static_assert>> <<_thread>> <<_type_traits>> <<_typeof>> <<_utility>> |
+|===
+
+### conversion
+[cols="1,5", grid=none, frame=none, stripes=even]
+|===
+| **Buildable** | **Primary Dependencies** |
+no |<<_assert>> <<_config>> <<_core>> <<_smart_ptr>> <<_throw_exception>> <<_type_traits>> <<_typeof>> |
+|===
+
+### convert
+[cols="1,5", grid=none, frame=none, stripes=even]
+|===
+| **Buildable** | **Primary Dependencies** |
+no |<<_config>> <<_core>> <<_function_types>> <<_lexical_cast>> <<_math>> <<_mpl>> <<_optional>> <<_parameter>> <<_range>> <<_spirit>> <<_type_traits>> |
+|===
+
+### core
+[cols="1,5", grid=none, frame=none, stripes=even]
+|===
+| **Buildable** | **Primary Dependencies** |
+no |<<_assert>> <<_config>> <<_static_assert>> <<_throw_exception>> |
+|===
+
+### coroutine
+[cols="1,5", grid=none, frame=none, stripes=even]
+|===
+| **Buildable** | **Primary Dependencies** |
+**Yes** |<<_assert>> <<_config>> <<_context>> <<_core>> <<_exception>> <<_move>> <<_system>> <<_throw_exception>> <<_type_traits>> <<_utility>> |
+|===
+
+### coroutine2
+[cols="1,5", grid=none, frame=none, stripes=even]
+|===
+| **Buildable** | **Primary Dependencies** |
+no |<<_assert>> <<_config>> <<_context>> |
+|===
+
+### crc
+[cols="1,5", grid=none, frame=none, stripes=even]
+|===
+| **Buildable** | **Primary Dependencies** |
+no |<<_array>> <<_config>> <<_integer>> <<_type_traits>> |
+|===
+
+* <<_table_of_dependencies>>
+
+## D
+
+### date_time
+[cols="1,5", grid=none, frame=none, stripes=even]
+|===
+| **Buildable** | **Primary Dependencies** |
+**Yes** |<<_algorithm>> <<_assert>> <<_config>> <<_core>> <<_io>> <<_lexical_cast>> <<_numeric_conversion>> <<_range>> <<_smart_ptr>> <<_static_assert>> <<_throw_exception>> <<_tokenizer>> <<_type_traits>> <<_utility>> <<_winapi>> |
+|===
+
+### describe
+[cols="1,5", grid=none, frame=none, stripes=even]
+|===
+| **Buildable** | **Primary Dependencies** |
+no |<<_mp11>> |
+|===
+
+### detail
+[cols="1,5", grid=none, frame=none, stripes=even]
+|===
+| **Buildable** | **Primary Dependencies** |
+no |<<_config>> <<_core>> <<_preprocessor>> <<_static_assert>> <<_type_traits>> |
+|===
+
+### dll
+[cols="1,5", grid=none, frame=none, stripes=even]
+|===
+| **Buildable** | **Primary Dependencies** |
+no |<<_assert>> <<_config>> <<_core>> <<_filesystem>> <<_function>> <<_move>> <<_predef>> <<_smart_ptr>> <<_spirit>> <<_static_assert>> <<_system>> <<_throw_exception>> <<_type_index>> <<_type_traits>> <<_winapi>> |
+|===
+
+### dynamic_bitset
+[cols="1,5", grid=none, frame=none, stripes=even]
+|===
+| **Buildable** | **Primary Dependencies** |
+no |<<_assert>> <<_config>> <<_container_hash>> <<_core>> <<_integer>> <<_move>> <<_static_assert>> <<_throw_exception>> |
+|===
+
+* <<_table_of_dependencies>>
+
+## E
+
+### endian
+[cols="1,5", grid=none, frame=none, stripes=even]
+|===
+| **Buildable** | **Primary Dependencies** |
+no |<<_config>> <<_core>> <<_static_assert>> <<_type_traits>> |
+|===
+
+### exception
+[cols="1,5", grid=none, frame=none, stripes=even]
+|===
+| **Buildable** | **Primary Dependencies** |
+**Yes** |<<_assert>> <<_config>> <<_core>> <<_smart_ptr>> <<_throw_exception>> <<_tuple>> <<_type_traits>> |
+|===
+
+* <<_table_of_dependencies>>
+
+## F
+
+### fiber
+[cols="1,5", grid=none, frame=none, stripes=even]
+|===
+| **Buildable** | **Primary Dependencies** |
+**Yes** |<<_algorithm>> <<_assert>> <<_config>> <<_context>> <<_core>> <<_filesystem>> <<_format>> <<_intrusive>> <<_predef>> <<_smart_ptr>> |
+|===
+
+### filesystem
+[cols="1,5", grid=none, frame=none, stripes=even]
+|===
+| **Buildable** | **Primary Dependencies** |
+**Yes** |<<_assert>> <<_atomic>> <<_config>> <<_container_hash>> <<_core>> <<_detail>> <<_io>> <<_iterator>> <<_predef>> <<_smart_ptr>> <<_system>> <<_throw_exception>> <<_type_traits>> <<_winapi>> |
+|===
+
+### flyweight
+[cols="1,5", grid=none, frame=none, stripes=even]
+|===
+| **Buildable** | **Primary Dependencies** |
+no |<<_assert>> <<_config>> <<_container_hash>> <<_core>> <<_detail>> <<_interprocess>> <<_mpl>> <<_multi_index>> <<_parameter>> <<_preprocessor>> <<_smart_ptr>> <<_throw_exception>> <<_type_traits>> |
+|===
+
+### foreach
+[cols="1,5", grid=none, frame=none, stripes=even]
+|===
+| **Buildable** | **Primary Dependencies** |
+no |<<_config>> <<_core>> <<_iterator>> <<_mpl>> <<_range>> <<_type_traits>> |
+|===
+
+### format
+[cols="1,5", grid=none, frame=none, stripes=even]
+|===
+| **Buildable** | **Primary Dependencies** |
+no |<<_assert>> <<_config>> <<_core>> <<_optional>> <<_smart_ptr>> <<_throw_exception>> <<_utility>> |
+|===
+
+### function
+[cols="1,5", grid=none, frame=none, stripes=even]
+|===
+| **Buildable** | **Primary Dependencies** |
+no |<<_assert>> <<_bind>> <<_config>> <<_core>> <<_preprocessor>> <<_throw_exception>> <<_type_traits>> <<_typeof>> |
+|===
+
+### function_types
+[cols="1,5", grid=none, frame=none, stripes=even]
+|===
+| **Buildable** | **Primary Dependencies** |
+no |<<_config>> <<_core>> <<_detail>> <<_mpl>> <<_preprocessor>> <<_type_traits>> |
+|===
+
+### functional
+[cols="1,5", grid=none, frame=none, stripes=even]
+|===
+| **Buildable** | **Primary Dependencies** |
+no |<<_config>> <<_core>> <<_function>> <<_function_types>> <<_mpl>> <<_preprocessor>> <<_type_traits>> <<_typeof>> <<_utility>> |
+|===
+
+### fusion
+[cols="1,5", grid=none, frame=none, stripes=even]
+|===
+| **Buildable** | **Primary Dependencies** |
+no |<<_config>> <<_container_hash>> <<_core>> <<_function_types>> <<_functional>> <<_mpl>> <<_preprocessor>> <<_static_assert>> <<_tuple>> <<_type_traits>> <<_typeof>> <<_utility>> |
+|===
+
+* <<_table_of_dependencies>>
+
+## G
+
+### geometry
+[cols="1,5", grid=none, frame=none, stripes=even]
+|===
+| **Buildable** | **Primary Dependencies** |
+no |<<_algorithm>> <<_any>> <<_array>> <<_assert>> <<_concept_check>> <<_config>> <<_container>> <<_core>> <<_function_types>> <<_fusion>> <<_integer>> <<_iterator>> <<_lexical_cast>> <<_math>> <<_move>> <<_mpl>> <<_multiprecision>> <<_numeric_conversion>> <<_polygon>> <<_qvm>> <<_range>> <<_rational>> <<_serialization>> <<_smart_ptr>> <<_static_assert>> <<_thread>> <<_throw_exception>> <<_tokenizer>> <<_tuple>> <<_type_traits>> <<_utility>> <<_variant>> <<_variant2>> |
+|===
+
+### gil
+[cols="1,5", grid=none, frame=none, stripes=even]
+|===
+| **Buildable** | **Primary Dependencies** |
+no |<<_assert>> <<_concept_check>> <<_config>> <<_container_hash>> <<_core>> <<_filesystem>> <<_integer>> <<_iterator>> <<_mp11>> <<_preprocessor>> <<_type_traits>> <<_variant2>> |
+|===
+
+### graph
+[cols="1,5", grid=none, frame=none, stripes=even]
+|===
+| **Buildable** | **Primary Dependencies** |
+**Yes** |<<_algorithm>> <<_any>> <<_array>> <<_assert>> <<_bimap>> <<_bind>> <<_concept_check>> <<_config>> <<_container_hash>> <<_conversion>> <<_core>> <<_detail>> <<_foreach>> <<_function>> <<_integer>> <<_iterator>> <<_lexical_cast>> <<_math>> <<_move>> <<_mpl>> <<_multi_index>> <<_optional>> <<_parameter>> <<_preprocessor>> <<_property_map>> <<_property_tree>> <<_random>> <<_range>> <<_regex>> <<_serialization>> <<_smart_ptr>> <<_spirit>> <<_static_assert>> <<_throw_exception>> <<_tti>> <<_tuple>> <<_type_traits>> <<_typeof>> <<_unordered>> <<_utility>> <<_xpressive>> |
+|===
+
+### graph_parallel
+[cols="1,5", grid=none, frame=none, stripes=even]
+|===
+| **Buildable** | **Primary Dependencies** |
+**Yes** |<<_algorithm>> <<_assert>> <<_concept_check>> <<_config>> <<_container_hash>> <<_core>> <<_detail>> <<_dynamic_bitset>> <<_filesystem>> <<_foreach>> <<_function>> <<_graph>> <<_iterator>> <<_lexical_cast>> <<_mpi>> <<_mpl>> <<_optional>> <<_property_map>> <<_property_map_parallel>> <<_random>> <<_serialization>> <<_smart_ptr>> <<_static_assert>> <<_tuple>> <<_type_traits>> <<_variant>> |
+|===
+
+* <<_table_of_dependencies>>
+
+## H
+
+### hana
+[cols="1,5", grid=none, frame=none, stripes=even]
+|===
+| **Buildable** | **Primary Dependencies** |
+no |<<_config>> <<_core>> <<_fusion>> <<_mpl>> <<_tuple>> |
+|===
+
+### headers
+
+[cols="1,5", grid=none, frame=none, stripes=even]
+|===
+| **Buildable** | **Primary Dependencies** |
+no | None |
+|===
+
+### heap
+[cols="1,5", grid=none, frame=none, stripes=even]
+|===
+| **Buildable** | **Primary Dependencies** |
+no |<<_array>> <<_assert>> <<_bind>> <<_concept_check>> <<_config>> <<_core>> <<_intrusive>> <<_iterator>> <<_parameter>> <<_static_assert>> <<_throw_exception>> <<_type_traits>> |
+|===
+
+### histogram
+[cols="1,5", grid=none, frame=none, stripes=even]
+|===
+| **Buildable** | **Primary Dependencies** |
+no |<<_config>> <<_core>> <<_math>> <<_mp11>> <<_serialization>> <<_throw_exception>> <<_variant2>> |
+|===
+
+### hof
+
+[cols="1,5", grid=none, frame=none, stripes=even]
+|===
+| **Buildable** | **Primary Dependencies** |
+no | None |
+|===
+
+* <<_table_of_dependencies>>
+
+## I
+
+### icl
+[cols="1,5", grid=none, frame=none, stripes=even]
+|===
+| **Buildable** | **Primary Dependencies** |
+no |<<_assert>> <<_concept_check>> <<_config>> <<_container>> <<_core>> <<_date_time>> <<_detail>> <<_iterator>> <<_move>> <<_mpl>> <<_range>> <<_rational>> <<_static_assert>> <<_type_traits>> <<_utility>> |
+|===
+
+### integer
+[cols="1,5", grid=none, frame=none, stripes=even]
+|===
+| **Buildable** | **Primary Dependencies** |
+no |<<_assert>> <<_config>> <<_core>> <<_static_assert>> <<_throw_exception>> <<_type_traits>> |
+|===
+
+### interprocess
+[cols="1,5", grid=none, frame=none, stripes=even]
+|===
+| **Buildable** | **Primary Dependencies** |
+no |<<_assert>> <<_config>> <<_container>> <<_core>> <<_intrusive>> <<_move>> <<_static_assert>> <<_type_traits>> <<_unordered>> <<_winapi>> |
+|===
+
+### intrusive
+[cols="1,5", grid=none, frame=none, stripes=even]
+|===
+| **Buildable** | **Primary Dependencies** |
+no |<<_assert>> <<_config>> <<_container_hash>> <<_move>> <<_static_assert>> |
+|===
+
+### io
+[cols="1,5", grid=none, frame=none, stripes=even]
+|===
+| **Buildable** | **Primary Dependencies** |
+no |<<_config>> |
+|===
+
+### iostreams
+[cols="1,5", grid=none, frame=none, stripes=even]
+|===
+| **Buildable** | **Primary Dependencies** |
+**Yes** |<<_assert>> <<_config>> <<_core>> <<_detail>> <<_function>> <<_integer>> <<_iterator>> <<_mpl>> <<_numeric_conversion>> <<_preprocessor>> <<_random>> <<_range>> <<_regex>> <<_smart_ptr>> <<_static_assert>> <<_throw_exception>> <<_type_traits>> <<_utility>> |
+|===
+
+### iterator
+[cols="1,5", grid=none, frame=none, stripes=even]
+|===
+| **Buildable** | **Primary Dependencies** |
+no |<<_assert>> <<_concept_check>> <<_config>> <<_conversion>> <<_core>> <<_detail>> <<_function_types>> <<_fusion>> <<_mpl>> <<_optional>> <<_smart_ptr>> <<_static_assert>> <<_type_traits>> <<_utility>> |
+|===
+
+* <<_table_of_dependencies>>
+
+## J
+
+### json
+[cols="1,5", grid=none, frame=none, stripes=even]
+|===
+| **Buildable** | **Primary Dependencies** |
+**Yes** |<<_align>> <<_assert>> <<_config>> <<_container>> <<_container_hash>> <<_core>> <<_describe>> <<_mp11>> <<_system>> <<_throw_exception>> |
+|===
+
+* <<_table_of_dependencies>>
+
+## L
+
+### lambda
+[cols="1,5", grid=none, frame=none, stripes=even]
+|===
+| **Buildable** | **Primary Dependencies** |
+no |<<_bind>> <<_config>> <<_core>> <<_detail>> <<_iterator>> <<_mpl>> <<_preprocessor>> <<_tuple>> <<_type_traits>> <<_utility>> |
+|===
+
+### lambda2
+
+[cols="1,5", grid=none, frame=none, stripes=even]
+|===
+| **Buildable** | **Primary Dependencies** |
+no | None |
+|===
+
+### leaf
+
+[cols="1,5", grid=none, frame=none, stripes=even]
+|===
+| **Buildable** | **Primary Dependencies** |
+no | None |
+|===
+
+### lexical_cast
+[cols="1,5", grid=none, frame=none, stripes=even]
+|===
+| **Buildable** | **Primary Dependencies** |
+no |<<_array>> <<_assert>> <<_config>> <<_container>> <<_core>> <<_integer>> <<_numeric_conversion>> <<_range>> <<_static_assert>> <<_throw_exception>> <<_type_traits>> |
+|===
+
+### local_function
+[cols="1,5", grid=none, frame=none, stripes=even]
+|===
+| **Buildable** | **Primary Dependencies** |
+no |<<_config>> <<_mpl>> <<_preprocessor>> <<_scope_exit>> <<_type_traits>> <<_typeof>> <<_utility>> |
+|===
+
+### locale
+[cols="1,5", grid=none, frame=none, stripes=even]
+|===
+| **Buildable** | **Primary Dependencies** |
+**Yes** |<<_assert>> <<_config>> <<_core>> <<_iterator>> <<_predef>> <<_thread>> |
+|===
+
+### lockfree
+[cols="1,5", grid=none, frame=none, stripes=even]
+|===
+| **Buildable** | **Primary Dependencies** |
+no |<<_align>> <<_array>> <<_assert>> <<_atomic>> <<_config>> <<_core>> <<_integer>> <<_iterator>> <<_mpl>> <<_parameter>> <<_predef>> <<_static_assert>> <<_tuple>> <<_type_traits>> <<_utility>> |
+|===
+
+### log
+[cols="1,5", grid=none, frame=none, stripes=even]
+|===
+| **Buildable** | **Primary Dependencies** |
+**Yes** |<<_align>> <<_array>> <<_asio>> <<_assert>> <<_atomic>> <<_bind>> <<_config>> <<_container>> <<_core>> <<_date_time>> <<_exception>> <<_filesystem>> <<_function_types>> <<_fusion>> <<_interprocess>> <<_intrusive>> <<_io>> <<_iterator>> <<_lexical_cast>> <<_move>> <<_mpl>> <<_optional>> <<_parameter>> <<_phoenix>> <<_predef>> <<_preprocessor>> <<_property_tree>> <<_proto>> <<_random>> <<_range>> <<_regex>> <<_smart_ptr>> <<_spirit>> <<_static_assert>> <<_system>> <<_thread>> <<_throw_exception>> <<_type_index>> <<_type_traits>> <<_utility>> <<_winapi>> <<_xpressive>> |
+|===
+
+### logic
+[cols="1,5", grid=none, frame=none, stripes=even]
+|===
+| **Buildable** | **Primary Dependencies** |
+no |<<_config>> <<_core>> |
+|===
+
+* <<_table_of_dependencies>>
+
+## M
+
+### math
+[cols="1,5", grid=none, frame=none, stripes=even]
+|===
+| **Buildable** | **Primary Dependencies** |
+**Yes** |<<_assert>> <<_concept_check>> <<_config>> <<_core>> <<_integer>> <<_lexical_cast>> <<_predef>> <<_random>> <<_static_assert>> <<_throw_exception>> |
+|===
+
+### metaparse
+[cols="1,5", grid=none, frame=none, stripes=even]
+|===
+| **Buildable** | **Primary Dependencies** |
+no |<<_config>> <<_mpl>> <<_predef>> <<_preprocessor>> <<_static_assert>> <<_type_traits>> |
+|===
+
+### move
+[cols="1,5", grid=none, frame=none, stripes=even]
+|===
+| **Buildable** | **Primary Dependencies** |
+no |<<_config>> |
+|===
+
+### mp11
+
+[cols="1,5", grid=none, frame=none, stripes=even]
+|===
+| **Buildable** | **Primary Dependencies** |
+no | None |
+|===
+
+### mpi
+[cols="1,5", grid=none, frame=none, stripes=even]
+|===
+| **Buildable** | **Primary Dependencies** |
+**Yes** |<<_assert>> <<_config>> <<_core>> <<_foreach>> <<_function>> <<_graph>> <<_integer>> <<_iterator>> <<_lexical_cast>> <<_mpl>> <<_optional>> <<_python>> <<_serialization>> <<_smart_ptr>> <<_static_assert>> <<_throw_exception>> <<_type_traits>> <<_utility>> |
+|===
+
+### mpl
+[cols="1,5", grid=none, frame=none, stripes=even]
+|===
+| **Buildable** | **Primary Dependencies** |
+no |<<_config>> <<_core>> <<_predef>> <<_preprocessor>> <<_static_assert>> <<_type_traits>> <<_utility>> |
+|===
+
+### msm
+[cols="1,5", grid=none, frame=none, stripes=even]
+|===
+| **Buildable** | **Primary Dependencies** |
+no |<<_any>> <<_assert>> <<_bind>> <<_circular_buffer>> <<_config>> <<_core>> <<_function>> <<_fusion>> <<_mpl>> <<_parameter>> <<_phoenix>> <<_preprocessor>> <<_proto>> <<_serialization>> <<_tuple>> <<_type_traits>> <<_typeof>> |
+|===
+
+### multi_array
+[cols="1,5", grid=none, frame=none, stripes=even]
+|===
+| **Buildable** | **Primary Dependencies** |
+no |<<_array>> <<_assert>> <<_concept_check>> <<_config>> <<_core>> <<_functional>> <<_iterator>> <<_mpl>> <<_static_assert>> <<_type_traits>> |
+|===
+
+### multi_index
+[cols="1,5", grid=none, frame=none, stripes=even]
+|===
+| **Buildable** | **Primary Dependencies** |
+no |<<_assert>> <<_bind>> <<_config>> <<_container_hash>> <<_core>> <<_integer>> <<_iterator>> <<_move>> <<_mpl>> <<_preprocessor>> <<_smart_ptr>> <<_static_assert>> <<_throw_exception>> <<_tuple>> <<_type_traits>> <<_utility>> |
+|===
+
+### multiprecision
+[cols="1,5", grid=none, frame=none, stripes=even]
+|===
+| **Buildable** | **Primary Dependencies** |
+no |<<_assert>> <<_config>> <<_core>> <<_integer>> <<_lexical_cast>> <<_math>> <<_predef>> <<_random>> <<_throw_exception>> |
+|===
+
+### mysql
+[cols="1,5", grid=none, frame=none, stripes=even]
+|===
+| **Buildable** | **Primary Dependencies** |
+no |<<_asio>> <<_assert>> <<_config>> <<_core>> <<_endian>> <<_lexical_cast>> <<_mp11>> <<_system>> <<_throw_exception>> <<_variant2>> |
+|===
+
+* <<_table_of_dependencies>>
+
+## N
+
+### nowide
+[cols="1,5", grid=none, frame=none, stripes=even]
+|===
+| **Buildable** | **Primary Dependencies** |
+**Yes** |<<_config>> <<_filesystem>> |
+|===
+
+### numeric_conversion
+[cols="1,5", grid=none, frame=none, stripes=even]
+|===
+| **Buildable** | **Primary Dependencies** |
+no |<<_config>> <<_conversion>> <<_core>> <<_mpl>> <<_preprocessor>> <<_throw_exception>> <<_type_traits>> |
+|===
+
+### numeric_interval
+[cols="1,5", grid=none, frame=none, stripes=even]
+|===
+| **Buildable** | **Primary Dependencies** |
+no |<<_config>> <<_detail>> <<_logic>> |
+|===
+
+### numeric_odeint
+[cols="1,5", grid=none, frame=none, stripes=even]
+|===
+| **Buildable** | **Primary Dependencies** |
+no |<<_array>> <<_assert>> <<_bind>> <<_compute>> <<_config>> <<_core>> <<_function>> <<_fusion>> <<_iterator>> <<_math>> <<_mpi>> <<_mpl>> <<_multi_array>> <<_numeric_ublas>> <<_preprocessor>> <<_range>> <<_static_assert>> <<_throw_exception>> <<_type_traits>> <<_units>> <<_utility>> |
+|===
+
+### numeric_ublas
+[cols="1,5", grid=none, frame=none, stripes=even]
+|===
+| **Buildable** | **Primary Dependencies** |
+no |<<_compute>> <<_concept_check>> <<_config>> <<_core>> <<_iterator>> <<_mpl>> <<_numeric_interval>> <<_range>> <<_serialization>> <<_smart_ptr>> <<_static_assert>> <<_type_traits>> <<_typeof>> |
+|===
+
+* <<_table_of_dependencies>>
+
+## O
+
+### optional
+[cols="1,5", grid=none, frame=none, stripes=even]
+|===
+| **Buildable** | **Primary Dependencies** |
+no |<<_assert>> <<_config>> <<_core>> <<_detail>> <<_move>> <<_predef>> <<_static_assert>> <<_throw_exception>> <<_type_traits>> <<_utility>> |
+|===
+
+### outcome
+[cols="1,5", grid=none, frame=none, stripes=even]
+|===
+| **Buildable** | **Primary Dependencies** |
+no |<<_config>> <<_exception>> <<_system>> <<_throw_exception>> |
+|===
+
+* <<_table_of_dependencies>>
+
+## P
+
+### parameter
+[cols="1,5", grid=none, frame=none, stripes=even]
+|===
+| **Buildable** | **Primary Dependencies** |
+no |<<_config>> <<_core>> <<_function>> <<_fusion>> <<_mp11>> <<_mpl>> <<_optional>> <<_preprocessor>> <<_type_traits>> <<_utility>> |
+|===
+
+### parameter_python
+[cols="1,5", grid=none, frame=none, stripes=even]
+|===
+| **Buildable** | **Primary Dependencies** |
+no |<<_mpl>> <<_parameter>> <<_preprocessor>> <<_python>> |
+|===
+
+### pfr
+
+[cols="1,5", grid=none, frame=none, stripes=even]
+|===
+| **Buildable** | **Primary Dependencies** |
+no | None |
+|===
+
+### phoenix
+[cols="1,5", grid=none, frame=none, stripes=even]
+|===
+| **Buildable** | **Primary Dependencies** |
+no |<<_assert>> <<_bind>> <<_config>> <<_core>> <<_function>> <<_fusion>> <<_mpl>> <<_predef>> <<_preprocessor>> <<_proto>> <<_range>> <<_smart_ptr>> <<_type_traits>> <<_utility>> |
+|===
+
+### poly_collection
+[cols="1,5", grid=none, frame=none, stripes=even]
+|===
+| **Buildable** | **Primary Dependencies** |
+no |<<_assert>> <<_config>> <<_core>> <<_iterator>> <<_mp11>> <<_mpl>> <<_type_erasure>> <<_type_traits>> |
+|===
+
+### polygon
+[cols="1,5", grid=none, frame=none, stripes=even]
+|===
+| **Buildable** | **Primary Dependencies** |
+no |<<_config>> |
+|===
+
+### pool
+[cols="1,5", grid=none, frame=none, stripes=even]
+|===
+| **Buildable** | **Primary Dependencies** |
+no |<<_assert>> <<_config>> <<_integer>> <<_throw_exception>> <<_type_traits>> <<_winapi>> |
+|===
+
+### predef
+
+[cols="1,5", grid=none, frame=none, stripes=even]
+|===
+| **Buildable** | **Primary Dependencies** |
+no | None |
+|===
+
+### preprocessor
+
+[cols="1,5", grid=none, frame=none, stripes=even]
+|===
+| **Buildable** | **Primary Dependencies** |
+no | None |
+|===
+
+### process
+[cols="1,5", grid=none, frame=none, stripes=even]
+|===
+| **Buildable** | **Primary Dependencies** |
+no |<<_algorithm>> <<_asio>> <<_config>> <<_core>> <<_filesystem>> <<_fusion>> <<_io>> <<_iterator>> <<_move>> <<_optional>> <<_system>> <<_throw_exception>> <<_tokenizer>> <<_type_index>> <<_utility>> <<_winapi>> |
+|===
+
+### program_options
+[cols="1,5", grid=none, frame=none, stripes=even]
+|===
+| **Buildable** | **Primary Dependencies** |
+**Yes** |<<_any>> <<_bind>> <<_config>> <<_core>> <<_detail>> <<_function>> <<_iterator>> <<_lexical_cast>> <<_smart_ptr>> <<_static_assert>> <<_throw_exception>> <<_tokenizer>> <<_type_traits>> |
+|===
+
+### property_map
+[cols="1,5", grid=none, frame=none, stripes=even]
+|===
+| **Buildable** | **Primary Dependencies** |
+no |<<_any>> <<_assert>> <<_concept_check>> <<_config>> <<_core>> <<_function>> <<_iterator>> <<_lexical_cast>> <<_mpl>> <<_smart_ptr>> <<_static_assert>> <<_throw_exception>> <<_type_index>> <<_type_traits>> <<_utility>> |
+|===
+
+### property_map_parallel
+[cols="1,5", grid=none, frame=none, stripes=even]
+|===
+| **Buildable** | **Primary Dependencies** |
+no |<<_assert>> <<_concept_check>> <<_config>> <<_function>> <<_mpi>> <<_mpl>> <<_multi_index>> <<_optional>> <<_property_map>> <<_serialization>> <<_smart_ptr>> <<_static_assert>> <<_type_traits>> |
+|===
+
+### property_tree
+[cols="1,5", grid=none, frame=none, stripes=even]
+|===
+| **Buildable** | **Primary Dependencies** |
+no |<<_any>> <<_assert>> <<_bind>> <<_config>> <<_core>> <<_format>> <<_iterator>> <<_mpl>> <<_multi_index>> <<_optional>> <<_range>> <<_serialization>> <<_static_assert>> <<_throw_exception>> <<_type_traits>> |
+|===
+
+### proto
+[cols="1,5", grid=none, frame=none, stripes=even]
+|===
+| **Buildable** | **Primary Dependencies** |
+no |<<_config>> <<_core>> <<_fusion>> <<_mpl>> <<_preprocessor>> <<_range>> <<_static_assert>> <<_type_traits>> <<_typeof>> <<_utility>> |
+|===
+
+### ptr_container
+[cols="1,5", grid=none, frame=none, stripes=even]
+|===
+| **Buildable** | **Primary Dependencies** |
+no |<<_array>> <<_assert>> <<_circular_buffer>> <<_config>> <<_core>> <<_iterator>> <<_mpl>> <<_range>> <<_smart_ptr>> <<_static_assert>> <<_type_traits>> <<_unordered>> <<_utility>> |
+|===
+
+### python
+[cols="1,5", grid=none, frame=none, stripes=even]
+|===
+| **Buildable** | **Primary Dependencies** |
+**Yes** |<<_align>> <<_bind>> <<_config>> <<_conversion>> <<_core>> <<_detail>> <<_foreach>> <<_function>> <<_graph>> <<_integer>> <<_iterator>> <<_lexical_cast>> <<_mpl>> <<_numeric_conversion>> <<_preprocessor>> <<_property_map>> <<_smart_ptr>> <<_static_assert>> <<_tuple>> <<_type_traits>> <<_utility>> |
+|===
+
+* <<_table_of_dependencies>>
+
+## Q
+
+### qvm
+
+[cols="1,5", grid=none, frame=none, stripes=even]
+|===
+| **Buildable** | **Primary Dependencies** |
+no | None |
+|===
+
+* <<_table_of_dependencies>>
+
+## R
+
+### random
+[cols="1,5", grid=none, frame=none, stripes=even]
+|===
+| **Buildable** | **Primary Dependencies** |
+**Yes** |<<_array>> <<_assert>> <<_config>> <<_core>> <<_dynamic_bitset>> <<_integer>> <<_io>> <<_range>> <<_static_assert>> <<_system>> <<_throw_exception>> <<_type_traits>> <<_utility>> |
+|===
+
+### range
+[cols="1,5", grid=none, frame=none, stripes=even]
+|===
+| **Buildable** | **Primary Dependencies** |
+no |<<_array>> <<_assert>> <<_concept_check>> <<_config>> <<_container_hash>> <<_conversion>> <<_core>> <<_detail>> <<_iterator>> <<_mpl>> <<_optional>> <<_preprocessor>> <<_regex>> <<_static_assert>> <<_tuple>> <<_type_traits>> <<_utility>> |
+|===
+
+### ratio
+[cols="1,5", grid=none, frame=none, stripes=even]
+|===
+| **Buildable** | **Primary Dependencies** |
+no |<<_config>> <<_core>> <<_integer>> <<_mpl>> <<_rational>> <<_static_assert>> <<_type_traits>> |
+|===
+
+### rational
+[cols="1,5", grid=none, frame=none, stripes=even]
+|===
+| **Buildable** | **Primary Dependencies** |
+no |<<_assert>> <<_config>> <<_core>> <<_integer>> <<_static_assert>> <<_throw_exception>> <<_type_traits>> <<_utility>> |
+|===
+
+### regex
+[cols="1,5", grid=none, frame=none, stripes=even]
+|===
+| **Buildable** | **Primary Dependencies** |
+**Yes** |<<_assert>> <<_concept_check>> <<_config>> <<_container_hash>> <<_core>> <<_integer>> <<_mpl>> <<_predef>> <<_smart_ptr>> <<_static_assert>> <<_throw_exception>> <<_type_traits>> |
+|===
+
+* <<_table_of_dependencies>>
+
+## S
+
+### safe_numerics
+[cols="1,5", grid=none, frame=none, stripes=even]
+|===
+| **Buildable** | **Primary Dependencies** |
+no |<<_concept_check>> <<_config>> <<_core>> <<_integer>> <<_logic>> <<_mp11>> |
+|===
+
+### scope_exit
+[cols="1,5", grid=none, frame=none, stripes=even]
+|===
+| **Buildable** | **Primary Dependencies** |
+no |<<_config>> <<_function>> <<_preprocessor>> <<_type_traits>> <<_typeof>> |
+|===
+
+### serialization
+[cols="1,5", grid=none, frame=none, stripes=even]
+|===
+| **Buildable** | **Primary Dependencies** |
+**Yes** |<<_array>> <<_assert>> <<_config>> <<_core>> <<_detail>> <<_function>> <<_integer>> <<_io>> <<_iterator>> <<_move>> <<_mpl>> <<_optional>> <<_predef>> <<_preprocessor>> <<_smart_ptr>> <<_spirit>> <<_static_assert>> <<_type_traits>> <<_unordered>> <<_utility>> <<_variant>> |
+|===
+
+### signals2
+[cols="1,5", grid=none, frame=none, stripes=even]
+|===
+| **Buildable** | **Primary Dependencies** |
+no |<<_assert>> <<_bind>> <<_config>> <<_core>> <<_function>> <<_iterator>> <<_mpl>> <<_optional>> <<_parameter>> <<_predef>> <<_preprocessor>> <<_smart_ptr>> <<_throw_exception>> <<_tuple>> <<_type_traits>> <<_variant>> |
+|===
+
+### smart_ptr
+[cols="1,5", grid=none, frame=none, stripes=even]
+|===
+| **Buildable** | **Primary Dependencies** |
+no |<<_assert>> <<_config>> <<_core>> <<_move>> <<_static_assert>> <<_throw_exception>> <<_type_traits>> |
+|===
+
+### sort
+[cols="1,5", grid=none, frame=none, stripes=even]
+|===
+| **Buildable** | **Primary Dependencies** |
+no |<<_config>> <<_core>> <<_range>> <<_static_assert>> <<_type_traits>> |
+|===
+
+### spirit
+[cols="1,5", grid=none, frame=none, stripes=even]
+|===
+| **Buildable** | **Primary Dependencies** |
+no |<<_array>> <<_assert>> <<_config>> <<_core>> <<_endian>> <<_function>> <<_function_types>> <<_fusion>> <<_integer>> <<_io>> <<_iterator>> <<_move>> <<_mpl>> <<_optional>> <<_phoenix>> <<_pool>> <<_preprocessor>> <<_proto>> <<_range>> <<_regex>> <<_smart_ptr>> <<_static_assert>> <<_thread>> <<_throw_exception>> <<_type_traits>> <<_typeof>> <<_unordered>> <<_utility>> <<_variant>> |
+|===
+
+### stacktrace
+[cols="1,5", grid=none, frame=none, stripes=even]
+|===
+| **Buildable** | **Primary Dependencies** |
+**Yes** |<<_array>> <<_config>> <<_container_hash>> <<_core>> <<_predef>> <<_static_assert>> <<_type_traits>> <<_winapi>> |
+|===
+
+### statechart
+[cols="1,5", grid=none, frame=none, stripes=even]
+|===
+| **Buildable** | **Primary Dependencies** |
+no |<<_assert>> <<_bind>> <<_config>> <<_conversion>> <<_core>> <<_detail>> <<_function>> <<_mpl>> <<_smart_ptr>> <<_static_assert>> <<_thread>> <<_type_traits>> |
+|===
+
+### static_assert
+[cols="1,5", grid=none, frame=none, stripes=even]
+|===
+| **Buildable** | **Primary Dependencies** |
+no |<<_config>> |
+|===
+
+### static_string
+[cols="1,5", grid=none, frame=none, stripes=even]
+|===
+| **Buildable** | **Primary Dependencies** |
+no |<<_assert>> <<_config>> <<_container_hash>> <<_core>> <<_static_assert>> <<_throw_exception>> <<_utility>> |
+|===
+
+### stl_interfaces
+[cols="1,5", grid=none, frame=none, stripes=even]
+|===
+| **Buildable** | **Primary Dependencies** |
+no |<<_assert>> <<_config>> <<_type_traits>> |
+|===
+
+### system
+[cols="1,5", grid=none, frame=none, stripes=even]
+|===
+| **Buildable** | **Primary Dependencies** |
+**Yes** |<<_assert>> <<_config>> <<_throw_exception>> <<_variant2>> <<_winapi>> |
+|===
+
+* <<_table_of_dependencies>>
+
+## T
+
+### test
+[cols="1,5", grid=none, frame=none, stripes=even]
+|===
+| **Buildable** | **Primary Dependencies** |
+**Yes** |<<_algorithm>> <<_assert>> <<_bind>> <<_config>> <<_core>> <<_detail>> <<_exception>> <<_function>> <<_io>> <<_iterator>> <<_mpl>> <<_numeric_conversion>> <<_optional>> <<_preprocessor>> <<_smart_ptr>> <<_static_assert>> <<_type_traits>> <<_utility>> |
+|===
+
+### thread
+[cols="1,5", grid=none, frame=none, stripes=even]
+|===
+| **Buildable** | **Primary Dependencies** |
+**Yes** |<<_algorithm>> <<_assert>> <<_atomic>> <<_bind>> <<_chrono concept_check>> <<_config>> <<_container>> <<_container_hash>> <<_core>> <<_date_time>> <<_exception>> <<_function>> <<_intrusive>> <<_io>> <<_iterator>> <<_lexical_cast>> <<_move>> <<_optional>> <<_predef>> <<_preprocessor>> <<_smart_ptr>> <<_static_assert>> <<_system>> <<_throw_exception>> <<_tuple>> <<_type_traits>> <<_utility>> <<_winapi>> |
+|===
+
+### throw_exception
+[cols="1,5", grid=none, frame=none, stripes=even]
+|===
+| **Buildable** | **Primary Dependencies** |
+no |<<_assert>> <<_config>> |
+|===
+
+### timer
+[cols="1,5", grid=none, frame=none, stripes=even]
+|===
+| **Buildable** | **Primary Dependencies** |
+**Yes** |<<_chrono>> <<_config>> <<_core>> <<_io>> <<_predef>> <<_system>> <<_throw_exception>> |
+|===
+
+### tokenizer
+[cols="1,5", grid=none, frame=none, stripes=even]
+|===
+| **Buildable** | **Primary Dependencies** |
+no |<<_assert>> <<_config>> <<_iterator>> <<_throw_exception>> <<_type_traits>> |
+|===
+
+### tti
+[cols="1,5", grid=none, frame=none, stripes=even]
+|===
+| **Buildable** | **Primary Dependencies** |
+no |<<_config>> <<_function_types>> <<_mpl>> <<_preprocessor>> <<_type_traits>> |
+|===
+
+### tuple
+[cols="1,5", grid=none, frame=none, stripes=even]
+|===
+| **Buildable** | **Primary Dependencies** |
+no |<<_config>> <<_core>> <<_static_assert>> <<_type_traits>> |
+|===
+
+### type_erasure
+[cols="1,5", grid=none, frame=none, stripes=even]
+|===
+| **Buildable** | **Primary Dependencies** |
+**Yes** |<<_assert>> <<_config>> <<_core>> <<_fusion>> <<_iterator>> <<_mp11>> <<_mpl>> <<_preprocessor>> <<_smart_ptr>> <<_thread>> <<_throw_exception>> <<_type_traits>> <<_typeof>> <<_vmd>> |
+|===
+
+### type_index
+[cols="1,5", grid=none, frame=none, stripes=even]
+|===
+| **Buildable** | **Primary Dependencies** |
+no |<<_config>> <<_container_hash>> <<_core>> <<_preprocessor>> <<_static_assert>> <<_throw_exception>> <<_type_traits>> |
+|===
+
+### type_traits
+[cols="1,5", grid=none, frame=none, stripes=even]
+|===
+| **Buildable** | **Primary Dependencies** |
+no |<<_config>> <<_static_assert>> |
+|===
+
+### typeof
+[cols="1,5", grid=none, frame=none, stripes=even]
+|===
+| **Buildable** | **Primary Dependencies** |
+no |<<_config>> <<_preprocessor>> <<_type_traits>> |
+|===
+
+* <<_table_of_dependencies>>
+
+## U
+
+### units
+[cols="1,5", grid=none, frame=none, stripes=even]
+|===
+| **Buildable** | **Primary Dependencies** |
+no |<<_assert>> <<_config>> <<_core>> <<_integer>> <<_io>> <<_lambda>> <<_math>> <<_mpl>> <<_preprocessor>> <<_static_assert>> <<_type_traits>> <<_typeof>> |
+|===
+
+### unordered
+[cols="1,5", grid=none, frame=none, stripes=even]
+|===
+| **Buildable** | **Primary Dependencies** |
+no |<<_assert>> <<_config>> <<_container_hash>> <<_core>> <<_move>> <<_mp11>> <<_predef>> <<_preprocessor>> <<_static_assert>> <<_throw_exception>> <<_tuple>> <<_type_traits>> |
+|===
+
+### url
+[cols="1,5", grid=none, frame=none, stripes=even]
+|===
+| **Buildable** | **Primary Dependencies** |
+**Yes** |<<_align>> <<_assert>> <<_config>> <<_core>> <<_mp11>> <<_optional>> <<_static_assert>> <<_system>> <<_throw_exception>> <<_type_traits>> <<_variant2>> |
+|===
+
+### utility
+[cols="1,5", grid=none, frame=none, stripes=even]
+|===
+| **Buildable** | **Primary Dependencies** |
+no |<<_assert>> <<_config>> <<_core>> <<_io>> <<_preprocessor>> <<_throw_exception>> <<_type_traits>> |
+|===
+
+### uuid
+[cols="1,5", grid=none, frame=none, stripes=even]
+|===
+| **Buildable** | **Primary Dependencies** |
+no |<<_assert>> <<_config>> <<_container_hash>> <<_core>> <<_io>> <<_move>> <<_numeric_conversion>> <<_predef>> <<_random>> <<_static_assert>> <<_throw_exception>> <<_tti>> <<_type_traits>> <<_winapi>> |
+|===
+
+* <<_table_of_dependencies>>
+
+## V
+
+### variant
+[cols="1,5", grid=none, frame=none, stripes=even]
+|===
+| **Buildable** | **Primary Dependencies** |
+no |<<_assert>> <<_bind>> <<_config>> <<_container_hash>> <<_core>> <<_detail>> <<_integer>> <<_move>> <<_mpl>> <<_preprocessor>> <<_static_assert>> <<_throw_exception>> <<_type_index>> <<_type_traits>> <<_utility>> |
+|===
+
+### variant2
+[cols="1,5", grid=none, frame=none, stripes=even]
+|===
+| **Buildable** | **Primary Dependencies** |
+no |<<_assert>> <<_config>> <<_mp11>> |
+|===
+
+### vmd
+[cols="1,5", grid=none, frame=none, stripes=even]
+|===
+| **Buildable** | **Primary Dependencies** |
+no |<<_preprocessor>> |
+|===
+
+* <<_table_of_dependencies>>
+
+## W
+
+### wave
+[cols="1,5", grid=none, frame=none, stripes=even]
+|===
+| **Buildable** | **Primary Dependencies** |
+**Yes** |<<_assert>> <<_concept_check>> <<_config>> <<_core>> <<_filesystem>> <<_format>> <<_iterator>> <<_lexical_cast>> <<_mpl>> <<_multi_index>> <<_optional>> <<_pool>> <<_preprocessor>> <<_serialization>> <<_smart_ptr>> <<_spirit>> <<_static_assert>> <<_throw_exception>> <<_type_traits>> |
+|===
+
+### winapi
+[cols="1,5", grid=none, frame=none, stripes=even]
+|===
+| **Buildable** | **Primary Dependencies** |
+no |<<_config>> <<_predef>> |
+|===
+
+* <<_table_of_dependencies>>
+
+## X
+
+### xpressive
+[cols="1,5", grid=none, frame=none, stripes=even]
+|===
+| **Buildable** | **Primary Dependencies** |
+no |<<_assert>> <<_config>> <<_conversion>> <<_core>> <<_exception>> <<_fusion>> <<_integer>> <<_iterator>> <<_lexical_cast>> <<_mpl>> <<_numeric_conversion>> <<_optional>> <<_preprocessor>> <<_proto>> <<_range>> <<_smart_ptr>> <<_static_assert>> <<_throw_exception>> <<_type_traits>> <<_typeof>> <<_utility>> |
+|===
+
+* <<_table_of_dependencies>>
+
+##  Y
+
+### yap
+[cols="1,5", grid=none, frame=none, stripes=even]
+|===
+| **Buildable** | **Primary Dependencies** |
+no |<<_hana>> <<_preprocessor>> <<_type_index>> |
+|===
+
+### See Also
+[square]
+* xref:build-options.adoc[]
+* xref:library-naming.adoc[]
+

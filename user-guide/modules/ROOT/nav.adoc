@@ -32,3 +32,4 @@
 ** xref:library-naming.adoc[]
 ** xref:header-organization-compilation.adoc[]
 ** xref:build-options.adoc[]
+** xref:library-dependencies.adoc[]
