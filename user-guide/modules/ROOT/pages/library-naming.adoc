@@ -38,7 +38,7 @@ be broken down into the following elements:
 
 [cols="1,5,2",options="header",stripes=even]
 |===
-|Key |Use this library when: |Boost.Build option
+|Key |Use this library when: |B2 option
 |`s` |linking statically to the C++ standard library and compiler
 runtime support libraries. |`runtime-link=static`
 |`g` |using debug versions of the standard and runtime support
@@ -61,7 +61,7 @@ apply, the ABI tag is omitted.
 
 [width="100%",cols="1,3,4",options="header",stripes=even]
 |===
-|Key |Architecture |Boost.Build option
+|Key |Architecture |B2 option
 |`x` |x86-32, x86-64 | `architecture=x86`
 |`a` |ARM |`architecture=arm`
 |`i` |IA-64 |`architecture=ia64`
@@ -75,7 +75,7 @@ follows:
 
 [width="100%",cols="1,3,4",options="header",stripes=even]
 |===
-|Key |Address model |Boost.Build option
+|Key |Address model |B2 option
 |`32` |32 bit |`address-model=32`
 |`64` |64 bit |`address-model=64`
 |===
@@ -122,7 +122,7 @@ After installing Boost, this is the resulting directory structure, in the *boost
 |*more*  | *getting_started*  *writingdoc* | Policy, getting started, and Contributor Guide documentation
 |*stage* | *lib* | CMake files for each library
 |*status*| | Boost-wide test suite
-|*tools* | tool folders |Utilities: Boost.Build, quickbook, bcp, etc.
+|*tools* | tool folders |Utilities: B2, quickbook, bcp, etc.
 |b2.exe| | Boost install app, and supporting files
 |index.htm | | A copy of www.boost.org starts here
 |===

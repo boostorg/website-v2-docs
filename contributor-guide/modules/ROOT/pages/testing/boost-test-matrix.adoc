@@ -29,7 +29,7 @@ To run every library's regression tests, run b2
  from *<boost-root>*/status directory.
 
 
-To run Boost.Build's regression tests, run "python
+To run B2's regression tests, run "python
  test\_all.py" from *<boost-root>*/tools/build/v2/test
  directory. (Python 2.3 ≤ version < 3.0 required.)
 
@@ -151,14 +151,13 @@ The regression run procedure will:
 
 * Download the most recent regression scripts.
 * Download the designated testing tool sources including
- Boost.Jam, Boost.Build, and the various regression
+ Boost.Jam, B2, and the various regression
  programs.
 * Download the most recent from the [Boost Git Repository](/users/download/#repository)
  into the subdirectory boost.
 * Build b2 and process\_jam\_log if
  needed. (process\_jam\_log is a utility, which
- extracts the test results from the log file produced by
- Boost.Build).
+ extracts the test results from the log file produced by B2).
 * Run regression tests, process and collect the
  results.
 * Upload the results to a common FTP server.
