@@ -100,6 +100,20 @@ Make sure your code compiles in the presence of the `min()` and `max()` macros. 
 
 * If you want to declare or define a function or a member function named min or max, then you must use the `BOOST_PREVENT_MACRO_SUBSTITUTION` macro. Instead of writing `int min() { return 0; }` you should write int min `BOOST_PREVENT_MACRO_SUBSTITUTION () { return 0; }` This is true regardless if the function is a free (namespace scope) function, a member function or a static member function, and it applies for the function declaration as well as for the function definition.
 
+== Support for Dynamic Libraries
+
+A dynamic library is a compiled collection of binary code and data that can be loaded and linked into a program at runtime, allowing shared use of library functions across multiple applications without the need for recompilation. Unlike static libraries, which are linked at compile time and become part of the resulting executable, dynamic libraries remain separate files and are often employed to save memory, reduce redundancy, and facilitate modular application design.
+
+This concept is known by different names on various platforms: shared objects (.so) on UNIX systems, dynamic link libraries (.dll) on Windows, and dynamic shared libraries (.dylib) on macOS.
+
+If your plan for your library is to enable its use as a dynamic library, you need to implement two sets of macros:
+
+. https://www.boost.org/doc/libs/master/libs/config/doc/html/boost_config/boost_macro_reference.html#boost_config.boost_macro_reference.macros_for_libraries_with_separate_source_code.macros_controlling_shared_library_symbol_visibility[Macros controlling shared library symbol visibility]
+
+. https://www.boost.org/doc/libs/master/libs/config/doc/html/boost_config/boost_macro_reference.html#boost_config.boost_macro_reference.macros_for_libraries_with_separate_source_code.automatic_library_selection[Automatic library selection]
+
+As untested macros are error-prone, it is important that they are thoroughly tested on a full range of compilers. For a full list of compilers, refer to  xref:user-guide:ROOT:header-organization-compilation.adoc#toolset[Toolsets].
+
 == Filenames
 
 Naming requirements ensure that file and directory names are relatively portable, including to ISO 9660:1999 (with extensions) and other relatively limited file systems. Superscript links are provided to detailed rationale for each choice.
@@ -153,8 +167,6 @@ link:#footnote6-location[(6)]:: We had to draw the line somewhere, and so the li
 
 [#footnote7]
 link:#footnote7-location[(7)]:: ISO 9660:1999.
-
-
 
 == Redirection
 
