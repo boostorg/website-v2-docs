@@ -58,7 +58,7 @@ sudo dnf update
 sudo dnf install gcc-c++ python3 bzip2-devel zlib-devel libicu-devel
 ----
 
-For CentOS systems, use the following commands:
+For Redhat-based systems (RHEL, CentOS Stream, etc.), use the following commands:
 
 [source,bash]
 ----
