@@ -1,5 +1,129 @@
 = Release Notes
 :navtitle: Release Notes
 
+Writing release notes is crucial for informing users about the changes made in the latest version of your library.
 
-*Content under construction.*
+Two versions of your release notes need to be prepared: one for your library's own documentation, one for a Boost history that covers all libraries added or updated in a release. 
+
+For the former, the Boost community does not have a strict format for your libraries' version of release notes (and some libraries refer to release notes as a  _change log_ or _history_). Follow the <<_release_note_checklist>>.
+
+For the latter, you will need to update a Boost history file with a succinct version of your completed release notes. These files do have a specified format, described in <<_update_boost_history>>.
+
+== Release Note Checklist
+
+When writing release notes for your library remember that the main goal is to effectively communicate the changes to the end-users. It's always a good practice to put yourself in the mind set of your developers, and think about what information they would need and appreciate. Be brief, but not so brief that only a seasoned user of your library will understand the context.
+
+=== Header Information
+
+Make sure the version number, and date of release are mentioned.
+
+=== Summary
+
+If this release addresses particular topics, provide a brief overview of the main changes, enhancements, or the theme of this release if there's one.
+
+=== Breaking Changes
+
+Before detailing other updates, immediately inform users of any backward-incompatible changes. This is crucial as these changes can directly impact existing code. The process for breaking changes is covered in detail in  xref:version-control.adoc[].
+
+=== API Parameters
+
+If you have added additional parameters (or changed a return value, or similar API change) to a function that are not breaking changes, then list them separately. If an API change might break an existing application, then ensure to list it under <<_breaking_changes>>.
+
+=== New Features
+
+Describe any new features or major enhancements. For complex features, consider adding a brief example or pointing to updated documentation. If the feature is referenced in an *Issue*, then consider adding a link to that issue.
+
+=== Bug Fixes
+
+List the fixed bugs, ideally with a brief description. If you're using a bug tracking system (like GitHub issues), provide links to the bug reports described in the issues. Include the identifier or number of the bug if available.
+
+=== Deprecations
+
+Mention any functions, classes, or features that are deprecated and might be removed in future releases.
+
+=== Performance Improvements
+
+Detail any optimizations or performance-related changes, ideally with metrics or benchmarks if they are significant.
+
+=== Documentation Updates
+
+Highlight and link to any significant updates in documentation, new examples, or tutorials.
+
+=== Acknowledgements
+
+Credit contributors or those who reported crucial bugs. Recognize any person or organization that played a special role in this release.
+
+=== Known Issues
+
+Briefly describe any known limitations or issues that are still unresolved in the current release. Include known compatibility issues - including with compilers and tools, and other libraries.
+
+=== Upgrade Notes
+
+Provide any specific instructions or recommendations for users upgrading from a previous version, especially if there are any manual steps involved.
+
+== Consistency and Formatting
+
+* Use clear and concise language. Experience has shown that short release notes are read, long files much less so. Do not add into release notes extensive text that should be in your main library documentation.
+
+* Be consistent in the formatting. If you're using bullet points for one section, maintain that for others.
+* Use headers and sub-headers to clearly differentiate sections.
+* Provide links to:
+[circle]
+    ** Your main library documentation, if there is updated text, examples or tutorials
+    ** Relevant issues, discussions or threads
+
+== Examples
+
+The following examples show some different approaches. Note how many rely on links to issues to provide the detailed information.
+
+* https://www.boost.org/doc/libs/1_83_0/libs/json/doc/html/json/release_notes.html[JSON Release Notes]
+* https://www.boost.org/doc/libs/1_83_0/libs/nowide/doc/html/changelog_page.html[NoWide Change Log]
+* https://www.boost.org/doc/libs/1_83_0/libs/type_traits/doc/html/boost_typetraits/history.html[Type Traits History]
+* https://www.boost.org/doc/libs/1_81_0/libs/variant2/doc/html/variant2.html#changelog[Variant2 Revision History]
+
+== Update Boost History
+
+When you have completed the library release notes, add the required information to the `[section New Libraries]` or `[section Updated Libraries]` of the https://github.com/boostorg/website/tree/master/feed/history[Boostorg History]. Copy the formatting of the examples below, which for reference is https://www.boost.org/doc/libs/1_83_0/doc/html/quickbook.html[Quickbook format].
+
+The examples below come from the https://github.com/boostorg/website/blob/master/feed/history/boost_1_83_0.qbk[boost_183_0.qbk] file:
+
+[source,bash]
+----
+[section New Libraries]
+
+[/ Example:
+* [phrase library..[@/libs/accumulators/ Accumulators]:] Framework for
+  incremental calculation, and collection of statistical accumulators, from Eric Niebler.
+]
+
+* [phrase library..[@/libs/compat/ Compat]:] A repository of C++11 implementations of
+  standard components added in later C++ standards, from Peter Dimov and contributors.
+
+[endsect]
+
+[section Updated Libraries]
+
+[/ Example:
+* [phrase library..[@/libs/interprocess/ Interprocess]:]
+  * Added anonymous shared memory for UNIX systems.
+  * Move semantics for shared objects ([ticket 1932]).
+  * Conform to `std::pointer_traits` requirements ([github_pr interprocess 32])
+  * Fixed `named_condition_any` fails to notify ([github interprocess 62])
+]
+
+* [phrase library..[@/libs/any/ Any]:]
+  * New `boost::anys::unique_any` C++11 class - an alternative to
+    `boost::any` (or to `std::any`) that does not require copy
+    or move construction from the held type.
+  * Ported documentation to Quickbook, Doxygen comments now used in code.
+
+  ....
+
+  [endsect]
+----
+
+== See Also
+
+* https://github.com/boostorg/website/tree/master/feed/history[Boostorg History]
+* xref:release-process.adoc[]
+* xref:version-control.adoc[]
