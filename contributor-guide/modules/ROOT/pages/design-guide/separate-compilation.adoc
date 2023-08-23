@@ -28,18 +28,18 @@ These options are provided in addition to those affecting which runtime library 
 
 The problem is that users often expect to be able to build the Boost libraries and then just link to them and have everything just plain work, no matter what their project settings are. Irrespective of whether this is a reasonable expectation or not, without some means of managing this issue, the user may well find that their program will experience strange and hard to track down crashes at runtime unless the library they link to was built with the same options as their project (changes to the default alignment setting are a prime culprit). One way to manage this is with "prefix and suffix" headers: these headers invoke compiler specific `#pragma` directives to instruct the compiler that whatever code follows was built (or is to be built) with a specific set of compiler ABI settings.
 
-boost:config[] provides the macro `BOOST\_HAS\_ABI\_HEADERS` which is set whenever there are prefix and suffix headers available for the compiler in use, typical usage in a header like this:
+boost:config[] provides the macro `BOOST_HAS_ABI_HEADERS` which is set whenever there are prefix and suffix headers available for the compiler in use, typical usage in a header like this:
 
 [source,cpp]
 ----
-#ifndef BOOST\_WHATEVER\_HPP
-#define BOOST\_WHATEVER\_HPP
+#ifndef BOOST_WHATEVER_HPP
+#define BOOST_WHATEVER_HPP
 
 #include <boost/config.hpp>
 
 // this must occur after all of the includes and before any code appears:
-#ifdef BOOST\_HAS\_ABI\_HEADERS
-#  include BOOST\_ABI\_PREFIX
+#ifdef BOOST_HAS_ABI_HEADERS
+#  include BOOST_ABI_PREFIX
 #endif
 //
 // this header declares one class, and one function by way of examples:
@@ -49,11 +49,11 @@ class whatever
    // details.
 };
 
-whatever get\_whatever();
+whatever get_whatever();
 
 // the suffix header occurs after all of our code:
-#ifdef BOOST\_HAS\_ABI\_HEADERS
-#  include BOOST\_ABI\_SUFFIX
+#ifdef BOOST_HAS_ABI_HEADERS
+#  include BOOST_ABI_SUFFIX
 #endif
 
 #endif
@@ -74,7 +74,7 @@ Trust the user, if they want 13-byte alignment (!) let them have it.
 
 ==== Counter Argument #2
 
-Prefix/suffix headers have a tendency to "spread" to other boost libraries - for example if `boost::shared\_ptr<>` forms part of your class's ABI, then including prefix/suffix headers in your code will be of no use unless `shared\_ptr.hpp` also uses them. Authors of header-only boost libraries may not be so keen on this solution - with some justification - since they don't face the same problem.
+Prefix/suffix headers have a tendency to "spread" to other boost libraries - for example if `boost::shared_ptr<>` forms part of your class's ABI, then including prefix/suffix headers in your code will be of no use unless `shared_ptr.hpp` also uses them. Authors of header-only boost libraries may not be so keen on this solution - with some justification - since they don't face the same problem.
 
 == Static or Dynamic Libraries
 
@@ -96,46 +96,46 @@ Note that other libraries might need to make other choices: for example librarie
 
 == Supporting Windows Dll's
 
-On most Unix-like platforms no special annotations of source code are required in order for that source to be compiled as a shared library because all external symbols are exposed. However the majority of Windows compilers require that symbols that are to be imported or exported from a dll, be prefixed with `\_\_declspec(dllimport)` or `\_\_declspec(dllexport)`. Without this mangling of source code, it is not possible to correctly build shared libraries on Windows (historical note - originally these declaration modifiers were required on 16-bit Windows where the memory layout for exported classes was different from that of "local" classes - although this is no longer an issue, there is still no way to instruct the linker to "export everything", it also remains to be seen whether 64-bit Windows will resurrect the segmented architecture that led to this problem in the first place. Note also that the mangled names of exported symbols are different from non-exported ones, so `\_\_declspec(dllimport)` is required in order to link to code within a dll).
+On most Unix-like platforms no special annotations of source code are required in order for that source to be compiled as a shared library because all external symbols are exposed. However the majority of Windows compilers require that symbols that are to be imported or exported from a dll, be prefixed with `__declspec(dllimport)` or `__declspec(dllexport)`. Without this mangling of source code, it is not possible to correctly build shared libraries on Windows (historical note - originally these declaration modifiers were required on 16-bit Windows where the memory layout for exported classes was different from that of "local" classes - although this is no longer an issue, there is still no way to instruct the linker to "export everything", it also remains to be seen whether 64-bit Windows will resurrect the segmented architecture that led to this problem in the first place. Note also that the mangled names of exported symbols are different from non-exported ones, so `__declspec(dllimport)` is required in order to link to code within a dll).
 
-In order to support the building of shared libraries on MS Windows your code will have to prefix all the symbols that your library exports with a macro (lets call it `BOOST\_WHATEVER\_DECL`) that your library will define to expand to either `\_\_declspec(dllexport)` or `\_\_declspec(dllimport)` or nothing, depending upon how your library is being built or used. Typical usage would look like this:
+In order to support the building of shared libraries on MS Windows your code will have to prefix all the symbols that your library exports with a macro (lets call it `BOOST_WHATEVER_DECL`) that your library will define to expand to either `__declspec(dllexport)` or `__declspec(dllimport)` or nothing, depending upon how your library is being built or used. Typical usage would look like this:
 
 [source,cpp]
 ----
-#ifndef BOOST\_WHATEVER\_HPP
-#define BOOST\_WHATEVER\_HPP
+#ifndef BOOST_WHATEVER_HPP
+#define BOOST_WHATEVER_HPP
 
 #include <boost/config.hpp>
 
-#ifdef BOOST\_HAS\_DECLSPEC // defined in config system
+#ifdef BOOST_HAS_DECLSPEC // defined in config system
 // we need to import/export our code only if the user has specifically
-// asked for it by defining either BOOST\_ALL\_DYN\_LINK if they want all boost
-// libraries to be dynamically linked, or BOOST\_WHATEVER\_DYN\_LINK
+// asked for it by defining either BOOST_ALL_DYN_LINK if they want all boost
+// libraries to be dynamically linked, or BOOST_WHATEVER_DYN_LINK
 // if they want just this one to be dynamically liked:
-#if defined(BOOST\_ALL\_DYN\_LINK) || defined(BOOST\_WHATEVER\_DYN\_LINK)
+#if defined(BOOST_ALL_DYN_LINK) || defined(BOOST_WHATEVER_DYN_LINK)
 // export if this is our own source, otherwise import:
-#ifdef BOOST\_WHATEVER\_SOURCE
-# define BOOST\_WHATEVER\_DECL \_\_declspec(dllexport)
+#ifdef BOOST_WHATEVER_SOURCE
+# define BOOST_WHATEVER_DECL __declspec(dllexport)
 #else
-# define BOOST\_WHATEVER\_DECL \_\_declspec(dllimport)
-#endif  // BOOST\_WHATEVER\_SOURCE
-#endif  // DYN\_LINK
-#endif  // BOOST\_HAS\_DECLSPEC
+# define BOOST_WHATEVER_DECL __declspec(dllimport)
+#endif  // BOOST_WHATEVER_SOURCE
+#endif  // DYN_LINK
+#endif  // BOOST_HAS_DECLSPEC
 //
-// if BOOST\_WHATEVER\_DECL isn't defined yet define it now:
-#ifndef BOOST\_WHATEVER\_DECL
-#define BOOST\_WHATEVER\_DECL
+// if BOOST_WHATEVER_DECL isn't defined yet define it now:
+#ifndef BOOST_WHATEVER_DECL
+#define BOOST_WHATEVER_DECL
 #endif
 
 //
 // this header declares one class, and one function by way of examples:
 //
-class BOOST\_WHATEVER\_DECL whatever
+class BOOST_WHATEVER_DECL whatever
 {
    // details.
 };
 
-BOOST\_WHATEVER\_DECL whatever get\_whatever();
+BOOST_WHATEVER_DECL whatever get_whatever();
 
 #endif
 ----
@@ -145,17 +145,17 @@ And then in the source code for this library one would use:
 [source,cpp]
 ----
 // 
-// define BOOST\_WHATEVER SOURCE so that our library's 
+// define BOOST_WHATEVER SOURCE so that our library's 
 // setup code knows that we are building the library (possibly exporting code), 
 // rather than using it (possibly importing code): 
 // 
-#define BOOST\_WHATEVER\_SOURCE 
+#define BOOST_WHATEVER_SOURCE 
 #include <boost/whatever.hpp> 
 
 // class members don't need any further annotation: 
 whatever::whatever() { } 
 // but functions do: 
-BOOST\_WHATEVER\_DECL whatever get\_whatever() 
+BOOST_WHATEVER_DECL whatever get_whatever() 
 {
    return whatever();
 }
@@ -167,14 +167,14 @@ As well as exporting your main classes and functions (those that are actually do
 
 [source,cpp]
 ----
-#ifdef BOOST\_MSVC
+#ifdef BOOST_MSVC
 #  pragma warning(push)
 #  pragma warning(disable : 4251 4231 4660)
 #endif
 
 // code here
 
-#ifdef BOOST\_MSVC
+#ifdef BOOST_MSVC
 #pragma warning(pop)
 #endif
 ----
@@ -201,14 +201,14 @@ Many Windows compilers ship with multiple runtime libraries - for example Micros
 
 [source,cpp]
 ----
-boost\_regex-vc71-mt-1\_31.lib
-boost\_regex-vc71-mt-gd-1\_31.lib
-libboost\_regex-vc71-mt-1\_31.lib
-libboost\_regex-vc71-mt-gd-1\_31.lib
-libboost\_regex-vc71-mt-s-1\_31.lib
-libboost\_regex-vc71-mt-sgd-1\_31.lib
-libboost\_regex-vc71-s-1\_31.lib
-libboost\_regex-vc71-sgd-1\_31.lib
+boost_regex-vc71-mt-1_31.lib
+boost_regex-vc71-mt-gd-1_31.lib
+libboost_regex-vc71-mt-1_31.lib
+libboost_regex-vc71-mt-gd-1_31.lib
+libboost_regex-vc71-mt-s-1_31.lib
+libboost_regex-vc71-mt-sgd-1_31.lib
+libboost_regex-vc71-s-1_31.lib
+libboost_regex-vc71-sgd-1_31.lib
 ----
 
 The difficulty now is selecting which of these the user should link his or her code to.
@@ -217,35 +217,35 @@ In contrast, most Unix compilers typically only have one runtime (or sometimes t
 
 Historically Microsoft Windows compilers have managed this issue by providing a #pragma option that allows the header for a library to automatically select the library to link to. This makes everything automatic and extremely easy for the end user: as soon as they include a header file that has separate source code, the name of the right library build variant gets embedded in the object file, and as long as that library is in the linker search path, it will get pulled in by the linker without any user intervention.
 
-Automatic library selection and linking can be enabled for a Boost library by including the header `<boost/config/auto\_link.hpp>`, after first defining `BOOST\_LIB\_NAME` and, if applicable, `BOOST\_DYN\_LINK`.
+Automatic library selection and linking can be enabled for a Boost library by including the header `<boost/config/auto_link.hpp>`, after first defining `BOOST_LIB_NAME` and, if applicable, `BOOST_DYN_LINK`.
 
 [source,cpp]
 ----
 //
 // Automatically link to the correct build variant where possible. 
 // 
-#if !defined(BOOST\_ALL\_NO\_LIB) && !defined(BOOST\_WHATEVER\_NO\_LIB) && !defined(BOOST\_WHATEVER\_SOURCE)
+#if !defined(BOOST_ALL_NO_LIB) && !defined(BOOST_WHATEVER_NO_LIB) && !defined(BOOST_WHATEVER_SOURCE)
 //
-// Set the name of our library, this will get undef'ed by auto\_link.hpp
+// Set the name of our library, this will get undef'ed by auto_link.hpp
 // once it's done with it:
 //
-#define BOOST\_LIB\_NAME boost\_whatever
+#define BOOST_LIB_NAME boost_whatever
 //
-// If we're importing code from a dll, then tell auto\_link.hpp about it:
+// If we're importing code from a dll, then tell auto_link.hpp about it:
 //
-#if defined(BOOST\_ALL\_DYN\_LINK) || defined(BOOST\_WHATEVER\_DYN\_LINK)
-#  define BOOST\_DYN\_LINK
+#if defined(BOOST_ALL_DYN_LINK) || defined(BOOST_WHATEVER_DYN_LINK)
+#  define BOOST_DYN_LINK
 #endif
 //
 // And include the header that does the work:
 //
-#include <boost/config/auto\_link.hpp>
+#include <boost/config/auto_link.hpp>
 #endif  // auto-linking disabled
 ----
 
-The library's user documentation should note that the feature can be disabled by defining either `BOOST\_ALL\_NO\_LIB` or `BOOST\_WHATEVER\_NO\_LIB`:
+The library's user documentation should note that the feature can be disabled by defining either `BOOST_ALL_NO_LIB` or `BOOST_WHATEVER_NO_LIB`:
 
-If for any reason you need to debug this feature, the header `<boost/config/auto\_link.hpp>` will output some helpful diagnostic messages if you first define `BOOST\_LIB\_DIAGNOSTIC`.
+If for any reason you need to debug this feature, the header `<boost/config/auto_link.hpp>` will output some helpful diagnostic messages if you first define `BOOST_LIB_DIAGNOSTIC`.
 
 == Changes Affecting the Build System
 
@@ -255,8 +255,8 @@ The Jamfile for building library "whatever" typically lives in `boost-root/libs/
 
 [source,cpp]
 ----
-lib boost\_regex : ../src/whatever.cpp : 
-  <link>shared:<define>BOOST\_WHATEVER\_DYN\_LINK=1 ;
+lib boost_regex : ../src/whatever.cpp : 
+  <link>shared:<define>BOOST_WHATEVER_DYN_LINK=1 ;
 ----
 
 === Auto-linking

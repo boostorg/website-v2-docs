@@ -147,7 +147,7 @@ int main()
   f( (void(\*)(double))h);  // C-style cast works (std:13.4-1.6 with 5.4)
 
   // "Overloaded 'h' ambiguous in this context"
-  f(static\_cast<void(\*)(double)>(h)); // should work (std:13.4-1.6 with 5.2.9)
+  f(static_cast<void(\*)(double)>(h)); // should work (std:13.4-1.6 with 5.2.9)
 }
 
 ```
@@ -283,8 +283,8 @@ template<class U> class C { };
 template<class T>
 class A
 {
-  typedef void (T::\*my\_type)();
-  static const int v = C<my\_type>::value;
+  typedef void (T::\*my_type)();
+  static const int v = C<my_type>::value;
 };
 
 ```
@@ -369,8 +369,8 @@ This technique is extensively used in boost/operators.hpp.
  Giving in to the wish of the compiler doesn't work in this
  case, because then the "instantiate one template, get lots of
  helper functions at namespace scope" approach doesn't work
- anymore. Defining BOOST\_NO\_OPERATORS\_IN\_NAMESPACE (a define
- BOOST\_NO\_INLINE\_FRIENDS\_IN\_CLASS\_TEMPLATES would match this
+ anymore. Defining BOOST_NO_OPERATORS_IN_NAMESPACE (a define
+ BOOST_NO_INLINE_FRIENDS_IN_CLASS_TEMPLATES would match this
  case better) works around this problem and leads to another
  one, see [using-template].
 
