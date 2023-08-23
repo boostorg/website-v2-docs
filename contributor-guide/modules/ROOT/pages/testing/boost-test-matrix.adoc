@@ -1,286 +1,178 @@
 = Boost Test Matrix
-:idprefix:
-:idseparator: -
+:navtitle: Boost Test Matrix
 
-*Legacy content, currently being updated.*
+It's straightforward to run regression tests on your Boost clone, by utilizing some scripts available for the purpose.
 
-Running Regression Tests Locally
---------------------------------
+== Script Requirements
 
-***It's easy to run regression tests on your Boost
- clone.***
-
-
-To run a library's regression tests, run Boost's
- [b2](/build/) utility from the
- *<boost-root>*/libs/*<library>*/test directory. To run a
- single test, specify its name (as found in 
- *<boost-root>*/libs/*<library>*/test/Jamfile.v2) on the
- command line.
-
-
-See the [Getting
- Started guide](/doc/libs/release/more/getting_started/index.html) for help building or downloading
- bjam for your platform, and navigating your Boost
- distribution.
-
-
-To run every library's regression tests, run b2
- from *<boost-root>*/status directory.
-
-
-To run B2's regression tests, run "python
- test\_all.py" from *<boost-root>*/tools/build/v2/test
- directory. (Python 2.3 ≤ version < 3.0 required.)
-
-Running Boost's Automated Regression and Reporting
---------------------------------------------------
-
-This runs all Boost regression tests and reports the results back to
- the Boost community.
-
-
-### Requirements
-
+To run the python based scripts, ensure you have:
 
 * Python (2.3 ≤ version < 3.0).
-* Git (recent version).
-* At least 5 gigabytes of disk space per compiler to be
- tested.
-
-
-### Step by step instructions
-
-
-1. Create a new directory for the branch you want to
- test.
-2. Download the [run.py](https://raw.githubusercontent.com/boostorg/regression/develop/testing/src/run.py) script into that directory:
-
-> 
-> 1. Open [run.py](https://raw.githubusercontent.com/boostorg/regression/develop/testing/src/run.py) script in your browser.
-> 2. Click the ***Raw*** button.
-> 3. Save as run.py in the directory you just created.
-> 
-> 
-> 
-3. Run "`python run.py options... [commands]`"
- **with these three required options**, plus any others you wish to employ:
-
-
-	* --runner= - Your choice of name that
-	 identifies your results in the reports [1](#runnerid1), [2](#runnerid2).
-	* --toolsets= - The toolset(s) you want to test
-	 with [3](#toolsets).
-	* --tag= - The tag (i.e. branch) you want to test.
-	 The only tags that currently make sense are
-	 develop and master.For example:
-
-python run.py --runner=Metacomm
- --toolsets=gcc-4.2.1,msvc-8.0 --tag=develop
-
-
-**Note**: If you are behind a firewall/proxy
- server, everything should still "just work". In the rare cases
- when it doesn't, you can explicitly specify the proxy server
- parameters through the --proxy option, e.g.:
-```
-python run.py ... **--proxy=http://www.someproxy.com:3128**
-
-```
-
-### Options
-```
-commands: cleanup, collect-logs, get-source, get-tools, patch, regression,
-setup, show-revision, test, test-boost-build, test-clean, test-process, test-
-run, update-source, upload-logs
-
-Options:
-  -h, --help            show this help message and exit
-  --runner=RUNNER       runner ID (e.g. 'Metacomm')
-  --comment=COMMENT     an HTML comment file to be inserted in the reports
-  --tag=TAG             the tag for the results
-  --toolsets=TOOLSETS   comma-separated list of toolsets to test with
-  --libraries=LIBRARIES
-                        comma separated list of libraries to test
-  --incremental         do incremental run (do not remove previous binaries)
-  --timeout=TIMEOUT     specifies the timeout, in minutes, for a single test
-                        run/compilation
-  --bjam-options=BJAM\_OPTIONS
-                        options to pass to the regression test
-  --bjam-toolset=BJAM\_TOOLSET
-                        bootstrap toolset for 'bjam' executable
-  --pjl-toolset=PJL\_TOOLSET
-                        bootstrap toolset for 'process\_jam\_log' executable
-  --platform=PLATFORM   
-  --user=USER           Boost SVN user ID
-  --local=LOCAL         the name of the boost tarball
-  --force-update        do an SVN update (if applicable) instead of a clean
-                        checkout, even when performing a full run
-  --have-source         do neither a tarball download nor an SVN update; used
-                        primarily for testing script changes
-  --ftp=FTP             FTP URL to upload results to.
-  --proxy=PROXY         HTTP proxy server address and port
-                        (e.g.'http://www.someproxy.com:3128')
-  --ftp-proxy=FTP\_PROXY
-                        FTP proxy server (e.g. 'ftpproxy')
-  --dart-server=DART\_SERVER
-                        the dart server to send results to
-  --debug-level=DEBUG\_LEVEL
-                        debugging level; controls the amount of debugging
-                        output printed
-  --send-bjam-log       send full bjam log of the regression run
-  --mail=MAIL           email address to send run notification to
-  --smtp-login=SMTP\_LOGIN
-                        STMP server address/login information, in the
-                        following form: <user>:<password>@<host>[:<port>]
-  --skip-tests          do not run bjam; used for testing script changes
+* Git (a recent version).
+* At least 5 gigabytes of free disk space per compiler to be tested.
+
+== Run Regression Tests Locally
+
+There are a range of options for running regression tests:
+
+. To run all of a library's regression tests, run the https://www.bfgroup.xyz/b2/[B2] utility from the `<boost-root>/libs/<library>/test` directory. 
+
+. To run a single test, specify the test name (found in `<boost-root>/libs/<library>/test/Jamfile.v2`) on the https://www.bfgroup.xyz/b2/[B2] command line.
+
+. To run every library's regression tests, run B2 from the `<boost-root>/status` directory.
+
+. To run B2's regression tests, run `python test\_all.py` from the `<boost-root>/tools/build/test` directory. 
+
+== Running Boost's Automated Regression and Reporting
+
+To run all Boost regression tests and report the results back to the Boost community:
+
+. Create a new directory for the branch you want to test.
+. Copy the https://raw.githubusercontent.com/boostorg/regression/develop/testing/src/run.py[run.py] script into that directory.
+. Run `python run.py <options> [<commands>]` with these three options, plus any other <<_run_options>> or <<_run_commands>> you wish to employ:
+
+[#footnote1-location]
+[cols="1,2",options="header",stripes=even,frame=none]
+|===
+| *Required Option* | *Description*
+| `--runner=` | Your choice of name that identifies your results in the reports link:#footnote1[(1)].
+| `--toolsets=` | One or more toolsets that you want to test with. If a `--toolsets` option is not provided, the script will try to use the platform's default toolset (for example: GCC for most Unix-based systems).
+| `--tag=` | The tag (i.e. branch) you want to test. Currently only `--tag=develop` and `--tag=master` are valid.
+|===
 
-```
+For example, if you are using the runner id `Metacomm` with the GCC and MSVC compilers, on the develop branch:
 
-To test develop use "`--tag=develop`",
- and to test master use
- "`--tag=master`". Or substitute any Boost
- tree of your choice.
+[source,bash]
+----
+python run.py --runner=Metacomm --toolsets=gcc-4.2.1,msvc-8.0 --tag=develop
+----
 
+By default, the script runs in what is known as _full mode_: on each `run.py` invocation all the files that were left in place by the previous run, including the binaries for the successfully built tests and libraries, are deleted, and everything is rebuilt once again from scratch. For a quicker alternative, refer to <<_run_incrementally>>.
 
-### Details
+**Note**: If you are behind a firewall/proxy server, everything should still "just work". In the rare cases when it doesn't, you can explicitly specify the proxy server parameters through the `--proxy` option, for example:
 
+[source,bash]
+----
+python run.py ... --proxy=http://www.someproxy.com:3128
+----
 
-The regression run procedure will:
+=== Run Commands
 
+The following commands can be specified for the `run.py` script: 
 
-* Download the most recent regression scripts.
-* Download the designated testing tool sources including
- Boost.Jam, B2, and the various regression
- programs.
-* Download the most recent from the [Boost Git Repository](/users/download/#repository)
- into the subdirectory boost.
-* Build b2 and process\_jam\_log if
- needed. (process\_jam\_log is a utility, which
- extracts the test results from the log file produced by B2).
-* Run regression tests, process and collect the
- results.
-* Upload the results to a common FTP server.
+* `cleanup`
+* `collect-logs`
+* `get-source`
+* `get-tools`
+* `patch`
+* `regression`
+* `setup`
+* `show-revision`
+* `test`
+* `test-boost-build`
+* `test-clean`
+* `test-process`
+* `test-run`
+* `update-source`
+* `upload-logs`
 
+=== Run Options
 
-The report merger process running continuously will merge
- all submitted test runs and publish them at [various locations](testing.html#RegressionTesting).
+The following options can be specified for the `run.py` script: 
 
+[cols="1,2",options="header",stripes=even,frame=none]
+|===
+| *Option* | *Description*
+| `-h`, `--help`         | Show this help message and exit.
+| `--runner=RUNNER`       | The runner id (for example: `Metacomm`).
+| `--comment=COMMENT`     | An HTML comment file to be inserted in the reports.
+| `--tag=TAG`             | The tag for the results.
+| `--toolsets=TOOLSETS`   | Comma-separated list of toolsets to test with.
+| `--libraries=LIBRARIES` | Comma separated list of libraries to test.
+| `--incremental`         | Do an incremental run (do not remove previous binaries).
+| `--timeout=TIMEOUT`     | Specifies the timeout, in minutes, for a single test run/compilation.
+| `--bjam-options=BJAM\_OPTIONS` | Options to pass to the regression test.
+| `--bjam-toolset=BJAM\_TOOLSET` | The bootstrap toolset for `bjam` executable.
+| `--pjl-toolset=PJL\_TOOLSET` | The bootstrap toolset for `process\_jam\_log` executable.
+| `--platform=PLATFORM`   | The platform.
+| `--user=USER`           | Boost SVN user id.
+| `--local=LOCAL`         | The name of the boost tarball.
+| `--force-update`        | Do an SVN update (if applicable) instead of a clean checkout, even when performing a full run.
+| `--have-source`         | Do neither a tarball download nor an SVN update; used primarily for testing script changes.
+| `--ftp=FTP`             | FTP URL to upload results to.
+| `--proxy=PROXY`         | HTTP proxy server address and port (for example: `http://www.someproxy.com:3128`).
+| `--ftp-proxy=FTP\_PROXY` | FTP proxy server (for example: `ftpproxy`).
+| `--dart-server=DART\_SERVER` | The dart server to send results to.
+| `--debug-level=DEBUG\_LEVEL` | Debugging level; controls the amount of debugging output printed.
+| `--send-bjam-log`       | Send full bjam log of the regression run.
+| `--mail=MAIL`           | Email address to send run notification to.
+| `--smtp-login=SMTP\_LOGIN` | STMP server address/login information, in the following form: `<user>:<password>@<host>[:<port>]`.
+| `--skip-tests`          | Do not run `bjam`; used for testing script changes.
+|===
 
-### Advanced use
+Note:: The `bjam` references in the table above refer to the executable associated with the Boost.Jam build system. The https://www.bfgroup.xyz/b2/[B2] tool is built on top of bjam, and simplifies many common tasks.
 
+=== Run Output
 
-### Providing detailed information about your environment
+The procedure that `run.py` goes through will:
 
+. Download the most recent regression scripts.
+. Download the designated testing tool sources including Boost.Jam, B2, and the various regression programs.
+. Download the most recent sources from the Boost Git Repository into the boost subdirectory.
+. Build B2 and run `process\_jam\_log` if needed (`process\_jam\_log` is a utility, which extracts the test results from the log file produced by B2).
+. Run regression tests, then process and collect the results.
+. Upload the results to a common FTP server.
 
-Once you have your regression results displayed in the
- Boost-wide reports, you may consider providing a bit more
- information about yourself and your test environment. This
- additional information will be presented in the reports on a
- page associated with your runner ID.
+The report merger process running continuously will merge all submitted test runs and publish them. 
 
+== Advanced Uses
 
-By default, the page's content is just a single line coming
- from the comment.html file in your run.py
- directory, specifying the tested platform. You can put online a
- more detailed description of your environment, such as your
- hardware configuration, compiler builds, and test schedule, by
- simply altering the file's content. Also, please consider
- providing your name and email address for cases where Boost
- developers have questions specific to your particular set of
- results.
+Once you are familiar with running the script, there are a few advanced uses you might consider.
 
+=== Provide Detailed Information on your Environment
 
-### Incremental runs
+Once you have your regression results displayed in the Boost-wide reports, you may consider providing a bit more information about yourself and your test environment. This additional information will be presented in the reports on a page associated with your runner id.
 
+By default, the page's content is just a single line coming from the `comment.html` file in your `run.py` directory, specifying the tested platform. You can put online a more detailed description of your environment, such as your hardware configuration, compiler builds, and test schedule, by simply altering the file's content. Also, consider providing your name and email address for cases where Boost developers have questions specific to your particular set of results.
 
-You can run run.py in [incremental mode](#incremental) by simply passing it an
- identically named command-line flag:
-```
-python run.py ... **--incremental**
+=== Run Incrementally
 
-```
+You can run `run.py` in _incremental mode_ by passing it the `incremental` flag, in addition to any other flags you set. This will limit all testing to only those tests and libraries where source files have changed since the last run.
 
-### Patching Boost sources
+[source,bash]
+----
+python run.py ... --incremental
+----
 
+The main advantage of incremental runs is a significantly shorter turnaround time, but unfortunately they don't always produce reliable results. Some types of changes to the codebase (changes to the B2 testing subsystem in particular) often require switching to full mode for one cycle in order to produce trustworthy reports.
 
-You might encounter an occasional need to make local
- modifications to the Boost codebase before running the tests,
- without disturbing the automatic nature of the regression
- process. To implement this under regression.py:
+As a general guideline, if you can afford it, testing in full mode is recommended after all significant updates.
 
+=== Patch Boost Sources
 
-1. Codify applying the desired modifications to the sources
- located in the ./boost\_root subdirectory in a single
- executable script named patch\_boost
- (patch\_boost.bat on Windows).
-2. Place the script in the run.py directory.
+You might encounter an occasional need to make local modifications to the Boost codebase before running the tests, without disturbing the automatic nature of the regression process. To implement this under `run.py`:
 
+. Codify applying the desired modifications to the sources located in the `./boost\_root` subdirectory in a single executable script named `patch\_boost` on Unix, or `patch\_boost.bat` on Windows.
 
-The driver will check for the existence of the
- patch\_boost script, and, if found, execute it after
- obtaining the Boost sources.
+. Place the script in the `run.py` directory.
 
+The driver will check for the existence of the `patch\_boost` script, and, if found, execute it after obtaining the Boost sources.
 
-### Feedback
+== Feedback
 
+Send all comments and suggestions regarding this document, and the testing procedure itself, to the https://lists.boost.org/mailman/listinfo.cgi/boost-testing[Boost Testing] mailing list.
 
-Please send all comments/suggestions regarding this document
- and the testing procedure itself to the [Boost Testing list](/community/groups.html#testing).
+== Footnotes
 
+[#footnote1]
+link:#footnote1-location[(1)] If you are running regressions interlaced with a different set of compilers (for example: for Intel in the morning and GCC at the end of the day), you need to provide a _different_ runner id for each of these runs, for example: `your\_name-intel`, and `your\_name-gcc`.
 
-### Notes
+The limitations of the reports' format/medium impose a direct dependency between the number of compilers you are testing with and the amount of space available for your runner id. If you are running regressions for a single compiler, make sure to choose a short enough id that does not significantly disturb the reports' layout. You can also use spaces in the runner id to allow the reports to wrap the name to fit.
 
+== See Also
 
-[1] If you are
- running regressions interlacingly with a different set of
- compilers (e.g. for Intel in the morning and GCC at the end of
- the day), you need to provide a *different* runner id
- for each of these runs, e.g. your\_name-intel, and
- your\_name-gcc.
-
-
-[2] The limitations
- of the reports' format/medium impose a direct dependency
- between the number of compilers you are testing with and the
- amount of space available for your runner id. If you are
- running regressions for a single compiler, please make sure to
- choose a short enough id that does not significantly disturb
- the reports' layout. You can also use spaces in the runner ID
- to allow the reports to wrap the name to fit.
-
-
-[3] If
- --toolsets option is not provided, the script will try
- to use the platform's default toolset (gcc for most
- Unix-based systems).
-
-
-[4] By default,
- the script runs in what is known as *full mode*: on each
- run.py invocation all the files that were left in
- place by the previous run — including the binaries for
- the successfully built tests and libraries — are deleted,
- and everything is rebuilt once again from scratch. By contrast,
- in *incremental mode* the already existing binaries are
- left intact, and only the tests and libraries which source
- files has changed since the previous run are re-built and
- re-tested.
-
-
-The main advantage of incremental runs is a significantly
- shorter turnaround time, but unfortunately they don't always
- produce reliable results. Some type of changes to the codebase
- (changes to the b2 testing subsystem in particular) often
- require switching to a full mode for one cycle in order to
- produce trustworthy reports.
-
-
-As a general guideline, if you can afford it, testing in
- full mode is preferable.
-
-
-
+* xref:testing/continuous-integration.adoc[]
+* xref:version-control.adoc[]
 
 
 
