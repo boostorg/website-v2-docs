@@ -1,0 +1,53 @@
+= Test Policy
+:navtitle: Test Policy
+
+There are required and optional (though highly recommended) tests for libraries.
+
+== Required
+
+Boost uses an automatic regression test suite which generates HTML compiler status tables. Boost also uses xref:testing/continuous-integration.adoc[] to ensure these tests are regularly run. Ensure your library testing includes the following:
+
+. Every Boost library should supply one or more suitable test programs to be exercised by the Boost regression test suite. In addition to the usual _compile-link-run_ tests expecting successful completion, _compile-only_ or _compile-and-link-only_ tests may be performed, and success for the test may be defined as failure of the steps.
+
+. Test program execution must report errors by returning a non-zero value. They may also write to `stdout` or `stderr`, but that output should be relatively brief. Regardless of other output, a non-zero return value is the only way the regression test framework will recognize an error has occurred. Note that test programs to be included in the status tables must compile, link, and run quickly since the tests are executed many times.
+
+. Libraries with time consuming tests should be divided into a fast-execution basic test program for the status tables, and a separate full-coverage test program for exhaustive test cases. The basic test should concentrate on compilation issues so that the status tables accurately reflect the library's likelihood of correct compilation on a platform.
+
+. If for any reason the usual test policies do not apply to a particular library, an alternate test strategy must be described and implemented.
+
+. Authors should supply a Jamfile to drive the regression tests for the library.
+
+== Optional
+
+* Use boost:test[] to create individual test cases and group them into test suites. Then use the library's test tools for https://www.boost.org/doc/libs/1_83_0/libs/test/doc/html/boost_test/test_output.html[Controlling outputs] to verify the expected behavior.
+
+* For simple cases, you can use the https://www.boost.org/doc/libs/1_83_0/libs/core/doc/html/core/lightweight_test.html[lightweight_test] features of boost:core[].
+
+== Protocol for Fixing Bugs or Adding Features
+
+. Before fixing the bug, or adding the feature, add regression test cases that detect the bug or tests the feature. Sometimes adding one case suggests similar untested cases, and add those too.
+
+. For bugs, run the regression test and verify that the bug is detected.
+
+. Now, fix the bug or add the feature.
+
+. Rerun the full regression tests, as sometimes the change breaks something else.
+
+== Snapshots
+
+Snapshots are used for quality control checks, and are posted to the JFrog platform. Because the snapshots represent work-in-process, they may not be suitable for production use.
+
+The Unix tarballs and Windows zipballs are identical except for the line endings exported from Git.
+
+[cols="1,2",options="header",stripes=even,frame=none]
+|===
+| *Version* | *Download*
+| Master branch | https://boostorg.jfrog.io/artifactory/main/master/[JFrog Index of main/master] 
+| Develop branch | https://boostorg.jfrog.io/artifactory/main/develop/[JFrog Index of main/develop] 
+|===
+
+The Git master branch can be checked out from https://github.com/boostorg/boost[boostorg/boost].
+
+== See Also
+
+* xref:testing/continuous-integration.adoc[]
