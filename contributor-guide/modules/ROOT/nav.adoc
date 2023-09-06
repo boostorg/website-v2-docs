@@ -26,6 +26,7 @@
 
 * Testing
 ** xref:testing/intro.adoc[]
+** xref:testing/test-policy.adoc[]
 ** xref:testing/boost-test-matrix.adoc[]
 ** xref:testing/writing-tests.adoc[]
 ** xref:testing/sanitizers.adoc[]
