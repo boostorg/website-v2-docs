@@ -1,210 +1,124 @@
-= Testing
-:idprefix:
-:idseparator: -
+= Introduction to Testing
+:navtitle: Introduction
 
-*Legacy content, currently being updated.*
+The Boost libraries are intended to be both reliable and portable. Every experienced programmer knows that means each library must be tested against a suitable number of test cases, on a range of platforms and compilers, and then tested again (_regression tested_) every time a change is made. The regression tests are run again before every public release.
 
-The Boost libraries are intended to be both reliable and
- portable. Every experienced programmer knows that means each
- library must be tested against a suitable number of test cases,
- on a wide range of platforms, and then tested again (regression
- tested) every time a change is made and before every
- release.
+There are three broad dimensions to Boost library testing:
 
+. The actual test codes - unit tests, regression tests, new feature and bug tests. Refer to xref:testing/writing-tests.adoc[].
+. Tests that are integrated with the primary build systems, xref:build-systems/b2.adoc[] and xref:build-systems/cmake.adoc[].
+. xref:testing/continuous-integration.adoc[]
 
-"Quality assurance based on a wide range of targeted tests"
- as one of the key answers to C.A.R Hoare's question "How did
- software get so reliable without proof."
+The new library developer needs to consider all three, however the initial focus on a new library will be the first in this list. Or, to put it another way, "Quality assurance based on a wide range of targeted tests" as one of the key answers to Professor Hoare's question:
 
+"_How did software get so reliable without proof?_"
 
-== Regression test
+== Define a Test Matrix
 
+When you're looking to submit a library to the Boost collection, it's essential to ensure broad compatibility with various compilers, platforms, and configurations. Create a test matrix of what you intend to support, and document what you do not intend to support, and consider:
 
-Boost uses an automatic [regression
- test suite](/doc/tools/regression/index.html) which generates HTML [compiler status
- tables](/development/testing.html#RegressionTesting).
+. Testing with multiple versions of each compiler. Popular compilers to consider include:
+** GCC (GNU Compiler Collection)
+** Clang
+** MSVC (Microsoft Visual pass:[C++])
++
+The Boost user base can be using older versions of these compilers, so strive for compatibility with a reasonable range of versions if possible.
++
+If your library depends on other Boost libraries or external libraries, ensure they are compatible with the compilers you are targeting. Be clear about any dependencies or prerequisites in your documentation.
++
+Be wary of non-standard compiler features or extensions. If you must use them, guard them with appropriate preprocessor checks.
+Boost provides its own set of configuration macros to help with this.
 
+. Compatibility with various versions of the pass:[C++] Standard: pass:[C++]11, pass:[C++]14, pass:[C++]17, pass:[C++]20, and pass:[C++]23. Some Boost libraries support many of the standards, while others target only more recent ones. 
++
+Note:: Supporting pass:[C++]03 is no longer considered good practice.
 
-== Test Policy
+. Different operating systems, including Linux, Windows, macOS, and others like various BSDs.
 
+. Different architectures: x86, x64, ARM, MIPS. Architecture can affect word size (usually 32 or 64 bit), endianness, memory alignment, inline assembly, cache sizes, latency, and other memory and performance issues.
 
-=== Required
+When you have outlined your test matrix, study the predefined macros available to assist you, and make adjustments to your matrix appropriately.
 
+== Use Predefined Macros from Boost.Config
 
-* Every Boost library should supply one or more suitable
- test programs to be exercised by the Boost [regression
- test suite](/doc/tools/regression/index.html). In addition to the usual compile-link-run
- tests expecting successful completion, compile-only or
- compile-and-link-only tests may be performed, and success for
- the test may be defined as failure of the steps.
-* Test program execution must report errors by returning a
- non-zero value. They may also write to stdout or stderr, but
- that output should be relatively brief. Regardless of other
- output, a non-zero return value is the only way the
- regression test framework will recognize an error has
- occurred. Note that test programs to be included in the
- status tables must compile, link, and run quickly since the
- tests are executed many, many, times.
-* Libraries with time consuming tests should be divided
- into a fast-execution basic test program for the status
- tables, and a separate full-coverage test program for
- exhaustive test cases. The basic test should concentrate on
- compilation issues so that the status tables accurately
- reflect the library's likelihood of correct compilation on a
- platform.
-* If for any reason the usual test policies do not apply to
- a particular library, an alternate test strategy must be
- implemented.
-* A [Jamfile](/doc/tools/regression/index.html#Adding_new_test) to drive the regression tests for the
- library.
+There are a set of macros in the boost:config[] library that can be used to identify compiler capabilities, platform specifics, and other configuration details. These macros are designed to smooth out differences between compilers and platforms, allowing for more portable code, for example:
 
+=== Compiler Identification
 
-=== Optional (but highly recommended)
+* `BOOST_COMP_GNUC`: Defined if the compiler is GCC.
+* `BOOST_COMP_MSVC`: Defined if the compiler is Microsoft Visual C++.
 
+=== Compiler Version Checks
 
-The [Boost
- Test Library](/doc/libs/release/libs/test/index.html) provides many useful components which ease the
- construction of test programs.
+* `BOOST_COMP_MSVC >= BOOST_VERSION_NUMBER(19, 0, 0)`: Checks if the MSVC version is 19 or greater.
 
+=== Platform Checks
 
-* Use the library's [Test Tools](/doc/libs/release/libs/test/doc/html/boost_test/testing_tools.html) for the construction of simple test programs
- that do not need much structure.
-* Use the library's [Unit
- Test Framework](/doc/libs/release/libs/test/doc/html/boost_test/tests_organization.html) for the construction of more complex test
- programs that need to be structured into individual tests and
- test suites.
+* `BOOST_OS_LINUX`: Defined if the operating system is Linux.
+* `BOOST_ARCH_X86_64`: Defined if the architecture is x86_64.
 
+=== Standard Library Checks
 
-== Suggested Protocol for Fixing Bugs or Adding Features.
+* `BOOST_LIB_C_GNU`: Defined if the C standard library is from https://gcc.gnu.org/onlinedocs/libstdc++/[GNU].
+* `BOOST_LIB_STD_DINKUMWARE`: Defined if the standard library is from https://docwiki.embarcadero.com/RADStudio/Sydney/en/Dinkumware_Standard_C%2B%2B_Library[Dinkumware] (often associated with MSVC).
 
+=== Feature Checks
 
-* First, add regression test cases that detects the bug or
- tests the feature. Sometimes adding one case suggests similar
- untested cases, and they are added too.
-* Second, for bugs, run the regression test and verify that
- the bug is now detected.
-* Third, then, and only then, fix the bug or add the
- feature.
-* Finally, rerun the full regression tests - sometimes the
- change breaks something else.
+* `BOOST_NO_CXX14_RETURN_TYPE_DEDUCTION`: Defined if the compiler does not support return type deduction introduced in C++14.
+* `BOOST_NO_CXX11_AUTO_DECLARATIONS`: Defined if the compiler does not support auto declarations from C++11. For example:
++
+[source,cpp]
+----
+#include <boost/config.hpp>
 
+// ...
+#ifdef BOOST_NO_CXX11_AUTO_DECLARATIONS
+// Use traditional type declaration
+int x = 42;
+#else
+// Use C++11 auto
+auto x = 42;
+#endif
+// ...
+----
++
+Use this same coding structure for any of the other macros.
 
-== History
+== Regression Testing
 
-[See Regression Test History](/doc/tools/regression/index.html#History).
+Boost releases are run through regression tests which automatically generates compiler status HTML tables for various platforms. Unless otherwise indicated, the pass:[C++] Standard Library implementation is the one shipped with the compiler. Refer to https://www.boost.org/doc/regression/library_status/doc/library_status.html[Generating Library Status Tables].
 
+Note:: The HTML tables are not a good indication of a particular compiler's compliance with the pass:[C++] Standard. The Boost libraries often contain workarounds which mask compiler deficiencies.
++
+Some regression tests are run only occasionally, and might be relatively out-of-date. Check the date and revision in the column headings.
 
-== Acknowledgements
+== Next Steps
 
+First, familiarize yourself with the Boost xref:testing/test-policy.adoc[]. 
 
-Written by Beman Dawes. Jens Maurer, Paul Moore, Gary Powell
- and Jeremy Siek contributed helpful suggestions.
+Then, read the documentation for the following libraries, which support the writing of unit, feature and regression tests:
 
+* boost:test[]
+* boost:core[]
 
+Start small and develop a good understanding of how these testing libraries work, before writing more than a few tests.
 
-== Regression Tests
+=== Advanced Testing
 
+When you have a good understanding of the basic testing procedures, look into more advanced techniques, such as xref:testing/fuzzing.adoc[].
 
-A group of volunteers donate CPU cycles and large amounts of
- disk space to collectively produce the regression testing
- result tables. Various Boost repository versions are tested for
- the benefit of library developers and interested users:
+== See Also
 
-| Version | Developers |
-| --- | --- |
-| Develop branch | [Summary](tests/develop/developer/summary.html) | [Unresolved
- Issues](tests/develop/developer/issues.html) |
-| Master branch | [Summary](tests/master/developer/summary.html) | [Unresolved
- Issues](tests/master/developer/issues.html) |
+* xref:release-process.adoc[]
+* xref:user-guide:ROOT:testing-debugging.adoc[]
+* xref:testing/writing-tests.adoc[]
 
 
-== Snapshots
 
 
-Snapshots are used for quality control checks.  The
- Unix tarballs and Windows zipballs are identical except for the
- line endings exported from Git.
 
 
-Because the snapshots represent work-in-process, they may
- not be suitable for production use.
 
-| Version | Download | Documentation |
-| --- | --- | --- |
-| Master branch | [Sourceforge](https://sourceforge.net/projects/boost/files/boost/snapshots/master/ "Boost master branch snapshots on sourceforge"), [JFrog.io](https://boostorg.jfrog.io/artifactory/main/master/ "Boost master branch snapshots on JFrog.io"). | [Documentation](/doc/libs/master/ "Boost master branch documentation snapshot") |
-| Develop branch | [Sourceforge](https://sourceforge.net/projects/boost/files/boost/snapshots/develop/ "Boost develop branch snapshots on sourceforge"), [JFrog.io](https://boostorg.jfrog.io/artifactory/main/develop "Boost develop branch snapshots on JFrog.io"). | [Documentation](/doc/libs/develop/ "Boost develop branch documentation snapshot") |
-
-
-The Git master branch can be checked out from <https://github.com/boostorg/boost>.
-
-
-== Inspection Reports
-
-
-The Boost snapshots are inspected daily to detect problems
- such as missing copyrights or licenses. The Boost Inspection
- Report tells all!
-
-| Version |
-| --- |
-| [Develop
- branch](http://boost.cowic.de/rc/docs-inspect-develop.html) |
-| [Master
- branch](http://boost.cowic.de/rc/docs-inspect-master.html) |
-
-
-== More about regression tests
-
-
-Will all Boost libraries work with your compiler? 
- Unfortunately, the answer is "it depends". See the [regression testing results](#RegressionTesting) to see
- exactly what works and what doesn't.
-
-
-Boost libraries rely on modern C++ features such as
- templates and the C++ Standard Library.  Most modern
- compilers support those major features fairly well. But even
- today, years after the adoption of the C++ Standard, some
- compilers still don't support important minor features like
- partial template specialization.
-
-
-Boost library authors often expend a great deal of effort
- trying to work around compiler deficiencies. 
- Nevertheless, some libraries will not compile at all with
- certain compilers or may have crippled functionality. 
- Even if the current release of a compiler supports a boost
- library, older versions of the compiler may not work
- properly.
-
-
-Boost releases are run through regression tests which
- automatically generates compiler status tables for various
- platforms. Unless otherwise indicated, the C++ Standard Library
- implementation is the one shipped with the compiler.
-
-
-=== Warnings
-
-
-* These tables are not a good indication of a particular
- compiler's compliance with the C++ Standard.  The Boost
- libraries often contain workarounds which mask compiler
- deficiencies.
-* Some regression tests are run only occasionally, and so
- are relatively out-of-date.  Check the date and revision
- in the column heading.
-
-
-The development code is being updated several times a day,
- so it may contain bug fixes, compiler workarounds, new
- features, and even whole new libraries. It may be unstable,
- however.
-
-
-A list of some of the organizations helping with testing is
- listed on the [Acknowledgements
- page](/community/acknowledgements.html#testing).
 
 
 
