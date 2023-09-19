@@ -19,3 +19,106 @@ Creating a real-time simulation of vehicles involves various aspects, including 
 * boost:mpi[] or boost:asio[]: For distributed simulations that run across multiple systems, you might need a library for network communication. boost:mpi[] provides a pass:[C++] interface for the Message Passing Interface (MPI) standard for distributed computing. boost:asio[] can also handle networking tasks and it is a bit lower-level.
 
 * boost:serialization[]: To save the state of the simulation or to communicate complex data structures over a network, you might find this library helpful.
+
+== Build only the Specific Libraries
+
+If you decided to run with the collection of libraries listed above, and only want to build these specific libraries, and their dependencies, then go through the following procedure:
+
+. Download the full Boost libraries package, and extract the files. Unless of course you have done so already. Refer to xref:getting-started.adoc[] for details.
+
+. Go through the bootstrap process. Again, unless you already have.
+
+. Optionally, create a folder for your specific build, say `C:\Users\YOURNAME\Documents\Boost\Simulation`.
+
+. In a Command Window, run the following command for Windows (on Linux or macOS use `./b2` instead of `b2` - the rest of the command is identical):
++
+[source,bash]
+----
+b2 install --prefix=C:\Users\YOURNAME\Documents\Boost\Simulation --with-chrono --with-graph --with-thread --with-mpi --with-serialization
+----
++ 
+Note:: We do not enter the `geometry`, `units`, `asio`, or `interprocess` library names as these are header-only and do not require any building. To determine which libraries need building, refer to  xref:header-organization-compilation.adoc#_required_compiled_binaries[Required Compiled Binaries].
++
+Warning:: You will get a library name error if you use the `--with` switch with a library that does not require building.
+
+. Wait for the command to finish. This can take a few minutes.
+
+. If you now look in your `Simulation` folder, you will see `include` and `lib` subfolders that contain the files you need to get going on your simulation project.
+
+. Add the appropriate `#include` statements to the start of your new project. Refer to the documentation for the individual libraries for details on all the options available. For example, to use the basic boost:graph[] functionalities:
++
+[source,cpp]
+----
+#include <boost/graph/adjacency_list.hpp>
+----
++
+And if you are using boost:graph[] algorithms:
++
+[source,cpp]
+----
+#include <boost/graph/breadth_first_search.hpp>  // for BFS, as an example
+----
++
+Similarly, to use core boost:units[] features:
++
+[source,cpp]
+----
+#include <boost/units/quantity.hpp>
+#include <boost/units/systems/si.hpp>  // for SI units
+----
++
+And for specific units or systems (for example, the imperial system):
++
+[source,cpp]
+----
+#include <boost/units/systems/imperial/length.hpp>
+----
+
+. Go through a similar decision process for the other libraries: boost:chrono[], boost:geometry[], boost:thread[], boost:asio[], boost:interprocess[], boost:mpi[] and boost:serialization[].
+
+. Remember to set your project's `include` path to point to Boost's header files in your `Simulation\include` folder, and your `library` path to your `Simulation\lib` folder containing the built binaries.
+
+. Write a great real-time simulation!
+
+=== Build using CMake
+
+. If you use CMake rather than B2, you would start by creating a `CMakeLists.txt` file at the root of your Boost source folder:
++
+[source,cpp]
+----
+cmake_minimum_required(VERSION 3.15)  # or the version you have
+project(BoostInstallation)
+
+add_subdirectory(libs/chrono)
+add_subdirectory(libs/graph)
+add_subdirectory(libs/thread)
+add_subdirectory(libs/mpi)
+add_subdirectory(libs/serialization)
+----
++
+This will tell CMake to only process the directories for the specified libraries.
+
+. Navigate to your Boost root folder in your terminal or command prompt and run:
++
+[source,cpp]
+----
+mkdir build && cd build
+cmake .. -DCMAKE_INSTALL_PREFIX=C:\Users\YOURNAME\Documents\Boost\Simulation
+----
++
+This will generate build files in the build folder, and set the installation prefix to the specified folder.
+
+. After the build files are generated, use CMake to build and install:
++
+[source,cpp]
+----
+cmake --build . --target install
+----
++
+This command will build the specified Boost libraries and install them to your `C:\Users\YOURNAME\Documents\Boost\Simulation` folder.
+
+== See Also
+
+* https://www.bfgroup.xyz/b2/[B2]
+
+* xref:header-organization-compilation.adoc#_required_compiled_binaries[Required Compiled Binaries]
