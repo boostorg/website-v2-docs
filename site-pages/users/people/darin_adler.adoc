@@ -1,0 +1,19 @@
+= Darin Adler
+
+image::../images/darin_adler.jpg[Darin Adler]
+
+Darin Adler has been programming computers since 1976. He loves to do it.
+
+His first major professional experience was at Apple Computer. In 1988 he led the team that rewrote the Macintosh Finder in C++. Before that project was completed, he was shanghaied to be the technical lead for the System 7 project (these days they would call it "Mac OS 7"). The group he formed to help him do that, the Blue Meanies, is still a legend in the Apple community.
+
+Since Apple, Darin has worked at General Magic as an architect of the Magic Cap OS, used the moniker Bent Spoon Software to do consulting, and helped start Eazel, a company that worked to make Linux easier to use and developed the Nautilus graphical shell for GNOME. Since 1997, he has worked from his home in Los Angeles, CA, collaborating with clients and coworkers in other locations.
+
+He prefers to use and program Macintosh computers with C++. But work on the GNOME project is best accomplished with a non-Macintosh PC. (That's why Darin is sitting in front of two computers.) The other people working on the GNOME project don't like C++, so he's writing a lot of C code these days.
+
+The picture shows him hard at work with his C++ guru, his daughter Sophia.
+
+He has hobbies and stuff but you don't want to read about that here.
+
+You can contact him by sending mail to darin@bentspoon.com.
+
+_You can submit content for this page here: https://github.com/cppalliance/site-docs._
