@@ -1,4 +1,4 @@
-= Documentation Style Guide
+= Style Guide
 :navtitle: Style Guide
 
 This section describes the style of writing and formatting to use when contributing to Boost documentation.
@@ -103,7 +103,7 @@ Our code snippets include pass:[C++] examples on using libraries, but also Comma
 
 . *Versioning*: Indicate the version of the programming language, library or framework that the code snippet is intended for. This can help prevent confusion or issues with running the code.
 
-=== Ascidocs Code Snippet
+=== Asciidoc Code Snippet
 
 Note the four hyphens delimiting the start and finish of the snippet, and the `c++` tag for the `source` to enable syntax highlighting (if available).
 
@@ -237,18 +237,18 @@ The following example asciidoc source would produce the table shown below. Note 
 [source]
 ----
 
-[cols="1,2",options="header",stripes=even]
+[cols="1,2",options="header",stripes=even,frame=none]
 |===
-| Head1  | Head2
+| *Head1*  | *Head2*
 | row1 | text
 | row2 | text
 |===
 
 ----
 
-[cols="1,2",options="header",stripes=even]
+[cols="1,2",options="header",stripes=even,frame=none]
 |===
-| Head1  | Head2
+| *Head1*  | *Head2*
 | row1 | text
 | row2 | text
 |===
@@ -283,4 +283,4 @@ image::filename.png[caption="Figure 1: caption", alt="alternate text"]
 == References
 
 [square]
-* https://mrduguo.github.io/asciidoctor.org/docs/asciidoc-syntax-quick-reference/[AsciiDocs Quick Reference]
+* https://mrduguo.github.io/asciidoctor.org/docs/asciidoc-syntax-quick-reference/[AsciiDoc Syntax Quick Reference]
