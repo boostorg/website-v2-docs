@@ -1,5 +1,5 @@
 = Documentation Components
-:navtitle: Components
+:navtitle: Documentation Components
 
 == Introduction
 
@@ -287,7 +287,6 @@ precondition, there will be no "Requires" paragraph.
 
 '''''
 
-Revised April, 2023
+_Revised April, 2023_
 
-_Distributed under the Boost Software License, Version 1.0. (See
-http://www.boost.org/LICENSE_1_0.txt)_.
+_Distributed under the Boost Software License, Version 1.0. Refer to http://www.boost.org/LICENSE_1_0.txt_.

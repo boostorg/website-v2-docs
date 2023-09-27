@@ -1,73 +1,581 @@
-= Documentation Guidelines
-:navtitle: Documentation Guidelines
+= Guidelines
+:navtitle: Guidelines
 
 It is not a requirement for a Boost library for the documentation to adhere to the following structure. However, it is listed here as a guide, if needed.
 
-The following structure for Boost library documentation should work for most libraries. Take each template, where one exists, in the order listed below, and fill in the details for your library.
+The following structure for Boost library documentation should work for most libraries. Take each section in the order listed below, and fill in the details for your library. Alternatively, if you want your documentation to be closer to the pass:[C++] Standard, refer to xref:docs/documentation-components.adoc[].
 
-The format for documentation on the new website is https://docs.asciidoctor.org/asciidoc/latest/syntax-quick-reference/[AsciiDocs].
+The format for documentation on the new website is https://docs.asciidoctor.org/asciidoc/latest/syntax-quick-reference/[AsciiDoc Syntax Quick Reference].
 
-Where you see `<LibraryName>` in the templates, replace with the name of your library.
+Where you see `<LibraryName>` in the templates below, replace with the name of your library.
 
-== Contents
+== Overview 
 
-=== Overview
+Provide a brief overview of the focus and features of your library.
+
+Mention the portability of the library, platforms and compilers. List dependencies.
+
+A developer should have a good idea if the library is right for their project, after reading your Overview.
+
+Note that footnote references link to the footnotes section, and the entries in the footnote section link back to the references.
+
+=== Overview Template
+
+[source,asciidoc]
+----
+
+== Overview
+
+Add an introduction to your library here. Refer to previous libraries on the content of an Overview.
+
+== First Topic
+
+[#footnote1-location]
+text
+text that requires a footnote. link:#footnote1[(1)]
+
+== Second Topic
+
+[#footnote2-location]
+text
+text that requires a footnote. link:#footnote2[(2)]
+
+== Third Topic
+
+text
+
+
+== Footnotes
+
+[#footnote1]
+link:#footnote1-location[(1)]: footnote 1 text
+
+[#footnote2]
+link:#footnote2-location[(2)]: footnote 2 text
+
+----
+
+== Rationale 
+
+A Rationale provides a description of the motivation behind the library. Describe the current problems that exist, and the goals of the library in addressing those problems.
+
+=== Rationale Template
+
+[source,asciidoc]
+----
+
+== Introduction
+
+Add an introduction to the rationale for your library here. Refer to previous libraries on the content of a Rationale.
+
+== First Topic
+
+[#footnote1-location]
+text
+text that requires a footnote. link:#footnote1[(1)]
+
+== Second Topic
+
+[#footnote2-location]
+text
+text that requires a footnote. link:#footnote2[(2)]
+
+== Third Topic
+
+text
+
+
+== Footnotes
+
+[#footnote1]
+link:#footnote1-location[(1)]: footnote 1 text
+
+[#footnote2]
+link:#footnote2-location[(2)]: footnote 2 text
+
+----
+
+== Guide
+
+The contents of the guide should be enough to get a new user up and running with your library.
+
+=== Guide Template
+
+[source,asciidoc]
+----
+== Guide to <LibraryName>
+
+Intro text
+
+=== Basic Tutorials and Examples
+
+Add simple tutorials and/or examples.
+
+=== How to Compile and Link
+
+text
+
+=== How to Test and Debug
+
+text
+----
+
+
+== Header 
+
+Provide a complete API reference to your library, without duplicating the contents of the <<Configuration>> or <<Definitions>> sections, which follow.
+
+=== Header Template
+
+[source,asciidoc]
+----
+
+== Introduction
+
+Introductory text
+
+== Macros
+
+=== Macro1
+
+=== Macro2
+
+== Values
+
+=== Value1
+
+=== Value2
+
+== Types
+
+=== Type1
+
+=== Type2
+
+== Classes
+
+=== Class `class name`
+
+class overview text
+
+==== Class `class name` synopsis
+
+....
+namespace boost
+{
+    class <class name>
+        {
+        };
+};
+....
+
+==== Class `class name` constructors and destructor
+
+....
+constructor
+....
+
+*Requires:* text
+
+*Effects:* text
+
+*Post-conditions:* text
+
+*Returns:* text
+
+*Throws:* text
+
+*Complexity:* text
+
+*Note:* text
+
+*Danger:* text
+
+*Rationale:* text
+
+....
+destructor
+....
+
+*Requires:* text
+
+*Effects:* text
+
+*Post-conditions:* text
+
+*Returns:* text
+
+*Throws:* text
+
+*Complexity:* text
+
+*Note:* text
+
+*Danger:* text
+
+*Rationale:* text
+
+==== Class `class name` comparison functions
+
+....
+comparison-function
+....
+
+*Requires:* text
+
+*Effects:* text
+
+*Post-conditions:* text
+
+*Returns:* text
+
+*Throws:* text
+
+*Complexity:* text
+
+*Note:* text
+
+*Danger:* text
+
+*Rationale:* text
+
+==== Class `class name` modifier functions
+
+....
+modifier-function
+....
+
+*Requires:* text
+
+*Effects:* text
+
+*Post-conditions:* text
+
+*Returns:* text
+
+*Throws:* text
+
+*Complexity:* text
+
+*Note:* text
+
+*Danger:* text
+
+*Rationale:* text
+
+==== Class `class name` observer functions
+
+....
+observer-function
+....
+
+*Requires:* text
+
+*Effects:* text
+
+*Post-conditions:* text
+
+*Returns:* text
+
+*Throws:* text
+
+*Complexity:* text
+
+*Note:* text
+
+*Danger:* text
+
+*Rationale:* text
+
+==== Class `class name` static functions
+
+....
+static-function
+....
+
+*Requires:* text
+
+*Effects:* text
+
+*Post-conditions:* text
+
+*Returns:* text
+
+*Throws:* text
+
+*Complexity:* text
+
+*Note:* text
+
+*Danger:* text
+
+*Rationale:* text
+
+== Functions
+
+....
+function1
+....
+
+*Requires:* text
+
+*Effects:* text
+
+*Post-conditions:* text
+
+*Returns:* text
+
+*Throws:* text
+
+*Complexity:* text
+
+*Note:* text
+
+*Danger:* text
+
+*Rationale:* text
+
+== Objects
+
+== Object specifications
+
+== Examples
+
+----
+
+
+== Configuration
+
+Describe the configuration macros that are used in your library.
+
+=== Configuration Template
+
+[source,asciidoc]
+----
+
+== `<LibraryName>`  Configuration
+
+== Introduction
+
+`<LibraryName>` uses several configuration macros in
+http://www.boost.org/libs/config/config.htm[<boost/config.hpp>], as well as configuration macros meant to be supplied by the application. These macros are documented here.
+
+== Application Defined Macros
+
+These are the macros that may be defined by an application using `<LibraryName>`.
+
+[cols="1,2",options="header",stripes=even,frame=none]
+|===
+| *Macro*  | *Meaning*
+|`macro` |meaning text
+|`macro` |meaning text
+|===
+
+== Public Library Defined Macros
+
+These macros are defined by `<LibraryName>`, but are also expected to be used by application code.
+
+[cols="1,2",options="header",stripes=even,frame=none]
+|===
+| *Macro*  | *Meaning*
+|`macro` |meaning text
+|`macro` |meaning text
+|===
+
+== Library Defined Implementation Macros
+
+These macros are defined by `<LibraryName>` and are implementation details of interest only to implementers.
+
+[cols="1,2",options="header",stripes=even,frame=none]
+|===
+| *Macro*  | *Meaning*
+|`macro` |meaning text
+|`macro` |meaning text
+|===
+
+----
+
+Example:: *Application Defined Macros*
++
+These are the macros that may be defined by an application using `<LibraryName>`, for example:
++
+[cols="1,2",options="header",stripes=even,frame=none]
+|===
+| *Macro*  | *Meaning*
+|`add(x,y)` | The x and y values are added together.
+|`mult(x,y)` | The x and Y values are multiplied together.
+|===
+
+== Definitions
+
+If you library uses any terminology that might benefit from a description, consider adding Definitions to your documentation.
+
+Note that each definition is preceded by an anchor, so can be linked to from any other section of your documentation. This can help reduce duplication of explanations - link to your definitions rather than repeat explanations.
+
+=== Definitions Template
+
+[source,asciidoc]
+----
+
+==  <LibraryName> Definitions
+
+Introductory text.
+
+== Definitions
+
+[#definition-term1]
+*Term1*::
+definition-text1
+
+[#definition-term2]
+*Term2*::
+definition-text2
+
+----
+
+Example:: Assume there is a String-Container library, and that String container algorithms work using some pre-defined concepts:
++
+[#Finder Concept]
+*Finder Concept*::
+A Finder is a function which searches for an arbitrary part of a container. For example (add example logic here).
++
+[#Formatter Concept]
+*Formatter Concept*::
+Formatters are used by string replace algorithms. For example (add example logic here).
+
+== Advanced Topics
+
+Advanced topics include advanced tutorials or examples, and also covers porting, customization, synchronization, and performance tuning.
+
+
+=== Advanced Topics Template
+
+[source,asciidoc]
+----
+
+== Advanced Use of <LibraryName>
+
+Intro text
+
+=== Porting Guide
+
+text
+
+=== Customization
+
+text
+
+=== Synchronization
+
+text
+
+=== Performance Tuning
+
+text
+
+=== Complex Examples
+
+text
+
+=== Troubleshooting
+
+text
+
+
+----
+
+
+== Frequently Asked Questions (FAQs) 
+
+A Frequently Asked Questions (FAQ) section might add value to your documentation, by aiding developers with answers to known issues or complexities.
+
+If there are a large number of questions and answers, group them into sections with headings such as *Errors and Exceptions*, *Performance*, and so on.
+
+Note that every question is in bold, and always ends with a question mark.
+
+=== FAQ Template
+
+[source,asciidoc]
+----
+=== FAQ
+
+==== *question1?*
+
+answer1
+
+==== *question2?*
+
+answer2
+----
+
+Example:: 
++
+*Does this library work with COM methods?*
++
+Yes, if you add `#define BOOST_ENABLE_STDCALL` to your code.
++
+*Does this library support Windows earlier than Windows 10?*
++
+No, the only supported versions of Windows supported are 10 and 11.
+
+== Versioning and Release Notes
+
+Make sure to version your library correctly, and provide release notes for each release. Refer to xref:version-control.adoc[] and xref:release-notes.adoc[] for details.
+
+== Bibliography 
+
+If bibliographic references are required in your documentation for your library, add a bibliography to the documentation.
+
+The book title can be text, or can be a link to a site too if the text of the book is available online. The ISBN number can be replaced by another reference number if the reference is to an academic paper, or other reference that is not published in book form.
+
+Ideally, list the bibliography in alphabetical order.
+
+=== Bibliography Template
+
+[source,asciidoc]
+----
+=== Bibliography
+[Surname/s] Authors full names. _Book title_. ISBN number, Publication date.
+[Surname/s] Authors full names. _Book title_. ISBN number, Publication date.
+----
+
+Example:: [Turcan, Wasson] Peter Turcan, Mike Wasson. _Fundamentals of Audio and Video Programming for Games_. ISBN: 073561945X, 2003.
+
+
+
+== Acknowledgements
+
+If acknowledgements are required for your library, add an acknowledgements section to the documentation. As a rule of thumb, the acknowledgements should be ordered with the most important contributions coming first. Links can be included, if required.
+
+=== Acknowledgements Template
+
+[source,asciidoc]
+----
+
+=== Acknowledgements
+
+The author appreciates the contributions to the library made by the following:
+
+* text1
+* text2
+
+----
+
+Example:: The author appreciates the contributions to the library made by the following:
++
 [disc]
-* xref:./templates/01-overview-template.adoc[Overview]
+* John Doe and Jane Doe for editing the original draft documentation.
+* John Doe for input on the architecture and design of the API interfaces.
+* Jane Doe for numerous improvements and suggestions on the text of the error messages.
 
-* xref:./templates/04-rationale-template.adoc[Rationale]
+== Other Appendices
 
-=== Guide
+If any other appendices are needed, add them here. 
 
-[disc]
-* Basic Tutorials or Examples
+== See Also
 
-* How to compile and link
+* xref:docs/style-guide.adoc[]
 
-* How to test and debug
+_Revised April, 2023_
 
-=== Reference
-
-[disc]
-* xref:./templates/02-header-template.adoc[Header]
-
-* xref:./templates/03-configuration-template.adoc[Configuration Information]
-
-* xref:./templates/05-definitions-template.adoc[Definitions]
-
-* More Advanced Tutorials or Examples
-
-* Advanced Topics
-
-    . Porting Guide
-    . Customization
-    . Synchronization
-    . Performance Tuning
-    . Complex Examples
-
-* xref:./templates/06-faq-template.adoc[Frequently Asked Questions (FAQs)]
-
-* Troubleshooting
-
-=== Versioning and Release Notes
-
-* Version Info
-
-* Release Notes
-
-=== Appendices
-
-[disc]
-* xref:./templates/07-bibliography-template.adoc[Bibliography]
-
-* xref:./templates/08-acknowledgements-template.adoc[Acknowledgements]
-
-* Other Appendices
-
-
-
-Revised April, 2023
-
-_Distributed under the Boost Software License, Version 1.0. (See
-http://www.boost.org/LICENSE_1_0.txt)_.
-
+_Distributed under the Boost Software License, Version 1.0. Refer to http://www.boost.org/LICENSE_1_0.txt_.
