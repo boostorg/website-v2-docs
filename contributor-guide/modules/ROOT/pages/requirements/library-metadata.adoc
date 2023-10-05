@@ -3,9 +3,13 @@
 :idseparator: -
 :navtitle: Library Metadata
      
-A module can contain an optional file which describes the libraries that it contains. This is located at `meta/libraries.json`. It either contains a single json object for a single library, or a list or json objects for any number of libraries.
+The sources for each library, or possibly a number of related libraries, is contained in a sub-module of the xref:version-control.adoc#super-project[Boost super-project].
+Each sub-module _must_ contain a file which describes the libraries that it contains. This is located at `meta/libraries.json`.
 
-For example, for a single library:
+== Json Objects
+
+If the sub-module contains a single library, `libraries.json` should contain a single object, for example:
+
 ```
 {
     "key": "unordered",
@@ -29,7 +33,10 @@ For example, for a single library:
 Or view: https://github.com/vinniefalco/unordered/blob/d05824312f4b4748f8975a4bdb9e51bfc10327b2/meta/libraries.json[unordered/meta
 /libraries.json].
 
-An example for multiple libraries:
+=== Multiple Libraries
+
+If the sub-module contains multiple libraries, `libraries.json` should contain a list of objects, for example:
+
 ```
 [
     {
