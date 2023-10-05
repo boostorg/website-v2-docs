@@ -11,6 +11,7 @@ The official Boost repositories are hosted in GitHub under the https://github.co
 
 As with any Git-based project, you can clone the repositories, make changes, commit those changes to your local repository, and push your changes back to the server. If you want to contribute changes to the official Boost libraries, refer to xref:getting-involved.adoc#contribute[Contribute to an Existing Library].
 
+[#super-project]
 == The Super-project Repository
 
 The Boost https://github.com/boostorg/boost[*Super-project*] repository includes all the libraries as submodules.

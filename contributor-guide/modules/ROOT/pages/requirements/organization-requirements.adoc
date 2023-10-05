@@ -7,20 +7,22 @@ The quality of the Boost libraries is not just about the APIs and code design. B
 
 [cols="1,5,2",options="header",stripes=even]
 |===
-|Sub-directory or file	|Contents	|Required
+|*Sub-directory or file*	|*Contents*	|*Required*
 |*build*	|Library build files such as a Jamfile, IDE projects, Makefiles, Cmake files, etc.	|Required if the library has sources to build.
 |*config*	|Files used for build-time configuration checks. This directory may contain source files and build system scripts to be used when building the library, tests or examples to check if the target system satisfies certain conditions. For example, a check may test if the compiler implements a certain feature, or if the target system supports a certain API.	|Optional.
 |*doc*	|Sources to build with and built documentation for the library. If the library needs to build documentation from non-HTML files this location must be build-able with Boost Build.	|Required for all libraries.
 |*doc/html*	|Documentation (HTML) files.	|Required for all libraries with pregenerated documentation. And generated documentation must be generated here.
 |*example*	|Sample program files.	|Required if library has sample files. Which is highly recommended.
-|*index.html*	|Redirection to HTML documentation. See "Redirection" for a template for this file.	|Required for all libraries.
+|*index.html*	|Redirection to HTML documentation. Refer to xref:design-guide/design-guide.adoc#redirection[Design Guide/Redirection] for a template for this file.	|Required for all libraries.
 |*include/boost/library*	|Header files for the library.	|Required for all libraries.
 |*meta*	|Meta-data about the library.	|Required for all libraries.
-|*meta/libraries.json*	|A JSON file containing information about the library used to generate website and documentation for the Boost C++ Libraries collection.	|Required for all libraries.
+|*meta/libraries.json*	|A JSON file containing information about the library, which is used to generate website and documentation for the Boost Libraries collection. Refer to xref:requirements/library-metadata.adoc[].	|Required for all libraries.
 |*meta/explicit-failures-markup.xml*	|XML file describing expected test failures, used to generate the test report.	|Optional
 |*src*	|Source files which must be compiled to build the library.	|Required if the library has source files to build.
 |*test*	|Regression or other test programs or scripts. This is the only location considered for automated testing. If you have additional locations that need to be part of automated testing it is required that this location refer to the additional test locations.	|Required for all libraries.
+|*test/cmake_test* | CMake sub-folders can be named for the type of xref:testing/continuous-integration.adoc[Continuous Integration] tests they contain (`cmake_install_test` for example). The structure of your tests should match that in https://github.com/boostorg/boost-ci[boostorg/boost-ci], and refer to the https://github.com/boostorg/boost-ci/blob/master/README.md[Boost.CI Readme] for process details. Also, consider referring to the `cmake_install_test` folder in https://github.com/vinniefalco/mp11/tree/52fd7817e85e2d208d364f2ff4bde74594308945/test[mp11/test] and https://github.com/boostorg/json/tree/66d925116740c1063eab814be7821fc7611ac480/test[json/test] as examples. | Not required, though most new libraries include these tests.
 |*tools*	|Tools used, or offered, by the library. The structure within this is up to the library, but it's recommended to use similar structure as a regular Boost library or tool.	|Required for libraries that have run-able tools.
+|*CMakeLists.txt* | Refer to https://github.com/boostorg/cmake/blob/develop/developer.md[CMake for Boost Developers]. | Required
 |===
 
 == Integration
@@ -71,15 +73,16 @@ run cpp11_test.cpp ;
 
 For more information, see the documentation of Boost.Config.
 
+[#building_documentation]
 === Building Documentation
 
 The library needs to provide a Boost Build project for building the documentation for the library. The project-root/doc project is the only location referred to by the top level documentation build scripts and the release building scripts. The documentation build project must have the following two features:
 
-Define a boostdoc target. This target should likely be an alias that looks roughly like:
+Define a `boostrelease`  target. This target should likely be an alias that looks roughly like:
 
 [source,bash]
 ----
-alias boostdoc : my_boostbook_target
+alias boostrelease  : my_boostbook_target
     : : : <implicit-dependency>my_boostbook_target ;
 ----
 
@@ -87,7 +90,9 @@ But if your project doesn't integrate into the global documentation book you can
 
 [source,bash]
 ----
-alias boostdoc ;
+alias boostrelease  ;
 ----
 
 The project must default to building standalone documentation if it has any. The release scripts build this default so as to guarantee all projects have up to date documentation.
+
+Note:: _Integrated_ documentation, using the `boostdoc` target (instead of the `boostrelease` target) is now considered legacy, and should be avoided for new library documentation.

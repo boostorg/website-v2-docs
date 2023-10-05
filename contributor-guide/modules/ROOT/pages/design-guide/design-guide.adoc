@@ -155,7 +155,7 @@ link:#footnote6-location[(6)]:: We had to draw the line somewhere, and so the li
 link:#footnote7-location[(7)]:: ISO 9660:1999.
 
 
-
+[#redirection]
 == Redirection
 
 The primary directory should always contain a file named index.html. Authors have requested this so that they can publish URL's in the form `https://www.boost.org/libs/lib-name` with the assurance a documentation reorganization won't invalidate the URL. Boost's internal tools are also simplified by knowing that a library's documentation is always reachable via the simplified URL.
