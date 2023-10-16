@@ -88,18 +88,18 @@ jobs:
           SOURCE_DIR: build/
           DEST_DIR: ${{ format('site-docs/{0}', github.ref_name) }}
 
-      - name: AWS Sync site-pages (revsys cluster)
+      - name: AWS Sync site-docs (production on GKE)
         if: matrix.publish && (github.ref == 'refs/heads/master' || github.ref == 'refs/heads/develop') && github.event_name == 'push' && github.repository == 'cppalliance/site-docs'
         uses: jakejarvis/s3-sync-action@master
         with:
           args: --follow-symlinks --delete --exclude '.git/*' --exclude 'build/lib/*'
         env:
-          AWS_S3_BUCKET: ${{ secrets.REVSYS_BUCKET }}
-          AWS_ACCESS_KEY_ID: ${{ secrets.REVSYS_KEY_ID }}
-          AWS_SECRET_ACCESS_KEY: ${{ secrets.REVSYS_ACCESS_KEY }}
+          AWS_S3_BUCKET: ${{ secrets.BOOST_PRODUCTION_BUCKET }}
+          AWS_ACCESS_KEY_ID: ${{ secrets.BOOST_PRODUCTION_KEY_ID }}
+          AWS_SECRET_ACCESS_KEY: ${{ secrets.BOOST_PRODUCTION_ACCESS_KEY }}
           AWS_REGION: 'us-east-2'
-          SOURCE_DIR: site-pages/
-          DEST_DIR: ${{ format('site-pages/{0}', github.ref_name) }}
+          SOURCE_DIR: build/
+          DEST_DIR: ${{ format('site-docs/{0}', github.ref_name) }}
 
       - name: AWS Sync site-docs (staging on GKE)
         if: matrix.publish && (github.ref == 'refs/heads/master' || github.ref == 'refs/heads/develop') && github.event_name == 'push' && github.repository == 'cppalliance/site-docs'
@@ -114,7 +114,34 @@ jobs:
           SOURCE_DIR: build/
           DEST_DIR: ${{ format('site-docs/{0}', github.ref_name) }}
 
-      - name: AWS Sync site-docs (production on GKE)
+      - name: AWS Sync site-docs (cppal_dev on GKE)
+        if: matrix.publish && (github.ref == 'refs/heads/master' || github.ref == 'refs/heads/develop') && github.event_name == 'push' && github.repository == 'cppalliance/site-docs'
+        uses: jakejarvis/s3-sync-action@master
+        with:
+          args: --follow-symlinks --delete --exclude '.git/*' --exclude 'build/lib/*'
+        env:
+          AWS_S3_BUCKET: ${{ secrets.CPPAL_DEV_BUCKET }}
+          AWS_ACCESS_KEY_ID: ${{ secrets.CPPAL_DEV_KEY_ID }}
+          AWS_SECRET_ACCESS_KEY: ${{ secrets.CPPAL_DEV_ACCESS_KEY }}
+          AWS_REGION: 'us-east-2'
+          SOURCE_DIR: build/
+          DEST_DIR: ${{ format('site-docs/{0}', github.ref_name) }}
+
+
+      - name: AWS Sync site-pages (revsys cluster)
+        if: matrix.publish && (github.ref == 'refs/heads/master' || github.ref == 'refs/heads/develop') && github.event_name == 'push' && github.repository == 'cppalliance/site-docs'
+        uses: jakejarvis/s3-sync-action@master
+        with:
+          args: --follow-symlinks --delete --exclude '.git/*' --exclude 'build/lib/*'
+        env:
+          AWS_S3_BUCKET: ${{ secrets.REVSYS_BUCKET }}
+          AWS_ACCESS_KEY_ID: ${{ secrets.REVSYS_KEY_ID }}
+          AWS_SECRET_ACCESS_KEY: ${{ secrets.REVSYS_ACCESS_KEY }}
+          AWS_REGION: 'us-east-2'
+          SOURCE_DIR: site-pages/
+          DEST_DIR: ${{ format('site-pages/{0}', github.ref_name) }}
+
+      - name: AWS Sync site-pages (production on GKE)
         if: matrix.publish && (github.ref == 'refs/heads/master' || github.ref == 'refs/heads/develop') && github.event_name == 'push' && github.repository == 'cppalliance/site-docs'
         uses: jakejarvis/s3-sync-action@master
         with:
@@ -124,8 +151,34 @@ jobs:
           AWS_ACCESS_KEY_ID: ${{ secrets.BOOST_PRODUCTION_KEY_ID }}
           AWS_SECRET_ACCESS_KEY: ${{ secrets.BOOST_PRODUCTION_ACCESS_KEY }}
           AWS_REGION: 'us-east-2'
-          SOURCE_DIR: build/
-          DEST_DIR: ${{ format('site-docs/{0}', github.ref_name) }}
+          SOURCE_DIR: site-pages/
+          DEST_DIR: ${{ format('site-pages/{0}', github.ref_name) }}
+
+      - name: AWS Sync site-pages (staging on GKE)
+        if: matrix.publish && (github.ref == 'refs/heads/master' || github.ref == 'refs/heads/develop') && github.event_name == 'push' && github.repository == 'cppalliance/site-docs'
+        uses: jakejarvis/s3-sync-action@master
+        with:
+          args: --follow-symlinks --delete --exclude '.git/*' --exclude 'build/lib/*'
+        env:
+          AWS_S3_BUCKET: ${{ secrets.BOOST_STAGE_BUCKET }}
+          AWS_ACCESS_KEY_ID: ${{ secrets.BOOST_STAGE_KEY_ID }}
+          AWS_SECRET_ACCESS_KEY: ${{ secrets.BOOST_STAGE_ACCESS_KEY }}
+          AWS_REGION: 'us-east-2'
+          SOURCE_DIR: site-pages/
+          DEST_DIR: ${{ format('site-pages/{0}', github.ref_name) }}
+
+      - name: AWS Sync site-pages (cppal_dev on GKE)
+        if: matrix.publish && (github.ref == 'refs/heads/master' || github.ref == 'refs/heads/develop') && github.event_name == 'push' && github.repository == 'cppalliance/site-docs'
+        uses: jakejarvis/s3-sync-action@master
+        with:
+          args: --follow-symlinks --delete --exclude '.git/*' --exclude 'build/lib/*'
+        env:
+          AWS_S3_BUCKET: ${{ secrets.CPPAL_DEV_BUCKET }}
+          AWS_ACCESS_KEY_ID: ${{ secrets.CPPAL_DEV_KEY_ID }}
+          AWS_SECRET_ACCESS_KEY: ${{ secrets.CPPAL_DEV_ACCESS_KEY }}
+          AWS_REGION: 'us-east-2'
+          SOURCE_DIR: site-pages/
+          DEST_DIR: ${{ format('site-pages/{0}', github.ref_name) }}
 
       - name: Publish Releases as Artifacts
         if: matrix.publish && github.event_name == 'push'
