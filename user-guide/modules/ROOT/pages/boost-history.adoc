@@ -13,7 +13,7 @@ The story of Boost began when Robert Klarer and Beman Dawes discussed the idea a
 
 == Early Development
 
-The first few libraries that formed the basis of Boost were created by a group of dedicated and talented pass:[C++] programmers. Early libraries included the boost:smart_ptr[] library, which provided support for reference counting and garbage collection, and the boost:regex[] library, which added regular expression support to the language. The first official release was in the year 2000, and contained 24 libraries.
+The first few libraries that formed the basis of Boost were created by a group of dedicated and talented pass:[C++] programmers. Early libraries included the boost:smart_ptr[] library, which provided support for reference counting and garbage collection, and the boost:regex[] library, which added regular expression support to the language. The first official release was in the year 1999, and contained 24 libraries. Version numbers were started in December 1999, with version _1.10.3_. 
 
 Boost quickly gained traction and attracted more contributors who shared a common vision of improving the pass:[C++] language through high-quality, portable, and reusable code.
 
@@ -25,28 +25,58 @@ One of the defining characteristics of Boost is its strict peer review process. 
 
 Boost has had a profound impact on the pass:[C++] language and its community. Many of the libraries and concepts introduced by Boost have been adopted into the pass:[C++] Standard Library, including smart pointers, regular expressions, and the boost:lambda[] function syntax. Boost has also been a fertile ground for experimenting with new ideas and techniques, which have later made their way into the pass:[C++] language itself, such as boost:type_traits[] and boost:mpl[].
 
+=== Developer Conference
+
+_BoostCon_, initiated in 2007, was a conference dedicated to the discussion and improvement of both Boost libraries and pass:[C++] software development in general. In 2012, http://boostcon.boost.org/[BoostCon] was rebranded as _pass:[C++] Now_ (https://cppnow.org/) to reflect a broader scope. While Boost libraries remained a crucial part of the discussion, the conference expanded to cover popular and advanced pass:[C++] techniques.
+
+pass:[C++] Now featured topics ranging from "Building a Modern pass:[C++] HTTP Server with boost:beast[]" and "Exploring New Functionalities in boost:geometry[]", to 
+"pass:[C++]in Game Development: Best Practices" and "Advanced Template Metaprogramming Techniques", among many other presentations.
+
+The conference is primarily held in May, in the picturesque and tranquil setting of Aspen, Colorado. The promotion of the location includes the warning "Mild-mannered black bears live in the area. Please close doors behind you in the evenings."
+
+Boost maintainers, contributors, and users often participate in the conference, sharing their expertise, discussing best practices, and exploring new directions for Boost libraries. The conference has a reputation for interruptions and comments from the audience - it is very much a collaborative conference!
+
+== Migration to Git
+
+Boost libraries transitioned their source code management from https://subversion.apache.org/[Subversion (SVN)], and issue tracking from https://trac.edgewall.org/[Trac], to Git, and GitHub Issues, throughout 2013-2014.
+
+This migration was in line with broader trends in open-source software development. Git and GitHub appeared to offer a more flexible and collaborative environment, and many open-source projects started adopting them to manage their source code and facilitate community contributions.
+
+By transitioning to these platforms, Boost aimed to improve its development workflow, make it easier for new contributors to get involved, and leverage the powerful collaboration features offered by GitHub. However, as with many major changes, there was a lot of discussion on the issues at the time, some favorable and some not so much. For example (from mailing list archives):
+
+* https://lists.boost.org/Archives/boost//2013/10/208008.php[Switchover schedule proposal]
+* https://lists.boost.org/Archives/boost//2012/05/193472.php[Revelations at C++ Now]
+* https://lists.boost.org/Archives/boost//2012/02/190195.php[Neglected issues]
+* https://lists.boost.org/Archives/boost//2015/04/221780.php[Switch from Trac]
+* https://lists.boost.org/Archives/boost//2011/02/177137.php[Boost Filesystem now has public GitHub repository]
+
+
 == A Timeline of Boost Exclusivity
 
-While many Boost libraries have been incorporated into the C++ Standard Library, most others remain exclusive to Boost, and are highly regarded for their capabilities and performance. Some of these noteworthy libraries include:
+While many Boost libraries have been incorporated into the https://en.cppreference.com/w/cpp/standard_library[C++ Standard Library], most others remain exclusive to Boost, and are highly regarded for their capabilities and performance. Some of these noteworthy libraries include:
 
 [square]
-* boost:graph[] : An extensive library for graph data structures and algorithms, enabling developers to work with graphs and network structures, while providing efficient implementations of popular graph algorithms like Dijkstra's, Kruskal's, and more. Released in *August 2000*.
+* boost:graph[] : An extensive library for graph data structures and algorithms, enabling developers to work with graphs and network structures, while providing efficient implementations of popular graph algorithms like Dijkstra's, Kruskal's, and more.  Developed by Jeremy Siek, Lie-Quan Lee and Andrew Lumsdaine of Indiana University and released in *September 2000*.
 
-* boost:spirit[] : A powerful and flexible parser and generator framework, which uses expression templates and template metaprogramming to create parsers at compile-time. This results in efficient and type-safe parsing code. Added to Boost *February 2003*, though has gone through multiple updates.
+* boost:spirit[] : A powerful and flexible parser and generator framework, which uses expression templates and template metaprogramming to create parsers at compile-time. This results in efficient and type-safe parsing code. Developed by Joel de Guzman and Hartmut Kaiser and added to Boost *March 2003*. 
 
-* boost:asio[] : A cross-platform library for network and low-level I/O programming, offering a consistent asynchronous model that allows developers to write efficient and highly-scalable applications. Added to Boost *April 2008*.
+* boost:asio[] : A cross-platform library for network and low-level I/O programming, offering a consistent asynchronous model that allows developers to write efficient and highly-scalable applications. Developed by Christopher Kohlhoff and added to Boost *March 2008*.
 
-* boost:geometry[] : A library providing a collection of algorithms and data structures for working with geometrical objects, such as points, lines, polygons, and more. It also supports spatial indexing, coordinate system transformations, and various distance calculations. Added to Boost *July 2011*.
+* boost:geometry[] : A library providing a collection of algorithms and data structures for working with geometrical objects, such as points, lines, polygons, and more. It also supports spatial indexing, coordinate system transformations, and various distance calculations. Developed by Barend Gehrels, Bruno Lalande, Mateusz Loskot, Adam Wulkiewicz, Menelaos Karavelas and Vissarion Fisikopoulos and added to Boost *July 2011*.
 
-* boost:compute[]: A library for parallel and high-performance computing on GPUs and other OpenCL devices, offering a high-level, easy-to-use interface for working with OpenCL. Added to Boost *November 2014*.
+* boost:coroutine[] : A library providing templates for generalized subroutines which allow for suspending and resuming execution at certain locations. The idea is to enable _cooperative_ programming. Developed by Oliver Kowalke and added to Boost *February 2013*.
 
-* boost:hana[] : A modern metaprogramming library for pass:[C++] that employs cutting-edge pass:[C++] features to facilitate powerful and expressive metaprogramming techniques, such as heterogeneous containers, compile-time algorithms, and type introspection. Added to Boost *May 2016*.
+* boost:hana[] : A modern metaprogramming library for pass:[C++] that employs cutting-edge pass:[C++] features to facilitate powerful and expressive metaprogramming techniques, such as heterogeneous containers, compile-time algorithms, and type introspection. Developed by Louis Dionne and added to Boost *May 2016*.
 
-* boost:json[] : A JSON library for encoding, decoding, and manipulating JSON data. Added to Boost in *January 2021*.
+* boost:mp11[] : A metaprogramming library for compile-time manipulation of data structures that contain types, based on template aliases and variadic templates. Developed by Peter Dimov and added to Boost in *December 2017*.
+
+* boost:json[] : A JSON library for encoding, decoding, and manipulating JSON data. Developed by Vinnie Falco, Krystian Stasiowski and Dmitry Arkhipov and added to Boost in *December 2020*.
+
+* boost:describe[] : This reflection library enables authors of user-defined types (enums, structs and classes) to describe their enumerators, base classes, data members and member functions. This information can later be queried by other code portions, possibly written by a different author, using the supplied primitives. Developed by Peter Dimov and added to Boost in *August 2021*.
 
 These libraries, among many others, showcase the value and versatility of Boost in providing advanced functionality beyond the scope of the pass:[C++] Standard Library. As well as the xref:common-introduction.adoc[Common] and xref:advanced-introduction.adoc[Advanced] scenarios highlighted in this documentation, Boost libraries are used in highly specialized applications, ranging from probability theory to astronomy to mass spectroscopy. Open source isn't just for nerds and researchers. Real world programming challenges, irrespective of whether they are open or closed source, can benefit enormously from the thought and experience that has gone into the libraries.
 
-The source code is always distributed as open source, and released under the Boost Software License, which allows anyone to use, modify, and distribute the libraries for free. The libraries are platform independent and support most popular compilers, as well as many that are less well known.
+The source code is always distributed as open source, and released under the xref:bsl.adoc[Boost Software License], which allows anyone to use, modify, and distribute the libraries for free. The libraries are platform independent and support most popular compilers, as well as many that are less well known.
 
 == Current Status
 
@@ -58,7 +88,11 @@ Boost has evolved into a widely used and influential https://www.boost.org/doc/l
 
 Even though there is no formal relationship between the Boost community and the Standardization Committee, some developers are active in both groups. As the pass:[C++] language continues to evolve, Boost will undoubtedly remain an essential and innovative part of its story.
 
-_The best software solutions are written using the C++ programming language_
+image::get-boost-button.png[]
+_The Get Boost download button actually originated by replacing the word ALARMA from a Spanish operational manual photograph._ 
+
+image::highly-respected-quote.png[]
+_Early praise from well-known pass:[C++] gurus in their book: pass:[C++] Coding Standards: 101 Rules, Guidelines, and Best Practices, published in 2004"._
 
 == References
 
@@ -66,6 +100,7 @@ _The best software solutions are written using the C++ programming language_
 
 [circle]
 - https://www.boost.org/users/proposal.pdf[Proposal for a C++ Library Repository Web Site]
+
 
 === Status Reports
 
