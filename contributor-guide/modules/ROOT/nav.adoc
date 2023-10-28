@@ -1,6 +1,6 @@
 
 * xref:getting-involved.adoc[]
-* xref:tweeting-boost.adoc[]
+* xref:tweeting.adoc[]
 
 * Requirements
 ** xref:requirements/library-requirements.adoc[]
