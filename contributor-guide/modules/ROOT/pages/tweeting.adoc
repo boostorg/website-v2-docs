@@ -1,17 +1,17 @@
-= Tweeting Boost
-:navtitle: Tweeting Boost
+= Tweeting
+:navtitle: Tweeting
 
-Boost has its own https://twitter.com/boost_libraries[@Boost_Libraries]
-account in X (formerly Twitter),
-where news and information about Boost in particular and C++ in general are shared
-with the community. If you'd like to propose a post for publication from Boost's
-account, follow these simple guidelines:
+
+The collection is represented on social media by the https://twitter.com/boost_libraries[@Boost_Libraries]
+X (formerly Twitter) account, where news and information about our libraries in particular and C++ in general are shared
+with the community. If you'd like to propose a post for publication from
+this account, follow these simple guidelines:
 
 === Topics of interest
 
 * Upcoming C++ events, meetups, conferences, etc.
 * Upcoming Boost internal events (releases, reviews, library proposals).
-* Talks about some Boost library, or where Boost libraries are put to good effect.
+* Talks about some particular library, or where such library is put to good effect.
 * Boost-related articles, blogposts, C++ Committee papers.
 * Interesting discussions ongoing on Reddit or some other online forums.
 
@@ -54,7 +54,9 @@ post examples.
 
 === Post submission
 
-Submit your post proposal to [WHERE?] including:
+Log into the https://cpplang.slack.com/[C++ Language Slack Workspace]
+(or https://cppalliance.org/slack/[join it] if you're not a member yet)
+and send a DM to @david_sankel, including:
 
 * Main text
 * Link(s), with or without introductory texts
