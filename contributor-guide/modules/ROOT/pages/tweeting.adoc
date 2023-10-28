@@ -28,7 +28,9 @@ clear call to action ("learn about", "watch", "contribute", you get the idea).
 
 *Link(s)*: After the text, the post must include a link (or maybe more) to the
 piece of news, talk, etc. you're posting about. Links can be provided as-is
-or with a short introductory text (like "Check it out: _link_"). 
+or with a short introductory text (like "Check it out: _link_"). There's no
+need to pass the links through an URL shortener: X does it automatically
+with its own shortening service.
 
 *Hashtags*: The post should end with the following:
 
