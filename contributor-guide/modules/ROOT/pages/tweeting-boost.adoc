@@ -4,7 +4,7 @@
 Boost has its own https://twitter.com/boost_libraries[@Boost_Libraries]
 account in X (formerly Twitter),
 where news and information about Boost in particular and C++ in general are shared
-with the community. If you'd like to propose a post for publication from Boost
+with the community. If you'd like to propose a post for publication from Boost's
 account, follow these simple guidelines:
 
 *Topics of interest*
@@ -18,26 +18,30 @@ account, follow these simple guidelines:
 The list is not exhaustive: if in doubt, just go with your submission or ask
 for guidance using the same submission channel.
 
-*Text and style:* Make it short and attractive. Posts in X are currently capped at
+image::tweet_structure.png[Structure of an X post]
+
+*Text:* Make it short and attractive. Posts in X are currently capped at
 280 characters, but you should strive for even less than that: one or two sentences
 should suffice. Go straight to the point and phrase your sentences with a
-clear call to action ("learn about", "check out", "contribute", you get the idea).
+clear call to action ("learn about", "watch", "contribute", you get the idea).
 
 *Link(s)*: After the text, the post must include a link (or maybe more) to the
-piece of news, talk, etc. you're posting about.
+piece of news, talk, etc. you're posting about. Links can be provided as-is
+or with a short introductory text (like "Check it out: _link_"). 
 
 *Hashtags*: The post should end with the following:
 
-`#boostcpp` `#cpp` `#cplusplus`
+`#boost` `#boostcpp` `#cpp` `#cplusplus`
 
 plus other hashtags specific to the post you're proposing. Experiment with
 different hashtags to see what X search brings on them.
 
 *Image*: Always provide an image to go with the text —this dramatically
-increases the visibility and reach of your post. The aspect ratio should be
-as close as possible to 16:9 (X will crop to that otherwise),
-and the minimum recommended size is 600 pixels wide × 335 pixels tall,
-but aim higher if you can. In our era of constant fight for attention and
+increases the visibility and reach of your post. The image should be
+as large as possible. X accepts any aspect ratio, but given that
+the majority of accesses will be through a mobile device, consider
+ratios close to 1:1 or even taller than wider.
+In our era of constant fight for attention and
 information overload, the actual content of the image is less important
 than how it will stand out amidst X infinite scroll: so,  favor
 colorful, original images that will make readers pause for a moment
@@ -49,12 +53,16 @@ post examples.
 
 === Post submission
 
-Submit your post proposal to [WHERE?] including
+Submit your post proposal to [WHERE?] including:
 
-* Text
-* Link(s)
+* Main text
+* Link(s), with or without introductory texts
 * Hashtags
 * Attached image (or link to it)
 
 The editorial team of @Boost_Libraries may make some editorial adjustments
 to your submission or get back to you to help them polish the final post.
+Also, they will schedule the publication date and time for
+maximum impact (typically, on weekday mornings with an eye to
+catching readers both sides of the Atlantic, but this may be adjusted
+for events specific to some country or geographical area).
