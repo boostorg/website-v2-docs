@@ -10,7 +10,7 @@ account, follow these simple guidelines:
 === Topics of interest
 
 * Upcoming C++ events, meetups, conferences, etc.
-* Upcoming Boost internal events (releases, reviews, library proposals.)
+* Upcoming Boost internal events (releases, reviews, library proposals).
 * Talks about some Boost library, or where Boost libraries are put to good effect.
 * Boost-related articles, blogposts, C++ Committee papers.
 * Interesting discussions ongoing on Reddit or some other online forums.
@@ -61,7 +61,7 @@ Submit your post proposal to [WHERE?] including:
 * Hashtags
 * Attached image (or link to it)
 
-The editorial team of @Boost_Libraries may make some editorial adjustments
+The team in charge of @Boost_Libraries may make some editorial adjustments
 to your submission or get back to you to help them polish the final post.
 Also, they will schedule the publication date and time for
 maximum impact (typically, on weekday mornings with an eye to
