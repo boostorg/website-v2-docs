@@ -15,11 +15,13 @@ guidelines will help ensure consistency and cohesion across all pages of the web
 
 == Wording Guidelines
 [disc]
-* The word "Boost" should occur no more than once per page, not counting logo
+* The word "Boost" should occur no more than once per page, not counting logo, but logo should not be visible in two places.
 ** user generated content excluded
 
 * The word "C++" should occur no more than once on a page
 ** user-generated content excluded
+
+We want to minimize the number of times we use the word "Boost" on a page. Since the logo in the header has the word "Boost" in it, sometimes we will have no choice but to use the word at least twice on a page. But we should try to minimize the repetitions.
 
 == URL Display 
 [disc]
