@@ -1,6 +1,5 @@
 
 * xref:getting-involved.adoc[]
-* xref:tweeting.adoc[]
 
 * Requirements
 ** xref:requirements/library-requirements.adoc[]
@@ -43,3 +42,6 @@
 * Releases
 ** xref:release-process.adoc[]
 ** xref:release-notes.adoc[]
+
+* Community
+** xref:tweeting.adoc[]
