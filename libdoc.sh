@@ -63,7 +63,7 @@ else
 fi
 
 if [ ! -d "node_modules" ] || [ "$(find package.json -prune -printf '%T@\n' | cut -d . -f 1)" -gt "$(find node_modules -prune -printf '%T@\n' | cut -d . -f 1)" ]; then
-  npm install
+  npm ci
 fi
 
 # Run antora command
