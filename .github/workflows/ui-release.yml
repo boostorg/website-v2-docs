@@ -32,7 +32,7 @@ jobs:
     - name: Build
       working-directory: antora-ui
       run: |
-        npm install
+        npm ci
         gulp bundle
 
     - name: Bundle

@@ -44,7 +44,7 @@ After cloning the project, you need to https://docs.antora.org/antora/latest/ins
 
 [source,bash]
 ----
-$ npm install
+$ npm ci
 ----
 
 Verify the antora command is now available by running:

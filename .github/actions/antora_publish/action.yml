@@ -42,12 +42,8 @@ runs:
       shell: bash
       run: |
         if test -f "package.json"; then
-            npm install
+            npm ci
         fi
-
-    - name: Install Antora
-      shell: bash
-      run: npm i antora
 
     - name: Install Antora Extensions
       if: inputs.extensions != ''
