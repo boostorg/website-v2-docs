@@ -165,7 +165,7 @@ To consume the libraries transparently from CMake, one can use the https://learn
 Conan::
 +
 --
-You can install Boost with Conan through the https://conan.io/center/boost[boost] package.
+You can install Boost with Conan through the https://conan.io/center/recipes/boost[boost] package.
 --
 ========
 
