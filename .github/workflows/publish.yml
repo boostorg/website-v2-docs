@@ -65,6 +65,8 @@ jobs:
               echo "built_libs=false" >> $GITHUB_OUTPUT
           fi
           
+          ANTORA_LOG_FAILURE_LEVEL=warn
+          export ANTORA_LOG_FAILURE_LEVEL
           ./build.sh
 
       - name: Remove lib dirs

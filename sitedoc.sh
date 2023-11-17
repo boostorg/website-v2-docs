@@ -22,6 +22,7 @@ if [ -z "$node_version" ]; then
 fi
 # major_version=$(echo $node_version | egrep -o "v([0-9]+)\." | cut -c 2- | rev | cut -c 2- | rev)
 major_version=$(echo "$node_version" | awk -F. '{print $1}' | cut -c 2-)
+echo "Node Major Version: ${major_version}"
 if [ "$major_version" -lt "16" ]; then
   echo "Node.js version $node_version is not supported. Please upgrade to version 16 or higher."
   node_path=$(which node)
