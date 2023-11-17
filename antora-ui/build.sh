@@ -7,7 +7,9 @@ if [ -z "$npm_version" ]; then
   echo "npm is not installed"
   exit 1
 fi
-
+# Add node_modules/.bin to path
+PATH=$(pwd)/node_modules/.bin:$PATH
+export PATH
 gulp_version=$(gulp --version 2>/dev/null)
 if [ -z "$gulp_version" ]; then
   echo "gulp is not installed"
