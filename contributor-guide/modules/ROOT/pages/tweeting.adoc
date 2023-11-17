@@ -7,7 +7,7 @@ X (formerly Twitter) account, where news and information about our libraries in 
 with the community. If you'd like to propose a post for publication from
 this account, follow these simple guidelines:
 
-=== Topics of interest
+== Topics of interest
 
 * Upcoming C++ events, meetups, conferences, etc.
 * Upcoming Boost internal events (releases, reviews, library proposals).
@@ -18,7 +18,7 @@ this account, follow these simple guidelines:
 The list is not exhaustive: if in doubt, just go with your submission or ask
 for guidance using the same submission channel.
 
-=== Post structure 
+== Post structure
 image::tweet_structure.png[Structure of an X post]
 
 *Text:* Make it short and attractive. Posts in X are currently capped at
@@ -54,7 +54,7 @@ Making the perfect post is not trivial: if you need inspiration,
 go to https://twitter.com/boost_libraries[@Boost_Libraries,role=resource,window=_blank] for actual
 post examples.
 
-=== Post submission
+== Post submission
 
 Log into the https://cpplang.slack.com/[C++ Language Slack Workspace,role=resource,window=_blank]
 (or https://cppalliance.org/slack/[join it,role=resource,window=_blank] if you're not a member yet)
