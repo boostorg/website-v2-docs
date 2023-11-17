@@ -65,8 +65,7 @@ jobs:
               echo "built_libs=false" >> $GITHUB_OUTPUT
           fi
           
-          # Always build sitedoc because all other changes affect it
-          ./sitedoc.sh ${{ github.ref_name }}
+          ./build.sh
 
       - name: Remove lib dirs
         if: steps.build.outputs.built_libs == 'true'
