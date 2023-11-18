@@ -1,3 +1,499 @@
 = Writing Tests
+:navtitle: Writing Tests
 
-*Content under construction.*
+== Guidelines for Contributors
+
+By following these guidelines and examples, contributors can write effective and maintainable unit tests that ensure the robustness and reliability of their Boost library contributions.
+
+. Tests should be neatly organized into test suites to maintain clarity about which aspect of the library is being tested.
+
+. When testing features that are compiler or platform-specific, use boost:config[] to ensure portability.
+
+. Test names should be descriptive enough to understand the purpose without diving deep into the test logic.
+
+. If a test contains non-trivial logic or checks for edge cases, include comments explaining the rationale.
+
+. Ensure that the tests cover all corner cases, edge conditions, and typical usage scenarios.
+
+. Each test should be independent, not relying on the state or outcome of another test.
+
+. Well-commented unit tests not only describe the "what" but also the "why" behind certain checks, making them invaluable for both current developers and future maintainers. It's crucial for unit tests to be self-explanatory, and while descriptive names play a significant role, comments can further elucidate complex or non-obvious logic.
+
+== Unit Tests
+
+Writing good unit tests is crucial. boost:test[] provides the facilities needed to write unit tests, and boost:config[] can be used to adjust code depending on the platform and compiler features. The following are some examples to help contributors get started:
+
+=== Basic Unit Testing using Boost.Test
+
+To begin, contributors should include the necessary headers and use the right macros.
+
+[source,cpp]
+----
+#define BOOST_TEST_MODULE MyLibraryTest
+#include <boost/test/included/unit_test.hpp>
+
+BOOST_AUTO_TEST_CASE(test_case1)
+{
+    BOOST_TEST(2 + 2 == 4);
+}
+----
+
+In this example, a test module named `MyLibraryTest` is defined, and a single test case (`test_case1`) checks a trivial arithmetic operation.
+
+=== Testing Suite
+
+For a library with multiple functionalities, it's a good idea to organize tests into test suites.
+
+[source,cpp]
+----
+#include <boost/test/included/unit_test.hpp>
+
+BOOST_AUTO_TEST_SUITE(MathTestSuite)
+
+BOOST_AUTO_TEST_CASE(test_addition)
+{
+    BOOST_TEST(2 + 2 == 4);
+}
+
+BOOST_AUTO_TEST_CASE(test_subtraction)
+{
+    BOOST_TEST(4 - 2 == 2);
+}
+
+BOOST_AUTO_TEST_SUITE_END()
+----
+
+=== Using Boost.Config
+
+Let's say a certain test is only valid for compilers supporting pass:[C++]14. boost:config[] can be used to conditionally include or exclude that test.
+
+[source,cpp]
+----
+#include <boost/test/included/unit_test.hpp>
+#include <boost/config.hpp>
+
+BOOST_AUTO_TEST_CASE(test_cpp14_feature)
+{
+#if !defined(BOOST_NO_CXX14_GENERIC_LAMBDAS)
+    auto lambda = [](auto x) { return x * x; };
+    BOOST_TEST(lambda(3) == 9);
+#endif
+}
+----
+
+In the above test, we ensure that the lambda (which uses a pass:[C++]14 feature) only gets compiled if the compiler supports pass:[C++]14 generic lambdas. The `BOOST_NO_CXX14_GENERIC_LAMBDAS` macro is provided by Boost.Config.
+
+=== Testing with Floating Point
+
+boost:test[] has special support for floating-point comparison to handle rounding errors.
+
+[source,cpp]
+----
+BOOST_AUTO_TEST_CASE(test_floating_point)
+{
+    double result = 0.1 * 0.1;
+    BOOST_TEST(result == 0.01, boost::test_tools::tolerance(1e-9));
+}
+----
+
+In this test, the `boost::test_tools::tolerance` call specifies the allowed difference between the computed result and the expected result.
+
+=== Testing Exceptions
+
+boost:test[] provides facilities to check if the right exceptions are thrown.
+
+[source,[source,cpp]]
+----
+#include <stdexcept>
+
+void foo() { throw std::runtime_error("Error!"); }
+
+BOOST_AUTO_TEST_CASE(test_exception)
+{
+    BOOST_CHECK_THROW(foo(), std::runtime_error);
+}
+----
+
+Here is an example that works around expectations.
+
+[source,[source,cpp]]
+----
+#define BOOST_TEST_MODULE ExceptionTest
+#include <boost/test/included/unit_test.hpp>
+
+void mightThrow(bool doThrow)
+{
+    if (doThrow)
+        throw std::runtime_error("An error occurred!");
+}
+
+BOOST_AUTO_TEST_CASE(test_exception_handling)
+{
+    // This call should not throw any exceptions.
+    mightThrow(false);
+
+    // Testing if the function throws the expected exception when asked to.
+    // This is especially useful when certain conditions in the application 
+    // logic are expected to trigger specific exceptions.
+    BOOST_CHECK_THROW(mightThrow(true), std::runtime_error);
+}
+----
+
+== Test Edge Cases
+
+Testing edge cases is crucial in ensuring the robustness and reliability of any software component. Edge cases often arise from boundary conditions, interactions of features, or uncommon input scenarios. The following examples demonstrate some common edge cases and how they can be tested using boost:test[]. In practice, understanding the problem domain and potential pitfalls of the library/component being developed is crucial in identifying and effectively testing edge cases.
+
+=== Test Array Boundaries
+
+When working with arrays or data structures with a fixed size, it's crucial to test both lower and upper boundaries.
+
+[source,cpp]
+----
+#include <array>
+#define BOOST_TEST_MODULE ArrayBoundaryTest
+#include <boost/test/included/unit_test.hpp>
+
+std::array<int, 5> data = {1, 2, 3, 4, 5};
+
+BOOST_AUTO_TEST_CASE(test_lower_boundary)
+{
+    BOOST_TEST(data[0] == 1);
+}
+
+BOOST_AUTO_TEST_CASE(test_upper_boundary)
+{
+    BOOST_TEST(data[4] == 5);
+}
+
+// This should fail if accessing out of bounds
+BOOST_AUTO_TEST_CASE(test_out_of_bounds)
+{
+    BOOST_CHECK_THROW(data.at(5), std::out_of_range);
+}
+----
+
+=== Test List Boundaries
+
+Comments help identify the purpose of the tests in this example of testing list size and boundaries.
+
+[source,cpp]
+----
+#define BOOST_TEST_MODULE BoundaryTest
+#include <boost/test/included/unit_test.hpp>
+
+BOOST_AUTO_TEST_CASE(test_list_boundary_conditions)
+{
+    std::list<int> myList;
+
+    // Testing the lower boundary. An empty list should have a size of 0.
+    BOOST_TEST(myList.size() == 0);
+
+    myList.push_back(1);
+    myList.push_back(2);
+
+    // When two items are added, size should reflect that.
+    BOOST_TEST(myList.size() == 2);
+
+    myList.clear();
+
+    // After clearing, the list should return to its initial empty state.
+    BOOST_TEST(myList.size() == 0);
+}
+----
+
+=== Test Numeric Limits
+
+When working with numerical operations, it's vital to test the smallest, largest, and other boundary values.
+
+[source,cpp]
+----
+#include <limits>
+#define BOOST_TEST_MODULE NumericLimitsTest
+#include <boost/test/included/unit_test.hpp>
+
+BOOST_AUTO_TEST_CASE(test_integer_overflow)
+{
+    int max_int = std::numeric_limits<int>::max();
+    BOOST_CHECK_THROW([&](){
+        int result = max_int + 1;
+    }(), std::overflow_error);
+}
+----
+
+=== Test Numerical Algorithms
+
+Numerical algorithms often have trouble with 0!
+
+[source,cpp]
+----
+#define BOOST_TEST_MODULE AlgorithmTest
+#include <boost/test/included/unit_test.hpp>
+
+double divide(double a, double b)
+{
+    if (b == 0.0)
+        throw std::domain_error("Denominator cannot be zero.");
+    return a / b;
+}
+
+BOOST_AUTO_TEST_CASE(test_division)
+{
+    // Regular division scenario: 10 divided by 2 should give 5.
+    BOOST_TEST(divide(10.0, 2.0) == 5.0);
+
+    // Division by zero should throw an error. We're ensuring that our
+    // function correctly handles this edge case and provides meaningful feedback.
+    BOOST_CHECK_THROW(divide(10.0, 0.0), std::domain_error);
+}
+----
+
+=== String Edge Cases
+
+When working with strings, some common edge cases include empty strings, strings with special characters, and extremely long strings.
+
+[source,cpp]
+----
+#include <string>
+#define BOOST_TEST_MODULE StringTest
+#include <boost/test/included/unit_test.hpp>
+
+std::string concatenate(const std::string &a, const std::string &b)
+{
+    return a + b;
+}
+
+BOOST_AUTO_TEST_CASE(test_empty_string)
+{
+    BOOST_TEST(concatenate("", "world") == "world");
+}
+
+BOOST_AUTO_TEST_CASE(test_special_characters)
+{
+    BOOST_TEST(concatenate("hello", "\n\t!") == "hello\n\t!");
+}
+
+// Use this test cautiously as it can consume a lot of memory
+// BOOST_AUTO_TEST_CASE(test_extremely_long_string)
+// {
+//     std::string long_string(1e7, 'a');  // 10 million 'a's
+//     BOOST_TEST(concatenate(long_string, "b").back() == 'b');
+// }
+----
+
+=== Test for `NULL` or `nullptr`
+
+For libraries that might work with pointers, always check for null pointer scenarios.
+
+[source,cpp]
+----
+#define BOOST_TEST_MODULE PointerTest
+#include <boost/test/included/unit_test.hpp>
+
+int dereference(int* ptr)
+{
+    return *ptr;
+}
+
+BOOST_AUTO_TEST_CASE(test_null_pointer)
+{
+    int* null_ptr = nullptr;
+    BOOST_CHECK_THROW(dereference(null_ptr), std::runtime_error);
+}
+----
+
+=== Test Recursive Functions
+
+For recursive algorithms, consider the maximum depth and base cases.
+
+[source,cpp]
+----
+#define BOOST_TEST_MODULE RecursionTest
+#include <boost/test/included/unit_test.hpp>
+
+int factorial(int n)
+{
+    if (n < 0) throw std::runtime_error("Negative input not allowed");
+    if (n == 0) return 1;
+    return n * factorial(n - 1);
+}
+
+BOOST_AUTO_TEST_CASE(test_negative_input)
+{
+    BOOST_CHECK_THROW(factorial(-1), std::runtime_error);
+}
+
+BOOST_AUTO_TEST_CASE(test_base_case)
+{
+    BOOST_TEST(factorial(0) == 1);
+}
+
+BOOST_AUTO_TEST_CASE(test_general_case)
+{
+    BOOST_TEST(factorial(5) == 120);
+}
+----
+
+=== Testing with Mocks
+
+A "mock" is a hypothetical example. Mocks are useful in isolating units of code and simulating external interactions without actually invoking them.
+
+[source,cpp]
+----
+#define BOOST_TEST_MODULE MockTest
+#include <boost/test/included/unit_test.hpp>
+#include <mock_database.hpp>  // hypothetical mock database header
+
+BOOST_AUTO_TEST_CASE(test_database_read)
+{
+    MockDatabase db;  // Creating a mock database instance
+
+    // Presetting the mock to return specific data when read is called.
+    db.setMockData("sample_data");
+
+    // The data returned from our mock should match the preset data.
+    BOOST_TEST(db.read() == "sample_data");
+}
+----
+
+== Testing Features of Boost.Core
+
+boost:core[] provides a set of core utility components intended for use by other libraries. Features include utility classes like `noncopyable`, type traits like `is_same`, and low-level functions like `addressof`.
+
+In each of the following tests, the boost:test[] framework is used to verify the behavior of components based on boost:core[]:
+
+=== Testing `noncopyable`
+
+Suppose you have a class that inherits from `boost::noncopyable` to ensure it can't be copied.
+
+[source,cpp]
+----
+#include <boost/core/noncopyable.hpp>
+
+class MyClass : private boost::noncopyable {
+    // class contents
+};
+----
+
+To test this:
+
+[source,cpp]
+----
+#define BOOST_TEST_MODULE NonCopyableTest
+#include <boost/test/included/unit_test.hpp>
+
+BOOST_AUTO_TEST_CASE(test_noncopyable)
+{
+    MyClass instance1;
+
+    // The following lines should result in compile-time errors because copy 
+    // constructor and assignment operator are deleted for noncopyable.
+    // Uncommenting these lines will cause the test to fail at compilation.
+    // 
+    // MyClass instance2(instance1);  // Copy construction
+    // instance1 = instance2;         // Copy assignment
+
+    BOOST_TEST(true);  // If we reach here, it means the class is noncopyable
+}
+----
+
+=== Testing `is_same`
+
+Using `boost::is_same` type trait:
+
+[source,cpp]
+----
+#include <boost/type_traits/is_same.hpp>
+
+template <typename T, typename U>
+bool are_same_type() {
+    return boost::is_same<T, U>::value;
+}
+----
+
+To test this:
+
+[source,cpp]
+----
+#define BOOST_TEST_MODULE IsSameTest
+#include <boost/test/included/unit_test.hpp>
+
+BOOST_AUTO_TEST_CASE(test_is_same)
+{
+    BOOST_TEST(are_same_type<int, int>());
+    BOOST_TEST(!are_same_type<int, double>());
+}
+----
+
+=== Testing `boost::addressof`
+
+This function obtains the memory address of an object, even if its `operator&` is overloaded.
+
+[source,cpp]
+----
+struct OverloadedAddress {
+    OverloadedAddress* operator&() {
+        return nullptr;
+    }
+};
+----
+
+Testing it:
+
+[source,cpp]
+----
+#define BOOST_TEST_MODULE AddressOfTest
+#include <boost/test/included/unit_test.hpp>
+#include <boost/core/addressof.hpp>
+
+BOOST_AUTO_TEST_CASE(test_addressof)
+{
+    OverloadedAddress obj;
+    BOOST_TEST(boost::addressof(obj) != nullptr);
+}
+----
+
+
+== Descriptive Test Names
+
+Descriptive test names are crucial for several reasons:
+
+* When a test fails, a good test name instantly conveys what was expected and what aspect of the system was being tested.
+* As the software evolves, descriptive test names make it easier for developers to update tests or understand the impact of a code change.
+* Tests often serve as a form of living documentation for a system. Good test names provide an outline of the system's behavior.
+* Test names should often start with a verb to indicate the action or condition being tested.
+* It's usually better to have a longer, descriptive name than a short, vague one.
+* If you're using a test framework that already prefixes methods with `test_`, you don't need to start every test name with `test_`. Consider using a more descriptive prefix.
+* If there's a naming convention in the existing test suite, stick to it.
+* The name should describe the expected behavior or outcome, not just the input conditions. For instance, `test_negative_balance` doesn't tell us what to expect, while `test_withdrawing_more_than_balance_throws_error` is much clearer.
+
+Let's delve into some more examples:
+
+=== Example Good Test Names
+
+[cols="1,2",options="header",stripes=even,frame=none]
+|===
+| *Name* | *Description*
+| `test_empty_list_has_size_of_zero` | This name is clear about the context (empty list) and the expectation (size is zero).
+| `test_user_cannot_withdraw_more_than_balance` | Clear and specific about the business rule being enforced.
+| `test_connection_throws_timeout_after_10_seconds` | Indicates that a connection should time out, and also specifies the expected time frame.
+| `test_sorting_preserves_original_order_of_equal_elements` | Describes a specific characteristic (stability) of a sorting function.
+| `test_password_must_contain_at_least_one_special_character` | Clear about the rule being checked.
+|===
+
+=== Example Poor Test Names
+
+[cols="1,2",options="header",stripes=even,frame=none]
+|===
+| *Name* | *Description*
+| `test1` or `test_function1` | Vague. Does not tell anything about the purpose or expected outcome.
+| `test_errors` | Too broad. What kind of errors? Under what conditions?
+| `test_logic` | Ambiguous. What specific logic? Why is it being tested?
+| `test_against_spec` | What spec? How? This name doesn't give a clear picture of what's being tested or what to expect.
+| `test_flag` | Too vague. What about the flag? Are we testing its default value, its behavior when set, or something else?
+| `test_issue576` | Will a future maintainer know how to access Issue 576? 
+|===
+
+== See Also
+
+* xref:testing/test-policy.adoc[]
+* xref:testing/fuzzing.adoc[]
