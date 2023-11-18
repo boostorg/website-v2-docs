@@ -1,5 +1,5 @@
-= Style Guide
-:navtitle: Style Guide
+= AsciiDoc Style Guide
+:navtitle: AsciiDoc Style Guide
 
 This section describes the style of writing and formatting to use when contributing to Boost documentation.
 
@@ -280,7 +280,7 @@ Place the image in the `images` folder, then add the following link in the file.
 image::filename.png[caption="Figure 1: caption", alt="alternate text"]
 ----
 
-== References
+== See Also
 
-[square]
 * https://mrduguo.github.io/asciidoctor.org/docs/asciidoc-syntax-quick-reference/[AsciiDoc Syntax Quick Reference]
+* xref:site-docs-style-guide.adoc[]

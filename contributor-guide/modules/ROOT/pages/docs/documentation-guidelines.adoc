@@ -600,7 +600,8 @@ If any other appendices are needed, add them here.
 
 == See Also
 
-* xref:docs/style-guide.adoc[]
+* xref:docs/asciidoc-style-guide.adoc[]
+* xref:site-docs-style-guide.adoc[]
 
 _Revised April, 2023_
 

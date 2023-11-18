@@ -19,6 +19,7 @@ The list is not exhaustive: if in doubt, just go with your submission or ask
 for guidance using the same submission channel.
 
 == Post structure
+
 image::tweet_structure.png[Structure of an X post]
 
 *Text:* Make it short and attractive. Posts in X are currently capped at

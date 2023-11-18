@@ -37,7 +37,7 @@
 ** xref:docs/documentation-guidelines.adoc[]
 ** xref:docs/documentation-components.adoc[]
 ** xref:docs/antora.adoc[Antora Guide]
-** xref:docs/style-guide.adoc[]
+** xref:docs/asciidoc-style-guide.adoc[]
 
 * Releases
 ** xref:release-process.adoc[]
@@ -45,3 +45,4 @@
 
 * Community
 ** xref:tweeting.adoc[]
+** xref:site-docs-style-guide.adoc[]

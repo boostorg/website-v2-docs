@@ -1,0 +1,39 @@
+= Site-docs Style Guide
+:navtitle: Site-docs Style Guide
+
+This document outlines the style guidelines for the site-docs. Adhering to these guidelines will help ensure consistency and cohesion across all pages of the website.
+
+== Color Guidelines
+
+* Boost Mustard
+[circle]
+** only use for one or two key top level headings
+** never on inactive UI controls
+** OK to use for hover state
+** never use large areas of this color in illustrations
+** never used as an endpoint of a color blend
+
+== Wording Guidelines
+
+* The word "Boost" should occur no more than once per page, not counting logo, but logo should not be visible in two places.
+[circle]
+** user generated content excluded
+* The word "pass:[C++]" should occur no more than once on a page
+[circle]
+** user-generated content excluded
+
+We want to minimize the number of times we use the word "Boost" on a page. Since the logo in the header has the word "Boost" in it, sometimes we will have no choice but to use the word at least twice on a page. But we should try to minimize the repetitions.
+
+== URL Display 
+
+* Per-library links (e.g. GitHub or docs) should use a schemeless URL:
+
+image::url-style-guide-image.png[]
+
+== Image Display
+
+* User avatars should never be displayed squared, always with rounded corners
+
+== See Also
+
+** xref:docs/asciidoc-style-guide.adoc[]
