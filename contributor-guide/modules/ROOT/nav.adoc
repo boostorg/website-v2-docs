@@ -33,6 +33,12 @@
 ** xref:testing/continuous-integration.adoc[]
 ** xref:testing/fuzzing.adoc[]
 
+* The Super-project
+** xref:superproject/overview.adoc[]
+** xref:superproject/getting-started.adoc[]
+** xref:superproject/library-maintenance.adoc[]
+** xref:superproject/library-workflow.adoc[]
+
 * Documentation
 ** xref:docs/documentation-guidelines.adoc[]
 ** xref:docs/documentation-components.adoc[]

@@ -1,0 +1,128 @@
+= Getting Started with the Super-project
+:navtitle: Getting Started
+
+Boost libraries reside in subdirectories under the `libs` directory. For example, the contents of the boost:filesystem[] library are in `libs/filesystem.` This includes the build scripts (in l`ibs/filesystem/build`), the source files (in `libs/filesystem/src`), the tests (in `libs/filesystem/test`), the documentation (in `libs/filesystem/doc`), and so on.
+
+In the past, when Boost used SVN as its version control system, the header files were an exception. The header files of all libraries resided in the `boost` subdirectory, and it wasn't possible to accurately determine which header belonged to which library.
+
+When Boost moved to Git for version control, header files were moved to their corresponding libraries, into an include subdirectory. The header files of boost:filesystem[] are now in `libs/filesystem/include`.
+
+For compatibility, `boost` is now a "virtual" directory, containing links to the headers. It's maintained automatically by https://www.bfgroup.xyz/b2/[B2]. The command `b2` creates or recreates the contents of the `boost` directory.
+
+This structure allows us to determine that, when faced with an `#include <boost/filesystem.hpp>` directive, that this header is part of boost:filesystem[], and that therefore, the current library being scanned depends on boost:filesystem[].
+
+Note:: Unfortunately, Boost releases do not have this structure. For backward compatibility, they have an old-style boost directory containing all header files, whereas the per-library include subdirectories are missing.
+
+== Clone and Install the Super-project
+
+To work within the Super-project, you will have to clone the Boost Git repository. To do that, execute the following command:
+
+[source, bash]
+----
+git clone https://github.com/boostorg/boost.git boost
+----
+
+This will download the Super-project (the master project, without any libraries) and place it into the subdirectory `boost` of the current directory. To override the directory name, pass it as a second argument instead of boost:
+
+[source, bash]
+----
+git clone https://github.com/boostorg/boost.git mydir
+----
+
+You can now `cd` into the newly created directory with `cd mydir`. This directory is called the "Boost root". All of the commands below assume that it is the current directory.
+
+The above `git clone` commands download the default branch of the Boost Git repository, which is `master`. This is the current stable version of Boost. To verify this, issue the command `git status` from the Boost root. This will output
+
+[source, bash]
+----
+# On branch master
+nothing to commit, working directory clean
+----
+
+To download a specific release instead, such as 1.58.0, issue the following command after `git clone`, from the Boost root:
+
+[source, bash]
+----
+git checkout boost-1.58.0
+----
+
+`git status` will now say"
+
+[source, bash]
+----
+# HEAD detached at boost-1.58.0
+nothing to commit, working directory clean
+----
+
+Then, download all the libraries:
+
+[source, bash]
+----
+git submodule update --init
+----
+
+This step will take a while.
+
+If all goes well, you will now have the complete contents of Boost's latest `master` branch (if you didn't checkout a specific release by name) or the corresponding Boost release (if you did).
+
+You can switch between the `master` branch, the `develop` branch, and a release, by issuing the following commands:
+
+For the `master` branch:
+
+[source, bash]
+----
+git checkout master
+git pull
+git submodule update --init
+----
+
+Note:: `git pull` updates your local copy of the `master` branch from the server, in case it has changed since your initial checkout.
+
+For the `develop` branch:
+
+[source, bash]
+----
+git checkout develop
+git pull
+git submodule update --init
+----
+
+For the boost-1.58.0 release:
+
+[source, bash]
+----
+git checkout boost-1.58.0
+git submodule update --init
+----
+
+For the boost-1.57.0 release:
+
+[source, bash]
+----
+git checkout boost-1.57.0
+git submodule update --init
+----
+
+Note:: While the initial `git submodule update` is quite slow, as it needs to download all the libraries, the subsequent invocations are a lot faster.
+
+Also note that if a new Boost library (`libs/convert`, for example) is present in, say, `master`, and you have it checked out, when you later switch to `boost-1.58.0`, where this library doesn't exist, Git will not delete `libs/convert`. In this case, git status will output
+
+[source, bash]
+----
+# HEAD detached at boost-1.58.0
+# Untracked files:
+#   (use "git add <file>..." to include in what will be committed)
+#
+#       libs/convert/
+nothing added to commit but untracked files present (use "git add" to track)
+----
+
+and you will have to remove `libs/convert` by hand.
+
+Now, you have successfully installed the Super-project.
+
+== See Also
+
+* xref:superproject/overview.adoc[]
+
+
