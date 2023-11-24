@@ -1,0 +1,67 @@
+= Super-project Layout
+:navtitle: Super-project Layout
+
+This section covers the organization of the Boost pass:[C++] Libraries into separate, independently developable modules, each residing in its own repository, to facilitate development, integration, and selective inclusion of individual libraries.
+
+This section provides an overview of how the Super-project is organized.
+
+== Overall Organization
+
+The Boost Super-project consists of separate projects for each individual library. In terms of Git, the Super-project treats the individual libraries as _submodules_.
+
+All public repositories are hosted at https://github.com/boostorg[GitHub boostorg].
+
+Releases of individual libraries occur asynchronously from releases of the Super-project.
+
+== Repositories
+
+- The Super-project has its own public repository within `boostorg`. It treats each individual library as a submodule, i.e. a link to a particular release in the library's public GitHub repository. The Super-project is maintained by the Boost release managers, and most library developers do not have write access.
+
+- Each individual library has its own public repository within `boostorg`. For example, boost:config[] has a public repository here. The maintainer of a library decides who has write access to the public repository. Release managers and their helpers also have write access for administrative purposes.
+
+- As with any Git project, a library's developers do day-to-day work using private repositories on their local machines. When they push changes from these local private repositories up to the library's public repository is up to them, as is when the library issues releases. As usual with Git, the local repositories may have private branches that are never pushed to the public repository.
+
+- Libraries are required to follow certain naming conventions for branches and directories, so that both humans and automatic test and management tools know where to find commonly referenced components. But beyond those requirements, each library is free to use whatever branch and directory strategies they wish.
+
+== Branches
+
+Boost requires all libraries have at least the two branches `master` and `develop`.
+
+Releases for both the Super-project and individual libraries are always on branch `master`. `master` in the library's `boostorg` public repo should be stable at all times, so should only be pushed to the library's public repository when it is stable and ready to ship.
+
+Branch `develop` is the main development branch. Whether or not `develop` is stable in the library's public `boostorg` repository is up to the library maintainer.
+
+Additional branches, if any, are up to the library maintainer. See <<Git Flow for Workflow>>.
+
+== Directory Structure
+
+Your library's directory structure conforms to Boost directory structure conventions, so both users and automatic processes can find header files, test files, build configurations, and the like. Beyond the conventions, your library's directory structure is up to you.
+
+The Super-project header files are placed in an `include/boost` directory hierarchy within the library's top-level directory. Here is what a very simple header-only library named `simple` would look like:
+
+[source, bash]
+----
+     simple
+       include
+         boost
+           simple
+             twice.hpp
+       test
+         twice_test.cpp
+         Jamfile.v2
+       index.html
+----
+
+Note:: The sub-directory hierarchy `include/boost/...` (where `...` represents the library's directories and header files) ensures that the library is entirely self-contained within the top-level directory.
+
+A real library would also have additional sub-directories such as `doc`, `example`, and `src`, as described in the directory conventions, but they are left out of simple for the sake of brevity.
+
+== Git Flow for Workflow
+
+Boost recommends, but does not require, the approach to library workflow that has come to be known as Git Flow. For more about how this applies to Boost libraries, see xref:superproject/library-workflow.adoc[].
+
+== See Also
+
+** xref:superproject/getting-started.adoc[]
+** https://www.bfgroup.xyz/b2/[B2]
+** xref:version-control.adoc[]

@@ -1,0 +1,279 @@
+= Getting Started with Super-project Library Maintenance
+:navtitle: Library Maintenance
+
+This page briefly sketches the mechanics of maintaining a Boost library using Git. The intended audience is developers getting started with the maintenance of an existing Super-project library.
+
+This page is intended to get you started only; it does not provide in-depth coverage. See links below for that.
+
+Illustrations of how to perform various actions are given using the Git command line client.
+
+== The Big Picture
+
+Library maintenance occurs in the context of how Boost repositories are organized. Study the xref:superproject/overview.adoc[] before continuing, since a Boost developer needs to be familiar with how Boost organizes its repositories.
+
+The examples given on this page follow Boost recommended workflow practices, but keep workflow discussion simple for this introduction. To better understand workflow recommendations and rationale before continuing, read xref:superproject/library-workflow.adoc[].
+
+== Prerequisites
+
+. A recent release of the Git command line client installed.
+
+. A https://github.com/[GitHub] account.
+
+. A pass:[C++] compiler and development environment installed and working smoothly.
+
+. The Super-project installed, as described in xref:superproject/getting-started.adoc[].
+
+. `b2` in your path. That allows the command line examples given here to work as shown on both Windows and POSIX-like systems.
+
+== Typical Maintenance Tasks
+
+=== Getting Ready to Work on a Library
+
+The preferred environment library maintenance is to checkout the library's `develop` branch, or some other development branch, while other Boost libraries are as defined by the Super-project `master` branch. This causes local tests of your library to run against `master` for other Boost libraries at the point in time referenced by the Super-project.
+
+This is a more realistic test environment in than testing against the possibly unstable `develop` branch of other Boost libraries or against the `master` branch of other libraries at a different point in time than that referenced by the Super-project. Robert Ramey has advocated this approach to testing for years, and the Super-project makes this approach relatively easy and fast.
+
+Note:: The following examples assume you have installed the Super-project to a folder called `boost-root`.
+
+[source, bash]
+----
+cd boost-root
+git checkout master
+git pull
+git submodule update
+----
+
+The `git submodule update`` will fail if it would result in uncommitted changes being overwritten.
+
+The `git submodule update` may switch submodules back to the detached state, depending on the working copy's exact situation.
+
+See <<Effects of `git submodule update`>> for details.
+
+To get more information about a submodule:
+
+[source, bash]
+----
+cd boost-root
+git submodule summary
+----
+
+If for some reason you wanted to test against the current head of master for all libraries, disregarding the Super-project state, the `git submodule update` command would be changed to:
+
+[source, bash]
+----
+git submodule foreach --recursive "git checkout master; git pull"
+----
+
+If modules are added, these should be added to your project too, which is not done by the commands above. Run:
+
+[source, bash]
+----
+git submodule update --init
+----
+
+Note that if you use the `--init` option, the already-initialized submodules will not be updated. You might have to run the command without `--init` afterwards.
+
+=== Check out the Development Branch of your Library
+
+You can see what branch `mylib` is currently on like this:
+
+[source, bash]
+----
+cd boost-root/libs/mylib
+git branch
+----
+
+Then if you need to change the branch to a development branch such as `develop`, do this:
+
+[source, bash]
+----
+cd boost-root/libs/mylib
+git checkout develop
+----
+
+You only have to do that once; your local repo working copy will sit on the branch until it is explicitly changed by a command you give.
+
+Of course, you don't have to change the directory before every command, and from here on this tutorial will assume the directory has not been changed since the prior example.
+
+If there is any possibility the branch head content in the public upstream repo has changed, you also will want to update content:
+
+[source, bash]
+----
+cd boost-root/libs/mylib
+git pull
+----
+
+From this point on, it is assumed you have already done a `cd boost-root/libs/mylib`.
+
+=== Testing Locally
+
+Unless you are 100% sure of the state of your library's regression tests, it is a good idea to run the regression tests before making any changes to the library:
+
+[source, bash]
+----
+pushd test
+b2
+popd
+----
+
+=== Checking Status
+
+Before making changes, it is a good idea to check status. Here is what that looks like on Windows; the message you get may vary somewhat:
+
+[source, bash]
+----
+>git status
+# On branch develop
+nothing to commit, working directory clean
+----
+
+=== Fix a Simple Bug Directly on `develop`
+
+For simple bugs, particularly in projects with a single maintainer, it is common practice to fix bugs directly in the `develop` branch. Creating a test case with your favorite editor, testing the test case, fixing the bug, testing the fix, and then iterating if necessary is no different than with any programming environment.
+
+Once the fix is complete, you then commit the fix locally and push from your local repo up to your public `boostorg` repo on GitHub. These same commands would be used for any Git project, so hopefully you are already somewhat familiar with them:
+
+[source, bash]
+----
+cd boost-root/libs/mylib
+git commit -a -m "my bug fix"
+git push
+----
+
+There are some significant disadvantages to this simple approach:
+
+- The fix is now made to `develop` but you must remember to merge it to a release branch or directly to `master`. It is very easy to forget to do that merge, particularly if this is a mature library you are not working with very often.
+- Users who need the bug fix right away are forced to jump through hoops to retrieve the fix from `develop`.
+Putting out a point release solves both of those problems. Read on...
+
+=== Fix a Bug using a Hot-fix Branch
+
+Fixing a bug directly on the `develop` branch is fine, if that's the library's policy, but if the bug is messy, multiple maintainers are involved, interruptions are expected, or other complexities are present, then it is better practice to work on the bug in a separate branch. And doing that on a hot-fix branch solves the problems mentioned at the end of the prior section.
+
+The operational distinction between a bug-fix branch and a hot-fix branch is that a bug-fix branch is branched from `develop` and then at completion merged back to `develop`, while a hot-fix branch is branched from `master` and then at completion is merged to both `master` and `develop`. With either approach, the branch is deleted after it has been merged.
+
+[source, bash]
+----
+git checkout master
+git checkout -b hotfix/complex-boo-boo
+----
+
+This creates the branch `hotfix/complex-boo-boo`, and switches to it. Incidentally, `hotfix/` is part of the name, not a directory specifier. The new branch is based on branch `master` because the working copy was on branch `master` at the time of the branch.
+
+Since the bug is complex, it may take some time to fix and may go through several cycles of fixes, tests, and commits.
+
+Once the bug is fixed and a final commit is done, then it is time to merge the `hotfix/complex-boo-boo` branch into `master` and `develop`:
+
+[source, bash]
+----
+git checkout master
+git merge hotfix/complex-boo-boo
+git push
+git checkout develop
+git merge hotfix/complex-boo-boo
+git push
+git branch -d hotfix/complex-boo-boo
+----
+
+=== Start Work on a New Feature
+
+Developers are encouraged to create a (possibly private) branch to work on new features, even simple ones, since development of new features on the `develop` branch might leave it unstable for longer that expected. Using the Git Flow convention, the branch will be named `feature/add-checksum-option`.
+
+[source, bash]
+----
+git checkout develop
+git checkout -b feature/add-checksum-option
+----
+
+When you create the branch, or perhaps later, you may decide the branch should be public (i.e. be present in the library's public `boostorg` repo) so that you can share the branch with others or just to back it up. If so, set that up by running:
+
+[source, bash]
+----
+git push --set-upstream origin feature/add-checksum-option
+----
+
+Whether or not `--set-upstream origin bugfix/complex-boo-boo` is actually needed depends on the `branch.autosetupmerge` configuration variable that isn't discussed here. If you don't supply `--set-upstream origin bugfix/complex-boo-boo` on your first push and it turns out to be needed, you will get an error message explaining that.
+
+The usual cycle of coding, testing, commits, and pushes (if public) then begins. If other work needs to be done, a stash or commit may be done to save work-in-progress, and the working copy switched to another branch for awhile. If significant fixes or other enhancements have been made to `develop` over time, it may be useful to merge `develop` into the feature branch so that the eventual merge back to `develop` has less conflicts. Here is how to merge from `develop` to `feature/add-checksum-option`:
+
+[source, bash]
+----
+git checkout feature/add-checksum-option
+git merge develop
+----
+
+=== Lightweight Library Release
+
+Small, simple libraries and simple releases just merge the development branch, such as `develop`, into `master`, and test like this:
+
+[source, bash]
+----
+git checkout master
+git merge --no-ff develop
+pushd test
+b2
+popd
+----
+
+Warning:: If there are any test failures, correct the problem, retest, and commit the fixes before proceeding with the release.
+
+If there are no test failures, tag for release and declare victory:
+
+[source, bash]
+----
+git push                            # push merge results
+git tag -a -m "tag for release" mylib-2014-06-02
+git push origin mylib-2014-06-02    # push specific tag to avoid pushing all local tags
+----
+
+See xref:superproject/library-workflow.adoc[] for release tag naming conventions.
+
+=== Heavyweight Library Release
+
+Large, complex libraries, particularly those with multiple developers working in parallel, need to use a release procedure that scales up better than the lightweight procedure. The Git Flow approach is recommended. Find out more at xref:superproject/library-workflow.adoc[] and be sure to study the examples given in https://nvie.com/posts/a-successful-git-branching-model/[Vincent Driessen's original blog post].
+
+== Effects of `git submodule update`
+
+The following table, based on actual tests run using git version `1.8.4.msysgit.0`, shows the effects on a submodule of:
+
+```
+cd boost-root
+git checkout master
+git pull
+git submodule update
+```
+
+[cols="1,1,2,2",options="header",stripes=even,frame=none]
+|===
+| *Submodule Branch*	| *Submodule Contents*	| *Submodule relative to Super-project*	| *Effects on Submodule*
+| Detached | 	Unmodified |	Up-to-date |	None
+| Detached | 	Unmodified |	Behind |	`git pull`
+| Detached | 	Uncommitted change|	Up-to-date |	error: Your local changes to the following files would be overwritten by checkout: ... Please, commit your changes or stash them before you can switch branches. Aborting Unable to checkout (SHA...) in submodule path '...'
+| Detached | 	Uncommitted change|	Behind |	error: Your local changes to the following files would be overwritten by checkout: ... Please, commit your changes or stash them before you can switch branches. Aborting Unable to checkout (SHA ...) in submodule path '...'
+| Detached | 	Committed change |	Up-to-date |	`git checkout --detach`
+| Detached | 	Committed change |	Behind |	`git checkout --detach`; `git pull`
+| `master` |  	Unmodified |	Up-to-date |	`git checkout --detach`
+| `master` |  	Unmodified |	Behind |	`git pull` (but no detach)
+| `master` |  	Uncommitted change|	Up-to-date |	error: Your local changes to the following files would be overwritten by checkout: ... Please, commit your changes or stash them before you can switch branches. Aborting Unable to checkout (SHA...) in submodule path '...'
+| `master` |  	Uncommitted change|	Behind |	error: Your local changes to the following files would be overwritten by checkout: ... Please, commit your changes or stash them before you can switch branches. Aborting Unable to checkout (SHA...) in submodule path '...'
+| `master` |  	Committed change |	Up-to-date |	`git checkout --detach`
+| `master` |  	Committed change |	Behind |	`git checkout --detach`; `git pull`
+| `develop` |  	Unmodified |	Up-to-date |	`git checkout --detach`
+| `develop` |  	Unmodified |	Behind |	`git checkout --detach`; `git pull`
+| `develop` |  	Uncommitted change|	Up-to-date |	error: Your local changes to the following files would be overwritten by checkout: ... Please, commit your changes or stash them before you can switch branches. Aborting Unable to checkout (SHA...) in submodule path '...'
+| `develop` |  	Uncommitted change|	Behind |	error: Your local changes to the following files would be overwritten by checkout: ... Please, commit your changes or stash them before you can switch branches. Aborting Unable to checkout (SHA...) in submodule path '...'
+| `develop` |  	Committed change |	Up-to-date |	`git checkout --detach`
+| `develop` |  	Committed change |	Behind |	`git checkout --detach`; `git pull`
+|===
+
+Note:: Be aware that `git checkout --detach;` and `git pull` are used as shorthand to describe the apparent effects. The actual git implementation may differ.
+
+== Acknowledgements
+
+Beman Dawes created and maintained this page. The content has been revised many times based on comments and list postings from Andrey Semashev, John Maddock, Daniel James, Michael Cox, Pete Dimov, Edward Diener, Bjørn Roald, Klaim - Joël Lamotte, Peter A. Bigot, and others.
+
+== See Also
+
+* xref:superproject/overview.adoc[]
+
+
