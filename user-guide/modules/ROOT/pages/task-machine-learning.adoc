@@ -10,7 +10,7 @@ Developing a machine learning library is a complex task that involves not just p
 Here are some Boost libraries that could be helpful for the supporting tasks:
 
 [circle]
-* https://www.boost.org/doc/libs/1_82_0/libs/numeric/ublas/doc/index.html[Boost.uBLAS]:  This is Boost's library for linear algebra. It provides classes for vectors and matrices and operations on them, which are fundamental in many <<Machine Learning Algorithms>>.
+* boost:numeric/ublas[] : This is Boost's library for linear algebra. It provides classes for vectors and matrices and operations on them, which are fundamental in many <<Machine Learning Algorithms>>.
 
 * boost:multiprecision[]:  In some machine learning tasks, especially those involving large datasets or sensitive data, high-precision arithmetic can be necessary. boost:multiprecision[] can provide this functionality.
 
