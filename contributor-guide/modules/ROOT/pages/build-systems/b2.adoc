@@ -1,5 +1,54 @@
 = B2
+:navtitle: B2
 
-*Content under construction.*
+B2 is a high-level build system designed to make it easy to build pass:[C++] projects. Building projects using B2 often involves no more than a single command line. This section introduces what library developers need to know about preparing a library for B2.
 
-https://www.bfgroup.xyz/b2/[B2]
+== Configuration Files
+
+The idea is that users build your library with a single command line, and as a developer you specify in configuration files just as much as is necessary to build your library. For example it is not required to tell B2 how to use a certain compiler. B2 supports many compilers out of the box by knowing how to call them and what options they take. If you create a configuration file you just need to tell B2 where to find your source files, what the executable should be called, which compiler B2 should use, and what if any compiler options need set. B2 will then try to find the compiler and automatically build the program.
+
+Writing configurations requires learning a language specifically developed for B2, called https://www.bfgroup.xyz/b2/manual/release/index.html#bbv2.overview.jam_language[_Boost.Jam_]. The configurations are stored in files called _Jamfiles_. 
+
+After a compiler is picked to build a program, B2 translates options in the configuration files to the command line options expected by the selected compiler. This makes it possible to write configuration files once and build many times for different platforms and different compilers. Refer to the https://www.bfgroup.xyz/b2/manual/release/index.html#bbv2.reference.buildprocess[B2 Build Process].
+
+== Supported Languages
+
+B2 can only be used for pass:[C++] and C projects. B2 doesn't support other languages (Java, C#, Python, etc.). It makes more sense to use a different build system (such as xref:build-systems/cmake.adoc[CMake]) for projects with components implemented in other programming languages.
+
+== Example Install
+
+The following command installs and builds three specific libraries (boost:chrono[], boost:graph[], and boost:thread[]) to the specified path. All dependencies of these three libraries will also automatically be installed and built.
+
+[source,bash]
+----
+b2 install --prefix=C:\Users\YOURNAME\Documents\Boost\Project --with-chrono --with-graph --with-thread
+----
+
+== Example Jamfiles
+
+The use of Jamfiles varies considerably between libraries, and many new developers will cut-and-paste from recently released libraries and adapt the code for their own use. Here are some recent examples:
+
+* boost:json[]
+** https://github.com/boostorg/json/blob/ae03c6b8217865d04c46ca061a10c3faae7ffcc6/Jamfile[json/Jamfile]
+** https://github.com/boostorg/json/blob/ae03c6b8217865d04c46ca061a10c3faae7ffcc6/build/Jamfile[json/build/Jamfile]
+** https://github.com/boostorg/json/blob/ae03c6b8217865d04c46ca061a10c3faae7ffcc6/bench/Jamfile[json/bench/Jamfile]
+** https://github.com/boostorg/json/blob/ae03c6b8217865d04c46ca061a10c3faae7ffcc6/doc/Jamfile[json/doc/Jamfile]
+** https://github.com/boostorg/json/blob/ae03c6b8217865d04c46ca061a10c3faae7ffcc6/example/Jamfile[json/example/Jamfile]
+** https://github.com/boostorg/json/blob/ae03c6b8217865d04c46ca061a10c3faae7ffcc6/fuzzing/Jamfile[json/fuzzing/Jamfile]
+** https://github.com/boostorg/json/blob/ae03c6b8217865d04c46ca061a10c3faae7ffcc6/test/Jamfile[json/test/Jamfile]
+
+* boost:redis[]
+** https://github.com/boostorg/redis/blob/0380e643ed33b89bd28d74b0532aa5599063b172/doc/Jamfile[redis/doc/Jamfile]
+** https://github.com/boostorg/redis/blob/0380e643ed33b89bd28d74b0532aa5599063b172/test/Jamfile[redis/test/Jamfile]
+
+== Summary
+
+B2 is the simplest and lightest weight option for a user to install and build using your Boost library.
+
+As a contributor, it is a requirement that B2 can successfully build your library on all supported platforms, using appropriate Jamfiles that you need to write.
+
+For full documentation on B2, refer to https://www.bfgroup.xyz/b2/.
+
+== See Also
+
+* xref:testing/intro.adoc[]

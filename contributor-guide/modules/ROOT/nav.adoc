@@ -21,8 +21,8 @@
 ** xref:best-practices.adoc[]
 
 * Build Systems
-** xref:build-systems/cmake.adoc[]
 ** xref:build-systems/b2.adoc[]
+** xref:build-systems/cmake.adoc[]
 
 * Testing
 ** xref:testing/intro.adoc[]
