@@ -1,4 +1,23 @@
 = Best Practices
 :navtitle: Best Practices
 
-*Content under construction*
+This section contains guidance on how to reduce development time from concept through to publishing of a new library.
+
+== Beneficial Dependencies
+
+Some libraries are published with the intended primary audience, or in some cases the sole audience, being developers of other libraries. These libraries are published to make some of the time consuming and awkward processes of Boost-compliance easier. It is good practice for a new library developer to read the introductions to each of these libraries, and ascertain if they might be of value to the library they are developing. 
+
+[cols="1,4",options="header",stripes=even,frame=none]
+|===
+| *Library* | *Description* 
+| boost:config[] | Helps Boost library developers adapt to compiler idiosyncrasies. The range of macros can be extended, if required, with boost:predef[].
+| boost:core[] | A collection of simple core utilities with minimal dependencies. The range of utilities can be extended, if required, with boost:utility[]
+| boost:assert[] | Customizable assert macros.
+| boost:static-assert[] | Static compile time assertions.
+| boost:throwException[] | A common infrastructure for throwing exceptions from Boost libraries.
+| boost:mp11[] | Provides a template metaprogramming framework, useful if metaprogramming is a feature of your new library.
+|===
+
+== See Also
+
+* xref:version-control.adoc[]
