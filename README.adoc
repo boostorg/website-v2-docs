@@ -7,10 +7,6 @@
 
 This tool renders the documentation for Boost modules whose documentation use asciidoc.
 
-== Demo
-
-- https://antora.cppalliance.org/develop/libs/mp11/
-
 == Installing Antora
 
 CAUTION: The workflow may change in the future.
