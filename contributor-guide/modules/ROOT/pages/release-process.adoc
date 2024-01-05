@@ -65,3 +65,5 @@ If issues are found with a release candidate that are important enough to addres
 
 For details of the Release Process that are pertinent to users, refer to the 
 User Guide xref:user-guide:ROOT:release-process.adoc[].
+
+* xref:testing/boost-test-matrix.adoc[]
