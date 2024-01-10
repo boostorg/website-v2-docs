@@ -25,7 +25,6 @@ site:
 antora:
   extensions:
     - require: ./extensions/boost.js
-    - require: '@antora/lunr-extension'
 asciidoc:
   extensions:
     - ./extensions/boost-link-inline-macro.js
