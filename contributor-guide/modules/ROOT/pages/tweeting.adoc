@@ -12,8 +12,7 @@ The account publishes two types of posts:
 
 * *Official posts*: These inform the community about new releases and libraries, library proposals,
 review schedules and results, and generally all the events associated to the evolution and deployment of the project.
-Official posts come with branded images (with a watermarked Boost logo) and are taken care of by the
-internal team at Boost.
+Official posts have a Boost brand imagery with watermark, and are taken care of by volunteers.
 * *Non-official posts*: Everything else. Imagery for these posts is not branded so that they can be told from
 the former. Anyone from the community can propose a non-official post for publication; if you're interested in
 doing so, follow these simple guidelines:
