@@ -4,13 +4,23 @@
 
 The collection is represented on social media by the https://twitter.com/boost_libraries[@Boost_Libraries,role=resource,window=_blank]
 X (formerly Twitter) account, where news and information about our libraries in particular and C++ in general are shared
-with the community. If you'd like to propose a post for publication from
-this account, follow these simple guidelines:
+with the community.
+
+== What gets posted
+
+The account publishes two types of posts:
+
+* *Official posts*: These inform the community about new releases and libraries, library proposals,
+review schedules and results, and generally all the events associated to the evolution and deployment of the project.
+Official posts come with branded images (with a watermarked Boost logo) and are taken care of by the
+internal team at Boost.
+* *Non-official posts*: Everything else. Imagery for these posts is not branded so that they can be told from
+the former. Anyone from the community can propose a non-official post for publication; if you're interested in
+doing so, follow these simple guidelines:
 
 == Topics of interest
 
 * Upcoming C++ events, meetups, conferences, etc.
-* Upcoming Boost internal events (releases, reviews, library proposals).
 * Talks about some particular library, or where such library is put to good effect.
 * Boost-related articles, blogposts, C++ Committee papers.
 * Interesting discussions ongoing on Reddit or some other online forums.
