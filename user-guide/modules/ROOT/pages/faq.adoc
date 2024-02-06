@@ -193,6 +193,43 @@ Other challenges include lack of runtime flexibility, as decisions are made at c
 
 NOTE: boost:mp11[] supersedes the earlier boost:mpl[] and boost:preprocessor[] libraries.
 
+== Modular Boost
+
+. *What is meant by "Modular Boost"?*
++
+Technically, Modular Boost consists of the Boost super-project and separate projects for each individual library in Boost. In terms of Git, the Boost super-project treats the individual libraries as submodules. Currently (early 2024) when the Boost libraries are downloaded and installed, the build organization does _not_ match the modular arrangement of the Git super-project. This is largely a legacy issue, and there are advantages to the build layout matching the super-project layout. This concept, and the effort behind it, is known as "Modular Boost".
++
+Refer to the xref:contributor-guide:ROOT:superproject/overview.adoc[] topic (in the xref:contributor-guide:ROOT:index.adoc[]) for a full description of the super-project.
+
+. *Will a Modular Boost affect the thrice-yearly Boost Release?*
++
+No. The collection of libraries is still a single release, and there are no plans to change the release cadence.
+
+. *Will this require that the current Boost source structure is changed?*
++
+Yes. Unfortunately there is one restriction that adhering to a modular Boost requires - there can be no sub-libraries. That is, we can't support having libraries in the `root/libs/<group name>/<library>` format. All libraries must be single libraries under the `root/libs` directory. There's only a handful of libraries that currently do not conform to this already (notably the `root/libs/numeric/<name>` group of libraries).
+
+. *Why do we want a Modular Boost?*
++
+It's easier on everyone if we adopt a flat hierarchy. The user will experience a consistent process no matter which libraries they want to use. Similarly for contributors, the creation process will be consistent. Also, tools can be written that can parse and analyze libraries without an awkward range of exceptions. This includes tools written by Boost contributors. For example, the tools that are used to determine library dependencies. And any tool that a user might want to write for their own, or shared, use.
+
++
+Other advantages of a modular format include:
++
+* Users of Boost can now choose to include only the specific modules they need for their project, rather than downloading and building the entire Boost framework. This can significantly reduce the size of the codebase and dependencies in a project, leading to faster compilation times and reduced resource usage.
++
+* Individual modules can be updated and released on their own schedule, independent of the rest of the libraries. This allows for quicker updates and bug fixes to individual libraries without waiting for a full release.
++
+* The structure aligns well with package managers like Conan, vcpkg, or Bazel, making it easier to manage Boost libraries within larger projects. Users can specify exactly which Boost libraries they need, and the package manager handles the inclusion and versioning.
+
+. *Will the proposed changes be backwards-compatible from the user's perspective. In particular, the public header inclusion paths will still be <boost/numeric/<name>.hpp> rather than, say, <boost/numeric-conversion/<name>.hpp>, correct?*
++
+Correct - backwards-compatibility should be maintained.
+
+. *When will Modular Boost be available to users?*
++
+An exact timeline requires issues to be resolved, though later in 2024 is the current plan-of-record.
+
 == Releases
 
 . *How do I download the latest libraries?*
