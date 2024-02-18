@@ -1,3 +1,11 @@
+////
+Copyright (c) 2024 The C++ Alliance, Inc. (https://cppalliance.org)
+
+Distributed under the Boost Software License, Version 1.0. (See accompanying
+file LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
+
+Official repository: https://github.com/boostorg/website-v2-docs
+////
 = Fuzz Testing
 
 *What is fuzz testing?* Fuzzing is a testing technique that injects random pieces of data to a software function to uncover crashes and vulnerabilities. It helps improving code security and reliability, since it can trigger edge cases that went unnoticed during unit testing.
