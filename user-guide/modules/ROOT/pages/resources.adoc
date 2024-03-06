@@ -45,6 +45,6 @@ For more specific technical questions, Stack Overflow has many questions and ans
 
 == See Also
 
-* https://pdimov.github.io/boostdep-report/[boost Dependency Report]
+* https://pdimov.github.io/boostdep-report/[Boost Dependency Report]
 * xref:explore-the-content.adoc[]
 * xref:faq.adoc[]
