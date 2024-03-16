@@ -10,7 +10,7 @@ Official repository: https://github.com/boostorg/website-v2-docs
 :navtitle: Tweeting
 
 
-The collection is represented on social media by the https://twitter.com/boostlibraries[@BoostLibraries,role=resource,window=_blank]
+The collection is represented on social media by the https://twitter.com/boost_libraries[@Boost_Libraries,role=resource,window=_blank]
 X (formerly Twitter) account, where news and information about our libraries in particular and C++ in general are shared
 with the community.
 
@@ -69,23 +69,21 @@ colorful, original images that will make readers pause for a moment
 and read the post (which is where the real info is shared).
 
 Making the perfect post is not trivial: if you need inspiration,
-go to https://twitter.com/boostlibraries[@BoostLibraries,role=resource,window=_blank] for actual
+go to https://twitter.com/boost_libraries[@Boost_Libraries,role=resource,window=_blank] for actual
 post examples.
 
 == Post submission
 
 Log into the https://cpplang.slack.com/[C++ Language Slack Workspace,role=resource,window=_blank]
 (or https://cppalliance.org/slack/[join it,role=resource,window=_blank] if you're not a member yet)
-and post a message in the
-https://cpplang.slack.com/archives/C27KZLB0X[`#boost`,role=resource,window=_blank] channel, including:
+and send a DM to @david_sankel, including:
 
 * Main text
 * Link(s), with or without introductory texts
 * Hashtags
 * Attached image (or link to it)
 
-The team in charge of https://twitter.com/boostlibraries[@BoostLibraries,role=resource,window=_blank]
-may make some editorial adjustments
+The team in charge of @Boost_Libraries may make some editorial adjustments
 to your submission or get back to you to help them polish the final post.
 Also, they will schedule the publication date and time for
 maximum impact (typically, on weekday mornings with an eye to
