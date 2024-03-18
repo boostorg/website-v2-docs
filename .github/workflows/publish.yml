@@ -85,7 +85,7 @@ jobs:
           find "lib" -mindepth 1 -maxdepth 1 -type d -exec rm -r {} +
 
       - name: AWS Sync site-docs (revsys cluster)
-        if: matrix.publish && (github.ref == 'refs/heads/master' || github.ref == 'refs/heads/develop') && github.event_name == 'push' && github.repository == 'cppalliance/site-docs'
+        if: matrix.publish && (github.ref == 'refs/heads/master' || github.ref == 'refs/heads/develop') && github.event_name == 'push' && github.repository == 'boostorg/website-v2-docs'
         uses: jakejarvis/s3-sync-action@master
         with:
           args: --follow-symlinks --delete --exclude '.git/*' --exclude 'build/lib/*'
@@ -98,7 +98,7 @@ jobs:
           DEST_DIR: ${{ format('site-docs/{0}', github.ref_name) }}
 
       - name: AWS Sync site-docs (production on GKE)
-        if: matrix.publish && (github.ref == 'refs/heads/master' || github.ref == 'refs/heads/develop') && github.event_name == 'push' && github.repository == 'cppalliance/site-docs'
+        if: matrix.publish && (github.ref == 'refs/heads/master' || github.ref == 'refs/heads/develop') && github.event_name == 'push' && github.repository == 'boostorg/website-v2-docs'
         uses: jakejarvis/s3-sync-action@master
         with:
           args: --follow-symlinks --delete --exclude '.git/*' --exclude 'build/lib/*'
@@ -111,7 +111,7 @@ jobs:
           DEST_DIR: ${{ format('site-docs/{0}', github.ref_name) }}
 
       - name: AWS Sync site-docs (staging on GKE)
-        if: matrix.publish && (github.ref == 'refs/heads/master' || github.ref == 'refs/heads/develop') && github.event_name == 'push' && github.repository == 'cppalliance/site-docs'
+        if: matrix.publish && (github.ref == 'refs/heads/master' || github.ref == 'refs/heads/develop') && github.event_name == 'push' && github.repository == 'boostorg/website-v2-docs'
         uses: jakejarvis/s3-sync-action@master
         with:
           args: --follow-symlinks --delete --exclude '.git/*' --exclude 'build/lib/*'
@@ -124,7 +124,7 @@ jobs:
           DEST_DIR: ${{ format('site-docs/{0}', github.ref_name) }}
 
       - name: AWS Sync site-docs (cppal_dev on GKE)
-        if: matrix.publish && (github.ref == 'refs/heads/master' || github.ref == 'refs/heads/develop') && github.event_name == 'push' && github.repository == 'cppalliance/site-docs'
+        if: matrix.publish && (github.ref == 'refs/heads/master' || github.ref == 'refs/heads/develop') && github.event_name == 'push' && github.repository == 'boostorg/website-v2-docs'
         uses: jakejarvis/s3-sync-action@master
         with:
           args: --follow-symlinks --delete --exclude '.git/*' --exclude 'build/lib/*'
@@ -138,7 +138,7 @@ jobs:
 
 
       - name: AWS Sync site-pages (revsys cluster)
-        if: matrix.publish && (github.ref == 'refs/heads/master' || github.ref == 'refs/heads/develop') && github.event_name == 'push' && github.repository == 'cppalliance/site-docs'
+        if: matrix.publish && (github.ref == 'refs/heads/master' || github.ref == 'refs/heads/develop') && github.event_name == 'push' && github.repository == 'boostorg/website-v2-docs'
         uses: jakejarvis/s3-sync-action@master
         with:
           args: --follow-symlinks --delete --exclude '.git/*' --exclude 'build/lib/*'
@@ -151,7 +151,7 @@ jobs:
           DEST_DIR: ${{ format('site-pages/{0}', github.ref_name) }}
 
       - name: AWS Sync site-pages (production on GKE)
-        if: matrix.publish && (github.ref == 'refs/heads/master' || github.ref == 'refs/heads/develop') && github.event_name == 'push' && github.repository == 'cppalliance/site-docs'
+        if: matrix.publish && (github.ref == 'refs/heads/master' || github.ref == 'refs/heads/develop') && github.event_name == 'push' && github.repository == 'boostorg/website-v2-docs'
         uses: jakejarvis/s3-sync-action@master
         with:
           args: --follow-symlinks --delete --exclude '.git/*' --exclude 'build/lib/*'
@@ -164,7 +164,7 @@ jobs:
           DEST_DIR: ${{ format('site-pages/{0}', github.ref_name) }}
 
       - name: AWS Sync site-pages (staging on GKE)
-        if: matrix.publish && (github.ref == 'refs/heads/master' || github.ref == 'refs/heads/develop') && github.event_name == 'push' && github.repository == 'cppalliance/site-docs'
+        if: matrix.publish && (github.ref == 'refs/heads/master' || github.ref == 'refs/heads/develop') && github.event_name == 'push' && github.repository == 'boostorg/website-v2-docs'
         uses: jakejarvis/s3-sync-action@master
         with:
           args: --follow-symlinks --delete --exclude '.git/*' --exclude 'build/lib/*'
@@ -177,7 +177,7 @@ jobs:
           DEST_DIR: ${{ format('site-pages/{0}', github.ref_name) }}
 
       - name: AWS Sync site-pages (cppal_dev on GKE)
-        if: matrix.publish && (github.ref == 'refs/heads/master' || github.ref == 'refs/heads/develop') && github.event_name == 'push' && github.repository == 'cppalliance/site-docs'
+        if: matrix.publish && (github.ref == 'refs/heads/master' || github.ref == 'refs/heads/develop') && github.event_name == 'push' && github.repository == 'boostorg/website-v2-docs'
         uses: jakejarvis/s3-sync-action@master
         with:
           args: --follow-symlinks --delete --exclude '.git/*' --exclude 'build/lib/*'
