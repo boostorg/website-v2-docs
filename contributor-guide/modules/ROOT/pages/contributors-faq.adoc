@@ -11,27 +11,13 @@ Official repository: https://github.com/boostorg/website-v2-docs
 
 This section contains answers to the common questions that new contributors to Boost often have.
 
-== Artificial Intelligence
+== Adding New Libraries
 
-. *If I wanted to build a library that focused on the lower-level building blocks required by generative AI, what functional areas should I consider?*
+. *When considering developing a library for Boost, what is the right balance between ambitious functionality and limited functionality?*
 +
-Consider one or more of the following:
-
-* Provide implementations of various _neural network architectures_ commonly used in generative AI, such as convolutional neural networks (CNNs), recurrent neural networks (RNNs), generative adversarial networks (GANs), variational autoencoders (VAEs), and transformers. These architectures serve as the backbone for generating complex and realistic outputs.
+The keys to a successful development of a new library are to identify core functionality and start simple. Prioritize functionality that provides significant value to developers and aligns with Boost's goals of promoting high-quality, reusable libraries. Avoid adding unnecessary features that may increase complexity without adding much value. It's often beneficial to start with a simpler implementation that addresses a specific problem or use case effectively. A library with a narrow focus and a clear, intuitive API is more likely to be accepted by the Boost community than one that attempts to solve too many problems at once or introduces unnecessary complexity.
 +
-* Develop _optimization algorithms_ for training neural networks, such as stochastic gradient descent (SGD), Adam, RMSprop, and other advanced optimization techniques. Efficient optimization algorithms are crucial for training AI models effectively and achieving good performance.
-+
-* Offer a variety of _loss functions_ suitable for different generative tasks, including image generation, text generation, and sequence generation. Loss functions measure the discrepancy between the model's predictions and the ground truth and play a crucial role in guiding the training process.
-+
-* Provide utilities for _data augmentation_ techniques that can enhance the diversity and robustness of training data. Data augmentation is particularly important for generative tasks where having a large and diverse dataset is essential for training high-quality models.
-+
-* Implementations of various _probability distributions_ are used in generative modeling, such as Gaussian distributions, categorical distributions, and multinomial distributions. Probability distributions are fundamental for modeling uncertainty and generating diverse outputs.
-+
-* Offer _evaluation metrics_ for assessing the performance of generative AI models, such as inception score, Frechet Inception Distance (FID), perplexity, and BLEU score. These metrics provide quantitative measures of the quality, diversity, and realism of generated outputs.
-+
-* Support _parallelization techniques_ and _GPU acceleration_ to speed up the training and inference process, especially for large-scale generative models that require significant computational resources.
-+
-* Provide tools for deploying trained generative _AI models_ into production environments, including integration with deployment platforms, model serialization formats, and optimization techniques for inference speed and resource efficiency.
+In addition to this, consider future extensibility, performance, portability, current trends, and always remember you can seek community advice and feedback through the Boost mailing lists.
 
 == Development Environments
 
@@ -47,7 +33,7 @@ https://www.sublimetext.com/index2[Sublime Text] is a lightweight yet powerful t
 +
 https://atom-editor.cc/[Atom] is an open-source text editor developed by GitHub. It's highly customizable and extensible through packages, and provides features like syntax highlighting, auto-completion, and project navigation.
 +
-There are many other tools, https://code.visualstudio.com/Download[Visual Studio Code] being a popular versatile code editor that can be extended and customized with various extensions.
+There are many other tools, Microsoft's https://visualstudio.microsoft.com/[Visual Studio] provides a full IDE and is well respected as a professional development environment, and https://code.visualstudio.com/Download[Visual Studio Code] is a lighter weight but versatile code editor that can be extended and customized with various extensions.
 
 == Existing Boost Libraries
 
@@ -85,7 +71,9 @@ The useful utilities such as boost:any[], boost:variant[], and boost:optional[] 
 
 . *What is meant by "Modular Boost"?*
 +
-Technically, Modular Boost consists of the Boost super-project and separate projects for each individual library in Boost. In terms of Git, the Boost super-project treats the individual libraries as submodules. Currently (early 2024) when the Boost libraries are downloaded and installed, the build organization does _not_ match the modular arrangement of the Git super-project. This is largely a legacy issue, and there are advantages to the build layout matching the super-project layout. This concept, and the effort behind it, is known as "Modular Boost".
+Technically, Modular Boost consists of the Boost super-project and separate projects for each individual library in Boost. In terms of Git, the Boost super-project treats the individual libraries as submodules. Currently (early 2024) when the Boost libraries are downloaded and installed, the build organization does _not_ match the modular arrangement of the Git super-project. This is largely a legacy issue, and there are advantages to the build layout matching the super-project layout. This concept, and the effort behind it, is now known as "Modular Boost".
++
+In the past, the term has been used more broadly to refer simply to libraries in different repositories. This definition has now been tightened to mean a flat layout where each library is in its own sub-module, and there are no sub-libraries as there have been in the past (for example, the `numeric` libraries).
 +
 Refer to xref:superproject/overview.adoc[] for a full description of the super-project.
 
@@ -105,21 +93,21 @@ The structure is still required for things like testing and documentation buildi
 +
 The numeric libraries have been divided into four packages: libboost-numeric-conversion/, libboost-numeric-interval/, libboost-numeric-odeint/, libboost-numeric-ublas/.
 
-== New Libraries
-
-. *When considering developing a library for Boost, what is the right balance between ambitious functionality and limited functionality?*
-+
-The keys to a successful development of a new library are to identify core functionality and start simple. Prioritize functionality that provides significant value to developers and aligns with Boost's goals of promoting high-quality, reusable libraries. Avoid adding unnecessary features that may increase complexity without adding much value. It's often beneficial to start with a simpler implementation that addresses a specific problem or use case effectively. A library with a narrow focus and a clear, intuitive API is more likely to be accepted by the Boost community than one that attempts to solve too many problems at once or introduces unnecessary complexity.
-+
-In addition to this, consider future extensibility, performance, portability, current trends, and always remember you can seek community advice and feedback through the Boost mailing lists.
-
 == Testing
 
-. *What Boost libraries are the best examples of how to add Continuous Integration (CI) into the library testing process?*
+. *What Boost libraries are useful examples of how to add Continuous Integration (CI) into the library testing process?*
 +
-One of the best examples of how Continuous Integration (CI) is integrated into the testing process for a Boost library is the boost:asio[] library. This is a cross-platform pass:[C++] library for network and low-level I/O programming. Alternativel, boost:test[] is a library designed to support unit testing in pass:[C++]. It provides a framework for writing and running test cases, as well as utilities for organizing and reporting test results. boost:test[] leverages CI to ensure the correctness and reliability of its functionality across different platforms and compilers. 
+The following libraries are solid examples of how Continuous Integration (CI) is integrated into the testing process:
 +
-By studying how Asio or Test implement CI into their testing processes, newcomers can gain valuable insights into best practices for ensuring the quality and reliability of their own library contributions.
+* boost:asio[] is a cross-platform library for network and low-level I/O programming that relies heavily on CI systems for testing and validation. 
+* boost:test[] supports unit testing in pass:[C++] and provides a framework for writing and running test cases, as well as utilities for organizing and reporting test results. boost:test[] leverages CI to ensure the correctness and reliability of its functionality across different platforms, compilers, and network configurations.
+* boost:thread[], a set of classes and functions for multithreading, is tested rigorously using CI systems to verify its correctness, performance, and portability across various platforms and environments. CI helps identify threading-related issues, including feared and difficult-to-debug race conditions.
+* boost:property-tree[] reads, manipulates and writes structured data. CI is used to validate the correctness and robustness of the parsing, serialization and manipulation features across diverse use cases and data sources.
+* boost:filesystem[] relies on CI systems to validate its functionality across different operating systems, file systems, and compiler environments, from basic file I/O operations to more complex file management tasks.
++
+By studying how these libraries implement CI into their testing processes, newcomers can gain valuable insights into best practices for ensuring the quality and reliability of their own library contributions.
++
+Refer also to xref:testing/continuous-integration.adoc[].
 
 == See Also
 
