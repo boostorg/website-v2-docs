@@ -1,0 +1,117 @@
+////
+Copyright (c) 2024 The C++ Alliance, Inc. (https://cppalliance.org)
+
+Distributed under the Boost Software License, Version 1.0. (See accompanying
+file LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
+
+Official repository: https://github.com/boostorg/website-v2-docs
+////
+= Contributors Frequently Asked Questions
+:navtitle: Contributors FAQ
+
+This section contains answers to the common questions that new contributors to Boost often have.
+
+== Adding New Libraries
+
+. *When considering developing a library for Boost, what is the right balance between ambitious functionality and limited functionality?*
++
+The keys to a successful development of a new library are to identify core functionality and start simple. Prioritize functionality that provides significant value to developers and aligns with Boost's goals of promoting high-quality, reusable libraries. Avoid adding unnecessary features that may increase complexity without adding much value. It's often beneficial to start with a simpler implementation that addresses a specific problem or use case effectively. A library with a narrow focus and a clear, intuitive API is more likely to be accepted by the Boost community than one that attempts to solve too many problems at once or introduces unnecessary complexity.
++
+In addition to this, consider future extensibility, performance, portability, current trends, and always remember you can seek community advice and feedback through the Boost mailing lists.
+
+== Development Environments
+
+. *Many developers opt for lightweight integrated developer environments (IDEs), rather than the full-fledged IDE. What lightweight IDEs are popular for pass:[C++] development?*
++
+There are several popular options for both Windows and Linux. https://www.jetbrains.com/clion/[CLion], developed by JetBrains, is a cross-platform IDE that offers advanced code analysis, refactoring tools, and integration with the CMake build system, which is commonly used in pass:[C++] projects.
++
+https://www.gnu.org/software/emacs/[GNU Emacs] and https://www.vim.org/[Vim] are highly configurable and popular among developers who prefer a more minimalistic environment. They offer powerful features for editing code, and many plugins are available to enhance development workflows.
++
+https://www.qt.io/product/development-tools[Qt Creator] provides features like code completion, syntax highlighting, and debugging support for pass:[C++] and Qt (projects that use the Qt framework).
++
+https://www.sublimetext.com/index2[Sublime Text] is a lightweight yet powerful text editor known for its speed and simplicity. It offers features like syntax highlighting, multiple selections, and a wide range of plugins for enhancing functionality, including support for pass:[C++] development.
++
+https://atom-editor.cc/[Atom] is an open-source text editor developed by GitHub. It's highly customizable and extensible through packages, and provides features like syntax highlighting, auto-completion, and project navigation.
++
+There are many other tools, Microsoft's https://visualstudio.microsoft.com/[Visual Studio] provides a full IDE and is well respected as a professional development environment, and https://code.visualstudio.com/Download[Visual Studio Code] is a lighter weight but versatile code editor that can be extended and customized with various extensions.
+
+== Existing Boost Libraries
+
+. *What are the biggest pain points that developers are running into, that are not addressed by current Boost libraries?*
++
+Some Boost libraries have a steep learning curve, especially for newcomers to pass:[C++]. Simplifying the API design, providing  extensive documentation, and offering beginner-friendly tutorials helps lower the barrier to entry and make your library more accessible to a wider audience. Other pain points include support for modern language features, working with concurrency and parallelism, providing a seamless experience across different platforms, and providing optimal performance.
+
+. *For reference, what libraries are good examples of ones that are easy to learn?*
++
+One library known for its relatively straightforward API and ease of learning compared to some others is boost:filesystem[]. 
+This library provides portable facilities to work with files and directories, offering an intuitive interface for common file system operations such as file creation, deletion, copying, moving, and directory traversal. Its design is user-friendly and follows familiar patterns. boost:filesystem[] documentation is comprehensive and well-structured. Overall, boost:filesystem[] is often recommended as a starting point for those looking to dip their toes into Boost libraries due to its simplicity, practicality, and broad applicability across various projects.
++
+Other libraries that are known for their shallow learning curve include boost:optional[] which is particularly useful for handling functions that may return an optional value or dealing with nullable data types in a safe and clear manner. boost:any[] allows developers to store objects of different types in a single container and retrieve them without typecasting. boost:type-index[]  provides facilities for obtaining type information at runtime, making it easy to work with types dynamically.
+
+. *What libraries have the steepest learning curve?*
++
+While all Boost libraries have their complexities, some are known to have steeper learning curves due to their advanced nature or the intricacies of the domain they address. boost:spirit[] is a parsing and generation library that uses a domain-specific embedded language (DSEL) implemented as pass:[C++] template metaprograms. It allows developers to define parsers and generators directly within code using EBNF-like syntax. However, the template-based approach and the metaprogramming techniques used can make it challenging for newcomers to grasp, especially those unfamiliar with advanced template programming or parsing theory.
++
+boost:mp11[] (Meta-Programming Library) is a powerful library for metaprogramming, providing tools for compile-time computation, type manipulation, and template metaprogramming. It allows developers to perform complex compile-time computations and transformations using a functional programming style. However, the functional programming paradigm and the intricacies of template metaprogramming can be daunting for beginners and require a solid understanding of pass:[C++] templates and meta-programming concepts.
+
+. *What libraries were the most ambitious in what they attempted to achieve?*
++
+The many notable examples include:
++
+* boost:graph[] provides a generic and efficient framework for working with graphs, making it suitable for a variety of applications in areas such as network analysis, optimization, and data visualization.
+* boost:compute[] provides abstractions for memory management, kernel execution, and data parallelism, enabling developers to harness the computational power of modern hardware for tasks such as numerical simulations, image processing, and machine learning.
+* boost:spirit[] is ambitious in its goal of providing a high-level and composable framework for parsing complex data formats and domain-specific languages entirely within pass:[C++] code, without the need for external tools or preprocessors.
+* boost:hana[] aims to simplify and modernize metaprogramming in pass:[C++], making it more accessible and powerful for developing generic libraries and applications.
+
+. *What libraries were the least ambitious technically?*
++
+The useful utilities such as boost:any[], boost:variant[], and boost:optional[] offer relatively simple functionality. Another simpler library is boost:bimap[] which provides a container for maintaining one-to-one mappings between keys and values. While bidirectional maps are a useful data structure, the functionality provided is relatively straightforward and focused on this specific use case.
+
+== Modular Boost
+
+. *What is meant by "Modular Boost"?*
++
+Technically, Modular Boost consists of the Boost super-project and separate projects for each individual library in Boost. In terms of Git, the Boost super-project treats the individual libraries as submodules. Currently (early 2024) when the Boost libraries are downloaded and installed, the build organization does _not_ match the modular arrangement of the Git super-project. This is largely a legacy issue, and there are advantages to the build layout matching the super-project layout. This concept, and the effort behind it, is now known as "Modular Boost".
++
+In the past, the term has been used more broadly to refer simply to libraries in different repositories. This definition has now been tightened to mean a flat layout where each library is in its own sub-module, and there are no sub-libraries as there have been in the past (for example, the `numeric` libraries).
++
+Refer to xref:superproject/overview.adoc[] for a full description of the super-project.
+
+. *What exactly is a "modular arrangement"?*
++
+It's when the libraries can be used, and hence built, without creating the monolithic headers, without needing the root build files, and without needing the libraries to be arranged in the usual `root/libs/<name>` format.
+
+. *Will the move to Modular Boost change testing?*
++
+No, unless you want to. You will still be able to test with the current non-modular way. But you could also test the modular way.
+
+. *How will modular Boost work if there is no `root/libs/<name>` structure? Or is the structure still required?*
++
+The structure is still required for things like testing and documentation building.
+
+. *What happens to the numeric libraries that are currently sub-libraries, when sub-libraries are no longer supported?*
++
+The numeric libraries have been divided into four packages: libboost-numeric-conversion/, libboost-numeric-interval/, libboost-numeric-odeint/, libboost-numeric-ublas/.
+
+== Testing
+
+. *What Boost libraries are useful examples of how to add Continuous Integration (CI) into the library testing process?*
++
+The following libraries are solid examples of how Continuous Integration (CI) is integrated into the testing process:
++
+* boost:asio[] is a cross-platform library for network and low-level I/O programming that relies heavily on CI systems for testing and validation. 
+* boost:test[] supports unit testing in pass:[C++] and provides a framework for writing and running test cases, as well as utilities for organizing and reporting test results. boost:test[] leverages CI to ensure the correctness and reliability of its functionality across different platforms, compilers, and network configurations.
+* boost:thread[], a set of classes and functions for multithreading, is tested rigorously using CI systems to verify its correctness, performance, and portability across various platforms and environments. CI helps identify threading-related issues, including feared and difficult-to-debug race conditions.
+* boost:property-tree[] reads, manipulates and writes structured data. CI is used to validate the correctness and robustness of the parsing, serialization and manipulation features across diverse use cases and data sources.
+* boost:filesystem[] relies on CI systems to validate its functionality across different operating systems, file systems, and compiler environments, from basic file I/O operations to more complex file management tasks.
++
+By studying how these libraries implement CI into their testing processes, newcomers can gain valuable insights into best practices for ensuring the quality and reliability of their own library contributions.
++
+Refer also to xref:testing/continuous-integration.adoc[].
+
+== See Also
+
+* xref:best-practices.adoc[]
+* xref:release-process.adoc[]
+* xref:version-control.adoc[]
+* xref:user-guide:ROOT:faq.adoc[User Guide FAQ]
