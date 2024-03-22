@@ -38,7 +38,7 @@ standardization, there is a list of Boost regulars who are also WG21 committee m
  . Zach Laine
  . Micheal Caisse
  . Matt Calabrese
- . EdwardDiener
+ . Edward Diener
  . Louis Dionne
  . Vinnie Falco
  . Glen Fernandes
