@@ -93,6 +93,130 @@ The structure is still required for things like testing and documentation buildi
 +
 The numeric libraries have been divided into four packages: libboost-numeric-conversion/, libboost-numeric-interval/, libboost-numeric-odeint/, libboost-numeric-ublas/.
 
+== Security
+
+. *What are the known security vulnerabilities of the language pass:[C++] that I should be aware of when developing my Boost library?*
++
+There are several known security vulnerabilities and pitfalls associated with the pass:[C++] language that developers should be aware of when developing libraries. Leveraging security tools, static analysis, and code reviews can help identify and address security issues early in the development lifecycle. In particular, be aware of:
++
+* _Buffer overflows_ occur when data is written beyond the boundaries of a fixed-size buffer, leading to memory corruption and potential exploitation. This vulnerability can be exploited by attackers to execute arbitrary code, crash the application, or manipulate program behavior.
++
+* _Null Pointer Dereferences_ (accessing memory at address 0) can lead to undefined behavior, crashes, or security vulnerabilities. Null pointer dereferences are a common source of application instability and can be exploited by attackers to cause denial-of-service conditions or execute arbitrary code.
++
+* _Memory leaks_ occur when memory allocated dynamically is not properly deallocated, leading to the exhaustion of available memory over time. While memory leaks may not directly result in security vulnerabilities, they can indirectly impact system stability and performance, potentially facilitating denial-of-service attacks or other security incidents.
++
+* _Deprecated functions_ and APIs may be insecure or outdated, exposing applications to known vulnerabilities or security risks. Developers should avoid using deprecated functions and select modern, secure alternatives provided by the latest Boost or Standard libraries.
++
+* _Integer overflows and underflows_ occur when arithmetic operations result in values that exceed the range of representable integer types. These vulnerabilities can lead to unexpected behavior, data corruption, or security vulnerabilities, especially in security-critical code paths such as input validation or memory allocation.
++
+* _Insecure input handling_, such as failure to validate input data or sanitize user input, can lead to injection attacks or buffer overflows. Developers should validate and sanitize input data to ensure that it meets expected criteria and is safe to process further.
++
+* _Unsafe type conversions_, such as casting pointers between incompatible types or using implicit type conversions without validation, can lead to memory corruption or data integrity issues. Developers should use explicit type conversions and perform appropriate validation to prevent unintended behavior.
++
+* _Concurrency and synchronization issues_, such as data races, deadlocks, and race conditions, can lead to unpredictable behavior and security vulnerabilities in multithreaded applications. Developers should use thread-safe synchronization primitives and adopt best practices for concurrent programming.
+
+. *Are there certain kinds of tests or certain testing styles that work well when trying to identify and remove security liabilities in pass:[C++] code?*
++
+There are several types of tests and testing techniques that can be particularly effective for identifying and mitigating security vulnerabilities in pass:[C++] code, consider:
++
+* _Unit testing_ involves testing individual components or units of code in isolation to ensure they behave as expected. Writing comprehensive unit tests for critical functions, classes, and modules helps verify their correctness and robustness, including edge cases, boundary conditions, and error handling paths. Refer to xref:testing/writing-tests.adoc[].
++
+* _Fuzz testing_, also known as fuzzing, involves providing invalid, unexpected, or random input data to the program to identify potential vulnerabilities such as buffer overflows, null pointer dereferences, and other memory-related issues. Fuzz testing tools generate large volumes of test cases automatically and monitor the program's behavior for crashes, hangs, or unexpected outputs. Refer to xref:testing/fuzzing.adoc[].
++
+* _Static analysis_ tools analyze source code without executing it and identify potential security vulnerabilities, code smells, and best practice violations. Static analysis tools for pass:[C++] can detect issues such as buffer overflows, null pointer dereferences, integer overflows, uninitialized variables, and unsafe type conversions.
++
+* _Dynamic analysis_ involves analyzing the behavior of the program during execution to identify security vulnerabilities, memory leaks, and runtime errors. Dynamic analysis tools for pass:[C++] can detect issues such as memory corruption, resource leaks, concurrency issues, and other runtime anomalies. Dynamic analysis techniques include memory sanitizers, address sanitizers, thread sanitizers, and runtime instrumentation. Refer to xref:testing/sanitizers.adoc[].
++
+* _Penetration testing_, also known as _pen testing_ or sometimes _ethical hacking_, involves simulating real-world attacks against the software to identify security vulnerabilities and assess the effectiveness of existing security measures.
++
+* Finally, _code reviews_ conducted by peers, security experts, or automated tools, and focus on identifying potential security vulnerabilities, design flaws, and implementation errors. 
+
+. *Are there Boost libraries that would help me guard against null pointer dereferencing?*
++
+While there is not a specific library dedicated solely to null pointer dereference prevention, you can leverage several libraries:
+ 
+ * boost:smart_ptr[] provides smart pointer classes such as `shared_ptr`, `unique_ptr`, and `weak_ptr`, which help manage dynamic memory allocation and deallocation automatically. Smart pointers implement https://en.wikipedia.org/wiki/Resource_acquisition_is_initialization[RAII (Resource Acquisition Is Initialization)] semantics, ensuring that memory is properly released when it goes out of scope or is no longer needed. By using smart pointers instead of raw pointers, you can reduce the risk of null pointer dereferencing errors, as smart pointers automatically handle null checks and memory deallocation.
++
+* boost:optional[] provides a type-safe wrapper for optional values, allowing you to represent nullable objects without resorting to raw pointers or null references.
++
+* boost:assert[] provides macros and utilities for defining runtime assertions and preconditions in your code. You can use assertions to validate assumptions and guard against null pointer dereferences by checking for null pointers before dereferencing them.
++
+* boost:contract[] provides a framework for specifying and enforcing function contracts, including preconditions, postconditions, and invariants. You can use contracts to define and enforce conditions that must be satisfied by function parameters, return values, and object states, including null pointer checks.
+
+. *Are there Boost libraries that I could include in my library project that help with secure input validation?*
++
+There are several libraries that provide functionalities for input validation, sanitization, and handling, helping to mitigate security vulnerabilities related to invalid or malicious input data:
++
+* https://www.boost.org/doc/libs/1_83_0/doc/html/string_algo.html[Boost.String_Algo] provides a collection of algorithms for string manipulation, including functions for removing leading or trailing whitespace, case conversion, tokenization, and search.
++
+* boost:tokenizer[] provides a tokenizer class for splitting input strings into tokens based on delimiter characters or regular expressions. This can be useful for parsing and validating input data that is structured or delimited, such as CSV files, configuration files, or network protocols. The tokenizer class allows you to define custom tokenization rules and handle edge cases effectively, improving the reliability and security of input data processing.
++
+* boost:property_tree[] provides a hierarchical data structure for representing and manipulating structured data, such as XML, JSON, INI, or property list formats. You can use it to parse, validate, and sanitize input data in various formats, ensuring that it conforms to expected schema or constraints before further processing.
++
+* boost:regex[] provides a comprehensive regular expression library for pattern matching and text processing. Regular expressions can be powerful tools for validating and sanitizing input data, such as validating email addresses, URLs, or other structured formats.
++
+* boost:spirit[] is a parsing and generation library that allows you to define parsers and generators directly within pass:[C++] code using a domain-specific embedded language (DSEL).
+
+. *Are there Boost libraries that help with secure memory management?*
++
+You can leverage various libraries to help ensure memory safety, prevent memory-related vulnerabilities, and manage resources efficiently:
++
+* boost:smart_ptr[] provides smart pointer classes such as `shared_ptr`, `unique_ptr`, and `weak_ptr`, which help manage dynamic memory allocation and deallocation automatically. By using smart pointers, you can prevent common memory-related vulnerabilities such as memory leaks, dangling pointers, and double frees.
++
+* boost:pool[] provides memory pool classes that allow you to efficiently allocate and deallocate fixed-size memory blocks from preallocated memory pools. Memory pools can help reduce memory fragmentation, improve memory locality, and minimize overhead associated with dynamic memory allocation.
++
+* boost:interprocess[] povides classes and utilities for interprocess communication and shared memory management. This library allows multiple processes to share memory regions securely and efficiently, facilitating communication and data exchange between them, and offers features such as named shared memory, mutexes, condition variables, and allocators for managing shared memory resources robustly.
++
+* boost:ptr_container[] provides container classes that manage ownership and lifetime of dynamically allocated objects stored within them. These containers, such as `ptr_vector`, `ptr_list`, and `ptr_map`, automatically delete contained objects when the container is destroyed or when objects are removed from it. By using pointer containers, you can simplify memory management and ensure proper cleanup of dynamically allocated objects, reducing the risk of memory leaks and resource exhaustion.
++
+* boost:circular_buffer[] provides a circular buffer data structure that manages a fixed-size buffer with automatic wrapping behavior. Circular buffers can be used to manage memory efficiently in scenarios where a fixed-size buffer is sufficient, and memory allocation and deallocation overhead, and fragmentation, need to be minimized.
+
+. *What penetration testing frameworks might work well with a new Boost library?*
++
+While penetration testing frameworks typically focus on testing web applications, network services, and software systems, they are still useful for identifying security vulnerabilities and weaknesses in a new library, typically by developing a test application that fully engages the features of the library:
++
+* https://www.metasploit.com/[Metasploit] is one of the most popular penetration testing frameworks, offering a wide range of tools and modules for exploiting vulnerabilities, conducting network reconnaissance, and assessing security posture. Metasploit modules can be customized to target specific vulnerabilities or attack vectors, such as buffer overflows, injection attacks, or memory corruption issues.
++
+* https://www.zaproxy.org/[OWASP ZAP] is an open-source web application security testing tool designed for finding security vulnerabilities in web applications and APIs. Boost libraries used in web applications or services may benefit from integration with ZAP to identify vulnerabilities related to input validation, injection attacks, and other web security issues.
++
+* https://nmap.org/[Nmap] (Network Mapper) is a powerful network scanning and reconnaissance tool used for discovering hosts and services on a network, identifying open ports, and detecting potential security vulnerabilities. Boost libraries used in networked applications or services may benefit from integration with Nmap to identify potential attack vectors, misconfigurations, or exposed services.
++
+* https://www.tenable.com/products/nessus[NESSUS] is a widely-used vulnerability scanning tool designed for identifying security vulnerabilities, misconfigurations, and compliance violations in networked environments.
++
+* https://portswigger.net/burp[Burp Suite] is a comprehensive web application security testing tool designed for finding security vulnerabilities in web applications and APIs, including input validation and injection attacks.
+
+. *In the past, can you give me some examples of where Boost libraries have fallen short and not prevented a malicious attack?*
++
+Security vulnerabilities in Boost libraries are rare compared to many other software projects, thanks to the rigorous testing, code reviews, and scrutiny they undergo. Nevertheless, there have been a few instances where security issues have been identified in Boost libraries. Here are a couple of examples:
++
+* A vulnerability affected multiple versions of Boost (versions 1.61 through 1.63) and was related to the boost:filesystem[] library. The vulnerability allowed an attacker to bypass security restrictions and potentially execute arbitrary code by exploiting a symbolic link issue in the `remove_all` function. This issue was addressed in later versions of Boost, and users were advised to update their installations to mitigate the risk.
++
+* Another vulnerability affected a later version of Boost (version 1.70). This vulnerability was related to the boost:asio[] library and could allow an attacker to cause a denial-of-service condition by triggering a stack overflow via a recursive function call. The issue was addressed in subsequent versions of boost:asio[], and users were encouraged to upgrade to the latest version to prevent potential exploitation.
+
+. *If I write a library for Boost, what are the legal ramifications if there are security breaches using features of my library?*
++
+As a developer contributing a library to the Boost pass:[C++] libraries, you generally retain ownership of the copyright to your code, but you also grant a license to the Boost Software License (BSL) for distribution as part of the Boost libraries. The Boost Software License is a permissive open-source license that allows users to freely use, modify, and distribute the library, subject to certain conditions.
++
+The xref:user-guide:ROOT:bsl.adoc[Boost Software License] includes a disclaimer of liability clause, which limits the liability of the library author and contributors for damages arising from the use or distribution of the library. This means that as the library author, you are generally not held legally responsible for any damages or losses resulting from security breaches or vulnerabilities in your library.
++
+Users of your library are responsible for their own use and deployment of the library, including ensuring the security of their applications and systems. *While you have a duty to exercise reasonable care in the development and maintenance of your library, users are ultimately responsible for assessing and mitigating any security risks associated with its usage.*
++
+In the event of a security breach or vulnerability in your library, it is important to respond promptly and responsibly by disclosing the issue, providing mitigations or workarounds, and releasing updates or patches to address the vulnerability. Prompt and transparent communication with the community helps minimize the impact of security incidents and demonstrates your commitment to security and accountability.
++
+Depending on the circumstances and applicable laws, there may be legal obligations to report security breaches or vulnerabilities, especially if they involve personal data or sensitive information. It's important to familiarize yourself with relevant legal requirements and best practices for handling security incidents, including data breach notification laws and industry-specific regulations. Engaging with the Boost community and collaborating with security researchers can help identify and address security vulnerabilities proactively. Encouraging responsible disclosure of security issues, providing clear channels for reporting vulnerabilities, and acknowledging contributions from security researchers fosters a culture of security awareness and helps improve the overall security posture of your library.
+
+. *Can you recommend a book that would give me best practices for threat modelling for my Boost library?*
++
+There are several books that cover threat modeling principles, techniques, and applicable best practices:
++
+* _Threat Modeling: Designing for Security_ by Adam Shostack. This book includes a comprehensive introduction to threat modeling, covering fundamental concepts, methodologies, and practical techniques for identifying and mitigating security threats in software systems.
++
+* _Threat Modeling: Uncover Security Design Flaws Using the STRIDE Approach_ by Frank Swiderski and Window Snyder. This book introduces the STRIDE threat modeling framework, which helps identify and analyze security threats based on six categories: Spoofing, Tampering, Repudiation, Information Disclosure, Denial of Service, and Elevation of Privilege.
++
+* _Threat Modeling: A Practical Guide for Development Teams_ by Mark E. Donaldson, James B. Ransome, and Andrew N. Nelson. This book offers practical guidance, real-world examples, and insights for integrating threat modeling into the software development process. It covers a range of threat modeling techniques, tools, and best practices, including data flow diagrams, attack trees, and risk analysis.
++
+* _Software Security Engineering: A Guide for Project Managers_ by Julia H. Allen, Sean Barnum, and Robert J. Ellison. This book provides a comprehensive overview of software security engineering principles, practices, and processes. It covers a wide range of topics related to software security, including threat modeling, security requirements analysis, security architecture, secure coding practices, and security testing.
+
 == Testing
 
 . *What Boost libraries are useful examples of how to add Continuous Integration (CI) into the library testing process?*
@@ -115,3 +239,4 @@ Refer also to xref:testing/continuous-integration.adoc[].
 * xref:release-process.adoc[]
 * xref:version-control.adoc[]
 * xref:user-guide:ROOT:faq.adoc[User Guide FAQ]
+
