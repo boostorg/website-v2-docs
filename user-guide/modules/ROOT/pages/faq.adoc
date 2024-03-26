@@ -21,7 +21,7 @@ Yes, Boost is designed to work with your existing pass:[C++] code. You can add B
 . *Can I use Boost libraries with the new pass:[C++] standards?*
 
 +
-Yes, Boost libraries are designed to work with modern pass:[C++] standards including pass:[C++11], pass:[C++14], pass:[C++17], and pass:[C++20].
+Yes, Boost libraries are designed to work with modern pass:[C++] standards including pass:[C++11], pass:[C++14], pass:[C++17], pass:[C++20], and pass:[C++23].
 
 . *What flavors of Linux are supported by the Boost libraries?*
 +
@@ -46,7 +46,7 @@ While Boost strives to ensure compatibility with a wide range of compilers and s
 
 . *What support does Boost provide for debugging and testing?*
 +
-Boost provides boost:test for unit testing, which can be an integral part of the debugging process. It also provides the boost:stacktrace[] library that can be used to produce useful debug information during a crash or from a running application.
+Boost provides boost:test[] for unit testing, which can be an integral part of the debugging process. It also provides the boost:stacktrace[] library that can be used to produce useful debug information during a crash or from a running application.
 
 . *How do I enable assertions in Boost?*
 +
@@ -58,7 +58,7 @@ You can use the boost:stacktrace[] library to obtain a stack trace in your appli
 
 . *Can I use Boost with a debugger like GDB or Visual Studio?*
 +
-Yes, Boost libraries can be used with common debuggers like GDB or Visual Studio. You can set breakpoints in your code, inspect variables, and execute code step by step. Boost doesn't interfere with these debugging tools.
+Yes, Boost libraries can be used with common debuggers like https://sourceware.org/gdb/[GDB] or https://visualstudio.microsoft.com/downloads/[Visual Studio]. You can set breakpoints in your code, inspect variables, and execute code step by step. Boost doesn't interfere with these debugging tools.
 
 . *Are there any debugging tools specifically provided by Boost?*
 +
@@ -83,7 +83,7 @@ Boost provides the assertion `boost::assert`. Best practices when using this are
 [disc]
 * _Use Severity Levels_: boost:log[] supports severity levels, which you can use to categorize and filter your log messages. This can help you control the amount of log output and focus on what's important.
 
-* _Provide Context_:boost:log[] allows you to attach arbitrary data to your log messages, such as thread IDs, timestamps, or file and line information. Use this feature to provide context that can help you understand the state of your application when the log message was generated.
+* _Provide Context_: boost:log[] allows you to attach arbitrary data to your log messages, such as thread IDs, timestamps, or file and line information. Use this feature to provide context that can help you understand the state of your application when the log message was generated.
 
 * _Use Asynchronous Logging_: If logging performance is a concern, consider using the asynchronous logging feature. This allows your application to continue executing while log messages are processed in a separate thread.
 
@@ -103,7 +103,7 @@ Yes, boost:test[] is the unit testing framework provided by Boost. It includes t
 
 . *What is Boost.Asio?*
 +
-boost:asio[] is a library that provides support for asynchronous input/output (I/O), a programming concept that allows operations to be executed without blocking the execution of the rest of the program.
+boost:asio[] is a library that provides support for _asynchronous_ input/output (I/O), a programming concept that allows operations to be executed without blocking the execution of the rest of the program.
 
 . *What is Boost.MP11?*
 +
@@ -111,24 +111,24 @@ boost:mp11[] (MetaProgramming Library for pass:[C++]11) is a Boost library desig
 
 . *Does Boost provide a library for threading?*
 +
-Yes, boost:thread[] provides a pass:[C++] interface for creating and managing threads, as well as primitives for synchronization and inter-thread communication.
+Yes, boost:thread[] provides a pass:[C++] interface for creating and managing threads, as well as primitives for synchronization and inter-thread communication. In addition, boost:atomic[] provides atomic operations and memory ordering primitives for working with shared data in multi-threaded environments. boost:lockfree[] provides lock-free data structures and algorithms for concurrent programming, allowing multiple threads to access shared data concurrently without explicit synchronization using locks or mutexes. For a lighter approach to multi-threading, consider boost:fiber[]. Fibers offer a high-level threading abstraction that allows developers to write asynchronous, non-blocking code with minimal overhead compared to traditional kernel threads. 
 
 . *What is the Boost Spirit library?*
 +
-boost:spirit[] is a library for building recursive-descent parsers directly in pass:[C++]. It uses template metaprogramming techniques to generate parsing code at compile time.
+boost:spirit[] is a library for building recursive-descent parsers directly in pass:[C++]. It uses template metaprogramming techniques to generate parsing code at compile time. Refer to <<Metaprogramming>>.
 
 . *I like algorithms, can you pique my interest with some Boost libraries that support complex algorithms?* 
 +
 Boost libraries offer a wide range of algorithmic and data structure support. Here are five libraries that you might find interesting:
 
 +
-* boost:graph[]: This library provides a way to represent and manipulate graphs. It includes algorithms for breadth-first search, depth-first search, Dijkstra's shortest paths, Kruskal's minimum spanning tree, and much more.
+* boost:graph[]: This library provides a way to represent and manipulate graphs. It includes algorithms for breadth-first search, depth-first search, https://en.wikipedia.org/wiki/Dijkstra%27s_algorithm[Dijkstra's shortest paths], https://en.wikipedia.org/wiki/Kruskal%27s_algorithm[Kruskal's minimum spanning tree], and much more.
 
 * boost:geometry[]: This library includes algorithms and data structures for working with geometric objects. It includes support for spatial indexing, geometric algorithms (like area calculation, distance calculation, intersections, etc.), and data structures to represent points, polygons, and other geometric objects.
 
 * boost:multiprecision[]: If you need to perform computations with large or precise numbers, this library can help. It provides classes for arbitrary precision arithmetic, which can be much larger or more precise than the built-in types.
 
-* boost:compute[]: This library provides a pass:[C++] interface to multi-core CPU and GPGPU computing platforms based on OpenCL. It includes algorithms for sorting, searching, and other operations, as well as containers like vectors and deques.
+* boost:compute[]: This library provides a pass:[C++] interface to multi-core CPU and GPGPU (General Purpose GPU) computing platforms based on OpenCL. It includes algorithms for sorting, searching, and other operations, as well as containers like vectors and deques.
 
 * boost:spirit[]: If you're interested in parsing or generating text, this library includes powerful tools based on formal grammar rules. It's great for building compilers, interpreters, or other tools that need to understand complex text formats.
 
@@ -146,11 +146,11 @@ The Boost libraries are licensed under the Boost Software License, a permissive 
 
 . *What is metaprogramming in the context of Boost pass:[C++]?*
 +
-Metaprogramming is a technique of programming that involves generating and manipulating programs. In the context of Boost and pass:[C++], metaprogramming often refers to template metaprogramming, which uses templates to perform computations at compile-time.
+Metaprogramming is a technique of programming that involves generating and manipulating programs. In the context of Boost and pass:[C++], metaprogramming often refers to _template metaprogramming_, which uses templates to perform computations at compile-time.
 
 . *What is Boost.MP11?*
 +
-boost:mp11[] is a Boost library designed for metaprogramming. It provides a set of templates and types for compile-time computations and manipulations, effectively extending the pass:[C++] template mechanism.
+boost:mp11[] is a Boost library designed for metaprogramming using pass:[C++]11. It provides a set of templates and types for compile-time computations and manipulations, effectively extending the pass:[C++] template mechanism.
 
 . *What can I achieve with Boost.MP11?*
 +
@@ -228,7 +228,7 @@ Other advantages of a modular format include:
 +
 * Individual modules can be updated and released on their own schedule, independent of the rest of the libraries. This allows for quicker updates and bug fixes to individual libraries without waiting for a full release.
 +
-* The structure aligns well with package managers like Conan, vcpkg, or Bazel, making it easier to manage Boost libraries within larger projects. Users can specify exactly which Boost libraries they need, and the package manager handles the inclusion and versioning.
+* The structure aligns well with package managers like https://conan.io/[Conan], https://vcpkg.io/en/[vcpkg], or https://bazel.build/about[Bazel], making it easier to manage Boost libraries within larger projects. Users can specify exactly which Boost libraries they need, and the package manager handles the inclusion and versioning.
 
 . *Will the proposed changes be backwards-compatible from the user's perspective. In particular, the public header inclusion paths will still be <boost/numeric/<name>.hpp> rather than, say, <boost/numeric-conversion/<name>.hpp>, correct?*
 +
@@ -276,9 +276,9 @@ Refer to the xref:contributor-guide:ROOT:index.adoc[]. Note that shareware libra
 The boost:smart_ptr[] library provides a set of smart pointers that helps in automatic and appropriate resource management. They are particularly useful for managing memory and provide a safer and more efficient way of handling dynamically allocated memory. The library provides the following types of smart pointers:
 +
 [disc]
-* `boost::scoped_ptr`: A simple smart pointer for sole ownership of single objects that must be deleted. It's neither copyable nor movable. Deletion occurs automatically when the scoped_ptr goes out of scope.
+* `boost::scoped_ptr`: A simple smart pointer for sole ownership of single objects that must be deleted. It's neither copyable nor movable. Deletion occurs automatically when the `scoped_ptr` goes out of scope.
 
-* `boost::scoped_array`: Similar to `scoped_ptr`, but for arrays instead of single objects. Deletion occurs automatically when the scoped_array goes out of scope.
+* `boost::scoped_array`: Similar to `scoped_ptr`, but for arrays instead of single objects. Deletion occurs automatically when the `scoped_array` goes out of scope.
 
 * `boost::shared_ptr`: A reference-counted smart pointer for single objects or arrays, which automatically deletes the object when the reference count reaches zero. Multiple `shared_ptr` can point to the same object, and the object is deleted when the last `shared_ptr` referencing it is destroyed.
 
@@ -396,6 +396,7 @@ This function can now be used to sort arrays of any type (that supports the `<` 
 
 == See Also
 
+* xref:contributor-guide:ROOT:contributors-faq.adoc[Contributor Guide FAQ]
 * xref:explore-the-content.adoc[]
 * xref:resources.adoc[]
 
