@@ -79,9 +79,7 @@ Such extensions are generally one of the following:
 convention
 
 Interface convention requirements are stated as generally as possible.
-Instead of stating "`class X` has to define a member function
-`operator++()`," the interface requires "for any object `x` of
-`class X`, `++x` is defined." That is, whether the operator is a member is unspecified.
+For example, instead of stating " `class X` has to define a member function `pass:[operator++]()` ", say " the interface requires for any object `x` of `class X`, `pass:[++x]` is defined" (noting that whether the operator is a member or not is unspecified).
 
 Requirements are stated in terms of well-defined expressions, which
 define valid terms of the types that satisfy the requirements. For every set of requirements there is a table that specifies an initial set of

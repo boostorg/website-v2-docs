@@ -21,7 +21,6 @@ Some libraries are published with the intended primary audience, or in some case
 | boost:config[] | Helps Boost library developers adapt to compiler idiosyncrasies. The range of macros can be extended, if required, with boost:predef[].
 | boost:core[] | A collection of simple core utilities with minimal dependencies. The range of utilities can be extended, if required, with boost:utility[]
 | boost:assert[] | Customizable assert macros.
-| boost:static-assert[] | Static compile time assertions.
 | boost:throwException[] | A common infrastructure for throwing exceptions from Boost libraries.
 | boost:mp11[] | Provides a template metaprogramming framework, useful if metaprogramming is a feature of your new library.
 |===
