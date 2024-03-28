@@ -93,7 +93,7 @@ The following examples show some different approaches. Note how many rely on lin
 
 When you have completed the library release notes, add the required information to the `[section New Libraries]` or `[section Updated Libraries]` of the https://github.com/boostorg/website/tree/master/feed/history[Boostorg History]. Copy the formatting of the examples below, which for reference is https://www.boost.org/doc/libs/1_83_0/doc/html/quickbook.html[Quickbook format].
 
-The examples below come from the https://github.com/boostorg/website/blob/master/feed/history/boost_1_83_0.qbk[boost_183_0.qbk] file:
+The examples below come from the https://github.com/boostorg/website/blob/master/feed/history/boost_1_83_0.qbk[boost_1_83_0.qbk] file:
 
 [source,bash]
 ----
