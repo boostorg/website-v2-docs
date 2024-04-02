@@ -30,6 +30,8 @@ The Boost libraries provide several tools that can help in writing parallel code
 
 * boost:phoenix[]: A library for functional programming, it supports the ability to create inline functions which can be used for defining parallel algorithms.
 
+* boost:atomic[]: This library provides low-level atomic operations, with the aim of ensuring correct and efficient concurrent access to shared data without data races or other undesirable behavior.
+
 == Parallel Computing Applications
 
 Parallel computing has been successful in a wide range of applications, especially those involving large-scale computation or data processing. Here are some key areas where parallel computing has been particularly effective:
