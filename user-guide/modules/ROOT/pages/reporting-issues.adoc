@@ -60,6 +60,6 @@ Note:: Currently, the Boost Super-project does not use the GitHub Discussion fea
 
 For information on issues from the library contributor's perspective, refer to xref:contributor-guide:ROOT:version-control.adoc[].
 
-
+* xref:discussion-policy.adoc[]
 
 
