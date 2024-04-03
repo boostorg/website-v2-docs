@@ -30,6 +30,7 @@ Official repository: https://github.com/boostorg/website-v2-docs
 
 * Community
 ** xref:reporting-issues.adoc[]
+** xref:discussion-policy.adoc[]
 ** xref:bsl.adoc[]
 ** xref:release-process.adoc[] 
 ** xref:boost-history.adoc[]
