@@ -65,7 +65,7 @@ If you put source code in your postings and your mailer wraps long lines automat
 
 Prune extraneous quoted text from replies so that only the relevant parts are included. It will save time and make your post more valuable when readers do not have to find out which exact part of a previous message you are responding to.
 
-Don't top-post (where the original message is included verbatim, with the reply above it); _inline_ replies are the appropriate posting style for Boost lists.
+Don't https://en.wikipedia.org/wiki/Posting_style#Top-posting[top-post] (where the original message is included verbatim, with the reply above it); _inline_ replies are the appropriate posting style for Boost lists.
 
 The common and very useful inline approach cites the small fractions of the message you are actually responding to and puts your response directly beneath each citation, with a blank line separating them for readability:
 
@@ -96,7 +96,7 @@ The Microsoft clients also create an unusually verbose header at the beginning o
 
 A summary of the foregoing thread is only needed after a long discussion, especially when the topic is drifting or a result has been achieved in a discussion. The mail system will do the tracking that is needed to enable mail readers to display message threads (and every decent mail reader supports that).
 
-If you ever have to refer to single message earlier in a thread or in a different thread then you can use a URL to the message archives. To help to keep those URLs short, you can use https://tinyurl.com/app[tinyurl.com]. Citing the relevant portion of a message you link to is often helpful (if the citation is small).
+If you ever have to refer to single message earlier in a thread or in a different thread then you can use a URL to the https://lists.boost.org/Archives/boost/[message archives]. Citing the relevant portion of the message you link to is often helpful (if the citation is small).
 
 === Maintain the Integrity of Discussion Threads
 
