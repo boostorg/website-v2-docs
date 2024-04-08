@@ -139,5 +139,4 @@ Libraries which have been abandoned will be put in care of the Community Mainten
 
 * xref:contributor-guide:ROOT:index.adoc[]
 * xref:user-guide:ROOT:index.adoc[]
-* https://docs.cppalliance.org/user-guide/index.html[User Guide]
-* https://docs.cppalliance.org/contributor-guide/index.html[Contributor Guide]
+
