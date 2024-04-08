@@ -66,7 +66,9 @@ asciidoc:
 
 ui:
   bundle:
-    url: ./antora-ui/build/ui-bundle.zip
+    # url: ./antora-ui/build/ui-bundle.zip
+    url: https://github.com/julioest/boost-ui/releases/download/v0.1.0/ui-bundle.zip
+    
     snapshot: true
 
 output:
