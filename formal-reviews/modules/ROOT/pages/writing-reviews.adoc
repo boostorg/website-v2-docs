@@ -20,41 +20,82 @@ Here's a structured approach to writing a review of a library, covering all the 
 
 Introduce yourself, and your knowledge of the problem domain. Remember that input from a newcomer to a domain is valuable. Briefly introduce the library and its purpose as you see it.
 
+=== Scope
+
 Describe the scope of your review, such as a focus on any particular area of the API, or any particular type of problem within the domain. Be clear on the level of commitment you made to the evaluation (a quick reading, in-depth testing of the API or a subset of it, focus on any particular area such as documentation, tutorials, portability, or similar).
+
+=== Affiliation
+
+Make it clear if you are affiliated with any organization involved with pass:[C++].
 
 == Design and Architecture
 
 Evaluate the design principles and architectural decisions of the library. Discuss the modularity, extensibility, and flexibility of the library's design. Assess how well the design aligns with Boost's guidelines and best practices.
 
-== Implementation: Functionality and Features
+=== Similar Libraries
+
+Discuss other Boost, or Standard, libraries that cover similar areas to this library. Note the differences, improvements, regressions, that the design suggests.
+
+== Implementation
 
 Provide an overview of the key functionality and features offered by the library. Evaluate the completeness and robustness of the feature set. Discuss any unique or innovative features that differentiate this library from existing alternatives.
 
-== Performance
+Evaluate the usability of the library from your developer's perspective. Discuss the ease of integration, API usability, and critically the learning curve. 
+
+=== Performance
 
 If you wrote some test code, which is highly recommended, assess the performance characteristics of the library, including not only runtime efficiency but resource usage. Include code snippets from your test code in your evaluation, in particular highlighting the code you wrote to prepare for an API call into the library, and the code following the call to handle the result/data/errors appropriately.
 
+
 If possible, benchmark the library against similar solutions or existing libraries in terms of speed, memory footprint, and scalability.
 
-== Usability and Documentation
-
-Evaluate the usability of the library from your developer's perspective. Discuss the ease of integration, API usability, and critically the learning curve. Assess the quality and comprehensiveness of the documentation, including tutorials, examples, and API reference materials. Include comments on the ease of navigation within the documentation, the structure of the documentation, and how easy or difficult it was to find what you were looking for.
-
-== Testing and Reliability
+=== Testing and Reliability
 
 Assess the reliability and stability of the library, including error handling and corner case handling. Discuss any known issues, limitations, or areas for improvement in terms of reliability. It is key to address the clarity and usefulness of error messages, and how they helped or hindered you in locating any particular problem.
 
-== Portability and Compatibility
+=== Portability and Compatibility
 
 If you are able, evaluate the portability of the library across different platforms, compilers, and environments. Give precise details on the tools or environment you used. Assess the library's compatibility with relevant pass:[C++] standards and other Boost libraries. Discuss any platform-specific issues, considerations or dependencies that you encountered.
 
-== Community and Adoption
+== Documentation
 
-Assess the likelihood of adoption by developers and organizations within the pass:[C++] community.
+Assess the quality and comprehensiveness of the documentation, including tutorials, examples, and API reference materials. Include comments on the ease of navigation within the documentation, the structure of the documentation, and how easy or difficult it was to find what you were looking for.
 
 == Conclusion
 
 Briefly summarize the strengths and weaknesses of the candidate library. Critically, provide a recommendation regarding the suitability of the library for inclusion in Boost. If the library falls short in some way, offer suggestions for  improvements or areas of focus that would bring the library up to the standard for a positive recommendation for inclusion.
+
+=== Community and Adoption
+
+Assess the likelihood of adoption by developers and organizations within the pass:[C++] community.
+
+== Review Template
+
+If it's helpful, cut and paste the following template into your email text when you have completed your review:
+
+```
+1. Introduce yourself
+* Are you knowledgeable about the problem domain?
+* How much effort did you put into your evaluation? A glance? A quick reading? In-depth study?
+* Do you have an affiliation to disclose?
+
+2. What is your evaluation of the design and architecture?
+* What is your evaluation of the potential usefulness of the library?
+* Is the feature set, or subset, of the library available in another Boost or Standard library?
+
+3. What is your evaluation of the implementation?
+* Did you try to use the library? With what compiler? Did you have any problems (minor, series, showstoppers)?
+* Can you highlight any performance issues?
+* Any feedback on testing and reliability?
+* Did you investigate portability and compatibility?
+
+4. What is your evaluation of the documentation?
+* Any thoughts on the introduction, tutorials, API reference, completeness, helpfulness?
+
+5. My conclusion
+* How do you think the community will react?
+* What is your verdict: Yes, No, or Yes with changes?
+```
 
 == See Also
 
