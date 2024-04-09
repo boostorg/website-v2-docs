@@ -7,7 +7,7 @@ file LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
 Official repository: https://github.com/boostorg/website-v2-docs
 ////
 = Introduction to Boost Formal Reviews
-:navtitle: Introduction to Boost Formal Reviews
+:navtitle: Formal Reviews
 
 When you feel that your library is ready for entry into Boost, you need to find at least one member (but preferably several) of the Boost community who is willing to publicly endorse your library for entry into Boost. A simple method of achieving this is to post to the https://www.boost.org/community/groups.html[Boost developers mailing list] a short description of your library, links to its Github and documentation, and a request for endorsements.
 
@@ -22,7 +22,6 @@ Once you have a list of people who have publicly endorsed your library for revie
  and any Incubator entry
 * Review Manager
 * Review Dates
-
 
 == Seek a Review Manager
 
@@ -85,38 +84,6 @@ To qualify for a fast track review:
 == Mini-Reviews
 
 It is possible that in the review process some issues might need to be fixed as a _requirement_ for acceptance. If a review does result in conditions on acceptance, the Review Manager may request a _Mini-Review_, at a later date, to determine if the conditions have been met. The Mini-Review is usually conducted by the same Review Manager.
-
-== The Role of Review Manager
-
-Before submitting a library, it will probably help to understand the role of the Review Manager.
-
-Before a library can be scheduled for formal review, an active Boost member (not connected with the library submission) must volunteer to be the _Review Manager_ for the library. Members may contact a library author on- or off-list to express interest in managing the review. The library author has to accept a person as a Review Manager.
-
-The Review Manager then:
-
-. Checks the submission to make sure it really is complete enough to warrant formal review. Refer to the https://stage.antora.cppalliance.org/doc/contributor-guide/index.html[Contributor Guide]. If necessary, work with the submitter to verify the code compiles and runs correctly on several compilers and platforms.
-
-. Finalizes the schedule with the Review Wizard and the submitter.
-
-. Posts a notice of the review schedule on both the regular boost mailing list and the boost-announce mailing list.
-
-  * The notice should include a brief description of the library and what it does, to let readers know if the library is one they are interested in reviewing.
-
-  * If the library is known to fail with certain compilers, mention them in the review notice so reviewers with those compilers won't waste time diagnosing known problems.
-
-  * It is advised to send the notice to each mailing list in a separate e-mail, otherwise online e-mail to news gateways could get confused.
-
-. Inspects the Boost library catalogue for libraries which may interact with the new submission. These potential interactions should be pointed out in the review announcement, and the authors of these libraries should be privately notified and urged to participate in the review.
-
-. Urges people to do reviews if they aren't forthcoming.
-
-. Follows review discussions regarding the library, moderating or answering questions as needed.
-
-. Asks the Review Wizard for permission to extend the review schedule if it appears that too few reviews will be submitted during the review period.
-
-. Decides if there is consensus to accept the library and if there are any conditions attached. Consensus is not the same as a vote. The Review Manager has discretion to weigh opinions based on authority or thoughtfulness.
-
-. Posts a notice of the review results on the regular boost mailing list, the boost-users mailing list, and the boost-announce mailing list. A rationale is also helpful, but its extent is up to the Review Manager. If there are suggestions, or conditions that must be met before final inclusion, they should be stated. Concerns about the timeliness or quality of the review report should be brought to the Review Wizards off-list.
 
 == Boost Website Posting
 
