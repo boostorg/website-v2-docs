@@ -17,7 +17,7 @@ Boost is a highly influential and widely used collection of libraries, designed 
 
 == Origins
 
-The story of Boost began when Robert Klarer and Beman Dawes discussed the idea at the March 1998 meeting of the pass:[C++] Standards Committee in Sophia Antipolis, France. Joined by Dave Abrahams, they convened the first Boost mailing list to facilitate discussions on the creation of high-quality, peer-reviewed libraries for the pass:[C++] programming language. At the time, the pass:[C++] Standard Library was limited in its functionality, and many developers felt the need for additional libraries to support the growing demands of software development. The name "Boost" was chosen to represent the goal of boosting the pass:[C++] language and its library ecosystem to new heights.
+The story of Boost began when Robert Klarer and xref:in-memoriam-beman-dawes.adoc[Beman Dawes] discussed the idea at the March 1998 meeting of the pass:[C++] Standards Committee in Sophia Antipolis, France. Joined by Dave Abrahams, they convened the first Boost mailing list to facilitate discussions on the creation of high-quality, peer-reviewed libraries for the pass:[C++] programming language. At the time, the pass:[C++] Standard Library was limited in its functionality, and many developers felt the need for additional libraries to support the growing demands of software development. The name "Boost" was chosen to represent the goal of boosting the pass:[C++] language and its library ecosystem to new heights.
 
 == Early Development
 
