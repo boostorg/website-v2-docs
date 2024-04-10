@@ -23,7 +23,7 @@ The Boost mailing list is a platform for discussions and communications related 
 
 * *Support*: Newcomers or users encountering difficulties can seek help from the community. Experienced members provide solutions, advice, and share their experiences.
 
-If you do join, follow the https://www.boost.org/community/policy.html[guidelines and rules] of the mailing list, as it helps in maintaining a respectful and productive environment.
+If you do join, follow the xref:user-guide:ROOT:discussion-policy.adoc[] of the mailing list, as it helps in maintaining a respectful and productive environment.
 
 To subscribe to the Developers Mailing List go https://lists.boost.org/mailman/listinfo.cgi/boost[Boost developers' mailing list].
 
@@ -71,3 +71,7 @@ NOTE: All libraries in Boost are tested when the super-project is tested, so eve
 == Contribute a New Library
 
 This is the big dog of contributions. There are developers who have contributed several libraries to Boost. Start by reading the xref:requirements/library-requirements.adoc[] section, and make sure to engage the Boost community before getting too deep into a massive coding project.
+
+== See Also
+
+* xref:formal-reviews:ROOT:index.adoc[]
