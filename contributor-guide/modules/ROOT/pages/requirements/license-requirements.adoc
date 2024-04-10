@@ -9,7 +9,7 @@ Official repository: https://github.com/boostorg/website-v2-docs
 = License Requirements
 :navtitle: License Requirements
 
-The preferred way to meet the license requirements is to use the https://www.boost.org/LICENSE_1_0.txt[Boost Software License]. See license information. If for any reason you do not intend to use the Boost Software License, please discuss the issues on the Boost developers mailing list first.
+The preferred way to meet the license requirements is to use xref:user-guide:ROOT:bsl.adoc[]. See license information. If for any reason you do not intend to use the Boost Software License, please discuss the issues on the Boost developers mailing list first.
 
 The license requirements:
 
@@ -25,3 +25,7 @@ The license requirements:
 * Must not require that the source code be available for execution or other binary uses of the library.
 
 * May restrict the use of the name and description of the library to the standard version found on the Boost web site.
+
+== See Also
+
+* xref:contributors-faq.adoc#boostsoftwarelicense[Contributors FAQ: Boost Software License]
