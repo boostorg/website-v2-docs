@@ -91,6 +91,71 @@ Boost provides the assertion `boost::assert`. Best practices when using this are
 
 * _Handle Log Rotation_: If your application produces a lot of log output, consider setting up log rotation, which is supported. This ensures that your log files don't grow indefinitely.
 
+[[isocommitteemeetings]]
+== ISO C++ Committee Meetings
+
+. *Who can attend ISO C++ Committee meetings?*
++
+Members of https://www.incits.org/committees/pl22.16[PL22.16] (the INCITS/ANSI committee) or of https://www.open-std.org/jtc1/sc22/wg21/[JTC1/SC22/WG21 - The C++ Standards Committee - ISOCPP] member country committee (the "national body" in ISO-speak), can attend the meetings. You can also attend as a guest, or join in remotely through email. For details and contact information refer to https://isocpp.org/std/meetings-and-participation/[Meetings and Participation].
++
+https://www.incits.org/[INCITS] has broadened PL22.16 membership requirements so anyone can join, regardless of nationality or employer, though there is a fee. Refer to https://www.incits.org/participation/apply-for-membership[Apply for Membership].
++
+It is recommended that any non-member who would like to attend should check in with the https://www.incits.org/committees/pl22.16[PL22.16] chair or head of their national delegation. Boosters who are active on the committee can help smooth the way, so consider contacting the https://lists.boost.org/mailman/listinfo.cgi/boost[Boost developers' mailing list] providing details of your interests.
+
+. *When and where are the next meetings?*
++
+There are three meetings a year. Two are usually in North America, and one is usually outside North America. See https://isocpp.org/std/meetings-and-participation/upcoming-meetings[Upcoming Meetings]. Detailed information about a particular meeting, including hotel information, is usually provided in a paper appearing in one of mailings for the prior meeting. If there isn't a link to it on the Meetings web page, you will have to go to the committee's https://www.open-std.org/jtc1/sc22/wg21/docs/papers/[C++ Standards Committee Papers] page and search a bit.
+
+. *Is there a fee for attending meetings?*
++
+No, but there can be a lot of incidental expenses like travel, lodging, and meals.
+
+. *What is the schedule?*
++
+The meetings typically start at 9:00AM on Monday, and 8:30AM other days. It is best to arrive a half-hour early to grab a good seat, some coffee, tea, or donuts, and to say hello to people.
++
+Until the next standard ships most meetings are running through Saturday, although some end on Friday. The last day, the meeting is generally over much earlier than on other days. Because the last day's formal meeting is for formal votes only, it is primarily of interest only to actual committee members.
++
+Sometimes there are evening technical sessions; the details aren't usually available until the Monday morning meeting. There may be a reception one evening, and, yes, significant others are invited. Again, details usually become available Monday morning.
+
+. *What actually happens at the meetings?*
++
+Monday morning an hour or two is spent in full committee on admin trivia, and then the committee breaks up into working groups (Core, Library, and Enhancements). The full committee also gets together later in the week to hear working group progress reports.
++
+The working groups are where most technical activities take place. Each active issue that appears on an _issues list_ is discussed, as are papers from the mailing. Most issues are non-controversial and disposed of in a few minutes. Technical discussions are often led by long-term committee members, often referring to past decisions or longstanding working group practice. Sometimes a controversy erupts. It takes first-time attendees awhile to understand the discussions and how decisions are actually made. The working group chairperson moderates.
++
+Sometimes straw polls are taken. In a straw poll anyone attending can vote, in contrast to the formal votes taken by the full committee, where only voting members can vote.
++
+Lunch break is an hour and a half. Informal subgroups often lunch together; a lot of technical problems are discussed or actually solved at lunch, or later at dinner. In many ways these discussions involving only a few people are the most interesting. Sometimes during the regular meetings, a working group chair will break off a sub-group to tackle a difficult problem.
+
+. *Do I have to stay at the venue hotel?*
++
+No, and committee members on tight budgets often stay at other, cheaper, hotels. The venue hotels are usually chosen because they have large meeting rooms available, and thus tend to be pricey. The advantage of staying at the venue hotel is that it is then easier to participate in the off-line discussions, which can be at least as interesting as what actually happens in the scheduled meetings.
+
+. *What do people wear at meetings?*
++
+Programmer casual. No neckties to be seen.
+
+. *What should I bring to a meeting?*
++
+It is almost essential to have a laptop computer. There is a meeting wiki and there is internet connectivity. Wireless connectivity has become the norm.
+
+. *What should I do to prepare for a meeting?*
++
+It is helpful to have downloaded the mailing or individual papers for the meeting, and to have read any papers you are interested in. Familiarize yourself with the issues lists. Decide which of the working groups you want to attend.
+
+. *What is a "Paper"?*
++
+An electronic document containing issues, proposals, or anything else the committee is interested in. Very little gets discussed at a meeting, much less acted upon, unless it is presented in a paper. Papers are available to anyone. Papers don't just appear randomly; they become available four (lately six) times a year, before and after each meeting. Committee members often refer to a paper by saying what mailing it was in, for example: "See the pre-Redmond mailing."
+
+. *What is a "Mailing"?*
++
+A mailing is the set of papers prepared before and after each meeting, or between meetings. It is physically just a .zip or .gz archive of all the papers for a meeting. Although the mailing's archive file itself is only available to committee members and technical experts, the contents (except copies of the standard) are available to all as individual papers. The ways of ISO are inscrutable.
+
+. *What is a "Reflector"?*
++
+The committee's mailing lists are called "reflectors". There are a number of them; "all", "core", "lib", and "ext" are the main ones. As a courtesy, Boost technical experts can be added to committee reflectors at the request of a committee member.
+
 == Libraries
 
 . *What are smart pointers in Boost?*
