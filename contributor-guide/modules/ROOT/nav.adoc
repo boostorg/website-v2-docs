@@ -54,7 +54,6 @@ Official repository: https://github.com/boostorg/website-v2-docs
 ** xref:docs/documentation-components.adoc[]
 ** xref:docs/antora.adoc[Antora Guide]
 ** xref:docs/asciidoc-style-guide.adoc[]
-** xref:docs/logo-policy-media-guide.adoc[]
 
 * Releases
 ** xref:release-process.adoc[]
