@@ -13,6 +13,8 @@ The Boost Test Matrix is an automated testing system that runs tests on Boost li
 
 The Test Matrix includes tests run on different operating systems (Windows, Linux, macOS) and with various compilers (such as GCC, Clang, MSVC). This diversity helps in catching issues that might only appear in specific environments.
 
+For information on running regression tests locally, refer to xref:testing/regression-tests.adoc[].
+
 == Regression Dashboard
 
 The results of library tests are published on the 
