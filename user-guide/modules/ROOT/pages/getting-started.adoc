@@ -121,50 +121,27 @@ They provide a simple and consistent way to download, configure, and install lib
 Vcpkg::
 +
 --
-To install Boost with Vcpkg, you can run a command like:
-
-[source]
-----
-vcpkg install boost
-----
-
-or adding `boost` to your `vcpkg.json` manifest file:
+You can install boost by adding required modules to your `vcpkg.json` manifest file:
 
 [source,json]
 ----
 {
-    "$schema": "https://raw.githubusercontent.com/microsoft/vcpkg-tool/main/docs/vcpkg.schema.json",
-    "name": "my-application",
-    "version": "0.15.2",
-    "dependencies": [
-        "boost"
-    ]
+  "$schema": "https://raw.githubusercontent.com/microsoft/vcpkg-tool/main/docs/vcpkg.schema.json",
+  "dependencies": [
+    "boost-describe",
+    "boost-variant2"
+  ]
 }
 ----
 
-You can also install individual boost modules by providing their names as a suffix:
+In classic mode, individual boost modules can be installed using a command like:
 
 [source]
 ----
-vcpkg install boost-variant2 boost-describe
+vcpkg install boost-describe boost-variant2
 ----
 
-or adding the modules to your `vcpkg.json` manifest file.
-
-[source,json]
-----
-{
-    "$schema": "https://raw.githubusercontent.com/microsoft/vcpkg-tool/main/docs/vcpkg.schema.json",
-    "name": "my-application",
-    "version": "0.15.2",
-    "dependencies": [
-        "boost-variant2",
-        "boost-describe"
-    ]
-}
-----
-
-For most users, Vcpkg recommends Manifest mode.
+Vcpkg recommends Manifest mode.
 Follow the instructions in https://learn.microsoft.com/en-us/vcpkg/users/manifests[the introduction guide] to manifest files.
 
 To consume the libraries transparently from CMake, one can use the https://learn.microsoft.com/en-us/vcpkg/users/buildsystems/cmake-integration[Vcpkg toolchain] with the `CMAKE_TOOLCHAIN_FILE` configuration option.
