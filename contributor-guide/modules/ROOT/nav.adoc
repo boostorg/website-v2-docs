@@ -37,6 +37,7 @@ Official repository: https://github.com/boostorg/website-v2-docs
 ** xref:testing/intro.adoc[]
 ** xref:testing/test-policy.adoc[]
 ** xref:testing/boost-test-matrix.adoc[]
+** xref:testing/regression-tests.adoc[]
 ** xref:testing/writing-tests.adoc[]
 ** xref:testing/sanitizers.adoc[]
 ** xref:testing/continuous-integration.adoc[]
