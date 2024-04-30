@@ -18,7 +18,14 @@ For information on running regression tests locally, refer to xref:testing/regre
 == Regression Dashboard
 
 The results of library tests are published on the 
-http://www.boost.org/development/tests/master/developer/summary.html[Boost Regression Testing Dashboard].
+*Boost Regression Testing Dashboard*:
+
+[cols="1,1,1",options="header",stripes=even,frame=none]
+|===
+| *Version* | *Results* | *Issues*
+| Develop branch | https://regression.boost.io/develop/developer/summary.html[Summary] | https://regression.boost.io/develop/developer/issues.html[Unresolved Issues]
+| Master branch | https://regression.boost.io/master/developer/summary.html[Summary] | https://regression.boost.io/master/developer/issues.html[Unresolved Issues]
+|===
 
 This dashboard is publicly accessible and provides detailed information about the test results for most libraries.
 
