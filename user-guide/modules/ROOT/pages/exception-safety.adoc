@@ -1,0 +1,297 @@
+////
+Copyright (c) 2024 The C++ Alliance, Inc. (https://cppalliance.org)
+
+Distributed under the Boost Software License, Version 1.0. (See accompanying
+file LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
+
+Official repository: https://github.com/boostorg/website-v2-docs
+////
+= Exception-Safety in Generic Components
+:navtitle: Exception-Safety
+
+Exception-safety in a component means that it exhibits reasonable behavior when an exception is thrown during its execution. For most people, the term “reasonable” includes all the usual expectations for error-handling: that resources should not be leaked, and that the program should remain in a well-defined state so that execution can continue. For most components, it also includes the expectation that when an error is encountered, it is reported to the caller.
+
+More formally, we can describe a component as minimally exception-safe if, when exceptions are thrown from within that component, its invariants are intact. Later on, we'll see that at least three different levels of exception-safety can be usefully distinguished. These distinctions can help us to describe and reason about the behavior of large systems.
+
+In a generic component, we usually have an additional expectation of exception-neutrality, which means that exceptions thrown by a component's type parameters should be propagated, unchanged, to the component's caller.
+
+== Myths and Superstitions
+
+Exception-safety seems straightforward so far: it doesn't constitute anything more than we'd expect from code using more traditional error-handling techniques. It might be worthwhile, however, to examine the term from a psychological viewpoint. Nobody ever spoke of “error-safety” before pass:[C++] had exceptions.
+
+It's almost as though exceptions are viewed as a mysterious attack on otherwise correct code, from which we must protect ourselves. Needless to say, this doesn't lead to a healthy relationship with error handling! During standardization, a democratic process that requires broad support for changes, I encountered many widely-held superstitions. To even begin the discussion of exception-safety in generic components, it may be worthwhile confronting a few of them.
+
+=== _“Interactions between templates and exceptions are not well-understood.”_ 
+
+This myth, often heard from those who consider these both new language features, is easily disposed of: there simply are no interactions. A template, once instantiated, works in all respects like an ordinary class or function. A simple way to reason about the behavior of a template with exceptions is to think of how a specific instantiation of that template works. Finally, the genericity of templates should not cause special concern. Although the component's client supplies part of the operation (which may, unless otherwise specified, throw arbitrary exceptions), the same is true of operations using familiar virtual functions or simple function pointers.
+
+=== _“It is well known to be impossible to write an exception-safe generic container.”_ 
+
+This claim is often heard concerning an article by Tom Cargill in which he explores the problem of exception-safety for a generic stack template. In his article, Cargill raises many useful questions, but unfortunately fails to present a solution to his problem. He concludes by suggesting that a solution may not be possible. Unfortunately, his article was read by many as “proof” of that speculation. Since it was published there have been many examples of exception-safe generic components, among them the pass:[C++] standard library containers.
+
+Note:: Probably the greatest impediment to a solution in Cargill's case was an unfortunate combination of choices on his part: the interface he chose for his container was incompatible with his particular demands for safety. By changing either one he might have solved the problem.
+
+=== _“Dealing with exceptions will slow code down, and templates are used specifically to get the best possible performance.”_
+
+A good implementation of pass:[C++] will not devote a single instruction cycle to dealing with exceptions until one is thrown, and then it can be handled at a speed comparable with that of calling a function. That alone gives programs using exceptions performance equivalent to that of a program which ignores the possibility of errors. Using exceptions can result in faster programs than traditional error handling methods for other reasons. First, a catch block indicates to the compiler which code is devoted to error-handling; it can then be separated from the usual execution path, improving locality of reference. Second, code using traditional error handling must typically test a return value for errors after every single function call; using exceptions completely eliminates that overhead.
+
+=== _“Exceptions make it more difficult to reason about a program's behavior.”_ 
+
+Usually cited in support of this myth is the way hidden execution paths are followed during stack-unwinding. Hidden execution paths are nothing new to any pass:[C++] programmer who expects local variables to be destroyed upon returning from a function:
+
+```cpp
+ErrorCode f( int& result )         // 1 
+{                                  // 2 
+    X x;                           // 3 
+    ErrorCode err = x.g( result ); // 4 
+    if ( err != kNoError )         // 5 
+        return err;                // 6 
+    // ...More code here... 
+    return kNoError;               // 7 
+}
+```
+
+In the example above, there is a hidden call to `X::~X()` in lines 6 and 7. Granted, using exceptions, there is no code devoted to error handling visible:
+
+```cpp
+int f()                 // 1 
+{                       // 2 
+    X x;                // 3 
+    int result = x.g(); // 4 
+    // ...More code here... 
+    return result;      // 5 
+} 
+```
+
+For many programmers more familiar with exceptions, the second example is actually more readable and understandable than the first. The hidden code paths include the same calls to destructors of local variables. Also, they follow a simple pattern which acts exactly as though there was a potential return statement after each function call in case of an exception. Readability is enhanced because the normal path of execution is unobscured by error-handling, and return values are freed up to be used naturally.
+
+There is an even more important way in which exceptions can enhance correctness: by allowing simple class invariants. In the first example, if x's constructor should need to allocate resources, it has no way to report a failure: in pass:[C++], constructors have no return values. The usual result when exceptions are avoided is that classes requiring resources must include a separate initializer function which finishes the job of construction. The programmer can therefore never be sure, when an object of class X is used, whether he is handling a full-fledged X or some abortive attempt to construct one (or worse: someone simply forgot to call the initializer!).
+
+== A Contractual Basis for Exception-Safety
+
+A non-generic component can be described as exception-safe in isolation, but because of its configurability by client code, exception-safety in a generic component usually depends on a contract between the component and its clients. For example, the designer of a generic component might require that an operation that is used in the component's destructor not throw any exceptions. The generic component might, in return, provide one of the following guarantees:
+
+- The *_basic guarantee_*: that the invariants of the component are preserved, and no resources are leaked.
+- The *_strong guarantee_*: that the operation has either completed successfully or thrown an exception, leaving the program state exactly as it was before the operation started.
+- The *_no-throw guarantee_*: that the operation will not throw an exception.
+
+Notes:: It is usually inadvisable to throw an exception from a destructor in pass:[C++], since the destructor may itself be called during the stack-unwinding caused by another exception. If the second exception is allowed to propagate beyond the destructor, the program is immediately terminated.
++
+Mutating algorithms usually cannot provide the strong guarantee: to roll back a modified element of a range, it must be set back to its previous value using `operator=`, which itself might throw. In the pass:[C++] standard library, there are a few exceptions to this rule, whose rollback behavior consists only of destruction: `uninitialized_copy`, `uninitialized_fill`, and `uninitialized_fill_n`.
+
+The basic guarantee is a simple minimum standard for exception-safety to which we can hold all components. It says simply that after an exception, the component can still be used as before. Importantly, the preservation of invariants allows the component to be destroyed, potentially as part of stack-unwinding. This guarantee is actually less useful than it might at first appear. If a component has many valid states, after an exception we have no idea what state the component is in; only that the state is valid. The options for recovery, in this case, are limited: either destruction or resetting the component to some known state before further use. Consider the following example:
+
+```cpp
+template <class X> 
+void print_random_sequence() 
+{ 
+    std::vector<X> v(10); // A vector of 10 items 
+    try { 
+        // Provides only the basic guarantee 
+        v.insert( v.begin(), X() ); 
+    } 
+    catch(...) {} // ignore any exceptions above 
+    // print the vector's contents 
+    std::cout "(" << v.size() << ") "; 
+    std::copy( v.begin(), v.end(), 
+    std::ostream_iterator<X>( std::cout, " " ) ); 
+} 
+```
+
+Since all we know about `v` after an exception is that it is valid, the function is allowed to print any random sequence of Xs. It is safe in the sense that it is not allowed to crash, but its output may be unpredictable.
+
+Note:: In practice of course, this function would make an extremely poor random sequence generator!
+
+The strong guarantee provides full _commit-or-rollback_ semantics. In the case of pass:[C++] standard containers, this means, for example, that if an exception is thrown all iterators remain valid. We also know that the container has the same elements as before the exception was thrown. A transaction that has no effects if it fails has obvious benefits: the program state is simple and predictable in case of an exception. In the pass:[C++] standard library, nearly all of the operations on the node-based containers list, set, multiset, map, and multimap provide the strong guarantee.
+
+Note:: Associative containers whose `Compare` object might throw an exception when copied cannot use this technique, since the `swap` function might fail.
+
+The no-throw guarantee is the strongest of all, and it says that an operation is guaranteed not to throw an exception: it always completes successfully. This guarantee is necessary for most destructors, and indeed the destructors of pass:[C++] standard library components are all guaranteed not to throw exceptions. The no-throw guarantee turns out to be important for other reasons, as we shall see.
+
+Note:: All type parameters supplied by clients of the pass:[C++] standard library are required not to throw from their destructors. In return, all components of the pass:[C++] standard library provide at least the basic guarantee.
+
+== Legal Wrangling
+
+Inevitably, the contract can get more complicated: a quid pro quo arrangement is possible. Some components in the pass:[C++] Standard Library give one guarantee for arbitrary type parameters, but give a stronger guarantee in exchange for additional promises from the client type that no exceptions will be thrown. For example, the standard container operation `vector<T>::erase` gives the basic guarantee for any `T`, but for types whose copy constructor and copy assignment operator does not throw, it gives the no-throw guarantee.
+
+Note:: Similar arrangements might have been made in the pass:[C++] standard for many of the mutating algorithms, but were never considered due to time constraints on the standardization process.
+
+== What Level of Exception-Safety should a Component Specify?
+
+From a client's point-of-view, the strongest possible level of safety would be ideal. Of course, the no-throw guarantee is simply impossible for many operations, but what about the strong guarantee? For example, suppose we wanted atomic behavior for `vector<T>::insert`. Insertion into the middle of a vector requires copying elements after the insertion point into later positions, to make room for the new element. If copying an element can fail, rolling back the operation would require undoing the previous copies...which depends on copying again. If copying back should fail (as it likely would), we have failed to meet our guarantee.
+
+One possible alternative would be to redefine insert to build the new array contents in a fresh piece of memory each time, and only destroy the old contents when that has succeeded. Unfortunately, there is a non-trivial cost if this approach is followed: insertions near the end of a vector which might have previously caused only a few copies would now cause every element to be copied. The basic guarantee is a natural level of safety for this operation, which it can provide without violating its performance guarantees. In fact all of the operations in the library appears to have such a natural level of safety.
+
+Because performance requirements were already a well-established part of the draft standard and because performance is a primary goal of the STL, there was no attempt to specify more safety than could be provided within those requirements. Although not all of the library gives the strong guarantee, almost any operation on a standard container which gives the basic guarantee can be made strong using the _make-a-new-copy_ strategy described above:
+
+```cpp
+template <class Container, class BasicOp> 
+void MakeOperationStrong( Container& c, const BasicOp& op ) 
+{ 
+    Container tmp(c); // Copy c 
+    op(tmp); // Work on the copy 
+    c.swap(tmp); // Cannot fail7
+}
+```
+
+This technique can be folded into a wrapper class to make a similar container which provides stronger guarantees (and different performance characteristics).
+
+Note:: This suggests another potential use for the oft-wished-for but as yet unseen `container_traits<>` template: automated container selection to meet exception-safety constraints.
+
+== Should We Take Everything We Can Get?
+
+By considering a particular implementation, we can hope to discern a natural level of safety. The danger in using this to establish requirements for a component is that the implementation might be restricted. If someone should come up with a more-efficient implementation which we'd like to use, we may find that it's incompatible with our exception-safety requirements. One might expect this to be of no concern in the well-explored domains of data structures and algorithms covered by the STL, but even there, advances are being made. A good example is the recent _introsort_ algorithm, which represents a substantial improvement in worst-case complexity over the well-established _quicksort_.
+
+To determine exactly how much to demand of the standard components, I looked at a typical real-world scenario. The chosen test case was a composite container. Such a container, built of two or more standard container components, is not only commonly needed, but serves as a simple representative case for maintaining invariants in larger systems:
+
+```cpp
+// SearchableStack - A stack which can be efficiently searched 
+// for any value. 
+template <class T> 
+class SearchableStack 
+{ 
+ public: 
+    void push(const T& t); // O(log n) 
+    void pop(); // O(log n) 
+    bool contains(const T& t) const; // O(log n) 
+    const T& top() const; // O(1) 
+ private: 
+    std::set<T> set_impl; 
+    std::list<std::set<T>::iterator> list_impl; 
+}; 
+```
+
+The idea is that the list acts as a stack of set iterators: every element goes into the set first, and the resulting position is pushed onto the list. The invariant is straightforward: the set and the list should always have the same number of elements, and every element of the set should be referenced by an element of the list. The following implementation of the push function is designed to give the strong guarantee within the natural levels of safety provided by set and list:
+
+```cpp
+template <class T>                                      // 1 
+void SearchableStack<T>::push(const T& t)               // 2 
+{                                                       // 3 
+    set<T>::iterator i = set_impl.insert(t);            // 4 
+    try                                                 // 5 
+    {                                                   // 6 
+        list_impl.push_back(i);                         // 7 
+    }                                                   // 8 
+    catch(...)                                          // 9 
+    {                                                   // 10 
+        set_impl.erase(i);                              // 11 
+        throw;                                          // 12 
+    }                                                   // 13 
+}                                                       // 14 
+```
+
+What does our code require of the library? We need to examine the lines where non-const operations occur:
+
+- Line 4: if the insertion fails but `set_impl` is modified in the process, our invariant is violated. We need to be able to rely on the strong guarantee from `set<T>::insert`.
+- Line 7: likewise, if `push_back` fails, but `list_impl` is modified in the process, our invariant is violated, so we need to be able to rely on the strong guarantee from `list<T>::insert`.
+- Line 11: here we are rolling back the insertion on line 4. If this operation should fail, we will be unable to restore our invariant. We absolutely depend on the no-throw guarantee from `set<T>::erase`.
+- Line 11: for the same reasons, we also depend on being able to pass the `i` to the `erase` function: we need the no-throw guarantee from the copy constructor of `set<T>::iterator`.
+
+Note:: One might be tempted to surround the erase operation with a try/catch block to reduce the requirements on `set<T>` and the problems that arise in case of an exception, but in the end that just begs the question. First, erase just failed and in this case there are no viable alternative ways to produce the necessary result. Second and more generally, because of the variability of its type parameters a generic component can seldom be assured that any alternatives will succeed.
+
+I learned a great deal by approaching the question this way during standardization. First, the guarantee specified for the composite container depends on stronger guarantees from its components (the no-throw guarantees in line 11). Also, I took advantage of all of the natural levels of safety to implement this simple example. Finally, the analysis revealed a requirement on iterators which I had previously overlooked when operations were considered on their own. The conclusion was that we should provide as much of the natural level of safety as possible. Faster but less-safe implementations could always be provided as extensions to the standard components.
+
+Note:: The prevalent philosophy in the design of STL was that functionality that wasn't essential to all uses should be left out in favor of efficiency, as long as that functionality could be obtained when needed by adapting the base components. This departs from that philosophy, but it would be difficult or impossible to obtain even the basic guarantee by adapting a base component that doesn't already have it.
+
+== Automated Testing for Exception-Safety
+
+As part of the standardization process, I produced an exception-safe reference implementation of the STL. Error-handling code is seldom rigorously tested in real life, in part because it is difficult to cause error conditions to occur. It is very common to see error-handling code that crashes the first time it is executed ...in a shipping product! To bolster confidence that the implementation worked as advertised, I designed an automated test suite, based on an exhaustive technique due to my colleague Matt Arnold.
+
+The test program started with the basics: reinforcement and instrumentation, especially of the global operators `new` and `delete`. Instances of the components (containers and algorithms) were created, with type parameters chosen to reveal as many potential problems as possible. For example, all type parameters were given a pointer to heap-allocated memory, so that leaking a contained object would be detected as a memory leak.
+
+Note:: An excellent discussion on how to fortify memory subsystems can be found in: Steve Maguire, _Writing Solid Code, Microsoft Press, Redmond, WA, 1993, ISBN 1-55615- 551-4_.
+
+Finally, a scheme was designed that could cause an operation to throw an exception at each possible point of failure. At the beginning of every client-supplied operation which is allowed to throw an exception, a call to `ThisCanThrow` was added. A call to `ThisCanThrow` also had to be added everywhere that the generic operation being tested might throw an exception, for example in the global operator new, for which an instrumented replacement was supplied.
+
+```cpp
+// Use this as a type parameter, e.g. vector<TestClass> 
+struct TestClass 
+{ 
+    TestClass( int v = 0 ) 
+        : p( ThisCanThrow(), new int( v ) ) {} 
+    TestClass( const TestClass& rhs ) 
+        : p( ThisCanThrow(), new int( *rhs.p ) ) {} 
+    const TestClass& operator=( const TestClass& rhs ) 
+        { ThisCanThrow(); *p = *rhs.p; } 
+    bool operator==( const TestClass& rhs ) const
+        { ThisCanThrow(); return *p == *rhs.p; } 
+    ...etc... 
+    ~TestClass() { delete p; } 
+};
+```
+
+`ThisCanThrow` simply decrements a _throw counter_ and, if it has reached zero, throws an exception. Each test takes a form which begins the counter at successively higher values in an outer loop and repeatedly attempts to complete the operation being tested. The result is that the operation throws an exception at each successive step along its execution path that can possibly fail. For example, here is a simplified version of the function used to test the strong guarantee:
+
+```cpp
+extern int gThrowCounter; // The throw counter
+void ThisCanThrow() 
+{ 
+    if (gThrowCounter-- == 0) 
+        throw 0; 
+} 
+ 
+template <class Value, class Operation> 
+void StrongCheck(const Value& v, const Operation& op) 
+{ 
+    bool succeeded = false; 
+    for (long nextThrowCount = 0; !succeeded; ++nextThrowCount) 
+    { 
+        Value duplicate = v; 
+        try 
+        { 
+            gThrowCounter = nextThrowCount; 
+            op( duplicate ); // Try the operation 
+            succeeded = true; 
+        } 
+        catch(...) // Catch all exceptions 
+        { 
+            bool unchanged = duplicate == v; // Test strong guarantee 
+            assert( unchanged ); 
+        } 
+        // Specialize as desired for each container type, to check 
+        // integrity. For example, size() == distance(begin(),end()) 
+        CheckInvariant(v); // Check any invariant 
+    } 
+}
+```
+
+Note:: This technique requires that the operation being tested be exception-neutral. If the operation ever tries to recover from an exception and proceed, the throw counter will be negative, and subsequent operations that might fail will not be tested for exception-safety.
+
+Notably, this kind of testing is much easier and less intrusive with a generic component than with non-generics, because testing-specific type parameters can be used without modifying the source code of the component being tested. Also, generic functions like `StrongCheck` above were instrumental in performing the tests on a wide range of values and operations.
+
+== Further Reading
+
+To my knowledge, there are currently only two descriptions of STL exception-safety available. The original specification for the reference exception-safe implementation of the STL is an informal specification, simple and self-explanatory (also verbose), and uses the basic- and strong-guarantee distinctions outlined in this article. It explicitly forbids leaks, and differs substantively from the final pass:[C++] standard in the guarantees it makes, though they are largely identical. I hope to produce an updated version of this document soon.
+
+The description of exception-safety in the pass:[C++] Standard is only slightly more formal, but relies on hard-to-read standardese and an occasionally subtle web of implication. In particular, leaks are not treated directly at all. It does have the advantage that it is the standard.
+
+Note:: The changes to the draft standard which introduced exception-safety were made late in the process, when amendments were likely to be rejected solely based on the number of altered words. Unfortunately, the result compromises clarity somewhat in favor of brevity. Greg Colvin was responsible for the clever language-lawyering needed to minimize the extent of these changes.
+
+The original reference implementation of the exception-safe STL is an adaptation of an old version of the SGI STL, designed for pass:[C++] compilers with limited features. Although it is not a complete STL implementation, the code may be easier to read, and it illustrates a useful base-class technique for eliminating exception-handling code in constructors. The full test suite used to validate the reference implementation has been used successfully to validate all recent versions of the SGI STL, and has been adapted to test one other vendor's implementation (which failed). As noted on the documentation page, it also seems to have the power to reveal hidden compiler bugs, particularly where optimizers interact with exception-handling code.
+
+=== References
+
+* _International Standard ISO/IEC 14882, Information Technology-Programming Languages-C++, Document Number ISO/IEC 14882-1998_, available from http://webstore.ansi.org/ansidocstore/default.asp.
+* D. Abrahams, _Exception Safety in STLport_, available at http://www.stlport.org/doc/exception_safety.html.
+* D. Abrahams and B. Fomitchev, _Exception Handling Test Suite_, available at http://www.stlport.org/doc/eh_testsuite.html.
+* Tom Cargill, _Exception Handling: A False Sense of Security, C++ Report, Nov-Dec 1994_.
+* B. Fomitchev, _Adapted SGI STL Version 1.0_, with exception handling code by D. Abrahams, available at http://www.stlport.org.
+* D. R. Musser, _Introspective Sorting and Selection Algorithms,” Software-Practice and Experience 27(8):983-993, 1997._
+* Bjarne Stroustrup, _The Design And Evolution of C++. Addison Wesley, Reading, MA, 1995, ISBN 0-201-54330-3, Section 16.9.1._
+
+== Acknowledgements
+
+This topic was originally written by David Abrahams (dave@boostpro.com) as a paper entitled _"Lessons Learned from Specifying Exception-Safety for the pass:[C++] Standard Library"_.
+
+Abstract:  _"This paper represents the knowledge accumulated in response to a real-world need: that the pass:[C++] Standard Template Library exhibit useful and well-defined interactions with exceptions, the error-handling mechanism built-in to the core pass:[C++] language. It explores the meaning of exception-safety, reveals surprising myths about exceptions and genericity describes valuable tools for reasoning about program correctness, and outlines an automated testing procedure for verifying exception-safety."_
+
+Keywords: _"exception-safety, exceptions, STL, pass:[C++]"_
+
+== See Also
+
+* boost:exception[] : provides utilities for working with C++ exceptions, including exception types, error handling policies, and exception propagation mechanisms.
+* boost:system[] : provides a set of portable error code and error category classes for representing and handling error conditions.
+* boost:test[] : provides a unit testing framework, including support for testing exception handling and error conditions. 
+* xref:testing-debugging.adoc[]
+
+
