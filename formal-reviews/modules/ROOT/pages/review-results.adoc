@@ -1,0 +1,628 @@
+////
+Copyright (c) 2024 The C++ Alliance, Inc. (https://cppalliance.org)
+
+Distributed under the Boost Software License, Version 1.0. (See accompanying
+file LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
+
+Official repository: https://github.com/boostorg/website-v2-docs
+////
+= Boost Formal Review Schedule
+:navtitle: Review Schedule
+
+Reviews are scheduled when the review wizards approve a review manager and agree with the manager and author on dates. See xref:submissions.adoc[] for more information.
+
+In addition to upcoming reviews, the schedule includes recent reviews already completed; that helps track review manager assignments and libraries reviewed but not yet posted on the website. There is often a lag between acceptance and site posting as authors address issues raised in the formal review.
+
+== Current Schedule
+
+[cols="1,1,1,2,2",stripes=even,options="header",frame=none]
+|===
+| *Submission* | *Submitter* | *Review Manager* | *Review Dates* | *Result*
+| 			| 			| 			| 			|
+|===
+
+=== Review Managers
+
+In order for a review to proceed, a Boost member must volunteer to manage the review. This should be someone with experience with the review process and knowledge of the library's domain. If you would like to volunteer to become a review manager, refer to xref:managing-reviews.adoc[].
+
+== Past Review Results and Milestones
+
+[cols="1,1,1,2,2",stripes=even,options="header",frame=none]
+|===
+| *Submission* | *Submitter* | *Review Manager* | *Review Dates* | *Result*
+| Parser | Zach Laine | Marshall Clow | February 19, 2024 - February 28, 2024 | [.line-through]#https://lists.boost.org/Archives/boost/2024/02/255957.php[Pending]# https://lists.boost.org/Archives/boost/2024/03/256151.php[Conditionally Accepted]
+
+| CharConv | Matt Borland | Christopher Kormanyos | January 15, 2024 - January 25, 2024 | [.line-through]#https://lists.boost.org/Archives/boost/2024/01/255713.php[Pending]# https://lists.boost.org/Archives/boost/2024/02/255820.php[Accepted] Added in 1.85
+
+| Cobalt (fka Async) | Klemens Morgenstern | Niall Douglas | September 22, 2023 - October 2, 2023 https://lists.boost.org/Archives/boost/2023/08/254947.php[repeated due lack of reviews] | [.line-through]#https://lists.boost.org/Archives/boost/2023/09/254987.php[Pending]# https://lists.boost.org/Archives/boost/2023/10/255139.php[Conditionally Accepted] -- Added in 1.84
+
+| Scope | Andrey Semashev | Dmitry Arkhipov | November 26, 2023 - December 5, 2023 | [.line-through]#https://lists.boost.org/Archives/boost/2023/11/255367.php[Pending]# https://lists.boost.org/Archives/boost/2024/01/255717.php[Conditionally Accepted] -- Added in 1.85
+
+| Mustache | Peter Dimov | Klemens Morgenstern | February 5, 2023 - February 14, 2023 | [.line-through]#https://lists.boost.org/Archives/boost/2023/02/254011.php[Pending]# https://lists.boost.org/Archives/boost/2023/02/254188.php[Rejected]
+
+| Redis (fka Aedis) | Marcelo Zimbres Silva | Klemens Morgenstern | January 15, 2023 - January 24, 2023 | [.line-through]#https://lists.boost.org/Archives/boost/2023/01/253871.php[Pending]# https://lists.boost.org/Archives/boost/2023/01/253944.php[Conditionally Accepted] -- Added in 1.84
+
+| URL | Vinnie Falco, Alan de Freitas | Klemens Morgenstern | August 13, 2022 - August 22, 2022 | [.line-through]#https://lists.boost.org/Archives/boost/2022/05/252898.php[Pending]# https://lists.boost.org/Archives/boost//2022/08/253509.php[Accepted] Added in 1.81
+
+| MySQL | Ruben Perez | Richard Hodges | May 9, 2022 - May 18, 2022 | [.line-through]#https://lists.boost.org/Archives/boost/2022/05/252898.php[Pending]# https://lists.boost.org/Archives/boost//2022/06/253193.php[Accepted] Added in 1.82
+
+| Lambda2 | Peter Dimov | Joel de Guzman | March 22, 2021 - March 31, 2021 | [.line-through]#https://lists.boost.org/Archives/boost/2021/03/251218.php[Pending]# https://lists.boost.org/Archives/boost/2021/04/251393.php[Accepted] Added in 1.77
+
+|  Describe | Peter Dimov | Richard Hodges | March 1, 2021 - March 10, 2021 | [.line-through]#https://lists.boost.org/Archives/boost/2021/02/250933.php[Pending]# https://lists.boost.org/Archives/boost/2021/03/251099.php[Accepted] Added in 1.77
+
+| PFR(Precise and Flat Reflection) | Antony Polukhin | Benedek Thaler | September 28, 2020 - October 7, 2020 | [.line-through]#https://lists.boost.org/Archives/boost/2020/09/250077.php[Pending]# https://lists.boost.org/Archives/boost/2020/10/250176.php[Accepted] Added in 1.75
+
+| JSON | Vinnie Falco, Krystian Stasiowski | Pranam Lashkari | September 14, 2020 - September 23, 2020 | [.line-through]#https://lists.boost.org/Archives/boost/2020/09/249708.php[Pending]# https://lists.boost.org/Archives/boost/2020/10/250129.php[Accepted] Added in 1.75
+
+| LEAF(Lightweight Error Augmentation Framework) | Emil Dotchevski | Michael Caisse | May 22, 2020 - May 31, 2020 | [.line-through]#https://lists.boost.org/Archives/boost/2020/05/248850.php[Pending]# https://lists.boost.org/Archives/boost/2020/08/249657.php[Accepted] Added in 1.75
+
+
+| Text | Zach Laine | Glen Fernandes | June 11, 2020 - June 20, 2020 | [.line-through]#https://lists.boost.org/Archives/boost/2020/06/249094.php[Pending]# https://lists.boost.org/Archives/boost/2020/06/249242.php[Rejected]
+
+| Review Wizard Status Report |  | Mateusz Loskot | May 20, 2020 |  https://lists.boost.org/Archives/boost/2020/05/248944.php[Report]
+
+| *Boost 1.73.0 Released* |  - |   Marshall Clow |  April 28, 2020 | https://www.boost.org/users/history/version_1_73_0.html[Notes] 
+| *Boost 1.72.0 Released* |  - |   Marshall Clow |  December 11, 2019 | https://www.boost.org/users/history/version_1_72_0.html[Notes] 
+
+| STLInterfaces|  Zach Laine | Barrett Adair|  December 10, 2019 - December 19, 2019|  
+		     [.line-through]#https://lists.boost.org/boost-announce/2019/12/0564.php[Pending]#
+		      https://lists.boost.org/boost-announce/2019/12/0568.php[Conditionally Accepted] -- Added in 1.74
+
+
+
+| StaticString (was FixedString) | Krystian Stasiowski and Vinnie Falco |  Joaquin M López Muñoz | November 25, 2019 - December 4, 2019 |
+[.line-through]#https://lists.boost.org/boost-announce/2019/11/0563.php[Pending]#
+		    https://lists.boost.org/Archives/boost/2020/02/248229.php[Accepted] -- Added in 1.73
+
+
+| *Boost 1.71.0 Released* |  - |   Marshall Clow |  August 19, 2019 | https://www.boost.org/users/history/version_1_71_0.html[Notes] 
+
+| out_ptr|  JeanHeyd Meneide | Zach Laine|  June 16, 2019 - July 10, 2019 | 
+		     [.line-through]#https://lists.boost.org/boost-announce/2019/06/0556.php[Pending]#
+		      
+			https://lists.boost.org/boost-announce/2019/07/0558.php[Rejected]
+		    
+
+| *Boost 1.70.0 Released* |  - |   Marshall Clow |  April 12, 2019 | https://www.boost.org/users/history/version_1_70_0.html[Notes] 
+
+| Variant2 | Peter Dimov | Michael Caisse | April 1, 2019 - April 15, 2019 |[.line-through]#https://lists.boost.org/Archives/boost/2019/03/245563.php[Ongoing]#
+		    https://lists.boost.org/boost-announce/2019/06/0553.php[Accepted] Added in 1.71
+
+| *Boost 1.69.0 Released* |  - |   Marshall Clow |  December 11, 2018 | https://www.boost.org/users/history/version_1_69_0.html[Notes] 
+
+
+| Histogram | Hans Dembinski | Mateusz Loskot | September 17, 2018 - September 26, 2018| [.line-through]#https://lists.boost.org/boost-announce/2018/09/0544.php[Pending]# https://lists.boost.org/boost-announce/2018/10/0548.php[Accepted] Added in 1.70
+
+| *Boost 1.68.0 Released* |  - |   Marshall Clow |  August 09, 2018 | https://www.boost.org/users/history/version_1_68_0.html[Notes] 
+
+| *Boost 1.67.0 Released* |  - |   Daniel James |  April 16, 2018 | https://www.boost.org/users/history/version_1_67_0.html[Notes] 
+
+
+| YAP|  Zach Laine|  Louis Dionne|  February 5, 2018 - February 14, 2018| [.line-through]#https://lists.boost.org/boost-announce/2018/02/0537.php[Ongoing]   https://lists.boost.org/boost-announce/2018/03/0540.php[Conditionally Accepted]#   https://lists.boost.org/boost-announce/2018/06/0542.php[Accepted] Added in 1.70
+                  
+		  
+| Outcome | Niall Douglas | Charley Bay | January 19, 2018 - January 28, 2018 |[.line-through]#https://lists.boost.org/boost-announce/2018/01/0533.php[Pending]# https://lists.boost.org/boost-announce/2018/02/0536.php[Accepted] -- Added in 1.70
+
+| *Boost 1.66.0 Released* |  - |   Daniel James |  December 19, 2017 | https://www.boost.org/users/history/version_1_66_0.html[Notes] 
+
+|  Double-Ended | Benedek Thaler | Thorsten Ottosen | September 21, 2017 - October 7, 2017 |[.line-through]#https://lists.boost.org/boost-announce/2017/09/0528.php[Pending]#
+		    https://lists.boost.org/boost-announce/2017/10/0530.php[Conditionally Accepted]
+
+
+|  Fit (now HOF) | Paul Fultz | Matt Calabrese | September 8, 2017 - September 20, 2017 |[.line-through]#https://lists.boost.org/boost-announce/2017/09/0526.php[Pending]#
+		    https://lists.boost.org/boost-announce/2017/09/0529.php[Accepted] Added in 1.67
+
+		
+| *Boost 1.65.1 Released* |  - |   Daniel James |  September 7, 2017 | https://www.boost.org/users/history/version_1_65_1.html[Notes] 
+
+| *Boost 1.65.0 Released* |  - |   Daniel James |  August 21, 2017 | https://www.boost.org/users/history/version_1_65_0.html[Notes] 
+
+| mp11 | Peter Dimov | Bjorn Reese | July  15, 2017 - July 24, 2017 | [.line-through]#https://lists.boost.org/boost-announce/2017/07/0519.php[Ongoing]#
+		    https://lists.boost.org/boost-announce/2017/08/0520.php[Accepted] Added in 1.66
+
+		
+| Beast|  Vinnie Falco|  Michael Caisse|  July 1, 2017 - July 10, 2017 |  
+		   [.line-through]#https://lists.boost.org/boost-announce/2017/06/0515.php[Pending]#
+		    https://lists.boost.org/Archives/boost/2017/07/237385.php[Accepted] Added in 1.66
+
+		  
+| pdqsort | Orson Peters | Steven Ross | June 21, 2017 - June 30, 2017 |  
+		    https://lists.boost.org/boost-announce/2017/06/0518.php[Accepted]
+
+		  
+| Nowide|  Artyom Beilis|  Frédéric Bron|  June 12, 2017 - June 21, 2017| [.line-through]#https://lists.boost.org/boost-announce/2017/06/0512.php[Pending]#
+		      https://lists.boost.org/boost-announce/2017/06/0516.php[Accepted] Added in 1.73
+
+		  
+| Timsort|  Alexander Zaitsev|  Steven Ross|  June 3, 2017 - June 12, 2017 | [.line-through]#https://lists.boost.org/boost-announce/2017/06/0509.php[Ongoing]#
+		      https://lists.boost.org/boost-announce/2017/06/0513.php[Rejected]
+		    
+		  
+
+		
+|  Outcome|  Niall Douglas | Charley Bay|  May 19, 2017 - May 28, 2017|  
+		     [.line-through]#https://lists.boost.org/boost-announce/2017/05/0504.php[Pending]#
+		      https://lists.boost.org/boost-announce/2017/06/0510.php[Rejected]
+
+
+| PolyCollection|  Joaquín Mª López Muñoz | Ion Gaztañaga|  May 3, 2017 - May 12, 2017|    [.line-through]#https://lists.boost.org/boost-announce/2017/05/0502.php[Ongoing]# https://lists.boost.org/boost-announce/2017/05/0505.php[Accepted] Added in 1.65
+
+
+
+| *Boost 1.64.0 Released* |  - |   Rene Rivera |  April 19, 2017 | https://www.boost.org/users/history/version_1_64_0.html[Notes] 
+
+| CallableTraits | Barrett Adair | Louis Dionne | April 3, 2017 - April 12, 2017 | [.line-through]#https://lists.boost.org/Archives/boost/2017/03/234005.php[Ongoing]#
+		    https://lists.boost.org/Archives/boost/2017/04/234513.php[Conditionally Accepted] -- Added in 1.66
+
+		
+
+| Stacktrace|  Antony Polukhin|  Niall Douglas | March 17, 2017 - March 26, 2017| [.line-through]#https://lists.boost.org/boost-announce/2017/03/0493.php[Ongoing]#
+		      https://lists.boost.org/boost-announce/2017/03/0496.php[Accepted] Added in 1.65
+
+
+| Safe Numerics|  Robert Ramey|  Andrzej Krzemienski|  March 2, 2017 - March 16, 2017| [.line-through]#https://lists.boost.org/boost-announce/2017/03/0491.php[Ongoing]#
+		      https://lists.boost.org/boost-announce/2017/03/0494.php[Conditionally Accepted] -- Added in 1.69
+
+		      
+| *Boost 1.63.0 Released* |  - |   Marshall Clow |  December 26, 2016 | https://www.boost.org/users/history/version_1_63_0.html[Notes] 
+
+| Stacktrace |  Antony Polukhin |  Niall Douglas |  December 14, 2016 - December 23, 2016 |[.line-through]#https://lists.boost.org/boost-announce/2016/12/0483.php[Pending]#
+		    https://lists.boost.org/boost-announce/2017/01/0486.php[Conditionally Accepted]
+
+
+| Synapse|  Emil Dotchevski|  Edward Diener|  December 2, 2016 - December 11, 2016 | [.line-through]#https://lists.boost.org/boost-announce/2016/12/0479.php[Pending]#
+https://lists.boost.org/boost-announce/2016/12/0484.php[Rejected]		      
+| Parallel Sorting Sub-library | Francisco José Tapia | Steven Ross | November 11, 2016 - November 20, 2016 |[.line-through]#https://lists.boost.org/Archives/boost/2016/11/231544.php[Pending]#
+		      https://lists.boost.org/Archives/boost/2016/11/231732.php[Accepted]
+
+		  
+| Process|  Klemens Morgenstern|  Antony Polukhin|  October 27, 2016 - November 5, 2016 | [.line-through]#https://lists.boost.org/boost-announce/2016/10/0476.php[Pending]#
+		      https://lists.boost.org/boost-announce/2016/11/0477.php[Accepted] -- Added in 1.64
+
+| *Boost 1.62.0 Released* |  - |   Rene Rivera |  September 28, 2016 | https://www.boost.org/users/history/version_1_62_0.html[Notes] 
+
+|  Fiber (mini-review)|  Oliver Kowalke | Nat Goodspeed|  May 23, 2016 - June 2, 2016 | [.line-through]#https://lists.boost.org/boost-announce/2016/05/0473.php[Pending]#
+		      https://lists.boost.org/boost-announce/2016/06/0474.php[Accepted] Added in 1.62
+
+
+| Review Wizard Status Report| - |  Ronald Garcia |  May 19, 2016 |   
+		       https://lists.boost.org/boost-announce/2016/05/0471.php[Report]
+
+| *Boost 1.61.0 Released* |  - |   Rene Rivera |  May 13, 2016 | https://www.boost.org/users/history/version_1_61_0.html[Notes] 
+		
+| Fit |  Paul Fultz|  Vicente Botet|  March 2, 2016 - March 13, 2016 | [.line-through]#https://lists.boost.org/Archives/boost/2016/03/228107.php[Ongoing]#
+		      https://lists.boost.org/Archives/boost/2016/04/228770.php[Rejected]
+		    
+
+| Quaternions, Vectors, Matrices (QVM)|  Emil Dotchevski|  Adam Wulkiewicz|  December 7, 2015 - December 23, 2015 |[.line-through]#https://lists.boost.org/boost-announce/2015/12/0458.php[Ongoing]#
+https://lists.boost.org/Archives/boost/2016/01/227027.php[Accepted] Added in 1.62
+
+
+| *Boost 1.60.0 Released* |  - |   Marshall Clow |  December 17, 2015 | https://www.boost.org/users/news/version_1_60_0[Notes] 
+
+| Fiber (mini-review)|  Oliver Kowalke|  Nat Goodspeed|  September 4, 2015 - September 13, 2015|    [.line-through]#https://lists.boost.org/boost-announce/2015/09/0453.php[Pending]#
+https://lists.boost.org/boost-announce/2015/10/0456.php[Continuing Conditionally Accepted] 
+
+| Asynchronous File I/O |  Niall Douglas and
+                  Paul Kirth |  Ahmed Charles |  August 21, 2015 - August 31, 2015 |  
+		   [.line-through]#https://lists.boost.org/boost-announce/2015/08/0451.php[Pending]#
+		    Rejected (no result posted)
+
+
+| *Boost 1.59.0 Released* |  - |   Marshall Clow |  August 13, 2015 | https://www.boost.org/users/news/version_1_59_0[Notes] 
+
+| Http |  Vinícius dos Santos Oliveira |  Bjorn Reese |  August 7, 2015 - August 16, 2015 | [.line-through]#https://lists.boost.org/boost-announce/2015/08/0449.php[Pending]#
+		    https://lists.boost.org/boost-announce/2015/08/0452.php[Rejected]
+
+| DLL |  Antony Polukhin |  Vladimir Prus |  June 29, 2015 - July 12, 2015 |  [.line-through]#https://lists.boost.org/Archives/boost/2015/07/223995.php[Pending]# https://lists.boost.org/boost-announce/2015/07/0448.php[Accepted] Added in 1.61
+
+| Hana |  Louis Dionne |  Glen Fernandes |  June 10, 2015 - June 24, 2015 | https://lists.boost.org/boost-announce/2015/07/0443.php[Accepted] Added in 1.61
+
+| Metaparse |  Abel Sinkovics |  Christophe Henry |  May 25, 2015 - June 7, 2015 |  [.line-through]#https://lists.boost.org/Archives/boost/2015/05/222478.php[Pending]# https://lists.boost.org/boost-announce/2015/07/0446.php[Accepted] Added in 1.61
+
+| *Boost 1.58.0 Released* |  - |   Marshall Clow |  April 17, 2015 | https://www.boost.org/users/news/version_1_58_0[Notes] 
+
+| Endian Mini-Review |  Beman Dawes |  Joel Falcou |  January 23, 2015 - February 1, 2015 |  [.line-through]#https://lists.boost.org/boost-announce/2015/01/0428.php[Ongoing]# https://lists.boost.org/Archives/boost/2015/02/220090.php[Accepted] -- Added in 1.58
+
+| Review Wizard Status Report| - |   Ronald Garcia |  January 22, 2015 | https://lists.boost.org/boost-announce/2015/01/0427.php[Report]
+
+| Compute |  Kyle Lutz |  Antony Polukhin |  December 15, 2014 - December 30, 2014 |  [.line-through]#https://lists.boost.org/boost-announce/2014/12/0423.php[Ongoing]# https://lists.boost.org/boost-announce/2015/01/0425.php[Accepted] -- Added in 1.61
+
+| Sort |  Steven Ross |  Edward Diener |  November 10, 2014 - November 19, 2014 |  [.line-through]#https://lists.boost.org/boost-announce/2014/11/0421.php[Pending]# https://lists.boost.org/boost-announce/2014/11/0422.php[Accepted] -- Added in 1.58
+
+| *Boost 1.57.0 Released* |  - |   Marshall Clow |  November 3, 2014 | https://www.boost.org/users/news/version_1_57_0[Notes] 
+
+| Review Wizard Status Report| - | Ronald Garcia |  August 30, 2014 | https://lists.boost.org/boost-announce/2014/08/0414.php[Report]
+
+| Variadic Macro Data |  Edward Diener |  Steven Watanabe |  August 21, 2014 - August 30, 2014 |  [.line-through]#https://lists.boost.org/boost-announce/2014/08/0413.php[Pending]# https://lists.boost.org/boost-announce/2015/02/0432.php[Accepted] Added in 1.60
+
+| *Boost 1.56.0 Released* |  - |   Marshall Clow |  August 7, 2014 | https://www.boost.org/users/news/version_1_56_0[Notes] 
+
+| Convert |  Vladimir Batov |  Edward Diener |  May 12, 2014 - May 25, 2014 |  [.line-through]#https://lists.boost.org/boost-announce/2014/05/0403.php[Pending]# https://lists.boost.org/boost-announce/2014/06/0406.php[Accepted]
+
+| TypeIndex Mini-Review |  Antony Polukhin |  Niall Douglas |  April 21, 2014 - April 30, 2014 |  [.line-through]#https://lists.boost.org/boost-announce/2014/04/0399.php[Pending]# https://lists.boost.org/boost-announce/2014/05/0402.php[Accepted] -- Added in 1.56
+
+| Align |  Glen Fernandes |  Ahmed Charles |  April 11, 2014 - April 20, 2014 |  [.line-through]#https://lists.boost.org/boost-announce/2014/04/0398.php[Pending]# https://lists.boost.org/boost-announce/2014/04/0400.php[Accepted] -- Added in 1.56
+
+| Fiber |  Oliver Kowalke |  Nat Goodspeed |  January 6, 2014 - January 15, 2014 |  [.line-through]#https://lists.boost.org/boost-announce/2014/01/0392.php[Pending]# https://lists.boost.org/boost-announce/2014/01/0393.php[Conditionally Accepted]
+
+| TypeIndex |  Antony Polukhin |  Niall Douglas |  November 11, 2013 - November 20, 2013 |  [.line-through]#https://lists.boost.org/boost-announce/2013/11/0389.php[Conditionally Accepted]#
+
+
+| *Boost 1.55.0 Released* |  - |   Marshall Clow |  November 11, 2013 | https://www.boost.org/users/news/version_1_55_0[Notes] 
+
+| *Boost 1.54.0 Released* |  - |   Marshall Clow |  July 1, 2013 | https://www.boost.org/users/news/version_1_54_0[Notes] 
+
+| Review Wizard Status Report| - |   Ronald Garcia |  March 14, 2013 | https://lists.boost.org/boost-announce/2013/03/0378.php[Report]
+
+| *Boost 1.53.0 Released* |  - |   Marshall Clow |  February 4, 2013 | https://www.boost.org/users/news/version_1_53_0[Notes] 
+
+| Review Wizard Status Report| - |   Ronald Garcia |  November 10, 2012 | https://lists.boost.org/boost-announce/2012/11/0374.php[Report]
+
+| *Boost 1.52.0 Released* |  - |   Marshall Clow |  October 5, 2012 | https://www.boost.org/users/news/version_1_52_0[Notes] 
+
+| Review Wizard Status Report| - |   Ronald Garcia |  September 27, 2012 | https://lists.boost.org/boost-announce/2012/09/0370.php[Report]
+
+| ODEint |  Karsten Ahnert and 
+		    Mario Mulansky |  Steven Watanabe |  September 19, 2012 - September 28, 2012 |  [.line-through]#https://lists.boost.org/boost-announce/2012/09/0369.php[Pending]# https://lists.boost.org/boost-announce/2012/10/0371.php[Accepted] -- Added in 1.53
+
+| Coroutine |  Oliver Kowalke |  Hartmut Kaiser |  September 3, 2012 - September 12, 2012 |  [.line-through]#https://lists.boost.org/boost-announce/2012/09/0366.php[Pending]# https://lists.boost.org/boost-announce/2012/11/0375.php[Accepted] -- Added in 1.53
+
+| Contract |  Lorenzo Caminiti |  Dave Abrahams |  August 22, 2012 - August 31, 2012 |  [.line-through]#https://lists.boost.org/boost-announce/2012/08/0362.php[Pending]# https://lists.boost.org/boost-announce/2012/09/0368.php[Accepted] Added in 1.67
+
+| *Boost 1.51.0 Released* |  - |   Marshall Clow |  August 20, 2012 | https://www.boost.org/users/news/version_1_51_0[Notes] 
+
+| Review Wizard Status Report| - |   Ronald Garcia |  August 15, 2012 | https://lists.boost.org/boost-announce/2012/08/0360.php[Report]
+
+| Type Erasure |  Steven Watanabe |  Lorenzo Caminiti |  July 18, 2012 - July 27, 2012 |  [.line-through]#https://lists.boost.org/boost-announce/2012/07/0357.php[Pending]# https://lists.boost.org/boost-announce/2012/08/0364.php[Accepted] -- Added in 1.54
+
+| Review Wizard Status Report| - |   Ronald Garcia |  July 13, 2012 | https://lists.boost.org/boost-announce/2012/07/0355.php[Report]
+
+| *Boost 1.50.0 Released* |  - |   Beman Dawes |  June 28, 2012 | https://www.boost.org/users/news/version_1_50_0[Notes] 
+
+| Multiprecision Arithmetic |  John Maddock |  Jeffrey Hellrung |  June 8, 2012 - June 17, 2012 |  [.line-through]#https://lists.boost.org/boost-announce/2012/06/0353.php[Pending]# https://lists.boost.org/boost-announce/2012/08/0359.php[Accepted] -- Added in 1.53
+
+| *Boost 1.49.0 Released* |  - |   Beman Dawes |  February 24, 2012 | https://www.boost.org/users/news/version_1_49_0[Notes] 
+
+| Predef |  Rene Rivera |  Joel Falcou |  February 20, 2012 - February 29, 2012 |  [.line-through]#https://lists.boost.org/boost-announce/2012/02/0349.php[Pending]# https://lists.boost.org/boost-announce/2013/04/0379.php[Accepted] -- Added in 1.55
+
+| Review Wizard Status Report| - |   Ronald Garcia |  January 10, 2012 | https://lists.boost.org/boost-announce/2012/01/0344.php[Report]
+
+| Context (mini-review) |  Oliver Kowalke |  Giovanni Deretta |  January 2, 2012 - January 11, 2012 |  [.line-through]#https://lists.boost.org/boost-announce/2012/01/0343.php[Pending]# https://lists.boost.org/boost-announce/2012/01/0348.php[Accepted] -- Added in 1.51.0
+
+| *Boost 1.48.0 Released* |  - |   Beman Dawes |  November 16, 2011 | https://www.boost.org/users/news/version_1_48_0[Notes] 
+
+| Local |  Lorenzo Caminiti |  Jeffrey Hellrung |  November 10, 2011 - November 19, 2011 |  [.line-through]#https://lists.boost.org/boost-announce/2011/11/0338.php[Pending]# https://lists.boost.org/boost-announce/2011/12/0340.php[Accepted] -- Added in 1.50
+
+| Atomic |  Helge Bahmann |  Tim Blechmann |  October 17, 2011 - October 26, 2011 | https://lists.boost.org/boost-announce/2011/11/0337.php[Accepted] -- Added in 1.53
+
+| Algorithm |  Marshall Clow |  Dave Abrahams |  September 22, 2011 - October 1, 2011 |  [.line-through]#https://lists.boost.org/boost-announce/2011/09/0333.php[Pending]# https://lists.boost.org/boost-announce/2011/12/0341.php[Accepted] -- Added in 1.50
+
+| Endian |  Beman Dawes |  Joel Falcou |  September 5, 2011 - September 14, 2011 | https://lists.boost.org/boost-announce/2011/11/0336.php[Conditionally Accepted]
+
+| Conversion |  Vicente Botet |  Gordon Woodhull |  August 20, 2011 - August 29, 2011 |  [.line-through]#https://lists.boost.org/boost-announce/2011/08/0330.php[Pending]# https://lists.boost.org/boost-announce/2012/07/0356.php[Rejected]
+
+| Containers |  Ion Gaztañaga |  John Maddock |  August 3, 2011 - August 12, 2011 |  [.line-through]#https://lists.boost.org/boost-announce/2011/08/0329.php[Pending]# https://lists.boost.org/Archives/boost/2011/08/184936.php[Accepted] -- Added in 1.48.0
+
+| Lockfree |  Tim Blechmann |  Hartmut Kaiser |  July 18, 2011 - July 27, 2011 | [.line-through]#https://lists.boost.org/boost-announce/2011/07/0324.php[Pending]# https://lists.boost.org/boost-announce/2011/08/0331.php[Accepted] -- Added in 1.53
+
+| *Boost 1.47.0 Released* |  - |   Beman Dawes |  July 12, 2011 | https://www.boost.org/users/news/version_1_47_0[Notes] 
+
+| Type Traits Introspection |  Edward Diener |  Joel Falcou |  July 1, 2011 - July 10, 2011 |  [.line-through]#https://lists.boost.org/boost-announce/2011/06/0320.php[Pending]#
+[.line-through]#https://lists.boost.org/boost-announce/2011/07/0322.php[Pending]# https://lists.boost.org/boost-announce/2011/08/0328.php[Accepted] -- Added in 1.54
+
+| Assign v2 |  Erwann Rogard,
+                  Thorsten Ottosen |  John Bytheway |  June 15, 2011 - June 24, 2011 |  [.line-through]#https://lists.boost.org/boost-announce/2011/06/0315.php[Pending]#
+[.line-through]#https://lists.boost.org/boost-announce/2011/06/0319.php[Pending]# https://lists.boost.org/boost-announce/2011/07/0321.php[Rejected]
+
+| Heaps |  Tim Blechmann |  Andrew Sutton |  May 30, 2011 - June 8, 2011 |  [.line-through]#https://lists.boost.org/boost-announce/2011/05/0314.php[Pending]# https://lists.boost.org/boost-announce/2011/06/0316.php[Accepted] -- Added in 1.49
+
+| Review Wizard Status Report| - |   Ronald Garcia |  May 23, 2011 | https://lists.boost.org/boost-announce/2011/05/0311.php[Report]
+
+| AutoIndex (Tool) |  John Maddock |  Daniel James |  May 5, 2011 - May 14, 2011 |  [.line-through]#https://lists.boost.org/boost-announce/2011/05/0308.php[Pending]# https://lists.boost.org/boost-announce/2011/05/0312.php[Accepted] -- Added in 1.48.0
+
+| Convert |  Vladimir Batov |  Edward Diener |  April 23, 2011 - May 2, 2011- |  [.line-through]#https://lists.boost.org/boost-announce/2011/04/0302.php[Pending]# https://lists.boost.org/boost-announce/2011/05/0307.php[Withdrawn] https://lists.boost.org/boost-announce/2011/05/0309.php[Report]
+  
+
+| Locale |  Artyom Beilis |  Chad Nelson |  April 7, 2011 - April 16, 2011 |  [.line-through]#https://lists.boost.org/boost-announce/2011/04/0298.php[Pending]#
+[.line-through]#https://lists.boost.org/boost-announce/2011/04/0303.php[Pending]# https://lists.boost.org/boost-announce/2011/04/0304.php[Accepted] -- Added in 1.48.0
+
+| Context |  Oliver Kowalke |  Vicente Botet |  March 21, 2011 - March 30, 2011 |  [.line-through]#https://lists.boost.org/boost-announce/2011/03/0296.php[Pending]#
+[.line-through]#https://lists.boost.org/boost-announce/2011/05/0310.php[Accepted Provisionally]# https://lists.boost.org/boost-announce/2012/01/0348.php[Accepted] -- Added in 1.51.0
+
+| Type Traits Extensions (Fast-Track) |  Frédéric Bron |  Joel Falcou |  March 14, 2011 - March 18, 2011 | https://lists.boost.org/boost-announce/2011/03/0297.php[Accepted] -- Added in 1.48.0
+
+| *Boost 1.46.1 Released* |  - |   Beman Dawes |  March 21, 2011 | https://www.boost.org/users/news/version_1_46_1[Notes] 
+
+| Review Wizard Status Report| - |   Ronald Garcia |  March 4, 2011 | https://lists.boost.org/boost-announce/2011/03/0289.php[Report]
+
+| XInt |  Chad Nelson |  Vladimir Prus |  March 2, 2011 - March 12, 2011 |  [.line-through]#https://lists.boost.org/boost-announce/2011/03/0288.php[Pending]# https://lists.boost.org/boost-announce/2011/04/0305.php[Rejected]
+
+| *Boost 1.46 Released* |  - |   Beman Dawes |  February 21, 2011 | https://www.boost.org/users/news/version_1_46_0[Notes] 
+
+| Phoenix (mini-review) |  Joel de Guzmann |  Hartmut Kaiser |  February 20, 2011 - March 2, 2011 | https://lists.boost.org/boost-announce/2011/03/0291.php[Accepted] -- Added in 1.47.0
+
+| Process |  Boris Schaeling |  Marshall Clow |  February 7. 2011 - February 16, 2011 | https://lists.boost.org/boost-announce/2011/03/0292.php[Rejected]
+
+| GIL.IO |  Christian Henning |  Mateusz Loskot |  December 1, 2010 - December 10, 2010 | https://lists.boost.org/boost-announce/2011/01/0281.php[Accepted] -- Added in 1.68.0
+
+| *Boost 1.45 Released* |  - |   Beman Dawes |  November 20, 2010 | https://lists.boost.org/boost-announce/2010/11/0272.php[Notes] 
+
+| Chrono |  Vicente Botet |  Anthony Williams |  November 6, 2010 - November 15, 2010 | https://lists.boost.org/boost-announce/2011/01/0280.php[Accepted] -- Added in 1.47.0
+
+| Ratio |  Vicente Botet |  Anthony Williams |  October 2, 2010 - October 11, 2010 | https://lists.boost.org/boost-announce/2010/10/0270.php[Accepted] -- Added in 1.47.0
+
+| *Boost 1.44 Released* |  - |   Beman Dawes |  August 17, 2010 | https://lists.boost.org/boost-announce/2010/08/0264.php[Notes] 
+
+| Boost.Assign Extensions (Mini-Review) |  Erwann Rogard |  Thorsten Ottosen |  June 13, 2010 - June 19, 2010 | https://lists.boost.org/boost-announce/2010/10/0269.php[Rejected]
+
+| Review Wizard Status Report| - |   Ronald Garcia |  May 26, 2010 | https://lists.boost.org/boost-announce/2010/05/0262.php[Report]
+
+| Move |  Ion Gaztañaga |  [.line-through]#OvermindDL1# Michael Caisse
+                   |  May 10, 2010 - May 24, 2010 | https://lists.boost.org/boost-announce/2011/02/0283.php[Accepted] -- Added in 1.48.0
+
+| *Boost 1.43 Released* |  - |   Beman Dawes |  May 6, 2010 | https://lists.boost.org/boost-announce/2010/05/0258.php[Notes] 
+
+| Log |  Andrey Semashev |  Vladimir Prus |  March 8, 2010 - March 17, 2010 |  [.line-through]#https://lists.boost.org/boost-announce/2010/03/0256.php[Accepted Provisionally]# Accepted -- Added in 1.54
+
+
+| Interval Containers |  Joachim Faulhaber |  Hartmut Kaiser |  February 18, 2010 - February 27, 2010 | https://lists.boost.org/boost-announce/2010/04/0257.php[Accepted] -- Added in 1.46
+
+| *Boost 1.42 Released* |  - |   Beman Dawes |  February 2, 2010 | https://lists.boost.org/boost-announce/2010/02/0250.php[Notes] 
+
+| Review Wizard Status Report| - |   John Phillips |  December 7, 2009 |   https://www.boost.org/development/report-dec-2009.html[Report]
+
+| Meta State Machine (MSM) |  Christophe Henry |  Dave Abrahams |  November 23, 2009 - December 13, 2009 | https://lists.boost.org/Archives/boost/2010/01/160812.php[Accepted] -- Added in 1.44
+
+| *Boost 1.41 Released* |  - |   Beman Dawes |  November 18, 2009 | https://lists.boost.org/boost-announce/2009/11/0241.php[Notes] 
+
+| Geometry |  Barend Gehrels, Bruno Lalande, and Mateusz Loskot |  Hartmut Kaiser |  November 5, 2009 - November 22, 2009 | https://lists.boost.org/boost-announce/2009/11/0245.php[Accepted] -- Added in 1.47.0
+
+| *Boost 1.40 Released* |  - |   Beman Dawes |  August 27, 2009 | https://lists.boost.org/boost-announce/2009/08/0235.php[Notes] 
+
+| Polygon |  Lucanus Simonson |  Fernando Cacciola |  August 24, 2009 - September 2, 2009 | https://lists.boost.org/boost-announce/2009/11/0239.php[Accepted] -- Added in 1.44
+
+| Review Wizard Status Report| - |   Ronald Garcia |  June 4, 2009 |   https://www.boost.org/development/report-jun-2009.html[Report]
+
+| *Boost 1.39 Released* |  - |   Beman Dawes |  May 3, 2009 | https://lists.boost.org/boost-announce/2009/05/0232.php[Notes] 
+
+| Polynomial |  Paweł Kieliszczyk |  John Maddock |  March 10, 2009 - March 19, 2009 | https://lists.boost.org/boost-announce/2009/04/0228.php[Rejected]
+
+| Boost.Range (Update) |  Neil Groves |  Thorsten Ottosen |  February 20, 2009 - March 3, 2009 | https://lists.boost.org/boost-announce/2009/04/0231.php[Accepted] -- Added in 1.43
+
+| *Boost 1.38 Released* |  - |   Beman Dawes |  February 9, 2009 | https://lists.boost.org/boost-announce/2009/02/0223.php[Notes] 
+
+| Futures (1st candidate) | Anthony Williams |  Tom Brinkman |  January 5, 2009 - January 20, 2009 | https://lists.boost.org/boost-announce/2009/04/0229.php[Accepted] -- Added in 1.41
+| Futures (2nd candidate) | Braddock Gaskill |  Tom Brinkman |  January 5, 2009 - January 20, 2009 |  Rejected
+
+| Constrained Value |  Robert Kawulak |  [.line-through]#Jeff Garland# Gordon Woodhull
+                   |  December 1, 2008 - December 10, 2008 |  [.line-through]#https://lists.boost.org/boost-announce/2010/09/0265.php[Accepted]# Orphaned
+
+
+| Review Wizard Status Report| - |   John Phillips |  November 25, 2008 |   https://www.boost.org/development/report-nov-2008.html[Report]
+
+| Globally Unique Identifier (mini-review) (now UUID) |  Andy Tompkins |  Hartmut Kaiser |  November 23, 2008 - November 29, 2008 | https://lists.boost.org/boost-announce/2009/01/0221.php[Accepted] -- Added in 1.42
+
+| *Boost 1.37 Released* |  - |   Beman Dawes |  November 3, 2008 | https://lists.boost.org/boost-announce/2008/11/0209.php[Notes] 
+
+| Thread-Safe Signals (now Signals2) |  Frank Hess |  Stjepan Rajko |  November 1, 2008 - November 10, 2008 | https://lists.boost.org/boost-announce/2008/11/0211.php[Accepted] -- Added in 1.39
+
+| Phoenix |  Joel de Guzman |  Hartmut Kaiser |  September 21, 2008 - September 30, 2008 | [.line-through]#https://lists.boost.org/boost-announce/2008/10/0205.php[Accepted Conditionally]# [.line-through]#https://lists.boost.org/Archives/boost/2010/05/167128.php[Under Development]# https://lists.boost.org/boost-announce/2011/03/0291.php[Accepted] -- Added in 1.47.0
+
+| DataFlow Signals|  Stjepan Rajko|  Jaakko Järvi|  September 1, 2008 - September 10, 2008| https://lists.boost.org/Archives/boost/2008/09/142198.php[Rejected] 
+
+| *Boost 1.36 Released* |  - |  Beman Dawes|  August 14, 2008| https://lists.boost.org/boost-announce/2008/08/0196.php[Notes] 
+
+| Finite State Machines|  Andrey Semashev|  Martin Vuille|  August 11, 2008 - August 27, 2008| https://lists.boost.org/boost-announce/2008/09/0202.php[Rejected] (https://lists.boost.org/boost-announce/2008/09/0203.php[Notes] ) 
+
+| Review Wizard Status Report| - |  John Phillips|  2008 May 16| https://www.boost.org/development/report-may-2008.html[Report] 
+
+| Egg|  Shunsuke Sogame|  Dan Marsden|  March 31, 2008 - April 13, 2008| https://lists.boost.org/boost-announce/2008/05/0192.php[Rejected] 
+
+| *Boost 1.35 Released* |  - | Beman Dawes|  March 29, 2007| https://lists.boost.org/boost-announce/2008/03/0183.php[Notes] 
+
+| Proto|  Eric Niebler|  Hartmut Kaiser|  March 1, 2008 - March 14, 2008| https://lists.boost.org/boost-announce/2008/04/0187.php[Accepted] -- Added in 1.37 
+
+| Floating Point Utilities|  Johan Råde|  John Maddock|  February 18, 2008 - February 27, 2008| https://lists.boost.org/boost-announce/2008/03/0179.php[Accepted] -- Added in 1.?? 
+
+| Logging|  John Torjo|  Gennadiy Rozental|  February 4, 2008 - February 13, 2008| https://lists.boost.org/boost-announce/2008/03/0181.php[Rejected] 
+
+| Flyweight|  Joaquín Mª López Muñoz|  Ion Gaztañaga|  January 21, 2008 - January 30, 2008| https://lists.boost.org/boost-announce/2008/02/0174.php[Accepted] -- Added in 1.38 
+
+| Singleton (fast-track)|  Tobias Schwinger|  John Torjo|  January 14, 2008 - January 18, 2008| https://lists.boost.org/boost-announce/2008/01/0171.php[Rejected] 
+
+| Switch|  Steven Watanabe|  Stejpan Rajko|  January 5, 2008 - January 13, 2008|    [.line-through]#https://lists.boost.org/boost-announce/2008/01/0166.php[Accepted Provisionally]# Orphaned 
+
+| Factory (fast-track)|  Tobias Schwinger|  John Torjo|  December 17, 2007 - December 21, 2007| https://lists.boost.org/boost-announce/2007/12/0161.php[Accepted] -- Added in 1.43 
+
+| Unordered Containers|  Daniel James|  Ion Gaztañaga|  December 7, 2007 - December 16, 2007| https://lists.boost.org/boost-announce/2007/12/0158.php[Accepted] -- Added in 1.36 
+
+| Forward (fast-track)|  Tobias Schwinger|  John Torjo|  December 3, 2007 - December 7, 2007| https://lists.boost.org/boost-announce/2007/12/0153.php[Accepted] -- Added in 1.43 
+
+| Review Wizard Status Report| - |  Ronald Garcia|  2007 November 16| https://www.boost.org/development/report-nov-2007.html[Report] 
+
+| Exception|  Emil Dotchevski|  Tobias Schwinger|  September 27, 2007 - October 7, 2007| https://lists.boost.org/boost-users/2007/11/31912.php[Accepted]   -- Added in 1.36 
+
+| Review Wizard Status Report| - |  Ronald Garcia|  2007 September 14| https://www.boost.org/development/report-sep-2007.html[Report] 
+
+| Scope Exit|  Alexander Nasonov|    [.line-through]#Jody Hagins#   John R. Phillips |  August 13, 2007 - August 22, 2007-| https://lists.boost.org/boost-announce/2008/05/0190.php[Accepted] -- Added in 1.38 
+
+| Time Series|  Eric Niebler|  John R. Phillips|  July 30, 2007 - August 13, 2007| [.line-through]#https://lists.boost.org/boost-announce/2007/08/0142.php[Accepted]#   https://lists.boost.org/Archives/boost/2010/05/167128.php[Orphaned] 
+
+| *Boost 1.34.1 Released* |  - | Thomas Witt|  July 24, 2007| https://lists.boost.org/boost-announce/2007/07/0135.php[Notes] 
+
+| *Boost 1.34.0 Released* |  - | Thomas Witt|  May 12, 2007| https://lists.boost.org/boost-announce/2007/05/0131.php[Notes] 
+
+| Globally Unique Identifier|  Andy Tompkins|  Hartmut Kaiser|  April 30, 2007 - May 10, 2007|    [.line-through]#https://lists.boost.org/boost-announce/2007/05/0134.php[Accepted Provisionally]#   https://lists.boost.org/boost-announce/2009/01/0221.php[Accepted] -- Added in 1.42 
+
+| Math Toolkit|  John Maddock|  Matthias Schabel|  April 11, 2007 - April 27, 2007| https://lists.boost.org/boost-announce/2007/05/0129.php[Accepted] -- Added in 1.35 
+
+| Quantitative Units|  Matthias Schabel|  John R. Phillips|  March 26, 2007 - April 4, 2007| https://lists.boost.org/boost-announce/2007/04/0126.php[Accepted] -- Added in 1.36 
+
+| Intrusive Containers|  Ion Gaztañaga|  Joaquín Mª López Muñoz|  March 12, 2007 - March 21, 2007| https://lists.boost.org/boost-announce/2007/04/0122.php[Accepted] -- Added in 1.35 
+
+| Bimap|  Matias Capeletto|  Ion Gaztañaga|  February 15 2007- March 2, 2007| https://lists.boost.org/Archives/boost/2007/03/117351.php[Accepted] -- Added in 1.35 
+
+| Accumulators|  Eric Niebler|  John R. Phillips|  January 29, 2007 - February 7, 2007| https://lists.boost.org/boost-announce/2007/02/0114.php[Accepted] -- Added in 1.36 
+
+| Function Types (Re-review)|  Tobias Schwinger|  Tom Brinkman|  2006 November 6 - 2006 November 17| https://lists.boost.org/boost-announce/2006/11/0106.php[Accepted] -- Added in 1.35 
+
+| Generic Image Library|  Lubomir Bourdev|  Tom Brinkman|  2006 October 5 - 2006 October 25| https://lists.boost.org/Archives/boost/2006/11/112896.php[Accepted] -- Added in 1.35 
+
+| Message Passing|  Doug Gregor|  Jeremy Siek|  2006 September 6 - 2006 September 15| https://lists.boost.org/boost-announce/2006/09/0099.php[Accepted] -- Added in 1.35 
+
+| Physical Quantities System|  Andy Little|  Fred Bertsch|  2006 May 31 - 2006 June 9| https://lists.boost.org/boost-announce/2006/06/0096.php[Rejected] 
+
+| Pimpl Pointer|  Asger Mangaard|  Rene Rivera|  2006 May 15 - 2006 May 24| https://lists.boost.org/boost-announce/2006/10/0104.php[Rejected] 
+
+| Fusion|  Joel de Guzman|  Ronald Garcia|  2006 May 1 - 2006 May 10| https://lists.boost.org/boost-announce/2006/06/0094.php[Accepted] -- Added in 1.35 
+
+| Property Tree|  Marcin Kalicinski|  Thorsten Ottosen|  2006 April 18 - 2006 April 30| https://lists.boost.org/boost-announce/2006/05/0092.php[Accepted] -- Added in 1.41 
+
+| Promotion Traits (fast-track)|  Alexander Nasonov|  Tobias Schwinger|  2006 April 1 - 2006 April 9| https://lists.boost.org/boost-announce/2006/04/0086.php[Accepted] -- Added in 1.35 
+
+| Review Wizard Status Report| - | Tom Brinkman|  2006 March 30| https://www.boost.org/development/report-apr-2006.html[Report] 
+
+| Shmem (now Interprocess)|  Ion Gaztañaga|  Fred Bertsch|  2006 February 6 - 2006 February 15| https://lists.boost.org/boost-announce/2006/02/0083.php[Accepted] -- Added in 1.35 
+
+| Fixed Strings|  Reece Dunn|  Harmut Kaiser|  2006 January 19 - 2006 February 5| https://lists.boost.org/boost-announce/2006/02/0081.php[Rejected] 
+
+| Review Wizard Status Report| - |  Ronald Garcia|  2006 January 19| https://www.boost.org/development/report-jan-2006.html[Report] 
+
+| asio|  Christopher Kohlhoff|  Jeff Garland|  2005 December 10 - 2005 December 30| https://lists.boost.org/Archives/boost/2006/03/102287.php[Accepted] -- Added in 1.35 
+
+| *Boost 1.33.1 Released* |  - |  Doug Gregor|  2005 December 5| https://lists.boost.org/boost-announce/2005/12/0077.php[Notes] 
+
+| Review Wizard Status Report| - |  Ronald Garcia|  2005 December 1| https://lists.boost.org/boost-announce/2005/12/0076.php[Report] 
+
+| Logging Library|  John Torjo|  Hartmut Kaiser|  2005 November 7 - 2005 November 16th| https://lists.boost.org/boost-announce/2005/11/0075.php[Rejected] 
+
+| *Boost 1.33.1 Beta Released* |  - | Doug Gregor|  2005 November 9| https://lists.boost.org/boost-announce/2005/11/0073.php[Notes]  
+
+| binary_int|  Scott Schurr and Matt Calabrese|  Pavel Vozenilek|  2005 October 13 - 2005 October 20| https://lists.boost.org/boost-announce/2006/01/0078.php[Accepted] -- Added in 1.37. 
+
+| TR1|  John Maddock|  Beman Dawes|  2005 September 24 - 2005 October 5|  Accepted -- Added in 1.34
+
+| Xpressive|  Eric Niebler|  Thomas Witt|  2005 September 8 - 2005 September 18|  Accepted -- Added in 1.34
+
+| *Boost 1.33.0 Released* |  - | Doug Gregor|  17 August 2005| https://lists.boost.org/boost-announce/2005/08/0067.php[Notes]  
+
+| Function Types|  Tobias Schwinger|  John Maddock|  2005-Jun-6 to 2005-June-16|   [ .line-through]#https://lists.boost.org/boost-announce/2005/06/0066.php[Accepted Provisionally]#,   https://lists.boost.org/boost-announce/2006/11/0106.php[Accepted] -- Added in 1.35 
+
+| Typeof|  Arkadiy Vertleyb and
+		      Peder Holt|  Andy Little|  2005 May 20 - 2005 May 30|  Accepted -- Added in 1.34
+
+| Singleton|  Jason Hise|  Pavel Vozenilek|  2005 May 5 - 2005 May 15| https://lists.boost.org/boost-announce/2005/05/0062.php[Rejected] 
+
+| FOREACH Macro|  Eric Niebler|  Gennadiy Rozental|  2005 April 25 - 2005 May 1|  Accepted -- Added in 1.34
+
+| Hash|  Daniel James|  Thorsten Ottosen|  2005 Mar 21 - 2005 March 12|  Accepted -- Added in 1.33
+
+| State Chart|  Andreas Huber|  Pavel Vozenilek|  2005 Feb 23 - 2005 March 9|  Accepted -- Added in 1.34
+
+| Wave|  Hartmut Kaiser|  Tom Brinkman|  2005 Feb 7 - 2005 Feb 20|  Accepted -- Added in 1.33
+
+| Pointer Containers|  Thorsten Ottosen|  Pavol Droba|  2004 Sept 26 - Oct 5|  Accepted -- Added in 1.33
+
+| Named Params|  David Abrahams &
+		      Daniel Wallin|  Doug Gregor|  2004 Nov 1 - 2004 Nov 20|  Accepted -- Added in 1.33
+
+| Output Formatters|  Reece Dunn|  John Torjo|  2004 Sept 11 - Sept 25| https://lists.boost.org/Archives/boost/2004/10/74535.php[Rejected] 
+
+| Iostreams|  Jonathan Turkanis|  Jeff Garland|  2004 Aug 28 - Sep 11|  Accepted -- Added in 1.33
+
+| More IO|  Daryle Walker|  Tom Brinkman|  2004 Aug 21 - 28|  Rejected
+
+| Tribool|  Douglas Gregor|  Thomas Witt|  2004 May 19-29|  Accepted -- Added in 1.32
+
+| Assignment|  Thorsten Ottosen|  Tom Brinkman|  2004 Apr 1 - 11|  Accepted -- Added in 1.32
+
+| Serialization (re-review)|  Robert Ramey|  Jeff Garland|  2004 Apr 13 - 26|  Accepted -- Added in 1.32
+
+| Container Traits (now Range)|  Thorsten Ottosen|  Hartmut Kaiser|  2004 Apr 28 - May 7|  Accepted -- Added in 1.32
+
+| Indexed Set (now MultiIndex)|  Joaquín Mª López Muñoz|  Pavel Vozenilek|  2004 Mar 20 - 30| https://lists.boost.org/Archives/boost/2004/04/63582.php[Accepted] -- Added in 1.32 
+
+| Circular Buffer|  Jan Gaspar|  Pavel Vozenilek|  2004 Mar 5 - 15|  Accepted -- Added in 1.35
+
+| enable_if|  Jaakko Järvi & Jeremiah Willcock & Andrew Lumsdaine|  (fasttrack)|  Dec 2003|  Accepted -- added in 1.31
+
+| FC++|  Brian McNamara & Yannis Smaragdakis|  Mat Marcus|  2004 Feb 14 - Mar 1|  Rejected
+
+| Numeric Conversions Library|  Fernando Cacciola|  Thorsten Ottosen|  8 - 22 Dec 2003|  Accepted -- added in 1.32
+
+| String Algorithm Library|  Pavol Droba|  Thorsten Ottosen|  17 - 30 Oct 2003|  Accepted -- added in 1.32
+
+| Shifted Pointer|  Philippe A. Bouchard|  Doug Gregor|  24 - 30 Sep 2003|  Rejected
+
+| Fixed-Point Decimal|  Bill Seymour|  Jens Maurer|  11 - 21 Jul 2003|  Rejected
+
+| Math Constants|  Paul A. Bristow|  Jaap Suter|  06 - 15 Jun 2003|  Rejected
+
+| Command Line & Config|  Vladimir Prus|  Aleksey Gurtovoy|  21 May - 03 Jun 2003|  Accepted -- added in 1.32
+
+| I/O Manipulators and Adaptors|  Daryle Walker|  Ed Brey|  27 Feb - 11 Mar 2003|  -
+
+| Variant|  Eric Friedman & Itay Maman|  Jeff Garland|  16 - 25 Feb 2003|  Accepted -- added in 1.31
+
+| Optional|  Fernando Cacciola|  Douglas Gregor|  09 - 18 Dec 2002|  Accepted -- added in 1.30
+
+| Serialization|  Robert Ramey|  Dave Abrahams|  02 - 11 Nov 2002|  Rejected
+
+| Spirit|  Joel de Guzman|  John Maddock|  11 - 20 Oct 2002|  Accepted -- added in 1.30
+
+| Minmax|  Hervé Bronnimann|  Thomas Witt|  28 Sep - 07 Oct 2002|  Accepted -- added in 1.32
+
+| Filesystem|  Beman Dawes|  William Kempf|  14 - 23 Sep 2002|  Accepted -- added in 1.30
+
+| Interval Arithmetic Library|  Hervé Bronnimann & Guillaume Melquiond & Sylvain Pion|  Beman Dawes|  31 Aug - 09 Sep 2002|  Accepted -- added in 1.30
+
+| Template Meta Programming Library MPL|  Aleksey Gurtovoy|  Douglas Gregor|  15 - 29 Jul 2002|  Accepted -- added in 1.30
+
+| uBLAS|  Joerg Walter & Mathias Koch|  Ed Brey|  21 Jun - 01 Jul 2002|  Accepted -- added in 1.29
+
+| Dynamic Bitset|  Chuck Alison & Jeremy Siek|  Mat Marcus|  08 - 17 Jun 2002|  Accepted -- added in 1.29
+
+| Date / Time|  Jeff Garland|  Darin Adler|  15 - 24 Apr 2002|  Accepted -- added in 1.29
+
+| Lambda|  Jaakko Järvi & Gary Powell|  Aleksey Gurtovoy|  08 - 20 Mar 2002|  Accepted and added
+
+| Signals|  Douglas Gregor|  William Kempf|  18 - 27 Feb 2002|  Accepted -- added in 1.29
+
+| I/O State Saver|  Daryle Walker|  Beman Dawes|  06 - 16 Feb 2002|  Accepted and added
+
+| printf-like formatting for iostreams|  Samuel Krempp|  Jens Maurer|  13 - 23 Jan 2002|  Accepted -- added in 1.29
+
+| Multi-array|  Ron Garcia|  John Maddock|  02 - 12 Jan 2002|  Accepted -- added in 1.29
+
+| Unit Test Library|  Gennadiy Rozental|  Jeremy Siek|  01 - 13 Dec 2001|  Accepted and added
+
+| GCD Library plus integer additions|  Daryle Walker|  Dave Abrahams|  17 - 26 Sep 2001|  -
+
+| Thread Library|  Bill Kempf|  Ed Brey|  Aug 30 - Sep 8|  Accepted and added
+
+| Config System|  John Maddock|  Doug Gregor|  Aug 20 - 29|  Accepted and added
+
+| Bind Library|  Peter Dimov|  Darin Adler|  Aug 10 - 19|  Accepted and added
+
+| Base from Member Library|  Daryle Walker|  Beman Dawes|  Jul 30 - Aug 9|  -
+
+| Coding Guidelines|  Dave Abrahams|  Aleksey Gurtovoy|  Jul 20 - 29|  -
+
+| Preprocessor Library|  Vesa Karvonen|  Jeremy Siek|  Jun 28 - Jul 9|  Accepted and added
+
+| Tuples Library|  Jaakko Järvi|  Beman Dawes|  Jun 17 - 26|  Accepted and added
+
+| Function Library|  Doug Gregor|  John Maddock|  Jun 6 - 16|  Accepted and added
+
+| Tokenizer|  John Bandela|  Doug Gregor|  May 28 - Jun 6|  Accepted and added
+
+| Special Functions|  Hubert Holin|  Jens Maurer|  May 18 - 27|  Accepted and added
+|===
+
+== See Also
+
+* xref:user-guide:ROOT:boost-history.adoc[]
+* xref:contributor-guide:ROOT:release-process.adoc[Contributor Guide: Release Process]
+
+
