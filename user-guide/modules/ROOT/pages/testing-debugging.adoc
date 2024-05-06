@@ -182,4 +182,4 @@ Other libraries that might help you with testing and debugging include:
 
 * boost:bind[] and boost:lambda[]: These libraries allow for the creation of small, unnamed function objects at the point where they are used. These can be useful in writing concise tests.
 
-* boost:mpl[]: A MetaProgramming Library, though not exclusively for testing or debugging, this library can be helpful in writing compile-time tests.
+* boost:mp11[]: A MetaProgramming Library, though not exclusively for testing or debugging, this library can be helpful in writing compile-time tests.
