@@ -1,0 +1,142 @@
+////
+Copyright (c) 2024 The C++ Alliance, Inc. (https://cppalliance.org)
+
+Distributed under the Boost Software License, Version 1.0. (See accompanying
+file LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
+
+Official repository: https://github.com/boostorg/website-v2-docs
+////
+= Implementation Variation Techniques
+:navtitle: Implementation Variations
+
+This topic discusses the separation of interface and implementation.
+
+The interface specifications for boost.org library components (as well as for quality software in general) are conceptually separate from implementations of those interfaces. This may not be obvious, particularly when a component is implemented entirely within a header, but this separation of interface and implementation is always assumed. From the perspective of those concerned with software design, portability, and standardization, the interface is what is important, while the implementation is just a detail.
+
+Dietmar Kühl, one of the original Boost contributors, comments _"The main contribution is the interface, which is augmented with an implementation, proving that it is possible to implement the corresponding class and providing a free implementation."_
+
+== Implementation Variations
+
+There may be a need for multiple implementations of an interface, to accommodate either platform dependencies or performance tradeoffs. Examples of platform dependencies include compiler shortcomings, file systems, thread mechanisms, and graphical user interfaces. The classic example of a performance tradeoff is a fast implementation that uses a lot of memory versus a slower implementation which uses less memory.
+
+Boost libraries generally use a configuration header, `boost/config.hpp`, to capture compiler and platform dependencies. Although the use of `boost/config.hpp` is not required, it is the preferred approach for simple configuration problems.
+
+== Boost Policy
+
+The Boost policy is to avoid platform dependent variations in interface specifications, but supply implementations which are usable over a wide range of platforms and applications. That means Boost libraries will use the techniques below described as appropriate for dealing with platform dependencies.
+
+The Boost policy toward implementation variations designed to enhance performance is to avoid them unless the benefits greatly exceed the full costs. The term _full costs_ is intended to include both tangible costs like extra maintenance, and intangible cost like increased difficulty in user understanding.
+
+== Techniques for Providing Implementation Variations
+
+Several techniques may be used to provide implementation variations. Each is appropriate in some situations, and not appropriate in others.
+
+=== Single General Purpose Implementation
+
+The first technique is to simply not provide implementation variation at all. Instead, provide a single general-purpose implementation, and forgo the increased complexity implied by all other techniques.
+
+[cols="1,4",stripes=none,frame=none]
+|===
+| *Appropriate* | When it is possible to write a single portable implementation which has reasonable performance across a wide range of platforms. Particularly appropriate when alternative implementations differ only in esoteric ways.
+| *Not appropriate* | When implementation requires platform specific features, or when there are multiple implementations possible with widely differing performance characteristics.
+|===
+
+In design discussions, some implementation is often alleged to be much faster than another, yet a timing test discovers no significant difference. The lesson is that while algorithmic differences may affect speed dramatically, coding differences such as changing a class from virtual to non-virtual members or removing a level of indirection are unlikely to make any measurable difference unless deep in an inner loop. And even in an inner loop, modern CPUs often execute such competing code sequences in the same number of clock cycles! A single general purpose implementation is often just fine.
+
+Or as Donald Knuth said in _Computing Surveys, vol 6, #4, p 268_, _"Premature optimization is the root of all evil."_.
+
+=== Macros
+
+While the evils of macros are well known, there remain a few cases where macros are the preferred solution:
+
+- Preventing multiple inclusion of headers via `#include` guards.
+- Passing minor configuration information from a configuration header to other files.
+
+[cols="1,4",stripes=none,frame=none]
+|===
+| *Appropriate* | For small compile-time variations that would otherwise be costly or confusing to install, use, or maintain. More appropriate to communicate within and between library components than to communicate with library users.
+| *Not appropriate* | If other techniques will do.
+|===
+
+To minimize the negative aspects of macros:
+
+- Only use macros when they are clearly superior to other techniques. Otherwise they should be viewed as a last resort.
+- Names should be all uppercase and begin with the namespace name. This will minimize the chance of name collisions. For example, the `#include` guard for a boost header called `foobar.h` might be named `BOOST_FOOBAR_H`.
+
+=== Separate Files
+
+A library component can have multiple variations, each contained in its own separate file or files. The files for the most appropriate variation are copied to the appropriate include or implementation directories at installation time.
+
+The way to provide this approach in Boost libraries is to include specialized implementations as separate files in separate sub-directories in the .ZIP distribution file. For example, the structure within the .ZIP distribution file for a library named `foobar` which has both default and specialized variations might look something like:
+
+```cpp
+foobar.h                // The default header file
+foobar.cpp              // The default implementation file
+readme.txt              // Readme explains when to use which files
+self_contained/foobar.h // A variation with everything in the header
+linux/foobar.cpp        // Implementation file to replace the default
+win32/foobar.h          // Header file to replace the default
+win32/foobar.cpp        // Implementation file to replace the default
+```
+
+[cols="1,4",stripes=none,frame=none]
+|===
+| *Appropriate* | When different platforms require different implementations, or when there are major performance differences between possible implementations.
+| *Not appropriate* | When it makes sense to use more that one of the variations in the same installation.
+|===
+
+=== Separate Components
+
+Rather than have several implementation variations of a single component, supply several separate components. For example, the Boost library currently supplies `scoped_ptr` and `shared_ptr` classes rather than a single `smart_ptr` class parameterized to distinguish between the two cases. There are several ways to make the component choice:
+
+- Hardwired by the programmer during coding.
+- Chosen by programmer written runtime logic (trading off some extra space, time, and program complexity for the ability to select the implementation at run-time.)
+
+[cols="1,4",stripes=none,frame=none]
+|===
+| *Appropriate* | When the interfaces for the variations diverge, and when it is reasonable to use more than one of the variations. When run-time selection of implementation is called for.
+| *Not appropriate* | When the variations are data type, traits, or specialization variations which can be better handled by making the component a template. Also not appropriate when choice of variation is best done by some setup or installation mechanism outside of the program itself. Thus usually not appropriate to cope with platform differences.
+|===
+
+Note:: There is a related technique where the interface is specified as an abstract (pure virtual) base class (or an interface definition language), and the implementation choice is passed off to some third-party, such as a dynamic-link library or object-request broker. While that is a powerful technique, it is way beyond the scope of this discussion.
+
+=== Template-Based Approaches
+
+Turning a class or function into a template is often an elegant way to cope with variations. Template-based approaches provide optimal space and time efficiency in return for constraining the implementation selection to compile time.
+
+Important template techniques include:
+
+- _Data type parameterization_: this allows a single component to operate on a variety of data types and is why templates were originally invented.
+- _Traits parameterization_; if parameterization is complex, bundling up aspects into a single traits helper class can allow great variation while hiding messy details. The C++ Standard Library provides several examples of this idiom, such as `iterator_traits<>` (24.3.1 lib.iterator.traits) and `char_traits<>` (21.2 lib.char.traits).
+- _Specialization_: a template parameter can be used purely for the purpose of selecting a specialization. For example:
+
+```cpp
+SomeClass<fast>  my_fast_object;  // fast and small are empty classes
+SomeClass<small> my_small_object; // used just to select specialization
+```
+
+[cols="1,4",stripes=none,frame=none]
+|===
+| *Appropriate* | When the need for variation is due to data type or traits or is performance-related like selecting among several algorithms, and when a program might reasonably use more than one of the variations.
+| *Not appropriate* | When the interfaces for variations are different, or when choice of variation is best done by some mechanism outside of the program itself. Thus usually not appropriate to cope with platform differences.
+|===
+
+== Acknowledgements
+
+This topic was originally written by xref:in-memoriam-beman-dawes.adoc[Beman Dawes], in 2001.
+
+== See Also
+
+The following libraries demonstrate the importance of separating interfaces from implementations:
+
+* boost:any[] : the implementation internally uses type erasure techniques to hide the actual type of the stored value, decoupling the interface from the concrete implementation details.
+
+* boost:function[] : the implementation internally uses type erasure techniques to store and invoke callable objects polymorphically, decoupling the interface from the specific callable object type.
+
+* boost:optional[] : the implementation internally uses _tag dispatching_ techniques to handle the presence or absence of the optional value, decoupling the interface from the concrete implementation details.
+
+Note:: Tag dispatching is a technique used to select different implementations of a function, or algorithm, based on the types or properties of its arguments.
+
+* boost:iterator[] : the implementation internally uses iterator traits and type traits to provide a generic interface for working with iterators, decoupling the interface from the specific iterator type and implementation.
+
+* boost:mp11[] : the implementation internally uses template metaprogramming techniques to perform type-level computations, decoupling the interface from the specific type and template instantiation.
