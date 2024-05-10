@@ -75,3 +75,4 @@ For details of the Release Process that are pertinent to users, refer to the
 User Guide xref:user-guide:ROOT:release-process.adoc[].
 
 * xref:testing/boost-test-matrix.adoc[]
+* xref:formal-reviews:ROOT:review-results.adoc[]
