@@ -189,6 +189,45 @@ jobs:
           SOURCE_DIR: site-pages/
           DEST_DIR: ${{ format('site-pages/{0}', github.ref_name) }}
 
+      - name: AWS Sync release-notes (production on GKE)
+        if: matrix.publish && (github.ref == 'refs/heads/master' || github.ref == 'refs/heads/develop') && github.event_name == 'push' && github.repository == 'boostorg/website-v2-docs'
+        uses: jakejarvis/s3-sync-action@master
+        with:
+          args: --follow-symlinks --delete --exclude '.git/*' --exclude 'build/lib/*'
+        env:
+          AWS_S3_BUCKET: ${{ secrets.BOOST_PRODUCTION_BUCKET }}
+          AWS_ACCESS_KEY_ID: ${{ secrets.BOOST_PRODUCTION_KEY_ID }}
+          AWS_SECRET_ACCESS_KEY: ${{ secrets.BOOST_PRODUCTION_ACCESS_KEY }}
+          AWS_REGION: 'us-east-2'
+          SOURCE_DIR: release-notes/
+          DEST_DIR: ${{ format('release-notes/{0}', github.ref_name) }}
+
+      - name: AWS Sync release-notes (staging on GKE)
+        if: matrix.publish && (github.ref == 'refs/heads/master' || github.ref == 'refs/heads/develop') && github.event_name == 'push' && github.repository == 'boostorg/website-v2-docs'
+        uses: jakejarvis/s3-sync-action@master
+        with:
+          args: --follow-symlinks --delete --exclude '.git/*' --exclude 'build/lib/*'
+        env:
+          AWS_S3_BUCKET: ${{ secrets.BOOST_STAGE_BUCKET }}
+          AWS_ACCESS_KEY_ID: ${{ secrets.BOOST_STAGE_KEY_ID }}
+          AWS_SECRET_ACCESS_KEY: ${{ secrets.BOOST_STAGE_ACCESS_KEY }}
+          AWS_REGION: 'us-east-2'
+          SOURCE_DIR: release-notes/
+          DEST_DIR: ${{ format('release-notes/{0}', github.ref_name) }}
+
+      - name: AWS Sync release-notes (cppal_dev on GKE)
+        if: matrix.publish && (github.ref == 'refs/heads/master' || github.ref == 'refs/heads/develop') && github.event_name == 'push' && github.repository == 'boostorg/website-v2-docs'
+        uses: jakejarvis/s3-sync-action@master
+        with:
+          args: --follow-symlinks --delete --exclude '.git/*' --exclude 'build/lib/*'
+        env:
+          AWS_S3_BUCKET: ${{ secrets.CPPAL_DEV_BUCKET }}
+          AWS_ACCESS_KEY_ID: ${{ secrets.CPPAL_DEV_KEY_ID }}
+          AWS_SECRET_ACCESS_KEY: ${{ secrets.CPPAL_DEV_ACCESS_KEY }}
+          AWS_REGION: 'us-east-2'
+          SOURCE_DIR: release-notes/
+          DEST_DIR: ${{ format('release-notes/{0}', github.ref_name) }}
+
       - name: Publish Releases as Artifacts
         if: matrix.publish && github.event_name == 'push'
         uses: actions/upload-artifact@v3
