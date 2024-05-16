@@ -1,0 +1,59 @@
+////
+Copyright (c) 2024 The C++ Alliance, Inc. (https://cppalliance.org)
+Distributed under the Boost Software License, Version 1.0. (See accompanying
+file LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
+Official repository: https://github.com/boostorg/website-v2-docs
+////
+= Release Notes
+These are the release notes for Boost version X.XX.XX.
+== New Libraries
+// List new libraries in lexicographical order (library name, purpose, authors)
+// Example:
+// * Accumulators : performs incremental calculation, and collection of statistical accumulators, from Eric Niebler.
+* Library 1 name : purpose, author
+* Library 2 name : purpose, author
+== Updated Libraries
+// List updated libraries in lexicographical order.
+// Example:
+// * Interprocess
+// ** Dependency on Boost.TypeTraits removed
+// ** Shared memory feature added
+// ** Support for C++ 03 removed
+* Library 1 name
+** update 1 text
+*** indented note for update 1, if needed
+*** another indented note for update 1, if needed
+** update 2 text
+** update 3 text
+* Library 2 name
+** update 1 text
+*** indented note for update 1, if needed
+*** another indented note for update 1, if needed
+** update 2 text
+** update 3 text
+== Compilers Tested
+// Edit this section as approrpriate
+Boost's primary test compilers are:
+* Linux:
+** Clang, C++03: 3.4, 3.5, 3.6, 3.7, 3.8, 3.9, 12.0.0, 13.0.0, 14.0.0, 15.0.0
+** Clang, C++11: 3.4, 11.0.0, 13.0.0, 14.0.0, 15.0.0
+** Clang, C++14: 3.5, 3.6, 3.7, 3.8, 3.9, 4.0, 5.0, 12.0.0, 13.0.0, 14.0.0, 15.0.0
+** Clang, C++17: 6.0.1, 7.0.0, 8.0.0, 9.0.0, 10.0.0, 11.0.0, 12.0.0, 13.0.0, 14.0.0, 15.0.0
+** Clang, C++20: 11.0.0, 12.0.0, 13.0.0, 14.0.0, 15.0.0
+** GCC, C++03: 4.6.3, 11, 12
+** GCC, C++11: 4.7.3, 4.8.5, 11, 12
+** GCC, C++14: 5.4.0, 6.4.0, 7.3.0, 8.0.1, 9.1.0, 11, 12
+** GCC, C++17: 7.3.0, 8.0.1, 9.1.0, 11, 12
+** GCC, C++20: 8.0.1, 9.1.0, 10, 11, 12
+* OS X:
+** Apple Clang, C++03: 11.0.3
+** Apple Clang, C++11: 11.0.3
+** Apple Clang, C++14: 11.0.3
+** Apple Clang, C++17: 11.0.3
+** Apple Clang, C++20: 11.0.3
+* Windows:
+** Visual C++: 10.0, 11.0, 12.0, 14.0, 14.1, 14.2, 14.3
+== Acknowledgements
+// Example:  * Marshall Clow and Glen Fernandes managed this release.
+* ack 1
+* ack 2
