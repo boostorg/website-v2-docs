@@ -39,3 +39,4 @@ If issues are found with a release that has gone public, and the issues are impo
 
 For details of the Release Process that are pertinent to contributors, refer to the Contributor Guide xref:contributor-guide:ROOT:release-process.adoc[].
 
+* xref:formal-reviews:ROOT:review-results.adoc[]

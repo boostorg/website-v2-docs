@@ -9,10 +9,11 @@ Official repository: https://github.com/boostorg/website-v2-docs
 = Boost Formal Review Schedule
 :navtitle: Review Schedule
 
-Reviews are scheduled when the review wizards approve a review manager and agree with the manager and author on dates. See xref:submissions.adoc[] for more information.
+Reviews are scheduled when the xref:managing-reviews.adoc#reviewwizards[Review Wizards] approve a review manager and agree with the manager and author on dates. See xref:submissions.adoc[] for more information.
 
 In addition to upcoming reviews, the schedule includes recent reviews already completed; that helps track review manager assignments and libraries reviewed but not yet posted on the website. There is often a lag between acceptance and site posting as authors address issues raised in the formal review.
 
+[[currentschedule]]
 == Current Schedule
 
 [cols="1,1,1,2,2",stripes=even,options="header",frame=none]
@@ -25,6 +26,7 @@ In addition to upcoming reviews, the schedule includes recent reviews already co
 
 In order for a review to proceed, a Boost member must volunteer to manage the review. This should be someone with experience with the review process and knowledge of the library's domain. If you would like to volunteer to become a review manager, refer to xref:managing-reviews.adoc[].
 
+[[pastreviewresults]]
 == Past Review Results and Milestones
 
 [cols="1,1,1,2,2",stripes=even,options="header",frame=none]
