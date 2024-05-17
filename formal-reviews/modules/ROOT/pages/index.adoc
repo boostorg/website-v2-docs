@@ -7,103 +7,21 @@ file LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
 Official repository: https://github.com/boostorg/website-v2-docs
 ////
 = Introduction to Boost Formal Reviews
-:navtitle: Formal Reviews
+:navtitle: Introduction
 
-When you feel that your library is ready for entry into Boost, you need to find at least one member (but preferably several) of the Boost community who is willing to publicly endorse your library for entry into Boost. A simple method of achieving this is to post to the https://www.boost.org/community/groups.html[Boost developers mailing list] a short description of your library, links to its Github and documentation, and a request for endorsements.
+This Formal Review Guide provides information for the three main roles in library submission:
 
-It is expected that those who endorse a library for review will have performed at least a cursory check of the library's suitability for Boost in terms of documentation, fit with the rest of Boost and usefulness. A public endorsement of a library for review means that from an initial glance, they believe that the library has a reasonable chance to be accepted during a formal review. The expectation is that these endorsers will themselves review of the library during formal review period, though this is not binding.
+. The authors who wish to submit the library to the Boost collection: refer to the xref:submissions.adoc[].
+. The _Review Manager_ who's job it is to lead and coordinate the review process: refer to xref:managing-reviews.adoc[].
+. The developers who test the submission, or elements of it, and write up their findings: refer to xref:writing-reviews.adoc[].
 
-Once you have a list of people who have publicly endorsed your library for review, email the https://www.boost.org/community/reviews.html#Wizard[Review Wizards] to request that your library be added to the https://www.boost.org/community/review_schedule.html[Boost Formal Review Schedule] where the following information will be shown:
+This guide also includes a comprehensive history of submissions, most with links to the rationale and announcements made during the evaluation process: refer to the xref:review-results.adoc[].
 
-[disc]
-* Submission
-* Submitter
-* Links to Source (GitHub), Documentation (HTML website)
- and any Incubator entry
-* Review Manager
-* Review Dates
+== Feedback
 
-== Seek a Review Manager
-
-In order to schedule a formal review, the author must find a capable volunteer to manage the review. This should be someone with knowledge of the library domain, and experience with the review process. See <<The Role of Review Manager>> for the responsibilities of the Review Manager.
-
-Authors can find community members interested in managing reviews through discussion of the library on the developer
-list. If no one steps forward to volunteer to manage the review, it is appropriate to contact an experienced Boost
-member who showed interest in the library. Be considerate that managing a review is a serious commitment; for this reason, it's better to contact the member off-list.
-
-If you cannot find a Review Manager after 3 weeks using the means above, and your submission is targeting eventual
-standardization, there is a list of Boost regulars who are also WG21 committee members who have volunteered to act as review managers in such cases. Please try them in the order listed:
- 
- . Zach Laine
- . Micheal Caisse
- . Matt Calabrese
- . EdwardDiener
- . Louis Dionne
- . Vinnie Falco
- . Glen Fernandes
- . David Sankel
-
-
-Once a potential Review Manager has been identified, contact the https://www.boost.org/community/reviews.html#Wizard[Review Wizards] for approval. The wizards approve Review Managers based on their level of participation in the Boost  community.
-
-The Review Wizards will coordinate with both the author and Review Manager to schedule a date convenient for both.
-
-== Formal Review
-
-Before your formal review begins, double-, triple-, and quadruple-check your library. Verify that every code example
-works, that all unit tests pass on at least two compilers on at least two major operating systems, and run your documentation through a spelling and grammar checker.
-
-Please do not modify your library on its *master* branch during a review. Instead, modify a separate *develop* branch in response to feedback and reviews. For bigger ticket items of work, open issues on your issue tracker so interested people can track the fixing of specific issues raised.
-
-The Review Manager will consider all the reviews made by members of the community and arrive at a decision on
-whether your library is rejected, conditionally accepted or unconditionally accepted. They will post a report summarizing the decision publicly. If conditions are attached to acceptance, you will need to implement those conditions or else undergo an additional formal review.
-
-== Fast Track Reviews
-
-To qualify for a fast track review:
-
-[disc]
-* The component must be small.
-
-* The technique must be already in use in Boost libraries and the new component provides a common implementation.
-
-* A full Boost-conformant implementation is available in the sandbox.
-
-* The Review Wizard determines that the proposal qualifies for fast track review.
-
-=== Fast Track Procedure
-
-. The Boost Review Wizard posts a review announcement to the main Boost developer's list. The fast track review period will normally last for 5 days. No two fast-track reviews will run in parallel. Fast track reviews may run during full reviews, though generally, this is to be avoided.
-
-. After the review period ends, the submitter will post a review summary containing proposed changes to the reviewed implementation.
-
-. The Review Wizard will accept or reject the proposed library and proposed changes.
-
-. After applying the proposed changes, the component is checked into the repository like any other library.
-
-== Mini-Reviews
-
-It is possible that in the review process some issues might need to be fixed as a _requirement_ for acceptance. If a review does result in conditions on acceptance, the Review Manager may request a _Mini-Review_, at a later date, to determine if the conditions have been met. The Mini-Review is usually conducted by the same Review Manager.
-
-== Boost Website Posting
-
-Once an accepted library is ready for inclusion on the Boost web site, the submitter is typically given Boost repository write access, and expected to check-in and maintain the library there. Contact the moderators if you need write access or direct use of the repository isn't possible for you.
-
-== Library Maintainer's Rights and Responsibilities
-
-By submitting a library to Boost, you accept responsibility for maintaining your library, or finding a qualified volunteer to serve as maintainer. You must be willing to put your library and documentation under a Boost-compatible license.
-
-You will be expected to respond to reasonable bug reports and questions on time and to participate as needed in discussions of your library on the Boost mailing lists.
-
-You are free to change your library in any way you wish, and you are encouraged to actively make improvements. However, peer review is an important part of the Boost process and as such you are also encouraged to get feedback from the Boost community before making substantial changes to the interface of an accepted library.
-
-If at some point you no longer wish to serve as maintainer of your library, it is your responsibility to make this known to the Boost community, and to find another individual to take your place.
-
-Libraries which have been abandoned will be put in care of the Community Maintenance Team.
-
+Feedback on any aspect of this documentation is encouraged, and is available by creating a https://github.com/cppalliance/site-docs/issues[New Issue].
 
 == See Also
 
 * xref:contributor-guide:ROOT:index.adoc[]
 * xref:user-guide:ROOT:index.adoc[]
-
