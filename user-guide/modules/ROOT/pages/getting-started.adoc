@@ -8,8 +8,8 @@ Official repository: https://github.com/boostorg/website-v2-docs
 ////
 = Getting Started
 :navtitle: Getting Started
-:latest_tag: 1_82_0
-:latest_version: 1.82.0
+:latest_tag: 1_85_0
+:latest_version: 1.85.0
 :release_basename: boost_{latest_tag}
 :release_filename: {release_basename}.tar.bz2
 :release_zip_filename: {release_basename}.zip
@@ -340,7 +340,7 @@ Windows::
 [source,none,subs="attributes+"]
 ----
 curl {release_zip_url} <1>
-7z x {release_filename} <2>
+tar -xf {release_zip_filename} <2>
 cd {release_basename} <3>
 ----
 
@@ -348,7 +348,7 @@ cd {release_basename} <3>
 <.> Extract the files into `{release_basename}`
 <.> Change the current working directory to `{release_basename}`
 
-Note that these instructions assume you have https://curl.se/[Curl,window="_blank"] and https://www.7-zip.org/[7-Zip,window="_blank"] installed on your system.
+Note:: These instructions assume you have https://curl.se/[Curl,window="_blank"] and https://gnuwin32.sourceforge.net/packages/gtar.htm[Tar,window="_blank"] installed on your system, and your OS is Windows 10 or later.
 
 --
 
@@ -358,7 +358,7 @@ Linux::
 [source,bash,subs="attributes+"]
 ----
 wget {release_url} <1>
-tar xvfj {release_filename} <2>
+tar xf {release_filename} <2>
 cd {release_basename} <3>
 ----
 
@@ -373,7 +373,7 @@ macOS::
 [source,bash,subs="attributes+"]
 ----
 curl {release_url} <1>
-tar xvfj {release_filename} <2>
+tar xf {release_filename} <2>
 cd {release_basename} <3>
 ----
 
