@@ -1,6 +1,6 @@
 .doc {
   color: var(--doc-font-color);
-  font-size: var(--doc-font-size);
+  font-family: var(--doc-font-family);
   hyphens: auto;
   line-height: var(--doc-line-height);
   margin: var(--doc-margin);
@@ -25,7 +25,7 @@
 .doc h5,
 .doc h6 {
   color: var(--heading-font-color);
-  font-weight: var(--heading-font-weight);
+  font-weight: var(--alt-heading-font-weight);
   hyphens: none;
   line-height: 1.3;
   margin: 1rem 0 0;
@@ -33,7 +33,7 @@
 }
 
 .doc > h1.page:first-child {
-  font-size: calc(36 / var(--rem-base) * 1rem);
+  font-size: var(--doc-heading-font-size);
   margin: 1.5rem 0;
 }
 
@@ -151,7 +151,7 @@
 }
 
 .doc pre {
-  font-size: calc(16 / var(--rem-base) * 1rem);
+  font-size: inherit;
   line-height: 1.5;
   margin: 0;
 }
@@ -219,7 +219,8 @@
 }
 
 .doc table.tableblock {
-  font-size: calc(15 / var(--rem-base) * 1rem);
+  font-size: inherit;
+  border: 0;
 }
 
 .doc .tablecontainer,
@@ -242,6 +243,11 @@
   padding: 0.5rem;
 }
 
+.doc table.tableblock tr th {
+  background-color: var(--color-smoke-70);
+  border: 1px solid var(--color-gray-15);
+}
+
 .doc table.tableblock,
 .doc table.tableblock > * > tr > * {
   border: 0 solid var(--table-border-color);
@@ -261,11 +267,11 @@
 
 .doc table.grid-all > thead th,
 .doc table.grid-rows > thead th {
-  border-bottom-width: 2.5px;
+  border-bottom-width: 1px;
 }
 
 .doc table.frame-all {
-  border-width: 1px;
+  border-width: 0;
 }
 
 .doc table.frame-ends {
@@ -333,11 +339,14 @@
 
 .doc .admonitionblock {
   margin: 1.4rem 0 0;
+  padding: 1rem;
+  background: var(--admonition-background);
+  border: var(--admonition-border);
 }
 
 .doc .admonitionblock p,
 .doc .admonitionblock td.content {
-  font-size: calc(16 / var(--rem-base) * 1rem);
+  font-size: inherit;
 }
 
 .doc .admonitionblock td.content > :not(.title):first-child,
@@ -346,7 +355,7 @@
 }
 
 .doc .admonitionblock pre {
-  font-size: calc(15 / var(--rem-base) * 1rem);
+  font-size: inherit;
 }
 
 .doc .admonitionblock > table {
@@ -355,56 +364,57 @@
   width: 100%;
 }
 
+.doc .admonitionblock > table tr {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25em;
+}
+
 .doc .admonitionblock td.content {
-  padding: 1rem 1rem 0.75rem;
-  background: var(--admonition-background);
+  padding: 0 1.7rem;
   width: 100%;
   word-wrap: anywhere;
 }
 
 .doc .admonitionblock .icon {
-  position: absolute;
-  top: 0;
-  left: 0;
-  font-size: calc(15 / var(--rem-base) * 1rem);
-  padding: 0 0.5rem;
-  height: 1.25rem;
+  font-size: inherit;
+  padding: 0 0 0 1.25rem;
   line-height: 1;
   font-weight: var(--admonition-label-font-weight);
-  text-transform: uppercase;
-  border-radius: 0.45rem;
-  transform: translate(-0.5rem, -50%);
+  color: var(--color-black) !important;
+  min-height: 1.25rem;
 }
 
 .doc .admonitionblock.caution .icon {
-  background-color: var(--caution-color);
   color: var(--caution-on-color);
+  background: no-repeat url("../img/caution.svg");
 }
 
 .doc .admonitionblock.important .icon {
-  background-color: var(--important-color);
   color: var(--important-on-color);
+  background: no-repeat url("../img/important.svg");
 }
 
 .doc .admonitionblock.note .icon {
-  background-color: var(--note-color);
   color: var(--note-on-color);
+  background: no-repeat url("../img/note.svg");
 }
 
 .doc .admonitionblock.tip .icon {
-  background-color: var(--tip-color);
   color: var(--tip-on-color);
+  background: no-repeat url("../img/tip.svg");
 }
 
 .doc .admonitionblock.warning .icon {
-  background-color: var(--warning-color);
   color: var(--warning-on-color);
+  background: no-repeat url("../img/warning.svg");
 }
 
 .doc .admonitionblock .icon i {
   display: inline-flex;
   align-items: center;
   height: 100%;
+  padding: 0 0.35rem;
 }
 
 .doc .admonitionblock .icon i::after {
@@ -459,18 +469,18 @@
 
 .doc .quoteblock,
 .doc .verseblock {
-  background: var(--quote-background);
-  border-left: 5px solid var(--quote-border-color);
+  background: var(--color-smoke-10);
+  border-left: 3px solid var(--quote-border-color);
   color: var(--quote-font-color);
 }
 
 .doc .quoteblock {
-  padding: 0.25rem 2rem 1.25rem;
+  padding: 0.25rem 1.5rem 1.25rem;
 }
 
 .doc .quoteblock .attribution {
   color: var(--quote-attribution-font-color);
-  font-size: calc(15 / var(--rem-base) * 1rem);
+  font-size: inherit;
   margin-top: 0.75rem;
 }
 
@@ -487,7 +497,7 @@
 }
 
 .doc .verseblock {
-  font-size: 1.15em;
+  font-size: inherit;
   padding: 1rem 2rem;
 }
 
@@ -624,12 +634,12 @@
 .doc .videoblock .title,
 .doc .tableblock caption {
   color: var(--caption-font-color);
-  font-size: calc(16 / var(--rem-base) * 1rem);
+  font-size: inherit;
   font-style: var(--caption-font-style);
   font-weight: var(--caption-font-weight);
   hyphens: none;
   letter-spacing: 0.01em;
-  padding-bottom: 0.075rem;
+  padding-bottom: 0.35rem;
 }
 
 .doc .tableblock caption {
@@ -706,8 +716,8 @@
 .doc .exampleblock > .content,
 .doc details.result > .content {
   background: var(--example-background);
-  border: 0.25rem solid var(--example-border-color);
-  border-radius: 0.5rem;
+  border: 0.125rem solid var(--example-border-color);
+  border-radius: 0;
   padding: 0.75rem;
 }
 
@@ -750,11 +760,12 @@
 .doc pre.highlight code,
 .doc .listingblock pre:not(.highlight),
 .doc .literalblock pre {
-  background: var(--pre-background);
-  box-shadow: inset 0 0 1.75px var(--pre-border-color);
+  background: none;
+  border: 1px solid var(--color-gray-15);
   display: block;
   overflow-x: auto;
-  padding: 0.875em;
+  padding: 0.685em;
+  font-size: inherit;
 }
 
 .doc .listingblock > .content {

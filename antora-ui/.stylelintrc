@@ -3,5 +3,8 @@
   "rules": {
     "comment-empty-line-before": null,
     "no-descending-specificity": null,
+    "value-keyword-case": ["lower", {
+      "ignoreKeywords": ["/^BlinkMacSystemFont$/", "/^Roboto$/", "/^Oxygen-Sans$/", "/^Ubuntu$/", "/^Cantarell$/", "/^Helvetica Neue$/", "/^Consolas$/", "/^Menlo$/", "/^Courier$/"]
+    }]
   }
 }

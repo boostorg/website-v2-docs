@@ -22,6 +22,7 @@ body {
   color: var(--body-font-color);
   font-family: var(--body-font-family);
   line-height: var(--body-line-height);
+  font-size: inherit;
   margin: 0;
   tab-size: 4;
   word-wrap: anywhere; /* aka overflow-wrap; used when hyphens are disabled or aren't sufficient */
