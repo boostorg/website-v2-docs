@@ -6,66 +6,39 @@ file LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
 
 Official repository: https://github.com/boostorg/website-v2-docs
 ////
-= Portability Hints: Borland C++ 5.5.1
+= Portability Hints using Borland C++ Compilers
 :navtitle: Borland Portability
 :idprefix:
 :idseparator: -
 
-*Legacy content, currently being updated.*
+It is a general aim for boost libraries to be xref:requirements/portability-requirements.adoc[Portable]. The primary means for achieving this goal is to adhere to ISO Standard pass:[C++]. However, ISO pass:[C++] is a broad and complex standard and most compilers are not fully conformant to ISO pass:[C++] yet. In order to achieve portability in the light of this restriction, it seems advisable to get acquainted with those language features that some compilers do not fully implement yet.
 
-It is a general aim for boost libraries to be [portable](/development/requirements.html#Portability). The
- primary means for achieving this goal is to adhere to ISO
- Standard C++. However, ISO C++ is a broad and complex standard
- and most compilers are not fully conformant to ISO C++ yet. In
- order to achieve portability in the light of this restriction,
- it seems advisable to get acquainted with those language
- features that some compilers do not fully implement yet.
+This topic gives portability hints on some language features of the Borland pass:[C++] version 5.5.1 compiler. Furthermore, the appendix presents additional problems with Borland pass:[C++] version 5.5. Borland pass:[C++] 5.5.1 is a freely available command-line compiler for Win32: https://developerinsider.co/download-and-install-borland-c-compiler-on-windows-10/[Download and Install Borland C++ Compiler on Windows 10 & 11].
 
+Each section below describes a particular issue, complete with sample source code to demonstrate the effect. Most sample code herein has been verified to compile with gcc 2.95.2 and Comeau pass:[C++] 4.2.44.
 
-This page gives portability hints on some language features
- of the Borland C++ version 5.5.1 compiler. Furthermore, the
- appendix presents additional problems with Borland C++ version
- 5.5. Borland C++ 5.5.1 is a freely available command-line
- compiler for Win32 available at <http://www.borland.com/>.
+== Preprocessor Symbol
 
+The preprocessor symbol `__BORLANDC__` is defined for all Borland pass:[C++] compilers. Its value is the version number of the compiler interpreted as a hexadecimal number. The following table lists some known values.
 
-Each entry in the following list describes a particular
- issue, complete with sample source code to demonstrate the
- effect. Most sample code herein has been verified to compile
- with gcc 2.95.2 and Comeau C++ 4.2.44.
-
-
-== Preprocessor symbol
-
-
-The preprocessor symbol `__BORLANDC__` is defined
- for all Borland C++ compilers. Its value is the version number
- of the compiler interpreted as a hexadecimal number. The
- following table lists some known values.
-
-| Compiler | `__BORLANDC__` value |
-| --- | --- |
-| Borland C++ Builder 4 | 0x0540 |
-| Borland C++ Builder 5 | 0x0550 |
-| Borland C++ 5.5 | 0x0550 |
-| Borland C++ 5.5.1 | 0x0551 |
-| Borland C++ Builder 6 | 0x0560 |
-
+[cols="1,1",options="header",stripes=even,frame=none]
+|===
+| Compiler | `__BORLANDC__` value 
+| Borland pass:[C++] Builder 4 | 0x0540 
+| Borland pass:[C++] Builder 5 | 0x0550 
+| Borland pass:[C++] 5.5 | 0x0550 
+| Borland pass:[C++] 5.5.1 | 0x0551 
+| Borland pass:[C++] Builder 6 | 0x0560 
+|===
 
 == Core Language
 
-
 === Mixing `using`-declarations and `using`-directives
 
+Mixing `using`-directives (which refer to whole namespaces) and namespace-level `using`-declarations (which refer to individual identifiers within foreign namespaces) causes ambiguities where there are none. The following code fragment illustrates this:
 
-Mixing `using`-directives (which refer to whole
- namespaces) and namespace-level `using`-declarations
- (which refer to individual identifiers within foreign
- namespaces) causes ambiguities where there are none. The
- following code fragment illustrates this:
-```
-
-namespace N {
+```cpp
+namespace N {  
   int x();
 }
 
@@ -73,66 +46,53 @@ using N::x;
 using namespace N;
 
 int main()
-{
+{  
   &x;     // Ambiguous overload
 }
-
 ```
 
-=== `using`-declarations for class templates
+=== `using`-declarations for Class Templates
 
+Identifiers for class templates can be used as arguments to `using`-declarations as any other identifier. However, the following code fails to compile with Borland pass:[C++]:
 
-Identifiers for class templates can be used as arguments to
- `using`-declarations as any other identifier.
- However, the following code fails to compile with Borland
- C++:
-```
-
+```cpp
 template<class T>
 class X { };
 
 namespace N
-{
-  // "cannot use template 'X<T>' without specifying specialization parameters"
+{  
+// "cannot use template 'X<T>' without specifying specialization parameters"  
   using ::X;
 };
-
 ```
 
-=== Deduction of constant arguments to function templates
+=== Deduction of Constant Arguments to Function Templates
 
+Template function type deduction should omit top-level constness. However, this code fragment instantiates `f<const int>(int)`:
 
-Template function type deduction should omit top-level
- constness. However, this code fragment instantiates "f<const
- int>(int)":
-```
-
+```cpp
 template<class T>
 void f(T x)
-{
-        x = 1;  // works
-        (void) &x;
-        T y = 17;
-        y = 20;  // "Cannot modify a const object in function f<const int>(int)"
-        (void) &y;
+{        
+  x = 1;  // works        
+  (void) &x;        
+  T y = 17;       
+  y = 20;  // "Cannot modify a const object in function f<const int>(int)"        
+  (void) &y;
 }
 
 int main()
-{
-        const int i = 17;
-        f(i);
+{        
+  const int i = 17;        
+  f(i);
 }
-
 ```
 
-=== Resolving addresses of overloaded functions
+=== Resolving Addresses of Overloaded Functions
 
+Addresses of overloaded functions are not in all contexts properly resolved (`std:13.4 [over.over]`); here is a small example:
 
-Addresses of overloaded functions are not in all contexts
- properly resolved (std:13.4 [over.over]); here is a small
- example:
-```
-
+```cpp
 template<class Arg>
 void f( void(\*g)(Arg) );
 
@@ -143,37 +103,29 @@ template<class T>
 void h2(T);
 
 int main()
-{
-  void (\*p)(int) = h;            // this works (std:13.4-1.1)
-  void (\*p2)(unsigned char) = h2;    // this works as well (std:13.4-1.1)
-  f<int>(h2);  // this also works (std:13.4-1.3)
-
-  // "Cannot generate template specialization from h(int)",
-  // "Could not find a match for f<Arg>(void (\*)(int))"
-  f<double>(h);   // should work (std:13.4-1.3)
-
-  f( (void(\*)(double))h);  // C-style cast works (std:13.4-1.6 with 5.4)
-
-  // "Overloaded 'h' ambiguous in this context"
+{  
+  void (\*p)(int) = h;                // this works (std:13.4-1.1)  
+  void (\*p2)(unsigned char) = h2;    // this works as well (std:13.4-1.1)  
+  f<int>(h2);                         // this also works (std:13.4-1.3)
+  
+  // "Cannot generate template specialization from h(int)",  
+  // "Could not find a match for f<Arg>(void (\*)(int))"  
+  f<double>(h);                       // should work (std:13.4-1.3)
+  
+  f( (void(\*)(double))h);            // C-style cast works (std:13.4-1.6 with 5.4)
+  
+  // "Overloaded 'h' ambiguous in this context"  
   f(static_cast<void(\*)(double)>(h)); // should work (std:13.4-1.6 with 5.2.9)
 }
-
 ```
 
-**Workaround:** Always use C-style casts when
- determining addresses of (potentially) overloaded
- functions.
-
+Workaround:: Always use C-style casts when determining addresses of (potentially) overloaded functions.
 
 === Converting `const char *` to `std::string`
 
+Implicitly converting `const char *` parameters to `std::string` arguments fails if template functions are explicitly instantiated (it works in the usual cases, though):
 
-Implicitly converting `const char *` parameters
- to `std::string` arguments fails if template
- functions are explicitly instantiated (it works in the usual
- cases, though):
-```
-
+```cpp
 #include <string>
 
 template<class T>
@@ -181,33 +133,21 @@ void f(const std::string & s)
 {}
 
 int main()
-{
+{  
   f<double>("hello");  // "Could not find a match for f<T>(char \*)"
 }
-
-
 ```
 
-**Workaround:** Avoid explicit template
- function instantiations (they have significant problems with
- Microsoft Visual C++) and pass default-constructed unused dummy
- arguments with the appropriate type. Alternatively, if you wish
- to keep to the explicit instantiation, you could use an
- explicit conversion to `std::string` or declare the
- template function as taking a `const char *`
- parameter.
+Workaround:: Avoid explicit template function instantiations (they have significant problems with Microsoft Visual pass:[C++]) and pass default-constructed unused dummy arguments with the appropriate type. Alternatively, if you wish to keep to the explicit instantiation, you could use an explicit conversion to `std::string` or declare the template function as taking a `const char *` parameter.
 
+=== Dependent Default Arguments for Template Value Parameters
 
-=== Dependent default arguments for template value parameters
+Template value parameters which default to an expression dependent on previous template parameters don't work:
 
-
-Template value parameters which default to an expression
- dependent on previous template parameters don't work:
-```
-
+```cpp
 template<class T>
 struct A
-{
+{  
   static const bool value = true;
 };
 
@@ -216,169 +156,118 @@ template<class T, bool v = A<T>::value>
 struct B {};
 
 int main()
-{
+{  
   B<int> x;
 }
-
-
 ```
 
-**Workaround:** If the relevant non-type
- template parameter is an implementation detail, use inheritance
- and a fully qualified identifier (for example,
- ::N::A<T>::value).
+Workaround:: If the relevant non-type template parameter is an implementation detail, use inheritance and a fully qualified identifier (for example, `::N::A<T>::value`).
 
+=== Partial Ordering of Function Templates
 
-=== Partial ordering of function templates
+Partial ordering of function templates, as described in `std:14.5.5.2 [temp.func.order]`, does not work:
 
-
-Partial ordering of function templates, as described in
- std:14.5.5.2 [temp.func.order], does not work:
-```
-
+```cpp
 #include <iostream>
 
 template<class T> struct A {};
 
 template<class T1>
 void f(const A<T1> &)
-{
+{  
   std::cout << "f(const A<T1>&)\n";
 }
 
 template<class T>
 void f(T)
-{
+{  
   std::cout << "f(T)\n";
 }
 
 int main()
-{
-  A<double> a;
-  f(a);   // output: f(T)  (wrong)
+{  
+  A<double> a;  
+  f(a);   // output: f(T)  (wrong)  
   f(1);   // output: f(T)  (correct)
 }
-
 ```
 
-**Workaround:** Declare all such functions
- uniformly as either taking a value or a reference
- parameter.
+Workaround:: Declare all such functions uniformly as either taking a value or a reference parameter.
 
+=== Instantiation with Member Function Pointer
 
-=== Instantiation with member function pointer
+When directly instantiating a template with some member function pointer, which is itself dependent on some template parameter, the compiler cannot cope:
 
-
-When directly instantiating a template with some member
- function pointer, which is itself dependent on some template
- parameter, the compiler cannot cope:
-```
-
+```cpp
 template<class U> class C { };
 template<class T>
 class A
-{
+{  
   static const int v = C<void (T::\*)()>::value;
 };
-
 ```
 
-**Workaround:** Use an intermediate
- `typedef`:
-```
+Workaround::: Use an intermediate `typedef`:
 
+```cpp
 template<class U> class C { };
 template<class T>
 class A
-{
-  typedef void (T::\*my_type)();
+{  
+  typedef void (T::\*my_type)();  
   static const int v = C<my_type>::value;
 };
-
 ```
 
-(Extracted from e-mail exchange of David Abrahams, Fernando
- Cacciola, and Peter Dimov; not actually tested.)
+Note:: Extracted from an e-mail exchange between David Abrahams, Fernando Cacciola, and Peter Dimov; not actually tested.
 
+== Math Library
 
-== Library
+=== Function `double std::abs(double)` Missing
 
+The function `double std::abs(double)` should be defined (`std:26.5-5 [lib.c.math]`), but it is not:
 
-=== Function `double std::abs(double)`
- missing
-
-
-The function `double std::abs(double)` should be
- defined (std:26.5-5 [lib.c.math]), but it is not:
-```
-
+```cpp
 #include <cmath>
 
 int main()
-{
+{  
   double (\*p)(double) = std::abs;  // error
 }
-
 ```
 
-Note that `int std::abs(int)` will be used
- without warning if you write `std::abs(5.1)`.
+Note:: `int std::abs(int)` will be used without warning if you write `std::abs(5.1)`.
 
+Similar remarks apply to seemingly all of the other standard math functions, where Borland pass:[C++] fails to provide `float` and `long double` overloads.
 
-Similar remarks apply to seemingly all of the other standard
- math functions, where Borland C++ fails to provide
- `float` and `long double` overloads.
+Workaround:: Use `std::fabs` instead if type genericity is not required.
 
+== Appendix: Additional Issues with Borland C++ Version 5.5
 
-**Workaround:** Use `std::fabs`
- instead if type genericity is not required.
+These issues are documented mainly for historic reasons. If you are still using Borland pass:[C++] version 5.5, you are strongly encouraged to obtain an upgrade to version 5.5.1, which fixes the issues described in the following section.
 
+=== Inline Friend Functions in Template Classes
 
-== Appendix: Additional issues with Borland C++ version 5.5
+If a friend function of some class has not been declared before the friend function declaration, the function is declared at the namespace scope surrounding the class definition. Together with class templates and inline definitions of friend functions, the code in the following fragment should declare (and define) a non-template function `bool N::f(int,int)`, which is a friend of `class N::A<int>`. However, Borland pass:[C++] v5.5 expects the function `f` to be declared beforehand:
 
-
-These issues are documented mainly for historic reasons. If
- you are still using Borland C++ version 5.5, you are strongly
- encouraged to obtain an upgrade to version 5.5.1, which fixes
- the issues described in this section.
-
-
-=== Inline friend functions in template classes
-
-
-If a friend function of some class has not been declared
- before the friend function declaration, the function is
- declared at the namespace scope surrounding the class
- definition. Together with class templates and inline
- definitions of friend functions, the code in the following
- fragment should declare (and define) a non-template function
- "bool N::f(int,int)", which is a friend of class
- N::A<int>. However, Borland C++ v5.5 expects the function
- f to be declared beforehand:
-```
-
+```cpp
 namespace N {
-template<class T>
-class A
-{
-  // "f is not a member of 'N' in function main()"
-  friend bool f(T x, T y) { return x < y; }
-};
+  template<class T>
+  class A
+  { 
+    // "f is not a member of 'N' in function main()"  
+    friend bool f(T x, T y) { return x < y; }
+  };
 }
 
 int main()
-{
-  N::A<int> a;
+{  
+    N::A<int> a;
 }
-
 ```
 
-This technique is extensively used in boost/operators.hpp.
- Giving in to the wish of the compiler doesn't work in this
- case, because then the "instantiate one template, get lots of
- helper functions at namespace scope" approach doesn't work
- anymore. Defining BOOST_NO_OPERATORS_IN_NAMESPACE (a define
- BOOST_NO_INLINE_FRIENDS_IN_CLASS_TEMPLATES would match this
- case better) works around this problem and leads to another
- one, see [using-template].
+This technique is extensively used in `boost/operators.hpp`. Giving in to the wish of the compiler doesn't work in this case, because then the _instantiate one template, get lots of helper functions at namespace scope_ approach doesn't work anymore. Defining BOOST_NO_OPERATORS_IN_NAMESPACE (a define BOOST_NO_INLINE_FRIENDS_IN_CLASS_TEMPLATES would match this case better) works around this problem and leads to another one, see the template discussion in <<Core Language>>.
 
+== See Also
+
+* xref:user-guide:ROOT:header-organization-compilation.adoc#toolset[User Guide Toolsets]
