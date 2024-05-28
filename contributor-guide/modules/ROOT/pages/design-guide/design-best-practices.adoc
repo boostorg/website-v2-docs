@@ -6,12 +6,12 @@ file LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
 
 Official repository: https://github.com/boostorg/website-v2-docs
 ////
-= Design Guide
-:navtitle: Design Guide
+= Design Best Practices
+:navtitle: Best Practices
 
 Use these guidelines as a checklist for preparing the content a library submission. Not every guideline applies to every library, but a reasonable effort to comply is expected.
 
-== Design and Programming
+== Overview
 
 This section covers the general best-practices for the design of a new library.
 
@@ -26,11 +26,11 @@ This section covers the general best-practices for the design of a new library.
 
 * Use the pass:[C++] Standard Library or other Boost libraries, but only when the benefits outweigh the costs. Do not use libraries other than the pass:[C++] Standard Library or Boost.
 
-* Read Implementation Variation to see how to supply performance, platform, or other implementation variations.
+* Read xref:user-guide:ROOT:implementation-variations.adoc[Implementation Variation Techniques] to see how to supply performance, platform, or other implementation variations.
 
 * Browse through the Best Practices Handbook for ideas and links to source code in existing Boost libraries.
 
-* Read the guidelines for libraries with separate source, to see how to ensure that compiled link libraries meet user expectations.
+* Read the guidelines for xref:design-guide/separate-compilation.adoc[Separate Compilation], to see how to ensure that compiled link libraries meet user expectations.
 
 == Source Files
 

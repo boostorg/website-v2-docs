@@ -7,7 +7,7 @@ file LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
 Official repository: https://github.com/boostorg/website-v2-docs
 ////
 = License Requirements
-:navtitle: License Requirements
+:navtitle: License
 
 The preferred way to meet the license requirements is to use xref:user-guide:ROOT:bsl.adoc[]. See license information. If for any reason you do not intend to use the Boost Software License, please discuss the issues on the Boost developers mailing list first.
 

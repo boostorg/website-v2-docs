@@ -7,7 +7,7 @@ file LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
 Official repository: https://github.com/boostorg/website-v2-docs
 ////
 = Documentation Components
-:navtitle: Documentation Components
+:navtitle: Components
 
 == Introduction
 
@@ -24,7 +24,7 @@ such as introductory, tutorial, example, and rationale content. With
 those things in mind, we suggest the following guidelines for Boost
 library documentation.
 
-== Standards Conforming Documentation
+== Conforming to Standards
 
 The documentation structure required for the pass:[C++] Standard is an
 effective way to describe the technical specifications for a library.
@@ -94,7 +94,7 @@ code is intended as a specification of equivalence of a construct to
 another construct, not necessarily as the way the construct must be
 implemented.link:#footnote2[(2)]
 
-==== Detailed specifications
+==== Detailed Specifications
 
 The detailed specifications each contain the following elements:
 
@@ -146,13 +146,13 @@ Complexity requirements specified in the library clauses are upper bounds, and i
 
 These conventions are for describing implementation-defined types, and member functions.
 
-==== Type descriptions
+==== Type Descriptions
 
 The Requirements subclauses may describe names that are used to specify constraints on template arguments.
 
 == More Information
 
-=== Function semantic element explanations
+=== Function Semantic Element Explanations
 
 The function semantic element description above is taken directly from the C++ standard, and is quite terse. Here is a
 more detailed explanation of each of the elements.
@@ -251,7 +251,7 @@ give users a lot of insight into why a library is designed the way it
 is. More importantly, it can help prevent "fixing" something that wasn't
 really broken as the library matures.
 
-== Web Reference Documentation
+== Web References
 
 Boost library documentation is often accessed via the World Web. Using
 search engines, a page deep in the reference content could be viewed

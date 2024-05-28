@@ -17,8 +17,8 @@ Official repository: https://github.com/boostorg/website-v2-docs
 ** xref:requirements/organization-requirements.adoc[]
 ** xref:requirements/library-metadata.adoc[]
 
-* Design Guide
-** xref:design-guide/design-guide.adoc[]
+* Design
+** xref:design-guide/design-best-practices.adoc[]
 ** xref:design-guide/headers.adoc[]
 ** xref:design-guide/backwards-compatibility.adoc[]
 ** xref:design-guide/separate-compilation.adoc[]
@@ -43,7 +43,7 @@ Official repository: https://github.com/boostorg/website-v2-docs
 ** xref:testing/continuous-integration.adoc[]
 ** xref:testing/fuzzing.adoc[]
 
-* The Super-project
+* The Super-Project
 ** xref:superproject/overview.adoc[]
 ** xref:superproject/getting-started.adoc[]
 ** xref:superproject/library-maintenance.adoc[]

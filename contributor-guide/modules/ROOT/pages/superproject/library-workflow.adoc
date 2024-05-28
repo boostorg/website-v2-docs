@@ -6,7 +6,7 @@ file LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
 
 Official repository: https://github.com/boostorg/website-v2-docs
 ////
-= Super-project Library Workflow
+= Super-Project Library Workflow
 :navtitle: Library Workflow
 
 Workflow is the term used to describe the steps a Boost library developer follows to create, maintain, and release a library. The workflow presented here is designed for Boost's individual libraries. The workflow for the Super-project may differ.

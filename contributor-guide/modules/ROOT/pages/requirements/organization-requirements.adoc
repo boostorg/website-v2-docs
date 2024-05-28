@@ -7,7 +7,7 @@ file LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
 Official repository: https://github.com/boostorg/website-v2-docs
 ////
 = Organization Requirements
-:navtitle: Organization Requirements
+:navtitle: Organization
 
 The quality of the Boost libraries is not just about the APIs and code design. But also about presenting a consistent view to users of the libraries as a whole. Upon acceptance libraries must adhere to this directory and file structure:
 
@@ -21,7 +21,7 @@ The quality of the Boost libraries is not just about the APIs and code design. B
 |*doc*	|Sources to build with and built documentation for the library. If the library needs to build documentation from non-HTML files this location must be build-able with Boost Build.	|Required for all libraries.
 |*doc/html*	|Documentation (HTML) files.	|Required for all libraries with pregenerated documentation. And generated documentation must be generated here.
 |*example*	|Sample program files.	|Required if library has sample files. Which is highly recommended.
-|*index.html*	|Redirection to HTML documentation. Refer to xref:design-guide/design-guide.adoc#redirection[Design Guide/Redirection] for a template for this file.	|Required for all libraries.
+|*index.html*	|Redirection to HTML documentation. Refer to xref:design-guide/design-best-practices.adoc#redirection[Design Guide/Redirection] for a template for this file.	|Required for all libraries.
 |*include/boost/library*	|Header files for the library.	|Required for all libraries.
 |*meta*	|Meta-data about the library.	|Required for all libraries.
 |*meta/libraries.json*	|A JSON file containing information about the library, which is used to generate website and documentation for the Boost Libraries collection. Refer to xref:requirements/library-metadata.adoc[].	|Required for all libraries.
