@@ -9,7 +9,7 @@ Official repository: https://github.com/boostorg/website-v2-docs
 = Library Metadata
 :idprefix:
 :idseparator: -
-:navtitle: Library Metadata
+:navtitle: Metadata
      
 The sources for each library, or possibly a number of related libraries, is contained in a sub-module of the xref:version-control.adoc#super-project[Boost super-project].
 Each sub-module _must_ contain a file which describes the libraries that it contains. This is located at `meta/libraries.json`.

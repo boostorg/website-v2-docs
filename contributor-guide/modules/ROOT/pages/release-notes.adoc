@@ -17,7 +17,7 @@ For the former, the Boost community does not have a strict format for your libra
 
 For the latter, you will need to update a Boost history file with a succinct version of your completed release notes. These files do have a specified format, described in <<_update_boost_history>>.
 
-== Release Note Checklist
+== Checklist
 
 When writing release notes for your library remember that the main goal is to effectively communicate the changes to the end-users. It's always a good practice to put yourself in the mind set of your developers, and think about what information they would need and appreciate. Be brief, but not so brief that only a seasoned user of your library will understand the context.
 

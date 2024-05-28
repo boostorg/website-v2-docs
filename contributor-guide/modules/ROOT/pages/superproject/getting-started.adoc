@@ -6,7 +6,7 @@ file LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
 
 Official repository: https://github.com/boostorg/website-v2-docs
 ////
-= Getting Started with the Super-project
+= Getting Started with the Super-Project
 :navtitle: Getting Started
 
 Boost libraries reside in subdirectories under the `libs` directory. For example, the contents of the boost:filesystem[] library are in `libs/filesystem.` This includes the build scripts (in l`ibs/filesystem/build`), the source files (in `libs/filesystem/src`), the tests (in `libs/filesystem/test`), the documentation (in `libs/filesystem/doc`), and so on.

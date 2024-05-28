@@ -7,7 +7,7 @@ file LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
 Official repository: https://github.com/boostorg/website-v2-docs
 ////
 = Portability Requirements
-:navtitle: Portability Requirements
+:navtitle: Portability
 
 [disc]
 * A library's interface must be portable and not restricted to a particular compiler or operating system.

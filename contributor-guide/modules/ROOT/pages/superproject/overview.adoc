@@ -6,8 +6,8 @@ file LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
 
 Official repository: https://github.com/boostorg/website-v2-docs
 ////
-= Super-project Layout
-:navtitle: Super-project Layout
+= Super-Project Layout
+:navtitle: Layout
 
 This section covers the organization of the Boost pass:[C++] Libraries into separate, independently developable modules, each residing in its own repository, to facilitate development, integration, and selective inclusion of individual libraries.
 

@@ -13,7 +13,7 @@ Official repository: https://github.com/boostorg/website-v2-docs
 
 Header files are the place where a library comes into contact with user code and other libraries. To co-exist peacefully and productively, headers must be "good neighbors".
 
-== Boost Header Standards
+== Boost Standards
 
 Here are the standards for boost headers. Many of these are also reasonable guidelines for general use.
 
@@ -32,7 +32,7 @@ Here are the standards for boost headers. Many of these are also reasonable guid
 
 * Include the https://www.boost.org/doc/libs/1_83_0/boost/config.hpp[`boost/config.hpp`] if there is a need to deal with compiler or platform configuration issues.
 
-== Sample Header
+== Sample
 
 [source,cpp]
 ----
@@ -68,7 +68,7 @@ namespace boost {
 #endif  // include guard
 ----
 
-== Example Header Guards
+== Example Guards
 
 Many libraries will include a large number of .hpp header files in a tree structure of folders. Taking boost:beast[] as an example. The header guard code is:
 
@@ -103,7 +103,6 @@ And in the `beast\core\impl` subfolder there is another header named `async_base
 ----
 
 Refer to https://github.com/boostorg/beast/tree/c316c6bd3571991aeac65f0fc35fca9067bc7906/include/boost[beast/include/boost] to view the full hierarchy of folders and headers for this library.
-  
 
 === Coding Style
 
