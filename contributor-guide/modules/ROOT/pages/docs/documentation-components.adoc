@@ -44,7 +44,7 @@ applicable. link:#footnote1[(1)]:
 [disc]
 * <<Summary>>
 * <<Requirements>>
-* <<Detailed specifications>>
+* <<Detailed Specifications>>
 * <<References to the C++ Standard Library>>
 * <<References to the C Standard Library>>
 

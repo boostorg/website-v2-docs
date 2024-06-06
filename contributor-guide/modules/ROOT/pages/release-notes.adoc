@@ -13,7 +13,7 @@ Writing release notes is crucial for informing users about the changes made in t
 
 Two versions of your release notes need to be prepared: one for your library's own documentation, one for a Boost history that covers all libraries added or updated in a release. 
 
-For the former, the Boost community does not have a strict format for your libraries' version of release notes (and some libraries refer to release notes as a  _change log_ or _history_). Follow the <<_release_note_checklist>>.
+For the former, the Boost community does not have a strict format for your libraries' version of release notes (and some libraries refer to release notes as a  _change log_ or _history_). Follow the <<Checklist>>.
 
 For the latter, you will need to update a Boost history file with a succinct version of your completed release notes. These files do have a specified format, described in <<_update_boost_history>>.
 

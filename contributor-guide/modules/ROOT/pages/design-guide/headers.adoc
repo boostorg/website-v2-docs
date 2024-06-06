@@ -20,13 +20,13 @@ Here are the standards for boost headers. Many of these are also reasonable guid
 [disc]
 * Header filenames should have a .hpp (lowercase) extension.
 
-* Unless multiple inclusion is intended, wrap the header in `#ifndef` guards. Use a naming convention that minimizes the chance of clashes with macro names from other's code. The <<Sample Header>> uses the Boost convention of all uppercase letters, with the header name prefixed by the namespace name, followed by the relative path, and suffixed with HPP, separated by underscores. Refer also to the <<Example Header Guards>>.
+* Unless multiple inclusion is intended, wrap the header in `#ifndef` guards. Use a naming convention that minimizes the chance of clashes with macro names from other's code. The <<Sample>> uses the Boost convention of all uppercase letters, with the header name prefixed by the namespace name, followed by the relative path, and suffixed with HPP, separated by underscores. Refer also to the <<Example Guards>>.
 
 * Wrap the header contents in a namespace to prevent global namespace pollution. The namespace approach to pollution control is strongly preferred to older approaches such as adding funny prefixes to global names. Libraries which are designed to work well with other Boost libraries should be placed in namespace `boost`.
 
 * Make sure that a translation unit, consisting of just the contents of the header file, will compile successfully.
 
-* Place the header file in a sub-directory to prevent conflict with identically named header files in other libraries. The parent directory is added to the compiler's include search path. Then both your code and user code specifies the sub-directory in `#include` directives. Thus the header <<Sample Header>> would be included by `#include <boost/furball.hpp>`. Including from the current file directory using `#include "furball.hpp"` syntax is discouraged.
+* Place the header file in a sub-directory to prevent conflict with identically named header files in other libraries. The parent directory is added to the compiler's include search path. Then both your code and user code specifies the sub-directory in `#include` directives. Thus the header <<Sample>> would be included by `#include <boost/furball.hpp>`. Including from the current file directory using `#include "furball.hpp"` syntax is discouraged.
 
 * The preferred ordering for class definitions is `public` members, `protected` members, and finally `private` members.
 
@@ -106,7 +106,7 @@ Refer to https://github.com/boostorg/beast/tree/c316c6bd3571991aeac65f0fc35fca90
 
 === Coding Style
 
-The alert reader will have noticed that the <<Sample Header>> employs a certain coding style for indentation, positioning braces, commenting ending braces, and similar formatting issues. These stylistic issues are viewed as personal preferences and are not part of the Boost Header Policy.
+The alert reader will have noticed that the <<Sample>> header employs a certain coding style for indentation, positioning braces, commenting ending braces, and similar formatting issues. These stylistic issues are viewed as personal preferences and are not part of the Boost Header Policy.
 
 
 
