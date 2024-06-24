@@ -303,6 +303,263 @@ Correct - backwards-compatibility should be maintained.
 +
 An exact timeline requires issues to be resolved, though later in 2024 is the current plan-of-record.
 
+== Other Languages
+
+. *Have developers written applications in languages such as Python that have successfully used the Boost libraries?*
++
+Yes, developers have successfully used Boost libraries in applications written in languages other than pass:[C++] by leveraging language interoperability features and creating bindings or wrappers.
++
+The most notable example is the use of boost:python[], a library specifically designed to enable seamless interoperability between pass:[C++] and Python. boost:python[] allows developers to expose pass:[C++] classes, functions, and objects to Python, enabling the use of the libraries from Python code. This has been used extensively in scientific computing, game development, and other fields where the performance of pass:[C++] is combined with the ease of Python.
++
+Here is an example, wrapping a pass:[C++] class for use with boost:python[] and including exception handling:
++
+[source,cpp]
+----
+// my_class.cpp
+#include <boost/python.hpp>
+#include <iostream>
+#include <stdexcept>
+
+class MyClass {
+public:
+    void hello() {
+        std::cout << "Hello from C++!" << std::endl;
+    }
+
+    int add(int a, int b) {
+        return a + b;
+    }
+
+    void throw_exception() {
+        throw std::runtime_error("An error occurred in C++ code");
+    }
+};
+
+// Function to translate C++ exceptions to Python exceptions
+void translate_runtime_error(const std::runtime_error& e) {
+    PyErr_SetString(PyExc_RuntimeError, e.what());
+}
+
+BOOST_PYTHON_MODULE(my_module) {
+    using namespace boost::python;
+    // Register the exception translator
+    register_exception_translator<std::runtime_error>(translate_runtime_error);
+
+    class_<MyClass>("MyClass")
+        .def("hello", &MyClass::hello)
+        .def("add", &MyClass::add)
+        .def("throw_exception", &MyClass::throw_exception);
+}
+
+----
++
+You need to compile this pass:[C++] code into a shared library that Python can load. Here's an example command for compiling using g++ on Linux. Make sure to adjust the Python include path and boost:python[] library name according to your system's configuration:
++
+----
+g++ -shared -fPIC -I/usr/include/python3.8 -lboost_python38 -o my_module.so my_class.cpp
+----
++
+Next, write the Python code that will use the wrapped class:
++
+[source,python]
+----
+# test_my_module.py
+import my_module
+
+# Create an instance of MyClass
+my_class_instance = my_module.MyClass()
+
+# Call the hello method
+my_class_instance.hello()
+
+# Call the add method
+result = my_class_instance.add(3, 4)
+print(f"The result of adding 3 and 4 is: {result}")
+
+# Call the throw_exception method and handle the exception
+try:
+    my_class_instance.throw_exception()
+except RuntimeError as e:
+    print(f"Caught an exception: {e}")
+
+----
++
+Ensure that the shared library (`my_module.so`) is in the same directory as your Python script or in a directory that's included in the Python module search path. Then run the script:
++
+----
+python3 test_my_module.py
+----
++
+When you run the Python script, you should see the following output:
++
+----
+Hello from C++!
+The result of adding 3 and 4 is: 7
+Caught an exception: An error occurred in C++ code
+----
++
+Note:: By registering an exception translator, you can ensure that pass:[C++] exceptions are correctly translated into Python exceptions, making your pass:[C++] library more robust and easier to use from Python.
+
+. *What real world applications have combined Python with the Boost libraries?*
++
+Here are some examples:
++
+* https://www.blender.org/[Blender] is a widely-used open-source 3D creation suite. It supports the entirety of the 3D pipeline, including modeling, rigging, animation, simulation, rendering, compositing, and motion tracking. Blender uses Boost libraries for various purposes, including memory management, string manipulation, and other utility functions. Blender's Python API, which allows users to script and automate tasks, integrates with pass:[C++] code using boost:python[].
++
+* https://pytorch.org/[PyTorch] is an open-source machine learning library based on the Torch library. It is used for applications such as natural language processing and computer vision. PyTorch uses several Boost libraries to handle low-level operations efficiently. boost:python[] is used to create bindings between pass:[C++] and Python, allowing PyTorch to provide a seamless interface for Python developers.
++
+* https://opencv.org/[OpenCV] (Open Source Computer Vision Library) is an open-source computer vision and machine learning software library. OpenCV's Python bindings use boost:python[] to interface between the pass:[C++] core and Python. This allows Python developers to use OpenCV's powerful pass:[C++] functions with Python syntax.
++
+* https://docs.enthought.com/canopy/2.1/index.html[Enthought Canopy] is a comprehensive Python analysis environment and distribution for scientific and analytic computing. It includes a Python distribution, an integrated development environment (IDE), and many additional tools and libraries.
+
+. *Are there some solid examples of real world applications that have combined C# with the Boost libraries?*
++
+Here are some great examples:
++ 
+* In the world of game development, several projects use pass:[C++] for performance-critical components and C# for scripting and higher-level logic. The Boost libraries are often used in the pass:[C++] components, in particular to leverage their algorithms, and data structures. https://unity.com/[Unity] allows the use of native plugins written in pass[C++]. These plugins can use Boost libraries for various functionalities, such as pathfinding algorithms or custom data structures, and then be called from C# scripts within Unity.
++
+* Financial applications often require high performance and reliability. They may use pass:[C++] for core processing and Boost libraries for tasks like date-time calculations, serialization, and multithreading. C# is used for GUI and integration with other enterprise systems. Trading platforms and risk management systems sometimes use Boost libraries for backend processing and interoperate with C# components for the user interface and data reporting.
++
+* Scientific computing applications that need high-performance computation often use pass:[C++] for core algorithms. C# is great for visualization, user interaction, and orchestration. Computational chemistry and physics applications sometimes use Boost for numerical computations and data handling, while C# provides the tools for managing simulations and visualizing results.
+
+. *Can I see some sample code of how to wrap Boost functions to be available for use in a C# app?*
++
+The following code shows how to create a wrapper for a pass:[C++] class that uses Boost, and then calls this from a C# application. The handling of return values and exceptions are shown too:
++
+[source,cpp]
+----
+// my_class.cpp
+#include <boost/algorithm/string.hpp>
+#include <iostream>
+#include <stdexcept>
+#include <string>
+
+class MyClass {
+public:
+    std::string to_upper(const std::string& input) {
+        if (input.empty()) {
+            throw std::runtime_error("Input string is empty");
+        }
+        return boost::to_upper_copy(input);
+    }
+};
+----
++
+Next, create a wrapper to expose the class to .NET:
++
+[source,cpp]
+----
+// MyClassWrapper.cpp
+#include "my_class.cpp"
+#include <string>
+
+public ref class MyClassWrapper {
+private:
+    MyClass* instance;
+
+public:
+    MyClassWrapper() {
+        instance = new MyClass();
+    }
+
+    ~MyClassWrapper() {
+        this->!MyClassWrapper();
+    }
+
+    !MyClassWrapper() {
+        delete instance;
+    }
+
+    System::String^ ToUpper(System::String^ input) {
+        try {
+            std::string nativeInput = msclr::interop::marshal_as<std::string>(input);
+            std::string result = instance->to_upper(nativeInput);
+            return gcnew System::String(result.c_str());
+        } catch (const std::runtime_error& e) {
+            throw gcnew System::Runtime::InteropServices::ExternalException(gcnew System::String(e.what()));
+        }
+    }
+};
+----
++
+Now create the C# application that uses the wrapper:
++
+[source,csharp]
+----
+// Program.cs
+using System;
+
+class Program {
+    static void Main() {
+        MyClassWrapper myClass = new MyClassWrapper();
+        
+        try {
+            string result = myClass.ToUpper("hello world");
+            Console.WriteLine("Result: " + result);
+            
+            // Test with an empty string to trigger the exception
+            result = myClass.ToUpper("");
+            Console.WriteLine("Result: " + result);
+        } catch (System.Runtime.InteropServices.ExternalException e) {
+            Console.WriteLine("Caught an exception: " + e.Message);
+        }
+    }
+}
+----
++
+Compile the C++ code into a DLL:
++
+----
+cl /c /EHsc my_class.cpp
+----
++
+Compile the wrapper:
++
+----
+cl /clr /EHsc /I"path\to\boost" MyClassWrapper.cpp my_class.obj /link /OUT:MyClassWrapper.dll
+----
++
+Finally, create a C# project (say, using Visual Studio), add a reference to the `MyClassWrapper.dll`, then build and run the application:
++
+----
+Result: HELLO WORLD
+Caught an exception: Input string is empty
+----
+
+. *Does the Java Native Interface (JNI) work with the Boost libraries?*
++
+Through the use of the Java Native Interface (JNI) or Java Native Access (JNA), developers can call Boost libraries from Java applications. It involves creating native methods in Java that are implemented in pass:[C++] and using Boost libraries as part of those implementations. Here is a simple example (without error handling or return values):
++
+[source,cpp]
+----
+// C++ implementation
+#include <jni.h>
+#include "MyClass.h"
+
+JNIEXPORT void JNICALL Java_MyClass_hello(JNIEnv* env, jobject obj) {
+    MyClass myClass;
+    myClass.hello();
+}
+----
++
+[source,java]
+----
+// Java class
+public class MyClass {
+    static {
+        System.loadLibrary("myclass");
+    }
+    
+    private native void hello();
+    
+    public static void main(String[] args) {
+        new MyClass().hello();
+    }
+}
+----
+
+Note:: Similar techniques can be applied to other languages, such as R, Ruby, Perl, and Lua, using their respective foreign function interfaces (FFI) or binding libraries. 
+
 == Releases
 
 . *How do I download the latest libraries?*
