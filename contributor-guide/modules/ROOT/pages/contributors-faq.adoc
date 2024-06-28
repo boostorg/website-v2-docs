@@ -166,6 +166,115 @@ The structure is still required for things like testing and documentation buildi
 +
 The numeric libraries have been divided into four packages: libboost-numeric-conversion/, libboost-numeric-interval/, libboost-numeric-odeint/, libboost-numeric-ublas/.
 
+== Post-Release Engagement
+
+. *Through what channels do Boost library authors typically receive the most feedback?*
++
+Primarily the https://lists.boost.org/mailman/listinfo.cgi/boost-users[Boost Users Mailing List] and the https://lists.boost.org/mailman/listinfo.cgi/boost[Boost Developers Mailing List]. In addition, checkout GitHub Issues and Pull Requests. Also, the Boost forums on https://slack.com/[Slack] can be active.
++
+Example of communication flow:
++
+.. A new library release is announced on the Boost mailing lists.
+.. Users start discussing the new release on the mailing lists, reporting initial impressions and any issues encountered.
+.. Users report bugs and request features on the relevant GitHub repository, leading to active discussions in the issues and pull requests sections.
+.. Boost library authors and contributors discuss technical details and implementation strategies on the https://lists.boost.org/mailman/listinfo.cgi/boost[Boost Developers Mailing List].
+.. Users seeking immediate help might turn to https://slack.com/[Slack] or sometimes https://discord.com/[Discord] for quick responses, or directly communicate with the authors if email or forum addresses are made public.
+
+. *What kind of communication from the pass:[C++] developer community have library authors received after public release of their library into the Boost collection?*
++
+Authors often receive a variety of feedback, which should be welcomed to help authors gauge the acceptance and usability of their library. Feedback can be categorized into several types:
++
+.. General feedback includes both positive and negative comments about the overall design, usability, and documentation of the library. The most common comments include praise for a well-designed API, criticism of complex or confusing documentation, and suggestions for improving user experience.
+.. Developers may ask for help or clarification on how to use certain features of the library, especially clarifications on API usage. Another common request is for example code to demonstrate specific use cases, or help with integrating the library into their own projects.
+.. Bug reports or issues developers encounter while using the library. These can range from minor issues, such as documentation typos, to major bugs that affect the functionality of the library. The more serious examples include: inconsistent behavior across different platforms, crashes or memory leaks in certain use cases, or incorrect results from specific functions.
+.. Feature requests are not uncommon, such as support for additional platforms or compilers, new algorithms or data structures, or performance improvements and optimizations.
+.. Performance feedback related to the performance of the library, including benchmarking results and suggestions for optimizations. Typically this centers around reports of slow performance in certain scenarios, comparisons with similar libraries, or suggestions for algorithmic improvements.
+.. Portability issues are also to be expected, related to building or running the library on different platforms, operating systems, or compilers. Obvious issues include compilation errors on specific platforms, incompatibilities with certain compiler versions, or issues with platform-specific dependencies.
+.. There can be integration feedback on how well the library integrates with other libraries, frameworks, or tools in the C++ ecosystem. This can include integrating even with other Boost libraries as well as other third-party libraries.
+.. Finally, it is important to remember that members of the community can contribute to a library by submitting patches, improvements, or additional features. These updates tend to focus on code optimizations, and bug fixes. Less often they are enhancements to the library's functionality.
+
+. *Can you give me some examples of user requests for library improvements and describe the response from the authors or maintainers?*
++
+* boost:asio[] received numerous bug reports and feature requests related to its asynchronous I/O capabilities. Users asked for better documentation and examples for common use cases, such as implementing network protocols. The author, Christopher M. Kohlhoff, responded by improving documentation and providing more examples and tutorials. The library also received several community-contributed enhancements and bug fixes.
++
+* boost:python[] users reported issues related to compatibility with different versions of Python and pass:[C++] compilers. There were also many requests for new features to better support modern pass:[C++] standards and Python 3.x. The maintainers addressed these issues by updating the library to support newer Python versions and pass:[C++] standards. The community also contributed patches to fix compatibility issues and add new features.
++
+* boost:spirit[], a library for creating parsers and generators, received feedback about its steep learning curve and complex documentation. Users requested more tutorials and simpler examples. The authors and the community worked on improving the documentation and providing more examples. The library also saw several enhancements to make it more user-friendly and easier to learn.
++
+* boost:thread[] ran into issues with changes in the pass:[C++]11 standard library, which introduced its own threading support.
+The authors had to adapt boost:thread[] to coexist with and complement the standard library's threading facilities, leading to significant refactoring.
++
+* boost:graph[] initially included some incorrect assumptions about graph properties and algorithms, this led to bugs that required reworking the design to support a wider range of graph types and use cases.
++
+* boost:math[] initially had issues in mathematical algorithms that produced incorrect results in some cases, and required redesigning the affected components to ensure greater robustness.
++
+* boost:interprocess[] had some bugs related to shared memory management that led to memory corruption, requiring a redesign of the allocation and synchronization mechanisms.
++
+* boost:filesystem[] early versions had an API that was inconsistent and difficult to extend. The introduction of the v3 API addressed these issues, providing a more robust and user-friendly interface.
++
+* boost:multi-index[] had performance issues with certain types of queries and modifications which required rethinking the internal data structures and algorithms to improve efficiency.
++
+* boost:geometry[] had performance bottlenecks in spatial indexing and query algorithms. This required redesigning parts of the library to handle large datasets more efficiently.
++
+* boost:regex[] had issues with regular expression processing that could be exploited for denial-of-service attacks required redesigning parts of the matching engine to improve security and robustness. These were promptly addressed. Refer to <<security>> for more details.
++
+* boost:serialization[] vulnerabilities in handling serialized data that could lead to arbitrary code execution or data corruption, where promptly addressed with changes in the serialization mechanisms to enhance security.
+
+. *What have been the most unpleasant surprises that Boost library authors have to deal with?*
++
+Here are some of the most notable ones:
+
+.. Changes in the pass:[C++] standard or the introduction of new features can sometimes break backward compatibility, leading to user complaints and requiring significant effort to fix.
+.. Authors have encountered unexpected behavior or compilation errors on less common platforms, requiring extensive debugging and platform-specific fixes.
+.. Boost has its own boost:build[] system (though CMake can also be used), which can be complex and difficult for new users to understand. Authors have received feedback about difficulties in building the library, leading to extensive support and documentation efforts to help users get started.
+.. Authors have had to deal with unexpected slowdowns (performance regressions) reported by users, requiring detailed performance analysis and sometimes reworking or reverting changes.
+.. Users often have high expectations, and meeting these expectations can be challenging, especially for volunteer-driven projects. Authors sometimes face criticism for perceived shortcomings in these areas.
+.. _Dependency hell_ : there can be a complex web of dependencies, and managing these dependencies can be challenging, especially when changes in one library affect others. Authors sometimes find it difficult to keep everything in sync.
+.. Like all software, Boost libraries can have security vulnerabilities that need to be addressed promptly. Carefully read the <<security>> section.
+.. Managing contributions from the community, ensuring code quality, and handling disagreements can be challenging.
+.. Writing and maintaining comprehensive documentation is crucial but often neglected due to the focus on coding.
+
+. *What mitigation strategies have Boost library authors employed to mitigate these unpleasant surprises?*
++
+Primarily implementing a comprehensive xref:testing/boost-test-matrix.adoc[Test Matrix] to catch issues early. xref:testing/continuous-integration.adoc[Continuous Integration (CI)] systems ensure consistent builds and tests across multiple platforms and configurations. Also actively engaging with the community through forums, mailing lists, and GitHub to gather feedback and address issues promptly. Last but not least, investing time in writing clear, detailed xref:docs/documentation-guidelines.adoc[Documentation] and tutorials to help users get started and understand complex features.
++
+After the initial release, consider releasing regular updates to address bugs, improve performance, and add features as necessary, and based on user feedback. Refer to xref:version-control.adoc[].
++
+Note:: Whereas promptly addressing issues is important, haste is not always the right approach. When critical bugs are identified, detailed bug reports are needed, and the library authors and contributors analyze the bugs, discuss possible solutions, and plan the necessary changes. Significant redesign or refactoring of the affected parts of the library is carried out to address the issue, but should not be rushed and needs extensive testing.
+
+. *About how long following release of a library does it take before communication dies down, say to just an occasional email or forum question?*
++
+The duration and intensity of communication following the release of a Boost library obviously varies widely depending on several factors, the complexity and popularity of the library, the initial quality of the release, and the responsiveness of the authors to early feedback. However, a general pattern has been observed:
++
+* During the _initial surge_ (0-3 months) the communication intensity is high. Authors are typically engaged and active during this period, addressing issues promptly, releasing patches or updates, and improving documentation based on feedback.
+* A _stabilization period_ (3-12 months) follows, with moderate feedback. Authors continue to be engaged but may start shifting focus to other projects or new features for the library, so response times can slow.
+* The _maturity phase_ (12+ months) involves sporadic communication, often related to edge cases or specific environments. Authors may check in periodically but are generally less active unless major issues arise or a significant update is planned.
++
+More complex libraries (for example, boost:spirit[] or boost:asio[]) tend to have longer periods of active communication due to their advanced features and higher potential for integration challenges. Libraries that quickly gain a large user base will have prolonged and more intense periods of communication. Popular libraries like boost:python[] tend to have more sustained engagement. *Libraries with thorough initial documentation and fewer bugs tend to stabilize faster.* Poor documentation or frequent bugs can extend the period of high communication.
+
+. *Say developers greatly appreciate a new library, what kind of praise have they given, or have they remained fairly silent?*
++
+Silence is common but praise does come in various ways, both publicly and privately. The feedback can be quite enthusiastic and detailed, highlighting the library's impact on their work and its overall quality. Developers often post messages of appreciation on the Boost mailing lists or Slack forums. These posts can range from simple thank-yous to detailed accounts of how the library has helped solve specific problems: _"boost:python[] has significantly reduced the complexity of integrating pass:[C++] with Python in our project. The documentation is clear, and the API is intuitive. Kudos to the developers!"_
++
+Praise is also shared on social media platforms like X, LinkedIn, and personal or company blogs. Developers might write blog posts detailing their experiences and the benefits they've gained from using the library: _"Just integrated boost:asio[] into our server application. The performance improvements are phenomenal! Big thanks to the Boost community!"_
++
+Developers might mention and praise Boost libraries in their talks at conferences or meetups. They often showcase how they used the library to solve challenging problems: for example, a presentation at https://github.com/CppCon[CppCon] highlighted the use of boost:hana[] for metaprogramming and how it simplified complex template code.
++
+Private emails to the library authors expressing their gratitude and sharing success stories are also not uncommon.
+For example _"I wanted to thank you for your work on boost:graph[]. It has been instrumental in our network analysis tool. Your dedication and support are greatly appreciated."_
++
+_"The documentation for boost:spirit[] is outstanding. The examples made it easy to get started and understand the complex concepts."_
++
+_"boost:multi-index[] has drastically improved our query performance. The library's efficiency and flexibility are top-notch."_
++
+_"Integrating boost:beast[] for our HTTP server was seamless. The design and ease of use are commendable."_
++
+_"boost:filesystem[] has been rock-solid in our cross-platform application. It handles all edge cases gracefully."_
++
+Positive feedback and praise from developers not only encourages the library authors but also helps promote the library within the wider community. This can lead to increased adoption, further contributions, and continuous improvement of the library by the community. It can of course lead to additional communication.
++
+Financial contributions or sponsorships as a token of appreciation are rare!
+
 [[security]]
 == Security
 
