@@ -1,0 +1,38 @@
+////
+Copyright (c) 2024 The C++ Alliance, Inc. (https://cppalliance.org)
+
+Distributed under the Boost Software License, Version 1.0. (See accompanying
+file LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
+
+Official repository: https://github.com/boostorg/website-v2-docs
+////
+= Introduction to the User Community
+:navtitle: Introduction
+
+The user community is a vibrant and collaborative group dedicated to the use, development, and maintenance of Boost Libraries. Since its inception, Boost has grown to offer a wide range of libraries that address knarly programming tasks, from algorithms and data structures to system utilities and concurrent programming. Boost users are encouraged to chime in with their thoughts and experiences!
+
+== Reporting Issues
+
+Users are encouraged to be active in xref:reporting-issues.adoc[] they encounter with Boost libraries. Users can submit issues directly, providing detailed descriptions, code snippets, and steps to reproduce the problem. This collaboration greatly aids the overall stability and reliability of Boost libraries.
+
+== Boost Mailing Lists
+
+Communication within the Boost community is primarily conducted through mailing lists. The https://lists.boost.org/mailman/listinfo.cgi/boost-users[Boost Users Mailing List] is a forum to ask questions, share experiences, and seeking advice. Participation in the mailing lists is open to all.
+
+=== Discussion Policy
+
+Boost maintains a clear and respectful xref:discussion-policy.adoc[Discussion Policy] to ensure productive and courteous interactions within the community. Participants are expected to engage in constructive dialogue, refrain from personal attacks, and respect differing viewpoints. 
+
+== Boost Software License
+
+The xref:bsl.adoc[Boost Software License (BSL)] is a free, open-source license that permits users to use, modify, and distribute Boost libraries with minimal restrictions. The BSL is designed to be compatible with both open-source and proprietary projects.
+
+== Long History
+
+Boost's long xref:boost-history.adoc[History] is a testament to its enduring relevance and impact. Since its founding in 1998 by the late xref:in-memoriam-beman-dawes.adoc[Beman Dawes], David Abrahams, and Robert Klarer, Boost has been an incubator for cutting-edge pass:[C++] techniques and practices.
+
+Over the years, Boost has grown to include dozens of libraries, each developed and maintained by dedicated contributors from around the world. The libraries are continually updated both to remedy issues and add new features, refer to xref:release-process.adoc[] for the process and cadence of new releases.
+
+== See Also
+
+* xref:contributor-guide:ROOT:contributor-community-introduction.adoc[]
