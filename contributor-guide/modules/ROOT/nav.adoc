@@ -61,5 +61,6 @@ Official repository: https://github.com/boostorg/website-v2-docs
 ** xref:release-notes.adoc[]
 
 * Community
+** xref:contributor-community-introduction.adoc[]
 ** xref:tweeting.adoc[]
 ** xref:site-docs-style-guide.adoc[]
