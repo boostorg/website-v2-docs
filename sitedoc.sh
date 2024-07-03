@@ -77,11 +77,6 @@ if [ ! -d "node_modules" ] || [ "$(find package.json -prune -printf '%T@\n' | cu
   npm ci
 fi
 
-# TODO: Find a better way of setting these
-export ALGOLIA_APP_ID="HXFFX7FZYE"
-export ALGOLIA_API_KEY="6a58e88f13574fdb9b18ca0159e896b4"
-export ALGOLIA_IDX_NAME="cppalliancedocs"
-
 echo $ANTORA_CMD --fetch --attribute page-boost-branch="$1" --attribute page-commit-id="$commit_id" site.playbook.yml
 $ANTORA_CMD --fetch --attribute page-boost-branch="$1" --attribute page-commit-id="$commit_id" site.playbook.yml
 
