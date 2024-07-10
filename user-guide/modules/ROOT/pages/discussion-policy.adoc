@@ -102,13 +102,21 @@ If you ever have to refer to single message earlier in a thread or in a differen
 
 When starting a new topic, always send a fresh message, rather than beginning a reply to some other message and replacing the subject and body. Many mailers can detect the thread you started with and will show the new message as part of the original thread, which probably isn't what you intended. Follow this guideline for your own sake as well as for others'. Often, people scanning for relevant messages will decide they're done with a topic and hide or kill the entire thread: your message will be missed, and you won't get the response you're looking for.
 
-By the same token, When replying to an existing message, use your mailer's *Reply* function, so that the reply shows up as part of the same discussion thread.
+By the same token, when replying to an existing message, use your mailer's *Reply* function, so that the reply shows up as part of the same discussion thread.
 
 Do not reply to digests if you are a digest delivery subscriber. Your reply will not be properly threaded and will probably have the wrong subject line.
 
 === Keep The Size of Your Posting Manageable
 
 The mailing list software automatically limits message and attachment size to a reasonable amount, typically 75K, which is adjusted from time-to-time by the moderators. This limit is a courtesy to those who rely on dial-up Internet access and let's face it, no one wants to read a posting that consists of 75K of error message text.
+
+=== Avoid Corporate and Confidentiality Footers in Your Emails
+
+Remember that mailing lists are publicly viewable, including by people not subscribed to the list. The responsibility of not posting any confidential information is always on the sender, and any confidentiality notice you may have in your email is void. Sending an email with a confidentiality footer is a one-way action by the sender, and the receiver has no way to accept or reject the terms specified in the footer. As such, the footer is not binding, but may come across as imposing on the receiver. This negative reception will reduce the likelihood of your message being answered.
+
+Additionally, if your footer contains corporate information, such as company name, logo, marketing slogans, contacts, and your position within the company, this may be taken as advertisement, which is explicitly forbidden. If your message requires you to expose your corporate affiliation, please include this information in the body of your message instead of attaching it to your every post in the corporate footer.
+
+If the footer is a mandatory corporate policy then please avoid using corporate email accounts for sending posts to the mailing lists. Use a non-corporate email account instead.
 
 == Prohibited Behavior
 
