@@ -35,6 +35,8 @@ antora:
   extensions:
     - require: ./extensions/boost.js
 asciidoc:
+  attributes:
+    page-pagination: ''
   extensions:
     - ./extensions/boost-link-inline-macro.js
     - '@asciidoctor/tabs'
