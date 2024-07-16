@@ -1,4 +1,6 @@
 <div class="body">
-{{> nav}}
+{{#if (eq page.component.latest.asciidoc.attributes.remove-sidenav undefined)}}
+  {{> nav}}
+{{/if}}
 {{> main}}
 </div>

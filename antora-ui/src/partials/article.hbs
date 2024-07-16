@@ -1,7 +1,12 @@
 <article class="doc">
-{{#with page.title}}
-<h1 class="page">{{{this}}}</h1>
-{{/with}}
-{{{page.contents}}}
-{{> pagination}}
+  {{#with page.title}}
+    <h1 class="page">{{{this}}}</h1>
+  {{/with}}
+  {{#if (ne page.component.latest.asciidoc.attributes.remove-sidenav undefined)}}
+    {{#if (and (eq page.module 'ROOT') (eq page.relativeSrcPath (or (extractKey (siteStartPage) 'asciidoc.attributes.page-relative-src-path') 'index.adoc')))}}
+      {{> nav-tree-plain navigation=page.navigation}}
+    {{/if}}
+  {{/if}}
+  {{{page.contents}}}
+  {{> pagination}}
 </article>
