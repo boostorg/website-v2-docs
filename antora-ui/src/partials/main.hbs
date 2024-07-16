@@ -1,11 +1,13 @@
 <main class="article">
-{{> toolbar}}
+  {{> toolbar}}
   <div class="content">
-{{#if (eq page.layout '404')}}
-{{> article-404}}
-{{else}}
-{{> toc}}
-{{> article}}
-{{/if}}
+    {{#if (eq page.layout '404')}}
+      {{> article-404}}
+    {{else}}
+      {{#if (eq page.component.latest.asciidoc.attributes.remove-sidenav undefined)}}
+        {{> toc}}
+      {{/if}}
+      {{> article}}
+    {{/if}}
   </div>
 </main>
