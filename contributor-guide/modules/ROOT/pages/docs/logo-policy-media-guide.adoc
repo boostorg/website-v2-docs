@@ -60,7 +60,9 @@ The Boost Logo may not be used:
 
 Reproduction of the Boost Logo in compliance with the terms and conditions stated above must meet the following additional requirements:
 
-* Color reproductions must use Boost Mustard or the closest possible color match.
+* Color reproductions must use _Boost Mustard_ (or the closest possible color match), defined as:
+** https://culturehustle.com/products/freetone[Freetone]: P 17-7 C
+** CIE Lab: 73.62, 15.69, 57.95
 * Black and white reproductions of the Boost Logo must be either pure black or pure white.
 * The background color must maintain at least 50% contrast with the logo color.
 * The logo must not be rotated or have its aspect ratio changed.
