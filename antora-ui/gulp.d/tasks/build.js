@@ -87,7 +87,7 @@ module.exports = (src, dest, preview) => () => {
           [
             imagemin.gifsicle(),
             imagemin.jpegtran(),
-            imagemin.optipng(),
+            // imagemin.optipng(),
             imagemin.svgo({
               plugins: [
                 { cleanupIDs: { preservePrefixes: ['icon-', 'view-'] } },

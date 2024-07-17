@@ -61,3 +61,24 @@ nav.pagination .prev a::before {
 nav.pagination .next a::after {
   content: "\203a";
 }
+
+/* =============================================================================
+Spirit style navigation
+============================================================================= */
+
+.spirit-nav {
+  text-align: right;
+  padding-top: 0.5em;
+}
+
+.spirit-nav a {
+  color: white;
+  padding-left: 0.5em;
+  display: inline-block;
+  vertical-align: middle;
+}
+
+.spirit-nav img {
+  border-width: 0;
+  vertical-align: middle;
+}
