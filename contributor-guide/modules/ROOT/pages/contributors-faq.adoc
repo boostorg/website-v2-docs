@@ -216,9 +216,9 @@ The authors had to adapt boost:thread[] to coexist with and complement the stand
 +
 * boost:geometry[] had performance bottlenecks in spatial indexing and query algorithms. This required redesigning parts of the library to handle large datasets more efficiently.
 +
-* boost:regex[] had issues with regular expression processing that could be exploited for denial-of-service attacks required redesigning parts of the matching engine to improve security and robustness. These were promptly addressed. Refer to <<security>> for more details.
+* boost:regex[] had issues with regular expression processing that could be exploited for denial-of-service attacks. This required redesigning parts of the matching engine to improve security and robustness. Refer to <<security>> for more details.
 +
-* boost:serialization[] vulnerabilities in handling serialized data that could lead to arbitrary code execution or data corruption, where promptly addressed with changes in the serialization mechanisms to enhance security.
+* boost:serialization[] also had <<security>> issues - vulnerabilities in handling serialized data could lead to arbitrary code execution or data corruption. This was addressed with changes to the serialization mechanisms.
 
 . *What have been the most unpleasant surprises that Boost library authors have to deal with?*
 +
@@ -238,9 +238,9 @@ Here are some of the most notable ones:
 +
 Primarily implementing a comprehensive xref:testing/boost-test-matrix.adoc[Test Matrix] to catch issues early. xref:testing/continuous-integration.adoc[Continuous Integration (CI)] systems ensure consistent builds and tests across multiple platforms and configurations. Also actively engaging with the community through forums, mailing lists, and GitHub to gather feedback and address issues promptly. Last but not least, investing time in writing clear, detailed xref:docs/documentation-guidelines.adoc[Documentation] and tutorials to help users get started and understand complex features.
 +
-After the initial release, consider releasing regular updates to address bugs, improve performance, and add features as necessary, and based on user feedback. Refer to xref:version-control.adoc[].
+After the initial release, consider releasing regular updates to address bugs, improve performance, and add features as necessary, based on user feedback. Refer to xref:version-control.adoc[].
 +
-Note:: Whereas promptly addressing issues is important, haste is not always the right approach. When critical bugs are identified, detailed bug reports are needed, and the library authors and contributors analyze the bugs, discuss possible solutions, and plan the necessary changes. Significant redesign or refactoring of the affected parts of the library is carried out to address the issue, but should not be rushed and needs extensive testing.
+Note:: Whereas promptly addressing issues is important, haste is not always the right approach. When critical bugs are identified, detailed bug reports are needed, and the library authors and contributors analyze the bugs, discuss possible solutions, and plan the necessary changes. Significant redesign or refactoring of the affected parts of the library may be needed to address the issues, but should not be rushed to avoid making an awkward situation worse.
 
 . *About how long following release of a library does it take before communication dies down, say to just an occasional email or forum question?*
 +
