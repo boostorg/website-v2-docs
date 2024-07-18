@@ -2,7 +2,7 @@
   {{#with page.previous}}
     <a accesskey="p" href="{{{relativize ./url}}}"><img src="{{{@root.uiRootPath}}}/img/prev.png" alt="Previous: {{{./content}}}"></a>
   {{/with}}
-  {{#with page.up}}
+  {{#with page.parent}}
     <a accesskey="p" href="{{{relativize ./url}}}"><img src="{{{@root.uiRootPath}}}/img/up.png" alt="Up: {{{./content}}}"></a>
   {{/with}}
   {{#unless page.home}}
