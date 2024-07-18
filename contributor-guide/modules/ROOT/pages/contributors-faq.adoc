@@ -240,7 +240,7 @@ Primarily implementing a comprehensive xref:testing/boost-test-matrix.adoc[Test 
 +
 After the initial release, consider releasing regular updates to address bugs, improve performance, and add features as necessary, based on user feedback. Refer to xref:version-control.adoc[].
 +
-Note:: Whereas promptly addressing issues is important, haste is not always the right approach. When critical bugs are identified, detailed bug reports are needed, and the library authors and contributors analyze the bugs, discuss possible solutions, and plan the necessary changes. Significant redesign or refactoring of the affected parts of the library may be needed to address the issues, but should not be rushed to avoid making an awkward situation worse.
+Note:: Whereas promptly addressing issues is important, haste is not always the right approach. When critical bugs are identified, detailed bug reports are needed, and the library authors and contributors analyze the bugs, discuss possible solutions, and plan the necessary changes. Significant redesign or refactoring of the affected parts of the library may be needed to address the issues. This will involve extensive testing and should not be rushed.
 
 . *About how long following release of a library does it take before communication dies down, say to just an occasional email or forum question?*
 +
