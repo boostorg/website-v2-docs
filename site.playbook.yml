@@ -38,8 +38,6 @@ asciidoc:
   attributes:
     # Enable pagination
     page-pagination: ''
-    # Remove the sidenav and include TOC in index.adoc page
-    remove-sidenav: ''
   extensions:
     - ./extensions/boost-link-inline-macro.js
     - '@asciidoctor/tabs'
