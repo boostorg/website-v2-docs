@@ -675,6 +675,18 @@ void foo() {
 }
 ----
 
+== Standard Library
+
+. *How can I be sure when I should use a Boost library or a component of the Standard Library?*
+
+Some Boost libraries provide useful and advanced functionality unavailable in the Standard Library. Other Boost libraries have indeed been superseded by the Standard Library, but remain in Boost for backwards compatibility. To determine which you should use, given the choice, consider working through the following process.
+
+.. Check the Boost library documentation, as their relationship to the Standard Library is often documented. Both the overview and the release notes are good sources of information for mentions of standardization.
+.. The https://en.cppreference.com/w/cpp/standard_library[C++ Standard Library] is also well documented. Check to see if the functionality you are looking for is now part of the Standard Library. If you have specific features in mind, comparing the Boost and Standard library functions and classes should provide you with a definitive answer on which to use.
+.. If you are less certain of the specific features you need, developers often discuss the status and relevance of Boost libraries in comparison to the Standard Library. Browse, or ask a question in, https://stackoverflow.com/search?q=Boost&s=f447efbc-2ea3-4846-a5d3-0f8676b3f65c[Stack Overflow], https://www.reddit.com/search/?q=Boost+libraries&type=link&cId=28644139-c8b3-48a5-87b6-0c9822188ed4&iId=7f450c5d-6180-4538-a39f-7df7876df4e9&onetap_auto=true&one_tap=true[Reddit], or the https://lists.boost.org/mailman/listinfo.cgi/boost[Boost Developers Mailing List].
+.. If you want to dig into the source code, check the activity in the Boost library's GitHub repository. Libraries that have been largely superseded have less recent activity compared to those still actively developed and extended. Also check release notes for mentions of deprecations or recommendations.
+.. Current examples of libraries where you should now use the Standard Library include boost:smart_ptr[] (use `std::shared_ptr`, `std::unique_ptr` etc.), boost:thread[] (use `std::thread`), boost:chrono[] (use `std::chrono`), and boost:random[] (use `std::rand`). Referring to the documentation for these might help show the language used when discussing the relationship with the Standard Library.
+
 
 == Templates
 
