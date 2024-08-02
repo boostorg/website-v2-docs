@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Type Specimen</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Noto+Sans:ital,wdth,wght@0,87.5,100..900;1,87.5,100..900&display=swap"
+      rel="stylesheet"
+    />
+    <style>
+      :root {
+        --color-cyan: rgb(0, 90, 156);
+      }
+      body {
+        font-family: "Noto Sans";
+        font-variation-settings: "wdth" 87.5;
+      }
+      code {
+        font-family: "Noto Sans Condensed", monospace;
+        font-weight: 500;
+        color: var(--color-cyan);
+      }
+
+      h1 {
+        font-weight: 600;
+      }
+      h2 {
+        font-weight: 600;
+      }
+      h3 {
+        font-weight: 500;
+      }
+      h4 {
+        font-weight: 600;
+      }
+      h5 {
+        font-weight: 600;
+      }
+      h6 {
+        font-weight: 600;
+      }
+
+      a {
+        color: var(--color-cyan);
+        text-decoration: none;
+      }
+    </style>
+  </head>
+
+  <body>
+    <h1>Overview</h1>
+    <p
+      >Boost.URL is a portable C++ library which provides containers and algorithms which model a "URL," more formally
+      described using the Uniform Resource Identifier (URI) specification (henceforth referred to as rfc3986). A URL is
+      a compact sequence of characters that identifies an abstract or physical resource. For example, this is a valid
+      URL:
+    </p>
+
+    <h2>Requirements</h2>
+    <p>The library requires a compiler supporting at least C++11.</p>
+    <h2>Reference</h2>
+
+    <h3>serializer</h3>
+    <p>A serializer for JSON.</p>
+
+    <h4>Synopsis</h4>
+    <p
+      >Defined in header &lt;<code><a href="">boost/json/serializer.hpp</a></code
+      >&gt;</p
+    >
+    <pre>
+  class serializer
+  </pre
+    >
+    <h4>Member Functions</h4>
+    <table>
+      <thead>
+        <tr>
+          <th>Name</th>
+          <th>Description</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>
+            <a href="#">done</a>
+          </td>
+          <td>Returns <code>true</code> if the serialization is complete.</td>
+        </tr>
+        <tr>
+          <td>
+            <a href="#">read</a>
+          </td>
+          <td>Read the next buffer of serialized JSON. </td>
+        </tr>
+        <tr>
+          <td>
+            <a href="#">reset</a>
+          </td>
+          <td>Reset the serializer for a new string.</td>
+        </tr>
+        <tr> </tr></tbody
+    ></table>
+
+    <h4>Description</h4>
+    <p
+      >This class traverses an instance of a library type and emits serialized JSON text by filling in one or more
+      caller-provided buffers. To use, declare a variable and call <code>reset</code> with a pointer to the variable you
+      want to serialize. Then call <code>read</code> over and over until <code>done</code> returns <code>true</code>.
+    </p>
+
+    <h4>Example</h4>
+    <p>This demonstrates how the serializer may be used to print a JSON value to an output stream.</p>
+    <pre>
+  void print( std::ostream& os, value const & jv)
+  {
+      serializer sr;
+      sr.reset( &jv );
+      while ( ! sr.done() )
+      {
+          char buf[ 4000 ];
+          os << sr.read( buf );
+      }
+  }
+  </pre
+    >
+
+    <p>Table 1.33. Character Sets</p>
+    <table>
+      <thead>
+        <tr>
+          <th>Name</th>
+          <th>Description</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>
+            <a href="#">alnum_chars</a>
+          </td>
+          <td>Contains the uppercase and lowercase letters, and digits.</td>
+        </tr>
+        <tr>
+          <td>
+            <a href="#">alpha_chars</a>
+          </td>
+          <td>Contains the uppercase and lowercase letters.</td>
+        </tr>
+        <tr>
+          <td>
+            <a href="#">digit_chars</a>
+          </td>
+          <td>Contains the decimal digit characters.</td>
+        </tr>
+        <tr> </tr></tbody
+    ></table>
+
+    <h4>Thread Safety</h4>
+    <p>The same instance may not be accessed concurrently.</p>
+    <p
+      >Convenience header &lt;<code><a href="">boost/json.hpp</a></code
+      >&gt;</p
+    >
+  </body>
+</html>
