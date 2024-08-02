@@ -88,6 +88,35 @@ aside.nav {
   padding-top: 3.5rem;
 }
 
+/* Toolbar Styles */
+.toolbar {
+  background-color: #fff;
+  box-shadow: unset;
+  height: 2rem;
+  top: 0;
+  justify-content: space-between;
+}
+
+@media screen and (min-width: 1024px) {
+  .toolbar {
+    align-items: center;
+  }
+}
+
+.toolbar .breadcrumbs ul,
+.breadcrumbs {
+  padding-left: 0;
+}
+
+/* Breadcrumbs Styles */
+.breadcrumbs a {
+  color: #424242;
+  font-weight: 500;
+}
+
+.breadcrumbs li::after {
+  padding: 0 0.25rem;
+}
 /* Table of Contents Styles */
 .toc.sidebar .toc-menu {
   top: 0;
