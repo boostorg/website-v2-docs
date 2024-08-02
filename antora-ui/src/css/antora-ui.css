@@ -1,0 +1,109 @@
+/* Antora UI Default Styles */
+
+/* Global Styles */
+.body {
+  max-width: 80rem;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+body.article {
+  background-color: #d1d5db;
+}
+
+.max-width-reset {
+  max-width: none;
+}
+
+/* Document Styles */
+.doc {
+  padding: 1rem 1rem 4rem;
+}
+
+@media screen and (min-width: 1024px) {
+  .body {
+    padding: 1rem 0;
+  }
+
+  .doc {
+    margin: 0 1rem;
+  }
+}
+
+/* Card Styles */
+.card {
+  background-color: #fff;
+}
+
+@media screen and (min-width: 1024px) {
+  .card {
+    padding: 1.5rem;
+    border-radius: 1rem;
+    height: 100%;
+  }
+}
+
+/* Navigation Styles */
+aside.nav {
+  background-color: #fff;
+  height: auto;
+}
+
+.nav {
+  position: initial;
+  box-shadow: none;
+}
+
+.nav .panels {
+  height: 100%;
+}
+
+.nav-list li {
+  padding-top: 0.45rem;
+}
+
+.nav-menu {
+  padding: 0;
+}
+
+/* Navigation Toggle Styles */
+.nav-toggle.is-active ~ .spirit-nav {
+  display: none;
+  visibility: hidden;
+}
+
+@media screen and (min-width: 769px) {
+  .nav-toggle.is-active ~ .spirit-nav {
+    display: block;
+    visibility: visible;
+  }
+}
+
+.nav-toggle {
+  background-position-x: 0;
+}
+
+.nav-container.is-active {
+  padding-left: 2rem;
+  padding-top: 3.5rem;
+}
+
+/* Table of Contents Styles */
+.toc.sidebar .toc-menu {
+  top: 0;
+}
+
+.toc.sidebar {
+  height: fit-content;
+}
+
+.toc.sidebar .toc-menu h3 {
+  height: auto;
+  justify-content: flex-start;
+  color: #424242;
+}
+
+.toc.embedded {
+  padding-top: 0.5rem;
+}
+
