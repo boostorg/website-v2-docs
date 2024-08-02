@@ -126,6 +126,15 @@ aside.nav {
   padding: 0;
 }
 
+/* Top Navigation Styles */
+.spirit-nav {
+  padding-top: 0;
+}
+
+.spirit-nav a {
+  width: 1.5rem;
+}
+
 /* Table of Contents Styles */
 .toc.sidebar .toc-menu {
   top: 0;
@@ -145,3 +154,12 @@ aside.nav {
   padding-top: 0.5rem;
 }
 
+/* Pagination Styles */
+nav.pagination {
+  padding: 1rem;
+}
+
+nav.pagination a::after,
+nav.pagination a::before {
+  width: 0.75rem;
+}
