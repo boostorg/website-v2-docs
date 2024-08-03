@@ -104,7 +104,7 @@ function compileLayouts (src) {
     map(
       (file, enc, next) => {
         const srcName = path.join(src, file.relative)
-        layouts.set(file.stem, handlebars.compile(file.contents.toString(), { preventIndent: true, srcName }))
+        layouts.set(file.stem, handlebars.compile(file.contents.toString(), { preventIndent: false, srcName }))
         next()
       },
       function (done) {
