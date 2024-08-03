@@ -7,74 +7,163 @@
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link
-      href="https://fonts.googleapis.com/css2?family=Noto+Sans:ital,wdth,wght@0,87.5,100..900;1,87.5,100..900&display=swap"
+      href="https://fonts.googleapis.com/css2?family=Noto+Sans+Display:ital,wdth,wght@0,87.5,100..900;1,87.5,100..900&display=swap"
       rel="stylesheet"
     />
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Mono:wdth,wght@62.5,550&display=swap" rel="stylesheet"/>
     <style>
+
+      *, *::before, *::after {
+        box-sizing: border-box;
+      }
+      * {
+        margin: 0;
+      }
+      body {
+        line-height: 1.5;
+        -webkit-font-smoothing: antialiased;
+      }
+      img, picture, video, canvas, svg {
+        display: block;
+        max-width: 100%;
+      }
+      input, button, textarea, select {
+        font: inherit;
+      }
+      p, h1, h2, h3, h4, h5, h6 {
+        overflow-wrap: break-word;
+      }
+      #root, #__next {
+        isolation: isolate;
+      }
+
+    /*----------------------------------------*/
+
       :root {
         --color-cyan: rgb(0, 90, 156);
       }
       body {
-        font-family: "Noto Sans";
-        font-variation-settings: "wdth" 87.5;
+        font-family: "Noto Sans Display", serif;
       }
-      code {
-        font-family: "Noto Sans Condensed", monospace;
-        font-weight: 500;
-        color: var(--color-cyan);
+      h1, h2, h3, h4, h5, h6 {
+        display: block;
+        line-height: 1;
+        margin-top: 1em;
+        margin-bottom: 0em;
+        font-weight: 650;
       }
-
-      h1 {
-        font-weight: 600;
+      h1 { font-size: 1.75em; }
+      h2 { font-size: 1.5em;   font-weight: 600; }
+      h3 { font-size: 1.375em; font-weight: 600; }
+      h4 { font-size: 1.25em;  font-weight: 600; }
+      h5 { font-size: 1.125em; font-weight: 600; }
+      h6 { font-size: 1em;     font-weight: 600; }
+      p {
+        margin: 1em 0em;
       }
-      h2 {
-        font-weight: 600;
-      }
-      h3 {
-        font-weight: 500;
-      }
-      h4 {
-        font-weight: 600;
-      }
-      h5 {
-        font-weight: 600;
-      }
-      h6 {
-        font-weight: 600;
-      }
-
       a {
         color: var(--color-cyan);
         text-decoration: none;
+      }
+      a:hover {
+        text-decoration: underline;
+      }
+      code {
+        font-family: "Noto Sans Mono", serif;
+      }
+      pre {
+        font-family: "Noto Sans Mono", serif;
+        background-color: #f8f8f8;
+        margin: 1em;
+        padding: 1em;
+        border: 1px solid #e8e8e8;
+      }
+      h6:has(+table)
+      {
+        margin-left: 1em;
+      }
+      table {
+        border-collapse: collapse;
+        border: 1px solid #e8e8e8;
+        margin: 1em;
+      }
+      th {
+        background-color: #f8f8f8;
+        text-align: left;
+        padding: 0.25em 0.55em;
+        font-weight: 550;
+      }
+      td {
+        border: 1px solid #e8e8e8;
+        padding: 0.25em 0.55em;
       }
     </style>
   </head>
 
   <body>
+ 
     <h1>Overview</h1>
-    <p
-      >Boost.URL is a portable C++ library which provides containers and algorithms which model a "URL," more formally
-      described using the Uniform Resource Identifier (URI) specification (henceforth referred to as rfc3986). A URL is
-      a compact sequence of characters that identifies an abstract or physical resource. For example, this is a valid
-      URL:
+
+    <p>
+    Boost.URL is a portable C++ library which provides containers and algorithms
+    which model a "URL," more formally described using the
+    <a href="https://datatracker.ietf.org/doc/html/rfc3986">Uniform Resource Identifier</a>
+    (<a href="https://datatracker.ietf.org/doc/html/rfc3986">URI</a>) specification
+    (henceforth referred to as rfc3986). A URL is a compact sequence of characters
+    that identifies an abstract or physical resource. For example, this is a valid URL:
     </p>
+    <pre>https://www.example.com/path/to/file.txt?userid=1001&pages=3&results=full#page1
+</pre>
+    This library understands the grammars related to URLs and provides
+    functionality to validate, parse, examine, and modify urls, and apply
+    normalization or resolution algorithms
+
+    <h2>Features</h2>
+
+    <p>
+    While the library is general purpose, special care has been taken to ensure
+    that the implementation and data representation are friendly to network
+    programs which need to handle URLs efficiently and securely, including the
+    case where the inputs come from untrusted sources. Interfaces are provided
+    for using error codes instead of exceptions as needed, and most algorithms
+    have the means to opt-out of dynamic memory allocation. Another feature of
+    the library is that all modifications leave the URL in a valid state. Code
+    which uses this library is easy to read, flexible, and performant.
+    <p>
+    Boost.URL offers these features:
+    </p>
+    <ul>
+      <li>C++11 as only requirement</li>
+      <li>Fast compilation, few templates</li>
+      <li>Strict compliance with rfc3986</li>
+      <li>Containers that maintain valid URLs</li>
+      <li>Parsing algorithms that work without exceptions</li>
+      <li>Control over storage and allocation for URLs</li>
+      <li>Support for -fno-exceptions, detected automatically</li>
+      <li>Features that work well on embedded devices</li>
+    </ul>
 
     <h2>Requirements</h2>
-    <p>The library requires a compiler supporting at least C++11.</p>
+
+    <p>
+    The library requires a compiler supporting at least C++11.
+    </p>
+    <p>
+    Aliases for standard types, such as
+    <a href="https://www.boost.org/doc/libs/master/libs/url/doc/html/url/ref/boost__urls__error_code.html"><code>error_code</code></a> or
+    <a href="https://www.boost.org/doc/libs/master/libs/url/doc/html/url/ref/boost__urls__string_view.html"><code>string_view</code></a>,
+    use their Boost equivalents.
+    </p>
+
     <h2>Reference</h2>
 
     <h3>serializer</h3>
     <p>A serializer for JSON.</p>
 
     <h4>Synopsis</h4>
-    <p
-      >Defined in header &lt;<code><a href="">boost/json/serializer.hpp</a></code
-      >&gt;</p
-    >
-    <pre>
-  class serializer
-  </pre
-    >
+    <p>Defined in header &lt;<a href="">boost/json/serializer.hpp</a>&gt;</p>
+    <pre>class serializer</pre>
+
     <h4>Member Functions</h4>
     <table>
       <thead>
@@ -86,19 +175,19 @@
       <tbody>
         <tr>
           <td>
-            <a href="#">done</a>
+            <a href="#"><code>done</code></a>
           </td>
           <td>Returns <code>true</code> if the serialization is complete.</td>
         </tr>
         <tr>
           <td>
-            <a href="#">read</a>
+            <a href="#"><code>read</code></a>
           </td>
           <td>Read the next buffer of serialized JSON. </td>
         </tr>
         <tr>
           <td>
-            <a href="#">reset</a>
+            <a href="#"><code>reset</code></a>
           </td>
           <td>Reset the serializer for a new string.</td>
         </tr>
@@ -106,29 +195,30 @@
     ></table>
 
     <h4>Description</h4>
-    <p
-      >This class traverses an instance of a library type and emits serialized JSON text by filling in one or more
-      caller-provided buffers. To use, declare a variable and call <code>reset</code> with a pointer to the variable you
-      want to serialize. Then call <code>read</code> over and over until <code>done</code> returns <code>true</code>.
+    <p>
+      This class traverses an instance of a library type and emits serialized
+      JSON text by filling in one or more caller-provided buffers. To use, declare
+      a variable and call
+      <a href="#"><code>reset</code></a> with a pointer to the variable you want
+      to serialize. Then call
+      <a href="#"><code>read</code></a> over and over until
+      <a href="#"><code>done</code></a> returns <code>true</code>.
     </p>
 
     <h4>Example</h4>
     <p>This demonstrates how the serializer may be used to print a JSON value to an output stream.</p>
-    <pre>
-  void print( std::ostream& os, value const & jv)
+    <pre>void print( std::ostream& os, value const & jv)
+{
+  serializer sr;
+  sr.reset( &jv );
+  while ( ! sr.done() )
   {
-      serializer sr;
-      sr.reset( &jv );
-      while ( ! sr.done() )
-      {
-          char buf[ 4000 ];
-          os << sr.read( buf );
-      }
+      char buf[ 4000 ];
+      os << sr.read( buf );
   }
-  </pre
-    >
+}</pre>
 
-    <p>Table 1.33. Character Sets</p>
+    <h6 class="table">Table 1.33. Character Sets</h6>
     <table>
       <thead>
         <tr>
@@ -164,5 +254,13 @@
       >Convenience header &lt;<code><a href="">boost/json.hpp</a></code
       >&gt;</p
     >
+
+    <h1>Heading 1</h1>
+    <h2>Heading 2</h2>
+    <h3>Heading 3</h3>
+    <h4>Heading 4</h4>
+    <h5>Heading 5</h5>
+    <h6>Heading 6</h6>
+
   </body>
 </html>
