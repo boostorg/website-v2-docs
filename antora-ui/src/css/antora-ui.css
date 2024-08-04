@@ -83,6 +83,11 @@ aside.nav {
   height: auto;
 }
 
+html.is-clipped--nav .nav-close {
+  display: block;
+  visibility: visible;
+}
+
 .nav {
   position: initial;
   box-shadow: none;
@@ -135,6 +140,19 @@ aside.nav {
 .nav-toggle {
   background-position-x: 0;
   background-position-y: 50%;
+}
+
+.nav-close {
+  display: none;
+  background: url(../img/back.svg) 0% 40% no-repeat;
+  background-size: 41.5%;
+  border: none;
+  outline: none;
+  line-height: inherit;
+  padding: 0;
+  height: var(--toolbar-height);
+  width: var(--toolbar-height);
+  margin-right: -0.25rem;
 }
 
 .nav-container.is-active {
