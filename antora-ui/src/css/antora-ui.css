@@ -1,10 +1,30 @@
 /* Antora UI Default Styles */
 
 /* Global Styles */
+
+html.is-clipped--nav {
+  overflow-y: visible;
+}
+
 .body {
   max-width: 80rem;
   margin-left: auto;
   margin-right: auto;
+}
+
+@media screen and (min-width: 769px) {
+  .body {
+    display: flex;
+    gap: 1rem;
+    padding: 0.75rem;
+  }
+}
+
+@media screen and (min-width: 1024px) {
+  .body {
+    display: flex;
+    padding: 1rem;
+  }
 }
 
 body.article {
@@ -16,17 +36,31 @@ body.article {
 }
 
 /* Document Styles */
+main.article {
+  min-width: 0;
+}
+
+html.is-clipped--nav main.article {
+  display: none;
+  visibility: hidden;
+}
+
+html:not(.is-clipped--nav) main.article {
+  display: block;
+  visibility: visible;
+}
+
 .doc {
   padding: 1rem 1rem 4rem;
 }
 
 @media screen and (min-width: 1024px) {
-  .body {
-    padding: 1rem 0;
+  .doc {
+    margin: 0;
   }
 
-  .doc {
-    margin: 0 1rem;
+  .content {
+    gap: 1rem;
   }
 }
 
@@ -35,10 +69,10 @@ body.article {
   background-color: #fff;
 }
 
-@media screen and (min-width: 1024px) {
+@media screen and (min-width: 769px) {
   .card {
-    padding: 1.5rem;
     border-radius: 1rem;
+    padding: 1rem;
     height: 100%;
   }
 }
@@ -58,6 +92,14 @@ aside.nav {
   height: 100%;
 }
 
+.nav-list {
+  margin-left: 0;
+}
+
+.nav-list > .nav-list {
+  margin-left: 1rem;
+}
+
 .nav-list li {
   padding-top: 0.45rem;
 }
@@ -66,10 +108,21 @@ aside.nav {
   padding: 0;
 }
 
+.nav-panel-menu {
+  overflow-y: auto;
+}
+
 /* Navigation Toggle Styles */
 .nav-toggle.is-active ~ .spirit-nav {
   display: none;
   visibility: hidden;
+}
+
+@media screen and (min-width: 769px) {
+  .nav-toggle {
+    display: none;
+    visibility: hidden;
+  }
 }
 
 @media screen and (min-width: 769px) {
@@ -81,11 +134,32 @@ aside.nav {
 
 .nav-toggle {
   background-position-x: 0;
+  background-position-y: 50%;
 }
 
 .nav-container.is-active {
-  padding-left: 2rem;
-  padding-top: 3.5rem;
+  position: static;
+  padding: 1rem;
+}
+
+@media screen and (min-width: 769px) {
+  .nav-container {
+    position: static;
+    visibility: visible;
+    flex: 0 0 20%;
+    min-width: 14rem;
+  }
+
+  .nav-container.is-active {
+    padding-left: 1rem;
+    padding-top: 1rem;
+  }
+}
+
+.nav-menu a,
+.nav-link,
+.nav-text {
+  color: #424242;
 }
 
 /* Toolbar Styles */
@@ -95,6 +169,12 @@ aside.nav {
   height: 2rem;
   top: 0;
   justify-content: space-between;
+}
+
+@media screen and (min-width: 769px) {
+  .toolbar {
+    justify-content: flex-end;
+  }
 }
 
 @media screen and (min-width: 1024px) {
@@ -116,6 +196,13 @@ aside.nav {
 
 .breadcrumbs li::after {
   padding: 0 0.25rem;
+}
+
+@media screen and (min-width: 769px) {
+  .breadcrumbs {
+    display: block;
+    visibility: visible;
+  }
 }
 
 /* Auxiliary Styles */
