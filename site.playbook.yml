@@ -38,6 +38,7 @@ asciidoc:
   attributes:
     # Enable pagination
     page-pagination: ''
+    hide-toc: ''
   extensions:
     - ./extensions/boost-link-inline-macro.js
     - '@asciidoctor/tabs'
