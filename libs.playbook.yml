@@ -41,19 +41,33 @@ site:
 
 antora:
   extensions:
-    - require: ./extensions/boost.js
+    - require: '@alandefreitas/antora-playbook-macros-extension'
+      macros:
+        # Default values for macros
+        # These values can be overridden with environment variables,
+        # asciidoc.attributes, or --attribute command line option.
+        page-boost-branch: develop
+        page-boost-ui-branch: develop
+        page-commit-id: '000000'
+    - require: '@alandefreitas/antora-cpp-tagfiles-extension'
+      cpp-tagfiles:
+        using-namespaces:
+          - 'boost::'
+    - require: '@alandefreitas/antora-cpp-reference-extension'
+      dependencies:
+        - name: 'boost'
+          repo: 'https://github.com/boostorg/boost.git'
+          tag: 'develop'
+          variable: 'BOOST_SRC_DIR'
+
 asciidoc:
   attributes:
-    page-boost-branch: develop
-    page-boost-ui-branch: develop
-    page-boost-is-release: ''
-    page-commit-id: ''
     # Enable pagination
     page-pagination: ''
     # Remove the sidenav and include TOC in index.adoc page
     remove-sidenav: ''
   extensions:
-    - ./extensions/boost-link-inline-macro.js
+    - '@alandefreitas/asciidoctor-boost-links'
     - '@asciidoctor/tabs'
 
 # Libraries that support Antora should be included here
