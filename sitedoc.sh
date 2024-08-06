@@ -77,6 +77,6 @@ if [ ! -d "node_modules" ] || [ "$(find package.json -prune -printf '%T@\n' | cu
   npm ci
 fi
 
-echo $ANTORA_CMD --fetch --attribute page-boost-branch="$1" --attribute page-commit-id="$commit_id" site.playbook.yml
+echo "$ANTORA_CMD" --fetch --attribute page-boost-branch="$1" --attribute page-commit-id="$commit_id" site.playbook.yml
 $ANTORA_CMD --fetch --attribute page-boost-branch="$1" --attribute page-commit-id="$commit_id" site.playbook.yml
 

@@ -33,24 +33,36 @@ site:
 
 antora:
   extensions:
-    - require: ./extensions/boost.js
+    - require: '@alandefreitas/antora-playbook-macros-extension'
+      macros:
+        # Default values for macros
+        # These values can be overridden with environment variables,
+        # asciidoc.attributes, or --attribute command line option.
+        page-boost-branch: develop
+        page-boost-ui-branch: develop
+        page-commit-id: '000000'
+    - require: '@alandefreitas/antora-cpp-tagfiles-extension'
+      cpp-tagfiles:
+        using-namespaces:
+          - 'boost::'
+
 asciidoc:
   attributes:
     # Enable pagination
     page-pagination: ''
   extensions:
-    - ./extensions/boost-link-inline-macro.js
+    - '@alandefreitas/asciidoctor-boost-links'
     - '@asciidoctor/tabs'
 
 content:
   sources:
-    - url: https://github.com/boostorg/website-v2-docs
+    - url: .
       start_path: user-guide
       edit_url: '{web_url}/edit/develop/{path}'
-    - url: https://github.com/boostorg/website-v2-docs
+    - url: .
       start_path: formal-reviews
       edit_url: '{web_url}/edit/develop/{path}'
-    - url: https://github.com/boostorg/website-v2-docs
+    - url: .
       start_path: contributor-guide
       edit_url: '{web_url}/edit/develop/{path}'
 
