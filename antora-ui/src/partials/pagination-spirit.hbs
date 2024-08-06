@@ -1,16 +1,16 @@
 <div class="spirit-nav">
   {{#with page.previous}}
-    <a accesskey="p" href="{{{relativize ./url}}}"><img src="{{{@root.uiRootPath}}}/img/prev.png" alt="Previous: {{{./content}}}"></a>
+    <a accesskey="p" href="{{{relativize ./url}}}"><img src="{{{@root.uiRootPath}}}/img/arrow-left.svg" alt="Previous: {{{./content}}}"></a>
   {{/with}}
   {{#with page.parent}}
-    <a accesskey="p" href="{{{relativize ./url}}}"><img src="{{{@root.uiRootPath}}}/img/up.png" alt="Up: {{{./content}}}"></a>
+    <a accesskey="p" href="{{{relativize ./url}}}"><img src="{{{@root.uiRootPath}}}/img/arrow-up.svg" alt="Up: {{{./content}}}"></a>
   {{/with}}
   {{#unless page.home}}
     {{#with (siteStartPage)}}
-      <a accesskey="p" href="{{{relativize ./pub.url}}}"><img src="{{{@root.uiRootPath}}}/img/home.png" alt="Home: {{{./content}}}"></a>
+      <a accesskey="p" href="{{{relativize ./pub.url}}}"><img src="{{{@root.uiRootPath}}}/img/home.svg" alt="Home: {{{./content}}}"></a>
     {{/with}}
   {{/unless}}
   {{#with page.next}}
-    <a accesskey="p" href="{{{relativize ./url}}}"><img src="{{{@root.uiRootPath}}}/img/next.png" alt="Next: {{{./content}}}"></a>
+    <a accesskey="p" href="{{{relativize ./url}}}"><img src="{{{@root.uiRootPath}}}/img/arrow-right.svg" alt="Next: {{{./content}}}"></a>
   {{/with}}
 </div>

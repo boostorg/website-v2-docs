@@ -6,9 +6,11 @@
   var navContainer = document.querySelector('.nav-container')
   var navToggle = document.querySelector('.nav-toggle')
   var nav = navContainer.querySelector('.nav')
+  var closeNavBtn = navContainer.querySelector('.nav-close')
 
   navToggle.addEventListener('click', showNav)
   navContainer.addEventListener('click', trapEvent)
+  closeNavBtn.addEventListener('click', hideNav)
 
   var menuPanel = navContainer.querySelector('[data-panel=menu]')
   if (!menuPanel) return
@@ -46,6 +48,17 @@
   menuPanel.addEventListener('mousedown', function (e) {
     if (e.detail > 1) e.preventDefault()
   })
+
+  function handleResize () {
+    var html = document.documentElement
+    if (window.innerWidth >= 769 && html.classList.contains('is-clipped--nav')) {
+      html.classList.remove('is-clipped--nav')
+      navContainer.classList.remove('is-active')
+      navToggle.classList.remove('is-active')
+    }
+  }
+
+  window.addEventListener('resize', handleResize)
 
   function onHashChange () {
     var navLink
@@ -119,9 +132,6 @@
     html.classList.add('is-clipped--nav')
     navToggle.classList.add('is-active')
     navContainer.classList.add('is-active')
-    var bounds = nav.getBoundingClientRect()
-    var expectedHeight = window.innerHeight - Math.round(bounds.top)
-    if (Math.round(bounds.height) !== expectedHeight) nav.style.height = expectedHeight + 'px'
     html.addEventListener('click', hideNav)
   }
 

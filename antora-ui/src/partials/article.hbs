@@ -1,5 +1,5 @@
-<article class="doc">
-  {{> pagination-spirit}}
+<article class="card doc {{#if (eq page.component.latest.asciidoc.attributes.remove-sidenav undefined)}}max-width-reset{{/if}}">
+  {{> toolbar}}
   {{#with page.title}}
     <h1 class="page">{{{this}}}</h1>
   {{/with}}
@@ -9,5 +9,12 @@
     {{/if}}
   {{/if}}
   {{{page.contents}}}
+  <div class="edit-this-page">
+    {{#if (and page.fileUri (not env.CI))}}
+      <a href="{{page.fileUri}}">Edit this Page</a>
+    {{else if (and page.editUrl (or env.FORCE_SHOW_EDIT_PAGE_LINK (not page.origin.private)))}}
+      <a href="{{page.editUrl}}">Edit this Page</a>
+    {{/if}}
+  </div>
   {{> pagination}}
 </article>
