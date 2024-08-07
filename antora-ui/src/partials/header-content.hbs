@@ -1,7 +1,17 @@
 <header class="header">
   <nav class="navbar">
     <div class="navbar-brand">
-      <a class="navbar-item" href="{{{or site.url siteRootPath}}}/doc/{{{page.component.name}}}/"><img src="{{{uiRootPath}}}/img/Boost_Brandmark_WhiteBoost_Transparent.svg" alt="" width="130"></a>
+      <a class="navbar-item" href="{{{or site.url siteRootPath}}}/doc/{{{page.component.name}}}/">
+        {{#if (and (eq page.component.latest.asciidoc.attributes.logo-img undefined) (eq page.component.latest.asciidoc.attributes.logo-text undefined))}}
+          <img src="{{{uiRootPath}}}/img/Boost_Brandmark_WhiteBoost_Transparent.svg" alt="" width="130">
+        {{else if (ne page.component.latest.asciidoc.attributes.logo-text undefined)}}
+          <span class="logo-text">{{page.component.latest.asciidoc.attributes.logo-text}}</span>
+        {{else if (ne page.component.latest.asciidoc.attributes.logo-img undefined)}}
+          {{! Set the logo image in ui.supplemental_files in the playbook }}
+          {{! https://docs.antora.org/antora/latest/playbook/ui-supplemental-files/ }}
+          <img src="{{{uiRootPath}}}/img/{{page.component.latest.asciidoc.attributes.logo-img}}" alt="" width="130">
+        {{/if}}
+      </a>
       <button class="navbar-burger" data-target="topbar-nav">
         <span></span>
         <span></span>
