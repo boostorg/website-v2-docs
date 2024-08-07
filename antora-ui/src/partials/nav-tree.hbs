@@ -1,19 +1,19 @@
 {{!-- Called for each level of left navigation --}}
 {{#if navigation.length}}
-  <ul class="nav-list">
-    {{#each navigation}}
-      {{#if ./content}}
-        <li class="{{#if (eq ./url @root.page.url)}} is-current-page{{/if}}" data-depth="{{or ../level 0}}">
-          {{#if ./url}}
-            <a class="nav-link" href="
-              {{~#if (eq ./urlType 'internal')}}{{{relativize ./url}}}
-              {{~else}}{{{./url}}}{{~/if}}">{{{./content}}}</a>
-          {{else}}
-            <span class="nav-text">{{{./content}}}</span>
-          {{/if}}
-        </li>
-      {{/if}}
-      {{> nav-tree navigation=./items level=(increment ../level)}}
-    {{/each}}
-  </ul>
+<ul class="nav-list">
+  {{#each navigation}}
+  {{#if ./content}}
+  <li class="{{#if (eq ./url @root.page.url)}} is-current-page{{/if}}" data-depth="{{or ../level 0}}">
+    {{#if ./url}}
+    <a class="nav-link" href="
+      {{~#if (eq ./urlType 'internal')}}{{{relativize ./url}}}
+      {{~else}}{{{./url}}}{{~/if}}">{{{./content}}}</a>
+    {{else}}
+    <span class="nav-text">{{{./content}}}</span>
+    {{/if}}
+  </li>
+  {{/if}}
+  {{> nav-tree navigation=./items level=(increment ../level)}}
+  {{/each}}
+</ul>
 {{/if}}

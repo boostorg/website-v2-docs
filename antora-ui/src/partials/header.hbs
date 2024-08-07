@@ -1,2 +1,10 @@
-{{> header-scripts}}
-{{> header-content}}
+{{!-- header-scripts.hbs --}}
+{{!-- Add header scripts here --}}
+{{!-- header-content.hbs --}}
+<header class="header">
+  <nav class="navbar">
+    <div class="navbar-brand">
+      <a class="navbar-item" href="{{{or site.url siteRootPath}}}/doc/{{{page.component.name}}}/"><img src="{{{uiRootPath}}}/img/Boost_Brandmark_WhiteBoost_Transparent.svg" alt="" width="130"></a>
+    </div>
+  </nav>
+</header>
