@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/bin/bash
 #
 # Copyright (c) 2024 The C++ Alliance, Inc. (https://cppalliance.org)
 #
@@ -12,6 +12,11 @@
 # This script is used to build the site
 # documentation which is not tagged per release.
 #
+
+# Note: macos users, run these commands
+# brew install findutils
+# echo "export PATH=\"/opt/homebrew/opt/findutils/libexec/gnubin:\$PATH\"" >> ~/.zprofile
+# . ~/.zprofile
 
 if [ $# -eq 0 ]; then
   echo "Usage: $0 { 'develop' | 'master' }..."
@@ -67,7 +72,7 @@ fi
 # Identify current commit id for footer
 if command -v git >/dev/null && git rev-parse --is-inside-work-tree >/dev/null 2>&1; then
   commit_id=$(git rev-parse HEAD)
-  commit_id=$(expr substr "$commit_id" 1 7)
+  commit_id=$(echo ${commit_id:0:7})
 else
   commit_id=""
 fi
