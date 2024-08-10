@@ -6,6 +6,10 @@ nav.pagination {
   padding: 0.75rem 1rem 0;
 }
 
+.dark nav.pagination {
+  border-top: 1px solid var(#051a26);
+}
+
 nav.pagination span {
   display: flex;
   flex: 50%;
