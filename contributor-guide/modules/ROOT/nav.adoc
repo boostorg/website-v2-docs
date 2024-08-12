@@ -28,6 +28,7 @@ Official repository: https://github.com/boostorg/website-v2-docs
 * Development
 ** xref:version-control.adoc[]
 ** xref:best-practices.adoc[]
+** xref:debug-visualisers.adoc[]
 
 * Build Systems
 ** xref:build-systems/cmake.adoc[]

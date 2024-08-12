@@ -1,0 +1,521 @@
+////
+Copyright (c) 2024 The C++ Alliance, Inc. (https://cppalliance.org)
+
+Distributed under the Boost Software License, Version 1.0. (See accompanying
+file LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
+
+Official repository: https://github.com/boostorg/website-v2-docs
+////
+= Mastering Debug Visualizers in MSVC and GDB
+:navtitle: Debug Visualizers
+
+Debug Visualizers offer a powerful way to simplify the debugging process by allowing developers to see complex data structures in a more understandable format. In this section, we explore how to use and write Debug Visualizers for both https://visualstudio.microsoft.com/[Microsoft Visual Studio (MSVC)] and the https://sourceware.org/gdb/[GNU Debugger (GDB)], two of the most popular debugging tools available today.
+
+Debug Visualizers are tools that allow developers to customize how complex data structures are displayed during a debugging session. Instead of manually parsing through raw data, Visualizers can present information in a human-readable format, making it easier to understand the state of a program and identify issues.
+
+For example, if you're working with a linked list, a Debug Visualizer can display the elements of the list in a clear, ordered format rather than as a series of memory addresses. This can significantly reduce the time and effort required to diagnose and fix bugs.
+
+== Debug Visualizers in MSVC
+
+Microsoft Visual Studio comes with built-in support for Debug Visualizers. MSVC includes several built-in Visualizers for common data types like `std::vector`, `std::map`, and `std::string`. However, one of the most powerful features of Visual Studio is the ability to create custom Visualizers to suit your specific needs. These Visualizers are often referred to as Natvis files, - short for Native Visualizer - a script-style display language for https://learn.microsoft.com/en-us/visualstudio/debugger/create-custom-views-of-native-objects?view=vs-2022[creating custom views of C++ objects].
+
+=== Using Built-in Visualizers
+
+Using built-in Visualizers in Visual Studio is straightforward. When you hit a breakpoint or pause the execution of your program, the debugger will automatically use the appropriate Visualizer to display the contents of variables.
+
+For example, if you're debugging a `std::vector`, Visual Studio will show the number of elements, their values, and the current capacity of the vector in a neatly organized format. You can also hover over variables to see a quick summary, or expand them in the Watch window to see more details.
+
+=== Writing Custom Visualizers in MSVC
+
+To create a custom Visualizer, you need to write a Natvis file. Natvis files are XML files that allow you to present data in a way that makes sense for your application, whether that means showing a simplified view or expanding complex structures, and annotating the output appropriately.
+
+==== Natvis Syntax
+
+The syntax of a Natvis file is both straightforward and flexible. Here's a basic structure of a Natvis file:
+
+[source, xml]
+----
+<?xml version="1.0" encoding="utf-8"?>
+<AutoVisualizer xmlns="http://schemas.microsoft.com/vstudio/debugger/natvis/2010">
+  <Type Name="MyNamespace::MyClass">
+    <DisplayString>{{m_member1}}, {{m_member2}}</DisplayString>
+    <Expand>
+      <Item Name="Member 1">m_member1</Item>
+      <Item Name="Member 2">m_member2</Item>
+    </Expand>
+  </Type>
+</AutoVisualizer>
+----
+
+In this example, the `DisplayString` element defines a simple summary of the data that will be shown when you hover over a variable of type `MyClass`. The `Expand` element defines what will be shown when you expand the variable in the debugger.
+
+==== Example Visualizer
+
+Let's consider an example where you have a custom linked list class:
+
+[source, cpp]
+----
+namespace MyNamespace {
+    struct Node {
+        int value;
+        Node* next;
+    };
+
+    class LinkedList {
+    public:
+        Node* head;
+    };
+}
+----
+
+Now, write a Natvis file to visualize this linked list in a user-friendly manner:
+
+[source, xml]
+----
+<?xml version="1.0" encoding="utf-8"?>
+<AutoVisualizer xmlns="http://schemas.microsoft.com/vstudio/debugger/natvis/2010">
+  <Type Name="MyNamespace::LinkedList">
+    <DisplayString>LinkedList with head at {head}</DisplayString>
+    <Expand>
+      <Item Name="Head">head</Item>
+      <LinkedListItems>
+        <Size>size</Size>
+        <ValuePointer>head</ValuePointer>
+        <NextPointer>next</NextPointer>
+      </LinkedListItems>
+    </Expand>
+  </Type>
+</AutoVisualizer>
+----
+
+This Natvis file will show the head of the linked list and allow you to expand it to see all the elements in a list format.
+
+==== Deploy and Test
+
+Once you have written your Natvis file, you can deploy it in Visual Studio by placing it in the `My Documents\Visual Studio <Version>\Visualizers` directory or by including it directly in your project. After loading your project and hitting a breakpoint, Visual Studio will use your custom Visualizer automatically.
+
+==== Tips and Best Practices
+
+When writing Natvis files, keep the following best practices in mind:
+
+. Visualizers should simplify the debugging process, so avoid overly complex representations.
+. Visualizers run during debugging, so inefficient Natvis files can slow down the debugger.
+. Ensure that your Visualizer works correctly with all possible states of the data structure, including having a single entry, or a NULL empty state, or being highly populated.
+. Document and comment your Natvis file so that others (or your future self) can understand and maintain them.
+
+== Debug Visualizers in GDB
+
+GNU Debugger (GDB) is a powerful and flexible debugger that is widely used in the open-source Unix community. While GDB does not have a direct equivalent to MSVC's Natvis files, it supports a feature called pretty-printers, which serve a similar purpose. Pretty-printers are written in Python and allow developers to customize the output of data structures during debugging.
+
+GDB comes with several built-in pretty-printers, particularly for standard library containers like `std::vector` and `std::map`. These pretty-printers can be enabled by loading the appropriate scripts during your debugging session.
+
+For example, to enable STL pretty-printers, you might add the following to your `.gdbinit` file:
+
+[source, bash]
+----
+python
+import sys
+sys.path.insert(0, '/usr/share/gcc-<version>/python')
+from libstdcxx.v6.printers import register_libstdcxx_printers
+register_libstdcxx_printers(gdb.current_objfile())
+end
+----
+
+Once enabled, GDB will automatically use these pretty-printers to display STL containers in a more readable format.
+
+=== Writing Custom Pretty-Printers in GDB
+
+Here's a simple Python template for a GDB pretty-printer:
+
+[source, python]
+----
+class MyClassPrinter:
+    "Print a MyNamespace::MyClass"
+
+    def __init__(self, val):
+        self.val = val
+
+    def to_string(self):
+        return "MyClass: member1 = {}, member2 = {}".format(
+            self.val['member1'], self.val['member2'])
+
+def lookup_function(val):
+    if str(val.type) == "MyNamespace::MyClass":
+        return MyClassPrinter(val)
+    return None
+
+gdb.pretty_printers.append(lookup_function)
+----
+
+==== Example Pretty-Printer
+
+Let's write a pretty-printer for the same linked list example used in the MSVC section:
+
+[source, python]
+----
+class LinkedListPrinter:
+    "Print a MyNamespace::LinkedList"
+
+    class Iterator:
+        def __init__(self, head):
+            self.node = head
+
+        def __iter__(self):
+            return self
+
+        def __next__(self):
+            if self.node == 0:
+                raise StopIteration
+            value = self.node['value']
+            self.node = self.node['next']
+            return value
+
+    def __init__(self, val):
+        self.val = val
+
+    def to_string(self):
+        return "LinkedList"
+
+    def children(self):
+        return enumerate(self.Iterator(self.val['head']))
+
+def lookup_function(val):
+    if str(val.type) == "MyNamespace::LinkedList":
+        return LinkedListPrinter(val)
+    return None
+
+gdb.pretty_printers.append(lookup_function)
+----
+
+This script will allow GDB to display the elements of the linked list in a way that is easy to understand.
+
+==== Deploy and Test
+
+To deploy the pretty-printer, you can add it to your `.gdbinit` file or load it manually during a debugging session. Once loaded, GDB will use the pretty-printer to display the linked list whenever it encounters the `LinkedList` type.
+
+=== Tips and Best Practices
+
+. Write modular pretty-printers that can be easily extended or reused.
+. Keep performance in mind, as pretty-printers run in real-time during debugging.
+. Ensure that your pretty-printer works correctly with all possible states of the data structure, including having a single entry, or a NULL empty state, or being highly populated.
+. Document and comment your pretty-printers so that others (or your future self) can understand and maintain them.
+
+== Comparing MSVC and GDB Debug Visualizers
+
+While both MSVC and GDB support custom visualization of data structures during debugging, they differ significantly in their approach:
+
+. Natvis files are XML-based and tightly integrated with the Visual Studio IDE, offering a more graphical and user-friendly experience.
+. GDB's pretty-printers are written in Python, providing greater flexibility but requiring more manual setup and scripting.
+
+== Real-World Use Cases
+
+Debug Visualizers are particularly useful in scenarios where data structures are complex and difficult to interpret from raw memory views. This includes debugging custom containers, graphical objects, or any data structure with a non-trivial internal representation.
+
+Consider a case where a developer is working on a 3D game engine. The engine uses complex data structures to represent scenes, including trees of graphical objects and spatial partitions. Without Debug Visualizers, diagnosing issues with these structures would involve manually traversing pointers and interpreting binary data. With custom Visualizers, the developer can see these structures as they are meant to be seen, such as a tree view of the scene graph or a grid of spatial partitions, making it much easier to identify and fix problems.
+
+=== Using Debug Visualizers with Simpler Boost Libraries
+
+The following examples refer to boost:optional[], boost:variant[], and boost:container[].
+
+==== Visualizing boost::optional
+
+The `boost::optional` type represents an object that may or may not contain a value. When debugging code that uses `boost::optional`, it's helpful to quickly see whether a value is present and, if so, what that value is.
+
+Here's an example of a Natvis file that visualizes `boost::optional` in MSVC:
+
+[source, xml]
+----
+<?xml version="1.0" encoding="utf-8"?>
+<AutoVisualizer xmlns="http://schemas.microsoft.com/vstudio/debugger/natvis/2010">
+  <Type Name="boost::optional<*>" Priority="High">
+    <DisplayString Condition="!is_initialized">empty</DisplayString>
+    <DisplayString Condition="is_initialized">Value = {*(this->storage_.data_)}</DisplayString>
+    <Expand>
+      <Item Name="Value" Condition="is_initialized">*(this->storage_.data_)</Item>
+    </Expand>
+  </Type>
+</AutoVisualizer>
+----
+
+This Visualizer checks if the `boost::optional` contains a value using the `is_initialized` method. If a value is present, it displays the content; otherwise, it shows "empty".
+
+For GDB, you can create a pretty-printer in Python:
+
+[source, python]
+----
+class OptionalPrinter:
+    "Print a boost::optional"
+
+    def __init__(self, val):
+        self.val = val
+
+    def to_string(self):
+        is_initialized = self.val['m_initialized']
+        if is_initialized:
+            return "Value = {}".format(self.val['m_storage']['m_storage']['data'])
+        else:
+            return "empty"
+
+def lookup_function(val):
+    if str(val.type).startswith('boost::optional'):
+        return OptionalPrinter(val)
+    return None
+
+gdb.pretty_printers.append(lookup_function)
+----
+
+This pretty-printer works similarly to the Natvis example, displaying either the value stored in the `boost::optional` or indicating that it is empty.
+
+==== Visualizing boost::variant
+
+`boost::variant` is a type-safe union that can hold one of several types. Visualizing it during debugging can be tricky, as you need to see which type is currently stored and what its value is.
+
+The following Natvis file visualizes `boost::variant`:
+
+[source, xml]
+----
+<?xml version="1.0" encoding="utf-8"?>
+<AutoVisualizer xmlns="http://schemas.microsoft.com/vstudio/debugger/natvis/2010">
+  <Type Name="boost::variant<*>">
+    <DisplayString>{ which = {which}, value = {*(void*)&storage_ + 16} }</DisplayString>
+    <Expand>
+      <Item Name="Which">which</Item>
+      <Item Name="Value">{*(void*)&storage_ + 16}</Item>
+    </Expand>
+  </Type>
+</AutoVisualizer>
+----
+
+This Visualizer displays the active type stored in the `boost::variant` and its value. The `which` member determines which of the possible types is currently in use, and the corresponding value is extracted and displayed.
+
+Here's how you might implement a pretty-printer for `boost::variant` in GDB:
+
+[source, python]
+----
+class VariantPrinter:
+    "Print a boost::variant"
+
+    def __init__(self, val):
+        self.val = val
+
+    def to_string(self):
+        which = self.val['which_']
+        value = gdb.parse_and_eval('((void*)&{})->boost::detail::variant::which_types::types[{}]'.format(self.val.address, which))
+        return "which = {}, value = {}".format(which, value)
+
+def lookup_function(val):
+    if str(val.type).startswith('boost::variant'):
+        return VariantPrinter(val)
+    return None
+
+gdb.pretty_printers.append(lookup_function)
+----
+
+This pretty-printer identifies the active type using `which_` and displays its value.
+
+==== Visualizing boost::container::vector
+
+`boost::container::vector` is a drop-in replacement for `std::vector` with improved performance in certain scenarios. Like `std::vector`, it benefits greatly from a Visualizer that can show the contents of the container in a user-friendly way.
+
+Here's a Natvis file for visualizing `boost::container::vector`:
+
+[source, xml]
+----
+<?xml version="1.0" encoding="utf-8"?>
+<AutoVisualizer xmlns="http://schemas.microsoft.com/vstudio/debugger/natvis/2010">
+  <Type Name="boost::container::vector<*>">
+    <DisplayString>Size = {size()}</DisplayString>
+    <Expand>
+      <Item Name="[size() elements]">[ptr_, ptr_ + size()]</Item>
+    </Expand>
+  </Type>
+</AutoVisualizer>
+----
+
+This Visualizer displays the size of the vector, and allows you to expand the vector to see all its elements.
+
+For GDB, you can use the following pretty-printer:
+
+[source, Python]
+----
+class BoostVectorPrinter:
+    "Print a boost::container::vector"
+
+    def __init__(self, val):
+        self.val = val
+
+    def to_string(self):
+        size = self.val['m_holder']['m_size']
+        return "Size = {}".format(size)
+
+    def children(self):
+        size = int(self.val['m_holder']['m_size'])
+        start = self.val['m_holder']['m_start']
+        return (('[{}]'.format(i), start[i]) for i in range(size))
+
+def lookup_function(val):
+    if str(val.type).startswith('boost::container::vector'):
+        return BoostVectorPrinter(val)
+    return None
+
+gdb.pretty_printers.append(lookup_function)
+----
+
+This pretty-printer shows the size of the `boost::container::vector`, and lists its elements.
+
+Now, let's look at debugging a more complex library.
+
+=== Using Debug Visualizers with Boost Asio
+
+boost:asio[] is a powerful and widely used library, with the challenge of debugging asynchronous code. Debug Visualizers can make this process significantly easier by providing insights into the state of your Asio objects during debugging.
+
+The `boost::asio::io_context` (formerly `io_service`) is a core component of the library, used to initiate and manage asynchronous operations. When debugging, it can be helpful to see the state of the `io_context`, including the number of pending tasks and whether it is currently running.
+
+Here's an example of a Natvis file that visualizes `boost::asio::io_context` in MSVC:
+
+[source, xml]
+----
+<?xml version="1.0" encoding="utf-8"?>
+<AutoVisualizer xmlns="http://schemas.microsoft.com/vstudio/debugger/natvis/2010">
+  <Type Name="boost::asio::io_context">
+    <DisplayString>Work = {this->impl_.work_count_}, Threads = {this->impl_.thread_count_}</DisplayString>
+    <Expand>
+      <Item Name="Work Count">this->impl_.work_count_</Item>
+      <Item Name="Thread Count">this->impl_.thread_count_</Item>
+    </Expand>
+  </Type>
+</AutoVisualizer>
+----
+
+This Visualizer displays the number of pending tasks (`work_count_`) and the number of threads currently running in the `io_context`. This information is crucial for understanding the load and activity level of the `io_context`.
+
+For GDB, you can create a pretty-printer in Python:
+
+[source, Python]
+----
+class IoContextPrinter:
+    "Print a boost::asio::io_context"
+
+    def __init__(self, val):
+        self.val = val
+
+    def to_string(self):
+        work_count = self.val['impl_']['work_count_']
+        thread_count = self.val['impl_']['thread_count_']
+        return "Work = {}, Threads = {}".format(work_count, thread_count)
+
+def lookup_function(val):
+    if str(val.type).startswith('boost::asio::io_context'):
+        return IoContextPrinter(val)
+    return None
+
+gdb.pretty_printers.append(lookup_function)
+----
+
+This pretty-printer provides similar information as the Natvis file, showing the number of pending tasks and threads in the `io_context`.
+
+==== Visualizing boost::asio::steady_timer
+
+The `boost::asio::steady_timer` is used for scheduling asynchronous operations to occur after a specified time period. Visualizing its state can help you understand when the next operation is scheduled to run.
+
+The following Natvis file visualizes `boost::asio::steady_timer`:
+
+[source, xml]
+----
+<?xml version="1.0" encoding="utf-8"?>
+<AutoVisualizer xmlns="http://schemas.microsoft.com/vstudio/debugger/natvis/2010">
+  <Type Name="boost::asio::steady_timer">
+    <DisplayString>Expires At = {this->impl_.expiry_}</DisplayString>
+    <Expand>
+      <Item Name="Expiry Time">this->impl_.expiry_</Item>
+    </Expand>
+  </Type>
+</AutoVisualizer>
+----
+
+This Visualizer displays the time at which the timer is set to expire, helping you to easily track the timing of scheduled operations.
+
+Here's a pretty-printer for `boost::asio::steady_timer` in GDB:
+
+[source, Python]
+----
+class SteadyTimerPrinter:
+    "Print a boost::asio::steady_timer"
+
+    def __init__(self, val):
+        self.val = val
+
+    def to_string(self):
+        expiry_time = self.val['impl_']['expiry_']
+        return "Expires At = {}".format(expiry_time)
+
+def lookup_function(val):
+    if str(val.type).startswith('boost::asio::steady_timer'):
+        return SteadyTimerPrinter(val)
+    return None
+
+gdb.pretty_printers.append(lookup_function)
+----
+
+This pretty-printer shows when the timer is set to expire, similar to the Natvis Visualizer.
+
+==== Visualizing boost::asio::socket
+
+Sockets are one of the most commonly used components in boost:asio[], allowing for network communication. Visualizing socket states and addresses during debugging can provide clarity on the connections being managed.
+
+Here's a Natvis file that visualizes a TCP socket:
+
+[source, xml]
+----
+<?xml version="1.0" encoding="utf-8"?>
+<AutoVisualizer xmlns="http://schemas.microsoft.com/vstudio/debugger/natvis/2010">
+  <Type Name="boost::asio::ip::tcp::socket">
+    <DisplayString>Local = {this->impl_.socket_.local_address_}:{this->impl_.socket_.local_port_}, Remote = {this->impl_.socket_.remote_address_}:{this->impl_.socket_.remote_port_}</DisplayString>
+    <Expand>
+      <Item Name="Local Address">{this->impl_.socket_.local_address_}:{this->impl_.socket_.local_port_}</Item>
+      <Item Name="Remote Address">{this->impl_.socket_.remote_address_}:{this->impl_.socket_.remote_port_}</Item>
+    </Expand>
+  </Type>
+</AutoVisualizer>
+----
+
+This Visualizer shows the local and remote addresses and ports for a TCP socket, giving you immediate insight into the connection being managed.
+
+A pretty-printer for a TCP socket in GDB might look like this:
+
+[source, Python]
+----
+class TcpSocketPrinter:
+    "Print a boost::asio::ip::tcp::socket"
+
+    def __init__(self, val):
+        self.val = val
+
+    def to_string(self):
+        local_address = self.val['impl_']['socket_']['local_address_']
+        local_port = self.val['impl_']['socket_']['local_port_']
+        remote_address = self.val['impl_']['socket_']['remote_address_']
+        remote_port = self.val['impl_']['socket_']['remote_port_']
+        return "Local = {}:{}, Remote = {}:{}".format(local_address, local_port, remote_address, remote_port)
+
+def lookup_function(val):
+    if str(val.type).startswith('boost::asio::ip::tcp::socket'):
+        return TcpSocketPrinter(val)
+    return None
+
+gdb.pretty_printers.append(lookup_function)
+----
+
+This pretty-printer displays the local and remote addresses and ports, providing clear information about the socket's connections.
+
+== Next Steps
+
+By understanding how to use and write Debug Visualizers, you can gain deeper insights into your code, catch bugs more quickly, and ultimately produce higher-quality software. Whether you're new to debugging or an experienced developer, taking the time to master these tools will pay off in the long run. 
+
+Consider downloading sample Natvis and Python pretty-printer files from the https://github.com/boostorg/boost/tree/master/libs[Boost library's GitHub repository].
+
+== See Also
+
+* https://sourceware.org/gdb/current/onlinedocs/gdb.html/Python-API.html[GDB Python API]
+* https://learn.microsoft.com/en-us/visualstudio/debugger/create-custom-views-of-native-objects?view=vs-2022[Natvis Language Reference]
+* xref:testing/boost-test-matrix.adoc[]
