@@ -76,7 +76,7 @@ The current Boost libraries are categorized as follows (the count shows the numb
 |String and text processing | 14 | Covers type conversion, string formatting, streams, localization, regular expressions, parsing, string algorithms, tokens.
 |System | 11 | Time utilities, context switching, handling libraries, threads, a smart file system, processes, backtraces, errors.
 |Template Metaprogramming | 15 | Libraries to support the development of libraries, with features such as callable traits, reflection, function types, tuples, higher-order functions, parsing, sequences, metafunctions, static assertions, introspection, properties, expressions.
-|Miscellaneous | ? | Libraries for numerical type and text conversion, byte ordering, logging, swapping, timing, initialization, and other utilities.
+|Miscellaneous | 15 | Libraries for numerical type and text conversion, byte ordering, logging, swapping, timing, initialization, and other utilities.
 |===
 
 
