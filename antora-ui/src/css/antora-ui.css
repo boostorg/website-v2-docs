@@ -1,4 +1,5 @@
 /* Antora UI Default Styles */
+@import "https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200";
 
 /* Global Styles */
 
@@ -16,14 +17,14 @@ html.is-clipped--nav {
   .body {
     display: flex;
     gap: 1rem;
-    padding: 0.75rem;
+    padding: 4rem 1rem 1rem;
   }
 }
 
 @media screen and (min-width: 1024px) {
   .body {
     display: flex;
-    padding: 1rem;
+    padding: 4rem 1rem 1rem;
   }
 }
 
@@ -33,6 +34,12 @@ body.article {
 
 .max-width-reset {
   max-width: none;
+}
+
+.dark .nav-link,
+.dark .nav-menu a,
+.dark .nav-text {
+  color: #ccc;
 }
 
 /* Document Styles */
@@ -67,6 +74,11 @@ html:not(.is-clipped--nav) main.article {
 /* Card Styles */
 .card {
   background-color: #fff;
+  position: relative;
+}
+
+.dark .card {
+  background-color: #08283a;
 }
 
 @media screen and (min-width: 769px) {
@@ -81,6 +93,11 @@ html:not(.is-clipped--nav) main.article {
 aside.nav {
   background-color: #fff;
   height: auto;
+}
+
+.dark aside.nav,
+.dark div.toolbar {
+  background-color: transparent !important;
 }
 
 html.is-clipped--nav .nav-close {
@@ -185,8 +202,29 @@ html.is-clipped--nav .nav-close {
   background-color: #fff;
   box-shadow: unset;
   height: 2rem;
-  top: 0;
+  top: 3px !important;
+  position: absolute;
+  display: flex;
   justify-content: space-between;
+  width: 96%;
+}
+
+.dark div.toolbar {
+  background-color: #08283a;
+}
+
+.toolbar .material-symbols-outlined {
+  font-variation-settings:
+    'FILL' 1,
+    'wght' 700,
+    'GRAD' 200,
+    'opsz' 20 !important;
+  color: #000;
+  font-size: 18px;
+}
+
+.dark .toolbar .material-symbols-outlined {
+  color: #fff;
 }
 
 @media screen and (min-width: 769px) {
