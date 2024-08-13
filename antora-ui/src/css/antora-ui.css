@@ -2,13 +2,22 @@
 @import "https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200";
 
 /* Global Styles */
+:root {
+  --color-black: rgb(0, 0, 0);
+  --color-white: rgb(255, 255, 255);
+  --color-pasteboard: rgb(229, 231, 235);
+  --color-light-gray: rgb(204, 204, 204);
+  --color-dark-blue: rgb(8, 40, 58);
+  --color-dark-gray: rgb(66, 66, 66);
+  --max-width: 80rem;
+}
 
 html.is-clipped--nav {
   overflow-y: visible;
 }
 
 .body {
-  max-width: 80rem;
+  max-width: var(--max-width);
   margin-left: auto;
   margin-right: auto;
 }
@@ -29,7 +38,7 @@ html.is-clipped--nav {
 }
 
 body.article {
-  background-color: #d1d5db;
+  background-color: var(--color-pasteboard);
 }
 
 .max-width-reset {
@@ -39,7 +48,7 @@ body.article {
 .dark .nav-link,
 .dark .nav-menu a,
 .dark .nav-text {
-  color: #ccc;
+  color: var(--color-light-gray);
 }
 
 /* Document Styles */
@@ -73,7 +82,7 @@ html:not(.is-clipped--nav) main.article {
 
 /* Card Styles */
 .card {
-  background-color: #fff;
+  background-color: var(--color-white);
   position: relative;
 }
 
@@ -83,15 +92,21 @@ html:not(.is-clipped--nav) main.article {
 
 @media screen and (min-width: 769px) {
   .card {
-    border-radius: 1rem;
+    border-radius: 0.5rem;
     padding: 1rem;
     height: 100%;
   }
 }
 
+@media screen and (max-width: 770px) {
+  .card {
+    position: absolute;
+  }
+}
+
 /* Navigation Styles */
 aside.nav {
-  background-color: #fff;
+  background-color: var(--color-white);
   height: auto;
 }
 
@@ -167,8 +182,8 @@ html.is-clipped--nav .nav-close {
   outline: none;
   line-height: inherit;
   padding: 0;
-  height: var(--toolbar-height);
-  width: var(--toolbar-height);
+  height: 3rem;
+  width: 3rem;
   margin-right: -0.25rem;
 }
 
@@ -194,7 +209,7 @@ html.is-clipped--nav .nav-close {
 .nav-menu a,
 .nav-link,
 .nav-text {
-  color: #424242;
+  color: var(--color-black);
 }
 
 /* Toolbar Styles */
@@ -210,7 +225,7 @@ html.is-clipped--nav .nav-close {
 }
 
 .dark div.toolbar {
-  background-color: #08283a;
+  background-color: var(--color-dark-blue);
 }
 
 .toolbar .material-symbols-outlined {
@@ -219,12 +234,12 @@ html.is-clipped--nav .nav-close {
     'wght' 700,
     'GRAD' 200,
     'opsz' 20 !important;
-  color: #000;
+  color: var(--color-black);
   font-size: 18px;
 }
 
 .dark .toolbar .material-symbols-outlined {
-  color: #fff;
+  color: var(--color-white);
 }
 
 @media screen and (min-width: 769px) {
@@ -246,7 +261,7 @@ html.is-clipped--nav .nav-close {
 
 /* Breadcrumbs Styles */
 .breadcrumbs a {
-  color: #424242;
+  color: var(--color-dark-gray);
   font-weight: 500;
 }
 
@@ -290,7 +305,7 @@ html.is-clipped--nav .nav-close {
 .toc.sidebar .toc-menu h3 {
   height: auto;
   justify-content: flex-start;
-  color: #424242;
+  color: var(--color-dark-gray);
 }
 
 .toc.embedded {
