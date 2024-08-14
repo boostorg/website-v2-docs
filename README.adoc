@@ -239,3 +239,23 @@ Run `npx antora --fetch playbook.yml` and similar antora commands described abov
 - See https://docs.antora.org/antora/latest/install-and-run-quickstart/
 - The output automatically goes in `build/site/`
 
+=== To Configure Antora Documentation to Remove Left-Side Navigation
+
+This section explains how to to configure an Antora documentation site to remove left-side navigation. 
+
+The options are set in a playbook.yml file. For `sitedocs` documentation the file is `website-v2-docs/site.playbook.yml`. For library playbooks the file is `website-v2-docs/libs.playbook.yml`.
+
+To remove the left-side navigation bar and instead include the table of contents (TOC) in the index.adoc page, include this yml code:
+
+[source,yml]
+----
+# Remove the sidenav and include a TOC in the index.adoc page 
+ remove-sidenav: ''
+----
+
+By default, the setting is disabled. Setting `remove-sidenav` to any string (including the empty string) enables it.
+
+The setting applies to all components of the playbook. There is no option to enable/disable it for any specific component of the playbook.
+
+
+
