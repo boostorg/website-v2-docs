@@ -35,11 +35,24 @@ To formally report an issue on an individual library, locate the repo for that l
 
 Before filing an issue, it is good practice to identify the admins (authors or maintainers) of a library. This information can be found in the `meta` folder for the library. For example: https://github.com/boostorg/json/blob/develop/meta/libraries.json[] contains the authors for the boost:json[] library. Also, library documentation and commit history may well specify who is actively involved. Make a connection first to ensure the library admins are open to updates.
 
-To report an issue with the web site, including this documentation, click the *New Issue* button on this GitHub page: https://github.com/cppalliance/site-docs/issues[cppalliance/site-docs]. 
+Whichever list you add your issue to, the issue will be addressed in due course. Providing full details, and examples and screenshots where appropriate, should give you the quicker response. Follow the *Create a New Issue* section below.
 
-After clicking *New Issue*, you will see a list of issue templates, such as *Submit a Correction or Bug report*, or *Suggest a Topic, Enhancement, or Information*. Select the most appropriate template (which will give you some advice on how to fill out the form), or select *Open a blank issue* if none of the templates applies.
+=== Report Issues in Outside Sources
 
-Whichever list you add your issue to, the issue will be addressed in due course. Providing full details, and examples and screenshots where appropriate, should give you the quicker response.
+There are sources of information on the Boost libraries outside of this website and the library documentation, including:
+
+* https://en.wikipedia.org/wiki/Boost_(C%2B%2B_libraries)[The Wikipedia page]
+* https://www.linkedin.com/company/boostlibs/[The LinkedIn page]
+* https://stackoverflow.com/questions/tagged/boost[Stack Overflow: Boost]
+
+If you notice content that needs updated in these sources, perhaps out-of-date information, incorrect or missing information, or perhaps just language that could be improved, then complete the process to *Create a New Issue*. Feedback like this is welcome.
+
+[[createnewissue]]
+=== Create a New Issue
+
+To report an issue with the web site, including this documentation, click the *New Issue* button on this GitHub page: https://github.com/boostorg/website-v2-docs/issues[website-v2-docs/issues]. 
+
+After clicking *New Issue*, you will be able to add a *Title* and *Description*. Provide as much detail as possible, including links where helpful and suggestions for the updated content.
 
 [#contribute]
 == Contribute to an Existing Library
