@@ -26,14 +26,14 @@ html.is-clipped--nav {
   .body {
     display: flex;
     gap: 1rem;
-    padding: 4rem 1rem 1rem;
+    padding: 1rem;
   }
 }
 
 @media screen and (min-width: 1024px) {
   .body {
     display: flex;
-    padding: 4rem 1rem 1rem;
+    padding: 1rem;
   }
 }
 
@@ -98,9 +98,10 @@ html:not(.is-clipped--nav) main.article {
   }
 }
 
-@media screen and (max-width: 770px) {
+@media screen and (max-width: 768px) {
   .card {
-    position: absolute;
+    position: absolute !important;
+    top: 2.7rem;
   }
 }
 
@@ -182,14 +183,14 @@ html.is-clipped--nav .nav-close {
   outline: none;
   line-height: inherit;
   padding: 0;
-  height: 3rem;
+  height: 2rem;
   width: 3rem;
   margin-right: -0.25rem;
 }
 
 .nav-container.is-active {
   position: static;
-  padding: 1rem;
+  padding: 0.5rem 1rem;
 }
 
 @media screen and (min-width: 769px) {
