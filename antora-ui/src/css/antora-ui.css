@@ -26,14 +26,14 @@ html.is-clipped--nav {
   .body {
     display: flex;
     gap: 1rem;
-    padding: 4rem 1rem 1rem;
+    padding: 1rem;
   }
 }
 
 @media screen and (min-width: 1024px) {
   .body {
     display: flex;
-    padding: 4rem 1rem 1rem;
+    padding: 1rem;
   }
 }
 
@@ -98,7 +98,7 @@ html:not(.is-clipped--nav) main.article {
   }
 }
 
-@media screen and (max-width: 770px) {
+@media screen and (max-width: 768px) {
   .card {
     position: absolute !important;
     top: 2.7rem;
