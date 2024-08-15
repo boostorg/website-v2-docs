@@ -54,6 +54,7 @@ site:
     latestVersion: *latest_version_123
 page:
   url: *home_url
+  role: -toc
   home: true
   title: Brand&#8217;s Hardware &amp; Software Requirements
   component: *component

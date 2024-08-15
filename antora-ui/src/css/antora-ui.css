@@ -12,28 +12,23 @@
   --max-width: 80rem;
 }
 
-html.is-clipped--nav {
-  overflow-y: visible;
+html,
+body {
+  height: 100%;
+  min-height: 100vh;
 }
 
-.body {
-  max-width: var(--max-width);
-  margin-left: auto;
-  margin-right: auto;
+html.is-clipped--nav {
+  overflow-y: visible;
 }
 
 @media screen and (min-width: 769px) {
   .body {
     display: flex;
-    gap: 1rem;
-    padding: 1rem;
-  }
-}
-
-@media screen and (min-width: 1024px) {
-  .body {
-    display: flex;
-    padding: 1rem;
+    padding-top: 1rem;
+    padding-right: 1rem;
+    padding-bottom: 0;
+    padding-left: 1rem;
   }
 }
 
@@ -53,6 +48,7 @@ body.article {
 
 /* Document Styles */
 main.article {
+  padding-bottom: 0;
   min-width: 0;
 }
 
@@ -70,20 +66,33 @@ html:not(.is-clipped--nav) main.article {
   padding: 1rem 1rem 4rem;
 }
 
+@media screen and (max-width: 768px) {
+  .content {
+    width: 100%;
+  }
+}
+
+@media screen and (min-width: 769px) {
+  main.article {
+    padding-left: 1rem;
+  }
+}
+
 @media screen and (min-width: 1024px) {
   .doc {
     margin: 0;
   }
+}
 
-  .content {
-    gap: 1rem;
+@media screen and (min-width: 1820px) {
+  main.article {
+    padding-left: 1rem;
   }
 }
 
 /* Card Styles */
 .card {
   background-color: var(--color-white);
-  position: relative;
 }
 
 .dark .card {
@@ -98,17 +107,13 @@ html:not(.is-clipped--nav) main.article {
   }
 }
 
-@media screen and (max-width: 768px) {
-  .card {
-    position: absolute !important;
-    top: 2.7rem;
-  }
-}
-
 /* Navigation Styles */
 aside.nav {
+  position: initial;
   background-color: var(--color-white);
+  box-shadow: none;
   height: auto;
+  overflow-y: auto;
 }
 
 .dark aside.nav,
@@ -121,13 +126,8 @@ html.is-clipped--nav .nav-close {
   visibility: visible;
 }
 
-.nav {
-  position: initial;
-  box-shadow: none;
-}
-
 .nav .panels {
-  height: 100%;
+  height: auto;
 }
 
 .nav-list {
@@ -156,20 +156,6 @@ html.is-clipped--nav .nav-close {
   visibility: hidden;
 }
 
-@media screen and (min-width: 769px) {
-  .nav-toggle {
-    display: none;
-    visibility: hidden;
-  }
-}
-
-@media screen and (min-width: 769px) {
-  .nav-toggle.is-active ~ .spirit-nav {
-    display: block;
-    visibility: visible;
-  }
-}
-
 .nav-toggle {
   background-position-x: 0;
   background-position-y: 50%;
@@ -188,23 +174,14 @@ html.is-clipped--nav .nav-close {
   margin-right: -0.25rem;
 }
 
-.nav-container.is-active {
-  position: static;
-  padding: 0.5rem 1rem;
+.dark .nav-close {
+  background: url(../img/dark-back.svg) 0% 40% no-repeat;
+  background-size: 41.5%;
 }
 
-@media screen and (min-width: 769px) {
-  .nav-container {
-    position: static;
-    visibility: visible;
-    flex: 0 0 20%;
-    min-width: 14rem;
-  }
-
-  .nav-container.is-active {
-    padding-left: 1rem;
-    padding-top: 1rem;
-  }
+.nav-container.is-active {
+  position: static;
+  padding: 0.5rem 1rem 2rem;
 }
 
 .nav-menu a,
@@ -213,16 +190,44 @@ html.is-clipped--nav .nav-close {
   color: var(--color-black);
 }
 
+@media screen and (min-width: 769px) {
+  .nav-toggle {
+    display: none;
+    visibility: hidden;
+  }
+
+  .nav-toggle.is-active ~ .spirit-nav {
+    display: block;
+    visibility: visible;
+  }
+
+  .nav-container {
+    position: sticky;
+    top: 1rem;
+    bottom: 1rem;
+    left: 1rem;
+    height: calc(100vh - 2rem);
+    visibility: visible;
+    min-width: 16rem;
+    overflow-y: auto;
+    font-size: 1rem !important;
+  }
+
+  .nav-container.is-active {
+    padding-left: 1rem;
+    padding-top: 1rem;
+  }
+}
+
 /* Toolbar Styles */
 .toolbar {
   background-color: #fff;
   box-shadow: unset;
   height: 2rem;
-  top: 3px !important;
-  position: absolute;
+  position: static;
   display: flex;
   justify-content: space-between;
-  width: 96%;
+  width: 100%;
 }
 
 .dark div.toolbar {
@@ -321,4 +326,10 @@ nav.pagination {
 nav.pagination a::after,
 nav.pagination a::before {
   width: 0.75rem;
+}
+
+.topnavbar + div.body {
+  margin-left: auto;
+  margin-right: auto;
+  max-width: 80rem;
 }
