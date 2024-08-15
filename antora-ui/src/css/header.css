@@ -2,9 +2,6 @@ html.is-clipped--navbar {
   overflow-y: hidden;
 }
 
-body {
-  padding-top: var(--navbar-height);
-}
 
 .navbar {
   background: var(--navbar-background);
