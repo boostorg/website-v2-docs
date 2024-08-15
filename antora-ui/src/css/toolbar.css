@@ -28,6 +28,18 @@
   margin-right: -0.25rem;
 }
 
+.dark .nav-toggle {
+  background: url(../img/dark-menu.svg) no-repeat 50% 47.5%;
+  background-size: 49%;
+  border: none;
+  outline: none;
+  line-height: inherit;
+  padding: 0;
+  height: var(--toolbar-height);
+  width: var(--toolbar-height);
+  margin-right: -0.25rem;
+}
+
 @media screen and (min-width: 1024px) {
   .nav-toggle {
     display: none;
