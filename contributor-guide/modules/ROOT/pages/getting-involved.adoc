@@ -31,13 +31,17 @@ There are other mailing lists you might want to join, such as the https://lists.
 
 == Report Issues and Suggest Improvements
 
+There are different locations to report issues, depending on which content needs updated.
+
+=== To Report an Issue with a Library
+
 To formally report an issue on an individual library, locate the repo for that library. Many of these repos exist in the https://github.com/cppalliance/boost/tree/master/libs[Boost Super-project] on GitHub. Search under the `libs` folder. For example, to file an issue on the boost:json[] library, click *New Issue* at https://github.com/boostorg/json/issues[]. If you have difficulty locating the correct repo, then ask the question of the https://lists.boost.org/mailman/listinfo.cgi/boost[Boost developers' mailing list].
 
 Before filing an issue, it is good practice to identify the admins (authors or maintainers) of a library. This information can be found in the `meta` folder for the library. For example: https://github.com/boostorg/json/blob/develop/meta/libraries.json[] contains the authors for the boost:json[] library. Also, library documentation and commit history may well specify who is actively involved. Make a connection first to ensure the library admins are open to updates.
 
-Whichever list you add your issue to, the issue will be addressed in due course. Providing full details, and examples and screenshots where appropriate, should give you the quicker response. Follow the *Create a New Issue* section below.
+Whichever list you add your issue to, the issue will be triaged and addressed appropriately. Providing full details, and examples and screenshots where appropriate, should give you a quicker response.
 
-=== Report Issues in Outside Sources
+=== To Report an Issue with an Outside Source
 
 There are sources of information on the Boost libraries outside of this website and the library documentation, including:
 
@@ -45,12 +49,12 @@ There are sources of information on the Boost libraries outside of this website 
 * https://www.linkedin.com/company/boostlibs/[The LinkedIn page]
 * https://stackoverflow.com/questions/tagged/boost[Stack Overflow: Boost]
 
-If you notice content that needs updated in these sources, perhaps out-of-date information, incorrect or missing information, or perhaps just language that could be improved, then complete the process to *Create a New Issue*. Feedback like this is welcome.
+If you notice content that needs updated in these sources, perhaps out-of-date information, incorrect or missing information, or perhaps just language that could be improved, then complete the same process as *To Report an Issue with this Website*. Feedback like this is welcome.
 
 [[createnewissue]]
-=== Create a New Issue
+=== To Report an Issue with this Website
 
-To report an issue with the web site, including this documentation, click the *New Issue* button on this GitHub page: https://github.com/boostorg/website-v2-docs/issues[website-v2-docs/issues]. 
+To report an issue with the website, including this documentation, click the *New Issue* button on GitHub page: https://github.com/boostorg/website-v2-docs/issues[website-v2-docs/issues]. 
 
 After clicking *New Issue*, you will be able to add a *Title* and *Description*. Provide as much detail as possible, including links where helpful and suggestions for the updated content.
 
