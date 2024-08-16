@@ -82,6 +82,7 @@ while test $# -gt 0; do
       --attribute page-boost-branch=$1 \
       --attribute page-boost-ui-branch=$1 \
       --attribute page-commit-id="$commit_id" \
+      --stacktrace \
       libs.playbook.yml
 
   elif [ "$1" = "release" ]; then
@@ -90,6 +91,7 @@ while test $# -gt 0; do
       --attribute page-boost-ui-branch=master \
       --attribute page-commit-id="$commit_id" \
       --attribute page-boost-is-release=true \
+      --stacktrace \
       libs.playbook.yml
 
   elif echo "$1" | grep -Eq '^[0-9]+\.[0-9]+\.[0-9]+$'; then
@@ -100,6 +102,7 @@ while test $# -gt 0; do
       --attribute page-boost-branch=$1 \
       --attribute page-boost-ui-branch=master \
       --attribute page-commit-id="$commit_id" \
+      --stacktrace \
         "$f"
     else
       echo "Playbook \"$f\" does not exist"
@@ -111,6 +114,7 @@ while test $# -gt 0; do
       $ANTORA_CMD --fetch \
         --attribute page-boost-branch=$branch \
         --attribute page-boost-ui-branch=$branch \
+        --stacktrace \
         "$f"
     done
     for branch in master develop; do
@@ -118,6 +122,7 @@ while test $# -gt 0; do
       $ANTORA_CMD --fetch \
         --attribute page-boost-branch=$branch \
         --attribute page-boost-ui-branch=$branch \
+        --stacktrace \
         libs.playbook.yml
     done
   else
