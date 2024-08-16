@@ -2,33 +2,45 @@
 
 # This script is used to build the Antora-UI
 
-# Find npm
+# Find npm and npx
 npm_version=$(npm --version 2>/dev/null)
 if [ -z "$npm_version" ]; then
   echo "npm is not installed"
   exit 1
 fi
-
-# Install modules if we have to
-if [ ! -d "node_modules" ] || [ "$(find package.json -prune -printf '%T@\n' | cut -d . -f 1)" -gt "$(find node_modules -prune -printf '%T@\n' | cut -d . -f 1)" ]; then
-  npm ci
+npx_version=$(npx --version 2>/dev/null)
+if [ -z "$npx_version" ]; then
+  echo "npx is not installed"
+  exit 1
 fi
 
-# Find gulp
-PATH=$(pwd)/node_modules/.bin:$PATH
-export PATH
-gulp_version=$(gulp --version 2>/dev/null)
-if [ -n "$gulp_version" ]; then
-  GULP_CMD='gulp'
+# Install modules if we have to
+node_modules_does_not_exist="[ ! -d 'node_modules' ]"
+if $node_modules_does_not_exist; then
+  npm ci
 else
-  npx_version=$(npx --version 2>/dev/null)
-  if [ -z "$npx_version" ]; then
-    echo "Neither gulp nor npx are installed"
-    exit 1
-  else
-    GULP_CMD='npx gulp'
+  package_json_mod_time="$(find package.json -prune -printf '%T@\n' | cut -d . -f 1)"
+  node_modules_mod_time="$(find node_modules -prune -printf '%T@\n' | cut -d . -f 1)"
+  package_json_is_newer="[ $package_json_mod_time -gt $node_modules_mod_time ]"
+  if $package_json_is_newer; then
+    npm ci
   fi
 fi
 
+# Lint
+set -e
+npx gulp lint
+lint_exit_code=$?
+if [ $lint_exit_code -ne 0 ]; then
+  msg="Linting failed. Please run \`npx gulp format\` before pushing your code."
+  if [ "$GITHUB_ACTIONS" = "true" ]; then
+    echo "::error::$msg"
+  else
+    echo "$msg"
+    npx gulp format
+  fi
+fi
+set +e
 
-$GULP_CMD bundle
+# Build
+npx gulp bundle
