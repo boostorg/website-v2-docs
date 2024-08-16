@@ -231,10 +231,10 @@ html.is-clipped--nav .nav-close {
 
 .toolbar .material-symbols-outlined {
   font-variation-settings:
-    'FILL' 1,
-    'wght' 700,
-    'GRAD' 200,
-    'opsz' 20 !important;
+    "FILL" 1,
+    "wght" 700,
+    "GRAD" 200,
+    "opsz" 20 !important;
   color: var(--color-black);
   font-size: 18px;
 }
