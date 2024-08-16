@@ -45,10 +45,22 @@ const lintTask = createTask({
   call: parallel(lintCssTask, lintJsTask),
 })
 
+const formatCssTask = createTask({
+  name: 'format:css',
+  desc: 'Format the CSS source files (standard config)',
+  call: task.formatCss(glob.css),
+})
+
+const formatJsTask = createTask({
+  name: 'format:js',
+  desc: 'Format the JavaScript source files (JavaScript Standard Style)',
+  call: task.formatJs(glob.js),
+})
+
 const formatTask = createTask({
   name: 'format',
   desc: 'Format the JavaScript source files using prettify (JavaScript Standard Style)',
-  call: task.format(glob.js),
+  call: parallel(formatCssTask, formatJsTask),
 })
 
 const buildTask = createTask({
