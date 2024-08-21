@@ -31,7 +31,7 @@ jobs:
     runs-on: ${{ matrix.os }}
     steps:
       - name: Checkout
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
         with:
           fetch-depth: 10
 
@@ -84,18 +84,18 @@ jobs:
         run: |
           find "lib" -mindepth 1 -maxdepth 1 -type d -exec rm -r {} +
 
-      - name: AWS Sync site-docs (revsys cluster)
-        if: matrix.publish && (github.ref == 'refs/heads/master' || github.ref == 'refs/heads/develop') && github.event_name == 'push' && github.repository == 'boostorg/website-v2-docs'
-        uses: jakejarvis/s3-sync-action@master
-        with:
-          args: --follow-symlinks --delete --exclude '.git/*' --exclude 'build/lib/*'
-        env:
-          AWS_S3_BUCKET: ${{ secrets.REVSYS_BUCKET }}
-          AWS_ACCESS_KEY_ID: ${{ secrets.REVSYS_KEY_ID }}
-          AWS_SECRET_ACCESS_KEY: ${{ secrets.REVSYS_ACCESS_KEY }}
-          AWS_REGION: 'us-east-2'
-          SOURCE_DIR: build/
-          DEST_DIR: ${{ format('site-docs/{0}', github.ref_name) }}
+      # - name: AWS Sync site-docs (revsys cluster)
+      #   if: matrix.publish && (github.ref == 'refs/heads/master' || github.ref == 'refs/heads/develop') && github.event_name == 'push' && github.repository == 'boostorg/website-v2-docs'
+      #   uses: jakejarvis/s3-sync-action@master
+      #   with:
+      #     args: --follow-symlinks --delete --exclude '.git/*' --exclude 'build/lib/*'
+      #   env:
+      #     AWS_S3_BUCKET: ${{ secrets.REVSYS_BUCKET }}
+      #     AWS_ACCESS_KEY_ID: ${{ secrets.REVSYS_KEY_ID }}
+      #     AWS_SECRET_ACCESS_KEY: ${{ secrets.REVSYS_ACCESS_KEY }}
+      #     AWS_REGION: 'us-east-2'
+      #     SOURCE_DIR: build/
+      #     DEST_DIR: ${{ format('site-docs/{0}', github.ref_name) }}
 
       - name: AWS Sync site-docs (production on GKE)
         if: matrix.publish && (github.ref == 'refs/heads/master' || github.ref == 'refs/heads/develop') && github.event_name == 'push' && github.repository == 'boostorg/website-v2-docs'
@@ -137,18 +137,18 @@ jobs:
           DEST_DIR: ${{ format('site-docs/{0}', github.ref_name) }}
 
 
-      - name: AWS Sync site-pages (revsys cluster)
-        if: matrix.publish && (github.ref == 'refs/heads/master' || github.ref == 'refs/heads/develop') && github.event_name == 'push' && github.repository == 'boostorg/website-v2-docs'
-        uses: jakejarvis/s3-sync-action@master
-        with:
-          args: --follow-symlinks --delete --exclude '.git/*' --exclude 'build/lib/*'
-        env:
-          AWS_S3_BUCKET: ${{ secrets.REVSYS_BUCKET }}
-          AWS_ACCESS_KEY_ID: ${{ secrets.REVSYS_KEY_ID }}
-          AWS_SECRET_ACCESS_KEY: ${{ secrets.REVSYS_ACCESS_KEY }}
-          AWS_REGION: 'us-east-2'
-          SOURCE_DIR: site-pages/
-          DEST_DIR: ${{ format('site-pages/{0}', github.ref_name) }}
+      # - name: AWS Sync site-pages (revsys cluster)
+      #   if: matrix.publish && (github.ref == 'refs/heads/master' || github.ref == 'refs/heads/develop') && github.event_name == 'push' && github.repository == 'boostorg/website-v2-docs'
+      #   uses: jakejarvis/s3-sync-action@master
+      #   with:
+      #     args: --follow-symlinks --delete --exclude '.git/*' --exclude 'build/lib/*'
+      #   env:
+      #     AWS_S3_BUCKET: ${{ secrets.REVSYS_BUCKET }}
+      #     AWS_ACCESS_KEY_ID: ${{ secrets.REVSYS_KEY_ID }}
+      #     AWS_SECRET_ACCESS_KEY: ${{ secrets.REVSYS_ACCESS_KEY }}
+      #     AWS_REGION: 'us-east-2'
+      #     SOURCE_DIR: site-pages/
+      #     DEST_DIR: ${{ format('site-pages/{0}', github.ref_name) }}
 
       - name: AWS Sync site-pages (production on GKE)
         if: matrix.publish && (github.ref == 'refs/heads/master' || github.ref == 'refs/heads/develop') && github.event_name == 'push' && github.repository == 'boostorg/website-v2-docs'
@@ -230,7 +230,7 @@ jobs:
 
       - name: Publish Releases as Artifacts
         if: matrix.publish && github.event_name == 'push'
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           name: site-docs
           path: build
