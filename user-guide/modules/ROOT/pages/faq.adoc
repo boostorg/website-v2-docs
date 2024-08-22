@@ -560,6 +560,26 @@ public class MyClass {
 
 Note:: Similar techniques can be applied to other languages, such as R, Ruby, Perl, and Lua, using their respective foreign function interfaces (FFI) or binding libraries. 
 
+. *What is the industry consensus for the expected remaining lifespan for pass:[C++], and does any other language look like it might become the replacement for it?*
++
+The expected remaining lifespan of the pass:[C++] programming language is generally considered to be long, probably spanning several decades. While it's difficult to assign a precise number of years, here's an overview of the factors contributing to this consensus:
++
+* pass:[C++] is deeply embedded in many critical systems, including operating systems, game engines, real-time systems, financial systems, and large-scale infrastructure projects. The massive amount of existing code ensures that the language will be relevant for a long time as maintaining, updating, and interacting with this codebase will remain necessary.
+* The Boost libraries and the pass:[C++] Standard place a strong emphasis on backward compatibility, which helps ensure that older code continues to work with new versions of the language.
+* The pass:[C++] language continues to evolve, with regular updates to the standard (e.g., pass:[C++]11, pass:[C++]14, pass:[C++]17, pass:[C++]20, and pass:[C++]23). These updates introduce new features and improvements that keep the language modern and competitive.
+* The pass:[C++] community, including the ISO pass:[C++] committee and Boost users, are highly active, ensuring that the language adapts to new programming paradigms, hardware architectures, and developer needs.
+* High Performance - pass:[C++] remains one of the go-to languages for applications where performance is critical, such as gaming, high-frequency trading, and embedded systems. Its ability to provide low-level memory and hardware control while still supporting high-level abstractions makes it difficult to replace.
+* For system-level programming and scenarios where fine-grained control over system resources is necessary, pass:[C++] is still unmatched.
+* pass:[C++] is still widely taught in universities, especially in courses related to systems programming, algorithms, and data structures. As a teaching language, it instills principles of memory management, performance optimization, and object-oriented programming, which are valuable across many programming domains.
+* pass:[C++] has a strong presence in specialized domains such as aerospace, robotics, telecommunications, and automotive software, where reliability, real-time performance, and low-level hardware access are critical. For example, some current EV manufacturers are using pass:[C++] and Unreal Engine to develop their in-car infotainment and control systems.
+* While newer languages may rise in popularity for certain use cases, no other language currently offers the same combination of performance, control, and ecosystem that pass:[C++] provides, making it unlikely to be replaced any time soon.
++
+Future technological shifts, such as advances in quantum computing or entirely new programming paradigms, could influence (increase or decrease) the lifespan of pass:[C++]. However, given its adaptability and entrenched role in many industries, pass:[C++] is expected to evolve alongside these changes rather than be replaced by them.
+
+. *If I was to learn one other language, in addition to pass:[C++], what should it be to best prepare myself for an uncertain future?*
++
+Python is often the top recommendation due to its versatility, simplicity, and wide application in growing fields like artificial intelligence (AI), machine learning (ML), rapid prototyping, and data science. And boost:python[] is there to help you integrate with the Boost libraries. Rust is another strong contender, especially if you are interested in systems programming and are looking for reliability and security. If you see the future as more cloud computing, then Go makes a strong case for itself.  And let's not forget that so much computing is now web based, so JavaScript deserves a mention here too. All of these languages offer valuable resources that complement pass:[C++] and prepare you for an uncertain future.
+
 == Releases
 
 . *How do I download the latest libraries?*
