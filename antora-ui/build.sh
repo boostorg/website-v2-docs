@@ -43,4 +43,4 @@ fi
 set +e
 
 # Build
-npx gulp bundle
+npx gulp
