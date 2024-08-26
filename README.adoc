@@ -111,6 +111,12 @@ Let us generate the `develop` and `master` versions of the documentation:
 [source,bash]
 ----
 ./sitedoc.sh develop
+----
+
+or
+
+[source,bash]
+----
 ./sitedoc.sh master
 ----
 
