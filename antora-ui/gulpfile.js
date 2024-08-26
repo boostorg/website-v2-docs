@@ -28,7 +28,7 @@ const task = require('./gulp.d/tasks')
 // Define the glob patterns for the CSS and JavaScript source files
 const glob = {
   all: [srcDir, previewSrcDir],
-  css: [`${srcDir}/css/**/*.css`],
+  css: [`${srcDir}/css/**/*.css`, `!${srcDir}/css/boostlook.css`],
   js: ['gulpfile.js', 'gulp.d/**/*.js', `${srcDir}/{helpers,js}/**/*.js`],
 }
 
