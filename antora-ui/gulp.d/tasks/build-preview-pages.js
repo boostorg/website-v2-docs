@@ -14,70 +14,26 @@ const yaml = require('js-yaml')
 
 const ASCIIDOC_ATTRIBUTES = { experimental: '', icons: 'font', sectanchors: '', 'source-highlighter': 'highlight.js' }
 
-module.exports = (src, previewSrc, previewDest, sink = () => map()) => (done) =>
-  Promise.all([
-    loadSampleUiModel(previewSrc),
-    toPromise(
-      merge(compileLayouts(src), registerPartials(src), registerHelpers(src), copyImages(previewSrc, previewDest))
-    ),
-  ])
-    .then(([baseUiModel, { layouts }]) => {
-      const extensions = ((baseUiModel.asciidoc || {}).extensions || []).map((request) => {
-        ASCIIDOC_ATTRIBUTES[request.replace(/^@|\.js$/, '').replace(/[/]/g, '-') + '-loaded'] = ''
-        const extension = require(request)
-        extension.register.call(Asciidoctor.Extensions)
-        return extension
-      })
-      const asciidoc = { extensions }
-      for (const component of baseUiModel.site.components) {
-        for (const version of component.versions || []) version.asciidoc = asciidoc
-      }
-      baseUiModel = { ...baseUiModel, env: process.env }
-      delete baseUiModel.asciidoc
-      return [baseUiModel, layouts]
-    })
-    .then(([baseUiModel, layouts]) =>
-      vfs
-        .src('**/*.adoc', { base: previewSrc, cwd: previewSrc })
-        .pipe(
-          map((file, enc, next) => {
-            const siteRootPath = path.relative(ospath.dirname(file.path), ospath.resolve(previewSrc))
-            const uiModel = { ...baseUiModel }
-            uiModel.page = { ...uiModel.page }
-            uiModel.siteRootPath = siteRootPath
-            uiModel.uiRootPath = path.join(siteRootPath, '_')
-            if (file.stem === '404') {
-              uiModel.page = { layout: '404', title: 'Page Not Found' }
-            } else {
-              const doc = Asciidoctor.load(file.contents, { safe: 'safe', attributes: ASCIIDOC_ATTRIBUTES })
-              uiModel.page.attributes = Object.entries(doc.getAttributes())
-                .filter(([name, val]) => name.startsWith('page-'))
-                .reduce((accum, [name, val]) => {
-                  accum[name.substr(5)] = val
-                  return accum
-                }, {})
-              uiModel.page.layout = doc.getAttribute('page-layout', 'default')
-              uiModel.page.title = doc.getDocumentTitle()
-              uiModel.page.contents = Buffer.from(doc.convert())
-            }
-            file.extname = '.html'
-            try {
-              file.contents = Buffer.from(layouts.get(uiModel.page.layout)(uiModel))
-              next(null, file)
-            } catch (e) {
-              next(transformHandlebarsError(e, uiModel.page.layout))
-            }
-          })
-        )
-        .pipe(vfs.dest(previewDest))
-        .on('error', done)
-        .pipe(sink())
-    )
+/** Load the sample UI model from a YAML file.
 
+ This function reads the 'ui-model.yml' file from the
+ specified source directory and parses its contents as YAML.
+
+ @param {string} src - The source directory.
+ @returns {Promise} A promise that resolves with the parsed YAML data.
+ */
 function loadSampleUiModel (src) {
   return fs.readFile(ospath.join(src, 'ui-model.yml'), 'utf8').then((contents) => yaml.safeLoad(contents))
 }
 
+/** Register Handlebars partials.
+
+ This function reads Handlebars partial files from the specified source directory
+ and registers them as partials.
+
+ @param {string} src - The source directory.
+ @returns {Stream} A stream that ends when all partials have been registered.
+ */
 function registerPartials (src) {
   return vfs.src('partials/*.hbs', { base: src, cwd: src }).pipe(
     map((file, enc, next) => {
@@ -87,6 +43,14 @@ function registerPartials (src) {
   )
 }
 
+/** Register Handlebars helpers.
+
+ This function reads JavaScript files from the specified source directory
+ and registers them as Handlebars helpers.
+
+ @param {string} src - The source directory.
+ @returns {Stream} A stream that ends when all helpers have been registered.
+ */
 function registerHelpers (src) {
   handlebars.registerHelper('resolvePage', resolvePage)
   handlebars.registerHelper('resolvePageURL', resolvePageURL)
@@ -98,6 +62,14 @@ function registerHelpers (src) {
   )
 }
 
+/** Compile Handlebars layouts.
+
+ This function reads Handlebars layout files from the specified source directory
+ and compiles them.
+
+ @param {string} src - The source directory.
+ @returns {Stream} A stream that ends when all layouts have been compiled.
+ */
 function compileLayouts (src) {
   const layouts = new Map()
   return vfs.src('layouts/*.hbs', { base: src, cwd: src }).pipe(
@@ -115,6 +87,15 @@ function compileLayouts (src) {
   )
 }
 
+/** Copy images.
+
+ This function copies image files from the specified source directory
+ to the specified destination directory.
+
+ @param {string} src - The source directory.
+ @param {string} dest - The destination directory.
+ @returns {Stream} A stream that ends when all images have been copied.
+ */
 function copyImages (src, dest) {
   return vfs
     .src('**/*.{png,svg}', { base: src, cwd: src })
@@ -122,14 +103,38 @@ function copyImages (src, dest) {
     .pipe(map((file, enc, next) => next()))
 }
 
+/** Resolve a page.
+
+ This function resolves a page specification to a URL.
+
+ @param {string} spec - The page specification.
+ @param {Object} context - The context (not used).
+ @returns {Object} An object with a 'pub' property containing the resolved URL.
+ */
 function resolvePage (spec, context = {}) {
   if (spec) return { pub: { url: resolvePageURL(spec) } }
 }
 
+/** Resolve a page URL.
+
+ This function resolves a page specification to a URL.
+
+ @param {string} spec - The page specification.
+ @param {Object} context - The context (not used).
+ @returns {string} The resolved URL.
+ */
 function resolvePageURL (spec, context = {}) {
   if (spec) return '/' + (spec = spec.split(':').pop()).slice(0, spec.lastIndexOf('.')) + '.html'
 }
 
+/** Transform a Handlebars error.
+
+ This function transforms a Handlebars error into a more readable format.
+
+ @param {Object} error - The error object.
+ @param {string} layout - The layout that caused the error.
+ @returns {Error} The transformed error.
+ */
 function transformHandlebarsError ({ message, stack }, layout) {
   const m = stack.match(/^ *at Object\.ret \[as (.+?)\]/m)
   const templatePath = `src/${m ? 'partials/' + m[1] : 'layouts/' + layout}.hbs`
@@ -138,6 +143,13 @@ function transformHandlebarsError ({ message, stack }, layout) {
   return err
 }
 
+/** Convert a stream to a promise.
+
+ This function converts a stream to a promise that resolves when the stream ends.
+
+ @param {Stream} stream - The stream.
+ @returns {Promise} A promise that resolves when the stream ends.
+ */
 function toPromise (stream) {
   return new Promise((resolve, reject, data = {}) =>
     stream
@@ -146,3 +158,121 @@ function toPromise (stream) {
       .on('finish', () => resolve(data))
   )
 }
+
+/** Process base UI model.
+
+ This function processes the base UI model and returns it along with the layouts.
+
+ @param {Object} baseUiModel - The base UI model.
+ @param {Object} layouts - The layouts.
+ @returns {Array} An array containing the processed base UI model and the layouts.
+ */
+function processBaseUiModel (baseUiModel, layouts) {
+  const extensions = ((baseUiModel.asciidoc || {}).extensions || []).map((request) => {
+    ASCIIDOC_ATTRIBUTES[request.replace(/^@|\.js$/, '').replace(/[/]/g, '-') + '-loaded'] = ''
+    const extension = require(request)
+    extension.register.call(Asciidoctor.Extensions)
+    return extension
+  })
+  const asciidoc = { extensions }
+  for (const component of baseUiModel.site.components) {
+    for (const version of component.versions || []) version.asciidoc = asciidoc
+  }
+  baseUiModel = { ...baseUiModel, env: process.env }
+  delete baseUiModel.asciidoc
+  return [baseUiModel, layouts]
+}
+
+/** Build pages.
+
+    This function builds the pages and writes the converted files back
+    to their original location.
+
+    @param {string} previewSrc - The preview source directory.
+    @param {Object} baseUiModel - The base UI model.
+    @param {Object} layouts - The layouts.
+    @param {string} previewDest - The preview destination directory.
+    @param {Function} done - The done callback.
+    @param {Function} sink - The sink function.
+ */
+function buildAsciidocPages (previewSrc, baseUiModel, layouts, previewDest, done, sink) {
+  return vfs
+    .src('**/*.adoc', { base: previewSrc, cwd: previewSrc })
+    .pipe(
+      map((file, enc, next) => {
+        const siteRootPath = path.relative(ospath.dirname(file.path), ospath.resolve(previewSrc))
+        const uiModel = { ...baseUiModel }
+        uiModel.page = { ...uiModel.page }
+        uiModel.siteRootPath = siteRootPath
+        uiModel.uiRootPath = path.join(siteRootPath, '_')
+        if (file.stem === '404') {
+          uiModel.page = { layout: '404', title: 'Page Not Found' }
+        } else {
+          const doc = Asciidoctor.load(file.contents, { safe: 'safe', attributes: ASCIIDOC_ATTRIBUTES })
+          uiModel.page.attributes = Object.entries(doc.getAttributes())
+            .filter(([name, val]) => name.startsWith('page-'))
+            .reduce((accum, [name, val]) => {
+              accum[name.substr(5)] = val
+              return accum
+            }, {})
+          uiModel.page.layout = doc.getAttribute('page-layout', 'default')
+          uiModel.page.title = doc.getDocumentTitle()
+          uiModel.page.contents = Buffer.from(doc.convert())
+        }
+        file.extname = '.html'
+        try {
+          file.contents = Buffer.from(layouts.get(uiModel.page.layout)(uiModel))
+          next(null, file)
+        } catch (e) {
+          next(transformHandlebarsError(e, uiModel.page.layout))
+        }
+      })
+    )
+    .pipe(vfs.dest(previewDest))
+    .on('error', done)
+    .pipe(sink())
+}
+
+/** Build preview pages.
+
+ This function uses Asciidoctor to convert AsciiDoc files to HTML for preview.
+ It creates a stream of AsciiDoc files from the specified glob pattern, converts
+ the files to HTML using Asciidoctor, and then writes the converted files back
+ to their original location.
+
+ @param {string} src - The source directory.
+ @param {string} previewSrc - The preview source directory.
+ @param {string} previewDest - The preview destination directory.
+ @param {Function} sink - The sink function.
+ @returns {Function} A function that builds the preview pages when called.
+ */
+function buildPreviewPages (src, previewSrc, previewDest, sink = () => map()) {
+  async function buildPages (done) {
+    try {
+      // Use Promise.all to run multiple basic tasks in parallel
+      const [baseUiModel, { layouts }] = await Promise.all([
+        // Load the sample UI model from a YAML file
+        loadSampleUiModel(previewSrc),
+        // Merge multiple streams into one and convert it to a promise
+        // The streams are created by compiling layouts, registering partials
+        // and helpers, and copying images
+        toPromise(
+          merge(compileLayouts(src), registerPartials(src), registerHelpers(src), copyImages(previewSrc, previewDest))
+        ),
+      ])
+
+      // Process the base UI model and get the processed base UI model and layouts
+      const [processedBaseUiModel, processedLayouts] = processBaseUiModel(baseUiModel, layouts)
+
+      // Build the AsciiDoc pages and write the converted files back to their original location
+      await buildAsciidocPages(previewSrc, processedBaseUiModel, processedLayouts, previewDest, done, sink)
+    } catch (error) {
+      // If an error occurs during the execution of the promises, it will be caught here
+      done(error)
+    }
+  }
+
+  return buildPages
+}
+
+module.exports = buildPreviewPages
