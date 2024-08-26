@@ -42,21 +42,16 @@ if [ "$major_version" -lt "16" ]; then
   node_path=$(which node)
   echo "node_path=${node_path}"
 fi
+echo "Node.js version $node_version"
 
 # Check if antora is available
 PATH=$(pwd)/node_modules/.bin:$PATH
-antora_version=$(antora --version 2>/dev/null)
-if [ -n "$antora_version" ]; then
-  ANTORA_CMD='antora'
-else
-  npx_version=$(npx --version 2>/dev/null)
-  if [ -z "$npx_version" ]; then
-    echo "Neither antora nor npx are installed"
-    exit 1
-  else
-    ANTORA_CMD='npx antora'
-  fi
+npx_version=$(npx --version 2>/dev/null)
+if [ -z "$npx_version" ]; then
+  echo "npx is not installed"
+  exit 1
 fi
+echo "npx version $npx_version"
 
 # Build UI if we have to
 cwd=$(pwd)
@@ -64,6 +59,7 @@ script_dir=$(dirname "$(readlink -f "$0")")
 if ! [ -e "$script_dir/antora-ui/build/ui-bundle.zip" ] || \
    find "$script_dir/antora-ui" -newer "$script_dir/antora-ui/build/ui-bundle.zip" -print -quit | grep -q .
 then
+  echo "Building antora-ui"
   cd "$script_dir/antora-ui" || exit
   ./build.sh
   cd "$cwd" || exit
@@ -76,12 +72,14 @@ if command -v git >/dev/null && git rev-parse --is-inside-work-tree >/dev/null 2
 else
   commit_id=""
 fi
+echo "Commit ID: $commit_id"
 
 # Install node modules if needed
 if [ ! -d "node_modules" ] || [ "$(find package.json -prune -printf '%T@\n' | cut -d . -f 1)" -gt "$(find node_modules -prune -printf '%T@\n' | cut -d . -f 1)" ]; then
+  echo "Installing playbook node modules"
   npm ci
 fi
 
-echo "$ANTORA_CMD" --fetch --attribute page-boost-branch="$1" --attribute page-commit-id="$commit_id" site.playbook.yml
-$ANTORA_CMD --fetch --attribute page-boost-branch="$1" --attribute page-commit-id="$commit_id" --stacktrace site.playbook.yml
+set -x
+npx antora --fetch --attribute page-boost-branch="$1" --attribute page-commit-id="$commit_id" --stacktrace site.playbook.yml
 

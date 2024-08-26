@@ -36,29 +36,25 @@ if [ -z "$node_version" ]; then
   echo "Node.js is not installed"
   exit 1
 fi
-major_version=$(echo $node_version | egrep -o "v([0-9]+)\." | cut -c 2- | rev | cut -c 2- | rev)
+major_version=$(echo "$node_version" | egrep -o "v([0-9]+)\." | cut -c 2- | rev | cut -c 2- | rev)
 if [ "$major_version" -lt "16" ]; then
   echo "Node.js version $node_version is not supported. Please upgrade to version 16 or higher."
   node_path=$(which node)
   echo "node_path=${node_path}"
 fi
+echo "Node.js version $node_version"
 
-antora_version=$(antora --version 2>/dev/null)
-if [ -n "$antora_version" ]; then
-  ANTORA_CMD='antora'
-else
-  npx_version=$(npx --version 2>/dev/null)
-  if [ -z "$npx_version" ]; then
-    echo "Neither antora nor npx are installed"
-    exit 1
-  else
-    ANTORA_CMD='npx antora'
-  fi
+npx_version=$(npx --version 2>/dev/null)
+if [ -z "$npx_version" ]; then
+  echo "npx is not installed"
+  exit 1
 fi
+echo "npx version $npx_version"
 
 cwd=$(pwd)
 script_dir=$(dirname "$(readlink -f "$0")")
 if ! [ -e "$script_dir/antora-ui/build/ui-bundle.zip" ]; then
+  echo "Building antora-ui"
   cd "$script_dir/antora-ui" || exit
   ./build.sh
   cd "$cwd" || exit
@@ -70,23 +66,26 @@ if command -v git >/dev/null && git rev-parse --is-inside-work-tree >/dev/null 2
 else
   commit_id=""
 fi
+echo "Commit ID: $commit_id"
 
 if [ ! -d "node_modules" ] || [ "$(find package.json -prune -printf '%T@\n' | cut -d . -f 1)" -gt "$(find node_modules -prune -printf '%T@\n' | cut -d . -f 1)" ]; then
+  echo "Installing playbook node modules"
   npm ci
 fi
 
 # Run antora command
 while test $# -gt 0; do
+  set -x
   if [ "$1" = "develop" ] || [ "$1" = "master" ]; then
-    $ANTORA_CMD --fetch \
-      --attribute page-boost-branch=$1 \
-      --attribute page-boost-ui-branch=$1 \
+    npx antora --fetch \
+      --attribute page-boost-branch="$1" \
+      --attribute page-boost-ui-branch="$1" \
       --attribute page-commit-id="$commit_id" \
       --stacktrace \
       libs.playbook.yml
 
   elif [ "$1" = "release" ]; then
-    $ANTORA_CMD --fetch \
+    npx antora --fetch \
       --attribute page-boost-branch=master \
       --attribute page-boost-ui-branch=master \
       --attribute page-commit-id="$commit_id" \
@@ -98,8 +97,8 @@ while test $# -gt 0; do
     f="./history/libs.$1.playbook.yml"
     if [ -f "$f" ]; then
       echo "Building playbook $f"
-      $ANTORA_CMD --fetch \
-      --attribute page-boost-branch=$1 \
+      npx antora --fetch \
+      --attribute page-boost-branch="$1" \
       --attribute page-boost-ui-branch=master \
       --attribute page-commit-id="$commit_id" \
       --stacktrace \
@@ -111,15 +110,15 @@ while test $# -gt 0; do
   elif [ "$1" = "all" ]; then
     for f in ./history/*.yml; do
       echo "Building playbook $f"
-      $ANTORA_CMD --fetch \
-        --attribute page-boost-branch=$branch \
-        --attribute page-boost-ui-branch=$branch \
+      npx antora --fetch \
+        --attribute page-boost-branch="$branch" \
+        --attribute page-boost-ui-branch="$branch" \
         --stacktrace \
         "$f"
     done
     for branch in master develop; do
       echo "Building playbook libs.playbook.yml for $branch branch"
-      $ANTORA_CMD --fetch \
+      npx antora --fetch \
         --attribute page-boost-branch=$branch \
         --attribute page-boost-ui-branch=$branch \
         --stacktrace \
