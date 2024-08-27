@@ -20,6 +20,8 @@ const tailwind = require('tailwindcss')
 const through = () => map((file, enc, next) => next(null, file))
 const uglify = require('gulp-uglify')
 const vfs = require('vinyl-fs')
+const axios = require('axios')
+const log = require('fancy-log')
 
 /** Bundles JavaScript files using Browserify.
 
@@ -177,7 +179,7 @@ function getAllTasks (opts, sourcemaps, postcssPlugins, preview, src) {
     // NOTE use the next line to bundle a JavaScript library that cannot be browserified, like jQuery
     //vfs.src(require.resolve('<package-name-or-require-path>'), opts).pipe(concat('js/vendor/<library-name>.js')),
     vfs
-      .src(['css/site.css', 'css/vendor/*.css'], { ...opts, sourcemaps })
+      .src(['css/boostlook.css', 'css/site.css', 'css/vendor/*.css'], { ...opts, sourcemaps })
       .pipe(postcss((file) => ({ plugins: postcssPlugins, options: { file } }))),
     // Task for getting font files
     vfs.src('font/*.{ttf,woff*(2)}', opts),
@@ -211,6 +213,62 @@ function getAllTasks (opts, sourcemaps, postcssPlugins, preview, src) {
   ]
 }
 
+/** Fetches the boostlook.css file.
+
+    This function uses axios to download the boostlook.css file.
+
+    It then writes the file to the `../../src/css` directory.
+
+    However, it first checks if the --skip-boostlook flag was set in the
+    command line.
+    If it was, it skips the download process.
+    This can be used to work locally on the boostlook.css file
+    without this process overwriting the file.
+
+    It also checks if the file already exists and was updated in
+    the last hour.
+    If it was, it also skips the download process.
+    This ensures contributors can work on the content with
+    a recent version of the boostlook.css file while still
+    avoiding unnecessary downloads.
+
+    In CI, the file won't be available so it always
+    uses the most recent version.
+ */
+async function fetchBoostlookCss () {
+  log('Fetching boostlook.css file...')
+  const skipBoostlook = process.argv.includes('--skip-boostlook')
+  const cssDir = ospath.join(__dirname, '..', '..', 'src', 'css')
+  const cssFilePath = ospath.join(cssDir, 'boostlook.css')
+  const url = 'https://raw.githubusercontent.com/cppalliance/boostlook/master/boostlook.css'
+
+  if (skipBoostlook) {
+    log('Skipping boostlook.css download due to --skip-boostlook flag.')
+    return
+  }
+
+  try {
+    const fileExists = await fs.pathExists(cssFilePath)
+    if (fileExists) {
+      const stats = await fs.stat(cssFilePath)
+      const oneHourAgo = Date.now() - 3600000 // 3600000 milliseconds = 1 hour
+      if (stats.mtimeMs > oneHourAgo) {
+        log('boostlook.css file already exists and was updated in the last hour. Skipping download.')
+        log(`boostlook.css file path: ${cssFilePath}`)
+        return
+      }
+    }
+
+    log('Downloading boostlook.css file...')
+    const response = await axios.get(url)
+    log('Writing boostlook.css file to ' + cssFilePath)
+    await fs.outputFile(cssFilePath, response.data)
+    log(`boostlook.css file written to ${cssFilePath} successfully.`)
+  } catch (error) {
+    console.error('Error fetching boostlook.css file:', error)
+  }
+}
+
 /**
     Builds UI assets.
 
@@ -228,6 +286,9 @@ function buildUiAssets (src, dest, preview) {
     // Prepare the options
     const opts = { base: src, cwd: src }
     const sourcemaps = preview || process.env.SOURCEMAPS === 'true'
+
+    // Fetch the boostlook.css file
+    await fetchBoostlookCss()
 
     // Get the PostCSS plugins
     const postcssPlugins = getPostCssPlugins(dest, preview)
