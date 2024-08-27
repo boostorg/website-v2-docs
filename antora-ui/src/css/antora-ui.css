@@ -23,7 +23,7 @@ html.is-clipped--nav {
 }
 
 .content div:has(table, pre, code) {
-  overflow: auto;
+  overflow-x: auto;
 }
 
 @media screen and (min-width: 769px) {
