@@ -22,10 +22,6 @@ html.is-clipped--nav {
   overflow-y: visible;
 }
 
-.content div:has(table, pre, code) {
-  overflow-x: auto;
-}
-
 @media screen and (min-width: 769px) {
   .body {
     display: flex;
