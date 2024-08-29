@@ -184,7 +184,7 @@ This will run your fuzzer only with `crash-abc`. It will not perform actual fuzz
 [#ci-builds]
 == Running the Fuzzer in CIs
 
-Your fuzzer won't be really useful unless you run it continiously. CI platforms are a good way to achieve this. We recommend using GitHub Actions for fuzzing jobs, although other platforms with similar functionality should work, too.
+Your fuzzer won't be really useful unless you run it continuously. CI platforms are a good way to achieve this. We recommend using GitHub Actions for fuzzing jobs, although other platforms with similar functionality should work, too.
 
 Your fuzzing CI job should, at least:
 
@@ -200,7 +200,7 @@ If you're using GitHub actions, corpus persistance can be achieved using the htt
 
 == Best Practices for Writing Fuzzers
 
-It is advisable to keep your fuzzers as targetted as possible. For example, if you have functions to parse JSON and BSON (binary JSON) files, you should write two different fuzzers, instead of a single one that invokes one or the other based on the input.
+It is advisable to keep your fuzzers as targeted as possible. For example, if you have functions to parse JSON and BSON (binary JSON) files, you should write two different fuzzers, instead of a single one that invokes one or the other based on the input.
 
 Your fuzzing code should be as efficient as possible. The faster it is, the more iterations the fuzzer will do, and the better the results. Avoid logging, cubic or greater complexity, and anything else that may slow down your code.
 

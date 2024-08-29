@@ -39,7 +39,7 @@ To formally report an issue on an individual library, locate the repo for that l
 
 Before filing an issue, it is good practice to identify the admins (authors or maintainers) of a library. This information can be found in the `meta` folder for the library. For example: https://github.com/boostorg/json/blob/develop/meta/libraries.json[] contains the authors for the boost:json[] library. Also, library documentation and commit history may well specify who is actively involved. Make a connection first to ensure the library admins are open to updates.
 
-Whichever list you add your issue to, the issue will be triaged and addressed appropriately. Providing full details, and examples and screenshots where appropriate, should give you a quicker response.
+Whichever list you add your issue to, the issue will be triaged and addressed appropriately. Providing full details, examples and screenshots where appropriate, should give you a quicker response.
 
 === To Report an Issue with an Outside Source
 
