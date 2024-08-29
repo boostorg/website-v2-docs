@@ -91,7 +91,7 @@ Popular Windows tools are Microsoft Visual pass:[C++], Visual Studio Code, and G
 
 The recommendation for Boost examples is to use a _popular_ tool in the various steps and processes, but _not_ to recommend one tool over any other. And to mention other tools that we know work well with Boost.
 
-It is important thet processes in our documentation work, so it will be necessary to state which tool you are using when creating working examples.
+It is important that processes in our documentation work, so it will be necessary to state which tool you are using when creating working examples.
 
 == Code Snippets
 
