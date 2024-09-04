@@ -12,7 +12,12 @@ const map = (transform = () => {}, flush = undefined) => new Transform({ objectM
 const vfs = require('vinyl-fs')
 const yaml = require('js-yaml')
 
-const ASCIIDOC_ATTRIBUTES = { experimental: '', icons: 'font', sectanchors: '', 'source-highlighter': 'highlight.js' }
+const ASCIIDOC_ATTRIBUTES = {
+  experimental: '',
+  icons: 'font',
+  sectanchors: '',
+  'source-highlighter': 'highlight.js',
+}
 
 /** Load the sample UI model from a YAML file.
 
@@ -167,10 +172,11 @@ function toPromise (stream) {
  @param {Object} layouts - The layouts.
  @returns {Array} An array containing the processed base UI model and the layouts.
  */
-function processBaseUiModel (baseUiModel, layouts) {
-  const extensions = ((baseUiModel.asciidoc || {}).extensions || []).map((request) => {
-    ASCIIDOC_ATTRIBUTES[request.replace(/^@|\.js$/, '').replace(/[/]/g, '-') + '-loaded'] = ''
-    const extension = require(request)
+function processBaseUiModel (baseUiModel) {
+  // Register Asciidoctor extensions defined in baseUiModel.asciidoc.extensions
+  const extensions = ((baseUiModel.asciidoc || {}).extensions || []).map((extensionRequest) => {
+    ASCIIDOC_ATTRIBUTES[extensionRequest.replace(/^@|\.js$/, '').replace(/[/]/g, '-') + '-loaded'] = ''
+    const extension = require(extensionRequest)
     extension.register.call(Asciidoctor.Extensions)
     return extension
   })
@@ -178,15 +184,18 @@ function processBaseUiModel (baseUiModel, layouts) {
   for (const component of baseUiModel.site.components) {
     for (const version of component.versions || []) version.asciidoc = asciidoc
   }
+  // Add environment variables to the base UI model
   baseUiModel = { ...baseUiModel, env: process.env }
   delete baseUiModel.asciidoc
-  return [baseUiModel, layouts]
 }
 
 /** Build pages.
 
     This function builds the pages and writes the converted files back
     to their original location.
+
+    For each .adoc file in preview-src directory, it reads the file,
+    and converts it to HTML using Asciidoctor,
 
     @param {string} previewSrc - The preview source directory.
     @param {Object} baseUiModel - The base UI model.
@@ -200,6 +209,7 @@ function buildAsciidocPages (previewSrc, baseUiModel, layouts, previewDest, done
     .src('**/*.adoc', { base: previewSrc, cwd: previewSrc })
     .pipe(
       map((file, enc, next) => {
+        // siteRootPath is relative to the file being processed
         const siteRootPath = path.relative(ospath.dirname(file.path), ospath.resolve(previewSrc))
         const uiModel = { ...baseUiModel }
         uiModel.page = { ...uiModel.page }
@@ -208,7 +218,14 @@ function buildAsciidocPages (previewSrc, baseUiModel, layouts, previewDest, done
         if (file.stem === '404') {
           uiModel.page = { layout: '404', title: 'Page Not Found' }
         } else {
-          const doc = Asciidoctor.load(file.contents, { safe: 'safe', attributes: ASCIIDOC_ATTRIBUTES })
+          const asciiDocAttributes = { ...ASCIIDOC_ATTRIBUTES }
+          if (process.argv.includes('--remove-sidenav')) {
+            asciiDocAttributes['page-remove-sidenav'] = '@'
+          }
+          if (process.argv.includes('--page-toc')) {
+            asciiDocAttributes['page-page-toc'] = '@'
+          }
+          const doc = Asciidoctor.load(file.contents, { safe: 'safe', attributes: asciiDocAttributes })
           uiModel.page.attributes = Object.entries(doc.getAttributes())
             .filter(([name, val]) => name.startsWith('page-'))
             .reduce((accum, [name, val]) => {
@@ -262,10 +279,10 @@ function buildPreviewPages (src, previewSrc, previewDest, sink = () => map()) {
       ])
 
       // Process the base UI model and get the processed base UI model and layouts
-      const [processedBaseUiModel, processedLayouts] = processBaseUiModel(baseUiModel, layouts)
+      processBaseUiModel(baseUiModel)
 
       // Build the AsciiDoc pages and write the converted files back to their original location
-      await buildAsciidocPages(previewSrc, processedBaseUiModel, processedLayouts, previewDest, done, sink)
+      await buildAsciidocPages(previewSrc, baseUiModel, layouts, previewDest, done, sink)
     } catch (error) {
       // If an error occurs during the execution of the promises, it will be caught here
       done(error)
