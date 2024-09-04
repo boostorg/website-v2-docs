@@ -3,7 +3,8 @@
     {{#if (eq page.layout '404')}}
       {{> article-404}}
     {{else}}
-      {{#if (eq page.component.latest.asciidoc.attributes.hide-toc undefined)}}
+      {{! The contents panel }}
+      {{#if (or (ne page.component.latest.asciidoc.attributes.page-toc undefined) (ne page.attributes.page-toc undefined))}}
         {{> toc}}
       {{/if}}
       {{> article}}
