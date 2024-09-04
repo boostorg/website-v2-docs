@@ -66,6 +66,8 @@ asciidoc:
     page-pagination: ''
     # Remove the sidenav and include TOC in index.adoc page
     remove-sidenav: ''
+    # Include the contents panel with the TOC for the current page
+    page-toc: ''
   extensions:
     - '@alandefreitas/asciidoctor-boost-links'
     - '@asciidoctor/tabs'
