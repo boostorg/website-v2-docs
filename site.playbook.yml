@@ -50,7 +50,6 @@ asciidoc:
   attributes:
     # Enable pagination
     page-pagination: ''
-    hide-toc: ''
   extensions:
     - '@alandefreitas/asciidoctor-boost-links'
     - '@asciidoctor/tabs'
