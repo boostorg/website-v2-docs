@@ -50,7 +50,7 @@ Official repository: https://github.com/boostorg/website-v2-docs
 ** xref:superproject/library-maintenance.adoc[]
 ** xref:superproject/library-workflow.adoc[]
 
-* Documentation
+* Writing Documentation
 ** xref:docs/documentation-guidelines.adoc[]
 ** xref:docs/documentation-components.adoc[]
 ** xref:docs/antora.adoc[Antora Guide]
