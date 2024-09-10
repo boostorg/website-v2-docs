@@ -1,19 +1,10 @@
 {
-  "devDependencies": {
-    "@antora/cli": "3.1.2",
-    "@antora/site-generator": "3.1.2",
-    "antora": "3.1.2"
-  },
   "dependencies": {
     "@alandefreitas/antora-cpp-reference-extension": "^0.0.2",
     "@alandefreitas/antora-cpp-tagfiles-extension": "^0.0.3",
     "@alandefreitas/antora-playbook-macros-extension": "^0.0.1",
     "@alandefreitas/asciidoctor-boost-links": "^0.0.1",
     "@antora/lunr-extension": "^1.0.0-alpha.8",
-    "@asciidoctor/tabs": "^1.0.0-beta.3",
-    "cache-directory": "^2.0.0",
-    "isomorphic-git": "^1.27.1",
-    "ospath": "^1.2.2",
-    "process": "^0.11.10"
+    "@asciidoctor/tabs": "^1.0.0-beta.3"
   }
 }
