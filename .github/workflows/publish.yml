@@ -35,7 +35,7 @@ jobs:
         with:
           fetch-depth: 10
 
-      - name: Build
+      - name: Environment
         id: build
         shell: bash
         run: |
@@ -69,21 +69,30 @@ jobs:
           
           # Only build lib playbook if it changed
           if [ "$changed_ui" = true ] || [ "$changed_ext" = true ] || [ "$changed_libs" = true ] || [ "$changed_actions" = true ]; then
-              ./libdoc.sh "${{ (startsWith(github.ref, 'refs/heads/develop') && 'develop') || 'master' }}"
-              echo "built_libs=true" >> $GITHUB_OUTPUT
+              echo "build-libs=true" >> $GITHUB_OUTPUT
           else
-              echo "built_libs=false" >> $GITHUB_OUTPUT
+              echo "build-libs=false" >> $GITHUB_OUTPUT
           fi
-          
-          ANTORA_LOG_FAILURE_LEVEL=warn
-          export ANTORA_LOG_FAILURE_LEVEL
+
+      - name: Build sitedocs
+        shell: bash
+        run: |
+          set -x
           ./build.sh
 
-      - name: Remove lib dirs
-        if: steps.build.outputs.built_libs == 'true'
+      - name: Build Libs
+        if: steps.build.outputs.build-libs == 'true'
+        shell: bash
+        run: |
+          set -x
+          ./libdoc.sh "${{ (startsWith(github.ref, 'refs/heads/develop') && 'develop') || 'master' }}"
+          
+      - name: Remove Libs from build
+        if: steps.build.outputs.build-libs == 'true'
         shell: bash
         working-directory: build
         run: |
+          set -x
           find "lib" -mindepth 1 -maxdepth 1 -type d -exec rm -r {} +
 
       - name: AWS Sync site-docs (revsys cluster)
