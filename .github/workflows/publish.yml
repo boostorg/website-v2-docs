@@ -80,6 +80,10 @@ jobs:
           set -x
           ./build.sh
 
+      - name: Setup Ninja
+        uses: seanmiddleditch/gha-setup-ninja@v4
+        if: ${{ runner.os == 'Windows' && steps.build.outputs.build-libs == 'true' }}
+
       - name: Build Libs
         if: steps.build.outputs.build-libs == 'true'
         shell: bash
