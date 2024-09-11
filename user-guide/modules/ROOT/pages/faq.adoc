@@ -769,5 +769,6 @@ This function can now be used to sort arrays of any type (that supports the `<` 
 
 * xref:contributor-guide:ROOT:contributors-faq.adoc[Contributor Guide FAQ]
 * xref:explore-the-content.adoc[]
+* xref:glossary.adoc[]
 * xref:resources.adoc[]
 
