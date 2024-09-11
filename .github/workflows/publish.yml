@@ -98,6 +98,7 @@ jobs:
         run: |
           set -x
           find "lib" -mindepth 1 -maxdepth 1 -type d -exec rm -r {} +
+          find "cpp-reference-extension" -mindepth 1 -maxdepth 1 -type d -exec rm -r {} +
 
       - name: AWS Sync site-docs (revsys cluster)
         if: matrix.publish && (github.ref == 'refs/heads/master' || github.ref == 'refs/heads/develop') && github.event_name == 'push' && github.repository == 'boostorg/website-v2-docs'
