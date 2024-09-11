@@ -81,5 +81,10 @@ if [ ! -d "node_modules" ] || [ "$(find package.json -prune -printf '%T@\n' | cu
 fi
 
 set -x
+if [ "$CI" = "true" ]; then
+  ANTORA_LOG_LEVEL=all
+  export ANTORA_LOG_LEVEL
+fi
+
 npx antora --fetch --attribute page-boost-branch="$1" --attribute page-commit-id="$commit_id" --stacktrace site.playbook.yml
 

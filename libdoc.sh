@@ -76,6 +76,11 @@ fi
 # Run antora command
 while test $# -gt 0; do
   set -x
+  if [ "$CI" = "true" ]; then
+    ANTORA_LOG_LEVEL=all
+    export ANTORA_LOG_LEVEL
+  fi
+
   if [ "$1" = "develop" ] || [ "$1" = "master" ]; then
     npx antora --fetch \
       --attribute page-boost-branch="$1" \
