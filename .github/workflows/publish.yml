@@ -65,6 +65,8 @@ jobs:
               changed_libs=true
           fi
           
+          set -x
+          
           # Only build lib playbook if it changed
           if [ "$changed_ui" = true ] || [ "$changed_ext" = true ] || [ "$changed_libs" = true ] || [ "$changed_actions" = true ]; then
               ./libdoc.sh "${{ (startsWith(github.ref, 'refs/heads/develop') && 'develop') || 'master' }}"
