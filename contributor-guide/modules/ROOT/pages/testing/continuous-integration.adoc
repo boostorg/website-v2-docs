@@ -154,7 +154,7 @@ Refer to:
 
 https://circleci.com/developer[CircleCI] is a CI/CD platform that supports a wide range of languages, tools, and services, making it flexible for different testing requirements. It is less commonly used than <<GitHub Actions>> or <<AppVeyor>>, but is used by xref:version-control.adoc#_the_super_project_repository[the Super-project Repository] and a few libraries.
 
-. CircleCI uses a file named `config.yml` stored in a directory called `.circleci` at the root of the repository. This file defines the build environment and steps, such as which <<Docker>> images to use, dependencies to install, and the commands for building and testing.
+. CircleCI uses a file named `config.yml` stored in a directory called `.circleci` at the root of the repository. This file defines the build environment and steps, such as which Docker images to use, dependencies to install, and the commands for building and testing.
 
 . Upon changes being pushed to the repository or on a schedule, CircleCI automatically executes the instructions in the `config.yml` file. This usually includes building the project and running the test suite.
 
