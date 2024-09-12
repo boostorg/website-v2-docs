@@ -1,6 +1,6 @@
 {
   "dependencies": {
-    "@alandefreitas/antora-cpp-reference-extension": "^0.0.2",
+    "@alandefreitas/antora-cpp-reference-extension": "^0.0.3",
     "@alandefreitas/antora-cpp-tagfiles-extension": "^0.0.3",
     "@alandefreitas/antora-playbook-macros-extension": "^0.0.1",
     "@alandefreitas/asciidoctor-boost-links": "^0.0.1",
