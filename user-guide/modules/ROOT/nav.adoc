@@ -43,7 +43,9 @@ Official repository: https://github.com/boostorg/website-v2-docs
 ** xref:boost-history.adoc[]
 ** xref:in-memoriam-beman-dawes.adoc[]
 
-* xref:resources.adoc[]
+* Resources
+** xref:resources.adoc[]
+** xref:glossary.adoc[]
 
 * Reference
 ** xref:library-naming.adoc[]
