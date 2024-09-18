@@ -74,6 +74,15 @@ Text in AsciiDoc is entered as is. Be sure to leave a blank line between paragra
 Next paragraph.
 ----
 
+=== Project References
+
+When writing about the Boost libraries for this website, library documentation or manuals, blog posts, social media, and any official communications - take the following guidelines as pertinent:
+
+. The name of the project as a whole is the *"Boost C++ Libraries"*, noting that "the" is _not_ part of the project name, and that "libraries" is plural. 
+
+. After first use of the full project name, avoid over-use of the word "Boost" in following paragraphs. Subsequent references to the project can select from terms such as "project", "libraries", and "collection", as determined by context. It is acceptable to use the single word "Boost" if it is needed for clarity (such as when comparing library collections).
+
+. Avoid the use of the word "Boost" in section or topic headings, especially those that will appear in the table of contents.
 
 == Pages
 
