@@ -78,6 +78,8 @@ jobs:
         shell: bash
         run: |
           set -x
+          BOOSTLOOK_BRANCH="${{ (startsWith(github.ref, 'refs/heads/develop') && 'develop') || 'master' }}"
+          export BOOSTLOOK_BRANCH
           ./build.sh
 
       - name: Setup Ninja

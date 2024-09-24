@@ -122,7 +122,8 @@ When the command completes successfully, the UI bundle will be available at `bui
 
 This project uses the Boost color scheme and typography available from `https://github.com/cppalliance/boostlook`.
 
-In the build step, the `boostlook` stylesheet is included in the bundle and used in the UI. When working on the Antora content, the `boostlook` stylesheet is updated every hour to ensure the latest version is used.
+In the build step, the `boostlook` stylesheet is included in the bundle and used in the UI.
+When working on the Antora content, the `boostlook` stylesheet is updated every hour to ensure the latest version is used.
 
 If you're working on the `boostlook.css` file and don't want the build step to include the latest version, you can use the `--skip-boostlook` to ensure the task does not attempt to fetch the latest version.
 
@@ -138,3 +139,14 @@ or in preview mode:
 gulp preview --skip-boostlook
 ----
 
+By default, the `boostlook` stylesheet is downloaded from the `master` branch of the `cppalliance/boostlook` repository.
+The `BOOSTLOOK_BRANCH` environment variable can be set to use a different branch.
+
+[source,bash]
+----
+BOOSTLOOK_BRANCH=develop
+export BOOSTLOOK_BRANCH
+gulp bundle
+----
+
+In CI, the `develop` branch is used to ensure the latest version is included in the bundle unless the current branch is `master`.

@@ -240,7 +240,8 @@ async function fetchBoostlookCss () {
   const skipBoostlook = process.argv.includes('--skip-boostlook')
   const cssDir = ospath.join(__dirname, '..', '..', 'src', 'css')
   const cssFilePath = ospath.join(cssDir, 'boostlook.css')
-  const url = 'https://raw.githubusercontent.com/boostorg/boostlook/master/boostlook.css'
+  const boostlookBranch = process.env.BOOSTLOOK_BRANCH || 'master'
+  const url = `https://raw.githubusercontent.com/cppalliance/boostlook/${boostlookBranch}/boostlook.css`
 
   if (skipBoostlook) {
     log('Skipping boostlook.css download due to --skip-boostlook flag.')
