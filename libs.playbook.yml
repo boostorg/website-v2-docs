@@ -41,7 +41,7 @@ site:
 
 antora:
   extensions:
-    - require: '@alandefreitas/antora-playbook-macros-extension'
+    - require: '@cppalliance/antora-playbook-macros-extension'
       macros:
         # Default values for macros
         # These values can be overridden with environment variables,
@@ -49,11 +49,11 @@ antora:
         page-boost-branch: develop
         page-boost-ui-branch: develop
         page-commit-id: '000000'
-    - require: '@alandefreitas/antora-cpp-tagfiles-extension'
+    - require: '@cppalliance/antora-cpp-tagfiles-extension'
       cpp-tagfiles:
         using-namespaces:
           - 'boost::'
-    - require: '@alandefreitas/antora-cpp-reference-extension'
+    - require: '@cppalliance/antora-cpp-reference-extension'
       dependencies:
         - name: 'boost'
           repo: 'https://github.com/boostorg/boost.git'
@@ -66,7 +66,7 @@ asciidoc:
     # Enable pagination
     page-pagination: ''
   extensions:
-    - '@alandefreitas/asciidoctor-boost-links'
+    - '@cppalliance/asciidoctor-boost-links'
     - '@asciidoctor/tabs'
 
 # Libraries that support Antora should be included here
