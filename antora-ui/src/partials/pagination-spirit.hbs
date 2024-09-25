@@ -5,11 +5,6 @@
   {{#with page.parent}}
     <a accesskey="p" href="{{{relativize ./url}}}"><span class="material-symbols-outlined" title="Up: {{{./content}}}">arrow_upward</span></a>
   {{/with}}
-  {{#unless page.home}}
-    {{#with (siteStartPage)}}
-      <a accesskey="p" href="{{{relativize ./pub.url}}}"><span class="material-symbols-outlined" title="Home: {{{./content}}}">home</span></a>
-    {{/with}}
-  {{/unless}}
   {{#with page.next}}
     <a accesskey="p" href="{{{relativize ./url}}}"><span class="material-symbols-outlined" title="Next: {{{./content}}}">arrow_forward</span></a>
   {{/with}}
