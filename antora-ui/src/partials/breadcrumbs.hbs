@@ -3,7 +3,11 @@
   <ul>
     {{#with page.componentVersion}}
     {{#if (and ./title (ne ./title @root.page.breadcrumbs.0.content))}}
-    <li><a href="{{{relativize ./url}}}">{{{./title}}}</a></li>
+    <li>
+      <a href="{{{relativize ./url}}}" aria-label="Home: {{{./title}}}">
+        <svg xmlns="http://www.w3.org/2000/svg" width="1rem" height="1rem" viewBox="0 -960 960 960" fill="#000000" aria-hidden="true"><path d="M160-120v-480l320-240 320 240v480H560v-280H400v280H160Z"/></svg>
+      </a>
+    </li>
     {{/if}}
     {{/with}}
     {{#each page.breadcrumbs}}
