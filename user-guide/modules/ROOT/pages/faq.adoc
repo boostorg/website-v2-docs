@@ -11,6 +11,20 @@ Official repository: https://github.com/boostorg/website-v2-docs
 
 This section contains answers to the common questions that new developers to Boost often have.
 
+* <<Compatibility>>
+* <<Debugging>>
+* <<ISO C++ Committee Meetings>>
+* <<Libraries>>
+* <<Licensing>>
+* <<Metaprogramming>>
+* <<Modular Boost>>
+* <<Other Languages>>
+* <<Releases>>
+* <<Safe C++>>
+* <<Smart Pointers>>
+* <<Standard Library>>
+* <<Templates>>
+
 == Compatibility
 
 . *Can I use Boost with my existing pass:[C++] project?*
@@ -609,6 +623,29 @@ File extensions communicate the "type" of the file, both to humans and to comput
 . *How do I contribute a library?*
 +
 Refer to the xref:contributor-guide:ROOT:index.adoc[]. Note that shareware libraries, commercial libraries, or libraries requiring restrictive licensing are all not acceptable. Your library must be provided free, with full source code, and have an acceptable license. There are other ways of contributing too, providing feedback, testing, submitting suggestions for new features and bug fixes, for example. There are no fees for submitting a library.
+
+== Safe C++
+
+. *What is meant by Safe pass:[C++]?*
++
+Safe pass:[C++] is an initiative to address fundamental security vulnerabilities in pass:[C++]. pass:[C++] is known for giving developers a lot of control over system resources, but this power comes with the risk of making mistakes that can be hard to detect and fix - notably memory safety. Languages such as RUST and SWIFT have attempted to address memory safety by design. However, for pass:[C++] developers that means learning a new language and opens up a Pandora's box of interop issues when only some components of a large system are written in these languages. Safe pass:[C++] is an initiative to provide pass:[C++] developers with the tools that they need to write very secure programs.
+
+. *Other than memory safety, are there other issues that Safe pass:[C++] addresses?*
++
+Memory safety is the big ticket item and includes avoiding such issues as undefined behavior, dereferencing null or dangling pointers, buffer overflows and uninitialized memory reads. In addition to this, Safe pass:[C++] promotes using strong typing to catch errors at compile time rather than runtime. This includes preferring `enum` classes over plain `enums`, using `constexpr` for compile-time constants, and avoiding implicit type conversions that can lead to unexpected results. Utilizing features like `auto`, `decltype`, and `template` type deduction to reduce errors related to type mismatches.
++
+Other goals of Safe pass:[C++] include thread safety (avoiding data races and using proper synchronization with mutexes, locks and atomic operations) and exception safety (handling exceptions without causing resource leaks, data corruption or other undefined behavior).
++
+There are some inherently unsafe constructs in pass:[C++], such as `reinterpret_cast`, `volatile`, and manual memory management. Safe pass:[C++] adds runtime checks and enforces safer coding standards.
+
+. *What is the connection between the Boost pass:[C++] Libraries and the Safe pass:[C++] initiative?*
++
+Safe pass:[C++] is _not_ a Boost library. Currently the pass:[C++] Alliance, which currently manages much of the Boost Libraries infrastructure, is sponsoring the Safe pass:[C++] initiative. In the future, Boost libraries are likely to be rewritten using Safe pass:[C++]. 
+
+. *Where can I learn more about the details of programming using Safe pass:[C++]?*
++
+Refer to this detailed paper: https://safecpp.org/P3390R0.html[Safe C++] authored by Sean Baxter - the primary developer.
+
 
 
 == Smart Pointers
