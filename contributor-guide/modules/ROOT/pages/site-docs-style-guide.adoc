@@ -44,4 +44,4 @@ image::url-style-guide-image.png[]
 
 == See Also
 
-** xref:docs/asciidoc-style-guide.adoc[]
+** xref:docs/asciidoc.adoc[]

@@ -51,10 +51,11 @@ Official repository: https://github.com/boostorg/website-v2-docs
 ** xref:superproject/library-workflow.adoc[]
 
 * Writing Documentation
-** xref:docs/documentation-guidelines.adoc[]
-** xref:docs/documentation-components.adoc[]
+** xref:docs/layout.adoc[]
+** xref:docs/content.adoc[]
+** xref:docs/components.adoc[]
 ** xref:docs/antora.adoc[Antora Guide]
-** xref:docs/asciidoc-style-guide.adoc[]
+** xref:docs/asciidoc.adoc[]
 ** xref:docs/logo-policy-media-guide.adoc[]
 
 * Releases

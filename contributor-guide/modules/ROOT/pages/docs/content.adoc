@@ -6,58 +6,37 @@ file LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
 
 Official repository: https://github.com/boostorg/website-v2-docs
 ////
-= Documentation Guidelines
-:navtitle: Guidelines
+= Documentation Content Structure
+:navtitle: Content
 
-This section covers how to structure library documentation.
+It is not a _requirement_ for a Boost library for the documentation to adhere to the following structure.
+However, it is listed here as a guide, if needed.
 
-== Location
+The following structure for Boost library documentation should work for most libraries.
+Take each section in the order listed below, and fill in the details for your library.
+Alternatively, if you want your documentation to be closer to the pass:[C++] Standard, refer to xref:docs/components.adoc[].
 
-The target location for completed and published library documentation should match the following:
-
-[source,asciidoc]
-----
-https://www.boost.org/doc/libs/<VERSION>/libs/<LIBRARY NAME>/doc/html/index.html
-----
-
-For example:
-
-[source,asciidoc]
-----
-https://www.boost.org/doc/libs/1_81_0/libs/json/doc/html/index.html
-https://www.boost.org/doc/libs/1_82_0/libs/serialization/doc/index.html
-https://www.boost.org/doc/libs/1_83_0/libs/beast/doc/html/index.html
-----
-
-== Required Organization
-
-In order for a library's documentation to be built correctly and the finished product written to the location described above, you must follow the xref:requirements/organization-requirements.adoc[], in particular the xref:requirements/organization-requirements.adoc#building_documentation[Building Documentation] section.
-
-== Recommended Structure
-
-It is not a _requirement_ for a Boost library for the documentation to adhere to the following structure. However, it is listed here as a guide, if needed.
-
-The following structure for Boost library documentation should work for most libraries. Take each section in the order listed below, and fill in the details for your library. Alternatively, if you want your documentation to be closer to the pass:[C++] Standard, refer to xref:docs/documentation-components.adoc[].
-
-The format for documentation on the new website is https://docs.asciidoctor.org/asciidoc/latest/syntax-quick-reference/[AsciiDoc Syntax Quick Reference].
+Although library documentation can use any format in
+xref:docs/layout.adoc#standalone-documentation[standalone documentation], the instructions on this page will use AsciiDoc as the format.
+Visit https://docs.asciidoctor.org/asciidoc/latest/syntax-quick-reference/[AsciiDoc Syntax Quick Reference,window=_blank] for more information on AsciiDoc syntax.
 
 Where you see `<LibraryName>` in the templates below, replace with the name of your library.
 
-=== Overview 
+== Overview
 
 Provide a brief overview of the focus and features of your library.
 
-Mention the portability of the library, platforms and compilers. List dependencies.
+Mention the portability of the library, platforms and compilers.
+List dependencies.
 
 A developer should have a good idea if the library is right for their project, after reading your Overview.
 
 Note that footnote references link to the footnotes section, and the entries in the footnote section link back to the references.
 
-==== Overview Template
+=== Overview Template
 
 [source,asciidoc]
 ----
-
 == Overview
 
 Add an introduction to your library here. Refer to previous libraries on the content of an Overview.
@@ -78,7 +57,6 @@ text that requires a footnote. link:#footnote2[(2)]
 
 text
 
-
 == Footnotes
 
 [#footnote1]
@@ -89,11 +67,12 @@ link:#footnote2-location[(2)]: footnote 2 text
 
 ----
 
-=== Rationale 
+== Design Rationale
 
-A Rationale provides a description of the motivation behind the library. Describe the current problems that exist, and the goals of the library in addressing those problems.
+A Rationale provides a description of the motivation behind the library.
+Describe the current problems that exist, and the goals of the library in addressing those problems.
 
-==== Rationale Template
+=== Rationale Template
 
 [source,asciidoc]
 ----
@@ -129,11 +108,11 @@ link:#footnote2-location[(2)]: footnote 2 text
 
 ----
 
-=== Guide
+== Guide
 
 The contents of the guide should be enough to get a new user up and running with your library.
 
-==== Guide Template
+=== Guide Template
 
 [source,asciidoc]
 ----
@@ -154,12 +133,11 @@ text
 text
 ----
 
-
-=== Header 
+== Reference
 
 Provide a complete API reference to your library, without duplicating the contents of the <<Configuration>> or <<Definitions>> sections, which follow.
 
-==== Header Template
+=== Reference Template
 
 [source,asciidoc]
 ----
@@ -377,12 +355,14 @@ function1
 
 ----
 
+If your documentation is defined as an Antora component, the `@cppalliance/antora-cpp-reference-extension` extension can be used to generate the reference documentation from the source code.
+Refer to xref:docs/antora.adoc[] for more details.
 
-=== Configuration
+== Configuration
 
 Describe the configuration macros that are used in your library.
 
-==== Configuration Template
+=== Configuration Template
 
 [source,asciidoc]
 ----
@@ -440,13 +420,14 @@ These are the macros that may be defined by an application using `<LibraryName>`
 |`mult(x,y)` | The x and Y values are multiplied together.
 |===
 
-=== Definitions
+== Definitions
 
-If you library uses any terminology that might benefit from a description, consider adding Definitions to your documentation.
+If your library uses any terminology that might benefit from a description, consider adding a "Definitions" page to your documentation.
 
-Note that each definition is preceded by an anchor, so can be linked to from any other section of your documentation. This can help reduce duplication of explanations - link to your definitions rather than repeat explanations.
+Each definition is typically preceded by an anchor, so can be linked to from any other section of your documentation.
+This can help reduce duplication of explanations: link to your definitions rather than repeat explanations.
 
-==== Definitions Template
+=== Definitions Template
 
 [source,asciidoc]
 ----
@@ -471,18 +452,19 @@ Example:: Assume there is a String-Container library, and that String container 
 +
 [#Finder Concept]
 *Finder Concept*::
-A Finder is a function which searches for an arbitrary part of a container. For example (add example logic here).
+A Finder is a function which searches for an arbitrary part of a container.
+For example (add example logic here).
 +
 [#Formatter Concept]
 *Formatter Concept*::
-Formatters are used by string replace algorithms. For example (add example logic here).
+Formatters are used by string replace algorithms.
+For example (add example logic here).
 
-=== Advanced Topics
+== Advanced Topics
 
-Advanced topics include advanced tutorials or examples, and also covers porting, customization, synchronization, and performance tuning.
+Advanced topics include advanced tutorials or examples, and also cover porting, customization, synchronization, and performance tuning.
 
-
-==== Advanced Topics Template
+=== Advanced Topics Template
 
 [source,asciidoc]
 ----
@@ -518,8 +500,7 @@ text
 
 ----
 
-
-=== Frequently Asked Questions (FAQs) 
+== Frequently Asked Questions (FAQs)
 
 A Frequently Asked Questions (FAQ) section might add value to your documentation, by aiding developers with answers to known issues or complexities.
 
@@ -527,7 +508,7 @@ If there are a large number of questions and answers, group them into sections w
 
 Note that every question is in bold, and always ends with a question mark.
 
-==== FAQ Template
+=== FAQ Template
 
 [source,asciidoc]
 ----
@@ -542,7 +523,7 @@ answer1
 answer2
 ----
 
-Example:: 
+Example::
 +
 *Does this library work with COM methods?*
 +
@@ -552,19 +533,21 @@ Yes, if you add `#define BOOST_ENABLE_STDCALL` to your code.
 +
 No, the only supported versions of Windows supported are 10 and 11.
 
-=== Versioning and Release Notes
+== Versioning and Release Notes
 
-Make sure to version your library correctly, and provide release notes for each release. Refer to xref:version-control.adoc[] and xref:release-notes.adoc[] for details.
+Make sure to version your library correctly, and provide release notes for each release.
+Refer to xref:version-control.adoc[] and xref:release-notes.adoc[] for details.
 
-=== Bibliography 
+== Bibliography
 
 If bibliographic references are required in your documentation for your library, add a bibliography to the documentation.
 
-The book title can be text, or can be a link to a site too if the text of the book is available online. The ISBN number can be replaced by another reference number if the reference is to an academic paper, or other reference that is not published in book form.
+The book title can be text, or can be a link to a site too if the text of the book is available online.
+The ISBN number can be replaced by another reference number if the reference is to an academic paper, or other reference that is not published in book form.
 
 Ideally, list the bibliography in alphabetical order.
 
-==== Bibliography Template
+=== Bibliography Template
 
 [source,asciidoc]
 ----
@@ -573,15 +556,16 @@ Ideally, list the bibliography in alphabetical order.
 [Surname/s] Authors full names. _Book title_. ISBN number, Publication date.
 ----
 
-Example:: [Turcan, Wasson] Peter Turcan, Mike Wasson. _Fundamentals of Audio and Video Programming for Games_. ISBN: 073561945X, 2003.
+Example:: [Turcan, Wasson] Peter Turcan, Mike Wasson. _Fundamentals of Audio and Video Programming for Games_.
+ISBN: 073561945X, 2003.
 
+== Acknowledgements
 
+If acknowledgements are required for your library, add an acknowledgements section to the documentation.
+As a rule of thumb, the acknowledgements should be ordered with the most important contributions coming first.
+Links can be included, if required.
 
-=== Acknowledgements
-
-If acknowledgements are required for your library, add an acknowledgements section to the documentation. As a rule of thumb, the acknowledgements should be ordered with the most important contributions coming first. Links can be included, if required.
-
-==== Acknowledgements Template
+=== Acknowledgements Template
 
 [source,asciidoc]
 ----
@@ -602,13 +586,13 @@ Example:: The author appreciates the contributions to the library made by the fo
 * John Doe for input on the architecture and design of the API interfaces.
 * Jane Doe for numerous improvements and suggestions on the text of the error messages.
 
-=== Other Appendices
+== Other Appendices
 
-If any other appendices are needed, add them here. 
+If any other appendices are needed, add them here.
 
 == See Also
 
-* xref:docs/asciidoc-style-guide.adoc[]
+* xref:docs/asciidoc.adoc[]
 * xref:site-docs-style-guide.adoc[]
 
 _Revised April, 2023_

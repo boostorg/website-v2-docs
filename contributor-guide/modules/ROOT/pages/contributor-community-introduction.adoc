@@ -9,19 +9,26 @@ Official repository: https://github.com/boostorg/website-v2-docs
 = Introduction to the Contributor Community
 :navtitle: Introduction
 
-The Boost Contributors Community is a dedicated group of developers and enthusiasts committed to advancing the Boost libraries. There are many different ways of xref:getting-involved.adoc[] with this community.
+The Boost Contributors Community is a dedicated group of developers and enthusiasts committed to advancing the Boost libraries.
+There are many different ways of xref:getting-involved.adoc[] with this community.
 
 == Communications
 
-The https://lists.boost.org/mailman/listinfo.cgi/boost[Boost Developers Mailing List] is focused on the development and maintenance of the libraries. It is a platform for proposing new libraries, discussing design and implementation details, and coordinating efforts among contributors. Participation in these mailing lists is open to all. In addition to mailing lists, the Boost community also leverages https://slack.com/[Slack] for real-time communication. The Slack Workspace hosts various channels dedicated to specific libraries, general discussions, and coordination among contributors.
+The https://lists.boost.org/mailman/listinfo.cgi/boost[Boost Developers Mailing List] is focused on the development and maintenance of the libraries.
+It is a platform for proposing new libraries, discussing design and implementation details, and coordinating efforts among contributors.
+Participation in these mailing lists is open to all.
+In addition to mailing lists, the Boost community also leverages https://slack.com/[Slack] for real-time communication.
+The Slack Workspace hosts various channels dedicated to specific libraries, general discussions, and coordination among contributors.
 
-When discussing Boost-related topics on social media, contributors are encouraged to follow our xref:tweeting.adoc[Tweeting] guidelines. These guidelines help ensure that the community maintains a positive and informative presence on social media.
+When discussing Boost-related topics on social media, contributors are encouraged to follow our xref:tweeting.adoc[Tweeting] guidelines.
+These guidelines help ensure that the community maintains a positive and informative presence on social media.
 
 New library developers usually have a lot of questions on their mind, before asking for help or information refer to the xref:contributors-faq.adoc[] for answers to many common questions and dilemmas.
 
 == Documentation Style
 
-A consistent documentation style, that emphasizes readability and accessibility, is encouraged. This includes all the library xref:docs/documentation-guidelines.adoc[Documentation Guidelines] and contributions to this website (refer to xref:site-docs-style-guide.adoc[]).
+A consistent documentation style, that emphasizes readability and accessibility, is encouraged.
+This includes all the library xref:docs/layout.adoc[Documentation Guidelines] and contributions to this website (refer to xref:site-docs-style-guide.adoc[]).
 
 == See Also
 

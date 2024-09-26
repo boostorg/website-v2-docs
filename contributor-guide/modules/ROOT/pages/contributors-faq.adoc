@@ -236,7 +236,7 @@ Here are some of the most notable ones:
 
 . *What mitigation strategies have Boost library authors employed to mitigate these unpleasant surprises?*
 +
-Primarily implementing a comprehensive xref:testing/boost-test-matrix.adoc[Test Matrix] to catch issues early. xref:testing/continuous-integration.adoc[Continuous Integration (CI)] systems ensure consistent builds and tests across multiple platforms and configurations. Also actively engaging with the community through forums, mailing lists, and GitHub to gather feedback and address issues promptly. Last but not least, investing time in writing clear, detailed xref:docs/documentation-guidelines.adoc[Documentation] and tutorials to help users get started and understand complex features.
+Primarily implementing a comprehensive xref:testing/boost-test-matrix.adoc[Test Matrix] to catch issues early. xref:testing/continuous-integration.adoc[Continuous Integration (CI)] systems ensure consistent builds and tests across multiple platforms and configurations. Also actively engaging with the community through forums, mailing lists, and GitHub to gather feedback and address issues promptly. Last but not least, investing time in writing clear, detailed xref:docs/layout.adoc[Documentation] and tutorials to help users get started and understand complex features.
 +
 After the initial release, consider releasing regular updates to address bugs, improve performance, and add features as necessary, based on user feedback. Refer to xref:version-control.adoc[].
 +
