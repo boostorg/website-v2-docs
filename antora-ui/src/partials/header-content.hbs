@@ -1,61 +1,6 @@
-<header class="header"><!--
-  <nav class="navbar">
-    <div class="navbar-brand">
-      <a class="navbar-item" href="{{{or site.url siteRootPath}}}/doc/{{{page.component.name}}}/">
-        {{#if (and (eq page.component.latest.asciidoc.attributes.logo-img undefined) (eq page.component.latest.asciidoc.attributes.logo-text undefined))}}
-          <img src="{{{uiRootPath}}}/img/Boost_Brandmark_WhiteBoost_Transparent.svg" alt="" width="130">
-        {{else if (ne page.component.latest.asciidoc.attributes.logo-text undefined)}}
-          <span class="logo-text">{{page.component.latest.asciidoc.attributes.logo-text}}</span>
-        {{else if (ne page.component.latest.asciidoc.attributes.logo-img undefined)}}
-          {{! Set the logo image in ui.supplemental_files in the playbook }}
-          {{! https://docs.antora.org/antora/latest/playbook/ui-supplemental-files/ }}
-          <img src="{{{uiRootPath}}}/img/{{page.component.latest.asciidoc.attributes.logo-img}}" alt="" width="130">
-        {{/if}}
-      </a>
-      <button class="navbar-burger" data-target="topbar-nav">
-        <span></span>
-        <span></span>
-        <span></span>
-      </button>
-    </div>
-    <div id="topbar-nav" class="navbar-menu">
-      <div class="navbar-end">
-        <div class="navbar-item has-dropdown is-hoverable">
-          <a class="navbar-link" href="#">{{page.component.title}}</a>
-          <div class="navbar-dropdown">
-            {{#each site.components}}
-              {{#if (ne this @root.page.component)}}
-                <a class="navbar-item" href="{{{relativize ./url}}}">{{{./title}}}</a>
-              {{/if}}
-            {{/each}}
-          </div>
-        </div>
-        <!--
-        <a class="navbar-item" href="#">Home</a>
-        <div class="navbar-item has-dropdown is-hoverable">
-          <a class="navbar-link" href="#">Products</a>
-          <div class="navbar-dropdown">
-            <a class="navbar-item" href="#">Product A</a>
-            <a class="navbar-item" href="#">Product B</a>
-            <a class="navbar-item" href="#">Product C</a>
-          </div>
-        </div>
-        <div class="navbar-item has-dropdown is-hoverable">
-          <a class="navbar-link" href="#">Services</a>
-          <div class="navbar-dropdown">
-            <a class="navbar-item" href="#">Service A</a>
-            <a class="navbar-item" href="#">Service B</a>
-            <a class="navbar-item" href="#">Service C</a>
-          </div>
-        </div>
-        -->
-        <!--<div class="navbar-item">
-          <span class="control">
-            <a class="button is-primary" target="blank_"
-              href="https://github.com/cppalliance/site-docs/issues/new/choose">Report an Issue</a>
-          </span>
-        </div>
-      </div>
-    </div>
-  </nav>-->
-</header>
+<div id="header">
+  {{#if (and (eq page.component.latest.asciidoc.attributes.remove-sidenav undefined) (eq page.attributes.remove-sidenav
+  undefined))}}
+    {{> nav}}
+  {{/if}}
+</div>
