@@ -31,7 +31,7 @@ To avoid a proposed library being rejected, it must meet these requirements:
 
 . The library must come reasonably close to meeting the xref:../design-guide/design-best-practices.adoc[].
 
-. The library must be well documented, refer to xref:../docs/documentation-guidelines.adoc[].
+. The library must be well documented, refer to xref:../docs/layout.adoc[].
 
 . The author must be willing to participate in discussions on the mailing list, and to refine the library accordingly.
 
