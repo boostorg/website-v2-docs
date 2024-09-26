@@ -29,7 +29,6 @@
 }
 
 .nav {
-  background: var(--nav-background);
   position: relative;
   top: var(--toolbar-height);
   height: var(--nav-height);
@@ -87,7 +86,6 @@ html.is-clipped--nav {
 
 .nav-menu {
   min-height: 100%;
-  padding: 0.5rem 0.75rem;
   line-height: var(--nav-line-height);
   position: relative;
 }
@@ -171,8 +169,6 @@ html.is-clipped--nav {
   font-size: calc(15 / var(--rem-base) * 1rem);
   flex-shrink: 0;
   color: var(--nav-muted-color);
-  box-shadow: 0 -1px 0 var(--nav-panel-divider-color);
-  padding: 0 0.5rem;
   display: flex;
   align-items: center;
   justify-content: space-between;

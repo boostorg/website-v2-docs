@@ -47,23 +47,15 @@ body.article {
 }
 
 /* Document Styles */
-main.article {
-  padding-bottom: 0;
-  min-width: 0;
-}
 
-html.is-clipped--nav main.article {
+html.is-clipped--nav div#content {
   display: none;
   visibility: hidden;
 }
 
-html:not(.is-clipped--nav) main.article {
+html:not(.is-clipped--nav) div#content {
   display: block;
   visibility: visible;
-}
-
-.doc {
-  padding: 1rem 1rem 4rem;
 }
 
 @media screen and (max-width: 768px) {
@@ -72,38 +64,9 @@ html:not(.is-clipped--nav) main.article {
   }
 }
 
-@media screen and (min-width: 769px) {
-  main.article {
-    padding-left: 1rem;
-  }
-}
-
 @media screen and (min-width: 1024px) {
   .doc {
     margin: 0;
-  }
-}
-
-@media screen and (min-width: 1820px) {
-  main.article {
-    padding-left: 1rem;
-  }
-}
-
-/* Card Styles */
-.card {
-  background-color: var(--color-white);
-}
-
-.dark .card {
-  background-color: #08283a;
-}
-
-@media screen and (min-width: 769px) {
-  .card {
-    border-radius: 0.5rem;
-    padding: 1rem;
-    height: 100%;
   }
 }
 
@@ -136,10 +99,6 @@ html.is-clipped--nav .nav-close {
 
 .nav-list > .nav-list {
   margin-left: 1rem;
-}
-
-.nav-list li {
-  padding-top: 0.45rem;
 }
 
 .nav-menu {

@@ -1,13 +1,11 @@
-<main class="article">
-  <div class="content">
-    {{#if (eq page.layout '404')}}
-      {{> article-404}}
-    {{else}}
-      {{! The contents panel }}
-      {{#if (or (ne page.component.latest.asciidoc.attributes.page-toc undefined) (ne page.attributes.page-toc undefined))}}
-        {{> toc}}
-      {{/if}}
-      {{> article}}
+<div id="content">
+  {{#if (eq page.layout '404')}}
+    {{> article-404}}
+  {{else}}
+    {{! The contents panel }}
+    {{#if (or (ne page.component.latest.asciidoc.attributes.page-toc undefined) (ne page.attributes.page-toc undefined))}}
+      {{> toc}}
     {{/if}}
-  </div>
-</main>
+    {{> article}}
+    {{/if}}
+</div>
