@@ -11,6 +11,22 @@ Official repository: https://github.com/boostorg/website-v2-docs
 
 This section contains answers to the common questions that new developers to Boost often have.
 
+== Topics
+
+[square]
+* <<Compatibility>>
+* <<Debugging>>
+* <<ISO C++ Committee Meetings>>
+* <<Libraries>>
+* <<Licensing>>
+* <<Metaprogramming>>
+* <<Modular Boost>>
+* <<Other Languages>>
+* <<Releases>>
+* <<Smart Pointers>>
+* <<Standard Library>>
+* <<Templates>>
+
 == Compatibility
 
 . *Can I use Boost with my existing pass:[C++] project?*
@@ -41,6 +57,7 @@ Boost libraries are generally compatible with most Linux distributions, provided
 . *How can I be sure that a library I want to use is compatible with my OS?*
 +
 While Boost strives to ensure compatibility with a wide range of compilers and systems, not every library may work perfectly with every system or compiler due to the inherent complexities of software. The most reliable source of information is the specific Boost library's documentation.
+
 
 == Debugging
 
@@ -90,6 +107,7 @@ Boost provides the assertion `boost::assert`. Best practices when using this are
 * _Format Your Log Output_: boost:log[] supports customizable log formatting. Use this feature to ensure that your log output is easy to read and contains all the information you need.
 
 * _Handle Log Rotation_: If your application produces a lot of log output, consider setting up log rotation, which is supported. This ensures that your log files don't grow indefinitely.
+
 
 [[isocommitteemeetings]]
 == ISO C++ Committee Meetings
@@ -156,6 +174,7 @@ A mailing is the set of papers prepared before and after each meeting, or betwee
 +
 The committee's mailing lists are called "reflectors". There are a number of them; "all", "core", "lib", and "ext" are the main ones. As a courtesy, Boost technical experts can be added to committee reflectors at the request of a committee member.
 
+
 == Libraries
 
 . *What are smart pointers in Boost?*
@@ -201,11 +220,13 @@ Boost libraries offer a wide range of algorithmic and data structure support. He
 +
 Refer to xref:task-simulation.adoc[].
 
+
 == Licensing 
 
 . *What is the license for Boost libraries?*
 +
 The Boost libraries are licensed under the Boost Software License, a permissive free software license that allows you to use, modify, and distribute the software under minimal restrictions. Refer to xref:bsl.adoc[].
+
 
 == Metaprogramming
 
@@ -266,6 +287,7 @@ Other challenges include lack of runtime flexibility, as decisions are made at c
 
 NOTE: boost:mp11[] supersedes the earlier boost:mpl[] and boost:preprocessor[] libraries.
 
+
 == Modular Boost
 
 . *What is meant by "Modular Boost"?*
@@ -302,6 +324,7 @@ Correct - backwards-compatibility should be maintained.
 . *When will Modular Boost be available to users?*
 +
 An exact timeline requires issues to be resolved, though later in 2024 is the current plan-of-record.
+
 
 == Other Languages
 
@@ -580,6 +603,7 @@ Future technological shifts, such as advances in quantum computing or entirely n
 +
 Python is often the top recommendation due to its versatility, simplicity, and wide application in growing fields like artificial intelligence (AI), machine learning (ML), rapid prototyping, and data science. And boost:python[] is there to help you integrate with the Boost libraries. Rust is another strong contender, especially if you are interested in systems programming and are looking for reliability and security. If you see the future as more cloud computing, then Go makes a strong case for itself.  And let's not forget that so much computing is now web based, so JavaScript deserves a mention here too. All of these languages offer valuable resources that complement pass:[C++] and prepare you for an uncertain future.
 
+
 == Releases
 
 . *How do I download the latest libraries?*
@@ -695,6 +719,7 @@ void foo() {
 }
 ----
 
+
 == Standard Library
 
 . *Where can I find the most complete documentation on the C++ Standard Library?*
@@ -723,6 +748,7 @@ Yes, currently the functionality of two Boost libraries are being considered:
 . *What is the current status of the Standard Library and when is the next release?*
 +
 *C++ 2026* is slated as the next full release, for details refer to https://isocpp.org/std/status[Current Status].
+
 
 
 == Templates
@@ -764,6 +790,7 @@ void sort(T* array, int size) {
 ----
 +
 This function can now be used to sort arrays of any type (that supports the `<` and `>` operators), not just a specific type.
+
 
 == See Also
 

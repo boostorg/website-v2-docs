@@ -11,6 +11,18 @@ Official repository: https://github.com/boostorg/website-v2-docs
 
 This section contains answers to the common questions that new contributors to Boost often have.
 
+== Topics
+
+[square]
+* <<Adding New Libraries>>
+* <<Boost Software License>>
+* <<Development Environments>>
+* <<Existing Boost Libraries>>
+* <<Modular Boost>>
+* <<Post-Release Engagement>>
+* <<Security>>
+* <<Testing>>
+
 == Adding New Libraries
 
 . *When considering developing a library for Boost, what is the right balance between ambitious functionality and limited functionality?*
@@ -18,6 +30,7 @@ This section contains answers to the common questions that new contributors to B
 The keys to a successful development of a new library are to identify core functionality and start simple. Prioritize functionality that provides significant value to developers and aligns with Boost's goals of promoting high-quality, reusable libraries. Avoid adding unnecessary features that may increase complexity without adding much value. It's often beneficial to start with a simpler implementation that addresses a specific problem or use case effectively. A library with a narrow focus and a clear, intuitive API is more likely to be accepted by the Boost community than one that attempts to solve too many problems at once or introduces unnecessary complexity.
 +
 In addition to this, consider future extensibility, performance, portability, current trends, and always remember you can seek community advice and feedback through the Boost mailing lists.
+
 
 [[boostsoftwarelicense]]
 == Boost Software License
@@ -92,6 +105,7 @@ Yes, there are no restrictions on the use of the license itself.
 +
 Yes. The https://opensource.org/[Open Source Initiative] certified the https://opensource.org/license/bsl-1-0[Boost Software License 1.0 in early 2008].
 
+
 == Development Environments
 
 . *Many developers opt for lightweight integrated developer environments (IDEs), rather than the full-fledged IDE. What lightweight IDEs are popular for pass:[C++] development?*
@@ -107,6 +121,7 @@ https://www.sublimetext.com/index2[Sublime Text] is a lightweight yet powerful t
 https://atom-editor.cc/[Atom] is an open-source text editor developed by GitHub. It's highly customizable and extensible through packages, and provides features like syntax highlighting, auto-completion, and project navigation.
 +
 There are many other tools, Microsoft's https://visualstudio.microsoft.com/[Visual Studio] provides a full IDE and is well respected as a professional development environment, and https://code.visualstudio.com/Download[Visual Studio Code] is a lighter weight but versatile code editor that can be extended and customized with various extensions.
+
 
 == Existing Boost Libraries
 
@@ -140,6 +155,7 @@ The many notable examples include:
 +
 The useful utilities such as boost:any[], boost:variant[], and boost:optional[] offer relatively simple functionality. Another simpler library is boost:bimap[] which provides a container for maintaining one-to-one mappings between keys and values. While bidirectional maps are a useful data structure, the functionality provided is relatively straightforward and focused on this specific use case.
 
+
 == Modular Boost
 
 . *What is meant by "Modular Boost"?*
@@ -165,6 +181,7 @@ The structure is still required for things like testing and documentation buildi
 . *What happens to the numeric libraries that are currently sub-libraries, when sub-libraries are no longer supported?*
 +
 The numeric libraries have been divided into four packages: libboost-numeric-conversion/, libboost-numeric-interval/, libboost-numeric-odeint/, libboost-numeric-ublas/.
+
 
 == Post-Release Engagement
 
@@ -274,6 +291,7 @@ _"boost:filesystem[] has been rock-solid in our cross-platform application. It h
 Positive feedback and praise from developers not only encourages the library authors but also helps promote the library within the wider community. This can lead to increased adoption, further contributions, and continuous improvement of the library by the community. It can of course lead to additional communication.
 +
 Financial contributions or sponsorships as a token of appreciation are rare!
+
 
 [[security]]
 == Security
@@ -400,6 +418,7 @@ There are several books that cover threat modeling principles, techniques, and a
 +
 * _Software Security Engineering: A Guide for Project Managers_ by Julia H. Allen, Sean Barnum, and Robert J. Ellison. This book provides a comprehensive overview of software security engineering principles, practices, and processes. It covers a wide range of topics related to software security, including threat modeling, security requirements analysis, security architecture, secure coding practices, and security testing.
 
+
 == Testing
 
 . *What Boost libraries are useful examples of how to add Continuous Integration (CI) into the library testing process?*
@@ -415,6 +434,7 @@ The following libraries are solid examples of how Continuous Integration (CI) is
 By studying how these libraries implement CI into their testing processes, newcomers can gain valuable insights into best practices for ensuring the quality and reliability of their own library contributions.
 +
 Refer also to xref:testing/continuous-integration.adoc[].
+
 
 == See Also
 
