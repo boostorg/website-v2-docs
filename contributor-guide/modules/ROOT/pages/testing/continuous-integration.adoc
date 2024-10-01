@@ -27,8 +27,9 @@ This repository contains scripts that enable CI with:
 * <<Drone>>
 * <<Travis CI>>
 * <<AppVeyor>>
-* <<Codecov.io>>
+* <<CircleCI>>
 * <<Azure Pipelines>>
+* <<Codecov.io>>
 * <<Coverity Scan>>
 
 For step-by-step processes, and tables of supported compilers, refer to the https://github.com/boostorg/boost-ci/blob/master/README.md[boost-ci README.md].
@@ -40,6 +41,14 @@ There are a few areas of CI testing that are fairly unique to Boost, and can pre
 . You test with the xref:version-control#_the_super-project_repository[Super-project], cloning it and placing your library inside a submodule. This is unique to Boost, you might expect to consume Boost as a dependency, but this is not how it works.
 . You test with the *develop* or *master* branches of xref:version-control.adoc#_the_super_project_repository[the Super-project Repository], not with the latest stable release.
 . The CMake workflows are not trivial, nor are they the usual CMake steps.
+
+Refer to the sections:
+
+* <<Test with Popular Compilers>>
+** <<Windows>>
+** <<Linux>>
+** <<MacOS>>
+* <<Docker Containers>>
 
 When tackling CI issues, it is expected that you will ask questions on the https://lists.boost.org/mailman/listinfo.cgi/boost[Boost developers mailing list].
 
