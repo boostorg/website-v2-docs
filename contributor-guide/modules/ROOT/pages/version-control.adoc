@@ -11,6 +11,14 @@ Official repository: https://github.com/boostorg/website-v2-docs
 
 Boost uses the Git version control system for its development. This allows multiple contributors to work on the libraries concurrently, while keeping track of the changes that each person makes. Git is a distributed version control system, which means each contributor has their own local copy of the entire project, including its history.
 
+This section covers:
+
+[square]
+* <<Library Repositories>>
+* <<The Super-project Repository>>
+* <<Breaking Changes>>
+* <<issues-anchor, Issues and Discussions>>
+
 == Library Repositories
 
 The Boost libraries are modular, and each library has its own separate repository.  This makes it easier to work with the entire collection of Boost libraries.
@@ -92,6 +100,7 @@ One thing library maintainers do to mitigate problems is announce their intentio
 
 Ultimately though, even after checking both a library readme file, and for library announcements, some testing may be necessary to be certain of whether a breaking change occurred, or not.
 
+[[issues-anchor]]
 ## Bugs, Issues, Feature Requests and Discussions
 
 The repositories use the built-in GitHub issue tracker. With Boost, users are encouraged to use the issue tracker for discussions and feature requests, as well as to report bugs and other issues.

@@ -15,6 +15,17 @@ Debug Visualizers are tools that allow developers to customize how complex data 
 
 For example, if you're working with a linked list, a Debug Visualizer can display the elements of the list in a clear, ordered format rather than as a series of memory addresses. This can significantly reduce the time and effort required to diagnose and fix bugs.
 
+This section covers:
+
+[square]
+* <<Debug Visualizers in MSVC>>
+* <<Debug Visualizers in GDB>>
+* <<Comparing MSVC and GDB Debug Visualizers>>
+* <<Real-World Use Cases>>
+* <<Using Debug Visualizers with Synchronous Boost Libraries>>
+* <<Visualizing Boost Asio>>
+* <<Next Steps>>
+
 == Debug Visualizers in MSVC
 
 Microsoft Visual Studio comes with built-in support for Debug Visualizers. MSVC includes several built-in Visualizers for common data types like `std::vector`, `std::map`, and `std::string`. However, one of the most powerful features of Visual Studio is the ability to create custom Visualizers to suit your specific needs. These Visualizers are often referred to as Natvis files, - short for Native Visualizer - a script-style display language for https://learn.microsoft.com/en-us/visualstudio/debugger/create-custom-views-of-native-objects?view=vs-2022[creating custom views of C++ objects].
@@ -213,11 +224,11 @@ Debug Visualizers are particularly useful in scenarios where data structures are
 
 Consider a case where a developer is working on a 3D game engine. The engine uses complex data structures to represent scenes, including trees of graphical objects and spatial partitions. Without Debug Visualizers, diagnosing issues with these structures would involve manually traversing pointers and interpreting binary data. With custom Visualizers, the developer can see these structures as they are meant to be seen, such as a tree view of the scene graph or a grid of spatial partitions, making it much easier to identify and fix problems.
 
-=== Using Debug Visualizers with Simpler Boost Libraries
+== Using Debug Visualizers with Synchronous Boost Libraries
 
 The following examples refer to boost:optional[], boost:variant[], and boost:container[].
 
-==== Visualizing boost::optional
+=== Visualizing boost::optional
 
 The `boost::optional` type represents an object that may or may not contain a value. When debugging code that uses `boost::optional`, it's helpful to quickly see whether a value is present and, if so, what that value is.
 
@@ -266,7 +277,7 @@ gdb.pretty_printers.append(lookup_function)
 
 This pretty-printer works similarly to the Natvis example, displaying either the value stored in the `boost::optional` or indicating that it is empty.
 
-==== Visualizing boost::variant
+=== Visualizing boost::variant
 
 `boost::variant` is a type-safe union that can hold one of several types. Visualizing it during debugging can be tricky, as you need to see which type is currently stored and what its value is.
 
@@ -313,7 +324,7 @@ gdb.pretty_printers.append(lookup_function)
 
 This pretty-printer identifies the active type using `which_` and displays its value.
 
-==== Visualizing boost::container::vector
+=== Visualizing boost::container::vector
 
 `boost::container::vector` is a drop-in replacement for `std::vector` with improved performance in certain scenarios. Like `std::vector`, it benefits greatly from a Visualizer that can show the contents of the container in a user-friendly way.
 
@@ -365,7 +376,7 @@ This pretty-printer shows the size of the `boost::container::vector`, and lists 
 
 Now, let's look at debugging a more complex library.
 
-=== Using Debug Visualizers with Boost Asio
+== Visualizing Boost Asio
 
 boost:asio[] is a powerful and widely used library, with the challenge of debugging asynchronous code. Debug Visualizers can make this process significantly easier by providing insights into the state of your Asio objects during debugging.
 
@@ -414,7 +425,7 @@ gdb.pretty_printers.append(lookup_function)
 
 This pretty-printer provides similar information as the Natvis file, showing the number of pending tasks and threads in the `io_context`.
 
-==== Visualizing boost::asio::steady_timer
+=== Visualizing boost::asio::steady_timer
 
 The `boost::asio::steady_timer` is used for scheduling asynchronous operations to occur after a specified time period. Visualizing its state can help you understand when the next operation is scheduled to run.
 
@@ -459,7 +470,7 @@ gdb.pretty_printers.append(lookup_function)
 
 This pretty-printer shows when the timer is set to expire, similar to the Natvis Visualizer.
 
-==== Visualizing boost::asio::socket
+=== Visualizing boost::asio::socket
 
 Sockets are one of the most commonly used components in boost:asio[], allowing for network communication. Visualizing socket states and addresses during debugging can provide clarity on the connections being managed.
 
