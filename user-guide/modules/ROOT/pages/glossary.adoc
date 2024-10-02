@@ -10,6 +10,8 @@ Official repository: https://github.com/boostorg/website-v2-docs
 
 You will find a myriad of jargon, acronyms and product or tool names used both in technical documentation and social media discussion of the Boost pass:[C++]Libraries and pass:[C++] development in general. This section contains descriptions of the most common.
 
+You will find well known acronyms such as DLL, URL and UUID in this list, because they also refer to Boost libraries of the same name.
+
 [[contents]]
 == Contents
 [width="50%",stripes=odd,frame=none]
@@ -40,7 +42,11 @@ You will find a myriad of jargon, acronyms and product or tool names used both i
 
 *CICD (CI/CD)* : Continuous Integration and Continuous Deployment (or Delivery). CI refers to the practice of automatically integrating code changes into a shared repository, where each change is verified by automated builds and tests. CD extends this process to automatically deploy or deliver new code to production environments. Refer to xref:contributor-guide:ROOT:testing/continuous-integration.adoc[Contributor Guide: Continuous Integration].
 
+*CRC* : Cyclic Redundancy Code - refer to boost:crc[].
+
 *CRTP* : Curiously Recurring Template Pattern
+
+*CUDA* : CUDA originally stood for _Compute Unified Device Architecture_ though is now generally used as a name for a parallel computing platform, language and API. For more information, refer to https://developer.nvidia.com/cuda-toolkit[CUDA Toolkit].
 
 == D
 
@@ -48,7 +54,7 @@ You will find a myriad of jargon, acronyms and product or tool names used both i
 
 *DFS* : Depth-First Search
 
-*DLL* : Dynamic Link Library
+*DLL* : Dynamic Link Library - also refer to boost:dll[].
 
 *Drone* : A continuous integration (CI) and delivery platform that automates the build, test, and deploy stages of a software pipeline. It is container-based and integrates with various version control systems, supporting multiple languages and environments. Refer to xref:contributor-guide:ROOT:testing/continuous-integration.adoc[Contributor Guide: Continuous Integration].
 
@@ -84,20 +90,29 @@ You will find a myriad of jargon, acronyms and product or tool names used both i
 
 == H
 
-*HSM* : Hierarchical State Machine - used in designing state machines in software development, often in real-time systems or simulations.
+*HOF* : High-Order Functions - refer to boost:hof[].
 
 *HRT* : High-Resolution Timer - a high-resolution timing mechanisms used in pass:[C++] for precise measurements of time, especially in performance profiling and real-time systems.
 
+*HSM* : Hierarchical State Machine - used in designing state machines in software development, often in real-time systems or simulations.
+
+
 == I
+
+*ICL* : Interval Container Library - refer to boost:icl[].
 
 *IDEs* : Integrated Development Environments
 
 *IMO* or *IMHO* : _In My (Honest or Humble) Opinion_
 
+*IO* : Input/Output - refer to boost:io[].
+
 *IOW* : _In Other Words_
 
 
 == J
+
+*Jinja* or *Jinga2* : Jinga is a popular Python text template engine. https://jinja2cpp.github.io/[Jinga2pass:[C++]] is a modern C++ implementation of Jinga.
 
 *JNI* : Java Native Interface - a framework that allows pass:[C++] code to interact with Java code. JNI is relevant when integrating pass:[C++] components into Java applications, especially in cross-language development.
 
@@ -109,6 +124,8 @@ You will find a myriad of jargon, acronyms and product or tool names used both i
 
 == L
 
+*LEAF* : Lightweight Error Augmentation Framework - refer to boost:leaf[].
+
 *LGTM* : _Looks Good To Me_
 
 *LIFO* : Last In, First Out
@@ -119,8 +136,6 @@ You will find a myriad of jargon, acronyms and product or tool names used both i
 
 == M
 
-*MVP* : Model-View-Presenter
-
 *MDS* :
 
 * Meltdown Data Sampling : in the context of system security and CPU vulnerabilities, MDS refers to a family of side-channel attacks that target weaknesses in modern CPU architectures. These attacks can potentially leak sensitive data through speculative execution flaws, similar to vulnerabilities like Meltdown and Spectre.
@@ -128,6 +143,12 @@ You will find a myriad of jargon, acronyms and product or tool names used both i
 * Modular Design Structure : sometimes used to describe a software design methodology in which systems are broken down into modules, allowing for separation of concerns and better maintainability.
 
 * Multiple Data Streams : a more abstract term, refers to scenarios where an application handles multiple data streams simultaneously, possibly in a parallel or distributed environment.
+
+*MPI* : Message Parsing Interface - refer to boost:mpi[].
+
+*MPL* or *MP11* : Metaprogramming Libraries - refer to boost:mpl[] and boost:mp11[].
+
+*MVP* : Model-View-Presenter
 
 == N
 
@@ -137,11 +158,15 @@ You will find a myriad of jargon, acronyms and product or tool names used both i
 
 == O
 
+*Odeint* : Ordinary Differential Equations (Initial) - a library for solving initial value problems of ordinary differential equations, refer to boost:numeric/odeint[].
+
 *OOB* : Out of Bounds (or Out of Band)
 
 *OOP* : Object-Oriented Programming
 
 == P
+
+*PFR* : A library to perform basic reflection - refer to boost:pfr[].
 
 *PIMPL* : Pointer to IMPLementation (or the "Cheshire Cat" idiom)
 
@@ -153,6 +178,10 @@ You will find a myriad of jargon, acronyms and product or tool names used both i
 
 == Q
 
+*QBK* : Quickbook - a Boost tool for automated documentation, not to be confused with Intuit Quickbooks accounting software.
+
+*QED* : "Quod erat demonstrandum" in Latin, which translates to "that which was to be demonstrated".
+
 *QML* : Qt Meta Language - a declarative language used in conjunction with Qt for designing user interfaces. QML is commonly referenced in pass:[C++] discussions related to UI development in Qt.
 
 *QOI* : Quite OK Image format - a relatively new image file format that aims to provide lossless image compression with a focus on simplicity and speed, sometimes used in performance-critical applications dealing with image processing.
@@ -160,6 +189,8 @@ You will find a myriad of jargon, acronyms and product or tool names used both i
 *QoS* : Quality of Service - a concept that often appears in networking discussions, especially when pass:[C++] programs deal with real-time communications, distributed systems, or systems requiring specific performance guarantees.
 
 *Qt* : This is a widely-used pass:[C++] framework for cross-platform GUI applications. While not an acronym, it's often capitalized as Qt in discussions. Qt is known for its rich set of libraries and tools to develop not only graphical applications but also applications that require network handling, file I/O, and more.
+
+*QVM* : Quaternions Vectors and Matrics - refer to boost:qvm[].
 
 == R
 
@@ -173,7 +204,9 @@ You will find a myriad of jargon, acronyms and product or tool names used both i
 
 == S
 
-*SFINAE* : _Substitution Failure Is Not An Error_
+*SHA* : Secure Hash Algorithm, a function that will reliably give different hash values for different inputs.
+
+*SFINAE* or *SFINAED* : _Substitution Failure Is Not An Error_
 
 *SOLID* : Single Responsibility, Open/Closed, Liskov Substitution, Interface Segregation, Dependency Inversion (Design principles)
 
@@ -193,13 +226,21 @@ You will find a myriad of jargon, acronyms and product or tool names used both i
 
 *TL;DR* : _Too Long; Didn't Read_
 
+*TTI* : Type Traits Introspection - refer to boost:tti[].
+
 == U
 
 *UB* : Undefined Behavior
 
+*UBlas* : Basic Linear Algebra - refer to boost:numeric/ublas[].
+
+*URL* : Universal Resource Locator - refer to boost:url[].
+
 *UDP* : User Datagram Protocol
 
 *UTC* : Coordinated Universal Time
+
+*UUID* : Universal Unique Identifier - refer to boost:uuid[].
 
 == V
 
@@ -209,6 +250,8 @@ You will find a myriad of jargon, acronyms and product or tool names used both i
 
 *VLA* : Variable Length Array - although pass:[C++] does not officially support VLAs in the standard, some compilers provide support as an extension. VLAs allow the length of an array to be determined at runtime.
 
+*VMD* : Variadic Macro Data - refer to boost:vmd[].
+
 *VoIP* : Voice over Internet Protocol - in networking libraries or real-time communication systems, VoIP is often discussed when implementing features for voice transmission over IP networks.
 
 *VR* : Virtual Reality - in game programming, simulations, or graphics-intensive applications, VR is often mentioned in discussions. pass:[C++] is commonly used for developing VR engines and related tools.
@@ -216,6 +259,8 @@ You will find a myriad of jargon, acronyms and product or tool names used both i
 *VTable* : Virtual Table - a mechanism used in pass:[C++] to support dynamic (runtime) polymorphism through virtual functions. Discussions involving inheritance and object-oriented programming often reference vtables.
 
 == W
+
+*WG21* : Working Group 2021 - a C++ Standards working group.
 
 *WowBadger* : TBD
 
@@ -228,6 +273,8 @@ You will find a myriad of jargon, acronyms and product or tool names used both i
 == Y
 
 *YAGNI* : _You Aren't Gonna Need It_
+
+*YAP* : An expression template library - refer to boost:yap[].
 
 == Z
 
