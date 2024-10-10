@@ -1,6 +1,5 @@
 /build/
 /node_modules/
 /public/
-# TODO: Uncomment when the new look is ready
-# /src/css/boostlook.css
+/src/css/boostlook.css
 
