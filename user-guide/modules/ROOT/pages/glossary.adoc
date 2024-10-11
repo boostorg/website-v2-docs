@@ -12,7 +12,6 @@ You will find a myriad of jargon, acronyms and product or tool names used both i
 
 You will find well known acronyms such as DLL, URL and UUID in this list, because they also refer to Boost libraries of the same name.
 
-[[contents]]
 == Contents
 [width="50%",stripes=odd,frame=none]
 |===
@@ -28,13 +27,21 @@ You will find well known acronyms such as DLL, URL and UUID in this list, becaus
 
 *AFAICT* : _As Far As I Can Tell_
 
-*ASIO* : Asynchronous Input/Output (refer to boost:asio[]).
+*AFAIK* : _As Far As I Know_
+
+*ASIO* : Asynchronous Input/Output - refer to boost:asio[]
 
 == B
+
+*BBK* : _Badly Broken Keyboard_ - describing terrible code or debugging issues
 
 *BFS* : Breadth-First Search
 
 *Bikeshedding* or *BS* : _Focusing on trivial issues_
+
+*BOFH* : _B'd Operator From Hell_ - referring to a grumpy system admin
+
+*BOGOSITY* : A measure of how bogus something is - typically bogus code or bogus logic
 
 *BTW* : _By The Way_
 
@@ -42,9 +49,13 @@ You will find well known acronyms such as DLL, URL and UUID in this list, becaus
 
 *CICD (CI/CD)* : Continuous Integration and Continuous Deployment (or Delivery). CI refers to the practice of automatically integrating code changes into a shared repository, where each change is verified by automated builds and tests. CD extends this process to automatically deploy or deliver new code to production environments. Refer to xref:contributor-guide:ROOT:testing/continuous-integration.adoc[Contributor Guide: Continuous Integration].
 
-*CRC* : Cyclic Redundancy Code - refer to boost:crc[].
+*CML* : Can mean CMake Language, Conversion Markup Language, Configuration Menu Language, Concurrent ML (a high-level language for concurrent programming) - depending on context.
+
+*CRC* : Cyclic Redundancy Code - refer to boost:crc[]
 
 *CRTP* : Curiously Recurring Template Pattern
+
+*CSS* : Cascading Style Sheet - defines the styles used in HTML web pages.
 
 *CUDA* : CUDA originally stood for _Compute Unified Device Architecture_ though is now generally used as a name for a parallel computing platform, language and API. For more information, refer to https://developer.nvidia.com/cuda-toolkit[CUDA Toolkit].
 
@@ -52,11 +63,15 @@ You will find well known acronyms such as DLL, URL and UUID in this list, becaus
 
 *DDS* : Data Distribution Service
 
+*DFL* : _Do not Fix Later_ - used sarcastically pointing out procrastination on fixing bugs
+
 *DFS* : Depth-First Search
 
-*DLL* : Dynamic Link Library - also refer to boost:dll[].
+*DLL* : Dynamic Link Library - also refer to boost:dll[]
 
-*Drone* : A continuous integration (CI) and delivery platform that automates the build, test, and deploy stages of a software pipeline. It is container-based and integrates with various version control systems, supporting multiple languages and environments. Refer to xref:contributor-guide:ROOT:testing/continuous-integration.adoc[Contributor Guide: Continuous Integration].
+*DOCCA* : A set of XSLT transformations that convert https://doxygen.nl/index.html[Doxygen] XML extracted from Javadoc comments in pass:[C++] source code, into Boost.Quickbook output.
+
+*Drone* : A continuous integration (CI) and delivery platform that automates the build, test, and deploy stages of a software pipeline. It is container-based and integrates with various version control systems, supporting multiple languages and environments - refer to xref:contributor-guide:ROOT:testing/continuous-integration.adoc[Contributor Guide: Continuous Integration].
 
 *DRY* : _Don't Repeat Yourself_
 
@@ -74,6 +89,8 @@ You will find well known acronyms such as DLL, URL and UUID in this list, becaus
 
 *FOMO* : _Fear Of Missing Out_
 
+*FOOBAR* or *FUBAR* : _Fed Up Beyond All Recognition_
+
 *FPU* : Floating Point Unit
 
 *FSM* : Finite State Machine
@@ -86,11 +103,15 @@ You will find well known acronyms such as DLL, URL and UUID in this list, becaus
 
 *GCC* : GNU Compiler Collection - a popular open-source compiler that supports pass:[C++], and it is frequently mentioned in discussions about toolchains, performance optimizations, and cross-platform development.
 
+*GDB* : Often used as short for GNU Debugger, though can mean Graph Database.
+
 *GIL* : Generic Image Library - boost:gil[] is a library designed for image processing, offering a flexible way to manipulate and process images.
 
 == H
 
-*HOF* : High-Order Functions - refer to boost:hof[].
+*HCF* : _Halt and Catch Fire_ - a bug that crashes everything, usually exaggerated
+
+*HOF* : High-Order Functions - refer to boost:hof[]
 
 *HRT* : High-Resolution Timer - a high-resolution timing mechanisms used in pass:[C++] for precise measurements of time, especially in performance profiling and real-time systems.
 
@@ -99,16 +120,25 @@ You will find well known acronyms such as DLL, URL and UUID in this list, becaus
 
 == I
 
-*ICL* : Interval Container Library - refer to boost:icl[].
+*ICL* : Interval Container Library - refer to boost:icl[]
+
+*ID10T* : _Idiot_ - pronounced "ID-ten-T" (user errors)
 
 *IDEs* : Integrated Development Environments
 
+*IIUC* : _If I understand correctly_
+
+*IIRC* : _If I remember correctly_
+
 *IMO* or *IMHO* : _In My (Honest or Humble) Opinion_
 
-*IO* : Input/Output - refer to boost:io[].
+*IO* : Input/Output - refer to boost:io[]
 
 *IOW* : _In Other Words_
 
+*IR* : Intermediate Representation - an internal representation of code or data.
+
+*IWBNI* : _It Would Be Nice If_ - a feature request is a dream
 
 == J
 
@@ -120,17 +150,29 @@ You will find well known acronyms such as DLL, URL and UUID in this list, becaus
 
 == K
 
+*K8s* : The https://kubernetes.io/[Kubernetes] container orchestration system
+
+*KDE* : The K Desktop Environment (a Linux graphical environment)
+
 *KISS* : _Keep It Simple, Stupid_
+
+*KPI* : Key Performance Indicator
+
+*KVM* : Kernel-based Virtual Machine
 
 == L
 
-*LEAF* : Lightweight Error Augmentation Framework - refer to boost:leaf[].
+*LEAF* : Lightweight Error Augmentation Framework - refer to boost:leaf[]
 
-*LGTM* : _Looks Good To Me_
+*LGTM* : _Looks Good To Me_ - often used in code reviews to signal approval
 
 *LIFO* : Last In, First Out
 
+*LLVM* : Initially this stood for _Low Level Virtual Machine_ but is now no longer considered an acronym. https://llvm.org/[LLVM] is now the name for a set of compiler and toolchain technologies that support the development of a frontend for any programming language and a backend for any processor architecture. It is written in pass:[C++].
+
 *LOL* : _Laughing Out Loud_
+
+*LOPS* _Lack Of Programmer Skill_ - used humorously when a problem is tricky to debug
 
 *LSP* : Liskov Substitution Principle - states that objects of a derived class should be able to replace objects of the base class without affecting the correctness of the program, ensuring that a subclass can stand in for its superclass without altering expected behavior.
 
@@ -144,9 +186,9 @@ You will find well known acronyms such as DLL, URL and UUID in this list, becaus
 
 * Multiple Data Streams : a more abstract term, refers to scenarios where an application handles multiple data streams simultaneously, possibly in a parallel or distributed environment.
 
-*MPI* : Message Parsing Interface - refer to boost:mpi[].
+*MPI* : Message Parsing Interface - refer to boost:mpi[]
 
-*MPL* or *MP11* : Metaprogramming Libraries - refer to boost:mpl[] and boost:mp11[].
+*MPL* or *MP11* : Metaprogramming Libraries - refer to boost:mpl[] and the later boost:mp11[]
 
 *MVP* : Model-View-Presenter
 
@@ -154,21 +196,32 @@ You will find well known acronyms such as DLL, URL and UUID in this list, becaus
 
 *NDA* : Non-Disclosure Agreement
 
+*NIMBY* : _Not In My Back Yard_ - when a programmer doesn't want to deal with a particular issue
+
 *NTTP* : Non-Type Template Parameter
 
 == O
 
-*Odeint* : Ordinary Differential Equations (Initial) - a library for solving initial value problems of ordinary differential equations, refer to boost:numeric/odeint[].
+*Odeint* : Ordinary Differential Equations (Initial) - a library for solving initial value problems of ordinary differential equations, refer to boost:numeric/odeint[]
 
-*OOB* : Out of Bounds (or Out of Band)
+*OOB* : Out of Bounds or Out of Band - meaning irrelevant
 
 *OOP* : Object-Oriented Programming
 
 == P
 
-*PFR* : A library to perform basic reflection - refer to boost:pfr[].
+*PEBKAC* : _Problem Exists Between Keyboard And Chair_ - user error
 
-*PIMPL* : Pointer to IMPLementation (or the "Cheshire Cat" idiom)
+*PFR* : A library to perform basic reflection - refer to boost:pfr[]
+
+*PICNIC* : _Problem In Chair, Not In Computer_
+
+*PIMPL* : 
+
+* Pointer to IMPLementation
+* _Perception Is My Lasting Principle_ - the "Cheshire Cat" idiom where someone's perception of reality is subjective
+
+*PITA* : _Pain In The Application_ - difficult or frustrating code issue
 
 *POD* : _Plain Old Data_
 
@@ -178,7 +231,7 @@ You will find well known acronyms such as DLL, URL and UUID in this list, becaus
 
 == Q
 
-*QBK* : Quickbook - a Boost tool for automated documentation, not to be confused with Intuit Quickbooks accounting software.
+*QBK* : Quickbook - a Boost tool for automated documentation, _not_ to be confused with Intuit Quickbooks accounting software.
 
 *QED* : "Quod erat demonstrandum" in Latin, which translates to "that which was to be demonstrated".
 
@@ -190,7 +243,7 @@ You will find well known acronyms such as DLL, URL and UUID in this list, becaus
 
 *Qt* : This is a widely-used pass:[C++] framework for cross-platform GUI applications. While not an acronym, it's often capitalized as Qt in discussions. Qt is known for its rich set of libraries and tools to develop not only graphical applications but also applications that require network handling, file I/O, and more.
 
-*QVM* : Quaternions Vectors and Matrics - refer to boost:qvm[].
+*QVM* : Quaternions Vectors and Matrices - refer to boost:qvm[]
 
 == R
 
@@ -202,11 +255,15 @@ You will find well known acronyms such as DLL, URL and UUID in this list, becaus
 
 *RTTI* : Run-Time Type Information
 
+*Rustaceans* : Afficionados of the https://www.rust-lang.org/[Rust] programming language
+
 == S
 
 *SHA* : Secure Hash Algorithm, a function that will reliably give different hash values for different inputs.
 
 *SFINAE* or *SFINAED* : _Substitution Failure Is Not An Error_
+
+*SMOP* : _Small Matter of Programming_ - sarcastically downplaying complex problems
 
 *SOLID* : Single Responsibility, Open/Closed, Liskov Substitution, Interface Segregation, Dependency Inversion (Design principles)
 
@@ -220,37 +277,45 @@ You will find well known acronyms such as DLL, URL and UUID in this list, becaus
 
 *TDD* : Test-Driven Development
 
-*Test Matrix* : A test matrix is a table used to define and track test cases, inputs, and environments, such as various operating systems, compilers, and hardware platforms. Each row represents a test scenario or feature, while the columns represent variations like software versions or hardware setups. Refer to xref:contributor-guide:ROOT:testing/boost-test-matrix.adoc[Contributor Guide: Test Matrix].
+*Test Matrix* : A test matrix is a table used to define and track test cases, inputs, and environments, such as various operating systems, compilers, and hardware platforms. Each row represents a test scenario or feature, while the columns represent variations like software versions or hardware setups - refer to xref:contributor-guide:ROOT:testing/boost-test-matrix.adoc[Contributor Guide: Test Matrix].
 
 *TLS* : Thread-Local Storage
 
 *TL;DR* : _Too Long; Didn't Read_
 
-*TTI* : Type Traits Introspection - refer to boost:tti[].
+*TL;DW* : _Too Long; Didn't Watch_ - used when someone posts an overly long video or demo
+
+*TTI* : Type Traits Introspection - refer to boost:tti[]
+
+*TTOU* : _Time To Opt Out_ - used humorously to express wanting to quit a project that is heading south
+
+*TTW* : _Time To Whine_ - used sarcastically used when someone starts complaining about their code or environment
 
 == U
 
 *UB* : Undefined Behavior
 
-*UBlas* : Basic Linear Algebra - refer to boost:numeric/ublas[].
+*UBlas* : Basic Linear Algebra - refer to boost:numeric/ublas[]
 
-*URL* : Universal Resource Locator - refer to boost:url[].
+*URL* : Universal Resource Locator - refer to boost:url[]
 
 *UDP* : User Datagram Protocol
 
 *UTC* : Coordinated Universal Time
 
-*UUID* : Universal Unique Identifier - refer to boost:uuid[].
+*UUID* : Universal Unique Identifier - refer to boost:uuid[]
 
 == V
 
 *VALA* : Vector Arithmetic Logic Array - a specialized hardware design or computation technique, but in some performance-critical pass:[C++] applications, vector arithmetic and optimization may be discussed in a similar context.
 
+*VCPKG* : https://vcpkg.io/en/[Microsoft's open source package manager] for acquiring and managing libraries
+
 *VFS* : Virtual File System - abstract file system operations across multiple platforms might implement or make use of a VFS layer. This allows consistent file I/O behavior regardless of the underlying file system.
 
 *VLA* : Variable Length Array - although pass:[C++] does not officially support VLAs in the standard, some compilers provide support as an extension. VLAs allow the length of an array to be determined at runtime.
 
-*VMD* : Variadic Macro Data - refer to boost:vmd[].
+*VMD* : Variadic Macro Data - refer to boost:vmd[]
 
 *VoIP* : Voice over Internet Protocol - in networking libraries or real-time communication systems, VoIP is often discussed when implementing features for voice transmission over IP networks.
 
@@ -260,21 +325,35 @@ You will find well known acronyms such as DLL, URL and UUID in this list, becaus
 
 == W
 
-*WG21* : Working Group 2021 - a C++ Standards working group.
+*WAD* : _Works As Designed_ - usually sarcastic
 
-*WowBadger* : TBD
+*WG21* : Working Group 2021 - a C++ Standards working group
+
+*WIP* : _Work In Progress_
+
+*WITIWF* : _Well I Thought It Was Funny_
+
+*WowBagger* :  The name of the web server where boost.org and lists.boost.org are running.  It's a Redhat Linux machine and soon to be replaced.
 
 *WRT* : _With Respect To_
 
+*WTB* : _Where's The Bug?_ - used sarcastically when trying to find a difficult-to-locate issue
+
 == X
 
-*XSS* : Cross-Site Scripting - a security vulnerability where malicious scripts are injected into websites.
+*XFS* : Extended File System - a high-performance file system in Linux
+
+*XSS* : Cross-Site Scripting - a security vulnerability where malicious scripts are injected into websites
+
+*XUL* : XML User Interface Language - used to define user interfaces in Mozilla applications
 
 == Y
 
 *YAGNI* : _You Aren't Gonna Need It_
 
-*YAP* : An expression template library - refer to boost:yap[].
+*YAP* : An expression template library - refer to boost:yap[]
+
+*YOLO* : _You Only Live Once_ - used when someone takes a risky or questionable coding decision
 
 == Z
 
