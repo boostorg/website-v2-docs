@@ -178,8 +178,13 @@ function getAllTasks (opts, sourcemaps, postcssPlugins, preview, src) {
     // Task for processing CSS files
     // NOTE use the next line to bundle a JavaScript library that cannot be browserified, like jQuery
     //vfs.src(require.resolve('<package-name-or-require-path>'), opts).pipe(concat('js/vendor/<library-name>.js')),
+    vfs.src('css/boostlook.css', opts)
+      .pipe(postcss([autoprefixer, preview ? () => {} : cssnano({
+        preset: 'default',
+      }),
+      ])),
     vfs
-      .src(['css/boostlook.css', 'css/site.css', 'css/vendor/*.css'], { ...opts, sourcemaps })
+      .src(['css/site.css', 'css/vendor/*.css'], { ...opts, sourcemaps })
       .pipe(postcss((file) => ({ plugins: postcssPlugins, options: { file } }))),
     // Task for getting font files
     vfs.src('font/*.{ttf,woff*(2)}', opts),
