@@ -12,7 +12,6 @@ You will find a myriad of jargon, acronyms and product or tool names used both i
 
 You will find well known acronyms such as DLL, URL and UUID in this list, because they also refer to Boost libraries of the same name.
 
-[[contents]]
 == Contents
 [width="50%",stripes=odd,frame=none]
 |===
@@ -28,7 +27,9 @@ You will find well known acronyms such as DLL, URL and UUID in this list, becaus
 
 *AFAICT* : _As Far As I Can Tell_
 
-*ASIO* : Asynchronous Input/Output (refer to boost:asio[]).
+*AFAIK* : _As Far As I Know_
+
+*ASIO* : Asynchronous Input/Output - refer to boost:asio[]
 
 == B
 
@@ -54,6 +55,8 @@ You will find well known acronyms such as DLL, URL and UUID in this list, becaus
 
 *CRTP* : Curiously Recurring Template Pattern
 
+*CSS* : Cascading Style Sheet - defines the styles used in HTML web pages.
+
 *CUDA* : CUDA originally stood for _Compute Unified Device Architecture_ though is now generally used as a name for a parallel computing platform, language and API. For more information, refer to https://developer.nvidia.com/cuda-toolkit[CUDA Toolkit].
 
 == D
@@ -66,7 +69,7 @@ You will find well known acronyms such as DLL, URL and UUID in this list, becaus
 
 *DOCCA* : A set of XSLT transformations that convert https://doxygen.nl/index.html[Doxygen] XML extracted from Javadoc comments in pass:[C++] source code, into Boost.Quickbook output.
 
-*Drone* : A continuous integration (CI) and delivery platform that automates the build, test, and deploy stages of a software pipeline. It is container-based and integrates with various version control systems, supporting multiple languages and environments. Refer to xref:contributor-guide:ROOT:testing/continuous-integration.adoc[Contributor Guide: Continuous Integration].
+*Drone* : A continuous integration (CI) and delivery platform that automates the build, test, and deploy stages of a software pipeline. It is container-based and integrates with various version control systems, supporting multiple languages and environments - refer to xref:contributor-guide:ROOT:testing/continuous-integration.adoc[Contributor Guide: Continuous Integration].
 
 *DRY* : _Don't Repeat Yourself_
 
@@ -117,7 +120,7 @@ You will find well known acronyms such as DLL, URL and UUID in this list, becaus
 
 *ICL* : Interval Container Library - refer to boost:icl[]
 
-*ID10T* : _Idiot_ (pronounced like "ID-ten-T", user errors)
+*ID10T* : _Idiot_ - pronounced "ID-ten-T" (user errors)
 
 *IDEs* : Integrated Development Environments
 
@@ -181,7 +184,7 @@ You will find well known acronyms such as DLL, URL and UUID in this list, becaus
 
 *MPI* : Message Parsing Interface - refer to boost:mpi[]
 
-*MPL* or *MP11* : Metaprogramming Libraries - refer to boost:mpl[] and boost:mp11[]
+*MPL* or *MP11* : Metaprogramming Libraries - refer to boost:mpl[] and the later boost:mp11[]
 
 *MVP* : Model-View-Presenter
 
@@ -197,7 +200,7 @@ You will find well known acronyms such as DLL, URL and UUID in this list, becaus
 
 *Odeint* : Ordinary Differential Equations (Initial) - a library for solving initial value problems of ordinary differential equations, refer to boost:numeric/odeint[]
 
-*OOB* : Out of Bounds (or Out of Band)
+*OOB* : Out of Bounds or Out of Band - meaning irrelevant
 
 *OOP* : Object-Oriented Programming
 
@@ -209,7 +212,10 @@ You will find well known acronyms such as DLL, URL and UUID in this list, becaus
 
 *PICNIC* : _Problem In Chair, Not In Computer_
 
-*PIMPL* : Pointer to IMPLementation (or the "Cheshire Cat" idiom)
+*PIMPL* : 
+
+* Pointer to IMPLementation
+* _Perception Is My Lasting Principle_ - the "Cheshire Cat" idiom where someone's perception of reality is subjective
 
 *PITA* : _Pain In The Application_ - difficult or frustrating code issue
 
@@ -221,7 +227,7 @@ You will find well known acronyms such as DLL, URL and UUID in this list, becaus
 
 == Q
 
-*QBK* : Quickbook - a Boost tool for automated documentation, not to be confused with Intuit Quickbooks accounting software.
+*QBK* : Quickbook - a Boost tool for automated documentation, _not_ to be confused with Intuit Quickbooks accounting software.
 
 *QED* : "Quod erat demonstrandum" in Latin, which translates to "that which was to be demonstrated".
 
@@ -233,7 +239,7 @@ You will find well known acronyms such as DLL, URL and UUID in this list, becaus
 
 *Qt* : This is a widely-used pass:[C++] framework for cross-platform GUI applications. While not an acronym, it's often capitalized as Qt in discussions. Qt is known for its rich set of libraries and tools to develop not only graphical applications but also applications that require network handling, file I/O, and more.
 
-*QVM* : Quaternions Vectors and Matrics - refer to boost:qvm[]
+*QVM* : Quaternions Vectors and Matrices - refer to boost:qvm[]
 
 == R
 
@@ -253,7 +259,7 @@ You will find well known acronyms such as DLL, URL and UUID in this list, becaus
 
 *SFINAE* or *SFINAED* : _Substitution Failure Is Not An Error_
 
-*SMOP* :_Small Matter of Programming_ - sarcastically downplaying complex problems
+*SMOP* : _Small Matter of Programming_ - sarcastically downplaying complex problems
 
 *SOLID* : Single Responsibility, Open/Closed, Liskov Substitution, Interface Segregation, Dependency Inversion (Design principles)
 
@@ -267,7 +273,7 @@ You will find well known acronyms such as DLL, URL and UUID in this list, becaus
 
 *TDD* : Test-Driven Development
 
-*Test Matrix* : A test matrix is a table used to define and track test cases, inputs, and environments, such as various operating systems, compilers, and hardware platforms. Each row represents a test scenario or feature, while the columns represent variations like software versions or hardware setups. Refer to xref:contributor-guide:ROOT:testing/boost-test-matrix.adoc[Contributor Guide: Test Matrix].
+*Test Matrix* : A test matrix is a table used to define and track test cases, inputs, and environments, such as various operating systems, compilers, and hardware platforms. Each row represents a test scenario or feature, while the columns represent variations like software versions or hardware setups - refer to xref:contributor-guide:ROOT:testing/boost-test-matrix.adoc[Contributor Guide: Test Matrix].
 
 *TLS* : Thread-Local Storage
 
@@ -293,7 +299,7 @@ You will find well known acronyms such as DLL, URL and UUID in this list, becaus
 
 *VALA* : Vector Arithmetic Logic Array - a specialized hardware design or computation technique, but in some performance-critical pass:[C++] applications, vector arithmetic and optimization may be discussed in a similar context.
 
-*VCPKG* : https://vcpkg.io/en/[Microsoft's open source package manager] for acquiring and managing libraries.
+*VCPKG* : https://vcpkg.io/en/[Microsoft's open source package manager] for acquiring and managing libraries
 
 *VFS* : Virtual File System - abstract file system operations across multiple platforms might implement or make use of a VFS layer. This allows consistent file I/O behavior regardless of the underlying file system.
 
@@ -311,11 +317,11 @@ You will find well known acronyms such as DLL, URL and UUID in this list, becaus
 
 *WAD* : _Works As Designed_ - usually sarcastic
 
-*WG21* : Working Group 2021 - a C++ Standards working group.
+*WG21* : Working Group 2021 - a C++ Standards working group
 
 *WITIWF* : _Well I Thought It Was Funny_
 
-*WowBadger* : TBD
+*WowBagger* :  The name of the web server where boost.org and lists.boost.org are running.  It's a Redhat Linux machine and soon to be replaced.
 
 *WRT* : _With Respect To_
 
@@ -346,6 +352,8 @@ You will find well known acronyms such as DLL, URL and UUID in this list, becaus
 *ZMQ* : ZeroMQ - a high-performance asynchronous messaging library that can be used in pass:[C++] for concurrent programming and networking applications.
 
 *Z-order* or *Z-ordering* : Refers to the drawing order of objects in 2D or 3D space. This is relevant in pass:[C++] game development or graphical applications when managing layers of objects.
+
+<<Contents>>
 
 == See Also
 
