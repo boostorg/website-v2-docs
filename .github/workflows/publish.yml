@@ -27,6 +27,7 @@ jobs:
         include:
           - { name: 'Ubuntu', os: ubuntu-22.04, publish: true }
           - { name: 'Windows', os: windows-2022 }
+          - { name: 'MacOS', os: macos-latest }
     name: Publish Antora Docs (${{ matrix.name }})
     runs-on: ${{ matrix.os }}
     steps:
@@ -57,18 +58,20 @@ jobs:
               changed_ext=$(echo "$changed_files" | grep -q "extensions/" && echo true || echo false)
               changed_actions=$(echo "$changed_files" | grep -q ".github/" && echo true || echo false)
               changed_libs=$(echo "$changed_files" | grep -q "libs.playbook.yml" && echo true || echo false)
+              changed_packages=$(echo "$changed_files" | grep -q "package.json" && echo true || echo false)
           else
               # Assume anything might have changed
               changed_ui=true
               changed_ext=true
               changed_actions=true
               changed_libs=true
+              changed_packages=true
           fi
           
           set -x
           
           # Only build lib playbook if it changed
-          if [ "$changed_ui" = true ] || [ "$changed_ext" = true ] || [ "$changed_libs" = true ] || [ "$changed_actions" = true ]; then
+          if [ "$changed_ui" = true ] || [ "$changed_ext" = true ] || [ "$changed_libs" = true ] || [ "$changed_actions" = true ] || [ "$changed_packages" = true ]; then
               echo "build-libs=true" >> $GITHUB_OUTPUT
           else
               echo "build-libs=false" >> $GITHUB_OUTPUT
