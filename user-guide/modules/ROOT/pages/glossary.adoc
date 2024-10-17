@@ -223,6 +223,8 @@ You will find well known acronyms such as DLL, URL and UUID in this list, becaus
 
 *PITA* : _Pain In The Application_ - difficult or frustrating code issue
 
+*PITA* : _Pain In The Application_ - difficult or frustrating code issue
+
 *POD* : _Plain Old Data_
 
 *POSIX* : Portable Operating System Interface

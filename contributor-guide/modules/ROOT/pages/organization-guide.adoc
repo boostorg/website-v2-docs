@@ -1,0 +1,62 @@
+////
+Copyright (c) 2024 The C++ Alliance, Inc. (https://cppalliance.org)
+
+Distributed under the Boost Software License, Version 1.0. (See accompanying
+file LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
+
+Official repository: https://github.com/boostorg/website-v2-docs
+////
+= Appendix I - Organization Guide
+:navtitle: Organization Guide
+
+The information in this appendix is only pertinent to those contributors who are involved with the server hosting, operations and infrastructure for the *Website v2*. The sections contains links to the eclectic set of documentation maintained on GitHub which provides the detailed implementation notes required by developers and system administrators for the website.
+
+== Server Hosting
+
+Provides details on the staging and production processes.
+
+[cols="1,4",options="header",stripes=even,frame=none]
+|===
+| *Document Link* | *Description* 
+| https://github.com/cppalliance/website-v2-operations/blob/master/deployments/README.md[Deployments] | If you are involved in testing the Boost website-v2, you might _not_ need a full cloud deployment. This document describes potentially more convenient options, including using a local Docker composition, the existing staging site, or the existing production site. If you are involved in the C++ Alliance's development efforts, code may be checked in directly to the staging and production sites, so another site isn't needed.
+| https://github.com/cppalliance/website-v2-operations/blob/master/gcp/README.md[GCP Notes] | The website is hosted on Google Cloud Platform in a project named "boostorg-project1" within a CPPAlliance account. This document describes the Kubernetes cluster running in the *us-central1* region, the Memorystore instance for each environment, and Archive Registry of the Docker images for each website release.
+| https://github.com/cppalliance/website-v2-operations/blob/master/aws/README.md[Amazon AWS Notes] |  In the *us-east-2* region AWS S3 buckets store the described content.
+| https://github.com/cppalliance/website-v2-operations/blob/master/fastly/README.md[Fastly Notes] | A Fastly CDN is configured as a front-end to the stage and production sites. This document describes the configuration steps.
+| https://github.com/cppalliance/website-v2-operations/blob/master/mailman/README.md[Mailman Notes] |Mailman-core servers have been installed to test a selection of REST API calls.
+| https://github.com/cppalliance/website-v2-operations/blob/master/website/README.md[Website Admin] | Contains some notes on staging synchronization. |
+|===
+
+== Website Operations
+
+Provides operational details, specifically for each release.
+
+[cols="1,4",options="header",stripes=even,frame=none]
+|===
+| *Document Link* | *Description* 
+| https://github.com/cppalliance/Infrastructure-Docs/blob/master/document-previews/user-guide.md[Documentation and Website Previews for The C++ Alliance] | This section covers what contributors should know about the preview generation on https://github.com/CPPAlliance/cppalliance.github.io[cppalliance.github.io] and other github repositories.
+| https://github.com/cppalliance/Infrastructure-Docs/blob/master/document-previews/jenkins-summary.md[Jenkins Summary] | Provides notes on the operation of Jenkins. A Jenkins build server is hosted on AWS at https://jenkins.cppalliance.org:8443. The server builds and publishes previews of the documentation for a number of GitHub repositories when pull requests are submitted.
+| https://github.com/cppalliance/Infrastructure-Docs/blob/master/document-previews/jenkins-job-details.md[Jenkins Job Details] | This section goes into exhaustive detail on Jenkins output that can be used as a reference for any job.
+| https://github.com/cppalliance/Infrastructure-Docs/tree/master/drone[Drone Docs] | Provides operational details on the CPPAlliance Drone CI implementation.
+| https://github.com/cppalliance/Infrastructure-Docs/blob/master/website-redirects/redirects.md[Website Redirects] | There are four subdomains which redirect to https://cppalliance.org/[The C++ Alliance]. The redirects act as shortcuts to quickly reach the Slack invitations page, or the main homepage. This section provides implementation details.
+|===
+
+
+== Slack Inviter
+
+Slack invitations, based on a contributors email and IP address, are key to maintaining communication groups.
+
+The inviter was originally hosted at DreamHost, though has since been migrated to AWS. Originally it was basically a copy of https://github.com/rauchg/slackin[slackin], and did not have database functionality.
+
+
+[cols="1,4",options="header",stripes=even,frame=none]
+|===
+| *Document Link* | *Description* 
+| https://github.com/cppalliance/Infrastructure-Docs/blob/master/slack-inviter/overview.md[Overview] | Describes the purpose of the slack-inviter.
+| https://github.com/cppalliance/Infrastructure-Docs/blob/master/slack-inviter/installation.md[Installation] | Provides the steps to install the slack-inviter onto a server.
+| https://github.com/cppalliance/Infrastructure-Docs/blob/master/slack-inviter/legacy-tokens-issue.md[Legacy Tokens] | Describes a significant legacy issue and workaround with https://github.com/rauchg/slackin[slackin] tokens.
+|===
+
+
+== See Also
+
+* xref:superproject/overview.adoc[]
