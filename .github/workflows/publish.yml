@@ -30,6 +30,9 @@ jobs:
           - { name: 'MacOS', os: macos-latest }
     name: Publish Antora Docs (${{ matrix.name }})
     runs-on: ${{ matrix.os }}
+    defaults:
+      run:
+        shell: bash
     steps:
       - name: Checkout
         uses: actions/checkout@v4
@@ -89,11 +92,29 @@ jobs:
         uses: seanmiddleditch/gha-setup-ninja@v4
         if: ${{ runner.os == 'Windows' && steps.build.outputs.build-libs == 'true' }}
 
+      - name: Identify Boost Modules
+        if: steps.build.outputs.build-libs == 'true'
+        run: |
+          grep -o 'https://github.com/boostorg/[a-zA-Z0-9_-]*' libs.playbook.yml | sed 's/https:\/\/github.com\/boostorg\///' | grep -v -e 'website-v2-docs' -e 'boost' | tr '\n' ' ' > boost_modules.txt
+          boost_modules=$(cat boost_modules.txt)
+          echo "boost-modules=$boost_modules" >> $GITHUB_OUTPUT
+        id: boost-modules
+
+      - name: Clone Boost
+        uses: alandefreitas/cpp-actions/boost-clone@v1.8.7
+        if: steps.build.outputs.build-libs == 'true'
+        id: boost-clone
+        with:
+          branch: ${{ (github.ref_name == 'master' && github.ref_name) || 'develop' }}
+          modules: ${{ steps.boost-modules.outputs.boost-modules }}
+
       - name: Build Libs
         if: steps.build.outputs.build-libs == 'true'
         shell: bash
         run: |
           set -x
+          BOOST_SRC_DIR="${{ steps.boost-clone.outputs.boost-dir }}"
+          export BOOST_SRC_DIR
           ./libdoc.sh "${{ (startsWith(github.ref, 'refs/heads/develop') && 'develop') || 'master' }}"
           
       - name: Remove Libs from build
