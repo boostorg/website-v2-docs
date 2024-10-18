@@ -23,7 +23,7 @@ Provides details on the staging and production processes.
 | https://github.com/cppalliance/website-v2-operations/blob/master/aws/README.md[Amazon AWS Notes] |  In the *us-east-2* region AWS S3 buckets store the described content.
 | https://github.com/cppalliance/website-v2-operations/blob/master/fastly/README.md[Fastly Notes] | A Fastly CDN is configured as a front-end to the stage and production sites. This document describes the configuration steps.
 | https://github.com/cppalliance/website-v2-operations/blob/master/mailman/README.md[Mailman Notes] |Mailman-core servers have been installed to test a selection of REST API calls.
-| https://github.com/cppalliance/website-v2-operations/blob/master/website/README.md[Website Admin] | Contains some notes on staging synchronization. |
+| https://github.com/cppalliance/website-v2-operations/blob/master/website/README.md[Website Admin] | Contains some notes on staging synchronization.
 |===
 
 == Website Operations
