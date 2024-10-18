@@ -33,29 +33,13 @@ Provides operational details, specifically for each release.
 [cols="1,4",options="header",stripes=even,frame=none]
 |===
 | *Document Link* | *Description* 
-| https://github.com/cppalliance/Infrastructure-Docs/blob/master/document-previews/user-guide.md[Documentation and Website Previews for The C++ Alliance] | This section covers what contributors should know about the preview generation on https://github.com/CPPAlliance/cppalliance.github.io[cppalliance.github.io] and other github repositories.
-| https://github.com/cppalliance/Infrastructure-Docs/blob/master/document-previews/jenkins-summary.md[Jenkins Summary] | Provides notes on the operation of Jenkins. A Jenkins build server is hosted on AWS at https://jenkins.cppalliance.org:8443. The server builds and publishes previews of the documentation for a number of GitHub repositories when pull requests are submitted.
-| https://github.com/cppalliance/Infrastructure-Docs/blob/master/document-previews/jenkins-job-details.md[Jenkins Job Details] | This section goes into exhaustive detail on Jenkins output that can be used as a reference for any job.
-| https://github.com/cppalliance/Infrastructure-Docs/tree/master/drone[Drone Docs] | Provides operational details on the CPPAlliance Drone CI implementation.
-| https://github.com/cppalliance/Infrastructure-Docs/blob/master/website-redirects/redirects.md[Website Redirects] | There are four subdomains which redirect to https://cppalliance.org/[The C++ Alliance]. The redirects act as shortcuts to quickly reach the Slack invitations page, or the main homepage. This section provides implementation details.
+| https://github.com/cppalliance/jenkins-ci/blob/master/docs/user-guide.md[Documentation and Website Previews for The C++ Alliance] | This section covers what contributors should know about the preview generation on https://github.com/CPPAlliance/cppalliance.github.io[cppalliance.github.io] and other github repositories.
+| https://github.com/cppalliance/jenkins-ci/blob/master/docs/jenkins-summary.md[Jenkins Summary] | Provides notes on the operation of Jenkins. A Jenkins build server is hosted on AWS at https://jenkins.cppalliance.org:8443. The server builds and publishes previews of the documentation for a number of GitHub repositories when pull requests are submitted.
+| https://github.com/cppalliance/jenkins-ci/blob/master/docs/jenkins-details.md[Jenkins System and Job Information] | This section goes into exhaustive detail on Jenkins output that can be used as a reference for any job.
+| https://github.com/cppalliance/jenkins-ci/blob/master/docs/inventory.md[Job Inventory] | The current Jenkins job inventory.
+| https://github.com/cppalliance/server-docs/tree/master/drone[Drone Docs] | Provides operational details on the CPPAlliance Drone CI implementation.
+| https://github.com/cppalliance/server-docs/blob/master/website-redirects/redirects.md[Website Redirects] | There are four subdomains which redirect to https://cppalliance.org/[The C++ Alliance]. The redirects act as shortcuts to quickly reach the Slack invitations page, or the main homepage. This section provides implementation details.
 |===
-
-
-== Slack Inviter
-
-Slack invitations, based on a contributors email and IP address, are key to maintaining communication groups.
-
-The inviter was originally hosted at DreamHost, though has since been migrated to AWS. Originally it was basically a copy of https://github.com/rauchg/slackin[slackin], and did not have database functionality.
-
-
-[cols="1,4",options="header",stripes=even,frame=none]
-|===
-| *Document Link* | *Description* 
-| https://github.com/cppalliance/Infrastructure-Docs/blob/master/slack-inviter/overview.md[Overview] | Describes the purpose of the slack-inviter.
-| https://github.com/cppalliance/Infrastructure-Docs/blob/master/slack-inviter/installation.md[Installation] | Provides the steps to install the slack-inviter onto a server.
-| https://github.com/cppalliance/Infrastructure-Docs/blob/master/slack-inviter/legacy-tokens-issue.md[Legacy Tokens] | Describes a significant legacy issue and workaround with https://github.com/rauchg/slackin[slackin] tokens.
-|===
-
 
 == See Also
 
