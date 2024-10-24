@@ -1,0 +1,152 @@
+////
+Copyright (c) 2024 The C++ Alliance, Inc. (https://cppalliance.org)
+
+Distributed under the Boost Software License, Version 1.0. (See accompanying
+file LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
+
+Official repository: https://github.com/boostorg/website-v2-docs
+////
+= Contributor Checklist
+:navtitle: Contributor Checklist
+
+Before submitting a library for review, work through this checklist to help polish the library to a high standard.
+
+[circle]
+* <<Code Quality and Design>>
+* <<Documentation>>
+* <<Testing>>
+* <<Efficiency and Performance>>
+* <<Boost-Specific Requirements>>
+* <<Usability and API Design>>
+* <<Pre-Review Feedback>>
+* <<Submission and Packaging>>
+* <<Examples of Successful Libraries>>
+
+== Code Quality and Design
+
+Examining your code, can you verify:
+
+[circle]
+* Consistent Coding Style - naming conventions, indentation, spacing. Consider using clang-format for consistency.
+* Modular Design - the code should be broken down into small, manageable, and reusable components, and fit into the structure of the xref:contributor-guide:ROOT:superproject/getting-started.adoc[Boost Super-Project].
+* Avoid Code Smells - eliminate dead code, redundant logic, overly complex functions, and other common red-flag issues.
+* Adherence to pass:[C++] Standards - ensure the library is compatible with a current standard (for example, pass:[C++]17 or later).
+* Template Usage - are templates appropriately used, and consider the potential impact on compile times.
+* Exception Safety - make sure the library has well-defined behavior when exceptions are thrown. Aim for _strong_ or _basic_ exception safety guarantees.
+* Thread Safety - if relevant, ensure thread safety or clearly document any multi-threading limitations.
+* Minimize Dependencies - use other Boost components when appropriate, but avoid unnecessary external and circular dependencies.
+
+== Documentation
+
+Documentation should be on a website (rather than, say, a downloadable pdf file) so that it can be regularly and easily be updated.
+
+[circle]
+* The Introduction or Overview should compel an interested developer to read further. The purpose of the library - in not-too-technical terms - should be clear as daylight. What kind of task this library is the solution for should be well understood by reading the introduction completely, but no further. Remember that it is not experts, but developers struggling, who most often turn to documentation for help. 
+* Have a developer unfamiliar with the library read the introduction. If they struggle to understand it, revise accordingly.
+
+Divide the rest of the documentation into three sections:
+
+=== 1. Comprehensive User Guide
+
+[circle]
+** how to install the library
+** the dependencies
+** the requirements - compilers, operating systems, hardware, etc.
+** a "hello world" example
+** architecture and rationale
+** license
+** references
+** acknowledgements
+
+==== Examples and Tutorials
+
+[circle]
+*** how to get started
+*** common use cases
+*** advanced use cases
+*** corner cases
+*** common patterns - for example, how to handle common errors
+
+=== 2. Complete Reference Documentation
+
+Provide detailed descriptions of _all_:
+[circle]
+* classes
+* interfaces
+* functions
+* properties
+* macros
+* types
+* constants
+* error codes - ensure that error messages are clear and helpful for debugging
+* exceptions
+
+It can be helpful to use tools like Doxygen or QuickBook. 
+
+=== 3. Guidelines for Contribution
+
+Make it easy for others to understand the codebase and, in the course of time, enable them to contribute their own issues, proposals and code. 
+
+[circle]
+* Provide links to the library source where appropriate
+
+== Testing
+
+Ensure comprehensive test coverage for all functionalities.
+
+[circle]
+* Unit Tests - use boost:test[] or another test framework.
+* Edge Cases and Boundary Conditions - especially for algorithms and data structures.
+* Cross-Platform Compatibility - verify that the library works on different platforms (Windows, Linux, macOS). Consider using CI tools like GitHub Actions or Travis CI to automate this process.
+* Build Configurations - test with different compilers (GCC, Clang, MSVC) and optimization levels.
+* Stress Tests - add stress tests (low memory, high CPU usage, etc.) to see how the library performs under heavy loads.
+
+== Efficiency and Performance
+
+As a minimum for validating your library performance, consider:
+
+[circle]
+* Including benchmarks to demonstrate the library's performance. Compare against existing solutions if possible.
+* Optimizing for memory usage and consider using `std::move` and `std::unique_ptr` where appropriate to minimize allocations.
+* Avoiding unnecessary copies by using `const &`, `std::move`, and `std::forward` properly to avoid unnecessary data copying.
+
+== Boost-Specific Requirements
+
+Boost library technical requirements are laid out in detail:
+
+[circle]
+* xref:contributor-guide:ROOT:requirements/library-requirements.adoc[]
+
+== Usability and API Design
+
+For usability, verify that you have:
+
+[circle]
+* A Simple and Intuitive Interface - avoid unnecessarily complex APIs.
+* A Consistent API -  consistent naming conventions, argument orders, and return types across the library.
+* Clear Error Handling - clearly define and handle error cases. Use exceptions where appropriate and document expected exceptions.
+* Template Type Deduction - ensure templates are designed to support type deduction and intuitive usage.
+
+== Pre-Review Feedback
+
+Before submitting for a formal review, have you:
+
+[circle]
+* Sought feedback from a smaller group of developers. Consider hosting the code on GitHub to get initial feedback from your community.
+* Addressed all feedback from the pre-submission review.
+
+== Examples of Successful Libraries
+
+Consider a brief study of some existing popular Boost libraries and use them as benchmarks for quality and completeness. Recommended libraries for study include:
+
+[circle]
+* boost:asio[]
+* boost:json[]
+* boost:mp11[]
+* boost:spirit[]
+
+
+== See Also
+
+* xref:contributor-guide:ROOT:contributors-faq.adoc[Contributor Guide FAQ]
+* xref:contributor-guide:ROOT:requirements/library-requirements.adoc[]
