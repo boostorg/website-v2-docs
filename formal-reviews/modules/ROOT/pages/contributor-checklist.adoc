@@ -19,7 +19,6 @@ Before submitting a library for review, work through this checklist to help poli
 * <<Boost-Specific Requirements>>
 * <<Usability and API Design>>
 * <<Pre-Review Feedback>>
-* <<Submission and Packaging>>
 * <<Examples of Successful Libraries>>
 
 == Code Quality and Design
@@ -34,26 +33,31 @@ Examining your code, can you verify:
 * Template Usage - are templates appropriately used, and consider the potential impact on compile times.
 * Exception Safety - make sure the library has well-defined behavior when exceptions are thrown. Aim for _strong_ or _basic_ exception safety guarantees.
 * Thread Safety - if relevant, ensure thread safety or clearly document any multi-threading limitations.
-* Minimize Dependencies - use other Boost components when appropriate, but avoid unnecessary external and circular dependencies.
+* Minimize Dependencies - use other Boost components when appropriate - ideally the latest incarnation, and avoid unnecessary external and circular dependencies.
+
+Refer to xref:contributor-guide:ROOT:design-guide/design-best-practices.adoc[] for considerably more detail.
 
 == Documentation
 
-Documentation should be on a website (rather than, say, a downloadable pdf file) so that it can be regularly and easily be updated.
+Documentation should be on a website (rather than, say, a downloadable pdf file) so that it can be regularly and easily be updated. It should also be a _single_ document as many reviewers will not explore beyond one link.
 
 [circle]
-* The Introduction or Overview should compel an interested developer to read further. The purpose of the library - in not-too-technical terms - should be clear as daylight. What kind of task this library is the solution for should be well understood by reading the introduction completely, but no further. Remember that it is not experts, but developers struggling, who most often turn to documentation for help. 
+* The Introduction or Overview should compel an interested developer to read further. The purpose of the library - in not-too-technical terms - should be clear as daylight. What kind of task this library is the solution for should be well understood by reading the introduction completely, but no further. Remember that it is not experts, but developers struggling, who most often turn to documentation for help.
 * Have a developer unfamiliar with the library read the introduction. If they struggle to understand it, revise accordingly.
+* Include a sub-section on testimonials, if you have any that are noteworthy.
+* Include information on how long the library has been stable, especially if it has been used for a significant period before the submission to Boost.
+
 
 Divide the rest of the documentation into three sections:
 
 === 1. Comprehensive User Guide
 
 [circle]
-** how to install the library
+** how to install the library - mentioning B2 and CMake as appropriate 
 ** the dependencies
 ** the requirements - compilers, operating systems, hardware, etc.
 ** a "hello world" example
-** architecture and rationale
+** architecture and rationale - include historical information and timelines if they impacted the design.
 ** license
 ** references
 ** acknowledgements
@@ -148,5 +152,7 @@ Consider a brief study of some existing popular Boost libraries and use them as 
 
 == See Also
 
+* xref:contributor-guide:ROOT:superproject/getting-started.adoc[Boost Super-Project]
 * xref:contributor-guide:ROOT:contributors-faq.adoc[Contributor Guide FAQ]
+* xref:contributor-guide:ROOT:design-guide/design-best-practices.adoc[]
 * xref:contributor-guide:ROOT:requirements/library-requirements.adoc[]
