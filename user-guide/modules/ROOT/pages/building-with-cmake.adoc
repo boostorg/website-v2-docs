@@ -1,0 +1,199 @@
+////
+Copyright (c) 2024 The C++ Alliance, Inc. (https://cppalliance.org)
+
+Distributed under the Boost Software License, Version 1.0. (See accompanying
+file LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
+
+Official repository: https://github.com/boostorg/website-v2-docs
+////
+= Building with CMake
+
+https://cmake.org/[*CMake*] is a powerful and widely-used cross-platform build system generator, designed to simplify the process of building and managing **complex software projects**. Unlike traditional build systems like Make, which relies on platform-specific Makefiles, CMake acts as a meta-build system: it generates platform-specific build files (such as Makefiles for Unix or Visual Studio project files for Windows) from a single set of configuration files.
+
+CMake is an alternative to using the Boost-specific https://www.bfgroup.xyz/b2/[B2] system, or the build options available in development environments such as https://visualstudio.microsoft.com/[Microsoft Visual Studio].
+
+In this section, the main concepts of CMake are described, then some examples of how to use the system with one or more Boost libraries.
+
+== The CMakeLists file
+
+The core of any CMake project is the `CMakeLists.txt` file, which defines the structure of the project and the build rules. This file allows developers to specify the source files, include directories, compiler flags, and dependencies required to build the project. CMake's syntax is declarative and procedural, allowing developers to set options, define targets, and specify dependencies in a structured way. The build configuration is organized around “targets,” which can represent executables, libraries, or custom commands. This target-based approach makes CMake highly flexible, as it enables complex dependency management and configuration, all while keeping platform-specific details abstracted away.
+
+== Handling External Dependencies
+
+One of the key strengths of CMake is its handling of external dependencies. Instead of manually specifying the paths to libraries or include directories, developers can use CMake's `find_package` command, which searches for installed libraries and frameworks. This is particularly useful when managing complex dependencies across different platforms, as CMake knows how to find libraries on Windows, macOS, and Linux systems _without_ requiring separate configuration files. CMake also supports package management tools such as https://conan.io/[Conan] and https://vcpkg.io/en/[vcpkg], allowing developers to integrate and manage third-party libraries more easily.
+
+== Separate Build and Source Locations
+
+CMake's “out-of-source” build feature is another significant advantage, allowing developers to keep build artifacts separate from the source code. By creating a dedicated build directory, developers can avoid cluttering the source tree with generated files, which makes it easier to manage source code and switch between different build configurations (such as debug and release builds) without affecting the original source files.
+
+== Handling Complex Projects
+
+For projects that span multiple modules or dependencies, CMake provides convenient mechanisms to handle this complexity. Projects can be organized into subdirectories, each with its own `CMakeLists.txt`, which can then be included in the main configuration file using `add_subdirectory`. This modularity is beneficial for larger projects with multiple libraries or executables, as it allows each component to define its build rules independently.
+
+In recent years, CMake has also introduced features like “Modern CMake” syntax, which promotes best practices, improves readability, and enhances maintainability. With Modern CMake, target-based commands like `target_include_directories` and `target_link_libraries` are emphasized, encouraging developers to specify dependencies and configurations directly on targets rather than globally. This approach makes it easier to manage dependencies in complex projects, as the configuration for each target is self-contained, reducing the risk of unintended interactions between targets.
+
+By learning CMake, you unlock the ability to handle cross-platform builds with ease and embrace a more structured, modular approach to software development.
+
+== Using CMake with Boost
+
+Using CMake with the Boost pass:[C++] Libraries makes it straightforward to include Boost's powerful functionality in your pass:[C++] projects. CMake has built-in support for Boost, allowing you to easily find and link Boost libraries to your project, whether you're using header-only libraries (like boost:range[]) or the compiled ones (like boost:filesystem[] or boost:thread[]).
+
+To determine whether a library is header-only or requires compilation, refer to xref:header-organization-compilation.adoc#compiled[Required Compiled Binaries].
+
+=== Header-Only Library
+
+For header-only libraries, you don't need to link against compiled Boost libraries. Instead, you simply need to locate Boost and add the include directories:
+
+[source, cmake]
+----
+cmake_minimum_required(VERSION 3.10)
+project(BoostExample)
+
+find_package(Boost REQUIRED)
+
+add_executable(my_app main.cpp)
+target_include_directories(my_app PRIVATE ${Boost_INCLUDE_DIRS})
+----
+
+Here, `find_package(Boost REQUIRED)` locates Boost, and `target_include_directories` adds the Boost headers to your project. This configuration is enough if you're using only header-only parts of Boost.
+
+== Compiled Library
+
+For Boost libraries that require linking, we need to specify the components and link them to the target:
+
+[source, cmake]
+----
+cmake_minimum_required(VERSION 3.10)
+project(BoostExample)
+
+find_package(Boost REQUIRED COMPONENTS filesystem)
+
+add_executable(my_app main.cpp)
+target_link_libraries(my_app PRIVATE Boost::filesystem)
+----
+
+In this example, `find_package(Boost REQUIRED COMPONENTS filesystem)` locates only the boost:filesystem[] library. Then, `target_link_libraries` links the compiled Boost library to the target executable. This approach makes it easy to build complex applications that depend on multiple Boost libraries.
+
+By using `find_package` and CMake's `target`-based commands, you can effectively manage Boost dependencies in both simple and complex scenarios.
+
+== Multiple Compiled Libraries
+
+Assume we have this project structure:
+
+[source, cmake]
+----
+MyProject/
+├── CMakeLists.txt
+├── libA/
+│   ├── CMakeLists.txt
+│   └── libA.cpp
+├── libB/
+│   ├── CMakeLists.txt
+│   └── libB.cpp
+├── libC/
+│   ├── CMakeLists.txt
+│   └── libC.cpp
+└── src/
+    ├── CMakeLists.txt
+    └── main.cpp
+----
+
+Each library (`libA`, `libB`, and `libC`) is in its own folder with its own `CMakeLists.txt` file, and there's a main application (`main.cpp`) in the `src` directory that links to these libraries.
+
+=== Top-Level CMakeLists.txt
+
+The root `CMakeLists.txt` file defines the project and includes the subdirectories for each library and the main executable.
+
+[source, cmake]
+----
+cmake_minimum_required(VERSION 3.10)
+project(MyProject)
+
+# Include each library's subdirectory
+add_subdirectory(libA)
+add_subdirectory(libB)
+add_subdirectory(libC)
+add_subdirectory(src)
+----
+
+=== libA/CMakeLists.txt
+
+This file defines `libA` as a static library.
+
+[source, cmake]
+----
+add_library(libA STATIC libA.cpp)
+
+# Optionally specify include directories if needed
+target_include_directories(libA PUBLIC ${CMAKE_CURRENT_SOURCE_DIR})
+----
+
+=== libB/CMakeLists.txt
+
+This file defines `libB` as a static library.
+
+[source, cmake]
+----
+add_library(libB STATIC libB.cpp)
+
+# Optionally specify include directories if needed
+target_include_directories(libB PUBLIC ${CMAKE_CURRENT_SOURCE_DIR})
+----
+
+=== libC/CMakeLists.txt
+
+This file defines `libC` as a static library.
+
+[source, cmake]
+----
+add_library(libC STATIC libC.cpp)
+
+# Optionally specify include directories if needed
+target_include_directories(libC PUBLIC ${CMAKE_CURRENT_SOURCE_DIR})
+----
+
+=== src/CMakeLists.txt
+
+This file defines the main executable and links it to the three libraries (`libA`, `libB`, and `libC`).
+
+[source, cmake]
+----
+add_executable(main_app main.cpp)
+
+# Link the main executable to the three libraries
+target_link_libraries(main_app PRIVATE libA libB libC)
+----
+
+=== Summary of the Pre-Build Process
+
+. Each library (`libA`, `libB`, `libC`) is defined in its respective `CMakeLists.txt` file and added as a STATIC library. Alternatively, you could change STATIC to SHARED if you want dynamic libraries instead.
+
+. In` src/CMakeLists.txt`, the main executable `main_app` is linked to `libA`, `libB`, and `libC` using `target_link_libraries`.
+
+. By using `add_subdirectory`, each library and executable has its own configuration, which keeps the project modular and organized.
+
+== Building the Project
+
+From the top-level directory (`MyProject`), you can build the entire project with the following commands:
+
+[source, cmake]
+----
+mkdir build
+cd build
+cmake ..
+make
+----
+
+This will compile each library and link them to the `main_app` executable.
+
+== See Also
+
+* https://www.bfgroup.xyz/b2/[B2]
+* https://cmake.org/[CMake]
+* https://github.com/boostorg/cmake/blob/develop/developer.md[CMake for Boost Developers]
+* xref:getting-started.adoc[]
+* xref:header-organization-compilation.adoc[]
+
+
+
+

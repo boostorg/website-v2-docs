@@ -10,6 +10,7 @@ Official repository: https://github.com/boostorg/website-v2-docs
 * xref:getting-started.adoc[]
 * xref:explore-the-content.adoc[]
 * xref:faq.adoc[]
+* xref:building-with-cmake.adoc[]
 
 * Common Scenarios
 ** xref:common-introduction.adoc[]
@@ -50,4 +51,3 @@ Official repository: https://github.com/boostorg/website-v2-docs
 * Reference
 ** xref:library-naming.adoc[]
 ** xref:header-organization-compilation.adoc[]
-** xref:advanced-builds.adoc[]
