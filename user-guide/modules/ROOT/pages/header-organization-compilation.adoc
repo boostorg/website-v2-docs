@@ -45,6 +45,7 @@ directives will look like: `#include <boost/whatever.hpp>` or `#include "boost/w
 . Don't be distracted by the *doc* subdirectory; it only contains a subset of the Boost documentation.
 Start with `libs/index.html` if you're looking for the whole enchilada.
 
+[#compiled]
 == Required Compiled Binaries
 
 Most Boost libraries are *header-only*: they consist _entirely of header files_ containing templates and inline functions, and require no separately-compiled library binaries or special treatment when linking.
