@@ -9,7 +9,7 @@ Official repository: https://github.com/boostorg/website-v2-docs
 = Introduction to Boost Formal Reviews
 :navtitle: Introduction
 
-This Formal Review Guide provides information for the three main roles in library submission:
+This Formal Review Guide provides information for the main roles in library submission:
 
 . The authors who wish to submit the library to the Boost collection: refer to the xref:submissions.adoc[].
 . The _Review Manager_ who's job it is to lead and coordinate the review process: refer to xref:managing-reviews.adoc[].

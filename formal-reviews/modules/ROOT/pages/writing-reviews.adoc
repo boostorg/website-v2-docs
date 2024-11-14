@@ -13,7 +13,7 @@ The goal of a Boost library review is to improve a candidate library through con
 
 Your comments may be brief or lengthy. The review manager needs your evaluation of the library. If you identify problems in your evaluation, try to categorize them as _minor_, _serious_, or _showstoppers_.
 
-Include questions for the library authors. Authors are interested in defending their library. If you don't get a response to your question quickly, be patient; if it takes too long or you don't get an answer you feel is sufficient, ask again or try to rephrase the question. Clarity is important, English is not the native language of many Boost developers.
+Ask questions for the library authors, on the https://lists.boost.org/mailman/listinfo.cgi/boost[Boost Developers Mailing List], so all interested parties can see it. Authors are interested in defending their library. If you don't get a response to your question quickly, be patient; if it takes too long or you don't get an answer you feel is sufficient, ask again or try to rephrase the question. Clarity is important, English is not the native language of many Boost developers. Try to get your questions answered before you submit your review.
 
 Here's a structured approach to writing a review of a library, covering all the bases:
 
@@ -97,6 +97,21 @@ If it's helpful, cut and paste the following template into your email text when 
 * How do you think the community will react?
 * What is your verdict: Yes, No, or Yes with changes?
 ```
+
+[[bestpractices]]
+== Best Practices
+
+From experience, there a number of more common pitfalls when writing reviews and engaging in review feedback discussions, so keep the following in mind:
+
+* Literally, keep on the same page. Submissions, discussions, comment should always be on the https://lists.boost.org/mailman/listinfo.cgi/boost[Boost Developers Mailing List] and not on Slack, Reddit, in personal email, or any other media. 
+
+* Elaborate in full. If you have series technical feedback on a library then explain yourself in detail. Try to avoid "teaser" type comments where other developers might feel you are onto something, but they are just not sure what.
+
+* Reviews needs to be self-contained. It's not a starting point for a discussion. Nobody is obligated to ask you clarifying questions, and there should be no missing parts that you fill in later in subsequent posts. This means that if you have questions about the library that you feel need to be answered by the author or review manager, you should ask these questions _before_ you submit your review.
+
+* Do not expect complete agreement. Too much compromise, consensus, in engineering endeavors leads to poorer design.
+
+* Refer to the xref:managing-reviews.adoc#realitycheck[Reality Check] section in the topic on Review Managers for clarity on the role of your review.
 
 == See Also
 
