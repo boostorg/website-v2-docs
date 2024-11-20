@@ -32,7 +32,7 @@ This includes all the library xref:docs/layout.adoc[Documentation Guidelines] an
 
 == Governance
 
-Refer to xref:oversight-committee.adoc[] for an overview of the role of the Fiscal Sponsorship Committee, the assets it maintains, and contact information if needed.
+Refer to xref:oversight-committee.adoc[] for an overview of the role of this committee, the assets it maintains, and contact information if needed.
 
 == See Also
 
