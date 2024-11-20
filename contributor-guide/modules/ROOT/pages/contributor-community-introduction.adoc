@@ -30,6 +30,10 @@ New library developers usually have a lot of questions on their mind, before ask
 A consistent documentation style, that emphasizes readability and accessibility, is encouraged.
 This includes all the library xref:docs/layout.adoc[Documentation Guidelines] and contributions to this website (refer to xref:site-docs-style-guide.adoc[]).
 
+== Governance
+
+Refer to xref:oversight-committee.adoc[] for an overview of the role of this committee, the assets it maintains, and contact information if needed.
+
 == See Also
 
 * xref:user-guide:ROOT:user-community-introduction.adoc[]
