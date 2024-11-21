@@ -23,6 +23,7 @@ concurrency:
 jobs:
   build:
     strategy:
+      fail-fast: false
       matrix:
         include:
           - { name: 'Ubuntu', os: ubuntu-22.04, publish: true }
@@ -34,6 +35,20 @@ jobs:
       run:
         shell: bash
     steps:
+      - name: Set environment for branches
+        run: |
+          if [[ $GITHUB_REF == 'refs/heads/master' ]]; then
+              echo "FASTLY_SERVICE_ID_1=${{ secrets.FASTLY_SERVICE_ID_PRODUCTION_1 }}" >> "$GITHUB_ENV"
+              echo "FASTLY_SERVICE_ID_2=${{ secrets.FASTLY_SERVICE_ID_PRODUCTION_2 }}" >> "$GITHUB_ENV"
+          elif [[ $GITHUB_REF == 'refs/heads/develop' ]]; then
+              echo "FASTLY_SERVICE_ID_1=${{ secrets.FASTLY_SERVICE_ID_STAGE_1 }}" >> "$GITHUB_ENV"
+              echo "FASTLY_SERVICE_ID_2=${{ secrets.FASTLY_SERVICE_ID_STAGE_2 }}" >> "$GITHUB_ENV"
+          elif [[ $GITHUB_REF == 'refs/heads/cppal-dev' ]]; then
+              # cppal-dev is a test branch in another fork. Doesn't need to be created in the main repo.
+              echo "FASTLY_SERVICE_ID_1=${{ secrets.FASTLY_SERVICE_ID_CPPAL_DEV_1 }}" >> "$GITHUB_ENV"
+              echo "FASTLY_SERVICE_ID_2=${{ secrets.FASTLY_SERVICE_ID_CPPAL_DEV_2 }}" >> "$GITHUB_ENV"
+          fi
+
       - name: Checkout
         uses: actions/checkout@v4
         with:
