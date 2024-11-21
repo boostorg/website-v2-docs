@@ -270,6 +270,17 @@ jobs:
           SOURCE_DIR: release-notes/
           DEST_DIR: ${{ format('release-notes/{0}', github.ref_name) }}
 
+      - name: Purge CDN cache
+        run: |
+          set -xe
+          # Clears files selected by the Surrogate Key "deployment", which can be adjusted in the VCL.
+          if [ -n "${{ env.FASTLY_SERVICE_ID_1 }}" ]; then
+              curl -X POST -H 'Fastly-Soft-Purge:1' -H "Fastly-Key: ${{ secrets.FASTLY_TOKEN }}" -H 'Accept: application/json' https://api.fastly.com/service/${{ env.FASTLY_SERVICE_ID_1 }}/purge/deployment
+          fi
+          if [ -n "${{ env.FASTLY_SERVICE_ID_2 }}" ]; then
+              curl -X POST -H 'Fastly-Soft-Purge:1' -H "Fastly-Key: ${{ secrets.FASTLY_TOKEN }}" -H 'Accept: application/json' https://api.fastly.com/service/${{ env.FASTLY_SERVICE_ID_2 }}/purge/deployment
+          fi
+
       - name: Publish Releases as Artifacts
         if: matrix.publish && github.event_name == 'push'
         uses: actions/upload-artifact@v4
