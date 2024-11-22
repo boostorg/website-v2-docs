@@ -44,7 +44,7 @@ Reality Check:: The review manager is _not_ supposed to impartially reflect the 
 +
 A review manager _can_ write a review themselves, though this process is independent of their role of review manager. 
 +
-The review process is more like a court - with the judge (the review manager) asking _"Does the library meet the required standards for acceptance as a Boost library?"_.  This question is resolved by various advocates presenting their cases, criticizing other advocates cases, presenting facts, logical arguments, their own experiences, and so on.  The judge's job is to weigh all this and reach a decision. And they may add conditions on acceptance, or not. If concensus between judge and authors cannot be reached on meeting any conditions - the process ends without a resolution (the mistrial). 
+The review process is more like a court - with the judge (the review manager) asking _"Does the library meet the required standards for acceptance as a Boost library?"_.  This question is resolved by various advocates presenting their cases, criticizing other advocates cases, presenting facts, logical arguments, their own experiences, and so on.  The judge's job is to weigh all this and reach a decision. And they may add conditions on acceptance, or not. If consensus between judge and authors cannot be reached on meeting any conditions - the process ends without a resolution (the mistrial). 
 +
 The review manager is - for better or worse - personally responsible for making the decision, defending the results, and dealing with future criticism.  Their name will be public.  This is not a job for everyone.
 +
@@ -55,6 +55,27 @@ If, years from now, someone would like to know why a library was accepted or rej
 . Posts a notice of the review results on the https://lists.boost.org/mailman/listinfo.cgi/boost-users[Boost users mailing list] as well as the https://lists.boost.org/mailman/listinfo.cgi/boost[Boost developers' mailing list] and https://lists.boost.org/mailman/listinfo.cgi/boost-announce[Boost-announce mailing list]. A rationale is also helpful, but its extent is up to the review manager. If there are suggestions, or conditions that must be met before final inclusion, they should be stated. Concerns about the timeliness or quality of the review report should be brought to the <<Review Wizards>> off-list.
 +
 Ideally, the review summary should contain all the information the manager has taken into account when coming to a decision. If there were discussions out of band, they need to be summarized. If there were discussions _on the list_ that haven't made their way into the formal reviews, they should be summarized too. Refer to the xref:writing-reviews.adoc#bestpractices[Best Practices] section on Writing Reviews for some issues to look out for. 
+
+=== Rejecting a Library
+
+One of the challenging tasks a review manager might have to take on is to write rejection rationale for a submitted library. For reference, here are links to the rationale of several libraries that were rejected in recent years.
+
+[cols="1,2,2",stripes=even,options="header",frame=none]
+|===
+| *Submission* | *Review Dates* | *Result Rationale*
+| Mustache | February 5, 2023 - February 14, 2023 | https://lists.boost.org/Archives/boost/2023/02/254188.php[Rejected]
+
+| Text | June 11, 2020 - June 20, 2020 | https://lists.boost.org/Archives/boost/2020/06/249242.php[Rejected]
+
+| out_ptr| June 16, 2019 - July 10, 2019 | https://lists.boost.org/boost-announce/2019/07/0558.php[Rejected]
+
+| Timsort| June 3, 2017 - June 12, 2017 | https://lists.boost.org/boost-announce/2017/06/0513.php[Rejected]
+
+| Synapse|  December 2, 2016 - December 11, 2016 | https://lists.boost.org/boost-announce/2016/12/0484.php[Rejected]
+
+|===
+
+For links to all available acceptance and rejection rationales, refer to xref:review-results.adoc#pastreviewresults[Past Review Results and Milestones].
 
 == Becoming a Review Manager
 
