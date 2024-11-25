@@ -11,6 +11,10 @@ Official repository: https://github.com/boostorg/website-v2-docs
 
 The information in this appendix is only pertinent to those contributors who are involved with the server hosting, operations and infrastructure for the *Website v2*. The sections contains links to the eclectic set of documentation maintained on GitHub which provides the detailed implementation notes required by developers and system administrators for the website.
 
+* <<Server Hosting>>
+* <<Website Operations>>
+* <<Doc Builds>>
+
 == Server Hosting
 
 Provides details on the staging and production processes.
@@ -40,6 +44,17 @@ Provides operational details, specifically for each release.
 | https://github.com/cppalliance/server-docs/tree/master/drone[Drone Docs] | Provides operational details on the CPPAlliance Drone CI implementation.
 | https://github.com/cppalliance/server-docs/blob/master/website-redirects/redirects.md[Website Redirects] | There are four subdomains which redirect to https://cppalliance.org/[The C++ Alliance]. The redirects act as shortcuts to quickly reach the Slack invitations page, or the main homepage. This section provides implementation details.
 |===
+
+== Doc Builds
+
+There a two main areas of documentation that are built for this website:
+
+. *Antora Docs on the website* : including this Contributor Guide, along with the xref:user-guide:ROOT:index.adoc[] and xref:formal-reviews:ROOT:index.adoc[].
+. *Boost Docs on the website* : covering the documentation for each individual library.
+
+In addition to these there are also *Boost Archives* created by Python scripts, and automated *Doc Previews* that are built by Jenkins.
+
+These build processes are outlined in https://github.com/cppalliance/website-v2-operations/tree/master/doc_builds#boost-docs-on-the-website[Doc Builds], which includes links to more details of the build processes.
 
 == See Also
 
