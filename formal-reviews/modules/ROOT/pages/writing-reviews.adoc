@@ -9,9 +9,9 @@ Official repository: https://github.com/boostorg/website-v2-docs
 = Writing Reviews
 :navtitle: Writing Reviews
 
-The goal of a Boost library review is to improve a candidate library through constructive criticism. At the end a decision must be made: _is the candidate library good enough at this point to accept into Boost?_ If not, we hope to have provided enough constructive criticism for it to be improved and accepted at a later time. The boost:serialization[] library is a good example of how constructive criticism resulted in revisions resulting in an excellent library that was accepted in its second review.
+The goal of a Boost library review is to improve a candidate library through constructive criticism. At the end a decision must be made: _is the candidate library good enough at this point to accept into Boost?_ If not, we hope to have provided enough constructive criticism for it to be improved and accepted at a later time. The boost:serialization[] library is a good example of a library that was originally rejected, but constructive criticism led to revisions resulting in an excellent library that was accepted in its second review.
 
-Your comments may be brief or lengthy. The review manager needs your evaluation of the library. If you identify problems in your evaluation, try to categorize them as _minor_, _serious_, or _showstoppers_.
+Your comments may be brief or lengthy. The review manager needs your evaluation of the library. If you identify problems during your evaluation, try to categorize them as _minor_, _serious_, or _showstoppers_.
 
 Ask questions for the library authors, on the https://lists.boost.org/mailman/listinfo.cgi/boost[Boost Developers Mailing List], so all interested parties can see it. Authors are interested in defending their library. If you don't get a response to your question quickly, be patient; if it takes too long or you don't get an answer you feel is sufficient, ask again or try to rephrase the question. Clarity is important, English is not the native language of many Boost developers. Try to get your questions answered before you submit your review.
 
