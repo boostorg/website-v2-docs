@@ -70,7 +70,14 @@ jobs:
           echo "before_id is now $before_id"
           fi
           
-          if git cat-file -e "$before_id" >/dev/null 2>&1; then
+          if [ ${{ github.event_name }} = 'workflow_dispatch' ]; then
+              # Assume anything might have changed
+              changed_ui=true
+              changed_ext=true
+              changed_actions=true
+              changed_libs=true
+              changed_packages=true
+          elif git cat-file -e "$before_id" >/dev/null 2>&1; then
               # Before ID is valid, compare files
               changed_files=$(git diff --name-only "$before_id" "$after_id" | tr '\n' ' ')
               changed_ui=$(echo "$changed_files" | grep -q "antora-ui/" && echo true || echo false)
@@ -287,6 +294,7 @@ jobs:
           DEST_DIR: ${{ format('release-notes/{0}', github.ref_name) }}
 
       - name: Purge CDN cache
+        if: matrix.publish
         run: |
           set -xe
           # Clears files selected by the Surrogate Key "deployment", which can be adjusted in the VCL.
