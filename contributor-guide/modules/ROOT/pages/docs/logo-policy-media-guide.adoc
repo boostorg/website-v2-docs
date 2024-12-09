@@ -15,11 +15,11 @@ The Boost C++ Library collection (or “Libraries”) is a community-driven, ope
 
 The Libraries are sponsored in part by https://cppalliance.org/[The C++ Alliance, Inc.] (or “Alliance”), a California 501(c)(3) non-profit which owns and protects the Boost logo trademark (the “Boost Logo”) shown below. This document provides information about the use of the Logo, as well as examples of common ways people might want to use this trademark, with explanations as to whether those uses are permitted or not or require additional written permission.
 
-// The Boost Logo:
+The Boost Logo:
 
-// image::boost-logo-carbon.png[Boost logo,width=400]
+image::boost-logo-carbon.png[Boost logo,width=400]
 
-// Note:: The background is transparent. The source for the image is available at https://github.com/boostorg/website-v2-docs/blob/develop/antora-ui/src/img/Boost_Symbol_Transparent.svg[Boost_Symbol_Transparent.svg].
+Note:: The background is transparent. The source for the image is available at https://github.com/boostorg/website-v2-docs/blob/develop/antora-ui/src/img/Boost_Symbol_Transparent.svg[Boost_Symbol_Transparent.svg].
 
 A trademark is a name or design that tells the world the source of a good or service. Protecting trademarks for an open-source project is particularly important. Anyone can change the source code and produce a product from that code, so it's important that only the original product, or variations that have been approved by the project, use the project's trademarks. By limiting use of the Boost Logo, the Alliance and the Developers can help users and contributors know they are getting an official product and not someone else's modified version, or something unrelated. The trademark assures users and developers of the quality and safety of the product they are using.
 
