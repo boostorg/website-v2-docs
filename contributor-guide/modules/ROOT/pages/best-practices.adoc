@@ -11,6 +11,9 @@ Official repository: https://github.com/boostorg/website-v2-docs
 
 This section contains guidance on how to reduce development time from concept through to publishing of a new library.
 
+* <<Beneficial Dependencies>>
+* <<GitHub Strategies>>
+
 == Beneficial Dependencies
 
 Some libraries are published with the intended primary audience, or in some cases the sole audience, being developers of other libraries. These libraries are published to make some of the time consuming and awkward processes of Boost-compliance easier. It is good practice for a new library developer to read the introductions to each of these libraries, and ascertain if they might be of value to the library they are developing. 
@@ -25,6 +28,98 @@ Some libraries are published with the intended primary audience, or in some case
 | boost:mp11[] | Provides a template metaprogramming framework, useful if metaprogramming is a feature of your new library.
 |===
 
+[[githubstrategies]]
+== GitHub Strategies
+
+Always submit changes to a Boost repo using a Pull Request (PR), never use the GitHub website to change the contents of a repository directly.
+
+It is good practice to bring your local repo up to date before submitting a PR, perhaps on a weekly or even daily basis - depending on the activity in the repo.
+
+Merge commits are to be avoided. These commits happens when a local origin branch and remote branch are out of sync. 
+
+The focus is on strategies that emphasize _linear history_, _rebasing_, and _collaborative discipline_. What follows are the best practices that can help.
+
+=== Use Rebase Instead of Merge
+
+When integrating changes from one branch into another, use `git rebase` instead of `git merge`. This rewrites the commit history, applying your changes on top of the target branch and maintains a linear history. Keep branches short-lived and focused on specific features or bug fixes. This reduces the likelihood of conflicts and simplifies rebasing onto the main branch. Regularly rebase your feature branch onto main or the target branch to keep up with upstream changes and avoid a large, complex integration at the end. For example:
+
+[source, bash]
+----
+git checkout feature-branch
+git rebase main
+----
+
+Then push changes after resolving any conflicts:
+
+[source, bash]
+----
+git push --force
+----
+
+=== Always Pull Using Rebase
+
+Configure your Git client to rebase when pulling changes, rather than creating merge commits:
+
+[source, bash]
+----
+git config --global pull.rebase true
+----
+
+When working collaboratively on a branch, use `git pull --rebase` to fetch and reapply your local changes on top of the latest commits from the remote branch.
+
+[source, bash]
+----
+git pull --rebase origin main
+----
+
+=== Squash Commits Before Merging
+
+Use interactive rebasing (`git rebase -i`) to clean up your branch history and squash multiple commits into one meaningful commit. This keeps the repository history tidy and avoids unnecessary merge commits.
+
+[source, bash]
+----
+git rebase -i HEAD~n  # Replace 'n' with the number of commits to squash
+----
+
+After squashing, you can fast-forward the branch without creating a merge commit:
+
+[source, bash]
+----
+git checkout main
+git rebase feature-branch
+----
+
+=== Use Fast-Forward Merges
+
+Enable fast-forward-only merges to ensure the branch history is linear. This avoids creating a merge commit.
+
+[source, bash]
+----
+git merge --ff-only feature-branch
+----
+
+Configure the repository to enforce fast-forward merges:
+
+[source, bash]
+----
+git config --global merge.ff only
+----
+
+=== Enforce Commit Discipline
+
+Avoid unnecessary commits and ensure that every commit is meaningful. Use `git add -p` or `git commit --amend` to refine commits before pushing.
+
+[source, bash]
+----
+git commit --amend
+----
+
+This ensures that when changes are rebased or fast-forwarded, the history remains clean and easy to understand.
+
+By following these practices, you'll avoid merge commits and maintain a clean, linear history in your Git repository while keeping the dev community happy! 
+
 == See Also
 
+* xref:superproject/overview.adoc[]
 * xref:version-control.adoc[]
+

@@ -68,6 +68,8 @@ A real library would also have additional sub-directories such as `doc`, `exampl
 
 Boost recommends, but does not require, the approach to library workflow that has come to be known as Git Flow. For more about how this applies to Boost libraries, see xref:superproject/library-workflow.adoc[].
 
+Refer also to xref:best-practices.adoc#githubstrategies[Best Practices: GitHub Strategies].
+
 == See Also
 
 ** xref:superproject/getting-started.adoc[]

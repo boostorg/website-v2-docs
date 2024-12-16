@@ -131,6 +131,7 @@ Now, you have successfully installed the Super-project.
 
 == See Also
 
+* xref:best-practices.adoc#githubstrategies[Best Practices: GitHub Strategies]
 * xref:superproject/overview.adoc[]
 
 
