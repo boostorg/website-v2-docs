@@ -14,6 +14,7 @@ The information in this appendix is only pertinent to those contributors who are
 * <<Server Hosting>>
 * <<Website Operations>>
 * <<Doc Builds>>
+* <<Boost Release Reports>>
 
 == Server Hosting
 
@@ -56,6 +57,17 @@ In addition to these there are also *Boost Archives* created by Python scripts, 
 
 These build processes are outlined in https://github.com/cppalliance/website-v2-operations/tree/master/doc_builds#boost-docs-on-the-website[Doc Builds], which includes links to more details of the build processes.
 
+== Boost Release Reports
+
+The purpose of a Boost Release Report is to _inspire and credit_ all of the volunteer contributors who put the work in for the release. A significant audience for the report are these contributors. It is a "feel-good" document by design.
+
+The introductory text for each release will depend on the priorities and new content for the release. For example, refer to: https://downloads.cppalliance.org/reports/boost_1_87_0_release_report.pdf[Boost 1.87 Release Report].
+
+Leave it to the technical documentation for each library, tool or process to go into such things as limitations, known issues, performance considerations, and so on.
+
+Write this report in such a way as to inspire our contributors to re-engage for a future release!
+
 == See Also
 
 * xref:superproject/overview.adoc[]
+* xref:oversight-committee.adoc[]
