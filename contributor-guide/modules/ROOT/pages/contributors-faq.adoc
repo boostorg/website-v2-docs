@@ -20,6 +20,7 @@ This section contains answers to the common questions that new contributors to B
 * <<Existing Boost Libraries>>
 * <<Modular Boost>>
 * <<Post-Release Engagement>>
+* <<Safe C++>>
 * <<Security>>
 * <<Testing>>
 
@@ -292,6 +293,20 @@ Positive feedback and praise from developers not only encourages the library aut
 +
 Financial contributions or sponsorships as a token of appreciation are rare!
 
+[[safecpp]]
+== Safe C++
+
+. *As a contributor of a library to Boost, what do I need to know about Safe pass:[C++]?*
++
+Currently, https://safecpp.org/P3390R0.html[Safe pass:[C++]] is a proposal, under discussion, to develop a memory-safe set of extensions to pass:[C++]. The push is because the current lack of memory safety makes it too easy for malicious software to exploit language vulnerabilities and perform a variety of attacks. Safe pass:[C++] would provide robust memory-safe, type-safe, and thread-safe operations.
++
+Clearly there could be significant interest in safe versions of Boost libraries, though the level of work involved extends well beyond rewriting a library using the safe extensions, as _all_ dependencies would also have to be safe versions too.
++
+Both the stakes and the workloads are high! If the proposal leads to a solid set of extensions, then as a library developer you will have a decision to make - whether to refactor your library using these extensions, or not. Many factors might influence this decision.
+
+. *Is Safe C++ part of Boost?*
+
+No, it is an independent initiative.
 
 [[security]]
 == Security
