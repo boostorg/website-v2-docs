@@ -305,8 +305,16 @@ Clearly there could be significant interest in safe versions of Boost libraries,
 Both the stakes and the workloads are high! If the proposal leads to a solid set of extensions, then as a library developer you will have a decision to make - whether to refactor your library using these extensions, or not. Many factors might influence this decision.
 
 . *Is Safe C++ part of Boost?*
++
+No, it is an independent initiative. The pass:[C++] Alliance has partnered with Sean Baxter, a key proponent of Safe pass:[C++], to further develop the proposal, and seek feedback from developers, researchers, and other stakeholders to refine the project's scope.
 
-No, it is an independent initiative.
+. *Is there an official release schedule for Safe C++?*
++
+No, it is still at the proposal and design refinement stage.
+
+. *What kind of feedback has the proposal garnered so far?*
++
+Positive feedback centers on appreciation of the initiative to address longstanding safety concerns in pass:[C++]. More challenging feedback has included concerns about the complexity of integrating new safety features into the existing pass:[C++] framework, balancing enhanced safety with the language's core design features of performance and flexibility, and competition from the https://www.rust-lang.org/[RUST] language.
 
 [[security]]
 == Security
