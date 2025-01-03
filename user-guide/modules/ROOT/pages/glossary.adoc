@@ -33,6 +33,8 @@ You will find well known acronyms such as DLL, URL and UUID in this list, becaus
 
 *AST* : Abstract Syntax Tree - a data structure used in compilers to represent the structure of code in a hierarchical, tree-like form. It's a crucial intermediate step in parsing code for tasks like analysis, compilation, and optimizations.
 
+*ATM* : _At The Moment_
+
 == B
 
 *BBK* : _Badly Broken Keyboard_ - describing terrible code or debugging issues
@@ -81,11 +83,15 @@ You will find well known acronyms such as DLL, URL and UUID in this list, becaus
 
 == E
 
+*ELF binary* : refers to a file that follows the Executable and Linkable Format (ELF), which is a common standard file format for executables, object code, shared libraries, and core dumps on Unix-like operating systems such as Linux. ELF supports advanced features like dynamic linking, which is useful for shared libraries. Tools like gdb (the GNU Debugger) can use the debug symbols and information stored in ELF binaries to provide insights during debugging sessions.
+
 *EVP* : 
 
 * Used in cryptography, particularly in OpenSSL, where EVP stands for _Envelope_. It is used to refer to high-level cryptographic functions in the OpenSSL library, such as encryption, hashing, and signing. pass:[C++] programs using OpenSSL for cryptographic operations might use the EVP APIs.
 
 * Enhanced Vector Processing : in high-performance computing contexts, EVP might refer to techniques that leverage vectorization or SIMD (Single Instruction, Multiple Data) for improving computational performance. It relates to libraries or frameworks that optimize algorithms using vectorized processing.
+
+*EVP_MD_CTX* : Envelope Message Digest Context - part of OpenSSL's high-level cryptographic library and is used to manage the context for performing message digest (hashing) operations. The EVP API provides a high-level and flexible interface, allowing developers to use a consistent set of functions for various cryptographic algorithms without being tied to a specific implementation. 
 
 == F
 
@@ -143,6 +149,8 @@ You will find well known acronyms such as DLL, URL and UUID in this list, becaus
 *IR* : Intermediate Representation - an internal representation of code or data.
 
 *IWBNI* : _It Would Be Nice If_ - a feature request is a dream
+
+*IWYU* : https://include-what-you-use.org/[include-what-you-use] - a tool for use with clang to analyze `#includes` in C and pass:[C++] source files.
 
 == J
 
@@ -237,6 +245,7 @@ You will find well known acronyms such as DLL, URL and UUID in this list, becaus
 *PIMPL* : 
 
 * Pointer to IMPLementation
+
 * _Perception Is My Lasting Principle_ - the "Cheshire Cat" idiom where someone's perception of reality is subjective
 
 *PITA* : _Pain In The Application_ - difficult or frustrating code issue
@@ -245,7 +254,9 @@ You will find well known acronyms such as DLL, URL and UUID in this list, becaus
 
 *POSIX* : Portable Operating System Interface
 
-*PR* : Pull Request
+*PPA* : Personal Package Archive - a repository on Launchpad (a platform for Ubuntu software collaboration) that allows developers and maintainers to distribute software or updates that are not yet included in the official Ubuntu repositories.
+
+*PR* : Pull Request - a request to include specified content into a GitHub repository. An administrator can accept or reject the PR.
 
 == Q
 
@@ -295,11 +306,13 @@ You will find well known acronyms such as DLL, URL and UUID in this list, becaus
 
 *SFINAE* or *SFINAED* : _Substitution Failure Is Not An Error_
 
+*SIGILS* : refers to symbols or characters that precede a variable, literal, or keyword to indicate its type or purpose. For example, in "%hash" the "%" is a sigil. It is occasionally used with a tongue-in-cheek tone because of its mystical connotations, referring to how these symbols can seem "magical" in making the code work! 
+
 *SMOP* : _Small Matter of Programming_ - sarcastically downplaying complex problems
 
 *SOLID* : Single Responsibility, Open/Closed, Liskov Substitution, Interface Segregation, Dependency Inversion (Design principles)
 
-*SSA* : Static Single Assignment - a property of intermediate representations (IRs) used in compilers. SSA is a popular technique in modern compilers to make optimizations and analysis simpler and more efficient. Each variable is assigned exactly once and is immutable after assignment. If a variable is updated, a new variable is created instead. Refer also to *Phi* functions.
+*SSA* : Static Single Assignment - a property of intermediate representations (IRs) used in compilers. SSA is a popular technique in modern compilers to make optimizations and analysis simpler and more efficient. Each variable is assigned exactly once and is immutable after assignment. If a variable is updated, a new variable is created instead. Refer also to *Phi functions*.
 
 *STL* : Standard Template Library
 
