@@ -105,6 +105,7 @@ The only Boost libraries that _must_ be built separately are:
 
 * boost:wave[]
 
+[[optionalcompiledbinaries]]
 == Optional Compiled Binaries
 
 A few libraries have optional separately-compiled binaries:
