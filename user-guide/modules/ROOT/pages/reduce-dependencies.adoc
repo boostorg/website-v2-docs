@@ -1,0 +1,92 @@
+////
+Copyright (c) 2024 The C++ Alliance, Inc. (https://cppalliance.org)
+
+Distributed under the Boost Software License, Version 1.0. (See accompanying
+file LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
+
+Official repository: https://github.com/boostorg/website-v2-docs
+////
+= Customize Builds to Reduce Dependencies
+:navtitle: Reduce Dependencies
+
+There are many libraries that provide macros or configuration options to remove optional components and so reduce dependencies. Refer to the documentation, in particular the macros, for the individual libraries you intend to use. Here are some specific examples:
+
+== Boost.Asio
+
+boost:asio[] defines macros to remove certain functionality and control behavior: 
+
+* `BOOST_ASIO_SEPARATE_COMPILATION` use the header-only features of the library.
+* `BOOST_ASIO_DISABLE_SSL` disables timers and SSL components.
+
+== Boost.Filesystem
+
+boost:filesystem[] includes macros to control its behavior and reduce dependencies. For example:
+
+* `BOOST_FILESYSTEM_NO_DEPRECATED` disables deprecated features.
+* `BOOST_FILESYSTEM_NO_LIB` prevents automatic linking of the library.
+
+== Boost.Locale
+
+boost:locale[] allows customization through macros:
+
+* `BOOST_LOCALE_WITH_ICU` enables or disables ICU support.
+* `BOOST_LOCALE_WITH_ICONV` enables or disables Iconv support.
+* `BOOST_LOCALE_WITH_STD` enables or disables support for the standard library's localization facilities.
+
+== Boost.Log
+
+boost:log[] has optional features that can be disabled using macros, such as:
+
+* `BOOST_LOG_NO_THREADS` disables multi-threading support if not required.
+* `BOOST_LOG_WITHOUT_DEBUG_OUTPUT` removes debug output support.
+* `BOOST_LOG_WITHOUT_EVENT_LOG` excludes Windows Event Log support.
+* `BOOST_LOG_WITHOUT_SYSLOG` disables support for Syslog (on Unix systems).
+
+== Boost.ProgramOptions
+
+boost:program_options[] provides macros to remove certain components:
+
+* `BOOST_PROGRAM_OPTIONS_NO_LIB` disables automatic linking.
+
+It also allows customization to minimize dependencies when certain features aren't needed, such as avoiding wide-character support. Refer to its documentation.
+
+== Boost.Python
+
+boost:python[] has options to exclude optional components, such as disabling support for certain Python features or optimizations:
+
+`BOOST_PYTHON_NO_LIB` disables automatic linking.
+
+== Boost.Regex
+
+boost:regex[] offers macros to customize its functionality, such as:
+
+* `BOOST_REGEX_NO_LIB` disables automatic linking.
+* `BOOST_REGEX_NO_EXTERNAL_TEMPLATES` prevents the use of external templates to reduce dependencies.
+* `BOOST_REGEX_MATCH_EXTRA` can be undefined to exclude certain match-related features.
+
+== Boost.Serialization
+
+boost:serialization[] allows disabling certain features to reduce dependencies:
+
+* `BOOST_SERIALIZATION_NO_LIB` disables automatic linking.
+* `BOOST_SERIALIZATION_NO_XML_ARCHIVE` excludes XML archive support.
+* `BOOST_SERIALIZATION_NO_TEXT_ARCHIVE` excludes text archive support.
+* `BOOST_SERIALIZATION_NO_EXCEPTION_SAFETY` removes exception safety-related functionality.
+
+== Boost.System
+
+boost:system[] has macros to control its behavior:
+
+* `BOOST_ERROR_CODE_HEADER_ONLY` makes it header-only by eliminating the need for compiled binaries.
+
+== Boost.Test
+
+boost:test[] allows stripping optional components to make it more lightweight:
+
+* `BOOST_TEST_NO_LIB` disables automatic linking.
+* `BOOST_TEST_DYN_LINK` forces dynamic linking.
+* `BOOST_TEST_NO_MAIN` prevents the inclusion of the main function, allowing integration into existing test frameworks.
+
+== See Also
+
+* xref:faq.adoc#dependencies[FAQ on Dependencies]

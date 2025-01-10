@@ -34,6 +34,7 @@ Official repository: https://github.com/boostorg/website-v2-docs
 ** xref:exception-safety.adoc[]
 ** xref:counted-body.adoc[]
 ** xref:implementation-variations.adoc[]
+** xref:reduce-dependencies.adoc[]
 
 * User Community
 ** xref:user-community-introduction.adoc[]
