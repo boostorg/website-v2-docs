@@ -112,7 +112,7 @@ Boost provides the assertion `boost::assert`. Best practices when using this are
 [[dependencies]]
 == Dependencies
 
-. *What is meant by a "dependency" and the phrase "dependency hell"?*
+. *What is meant by a "dependency" and the phrase "dependency chain"?*
 +
 In the context of this FAQ, a _dependency_ is any other library, Boost or Standard or third-party, that a Boost library requires. A _primary dependency_ is a library the top-level library explicitly includes, a _secondary dependency_ is a library that one of the primary, or other secondary dependency, includes. 
 +
@@ -120,12 +120,11 @@ Boost libraries are modular, but they can depend on each other for various funct
 +
 In general, taking dependencies can add a lot of value and reduce development time considerably. Boost libraries are carefully reviewed and tested to minimize dependency issues.
 +
-As often with powerful concepts, there are pitfalls. Dependencies can lead to "dependency chains," where including one library pulls in others that may not be directly needed by your application. In a complex or large project, this can lead to your phrase "dependency hell" - which describes the complications that arise when dependencies become overly numerous, complex, conflicting, or difficult to update and maintain.
+As often with powerful concepts, there are pitfalls. Dependencies can lead to "dependency chains," where including one library pulls in others that may not be needed by your project. 
 
-. *What contributes to dependency hell?*
+. *What issues do library developers have to address when managing dependencies?*
 +
-This can include several awkward situations: _Version Conflicts_ - when different dependencies require incompatible versions of the same library, _Transitive Dependencies_ - when a library pulls in additional, indirect dependencies that you may not even realize are part of your project, 
-_Bloat_ - when the sheer number of dependencies makes the build or runtime environment large, slow, or error-prone, and _Security Risks_ - when outdated or unnecessary dependencies introduce vulnerabilities.
+This includes handling several awkward situations: _Version Conflicts_ - when different dependencies require incompatible versions of the same library, _Transitive Dependencies_ - when a library pulls in additional, indirect dependencies that you may not even realize are part of your project, _Bloat_ - when the sheer number of dependencies makes the build or runtime environment large, slow, or error-prone, and _Security Risks_ - when outdated or unnecessary dependencies introduce vulnerabilities.
 +
 In forum posts you might come across the following phrases, each describing a frustration with dependencies:
 
@@ -137,7 +136,7 @@ In forum posts you might come across the following phrases, each describing a fr
 
 . *What is meant by a "standalone" library?*
 +
-A _standalone_ library is one where the are no dependencies (or, in reality, few), or the library depends only on the https://en.cppreference.com/w/cpp/standard_library[C++ Standard Library]. Sometimes separate standalone versions of specific libraries are available, though there may not be complete parity of functionality with the non-standalone version.
+A _standalone_ library is one where there are no dependencies (or, in reality, few), or the library depends only on the https://en.cppreference.com/w/cpp/standard_library[C++ Standard Library]. Sometimes separate standalone versions of specific libraries are available, though they might be lightweight versions and not have parity of functionality with the non-standalone version.
 
 . *What can I do to minimize the number and impact of dependencies?*
 +
@@ -147,9 +146,8 @@ A simple question but with a non-trivial answer. Consider working through this l
 .. Read the library documentation to find macros that are available to remove unneeded functionality. For example, when using boost:asio[], if support for timers or SSL are unneeded, then enter the statement: `#define BOOST_ASIO_DISABLE_SSL`. Refer to xref:reduce-dependencies.adoc[] for many more examples.
 .. For powerful libraries like boost:asio[], you can include only the headers you need, such as `<boost/asio/io_context.hpp>` rather than its parent `<boost/asio.hpp>`.
 .. Use forward declarations where possible instead of including full headers.
-.. Use a https://en.cppreference.com/w/cpp/standard_library[C++ Standard Library] alternative if one exists, and has equivalent functionality. For example, boost:variant[] could be replaced with `std::variant`.
-.. Use the Header-Only Mode (where possible). Many Boost libraries are header-only, meaning they don't require linking against precompiled binaries or additional dependencies. Examples include boost:optional[], boost:variant[], and boost:type_traits[]. For details of the binary requirements of Boost libraries refer to xref:header-organization-compilation.adoc#compiled[Required Compiled Binaries] and xref:header-organization-compilation.adoc#optionalcompiledbinaries[Optional Compiled Binaries].
-.. If a library has both header-only and compiled modes (for example, boost:asio[]), you can configure it to work as header-only by defining the appropriate macro: `#define BOOST_ASIO_SEPARATE_COMPILATION`.
+.. Use a https://en.cppreference.com/w/cpp/standard_library[C++ Standard Library] alternative if one exists, and has equivalent functionality and performance. For example, boost:variant[] could be replaced with `std::variant`.
+.. Use the Header-Only Mode (where possible). Many Boost libraries are header-only, meaning they don't require linking against precompiled binaries or additional dependencies. Examples include boost:optional[], boost:variant[], and boost:type_traits[]. For details of the binary requirements of Boost libraries refer to xref:header-organization-compilation.adoc#compiled[Required Compiled Binaries] and xref:header-organization-compilation.adoc#optionalcompiledbinaries[Optional Compiled Binaries]. For example, boost:asio[] has both header-only and compiled modes and you can configure it to work as header-only by defining the macro: `#define BOOST_ASIO_SEPARATE_COMPILATION`.
 .. For experienced developers only, consider commenting out unused code. This approach is possible but risky because it modifies library source code (Boost libraries are open-source), making updates and maintenance more challenging. It involves first identifying the parts of the library that introduce unnecessary dependencies and then commenting out the sections of source code or headers that you don't need (such as unused features, optional functionality, error handling code). Finally, rebuild the library and check it compiles and links and runs without unwanted side-effects.
 
 . *Are there any tools specific to Boost that help manage dependencies?*

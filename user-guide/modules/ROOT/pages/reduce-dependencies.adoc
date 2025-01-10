@@ -6,7 +6,7 @@ file LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
 
 Official repository: https://github.com/boostorg/website-v2-docs
 ////
-= Reduce Dependencies
+= Customize Builds to Reduce Dependencies
 :navtitle: Reduce Dependencies
 
 There are many libraries that provide macros or configuration options to remove optional components and so reduce dependencies. Refer to the documentation, in particular the macros, for the individual libraries you intend to use. Here are some specific examples:
