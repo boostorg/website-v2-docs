@@ -2,6 +2,12 @@
 <html lang="en">
   <head>
     {{> head defaultPageTitle='Untitled'}}
+    <!-- Favicon configuration -->
+    <link rel="apple-touch-icon" sizes="180x180" href="{{uiRootPath}}/img/favicons/apple-touch-icon.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="{{uiRootPath}}/img/favicons/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="{{uiRootPath}}/img/favicons/favicon-16x16.png">
+    <link rel="manifest" href="{{uiRootPath}}/img/favicons/site.webmanifest">
+    <link rel="shortcut icon" href="{{uiRootPath}}/img/favicons/favicon.ico">
   </head>
   <body class="article{{#with (or page.attributes.role page.role)}} {{{this}}}{{/with}} toc2 toc-left">
     {{> body}}
