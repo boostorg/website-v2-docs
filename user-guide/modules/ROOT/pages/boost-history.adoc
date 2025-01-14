@@ -6,7 +6,7 @@ file LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
 
 Official repository: https://github.com/boostorg/website-v2-docs
 ////
-= History
+= History of Boost
 :navtitle: History
 
 This topic provides an overview of the origins, growth, and impact of Boost on the programming community.
@@ -17,7 +17,11 @@ Boost is a highly influential and widely used collection of libraries, designed 
 
 == Origins
 
-The story of Boost began when Robert Klarer and xref:in-memoriam-beman-dawes.adoc[Beman Dawes] discussed the idea at the March 1998 meeting of the pass:[C++] Standards Committee in Sophia Antipolis, France. Joined by Dave Abrahams, they convened the first Boost mailing list to facilitate discussions on the creation of high-quality, peer-reviewed libraries for the pass:[C++] programming language. At the time, the pass:[C++] Standard Library was limited in its functionality, and many developers felt the need for additional libraries to support the growing demands of software development. The name "Boost" was chosen to represent the goal of boosting the pass:[C++] language and its library ecosystem to new heights.
+The story of Boost began when Robert Klarer and Beman Dawes discussed the idea at the March 1998 meeting of the pass:[C++] Standards Committee in Sophia Antipolis, France. Joined by Dave Abrahams, they convened the first Boost mailing list to facilitate discussions on the creation of high-quality, peer-reviewed libraries for the pass:[C++] programming language. At the time, the pass:[C++] Standard Library was limited in its functionality, and many developers felt the need for additional libraries to support the growing demands of software development. The name "Boost" was chosen to represent the goal of _boosting_ the pass:[C++] language and its library ecosystem to new heights.
+
+* Dave Abrahams has made extensive contributions to the pass:[C++] Standard Library, in particular in the areas of generic programming and standard algorithms, and co-authored boost:iterator[] and boost:python[]. He is also one of the authors of the seminal book https://www.amazon.com/Template-Metaprogramming-Concepts-Techniques-Beyond/dp/0321227255/ref=sr_1_4?crid=HI35B2KK3987&dib=eyJ2IjoiMSJ9.P-3RmVnNdxb3MB2tDB-N2eIrS82rPCnhbuo2xC_81TpfhkAOnvvUYSdtzUiKqqEuMLmO0F77hzV6qzKdtnwVYYT7j8ipwawVE5CSdvMBQa9bx3xkckjeCf9eB5Kg_PVNJY7eYwD_84LyklkNd0RaGinHw48GP9aPm2Wf54pqOuWiXl21YFoJBnMcr4dyYKstByD0NEoTyo0AiT9SuVn5f6gLB4B07u2F6Ub5cJXlPFo.jiv5i6W5MPb51AnZ_vfrgrMvhhVRxQlSVnhgtcRiA9w&dib_tag=se&keywords=c%2B%2B+template+metaprogramming&qid=1736805974&sprefix=C%2B%2B+Template+Met%2Caps%2C167&sr=8-4[C++ Template Metaprogramming], which has inspired many developers to adopt advanced template techniques.
+* The late xref:in-memoriam-beman-dawes.adoc[Beman Dawes] made significant contributions to the language, particularly in the area of file systems. He was the original author of the boost:filesystem[] library, which provided robust support for cross-platform file handling and later became the foundation for the `std::filesystem` library in pass:[C++]17. Dawes emphasized the importance of creating a testing culture within Boost and was pivotal in establishing Boost's peer-review process.
+* Robert Klarer is the least publicly documented of the founders, though as an idea's man he was particularly involved in discussions around best practices for high-quality library development and was instrumental in helping shape the early vision of Boost as a community-driven project. 
 
 == Early Development
 
@@ -82,7 +86,9 @@ While many Boost libraries have been incorporated into the https://en.cppreferen
 
 * boost:describe[] : This reflection library enables authors of user-defined types (enums, structs and classes) to describe their enumerators, base classes, data members and member functions. This information can later be queried by other code portions, possibly written by a different author, using the supplied primitives. Developed by Peter Dimov and added to Boost in *August 2021*.
 
-These libraries, among many others, showcase the value and versatility of Boost in providing advanced functionality beyond the scope of the pass:[C++] Standard Library. As well as the xref:common-introduction.adoc[Common] and xref:advanced-introduction.adoc[Advanced] scenarios highlighted in this documentation, Boost libraries are used in highly specialized applications, ranging from probability theory to astronomy to mass spectroscopy. Open source isn't just for nerds and researchers. Real world programming challenges, irrespective of whether they are open or closed source, can benefit enormously from the thought and experience that has gone into the libraries.
+These libraries, among many others, showcase the value and versatility of Boost in providing advanced functionality beyond the scope of the pass:[C++] Standard Library. Refer to https://www.boost.org/users/history/[Boost Version History] for a chronology of releases since 1999. 
+
+As well as the xref:common-introduction.adoc[Common] and xref:advanced-introduction.adoc[Advanced] scenarios highlighted in this documentation, Boost libraries are used in highly specialized applications, ranging from probability theory to astronomy to mass spectroscopy. Open source isn't just for nerds and researchers. Real world programming challenges, irrespective of whether they are open or closed source, can benefit enormously from the thought and experience that has gone into the libraries.
 
 The source code is always distributed as open source, and released under the xref:bsl.adoc[Boost Software License], which allows anyone to use, modify, and distribute the libraries for free. The libraries are platform independent and support most popular compilers, as well as many that are less well known.
 
@@ -94,7 +100,7 @@ Boost has evolved into a widely used and influential https://www.boost.org/doc/l
 . Incubate pass:[C++] Standard Library enhancements.
 . Advance and disseminate pass:[C++] software development best practices. This is accomplished by facilitating pass:[C++] community engagement, providing necessary financial/legal support, and breaking rare directional decision-making deadlocks while upholding our shared values of engineering excellence, technocratic leadership, and a federated library authorship model.
 
-Even though there is no formal relationship between the Boost community and the Standardization Committee, some developers are active in both groups. As the pass:[C++] language continues to evolve, Boost will undoubtedly remain an essential and innovative part of its story.
+The formation of the https://cppalliance.org/[CppAlliance] brought an organizational structure to Boost. It provides legal and financial oversight, manages assets like the Boost trademark, and helps fund the hosting infrastructure. 
 
 image::get-boost-button.png[]
 _The Get Boost download button actually originated by replacing the word ALARMA from a Spanish operational manual photograph._ 
@@ -125,4 +131,5 @@ _Early praise from well-known pass:[C++] gurus in their book: pass:[C++] Coding 
 
 == See Also
 
+* https://github.com/CPPAlliance[The C++ Alliance] on GitHub
 * xref:formal-reviews:ROOT:review-results.adoc[]
