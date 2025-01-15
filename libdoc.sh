@@ -15,6 +15,9 @@
 # User's Guide.
 #
 
+set -x
+set -e
+
 if [ $# -eq 0 ]; then
   echo "Usage: $0 { branch | version | 'release' | 'all' }..."
   echo
