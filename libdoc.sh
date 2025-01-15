@@ -15,6 +15,7 @@
 # User's Guide.
 #
 
+set -x
 set -e
 
 if [ $# -eq 0 ]; then
