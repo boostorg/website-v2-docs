@@ -38,23 +38,25 @@ The review manager works through the following process:
 . Asks the <<Review Wizards>> for permission to extend the review schedule if it appears that too few reviews will be submitted during the review period.
 
 . Decides if there is consensus to accept the library and if there are any conditions attached. Consensus is not the same as a vote. *The review manager has discretion to weigh opinions based on authority or thoughtfulness.*
-+
-[[realitycheck]]
-Reality Check:: The review manager is _not_ supposed to impartially reflect the community opinion, as expressed in the form of formal reviews. Instead, the review manager's role is to decide whether the library should be accepted, and the reviews help them with this, rather than decide for them. Simply put, the review manager does not impartially tally votes - reviews are not votes.
-+
-A review manager _can_ write a review themselves, though this process is independent of their role of review manager. 
-+
-The review process is more like a court - with the judge (the review manager) asking _"Does the library meet the required standards for acceptance as a Boost library?"_.  This question is resolved by various advocates presenting their cases, criticizing other advocates cases, presenting facts, logical arguments, their own experiences, and so on.  The judge's job is to weigh all this and reach a decision. And they may add conditions on acceptance, or not. If consensus between judge and authors cannot be reached on meeting any conditions - the process ends without a resolution (the mistrial). 
-+
-The review manager is - for better or worse - personally responsible for making the decision, defending the results, and dealing with future criticism.  Their name will be public.  This is not a job for everyone.
-+
-Sometimes the judging process is going to produce irreconcilable differences, and continued discussions about the "verdict" are a fact of life. With any process there will be "winners" and "losers". So it's not about everyone being happy at the end of the day.
-+
-If, years from now, someone would like to know why a library was accepted or rejected, they _only_ needs to read the court documents (the review posts and the review summary), and should come away with the correct understanding of what happened and why.
 
 . Posts a notice of the review results on the https://lists.boost.org/mailman/listinfo.cgi/boost-users[Boost users mailing list] as well as the https://lists.boost.org/mailman/listinfo.cgi/boost[Boost developers' mailing list] and https://lists.boost.org/mailman/listinfo.cgi/boost-announce[Boost-announce mailing list]. A rationale is also helpful, but its extent is up to the review manager. If there are suggestions, or conditions that must be met before final inclusion, they should be stated. Concerns about the timeliness or quality of the review report should be brought to the <<Review Wizards>> off-list.
 +
 Ideally, the review summary should contain all the information the manager has taken into account when coming to a decision. If there were discussions out of band, they need to be summarized. If there were discussions _on the list_ that haven't made their way into the formal reviews, they should be summarized too. Refer to the xref:writing-reviews.adoc#bestpractices[Best Practices] section on Writing Reviews for some issues to look out for. 
+
+[[realitycheck]]
+=== Reality Check
+
+The review manager is _not_ supposed to impartially reflect the community opinion, as expressed in the form of formal reviews. Instead, the review manager's role is to decide whether the library should be accepted, and the reviews help them with this, rather than decide for them. Simply put, the review manager does not impartially tally votes - reviews are not votes.
+
+* A review manager _can_ write a review themselves, though this process is independent of their role of review manager. 
+
+* The review process is more like a court - with the judge (the review manager) asking _"Does the library meet the required standards for acceptance as a Boost library?"_.  This question is resolved by various advocates presenting their cases, criticizing other advocates cases, presenting facts, logical arguments, their own experiences, and so on.  The judge's job is to weigh all this and reach a decision. And they may add conditions on acceptance, or not. If consensus between judge and authors cannot be reached on meeting any conditions - the process ends without a resolution (the mistrial). 
+
+* The review manager is - for better or worse - personally responsible for making the decision, defending the results, and dealing with future criticism.  Their name will be public.  This is not a job for everyone.
+
+* Sometimes the judging process is going to produce irreconcilable differences, and continued discussions about the "verdict" are a fact of life. With any process there will be "winners" and "losers". So it's not about everyone being happy at the end of the day.
+
+* If, years from now, someone would like to know why a library was accepted or rejected, they _only_ needs to read the court documents (the review posts and the review summary), and should come away with the correct understanding of what happened and why.
 
 === Rejecting a Library
 
