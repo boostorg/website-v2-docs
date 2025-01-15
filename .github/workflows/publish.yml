@@ -135,6 +135,7 @@ jobs:
         if: steps.build.outputs.build-libs == 'true'
         shell: bash
         run: |
+          set -e
           set -x
           BOOST_SRC_DIR="${{ steps.boost-clone.outputs.boost-dir }}"
           export BOOST_SRC_DIR
