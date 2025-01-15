@@ -148,7 +148,11 @@ jobs:
         run: |
           set -e
           set -x
-          find "lib" -mindepth 1 -maxdepth 1 -type d -exec rm -r {} +
+          if [ -d "lib" ]; then
+              find "lib" -mindepth 1 -maxdepth 1 -type d -exec rm -r {} +
+          else
+              echo "Directory 'lib' does not exist, skipping removal."
+          fi
           # find "cpp-reference-extension" -mindepth 1 -maxdepth 1 -type d -exec rm -r {} +
 
       # - name: AWS Sync site-docs (revsys cluster)
