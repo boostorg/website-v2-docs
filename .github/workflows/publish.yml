@@ -146,6 +146,7 @@ jobs:
         shell: bash
         working-directory: build
         run: |
+          set -e
           set -x
           find "lib" -mindepth 1 -maxdepth 1 -type d -exec rm -r {} +
           # find "cpp-reference-extension" -mindepth 1 -maxdepth 1 -type d -exec rm -r {} +
