@@ -2,6 +2,10 @@
 
 # This script is used to build the Antora-UI
 
+set -xe
+
+echo "Starting antora-ui/build.sh"
+
 # Find npm and npx
 npm_version=$(npm --version 2>/dev/null)
 if [ -z "$npm_version" ]; then
