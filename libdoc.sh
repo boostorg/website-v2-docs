@@ -18,6 +18,8 @@
 set -x
 set -e
 
+echo "Starting libdoc.sh"
+
 if [ $# -eq 0 ]; then
   echo "Usage: $0 { branch | version | 'release' | 'all' }..."
   echo
