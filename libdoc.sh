@@ -41,7 +41,8 @@ if [ -z "$node_version" ]; then
   echo "Node.js is not installed"
   exit 1
 fi
-major_version=$(echo "$node_version" | egrep -o "v([0-9]+)\." | cut -c 2- | rev | cut -c 2- | rev)
+major_version=$(echo "$node_version" | sed -n -E "s/v([0-9]+)\..*$/\1/p")
+echo "Node major version is $major_version"
 if [ "$major_version" -lt "16" ]; then
   echo "Node.js version $node_version is not supported. Please upgrade to version 16 or higher."
   node_path=$(which node)
@@ -67,7 +68,7 @@ fi
 
 if command -v git >/dev/null && git rev-parse --is-inside-work-tree >/dev/null 2>&1; then
   commit_id=$(git rev-parse HEAD)
-  commit_id=$(expr substr "$commit_id" 1 7)
+  commit_id=$(echo "$commit_id" | sed -n -E "s/^(.{7}).*$/\1/p")
 else
   commit_id=""
 fi
