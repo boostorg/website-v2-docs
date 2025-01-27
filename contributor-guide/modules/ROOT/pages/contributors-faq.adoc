@@ -314,7 +314,28 @@ No, it is still at the proposal and design refinement stage.
 
 . *What kind of feedback has the proposal garnered so far?*
 +
-Positive feedback centers on appreciation of the initiative to address longstanding safety concerns in pass:[C++]. More challenging feedback has included concerns about the complexity of integrating new safety features into the existing pass:[C++] framework, balancing enhanced safety with the language's core design features of performance and flexibility, and competition from the https://www.rust-lang.org/[RUST] language.
+Positive feedback centers on appreciation of the initiative to address longstanding safety concerns in pass:[C++]. More challenging feedback has included concerns about the complexity of integrating new safety features into the existing pass:[C++] framework, balancing enhanced safety with the language's core design features of performance and flexibility, and competition from the https://www.rust-lang.org/[RUST] and https://developer.apple.com/swift/[Swift] programming languages.
+
+. *Are there references I can read that will help me understand safe concepts and so understand the online discussions?*
++
+Yes, in addition to the https://safecpp.org/P3390R0.html[Safe pass:[C++] proposal] from Sean Baxter, the https://herbsutter.com/2024/03/11/safety-in-context/[pass:[C++] safety, in context] blog post, by Herb Sutter, has been written for a broad audience. Also by Herb Sutter, there is a paper entitled https://www.open-std.org/jtc1/sc22/wg21/docs/papers/2024/p3081r0.pdf[Core safety Profiles: Specification, adoptability, and impact].
++
+If you refer to the *References* section of any of these papers, you will find a range of books, papers, presentations and the like that delve to various depths into safety issues. For example, the https://open-std.org/JTC1/SC22/WG21/docs/papers/2023/p2816r0.pdf[Safety Profiles:Type-and-resource Safe programming in ISO Standard pass:[C++]], by Bjarne Stroustrup and Gabriel Dos Reis, outlines a talk on the broad spectrum of safety issues in a chattier style than the more formal programming papers - and might be a good place to start!
+
+. *Can you recommend some Boost libraries that demonstrate current best safe-coding practices?*
++
+By examining the source code for any of these libraries, you should be able to educate yourself on a robust approach to safe programming, using current development tools.
++
+For memory safety, boost:smart_ptr[] provides smart pointer types like `boost::shared_ptr`, `boost::weak_ptr`, and `boost::scoped_ptr` to manage dynamic memory safely and avoid common pitfalls like memory leaks and dangling pointers. boost:pool[] offers memory pooling utilities that efficient managing of memory allocations while minimizing fragmentation. It can help show how to avoid unsafe manual memory management.
++
+For type-safety, boost:static-assert[] facilitates compile-time checks with `BOOST_STATIC_ASSERT`, ensuring that certain conditions are met during compilation, thus improving type safety. Also, boost:type-traits[] supplies a set of tools for type introspection, enabling safer template programming by providing ways to query and manipulate types.
++
+For resource-safety boost:filesystem[] is designed to work with file paths and directories safely, minimizing errors in handling filesystem resources and ensuring proper cleanup. boost:scope_exit[] provides a mechanism for ensuring cleanup of resources (e.g., releasing locks or closing file handles) when a scope is exited, both normally or due to an exception. And boost:interprocess[] facilitates safe and efficient interprocess communication (IPC), managing shared memory and other resources in a resource-safe way.
++
+For thread-safety boost:thread[] offers portable thread management and synchronization primitives (such as `boost::mutex`, `boost::lock_guard`) to help developers write thread-safe code. boost:asio[] enables asynchronous I/O operations with an emphasis on thread safety, making it easier to build safe and scalable networked applications. At a lower level, boost:atomic[] provides atomic operations for thread-safe programming, avoiding data races in concurrent applications.
++
+For a more general approach to safety, boost:optional[] introduces a way to handle optional values safely, avoiding issues like null pointer dereferencing.
+boost:variant2[] provides a type-safe `union` type, ensuring that only one active type is stored at any time, preventing type misuse errors. boost:coroutine2[] implements stackful coroutines with resource management in mind, preventing unsafe usage patterns.
 
 [[security]]
 == Security
