@@ -314,7 +314,263 @@ No, it is still at the proposal and design refinement stage.
 
 . *What kind of feedback has the proposal garnered so far?*
 +
-Positive feedback centers on appreciation of the initiative to address longstanding safety concerns in pass:[C++]. More challenging feedback has included concerns about the complexity of integrating new safety features into the existing pass:[C++] framework, balancing enhanced safety with the language's core design features of performance and flexibility, and competition from the https://www.rust-lang.org/[RUST] language.
+Positive feedback centers on appreciation of the initiative to address longstanding safety concerns in pass:[C++]. More challenging feedback has included concerns about the complexity of integrating new safety features into the existing pass:[C++] framework, balancing enhanced safety with the language's core design features of performance and flexibility, and competition from the https://www.rust-lang.org/[RUST] and https://developer.apple.com/swift/[Swift] programming languages.
+
+. *Are there references I can read that will help me understand safe concepts and so understand the online discussions?*
++
+Yes, in addition to the https://safecpp.org/P3390R0.html[Safe pass:[C++] proposal] from Sean Baxter, the https://herbsutter.com/2024/03/11/safety-in-context/[pass:[C++] safety, in context] blog post, by Herb Sutter, has been written for a broad audience. Also by Herb Sutter, there is a paper entitled https://www.open-std.org/jtc1/sc22/wg21/docs/papers/2024/p3081r0.pdf[Core safety Profiles: Specification, adoptability, and impact].
++
+If you refer to the *References* section of any of these papers, you will find a range of books, papers, presentations and the like that delve to various depths into safety issues. For example, the https://open-std.org/JTC1/SC22/WG21/docs/papers/2023/p2816r0.pdf[Safety Profiles:Type-and-resource Safe programming in ISO Standard pass:[C++]], by Bjarne Stroustrup and Gabriel Dos Reis, outlines a talk on the broad spectrum of safety issues in a chattier style than the more formal programming papers - and might be a good place to start!
+
+. *Can you recommend some Boost libraries that demonstrate current best safe-coding practices?*
++
+By examining the source code and documentation for any of these libraries, you should be able to educate yourself on a robust approach to safe programming, using current development tools.
++
+For _memory safety_, boost:smart_ptr[] provides smart pointer types like `boost::shared_ptr`, `boost::weak_ptr`, and `boost::scoped_ptr` to manage dynamic memory safely and avoid common pitfalls like memory leaks and dangling pointers. boost:pool[] offers memory pooling utilities that efficient managing of memory allocations while minimizing fragmentation. It can help show how to avoid unsafe manual memory management.
++
+For _type-safety_, boost:static-assert[] facilitates compile-time checks with `BOOST_STATIC_ASSERT`, ensuring that certain conditions are met during compilation, thus improving type safety. Also, boost:type-traits[] supplies a set of tools for type introspection, enabling safer template programming by providing ways to query and manipulate types.
++
+For _resource-safety_ boost:filesystem[] is designed to work with file paths and directories safely, minimizing errors in handling filesystem resources and ensuring proper cleanup. boost:scope_exit[] provides a mechanism for ensuring cleanup of resources (e.g., releasing locks or closing file handles) when a scope is exited, both normally or due to an exception. And boost:interprocess[] facilitates safe and efficient interprocess communication (IPC), managing shared memory and other resources in a resource-safe way.
++
+For _thread-safety_ boost:thread[] offers portable thread management and synchronization primitives (such as `boost::mutex`, `boost::lock_guard`) to help developers write thread-safe code. boost:asio[] enables asynchronous I/O operations with an emphasis on thread safety, making it easier to build safe and scalable networked applications. At a lower level, boost:atomic[] provides atomic operations for thread-safe programming, avoiding data races in concurrent applications.
++
+For a more general approach to safety, boost:optional[] introduces a way to handle optional values safely, avoiding issues like null pointer dereferencing.
+boost:variant2[] provides a type-safe `union` type, ensuring that only one active type is stored at any time, preventing type misuse errors. boost:coroutine2[] implements stackful coroutines with resource management in mind, preventing unsafe usage patterns.
+
+. *Using current development tools what are the design principles of safe programming?*
++
+Current best practices start with the use of static and compile-time checks to enforce constraints early. For resource-safety the idiom is  _Resource Acquisition Is Initialization_ (RAII). This idiom ties the lifetime of a resource to a programming object, so that when the object is created the resource is initialized, and when the object is destroyed the resource is released. However, the central theme of current safety is _Encapsulation_ - the encapsulation of known unsafe operations in well-tested, robust, reusable abstractions, for example:
+
+*** Instead of exposing raw pointers, use smart pointers or custom encapsulation to ensure safe memory management:
++
+[source,cpp]
+```
+\\ Unsafe code
+
+int* allocateArray(size_t size) {
+    return new int[size];
+}
+
+void useArray() {
+    int* arr = allocateArray(10);
+    // Forgetting to delete could cause memory leaks.
+    arr[0] = 42;
+    // No bounds checking.
+    delete[] arr;
+}
+
+\\ Safe encapsulation
+
+#include <vector>
+#include <memory>
+
+class SafeArray {
+private:
+    std::unique_ptr<int[]> data;
+    size_t size;
+
+public:
+    SafeArray(size_t size) : data(std::make_unique<int[]>(size)), size(size) {}
+
+    int& operator[](size_t index) {
+        if (index >= size) {
+            throw std::out_of_range("Index out of range");
+        }
+        return data[index];
+    }
+
+    size_t getSize() const { return size; }
+};
+
+void useSafeArray() {
+    SafeArray arr(10);
+    arr[0] = 42; // Safe access
+    try {
+        arr[10] = 13; // Throws an exception
+    } catch (const std::out_of_range& e) {
+        std::cerr << e.what() << std::endl;
+    }
+}
+
+```
++
+*** Handle file operations safely by ensuring that the file is properly closed after use.
++
+[source,cpp]
+```
+\\ Unsafe code
+
+void writeFile(const std::string& filename) {
+    FILE* file = fopen(filename.c_str(), "w");
+    if (file) {
+        fputs("Hello, World!", file);
+        // Forgetting fclose could cause resource leaks.
+    }
+}
+
+\\ Safe encapsulation
+
+#include <fstream>
+#include <string>
+
+class FileHandler {
+private:
+    std::ofstream file;
+
+public:
+    explicit FileHandler(const std::string& filename) {
+        file.open(filename, std::ios::out);
+        if (!file) {
+            throw std::ios_base::failure("Failed to open file");
+        }
+    }
+
+    ~FileHandler() {
+        if (file.is_open()) {
+            file.close();
+        }
+    }
+
+    void write(const std::string& content) {
+        if (!file) {
+            throw std::ios_base::failure("File not open");
+        }
+        file << content;
+    }
+};
+
+void safeWriteFile(const std::string& filename) {
+    try {
+        FileHandler fh(filename);
+        fh.write("Hello, World!");
+    } catch (const std::exception& e) {
+        std::cerr << "Error: " << e.what() << std::endl;
+    }
+}
+
+```
++
+*** Prevent race conditions by wrapping shared resources in a thread-safe interface.
++
+[source,cpp]
+```
+\\ Unsafe code
+
+#include <iostream>
+#include <thread>
+#include <vector>
+
+int counter = 0;
+
+void incrementCounter() {
+    for (int i = 0; i < 1000; ++i) {
+        ++counter; // Race condition
+    }
+}
+
+void unsafeThreads() {
+    std::thread t1(incrementCounter);
+    std::thread t2(incrementCounter);
+    t1.join();
+    t2.join();
+    std::cout << "Counter: " << counter << std::endl; // Undefined behavior
+}
+
+\\ Safe encapsulation
+
+#include <iostream>
+#include <thread>
+#include <vector>
+#include <mutex>
+
+class ThreadSafeCounter {
+private:
+    int counter = 0;
+    std::mutex mtx;
+
+public:
+    void increment() {
+        std::lock_guard<std::mutex> lock(mtx);
+        ++counter;
+    }
+
+    int get() const {
+        return counter;
+    }
+};
+
+void safeThreads() {
+    ThreadSafeCounter counter;
+
+    auto worker = [&counter]() {
+        for (int i = 0; i < 1000; ++i) {
+            counter.increment();
+        }
+    };
+
+    std::thread t1(worker);
+    std::thread t2(worker);
+    t1.join();
+    t2.join();
+
+    std::cout << "Counter: " << counter.get() << std::endl; // Guaranteed correct result
+}
+
+
+```
++
+*** Instead of using raw sockets, encapsulate them in a class that ensures proper resource cleanup.
++
+[source,cpp]
+```
+\\ Unsafe code
+
+#include <sys/socket.h>
+#include <unistd.h>
+
+int createSocket() {
+    int sock = socket(AF_INET, SOCK_STREAM, 0);
+    if (sock == -1) {
+        perror("Socket creation failed");
+        return -1;
+    }
+    // Forgetting close(sock) could cause resource leaks.
+    return sock;
+}
+
+\\ Safe encapsulation
+
+#include <sys/socket.h>
+#include <unistd.h>
+#include <stdexcept>
+
+class SafeSocket {
+private:
+    int sock;
+
+public:
+    SafeSocket() {
+        sock = socket(AF_INET, SOCK_STREAM, 0);
+        if (sock == -1) {
+            throw std::runtime_error("Socket creation failed");
+        }
+    }
+
+    ~SafeSocket() {
+        if (sock != -1) {
+            close(sock);
+        }
+    }
+
+    int getSocket() const {
+        return sock;
+    }
+};
+
+
+```
++
+By wrapping low-level operations in safe abstractions, you make the code easier to use and much harder to misuse!
 
 [[security]]
 == Security
