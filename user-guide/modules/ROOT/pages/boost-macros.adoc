@@ -1,0 +1,257 @@
+////
+Copyright (c) 2024 The C++ Alliance, Inc. (https://cppalliance.org)
+
+Distributed under the Boost Software License, Version 1.0. (See accompanying
+file LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
+
+Official repository: https://github.com/boostorg/website-v2-docs
+////
+= Boost Macros
+:navtitle: Macros
+
+Boost provides many useful macros that help with configuration, debugging, portability, and convenience when working with the libraries. 
+
+There are thousands of defined macros (refer to the https://www.boost.org/doc/libs/1_87_0/libs/config/doc/html/boost_config/boost_macro_reference.html[Boost Macro Reference]). However, here are some of the most commonly used, and some sample code showing how to work them into your code.
+
+== Library Inclusion and Linking
+
+[cols="1,2",options="header",stripes=even,frame=none]
+|===
+| *Macro* | *Description* 
+| `BOOST_ALL_NO_LIB` | Disables automatic linking for all Boost libraries.
+| `BOOST_LIB_DIAGNOSTIC` | Enables diagnostic output for automatic linking.
+| `BOOST_INCLUDE_LIBRARIES`(libs...) | Used to specify which libraries should be included when using https://www.bfgroup.xyz/b2/[B2].
+| `BOOST_ALL_DYN_LINK` | Forces all Boost libraries to be linked dynamically.
+|===
+
+=== Example
+
+The `BOOST_ALL_NO_LIB` macro prevents automatic linking of Boost libraries.
+
+[source,cpp]
+----
+#define BOOST_ALL_NO_LIB  // Disable auto-linking
+
+#include <boost/filesystem.hpp>
+#include <iostream>
+
+int main() {
+    std::cout << "Boost Filesystem is included, but auto-linking is disabled.\n";
+}
+
+----
+
+== Configuration and Compiler Detection
+
+[cols="1,2",options="header",stripes=even,frame=none]
+|===
+| *Macro* | *Description* 
+| `BOOST_VERSION` | Defines the Boost version as an integer (for example, 107800 for Boost 1.78.0).
+| `BOOST_PLATFORM` | Identifies the platform (for example, Windows, Linux).
+| `BOOST_COMPILER` | Identifies the compiler in use (for example, gcc, msvc).
+| `BOOST_STDLIB` | Identifies the standard library (for example, pass:[libstdc++], msvc).
+| `BOOST_NO_EXCEPTIONS` | Disables exception handling in Boost.
+| `BOOST_DISABLE_THREADS` | Disables multi-threading support in Boost.
+| `BOOST_HAS_THREADS` | Indicates if Boost is built with threading support.
+|===
+
+=== Example
+
+The `BOOST_STDLIB` macro is part of boost:config[] and identifies the standard library implementation being used (for example, GNU pass:[libstdc++], Microsoft STL, or pass:[libc++]). This is useful when writing code that needs to adapt to different standard library behaviors. `BOOST_STDLIB` expands to a string representing the detected standard library.
+
+[source,cpp]
+----
+#include <boost/config.hpp>
+#include <iostream>
+
+int main() {
+    std::cout << "Detected Standard Library: " << BOOST_STDLIB << std::endl;
+
+#ifdef BOOST_LIBSTD_GNU
+    std::cout << "Using GNU libstdc++" << std::endl;
+#elif defined(BOOST_LIBSTD_MSVC)
+    std::cout << "Using Microsoft STL (MSVC Standard Library)" << std::endl;
+#elif defined(BOOST_LIBSTD_LIBCXX)
+    std::cout << "Using libc++ (Clang Standard Library)" << std::endl;
+#else
+    std::cout << "Using an unknown or unsupported standard library" << std::endl;
+#endif
+
+    return 0;
+}
+
+
+----
+
+== Debugging and Assertions
+
+[cols="1,2",options="header",stripes=even,frame=none]
+|===
+| *Macro* | *Description* 
+| `BOOST_ASSERT`(expr) | Asserts an expression, throwing an error in debug builds.
+| `BOOST_STATIC_ASSERT`(expr) | Performs a compile-time assertion.
+| `BOOST_VERIFY`(expr) | Like `BOOST_ASSERT`, but always evaluates the expression, even in release mode.
+| `BOOST_ENABLE_ASSERT_HANDLER` | Enables a custom assertion handler.
+|===
+
+=== Example
+
+Using `BOOST_ASSERT`, `BOOST_STATIC_ASSERT`, and `BOOST_VERIFY` for debugging.
+
+[source,cpp]
+----
+#include <boost/assert.hpp>
+#include <iostream>
+
+void process(int value) {
+    BOOST_ASSERT(value > 0 && "Value must be positive");  // Runtime assertion
+}
+
+int main() {
+    BOOST_STATIC_ASSERT(sizeof(int) == 4);  // Compile-time assertion
+
+    int x = 10;
+    BOOST_VERIFY(x != 0);  // Always checks in release mode
+
+    process(-1);  // Will trigger an assertion failure
+}
+
+----
+
+== Preprocessor Utilities
+
+[cols="1,2",options="header",stripes=even,frame=none]
+|===
+| *Macro* | *Description* 
+| `BOOST_PP_REPEAT`(count, macro, data) | Repeats a macro expansion a specified number of times.
+| `BOOST_PP_IF`(cond, then, else) | Implements an if-like construct at preprocessing time.
+| `BOOST_PP_ENUM_PARAMS`(count, param) | Expands into a comma-separated list of parameters.
+|===
+
+=== Example
+
+Using `BOOST_PP_REPEAT` to generate repeated code.
+
+[source,cpp]
+----
+#include <boost/preprocessor/repetition/repeat.hpp>
+#include <iostream>
+
+#define PRINT_N(z, n, text) std::cout << text << " " << n << "\n";
+
+int main() {
+    BOOST_PP_REPEAT(5, PRINT_N, "Iteration");
+}
+
+----
+
+== Cross-Platform Compatibility
+
+[cols="1,2",options="header",stripes=even,frame=none]
+|===
+| *Macro* | *Description* 
+| `BOOST_WINDOWS` | Defined when compiling on Windows.
+| `BOOST_LINUX` | Defined when compiling on Linux.
+| `BOOST_UNIX` | Defined when compiling on a Unix-like system.
+| `BOOST_FILESYSTEM_NO_DEPRECATED` | Disables deprecated features in boost:filesystem[].
+|===
+
+=== Example
+
+Using `BOOST_WINDOWS`, `BOOST_LINUX`, and `BOOST_UNIX` for platform-specific code. 
+
+[source,cpp]
+----
+#include <iostream>
+
+int main() {
+#ifdef BOOST_WINDOWS
+    std::cout << "Running on Windows\n";
+#elif defined(BOOST_LINUX)
+    std::cout << "Running on Linux\n";
+#elif defined(BOOST_UNIX)
+    std::cout << "Running on a Unix-like system\n";
+#else
+    std::cout << "Unknown platform\n";
+#endif
+}
+
+----
+
+== Threading and Synchronization
+
+[cols="1,2",options="header",stripes=even,frame=none]
+|===
+| *Macro* | *Description* 
+| `BOOST_THREAD_USE_LIB` | Forces boost:thread[] to be used as a static library.
+| `BOOST_THREAD_USE_DLL` | Forces boost:thread[] to be used as a shared library.
+| `BOOST_THREAD_PROVIDES_FUTURE` | Enables std::future-like functionality in boost:thread[].
+|===
+
+=== Example
+
+Using `BOOST_HAS_THREADS` to ensure threading support is enabled.
+
+[source,cpp]
+----
+#include <boost/thread.hpp>
+#include <iostream>
+
+void threadFunc() {
+    std::cout << "Hello from thread!\n";
+}
+
+int main() {
+#ifdef BOOST_HAS_THREADS
+    boost::thread myThread(threadFunc);
+    myThread.join();
+#else
+    std::cout << "Threads are not supported.\n";
+#endif
+}
+
+----
+
+== Exception Handling
+
+[cols="1,2",options="header",stripes=even,frame=none]
+|===
+| *Macro* | *Description* 
+| `BOOST_THROW_EXCEPTION`(e) | A portable way to throw exceptions that integrates with `BOOST_NO_EXCEPTIONS`.
+| `BOOST_NO_EXCEPTIONS` | Disables exception handling.
+|===
+
+=== Example
+
+Using `BOOST_THROW_EXCEPTION` to throw exceptions in a portable way.
+
+[source,cpp]
+----
+#include <boost/exception/exception.hpp>
+#include <boost/exception/all.hpp>
+#include <iostream>
+
+struct MyException : virtual boost::exception, virtual std::exception {
+    const char* what() const noexcept override {
+        return "A Boost exception occurred!";
+    }
+};
+
+void riskyOperation() {
+    BOOST_THROW_EXCEPTION(MyException());
+}
+
+int main() {
+    try {
+        riskyOperation();
+    } catch (const MyException& e) {
+        std::cout << "Caught exception: " << e.what() << "\n";
+    }
+}
+
+----
+
+== See Also
+
+* https://www.boost.org/doc/libs/1_87_0/libs/config/doc/html/boost_config/boost_macro_reference.html[Boost Macro Reference]
+* xref:testing-debugging.adoc[]
