@@ -44,12 +44,13 @@ Here: xref:user-guide:ROOT:bsl.adoc[The Boost Software License].
 +
 Add a multi-line comment based on the following template, substituting appropriate text for the name and date on the top line:
 +
-```
+[source,cpp]
+----
 //          Copyright Joe Coder 2004 - 2006.
 // Distributed under the Boost Software License, Version 1.0.
 //    (See accompanying file LICENSE_1_0.txt or copy at
 //          https://www.boost.org/LICENSE_1_0.txt)
-```
+----
 Notes::
 +
 a. Leave an empty line before and after the above comment block.
@@ -344,7 +345,7 @@ Current best practices start with the use of static and compile-time checks to e
 *** Instead of exposing raw pointers, use smart pointers or custom encapsulation to ensure safe memory management:
 +
 [source,cpp]
-```
+----
 \\ Unsafe code
 
 int* allocateArray(size_t size) {
@@ -392,12 +393,12 @@ void useSafeArray() {
     }
 }
 
-```
+----
 +
 *** Handle file operations safely by ensuring that the file is properly closed after use.
 +
 [source,cpp]
-```
+----
 \\ Unsafe code
 
 void writeFile(const std::string& filename) {
@@ -448,12 +449,12 @@ void safeWriteFile(const std::string& filename) {
     }
 }
 
-```
+----
 +
 *** Prevent race conditions by wrapping shared resources in a thread-safe interface.
 +
 [source,cpp]
-```
+----
 \\ Unsafe code
 
 #include <iostream>
@@ -517,12 +518,12 @@ void safeThreads() {
 }
 
 
-```
+----
 +
 *** Instead of using raw sockets, encapsulate them in a class that ensures proper resource cleanup.
 +
 [source,cpp]
-```
+----
 \\ Unsafe code
 
 #include <sys/socket.h>
@@ -568,7 +569,7 @@ public:
 };
 
 
-```
+----
 +
 By wrapping low-level operations in safe abstractions, you make the code easier to use and much harder to misuse!
 
