@@ -24,6 +24,7 @@ This section contains answers to the common questions that new developers to Boo
 * <<Modular Boost>>
 * <<Other Languages>>
 * <<Releases>>
+* <<Safe C++>>
 * <<Smart Pointers>>
 * <<Standard Library>>
 * <<Templates>>
@@ -685,6 +686,11 @@ File extensions communicate the "type" of the file, both to humans and to comput
 +
 Refer to the xref:contributor-guide:ROOT:index.adoc[]. Note that shareware libraries, commercial libraries, or libraries requiring restrictive licensing are all not acceptable. Your library must be provided free, with full source code, and have an acceptable license. There are other ways of contributing too, providing feedback, testing, submitting suggestions for new features and bug fixes, for example. There are no fees for submitting a library.
 
+== Safe C++
+
+. *I use Boost Libraries in my current projects. What do I need to know about Safe pass:[C++]?*
++
+Currently, https://safecpp.org/P3390R0.html[Safe pass:[C++]] is a proposal, under discussion, to develop a memory-safe set of extensions to pass:[C++]. There is no current timeline for release of these extensions, but for more information, refer to xref:contributor-guide:ROOT:contributors-faq#safecpp[Contributors FAQ: Safe pass:[C++]], and for terminology explanations see xref:glossary.adoc#s[Glossary: S].
 
 == Smart Pointers
 
