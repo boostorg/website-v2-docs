@@ -286,8 +286,9 @@ You will find well known acronyms such as DLL, URL and UUID in this list, becaus
 
 *RUST* : https://www.rust-lang.org/[Rust] is a relatively new programming language incorporating memory-safety, thread-safety and type-safety constructs. This language provides many of the concepts proposed for *Safe pass:[C++]*.
 
-*Rustaceans* : Afficionados of the https://www.rust-lang.org/[Rust] programming language
+*Rustaceans* : Aficionados of the https://www.rust-lang.org/[Rust] programming language
 
+[[s]]
 == S
 
 *Safe pass:[C++]* : Currently a https://safecpp.org/P3390R0.html[proposal for a memory-safe set of pass:[C++] operations]. Key concepts of memory safety include:
@@ -315,6 +316,8 @@ You will find well known acronyms such as DLL, URL and UUID in this list, becaus
 *SSA* : Static Single Assignment - a property of intermediate representations (IRs) used in compilers. SSA is a popular technique in modern compilers to make optimizations and analysis simpler and more efficient. Each variable is assigned exactly once and is immutable after assignment. If a variable is updated, a new variable is created instead. Refer also to *Phi functions*.
 
 *STL* : Standard Template Library
+
+*Swifties* : In the programming context, aficionados of the https://developer.apple.com/swift/[Swift] language.
 
 == T
 
