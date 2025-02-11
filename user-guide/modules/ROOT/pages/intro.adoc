@@ -11,82 +11,81 @@ Official repository: https://github.com/boostorg/website-v2-docs
 :idseparator: -
 
 
-Boost is a collection of peer-reviewed and high-quality libraries that aim to make application development more productive for all C++ developers.
+Boost is a collection of high-quality and peer-reviewed libraries that aims to make pass:[C++] development highly productive.
 
-Currently, there are over 180 libraries, and this number increases with regular new releases and updates.
-
-Boost is publicly released three times per year (April, August, and December). Each new release has updates to existing libraries, and possibly new libraries that pass the rigorous acceptance process.
-
-Feedback from the developer community is encouraged.
+Boost is publicly released three times per year (April, August, and December). Each release has updates to existing libraries, and any new libraries that have passed the rigorous acceptance process. Currently, there are over 180 libraries covering a myriad of programming tasks.
 
 == Advantages of using Boost
 
-There are many advantages to using Boost in your C++ projects, the main one being using Boost avoids reinventing the wheel if there is a library that implements functions that you would otherwise have to write yourself. And of course the libraries are well engineered and tested, and not home-brewed. In addition to this:
+There are many advantages to using Boost in your pass:[C++] projects, the main one being using Boost avoids reinventing the wheel if there is a library that implements functions that you would otherwise have to write yourself. In addition:
 
 [disc]
-* Boost libraries are peer reviewed, well designed, and extensively tested.
-* Boost does not compete with the Standard Template Library (STL) for C++. Rather it complements the STL libraries with exciting new functionality. Many libraries that are now part of the STL started as Boost libraries.
+* Boost libraries are peer reviewed, well designed, and extensively tested prior to release.
+* Boost does not compete with the https://en.cppreference.com/w/cpp/standard_library[C++ Standard Library]. Rather it complements the Standard with exciting additional functionality. Many components of the Standard started as components of Boost libraries.
 * Boost is open-source, and available for you to use in any of your projects. It is free, including for commercial projects. Refer to xref:bsl.adoc[].
-* Boost allows for cross-platform development, with single source code. Boost supports: Windows, Linux variants, Apple OS X, IOS, Android, and Xbox.
-* The Boost Libraries are designed to be as independent as possible so that users can pick and choose the libraries they need without being forced to include unnecessary code. Some libraries do have dependencies on a few others, and typically these other libraries are loaded automatically if just a subset of the full collection of libraries is being installed.
-* Particular strengths of the Boost libraries include smart pointers, unit tests, lambda functions, function binding, regex, a file system, to name a few.
-* Boost allows for all libraries to be installed and inspected. Alternatively a package manager can be used to install a specific collection of libraries.
+* Boost allows for cross-platform development, with single source code. Boost supports Windows, Linux variants, Apple OS X, IOS, Android, and Xbox.
+* The Boost Libraries are designed to be as independent as possible so that users can pick and choose the libraries they need without being forced to include unnecessary code. If a library has dependencies these other libraries are loaded automatically if just a subset of the full collection of libraries is being installed.
+* Particular strengths of the libraries include extensive documentation, ease of installing and updating, many libraries are header-only, and that less-common use cases are often covered.
 * Through _template metaprogramming_ Boost libraries are a good platform for building other libraries.
 * Boost can be used in conjunction with graphics and games SDKs, such as OpenGL, Vulkan,  and DirectX, and with game development engines such as the Unreal Engine.
-* It is easy to discuss and share your Boost experiences with other programmers.
-
+* It is easy to ask questions and share your Boost experiences with other programmers, via the xref:user-community-introduction.adoc[User Community].
+* A developer can gain knowledge of what is available. A library may be of no current use, but knowledge of its existence can help in future awareness and planning.
+* Bugs, though rare, and other issues can be filed on the library authors, refer to xref:reporting-issues.adoc[].
 
 == Considerations when using Boost
 
-The libraries implement a modern approach to C++ programming, generally prioritizing performance, correctness, cross-platform portability, efficiency and reusability. Boost offers building blocks, rather than a high-level app framework.
+The libraries implement a modern approach to pass:[C++] programming, generally prioritizing performance, correctness, cross-platform portability, efficiency and reusability. Boost offers building blocks, rather than a high-level app framework.
 
-Boost is template-heavy, in order to provide portability and reusability, but this does make for dense syntax, which can take some getting used to.
+Boost is template-heavy, in order to provide maximum portability and reusability, which can make for dense syntax, which takes some getting used to.
 
-Boost libraries are written by one, or a team, of independent developers. There will be minor differences in portability, standards, documentation, error reporting, and other aspects, between the libraries.
+Boost libraries are written by one, or a small team, of independent developers. There will be minor differences in portability, standards, documentation, error reporting, and other aspects, between the libraries. The stringent review process does help minimize these differences.
 
 == Library Categories
 
-The current Boost libraries are categorized as follows (the count shows the number of current libraries in the category). Note that one library may appear in two or more categories.
+The current Boost libraries are categorized as follows - the count shows the number of current libraries in the category.
 
-[cols="2,1,5", grid=none, frame=none, stripes=even]
+[cols="2,1,5", options="header", grid=none, frame=none, stripes=even]
 |===
 |**Category** | **Count** | **Description**
-|Algorithms | 14 | A range of libraries including several for 2D geometry, graphs, performance when iterating, sorting, string efficiency, and miscellaneous utility algorithms.
-|Broken compiler workarounds | 2 | Addresses compiler idiosyncrasies and help for non-conforming standard libraries.
-|Concurrent Programming | 12 | Libraries that address concurrency, threads, networking, sockets, context switching, memory, and other multi-threading functions.
-|Containers | 22 | Includes coverage of arrays, buffers, graphs, JSON, heaps, properties, stacks, and other storage constructs and issues.
-|Correctness and testing | 7 | Includes coverage of asserts, contracting, integer correctness, tracing, and unit testing.
-|Data structures | 22 | Supports of a wide range of data structures, including maps, containers, heaps, JSON, optional objects, pointers, polygons, properties, and stacks.
-|Domain Specific | 5 | Covers date and time utilities, cyclic redundancy code (CRC), unit analysis, and unique identifiers.
-|Error handling and recovery | 4 | Covers asserts, error reporting and handling, and an infrastructure for throwing exceptions.
-|Function objects and higher-order programming | 17 | Covers binding, function wrapping, function overloading, lambda functions, generic functions, and callback functions.
-|Generic Programming | 15 | A range of generalized libraries, including for passing parameters, function template overloads, handling operators and iterators, generic types and templates, parallel extensions.
-|Image processing | 1 | A single library for generic image processing.
-|Input/Output | 11 | Features include portable networking, conversions for correct byte ordering, formatting, streams, JSON, serialization, and URL parsing.
-|Inter-language support | 1 | A single library providing a framework for interfacing Python with C++.
-|Iterators | 6 | Covers iterations in images, graphs, arithmetic classes, and tokens.
-|Language Features Emulation | 11 | Covers language features such as reflection, exceptions, semantics, deterministic failure, parameters, scope, types, and typeof.
-|Math and numerics | 24 | Covers many math issues, such as statistics, types and conversions, geometry, histograms, trigonometry, common factors, Octonions, Quaternions, n-dimensional arrays, equations, operators, polygons, vectors, matrices, random numbers, ratios, rational numbers, safe integers, and linear algebra.
-|Memory | 4 | Memory functions including for alignment, allocators, traits, pool management, smart pointers, non-copyable classes.
-|Parsing | 3 | Libraries providing a parsing framework, covering grammars, primitives, directives, and other language features.
-|Patterns and Idioms | 5 | Covers design patters, empty member optimization, deterministic failure, callbacks non-copyable classes.
-|Preprocessor Metaprogramming | 3 | Covers macro parameters, repetition, recursion, macro data.
-|Programming Interfaces | 5 | Covers object wrappers for deferred calls or callbacks, deterministic failure, parameters, Python bindings, error reporting.
-|State Machines | 2 | Covers high-performance and arbitrarily complex finite state machines.
-|String and text processing | 14 | Covers type conversion, string formatting, streams, localization, regular expressions, parsing, string algorithms, tokens.
-|System | 11 | Time utilities, context switching, handling libraries, threads, a smart file system, processes, backtraces, errors.
-|Template Metaprogramming | 15 | Libraries to support the development of libraries, with features such as callable traits, reflection, function types, tuples, higher-order functions, parsing, sequences, metafunctions, static assertions, introspection, properties, expressions.
-|Miscellaneous | 15 | Libraries for numerical type and text conversion, byte ordering, logging, swapping, timing, initialization, and other utilities.
+|https://www.boost.org/doc/libs/1_87_0/libs/libraries.htm#Algorithms[Algorithms] | 13 | A range of libraries including several for 2D geometry, graphs, performance when iterating, sorting, string efficiency, and miscellaneous utility algorithms.
+|https://www.boost.org/doc/libs/1_87_0/libs/libraries.htm#Workarounds[Broken compiler workarounds] | 1 | Addresses compiler idiosyncrasies, and help for non-conforming standard libraries.
+|https://www.boost.org/doc/libs/1_87_0/libs/libraries.htm#Concurrent[Concurrent Programming] | 15 | Libraries that address concurrency, threads, networking, sockets, context switching, memory, and other multi-threading functions.
+|https://www.boost.org/doc/libs/1_87_0/libs/libraries.htm#Containers[Containers] | 23 | Includes coverage of arrays, buffers, graphs, JSON, heaps, properties, stacks, and other storage constructs and issues.
+|https://www.boost.org/doc/libs/1_87_0/libs/libraries.htm#Correctness[Correctness and testing] | 7 | Includes coverage of asserts, contracting, integer correctness, tracing, and unit testing.
+|https://www.boost.org/doc/libs/1_87_0/libs/libraries.htm#Data[Data structures] | 22 | Supports a wide range of data structures, including maps, containers, heaps, JSON, optional objects, pointers, polygons, properties, and stacks.
+|https://www.boost.org/doc/libs/1_87_0/libs/libraries.htm#Domain[Domain Specific] | 5 | Covers date and time utilities, cyclic redundancy code (CRC), unit analysis, and unique identifiers.
+|https://www.boost.org/doc/libs/1_87_0/libs/libraries.htm#Error-handling[Error handling and recovery] | 5 | Covers asserts, error reporting and handling, and an infrastructure for throwing exceptions.
+|https://www.boost.org/doc/libs/1_87_0/libs/libraries.htm#Function-objects[Function objects and higher-order programming] | 16 | Covers binding, function wrapping, function overloading, lambda functions, generic functions, and callback functions.
+|https://www.boost.org/doc/libs/1_87_0/libs/libraries.htm#Generic[Generic Programming] | 15 | A range of generalized libraries, including for passing parameters, function template overloads, handling operators and iterators, generic types and templates, and parallel extensions.
+|https://www.boost.org/doc/libs/1_87_0/libs/libraries.htm#Image-processing[Image processing] | 1 | A single library for generic image processing.
+|https://www.boost.org/doc/libs/1_87_0/libs/libraries.htm#IO[Input/Output] | 13 | Features include portable networking, conversions for correct byte-ordering, formatting, streams, JSON, serialization, and URL parsing.
+|https://www.boost.org/doc/libs/1_87_0/libs/libraries.htm#Inter-language[Inter-language support] | 1 | A single library providing a framework for interfacing Python with pass:[C++].
+|https://www.boost.org/doc/libs/1_87_0/libs/libraries.htm#Iterators[Iterators] | 6 | Covers iterations in images, graphs, arithmetic classes, and tokens.
+|https://www.boost.org/doc/libs/1_87_0/libs/libraries.htm#Emulation[Language Features Emulation] | 13 | Covers language features such as reflection, exceptions, semantics, deterministic failure, parameters, scope, types, and `typeof`.
+|https://www.boost.org/doc/libs/1_87_0/libs/libraries.htm#Math[Math and numerics] | 19 | Covers many math issues, such as statistics, types and conversions, geometry, histograms, trigonometry, common factors, Quaternions, n-dimensional arrays, equations, operators, polygons, vectors, matrices, random numbers, ratios, rational numbers, safe integers, and linear algebra.
+|https://www.boost.org/doc/libs/1_87_0/libs/libraries.htm#Memory[Memory] | 3 | Memory functions including for alignment, allocators, traits, pool management, smart pointers, and non-copyable classes.
+|https://www.boost.org/doc/libs/1_87_0/libs/libraries.htm#Parsing[Parsing] | 4 | Libraries providing a parsing framework, covering grammars, primitives, directives, and other language features.
+|https://www.boost.org/doc/libs/1_87_0/libs/libraries.htm#Patterns[Patterns and Idioms] | 6 | Covers design patterns, empty member optimization, deterministic failure, callbacks, and non-copyable classes.
+|https://www.boost.org/doc/libs/1_87_0/libs/libraries.htm#Preprocessor[Preprocessor Metaprogramming] | 3 | Covers macro parameters, repetition, recursion, and macro data.
+|https://www.boost.org/doc/libs/1_87_0/libs/libraries.htm#Programming[Programming Interfaces] | 6 | Covers object wrappers for deferred calls or callbacks, deterministic failure, parameters, Python bindings, and error reporting.
+|https://www.boost.org/doc/libs/1_87_0/libs/libraries.htm#State[State Machines] | 2 | Covers high-performance, and arbitrarily complex finite state machines.
+|https://www.boost.org/doc/libs/1_87_0/libs/libraries.htm#String[String and text processing] | 16 | Covers type conversion, string formatting, streams, localization, regular expressions, parsing, tokens, and string algorithms.
+|https://www.boost.org/doc/libs/1_87_0/libs/libraries.htm#System[System] | 11 | Time utilities, context switching, handling libraries, threads, a smart file system, processes, backtraces, and errors.
+|https://www.boost.org/doc/libs/1_87_0/libs/libraries.htm#Metaprogramming[Template Metaprogramming] | 15 | Libraries to support the development of higher-level libraries, with features such as callable traits, reflection, function types, tuples, higher-order functions, parsing, sequences, metafunctions, static assertions, introspection, properties, and expressions.
+|https://www.boost.org/doc/libs/1_87_0/libs/libraries.htm#Miscellaneous[Miscellaneous] | 15 | Libraries for numerical type and text conversion, byte-ordering, logging, swapping, timing, initialization, and many other utilities.
 |===
+
+Note:: One library may appear in more than one category.
 
 
 == Summary
 
-The purpose of the Boost libraries is to evangelize and support C++ development. You can take advantage of thousands of lines of high performance code.
+The purpose of the Boost libraries is to evangelize and support pass:[C++] development. You can take advantage of thousands of lines of high performance code.
 
 === Next Steps
 
-If you are new to Boost, the recommended next step is to download the entire library for your selected OS, and build a few small sample programs.
+If you are new to Boost, the recommended next step is to download the entire library for your selected OS, and build a few sample programs.
 
 [square]
 * xref:getting-started.adoc[]
+
