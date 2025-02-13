@@ -142,6 +142,8 @@ You will find well known acronyms such as DLL, URL and UUID in this list, becaus
 
 *IMO* or *IMHO* : _In My (Honest or Humble) Opinion_
 
+*INCITS* : The https://www.incits.org/[InterNational Committee for Information Technology Standards] is the central U.S. forum dedicated to creating technology standards for the next generation of innovation. 
+
 *IO* : Input/Output - refer to boost:io[]
 
 *IOW* : _In Other Words_
