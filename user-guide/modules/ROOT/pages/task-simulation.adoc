@@ -27,3 +27,10 @@ Creating a real-time simulation of vehicles involves various aspects, including 
 * boost:mpi[] or boost:asio[]: For distributed simulations that run across multiple systems, you might need a library for network communication. boost:mpi[] provides a pass:[C++] interface for the Message Passing Interface (MPI) standard for distributed computing. boost:asio[] can also handle networking tasks and it is a bit lower-level.
 
 * boost:serialization[]: To save the state of the simulation or to communicate complex data structures over a network, you might find this library helpful.
+
+== See Also
+
+* https://www.boost.org/doc/libs/1_87_0/libs/libraries.htm#Algorithms[Category: Algorithms]
+* https://www.boost.org/doc/libs/1_87_0/libs/libraries.htm#Image-processing[Category: Image processing]
+* https://www.boost.org/doc/libs/1_87_0/libs/libraries.htm#Math[Category: Math and numerics]
+* https://www.boost.org/doc/libs/1_87_0/libs/libraries.htm#State[Category: State Machines]

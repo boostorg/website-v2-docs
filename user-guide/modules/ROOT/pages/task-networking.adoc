@@ -27,3 +27,8 @@ Developing a networking application in pass:[C++] involves a lot of different co
 * boost:json[]: An efficient library for parsing, serializing, and manipulating JSON data. This is useful specifically in client-server communication and web services. Also, if you are working with large JSON payloads, there is support for incremental parsing, so you can feed data to the parser as it arrives over the network.
 
 * boost:url[]: Parses URL strings into components (scheme, user info, host, port, path, query, and fragment), and provides support for building URLs piece by piece. Also, there is support for modifying an existing URL (changing the query parameters, for example) and handling percent-encoded characters. This library basically makes even complex URLs easy to work with.
+
+== See Also
+
+* https://www.boost.org/doc/libs/1_87_0/libs/libraries.htm#Concurrent[Category: Concurrent Programming]
+* https://www.boost.org/doc/libs/1_87_0/libs/libraries.htm#IO[Category: Input/Output]

@@ -50,3 +50,8 @@ Parallel computing has been successful in a wide range of applications, especial
 * Genome Analysis and Bioinformatics: Tasks like genome sequencing, protein folding, and other bioinformatics tasks involve large amounts of data and can be greatly sped up using parallel computing.
 
 * Weather Forecasting and Climate Research: Simulating weather patterns and climate change requires processing vast amounts of data and performing complex calculations, tasks well-suited to parallel computation.
+
+== See Also
+
+* https://www.boost.org/doc/libs/1_87_0/libs/libraries.htm#Concurrent[Category: Concurrent Programming]
+* https://www.boost.org/doc/libs/1_87_0/libs/libraries.htm#System[Category: System]

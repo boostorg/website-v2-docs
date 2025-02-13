@@ -66,3 +66,10 @@ _Overfitting_ in the context of machine learning refers to a model that has been
 [#footnote2]
 link:#footnote1-location[(2)]
 The _kernel trick_ is a method used in machine learning to apply a linear classifier to data that is not linearly separable. It works by mapping the original input features into a higher-dimensional space where a linear classifier can be used to separate the data. This mapping is done using a function known as a kernel function. The "trick" part of the kernel trick comes from the fact that the kernel function allows us to operate in the higher-dimensional space without explicitly computing the coordinates of the data in that space. Instead, the kernel function computes only the inner products between the images of all pairs of data in the higher-dimensional space.
+
+== See Also
+
+* https://www.boost.org/doc/libs/1_87_0/libs/libraries.htm#Algorithms[Category: Algorithms]
+* https://www.boost.org/doc/libs/1_87_0/libs/libraries.htm#Iterators[Category: Iterators]
+* https://www.boost.org/doc/libs/1_87_0/libs/libraries.htm#Parsing[Category: Parsing]
+* https://www.boost.org/doc/libs/1_87_0/libs/libraries.htm#Math[Category: Math and numerics]
