@@ -53,6 +53,10 @@ Natural language parsing  (NLP) is a foundational technology that powers many mo
 
 * Content Recommendation: Platforms like YouTube or Netflix use NLP to analyze the content and provide more accurate and personalized recommendations.
 
+== See Also
 
+* https://www.boost.org/doc/libs/1_87_0/libs/libraries.htm#Parsing[Category: Parsing]
+* https://www.boost.org/doc/libs/1_87_0/libs/libraries.htm#Patterns[Category: Patterns and Idioms]
+* https://www.boost.org/doc/libs/1_87_0/libs/libraries.htm#String[Category: String and text processing]
 
 

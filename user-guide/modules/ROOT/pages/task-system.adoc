@@ -31,3 +31,8 @@ Developing a system component for an operating system in pass:[C++] involves a w
 * boost:process[] : This library allows you to create child processes, setup their environment and provides means to communicate with them asynchronously through various streams.
 
 * boost:chrono[] : This library provides a set of handy features for measuring time, which might be useful for system-level tasks that need to measure or manipulate time.
+
+== See Also
+
+* https://www.boost.org/doc/libs/1_87_0/libs/libraries.htm#Memory[Category: Memory]
+* https://www.boost.org/doc/libs/1_87_0/libs/libraries.htm#System[Category: System]

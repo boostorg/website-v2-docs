@@ -32,3 +32,9 @@ Creating a high-performance database application in pass:[C++] involves a range 
 * boost:pool[] : This library is used for simple, fast memory allocation and can improve efficiency in some scenarios by managing memory in chunks.
 
 * boost:smart_ptr[] : It provides smart pointer class templates, which can be very helpful in managing resources and preventing memory leaks.
+
+== See Also
+
+* https://www.boost.org/doc/libs/1_87_0/libs/libraries.htm#Containers[Category: Containers] 
+* https://www.boost.org/doc/libs/1_87_0/libs/libraries.htm#Data[Category: Data structures]
+* https://www.boost.org/doc/libs/1_87_0/libs/libraries.htm#Memory[Category: Memory]

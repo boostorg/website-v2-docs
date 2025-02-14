@@ -31,3 +31,9 @@ Developing a word processor, or other text based app, involves handling text, GU
 * boost:multi-index[] : This library provides a way of maintaining a set of items sorted according to multiple keys, which could be useful for implementing features like an index or a sorted list of items.
 
 * boost:thread[] : If your application is multithreaded (for example, if you want to save a document while the user continues to work), this library will be useful.
+
+== See Also
+
+* https://www.boost.org/doc/libs/1_87_0/libs/libraries.htm#Miscellaneous[Category: Miscellaneous]
+* https://www.boost.org/doc/libs/1_87_0/libs/libraries.htm#Parsing[Category: Parsing]
+* https://www.boost.org/doc/libs/1_87_0/libs/libraries.htm#String[Category: String and text processing]

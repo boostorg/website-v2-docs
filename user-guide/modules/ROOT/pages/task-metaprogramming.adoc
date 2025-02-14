@@ -44,4 +44,7 @@ Metaprogramming, the practice of writing code that generates or manipulates othe
 
 * Policy-based Design: This is a design paradigm in pass:[C++] where behavior is encapsulated in separate classes (policies), and classes are composed by specifying a set of policies as template parameters. This allows for high flexibility and reusability while maintaining performance.
 
+== See Also
 
+* https://www.boost.org/doc/libs/1_87_0/libs/libraries.htm#Preprocessor[Category: Preprocessor Metaprogramming]
+* https://www.boost.org/doc/libs/1_87_0/libs/libraries.htm#Metaprogramming[Category: Template Metaprogramming]
