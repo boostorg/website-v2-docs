@@ -13,6 +13,15 @@ Boost provides many useful macros that help with configuration, debugging, porta
 
 There are thousands of defined macros (refer to the https://www.boost.org/doc/libs/1_87_0/libs/config/doc/html/boost_config/boost_macro_reference.html[Boost Macro Reference]). However, here are some of the most commonly used, and some sample code showing how to work them into your code.
 
+[square]
+* <<Library Inclusion and Linking>>
+* <<Configuration and Compiler Detection>>
+* <<Debugging and Assertions>>
+* <<Preprocessor Utilities>>
+* <<Cross-Platform Compatibility>>
+* <<Threading and Synchronization>>
+* <<Exception Handling>>
+
 == Library Inclusion and Linking
 
 [cols="1,2",options="header",stripes=even,frame=none]
@@ -50,12 +59,15 @@ int main() {
 | `BOOST_PLATFORM` | Identifies the platform (for example, Windows, Linux).
 | `BOOST_COMPILER` | Identifies the compiler in use (for example, gcc, msvc).
 | `BOOST_STDLIB` | Identifies the standard library (for example, pass:[libstdc++], msvc).
-| `BOOST_NO_EXCEPTIONS` | Disables exception handling in Boost.
-| `BOOST_DISABLE_THREADS` | Disables multi-threading support in Boost.
-| `BOOST_HAS_THREADS` | Indicates if Boost is built with threading support.
+| `BOOST_SP_USE_QUICK_ALLOCATOR` | Optimizes memory allocation for `shared_ptr`.
+| `BOOST_NO_CXX11_SMART_PTR` | Defined if pass:[C++]11 `std::shared_ptr` and `std::unique_ptr` are not available, so Boost's smart pointers are used as a fallback.
+| `BOOST_STATIC_CONSTANT` | Defines compile-time constants in a way that is compatible with older pass:[C++] versions, so ensures compatibility with pre-pass:[C++]11 compilers.
+| `BOOST_FILESYSTEM_VERSION` | Defines the version of the boost:filesystem[] library being used, to ensure compatibility between different versions of that library.
+| `BOOST_NO_CXX11_LAMBDAS` | Defined if pass:[C++]11 lambda expressions are not available, so allows for providing alternative function objects for compatibility.
+| `BOOST_FILESYSTEM_NO_DEPRECATED` | Disables deprecated features in boost:filesystem[].
 |===
 
-=== Example
+=== Examples
 
 The `BOOST_STDLIB` macro is part of boost:config[] and identifies the standard library implementation being used (for example, GNU pass:[libstdc++], Microsoft STL, or pass:[libc++]). This is useful when writing code that needs to adapt to different standard library behaviors. `BOOST_STDLIB` expands to a string representing the detected standard library.
 
@@ -80,6 +92,57 @@ int main() {
     return 0;
 }
 
+----
+
+Using `BOOST_PLATFORM`, `BOOST_COMPILER`, and `BOOST_STDLIB` for diagnostics by identifing the system's platform, compiler, and standard library.
+
+[source,cpp]
+----
+#include <iostream>
+#include <boost/config.hpp>
+
+int main() {
+    std::cout << "Platform: " << BOOST_PLATFORM << std::endl;
+    std::cout << "Compiler: " << BOOST_COMPILER << std::endl;
+    std::cout << "Standard Library: " << BOOST_STDLIB << std::endl;
+    return 0;
+}
+
+----
+
+Using `BOOST_VERSION` to ensure version compatibility when using Boost.
+
+[source,cpp]
+----
+#include <iostream>
+#include <boost/version.hpp>
+
+int main() {
+    std::cout << "Boost version: " 
+              << (BOOST_VERSION / 100000) << "."   // Major version
+              << (BOOST_VERSION / 100 % 1000) << "." // Minor version
+              << (BOOST_VERSION % 100) << std::endl; // Patch version
+    return 0;
+}
+
+----
+
+Using `BOOST_SP_USE_QUICK_ALLOCATOR` to optimize `shared_ptr`.
+
+[source,cpp]
+----
+#define BOOST_SP_USE_QUICK_ALLOCATOR // Define before including Boost.SmartPtr
+
+#include <boost/smart_ptr.hpp>
+#include <iostream>
+
+int main() {
+    boost::shared_ptr<int> ptr1(new int(42));
+    boost::shared_ptr<int> ptr2 = ptr1;
+
+    std::cout << "Shared pointer value: " << *ptr1 << std::endl;
+    return 0;
+}
 
 ----
 
@@ -92,9 +155,10 @@ int main() {
 | `BOOST_STATIC_ASSERT`(expr) | Performs a compile-time assertion.
 | `BOOST_VERIFY`(expr) | Like `BOOST_ASSERT`, but always evaluates the expression, even in release mode.
 | `BOOST_ENABLE_ASSERT_HANDLER` | Enables a custom assertion handler.
+| `BOOST_ASIO_ENABLE_HANDLER_TRACKING` | Enables the debugging of handlers when using boost:asio[].
 |===
 
-=== Example
+=== Examples
 
 Using `BOOST_ASSERT`, `BOOST_STATIC_ASSERT`, and `BOOST_VERIFY` for debugging.
 
@@ -114,6 +178,23 @@ int main() {
     BOOST_VERIFY(x != 0);  // Always checks in release mode
 
     process(-1);  // Will trigger an assertion failure
+}
+
+----
+
+Using `BOOST_ASIO_ENABLE_HANDLER_TRACKING` to help debug asynchronous operations by tracking handlers.
+
+[source,cpp]
+----
+#define BOOST_ASIO_ENABLE_HANDLER_TRACKING // Enable debugging before including Boost.Asio
+
+#include <boost/asio.hpp>
+#include <iostream>
+
+int main() {
+    boost::asio::io_context io;
+    std::cout << "Boost.Asio handler tracking enabled!\n";
+    return 0;
 }
 
 ----
@@ -153,10 +234,11 @@ int main() {
 | `BOOST_WINDOWS` | Defined when compiling on Windows.
 | `BOOST_LINUX` | Defined when compiling on Linux.
 | `BOOST_UNIX` | Defined when compiling on a Unix-like system.
-| `BOOST_FILESYSTEM_NO_DEPRECATED` | Disables deprecated features in boost:filesystem[].
+| `BOOST_LITTLE_ENDIAN` | Define when the system is byte-order little-endian.
+| `BOOST_BIG_ENDIAN` | Define when the system is byte-order big-endian.
 |===
 
-=== Example
+=== Examples
 
 Using `BOOST_WINDOWS`, `BOOST_LINUX`, and `BOOST_UNIX` for platform-specific code. 
 
@@ -178,11 +260,33 @@ int main() {
 
 ----
 
+Using Using BOOST_LITTLE_ENDIAN and BOOST_BIG_ENDIAN for proper handling of byte order in serialization.
+
+[source,cpp]
+----
+#include <iostream>
+#include <boost/config.hpp>
+
+int main() {
+#if defined(BOOST_LITTLE_ENDIAN)
+    std::cout << "System is little-endian.\n";
+#elif defined(BOOST_BIG_ENDIAN)
+    std::cout << "System is big-endian.\n";
+#else
+    std::cout << "Unknown endianness.\n";
+#endif
+    return 0;
+}
+
+----
+
 == Threading and Synchronization
 
 [cols="1,2",options="header",stripes=even,frame=none]
 |===
 | *Macro* | *Description* 
+| `BOOST_DISABLE_THREADS` | Disables multi-threading support in Boost.
+| `BOOST_HAS_THREADS` | Indicates if Boost is built with threading support.
 | `BOOST_THREAD_USE_LIB` | Forces boost:thread[] to be used as a static library.
 | `BOOST_THREAD_USE_DLL` | Forces boost:thread[] to be used as a shared library.
 | `BOOST_THREAD_PROVIDES_FUTURE` | Enables std::future-like functionality in boost:thread[].
@@ -221,7 +325,7 @@ int main() {
 | `BOOST_NO_EXCEPTIONS` | Disables exception handling.
 |===
 
-=== Example
+=== Examples
 
 Using `BOOST_THROW_EXCEPTION` to throw exceptions in a portable way.
 
@@ -246,6 +350,31 @@ int main() {
         riskyOperation();
     } catch (const MyException& e) {
         std::cout << "Caught exception: " << e.what() << "\n";
+    }
+}
+
+----
+
+Using `BOOST_NO_EXCEPTIONS` to ensure compatibility with exception-free environments.
+
+[source,cpp]
+----
+#include <iostream>
+#include <boost/config.hpp>
+
+void safe_function() {
+#ifndef BOOST_NO_EXCEPTIONS
+    throw std::runtime_error("Something went wrong!");
+#else
+    std::cerr << "Exceptions are disabled. Handling error manually.\n";
+#endif
+}
+
+int main() {
+    try {
+        safe_function();
+    } catch (const std::exception& e) {
+        std::cerr << "Caught exception: " << e.what() << std::endl;
     }
 }
 
