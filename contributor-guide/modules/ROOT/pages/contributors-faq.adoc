@@ -346,7 +346,9 @@ Current best practices start with the use of static and compile-time checks to e
 +
 [source,cpp]
 ----
-\\ Unsafe code
+//
+// Unsafe code
+// 
 
 int* allocateArray(size_t size) {
     return new int[size];
@@ -354,13 +356,17 @@ int* allocateArray(size_t size) {
 
 void useArray() {
     int* arr = allocateArray(10);
-    // Forgetting to delete could cause memory leaks.
-    arr[0] = 42;
+
     // No bounds checking.
+    arr[10] = 42;
+
+    // Forgetting to delete could cause memory leaks.
     delete[] arr;
 }
 
-\\ Safe encapsulation
+//
+// Safe encapsulation
+// 
 
 #include <vector>
 #include <memory>
@@ -385,9 +391,13 @@ public:
 
 void useSafeArray() {
     SafeArray arr(10);
-    arr[0] = 42; // Safe access
+    
+    // Safe access
+    arr[0] = 42; 
     try {
-        arr[10] = 13; // Throws an exception
+
+        // Throws an exception
+        arr[10] = 13; 
     } catch (const std::out_of_range& e) {
         std::cerr << e.what() << std::endl;
     }
@@ -399,17 +409,22 @@ void useSafeArray() {
 +
 [source,cpp]
 ----
-\\ Unsafe code
+//
+// Unsafe code
+// 
 
 void writeFile(const std::string& filename) {
     FILE* file = fopen(filename.c_str(), "w");
     if (file) {
         fputs("Hello, World!", file);
+
         // Forgetting fclose could cause resource leaks.
     }
 }
 
-\\ Safe encapsulation
+//
+// Safe encapsulation
+// 
 
 #include <fstream>
 #include <string>
@@ -455,7 +470,9 @@ void safeWriteFile(const std::string& filename) {
 +
 [source,cpp]
 ----
-\\ Unsafe code
+//
+// Unsafe code
+// 
 
 #include <iostream>
 #include <thread>
@@ -465,7 +482,9 @@ int counter = 0;
 
 void incrementCounter() {
     for (int i = 0; i < 1000; ++i) {
-        ++counter; // Race condition
+
+        // Race condition
+        ++counter; 
     }
 }
 
@@ -474,10 +493,14 @@ void unsafeThreads() {
     std::thread t2(incrementCounter);
     t1.join();
     t2.join();
-    std::cout << "Counter: " << counter << std::endl; // Undefined behavior
+
+    // Undefined behavior
+    std::cout << "Counter: " << counter << std::endl;
 }
 
-\\ Safe encapsulation
+//
+// Safe encapsulation
+// 
 
 #include <iostream>
 #include <thread>
@@ -513,10 +536,10 @@ void safeThreads() {
     std::thread t2(worker);
     t1.join();
     t2.join();
-
-    std::cout << "Counter: " << counter.get() << std::endl; // Guaranteed correct result
+    
+    // Guaranteed correct result
+    std::cout << "Counter: " << counter.get() << std::endl; 
 }
-
 
 ----
 +
@@ -524,7 +547,9 @@ void safeThreads() {
 +
 [source,cpp]
 ----
-\\ Unsafe code
+//
+// Unsafe code
+// 
 
 #include <sys/socket.h>
 #include <unistd.h>
@@ -535,11 +560,14 @@ int createSocket() {
         perror("Socket creation failed");
         return -1;
     }
+
     // Forgetting close(sock) could cause resource leaks.
     return sock;
 }
 
-\\ Safe encapsulation
+//
+// Safe encapsulation
+// 
 
 #include <sys/socket.h>
 #include <unistd.h>
@@ -567,7 +595,6 @@ public:
         return sock;
     }
 };
-
 
 ----
 +
