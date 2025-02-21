@@ -11,6 +11,17 @@ Official repository: https://github.com/boostorg/website-v2-docs
 
 There are many ways to get involved with Boost, up to and including submitting your own library. In roughly ascending order of time and work commitment, here are the ways you can contribute to Boost:
 
+[square]
+* <<Participate in the Boost Developers Mailing List>>
+* <<Report Issues and Suggest Improvements>>
+** <<To Report an Issue with a Library>>
+** <<To Report an Issue with an Outside Source>>
+** <<To Report an Issue with this Website>>
+* <<Engage in the Review Process>>
+* <<Contribute to an Existing Library>>
+* <<Maintain an Existing Library>>
+* <<Contribute a New Library>>
+
 == Participate in the Boost Developers Mailing List
 
 The Boost mailing list is a platform for discussions and communications related to the Boost Libraries. The mailing list serves several key purposes:
@@ -58,6 +69,10 @@ To report an issue with the website, including this documentation, click the *Ne
 
 After clicking *New Issue*, you will be able to add a *Title* and *Description*. Provide as much detail as possible, including links where helpful and suggestions for the updated content.
 
+== Engage in the Review Process
+
+All libraries are reviewed by the community before becoming part of Boost. There are several roles in the review process, from managing the steps of the review process, to testing and providing feedback.  Read the xref:formal-reviews:ROOT:index.adoc[] for details.
+
 [#contribute]
 == Contribute to an Existing Library
 
@@ -71,10 +86,6 @@ After this, you can take a step back, and the owners or maintainers of the libra
 
 If all goes well, your changes will be merged by the library admins, and you will have made a welcome contribution.
 
-== Engage in the Review Process
-
-All libraries are reviewed by the community before becoming part of Boost. There are several roles in the review process, from managing the steps of the review process, to testing and providing feedback.  Read the xref:formal-reviews:ROOT:index.adoc[] for details.
-
 == Maintain an Existing Library
 
 There may be an existing library that you have a deep interest in, that for some reason no longer has an active owner or maintainer. Or, perhaps, is being less well maintained than might be ideal. Find what you can out by asking questions of the existing maintainers (listed in the xref:requirements/library-metadata.adoc[] json file) and, if no reply, on the https://lists.boost.org/mailman/listinfo.cgi/boost[Boost developers' mailing list]. If the replies suggest you could take a role, consider requesting, again via the mailing list, to become a library maintainer. For larger libraries there can certainly be more than one maintainer. 
@@ -87,8 +98,10 @@ NOTE: All libraries in Boost are tested when the super-project is tested, so eve
 
 == Contribute a New Library
 
-This is the big dog of contributions. There are developers who have contributed several libraries to Boost. Start by reading the xref:requirements/library-requirements.adoc[] section, and make sure to engage the Boost community before getting too deep into a massive coding project.
+This is the big dog of contributions. There are developers who have contributed several libraries to Boost. Start by reading the xref:requirements/library-requirements.adoc[] section, and make sure to engage the Boost community _before_ getting too deep into a massive coding project.
 
 == See Also
 
+* xref:contributor-community-introduction.adoc[]
 * xref:formal-reviews:ROOT:index.adoc[]
+* xref:user-guide:ROOT:user-community-introduction.adoc[]

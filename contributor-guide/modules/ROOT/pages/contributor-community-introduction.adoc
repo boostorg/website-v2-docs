@@ -36,4 +36,5 @@ Refer to xref:oversight-committee.adoc[] for an overview of the role of this com
 
 == See Also
 
+* xref:getting-involved.adoc[]
 * xref:user-guide:ROOT:user-community-introduction.adoc[]
