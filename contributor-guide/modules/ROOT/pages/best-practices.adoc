@@ -119,13 +119,14 @@ This ensures that when changes are rebased or fast-forwarded, the history remain
 
 By following these practices, you'll avoid merge commits and maintain a clean, linear history in your Git repository while keeping the dev community happy! 
 
+[[comments]]
 == Commenting Code
 
 Boost has informal coding standards that encourage clear, concise, and useful comments. The following are the main policy recommendations:
 
 . Doxygen-style comments for documenting APIs.
-. Explanatory comments _preceding_ a function for complex logic and important decisions.
-. Minimal but meaningful inline comments, though avoiding excessive or redundant annotations.
+. _Explanatory_ comments preceding a function for complex logic and important decisions.
+. Minimal but meaningful _inline_ comments.
 
 === Doxygen API Comments
 
@@ -207,7 +208,9 @@ The most useful Doxygen annotations are:
 | `@throws` | Lists the possible exceptions that the function may throw.
 |===
 
-Note:: For mathematical formulas the `\f[ ... \f]` tags render inline https://www.latex-project.org/[LaTeX]-style math formulas in the generated documentation.
+Notes:: 
+* For mathematical formulas the `\f[ ... \f]` tags render inline https://www.latex-project.org/[LaTeX]-style math formulas in the generated documentation. 
+* `@brief` is used inside block comments  (`/** ... */`), while `\brief` works with both block and single-line (`///`) comments. Good practice is simply being consistent with your preference.
 
 === Explanatory Comments
 
