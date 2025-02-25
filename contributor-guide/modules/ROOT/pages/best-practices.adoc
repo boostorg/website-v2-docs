@@ -9,10 +9,11 @@ Official repository: https://github.com/boostorg/website-v2-docs
 = Development Best Practices
 :navtitle: Best Practices
 
-This section contains guidance on how to reduce development time from concept through to publishing of a new library.
+This section contains guidance on how to reduce development time from concept through to publishing of a new library, whilst ensuring a quality and maintainability to the open source project that will be the result.
 
 * <<Beneficial Dependencies>>
 * <<GitHub Strategies>>
+* <<Commenting Code>>
 
 == Beneficial Dependencies
 
@@ -117,6 +118,338 @@ git commit --amend
 This ensures that when changes are rebased or fast-forwarded, the history remains clean and easy to understand.
 
 By following these practices, you'll avoid merge commits and maintain a clean, linear history in your Git repository while keeping the dev community happy! 
+
+[[comments]]
+== Commenting Code
+
+Boost has informal coding standards that encourage clear, concise, and useful comments. The following are the main policy recommendations:
+
+. Doxygen-style comments for documenting APIs.
+. _Explanatory_ comments preceding a function for complex logic and important decisions.
+. Minimal but meaningful _inline_ comments.
+
+=== Doxygen API Comments
+
+Boost libraries can use https://www.doxygen.nl/[Doxygen] to generate API reference documentation from specifically formatted comments. Many libraries follow this structure, for example:
+
+[source, cpp]
+----
+/// \brief Brief description of the function
+/// \details More detailed explanation if necessary.
+/// \param x Description of parameter x
+/// \return Description of return value
+int my_function(int x);
+
+----
+
+This makes it easier to generate consistent and readable documentation for users, as the build process picks up the triple-slash comments and creates API documentation automatically from them. Here is a more complete example using all the most useful annotations:
+
+[source, cpp]
+----
+#include <cmath>
+#include <stdexcept>
+
+/**
+ * @brief Computes the area of a triangle using Heron's formula.
+ * 
+ * This function calculates the area of a triangle given the lengths of its three sides.
+ * It uses Heron's formula, which states that for a triangle with sides a, b, and c:
+ * 
+ * \f[
+ * A = \sqrt{s \cdot (s - a) \cdot (s - b) \cdot (s - c)}
+ * \f]
+ * 
+ * where \f$s\f$ is the semi-perimeter:
+ * 
+ * \f[
+ * s = \frac{a + b + c}{2}
+ * \f]
+ * 
+ * @param a The length of the first side (must be positive).
+ * @param b The length of the second side (must be positive).
+ * @param c The length of the third side (must be positive).
+ * @return The computed area of the triangle.
+ * @throws std::invalid_argument if the sides do not form a valid triangle.
+ * @throws std::domain_error if the computed area is invalid due to floating-point errors.
+ */
+double computeTriangleArea(double a, double b, double c) {
+    if (a <= 0 || b <= 0 || c <= 0) {
+        throw std::invalid_argument("All side lengths must be positive.");
+    }
+
+    // Check for the triangle inequality
+    if (a + b <= c || a + c <= b || b + c <= a) {
+        throw std::invalid_argument("The given sides do not form a valid triangle.");
+    }
+
+    // Calculate semi-perimeter
+    double s = (a + b + c) / 2.0;
+
+    // Compute area using Heron's formula
+    double area = std::sqrt(s * (s - a) * (s - b) * (s - c));
+
+    if (std::isnan(area) || area <= 0) {
+        throw std::domain_error("Computed area is invalid due to floating-point errors.");
+    }
+
+    return area;
+}
+
+----
+
+The most useful Doxygen annotations are:
+
+[cols="1,4",options="header",stripes=even,frame=none]
+|===
+| *Annotation* | *Description* 
+| `@brief` | A short summary of the function's purpose.
+| `@param` | Describes the function parameters and their constraints.
+| `@return` | Explains the function's return value.
+| `@throws` | Lists the possible exceptions that the function may throw.
+|===
+
+Notes:: 
+* For mathematical formulas the `\f[ ... \f]` tags render inline https://www.latex-project.org/[LaTeX]-style math formulas in the generated documentation. 
+* `@brief` is used inside block comments  (`/** ... */`), while `\brief` works with both block and single-line (`///`) comments. Good practice is simply being consistent with your preference.
+
+=== Explanatory Comments
+
+Since many Boost libraries aim to be compatible with (or eventually integrated into) the https://en.cppreference.com/w/cpp/standard_library[Standard Library], you might adopt commenting styles similar to standard library headers, keeping explanations brief, precise, and technical. Sometimes though, the comments are more numerous and helpful in specific implementations, such as Clang pass:[libc++], GNU pass:[libstc++] or MSVC STL. The following code comes from `std::vector::resize` in pass:[libc++].
+
+[source, cpp]
+----
+/**
+ * @brief Resizes the container to contain @p __sz elements.
+ *
+ * If @p __sz is smaller than the current size, the container is reduced to its first @p __sz elements.
+ * If @p __sz is greater than the current size, additional default-constructed elements are appended.
+ *
+ * @param __sz The new size of the container.
+ *
+ * If an expansion is needed and sufficient capacity exists, no reallocation occurs.
+ * Otherwise, new storage is allocated and existing elements are moved.
+ *
+ * @exception If an exception is thrown during element construction or move, the container remains unchanged.
+ * 
+ * Complexity: Linear in the difference between old and new size.
+ */
+template <class _Tp, class _Allocator>
+void vector<_Tp, _Allocator>::resize(size_type __sz) {
+    if (__sz < size()) {
+
+        // Shrink: Destroy extra elements
+        erase(begin() + __sz, end());
+    } else if (__sz > size()) {
+
+        // Grow: Append default-constructed elements
+        insert(end(), __sz - size(), _Tp());
+    }
+}
+
+----
+
+Note:: Both exception safety and performance considerations are covered in the comments above, which are good practices!
+
+Boost encourages documenting exception safety guarantees (`noexcept`, strong guarantee, basic guarantee), and thread-safety considerations if applicable. For example:
+
+[source, cpp]
+----
+/// \pre `ptr` must not be null.
+/// \post Returns a valid shared_ptr managing `ptr`.
+/// \throws std::bad_alloc if allocation fails.
+std::shared_ptr<T> safe_wrap(T* ptr);
+
+----
+
+Some Boost libraries include comments explaining design choices, performance considerations, or trade-offs. These are typically found in complex implementations like boost:hana[], boost:asio[] or boost:spirit[]. Here's an example from the boost:hana[] library, which demonstrates the use of comments to explain the code's purpose and functionality:
+
+[source, cpp]
+----
+/*!
+@file
+Defines `boost::hana::transform`.
+*/
+
+namespace boost { namespace hana {
+    
+    //! Transform each element of a sequence with a given function.
+    //! @ingroup group-Sequence
+    //! 
+    //! Example:
+    //! @code
+    //! auto doubled = hana::transform(hana::make_tuple(1, 2, 3), [](auto x) { return x * 2; });
+    //! @endcode
+    //! doubled == hana::make_tuple(2, 4, 6)
+    //!
+    template <typename Xs, typename F>
+    constexpr auto transform(Xs&& xs, F&& f) {
+ 
+        // See below for the commented version of this function.
+    }
+}}
+
+----
+
+Note:: The `@file` entry provides an overview of the file contents. The `//!` syntax precedes a function-level Doxygen comment, providing an example usage of the function `hana::transform` in the code snippet above.
+
+=== Inline Comments
+
+Inline comments, throughout the source code, are used to explain the purpose of specific statements. This example is taken from `hana::transform`, mentioned previously.
+
+[source, cpp]
+----
+    constexpr auto transform(Xs&& xs, F&& f) {
+        return hana::adjust_if(
+
+            static_cast<Xs&&>(xs), // Forward the sequence `xs`
+
+            [](auto const&) { return true; }, // Always apply the transformation
+
+            static_cast<F&&>(f) // Forward the transformation function
+        );
+    }
+----
+
+Here is another example of inline commenting, from the boost:asio[] library, notice how the comments make understanding the flow easy.
+
+[source, cpp]
+----
+void start_read() {
+
+    // Prepare a buffer to store incoming data.
+    socket_.async_read_some(boost::asio::buffer(data_, max_length),
+        [this](boost::system::error_code ec, std::size_t length) {
+            if (!ec) { 
+
+                // Successfully read some data, process it.
+                handle_data(data_, length);
+
+                // Initiate another asynchronous read to continue receiving data.
+                start_read();
+            } else {
+
+                // An error occurred, log and handle it.
+                handle_error(ec);
+            }
+        });
+}
+
+----
+
+Here is a more in-depth example, showing how to comment non-trivial code behavior (for example, shared pointers, async operations). The comments also describe _purpose_ rather than restating code (for example, "Keep session alive" rather than "Creates a shared pointer"). And finally the comments guide the reader through the flow (such as explaining what happens after a read or write).
+
+[source, cpp]
+----
+#include <boost/asio.hpp>
+#include <iostream>
+#include <memory>
+#include <utility>
+
+using boost::asio::ip::tcp;
+
+class Session : public std::enable_shared_from_this<Session> {
+public:
+    explicit Session(tcp::socket socket) 
+
+        : socket_(std::move(socket)) {}  // Move socket into this session
+
+    void start() { 
+
+        read();  // Begin reading data from the client
+    }
+
+private:
+    void read() {
+
+        auto self = shared_from_this();  // Ensure session remains alive during async operation
+
+        // Asynchronous read operation
+        socket_.async_read_some(boost::asio::buffer(data_, max_length),
+            [self](boost::system::error_code ec, std::size_t length) {
+                if (!ec) {
+
+                    // Successfully received data, now send a response
+                    self->write(length);
+                } else {
+
+                    // Handle connection errors (e.g., client disconnected)
+                    std::cerr << "Read error: " << ec.message() << std::endl;
+                }
+            });
+    }
+
+    void write(std::size_t length) {
+
+        auto self = shared_from_this();  // Keep session alive for async write
+
+        // Asynchronous write operation
+        boost::asio::async_write(socket_, boost::asio::buffer(data_, length),
+            [self](boost::system::error_code ec, std::size_t /*bytes_transferred*/) {
+                if (!ec) {
+
+                    // Successfully wrote data, continue reading for more client input
+                    self->read();
+                } else {
+
+                    // Handle write error (e.g., broken pipe)
+                    std::cerr << "Write error: " << ec.message() << std::endl;
+                }
+            });
+    }
+
+    tcp::socket socket_;
+    enum { max_length = 1024 };
+
+    char data_[max_length];  // Buffer to store incoming data
+};
+
+// Server class that listens for incoming connections
+class Server {
+public:
+    Server(boost::asio::io_context& io_context, short port)
+        : acceptor_(io_context, tcp::endpoint(tcp::v4(), port)) {
+
+        accept();  // Start listening for connections
+    }
+
+private:
+    void accept() {
+        acceptor_.async_accept(
+            [this](boost::system::error_code ec, tcp::socket socket) {
+                if (!ec) {
+
+                    // Successfully accepted a connection, create a session
+                    std::make_shared<Session>(std::move(socket))->start();
+                } else {
+
+                    // Log accept error
+                    std::cerr << "Accept error: " << ec.message() << std::endl;
+                }
+
+                // Continue accepting new connections
+                accept();
+            });
+    }
+
+    tcp::acceptor acceptor_;
+};
+
+// Main function to run the server
+int main() {
+    try {
+        boost::asio::io_context io_context;
+
+        Server server(io_context, 12345);  // Start server on port 12345
+
+        io_context.run();  // Run the IO context to handle async operations
+    } catch (std::exception& e) {
+        std::cerr << "Exception: " << e.what() << std::endl;
+    }
+}
+
+----
+
+Note:: Inline comments are clearer if they are preceded by a blank line. Many libraries do not strictly stick to this practice, but it should be clear from the above example that the preceding-blank-line is a best practice for readability.
 
 == See Also
 

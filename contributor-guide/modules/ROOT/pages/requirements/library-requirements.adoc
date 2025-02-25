@@ -45,4 +45,8 @@ _"Doing work on your own time that is very similar to programming you do for you
 
 Place a copyright notice in all the important files you submit. Boost won't accept libraries without clear copyright information.
 
+== See Also
+
+* xref:best-practices.adoc#comments[Commenting Code]
+
 
