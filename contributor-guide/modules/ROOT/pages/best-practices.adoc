@@ -13,6 +13,7 @@ This section contains guidance on how to reduce development time from concept th
 
 * <<Beneficial Dependencies>>
 * <<GitHub Strategies>>
+* <<Commenting Code>>
 
 == Beneficial Dependencies
 
@@ -117,6 +118,235 @@ git commit --amend
 This ensures that when changes are rebased or fast-forwarded, the history remains clean and easy to understand.
 
 By following these practices, you'll avoid merge commits and maintain a clean, linear history in your Git repository while keeping the dev community happy! 
+
+== Commenting Code
+
+Boost has informal coding standards that encourage clear, concise, and useful comments. The following are the main policy recommendations:
+
+. Doxygen-style comments for documenting APIs.
+. Explanatory comments _preceding_ a function for complex logic and important decisions.
+. Minimal but meaningful inline comments, though avoiding excessive or redundant annotations.
+
+=== Doxygen API Comments
+
+Boost libraries can use https://www.doxygen.nl/[Doxygen] to generate API reference documentation from specifically formatted comments. Many libraries follow this structure, for example:
+
+[source, cpp]
+----
+/// \brief Brief description of the function
+/// \details More detailed explanation if necessary.
+/// \param x Description of parameter x
+/// \return Description of return value
+int my_function(int x);
+
+----
+
+This makes it easier to generate consistent and readable documentation for users, as the build process picks up the triple-slash comments and creates API documentation automatically from them.
+
+=== Explanatory Comments
+
+Since many Boost libraries aim to be compatible with (or eventually integrated into) the pass:[C++] Standard Library, they often adopt commenting styles similar to standard library headers, keeping explanations brief, precise, and technical.
+
+Boost encourages documenting exception safety guarantees (`noexcept`, strong guarantee, basic guarantee), and thread-safety considerations if applicable. For example:
+
+[source, cpp]
+----
+/// \pre `ptr` must not be null.
+/// \post Returns a valid shared_ptr managing `ptr`.
+/// \throws std::bad_alloc if allocation fails.
+std::shared_ptr<T> safe_wrap(T* ptr);
+
+----
+
+Some Boost libraries include comments explaining design choices, performance considerations, or trade-offs. These are typically found in complex implementations like boost:hana[], boost:asio[] or boost:spirit[]. Here's an example from the boost:hana[] library, which demonstrates the use of comments to explain the code's purpose and functionality:
+
+[source, cpp]
+----
+/*!
+@file
+Defines `boost::hana::transform`.
+*/
+
+namespace boost { namespace hana {
+    
+    //! Transform each element of a sequence with a given function.
+    //! @ingroup group-Sequence
+    //! 
+    //! Example:
+    //! @code
+    //! auto doubled = hana::transform(hana::make_tuple(1, 2, 3), [](auto x) { return x * 2; });
+    //! @endcode
+    //! doubled == hana::make_tuple(2, 4, 6)
+    //!
+    template <typename Xs, typename F>
+    constexpr auto transform(Xs&& xs, F&& f) {
+ 
+        // See below for the commented version of this function.
+    }
+}}
+
+----
+
+Note:: The `@file` entry provides an overview of the file contents. The `//!` syntax precedes a function-level Doxygen comment, providing an example usage of the function `hana::transform` in the code snippet above.
+
+=== Inline Comments
+
+Inline comments, throughout the source code, are used to explain the purpose of specific statements. This example is taken from `hana::transform`, mentioned previously.
+
+[source, cpp]
+----
+    constexpr auto transform(Xs&& xs, F&& f) {
+        return hana::adjust_if(
+
+            static_cast<Xs&&>(xs), // Forward the sequence `xs`
+
+            [](auto const&) { return true; }, // Always apply the transformation
+
+            static_cast<F&&>(f) // Forward the transformation function
+        );
+    }
+----
+
+Here is another example of inline commenting, from the boost:asio[] library, notice how the comments make understanding the flow easy.
+
+[source, cpp]
+----
+void start_read() {
+
+    // Prepare a buffer to store incoming data.
+    socket_.async_read_some(boost::asio::buffer(data_, max_length),
+        [this](boost::system::error_code ec, std::size_t length) {
+            if (!ec) { 
+
+                // Successfully read some data, process it.
+                handle_data(data_, length);
+
+                // Initiate another asynchronous read to continue receiving data.
+                start_read();
+            } else {
+
+                // An error occurred, log and handle it.
+                handle_error(ec);
+            }
+        });
+}
+
+----
+
+Here is a more in-depth example, showing how to comment non-trivial code behavior (for example, shared pointers, async operations). The comments also describe _purpose_ rather than restating code (for example, "Keep session alive" rather than "Creates a shared pointer"). And finally the comments guide the reader through the flow (such as explaining what happens after a read or write).
+
+[source, cpp]
+----
+#include <boost/asio.hpp>
+#include <iostream>
+#include <memory>
+#include <utility>
+
+using boost::asio::ip::tcp;
+
+class Session : public std::enable_shared_from_this<Session> {
+public:
+    explicit Session(tcp::socket socket) 
+
+        : socket_(std::move(socket)) {}  // Move socket into this session
+
+    void start() { 
+
+        read();  // Begin reading data from the client
+    }
+
+private:
+    void read() {
+
+        auto self = shared_from_this();  // Ensure session remains alive during async operation
+
+        // Asynchronous read operation
+        socket_.async_read_some(boost::asio::buffer(data_, max_length),
+            [self](boost::system::error_code ec, std::size_t length) {
+                if (!ec) {
+
+                    // Successfully received data, now send a response
+                    self->write(length);
+                } else {
+
+                    // Handle connection errors (e.g., client disconnected)
+                    std::cerr << "Read error: " << ec.message() << std::endl;
+                }
+            });
+    }
+
+    void write(std::size_t length) {
+
+        auto self = shared_from_this();  // Keep session alive for async write
+
+        // Asynchronous write operation
+        boost::asio::async_write(socket_, boost::asio::buffer(data_, length),
+            [self](boost::system::error_code ec, std::size_t /*bytes_transferred*/) {
+                if (!ec) {
+
+                    // Successfully wrote data, continue reading for more client input
+                    self->read();
+                } else {
+
+                    // Handle write error (e.g., broken pipe)
+                    std::cerr << "Write error: " << ec.message() << std::endl;
+                }
+            });
+    }
+
+    tcp::socket socket_;
+    enum { max_length = 1024 };
+
+    char data_[max_length];  // Buffer to store incoming data
+};
+
+// Server class that listens for incoming connections
+class Server {
+public:
+    Server(boost::asio::io_context& io_context, short port)
+        : acceptor_(io_context, tcp::endpoint(tcp::v4(), port)) {
+
+        accept();  // Start listening for connections
+    }
+
+private:
+    void accept() {
+        acceptor_.async_accept(
+            [this](boost::system::error_code ec, tcp::socket socket) {
+                if (!ec) {
+
+                    // Successfully accepted a connection, create a session
+                    std::make_shared<Session>(std::move(socket))->start();
+                } else {
+
+                    // Log accept error
+                    std::cerr << "Accept error: " << ec.message() << std::endl;
+                }
+
+                // Continue accepting new connections
+                accept();
+            });
+    }
+
+    tcp::acceptor acceptor_;
+};
+
+// Main function to run the server
+int main() {
+    try {
+        boost::asio::io_context io_context;
+
+        Server server(io_context, 12345);  // Start server on port 12345
+
+        io_context.run();  // Run the IO context to handle async operations
+    } catch (std::exception& e) {
+        std::cerr << "Exception: " << e.what() << std::endl;
+    }
+}
+
+----
+
+Note:: Inline comments are clearer if they are preceded by a blank line. Many libraries do not strictly stick to this practice, but it should be clear from the above example that the preceding-blank-line is a best practice for readability.
 
 == See Also
 
