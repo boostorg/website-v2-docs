@@ -9,7 +9,7 @@ Official repository: https://github.com/boostorg/website-v2-docs
 = Development Best Practices
 :navtitle: Best Practices
 
-This section contains guidance on how to reduce development time from concept through to publishing of a new library.
+This section contains guidance on how to reduce development time from concept through to publishing of a new library, whilst ensuring a quality and maintainability to the open source project that will be the result.
 
 * <<Beneficial Dependencies>>
 * <<GitHub Strategies>>
@@ -141,11 +141,111 @@ int my_function(int x);
 
 ----
 
-This makes it easier to generate consistent and readable documentation for users, as the build process picks up the triple-slash comments and creates API documentation automatically from them.
+This makes it easier to generate consistent and readable documentation for users, as the build process picks up the triple-slash comments and creates API documentation automatically from them. Here is a more complete example using all the most useful annotations:
+
+[source, cpp]
+----
+#include <cmath>
+#include <stdexcept>
+
+/**
+ * @brief Computes the area of a triangle using Heron's formula.
+ * 
+ * This function calculates the area of a triangle given the lengths of its three sides.
+ * It uses Heron's formula, which states that for a triangle with sides a, b, and c:
+ * 
+ * \f[
+ * A = \sqrt{s \cdot (s - a) \cdot (s - b) \cdot (s - c)}
+ * \f]
+ * 
+ * where \f$s\f$ is the semi-perimeter:
+ * 
+ * \f[
+ * s = \frac{a + b + c}{2}
+ * \f]
+ * 
+ * @param a The length of the first side (must be positive).
+ * @param b The length of the second side (must be positive).
+ * @param c The length of the third side (must be positive).
+ * @return The computed area of the triangle.
+ * @throws std::invalid_argument if the sides do not form a valid triangle.
+ * @throws std::domain_error if the computed area is invalid due to floating-point errors.
+ */
+double computeTriangleArea(double a, double b, double c) {
+    if (a <= 0 || b <= 0 || c <= 0) {
+        throw std::invalid_argument("All side lengths must be positive.");
+    }
+
+    // Check for the triangle inequality
+    if (a + b <= c || a + c <= b || b + c <= a) {
+        throw std::invalid_argument("The given sides do not form a valid triangle.");
+    }
+
+    // Calculate semi-perimeter
+    double s = (a + b + c) / 2.0;
+
+    // Compute area using Heron's formula
+    double area = std::sqrt(s * (s - a) * (s - b) * (s - c));
+
+    if (std::isnan(area) || area <= 0) {
+        throw std::domain_error("Computed area is invalid due to floating-point errors.");
+    }
+
+    return area;
+}
+
+----
+
+The most useful Doxygen annotations are:
+
+[cols="1,4",options="header",stripes=even,frame=none]
+|===
+| *Annotation* | *Description* 
+| `@brief` | A short summary of the function's purpose.
+| `@param` | Describes the function parameters and their constraints.
+| `@return` | Explains the function's return value.
+| `@throws` | Lists the possible exceptions that the function may throw.
+|===
+
+Note:: For mathematical formulas the `\f[ ... \f]` tags render inline https://www.latex-project.org/[LaTeX]-style math formulas in the generated documentation.
 
 === Explanatory Comments
 
-Since many Boost libraries aim to be compatible with (or eventually integrated into) the pass:[C++] Standard Library, they often adopt commenting styles similar to standard library headers, keeping explanations brief, precise, and technical.
+Since many Boost libraries aim to be compatible with (or eventually integrated into) the https://en.cppreference.com/w/cpp/standard_library[Standard Library], you might adopt commenting styles similar to standard library headers, keeping explanations brief, precise, and technical. Sometimes though, the comments are more numerous and helpful in specific implementations, such as Clang pass:[libc++], GNU pass:[libstc++] or MSVC STL. The following code comes from `std::vector::resize` in pass:[libc++].
+
+[source, cpp]
+----
+/**
+ * @brief Resizes the container to contain @p __sz elements.
+ *
+ * If @p __sz is smaller than the current size, the container is reduced to its first @p __sz elements.
+ * If @p __sz is greater than the current size, additional default-constructed elements are appended.
+ *
+ * @param __sz The new size of the container.
+ *
+ * If an expansion is needed and sufficient capacity exists, no reallocation occurs.
+ * Otherwise, new storage is allocated and existing elements are moved.
+ *
+ * @exception If an exception is thrown during element construction or move, the container remains unchanged.
+ * 
+ * Complexity: Linear in the difference between old and new size.
+ */
+template <class _Tp, class _Allocator>
+void vector<_Tp, _Allocator>::resize(size_type __sz) {
+    if (__sz < size()) {
+
+        // Shrink: Destroy extra elements
+        erase(begin() + __sz, end());
+    } else if (__sz > size()) {
+
+        // Grow: Append default-constructed elements
+        insert(end(), __sz - size(), _Tp());
+    }
+}
+
+----
+
+Note:: Both exception safety and performance considerations are covered in the comments above, which are good practices!
 
 Boost encourages documenting exception safety guarantees (`noexcept`, strong guarantee, basic guarantee), and thread-safety considerations if applicable. For example:
 
