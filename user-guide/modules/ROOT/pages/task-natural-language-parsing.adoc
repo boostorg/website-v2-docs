@@ -13,6 +13,13 @@ Developing a natural language parsing model involves tasks such as tokenization,
 
 Natural language processing is a complex field that goes beyond just programming. It involves knowledge of linguistics, and many parsing tasks can be difficult due to the ambiguity and complexity of natural languages. You may want to look into existing tools and libraries specifically designed for natural language processing, like https://en.wikipedia.org/wiki/Natural_Language_Toolkit[NLTK] or https://en.wikipedia.org/wiki/SpaCy[SpaCy] for Python, in addition to the general-purpose libraries that Boost offers.
 
+[square]
+* <<Libraries>>
+* <<Natural Language Processing Applications>>
+* <<Simple English Parsing Sample>>
+* <<Add a Dictionary of Valid Words>>
+* <<Add Detailed Error Reporting>>
+
 == Libraries
 
 [circle]
@@ -52,6 +59,304 @@ Natural language parsing  (NLP) is a foundational technology that powers many mo
 * Grammar Checkers: Tools like Grammarly use natural language processing to correct grammar, punctuation, and style in written text.
 
 * Content Recommendation: Platforms like YouTube or Netflix use NLP to analyze the content and provide more accurate and personalized recommendations.
+
+== Simple English Parsing Sample
+
+Say we wanted to parse a subset of the English language, only sentence of the form: The <adjective> <noun> <verb>. Example sentences could be "The quick fox jumps." or "The lazy dog sleeps."
+
+If the input matches this grammar, the following parser will accept it. Otherwise, it rejects the input.
+
+[source,cpp]
+----
+#include <iostream>
+#include <string>
+#include <boost/spirit/include/qi.hpp>
+
+namespace qi = boost::spirit::qi;
+
+bool parseSentence(const std::string& input) {
+    
+    // Grammar: The <adjective> <noun> <verb>.
+    qi::rule<std::string::const_iterator, std::string()> word = +qi::alpha;
+    qi::rule<std::string::const_iterator, std::string()> article = qi::lit("The");
+    qi::rule<std::string::const_iterator, std::string()> adjective = word;
+    qi::rule<std::string::const_iterator, std::string()> noun = word;
+    qi::rule<std::string::const_iterator, std::string()> verb = word;
+
+    // Full sentence rule
+    qi::rule<std::string::const_iterator, std::string()> sentence =
+        article >> adjective >> noun >> verb >> qi::lit('.');
+
+    auto begin = input.begin(), end = input.end();
+    bool success = qi::parse(begin, end, sentence);
+
+    return success && (begin == end);  // Ensure full input is consumed
+}
+
+int main() {
+    std::string input;
+    std::cout << "Enter a sentence (format: The <adjective> <noun> <verb>.)\n";
+    std::getline(std::cin, input);
+
+    if (parseSentence(input)) {
+        std::cout << "Valid sentence!\n";
+    } else {
+        std::cout << "Invalid sentence.\n";
+    }
+
+    return 0;
+}
+
+----
+
+The following shows a successful parse:
+
+[source,bash]
+----
+Enter a sentence (format: The <adjective> <noun> <verb>.)
+The happy cat purrs.
+Valid sentence!
+
+----
+
+And the following shows an unsuccessful parse:
+
+[source,bash]
+----
+Enter a sentence (format: The <adjective> <noun> <verb>.)
+A small dog runs.
+Invalid sentence.
+
+----
+
+Our subset is clearly very limited, as simply replacing the word "The" with "A" results in an error.
+
+== Add a Dictionary of Valid Words
+
+We can extend the simple example to use a dictionary of valid words, allow multiple adjectives, and use https://www.boost.org/doc/libs/1_82_0/doc/html/string_algo.html[Boost.String_Algo] for some string processing tasks (trimming spaces, converting to lowercase).
+
+[source,cpp]
+----
+#include <iostream>
+#include <string>
+#include <unordered_set>
+#include <boost/spirit/include/qi.hpp>
+#include <boost/algorithm/string.hpp>
+
+namespace qi = boost::spirit::qi;
+
+// Dictionary of valid words
+const std::unordered_set<std::string> valid_adjectives = {"quick", "lazy", "happy", "small", "big", "brown"};
+const std::unordered_set<std::string> valid_nouns = {"fox", "dog", "cat", "rabbit"};
+const std::unordered_set<std::string> valid_verbs = {"jumps", "sleeps", "runs", "eats"};
+
+bool is_valid_word(const std::string& word, const std::unordered_set<std::string>& dictionary) {
+    return dictionary.find(word) != dictionary.end();
+}
+
+// Parses: "The <adjective> <adjective>... <noun> <verb>."
+bool parseSentence(const std::string& input) {
+    std::string sentence = input;
+    
+    // Use Boost.StringAlgo to trim and convert to lowercase
+    boost::algorithm::trim(sentence);
+    boost::algorithm::to_lower(sentence);
+
+    // Define grammar
+    qi::rule<std::string::const_iterator, std::string()> word = +qi::alpha;
+    qi::rule<std::string::const_iterator, std::string()> article = qi::lit("the");
+
+    // Multiple adjectives allowed
+    std::vector<std::string> adjectives;
+    auto adjective_parser = +word[([&](auto& ctx) { adjectives.push_back(_attr(ctx)); })];
+
+    std::string noun, verb;
+    auto noun_parser = word[([&](auto& ctx) { noun = _attr(ctx); })];
+    auto verb_parser = word[([&](auto& ctx) { verb = _attr(ctx); })];
+
+    qi::rule<std::string::const_iterator, std::string()> sentence_parser =
+        article >> adjective_parser >> noun_parser >> verb_parser >> qi::lit('.');
+
+    // Parse input
+    auto begin = sentence.begin(), end = sentence.end();
+    bool success = qi::parse(begin, end, sentence_parser) && (begin == end);
+
+    // Validate words using dictionaries
+    if (!success) return false;
+    if (!is_valid_word(noun, valid_nouns) || !is_valid_word(verb, valid_verbs)) return false;
+    for (const auto& adj : adjectives) {
+        if (!is_valid_word(adj, valid_adjectives)) return false;
+    }
+
+    return true;
+}
+
+int main() {
+    std::string input;
+    std::cout << "Enter a sentence (e.g., The big brown fox jumps.):\n";
+    std::getline(std::cin, input);
+
+    if (parseSentence(input)) {
+        std::cout << "✅ Valid sentence!\n";
+    } else {
+        std::cout << "❌ Invalid sentence.\n";
+    }
+
+    return 0;
+}
+
+----
+
+The following shows a successful parse:
+
+[source,bash]
+----
+Enter a sentence (e.g., The big brown fox jumps.):
+The big brown fox jumps.
+✅ Valid sentence!
+
+----
+
+And the following shows an unsuccessful parse:
+
+[source,bash]
+----
+Enter a sentence (e.g., The big brown fox jumps.):
+The huge blue dragon flies.
+❌ Invalid sentence.
+
+----
+
+== Add Detailed Error Reporting
+
+[source,cpp]
+----
+#include <iostream>
+#include <string>
+#include <unordered_set>
+#include <vector>
+#include <boost/spirit/include/qi.hpp>
+#include <boost/algorithm/string.hpp>
+
+namespace qi = boost::spirit::qi;
+
+// Dictionary of valid words
+const std::unordered_set<std::string> valid_adjectives = {"quick", "lazy", "happy", "small", "big", "brown"};
+const std::unordered_set<std::string> valid_nouns = {"fox", "dog", "cat", "rabbit"};
+const std::unordered_set<std::string> valid_verbs = {"jumps", "sleeps", "runs", "eats"};
+
+// Function to check if a word is in a dictionary
+bool is_valid_word(const std::string& word, const std::unordered_set<std::string>& dictionary) {
+    return dictionary.find(word) != dictionary.end();
+}
+
+// Parses: "The <adjective> <adjective>... <noun> <verb>."
+bool parseSentence(const std::string& input, std::string& error_message) {
+    std::string sentence = input;
+    
+    // Use Boost.StringAlgo to trim and convert to lowercase
+    boost::algorithm::trim(sentence);
+    boost::algorithm::to_lower(sentence);
+
+    // Define grammar
+    qi::rule<std::string::const_iterator, std::string()> word = +qi::alpha;
+    qi::rule<std::string::const_iterator, std::string()> article = qi::lit("the");
+
+    std::vector<std::string> adjectives;
+    std::string noun, verb;
+
+    // Adjective parser
+    auto adjective_parser = *(word[([&](auto& ctx) { adjectives.push_back(_attr(ctx)); })]);
+
+    // Noun parser
+    auto noun_parser = word[([&](auto& ctx) { noun = _attr(ctx); })];
+
+    // Verb parser
+    auto verb_parser = word[([&](auto& ctx) { verb = _attr(ctx); })];
+
+    // Full sentence parser
+    qi::rule<std::string::const_iterator, std::string()> sentence_parser =
+        article >> adjective_parser >> noun_parser >> verb_parser >> qi::lit('.');
+
+    // Parse input
+    auto begin = sentence.begin(), end = sentence.end();
+    bool success = qi::parse(begin, end, sentence_parser) && (begin == end);
+
+    // Check syntax errors
+    if (!success) {
+        error_message = "❌ Syntax error: Sentence structure should be 'The <adjective> <adjective>... <noun> <verb>.'";
+        return false;
+    }
+
+    // Check dictionary validation
+    for (const auto& adj : adjectives) {
+        if (!is_valid_word(adj, valid_adjectives)) {
+            error_message = "❌ Invalid word: '" + adj + "' is not a recognized adjective.";
+            return false;
+        }
+    }
+    if (!is_valid_word(noun, valid_nouns)) {
+        error_message = "❌ Invalid word: '" + noun + "' is not a recognized noun.";
+        return false;
+    }
+    if (!is_valid_word(verb, valid_verbs)) {
+        error_message = "❌ Invalid word: '" + verb + "' is not a recognized verb.";
+        return false;
+    }
+
+    return true;
+}
+
+int main() {
+    std::string input;
+    std::cout << "Enter a sentence (e.g., The big brown fox jumps.):\n";
+    std::getline(std::cin, input);
+
+    std::string error_message;
+    if (parseSentence(input, error_message)) {
+        std::cout << "✅ Valid sentence!\n";
+    } else {
+        std::cout << error_message << "\n";
+    }
+
+    return 0;
+}
+
+----
+
+The following shows a successful parse:
+
+[source,bash]
+----
+Enter a sentence (e.g., The big brown fox jumps.):
+The big brown fox jumps.
+✅ Valid sentence!
+
+----
+
+And the following shows several unsuccessful parses:
+
+[source,bash]
+----
+Enter a sentence (e.g., The big brown fox jumps.):
+The huge blue dragon flies.
+❌ Invalid sentence.
+
+Enter a sentence (e.g., The big brown fox jumps.):
+The gigantic brown fox jumps.
+❌ Invalid word: 'gigantic' is not a recognized adjective.
+
+Enter a sentence (e.g., The big brown fox jumps.):
+The big brown dragon jumps.
+❌ Invalid word: 'dragon' is not a recognized noun.
+
+Enter a sentence (e.g., The big brown fox jumps.):
+The big brown fox flies.
+❌ Invalid word: 'flies' is not a recognized verb.
+
+----
+
+You will notice how adding more features to a natural language parser starts to considerably increase the code length. This is a normal feature of language parsing - a lot of code can be required to cover all the options of something as flexible as language. For an example of a simpler approach to parsing well-formatted input, refer to the sample code in xref:task-text-processing.adoc[].
 
 == See Also
 

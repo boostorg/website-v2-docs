@@ -13,6 +13,13 @@ Parallel computation is an important concept that helps in achieving faster exec
 
 Parallel programming can be complex and requires careful handling of shared resources to avoid race conditions, deadlocks, and other concurrency-related bugs. It's also worth noting that not every problem can be efficiently parallelized; the potential speedup from parallelization is largely determined by the proportion of the computation that can be performed concurrently, as described by https://en.wikipedia.org/wiki/Amdahl%27s_law[Amdahl's Law].
 
+[square]
+* <<Libraries>>
+* <<Parallel Computing Applications>>
+* <<Multi-threaded Sample>>
+* <<Thread-pool Sample>>
+* <<Message-queue Sample>>
+
 == Libraries
 
 The Boost libraries provide several tools that can help in writing parallel code:
