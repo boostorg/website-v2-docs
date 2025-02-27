@@ -13,6 +13,13 @@ Parallel computation is an important concept that helps in achieving faster exec
 
 Parallel programming can be complex and requires careful handling of shared resources to avoid race conditions, deadlocks, and other concurrency-related bugs. It's also worth noting that not every problem can be efficiently parallelized; the potential speedup from parallelization is largely determined by the proportion of the computation that can be performed concurrently, as described by https://en.wikipedia.org/wiki/Amdahl%27s_law[Amdahl's Law].
 
+[square]
+* <<Libraries>>
+* <<Parallel Computing Applications>>
+* <<Multi-threaded Sample>>
+* <<Thread-pool Sample>>
+* <<Message-queue Sample>>
+
 == Libraries
 
 The Boost libraries provide several tools that can help in writing parallel code:
@@ -22,8 +29,6 @@ The Boost libraries provide several tools that can help in writing parallel code
 
 * boost:asio[]: While primarily a xref:task-networking.adoc[] library, this library also provides tools for asynchronous programming, which can be used to write concurrent code that performs multiple tasks at the same time without necessarily using multiple CPU cores.
 
-* boost:mpi[]: Provides message passing interface for parallel programming. This is often used for communication between nodes in a distributed computing environment.
-
 * boost:compute[]: This is a GPU/parallel computing library for pass:[C++] based on OpenCL. The library provides a high-level, STL-like API and is header-only and does not require any special build steps or linking.
 
 * boost:fiber[]: Allows you to write code that works with fibers, which are user-space threads that can be used to write concurrent code. This can be useful in situations where you have many tasks that need to run concurrently but are I/O-bound rather than CPU-bound.
@@ -31,6 +36,10 @@ The Boost libraries provide several tools that can help in writing parallel code
 * boost:phoenix[]: A library for functional programming, it supports the ability to create inline functions which can be used for defining parallel algorithms.
 
 * boost:atomic[]: This library provides low-level atomic operations, with the aim of ensuring correct and efficient concurrent access to shared data without data races or other undesirable behavior.
+
+* boost:lockfree[] : Provides lock-free data structures which are useful in multi-threaded applications where you want to avoid locking overhead.
+
+* boost:chrono[]: Measures time intervals, which help control the timing of your app.
 
 == Parallel Computing Applications
 
@@ -50,6 +59,262 @@ Parallel computing has been successful in a wide range of applications, especial
 * Genome Analysis and Bioinformatics: Tasks like genome sequencing, protein folding, and other bioinformatics tasks involve large amounts of data and can be greatly sped up using parallel computing.
 
 * Weather Forecasting and Climate Research: Simulating weather patterns and climate change requires processing vast amounts of data and performing complex calculations, tasks well-suited to parallel computation.
+
+== Multi-threaded Sample
+
+The following code demonstrates using boost:thread[] to do the heavy lifting when you require a single foreground task, and multiple background tasks. 
+
+The sample has the following features:
+
+* The main thread prints status updates and listens for user input.
+* Background threads simulate work (for example, processing data, handling network requests), in this case just printing messages every second.
+* A shared flag (`running`) signals when to stop the threads.
+* A `boost::mutex` ensures synchronized console output to prevent message overlap.
+* The main thread waits for all background threads (`thread.join()`), ensuring a clean exit.
+
+[source,cpp]
+----
+#include <iostream>
+#include <vector>
+#include <boost/thread.hpp>
+#include <boost/chrono.hpp>
+
+// Shared flag to signal when to stop background threads
+boost::atomic<bool> running(true);
+boost::mutex coutMutex;  // Synchronizes console output
+
+// Simulated background task
+void backgroundTask(int id) {
+    while (running) {
+        {
+            boost::lock_guard<boost::mutex> lock(coutMutex);
+            std::cout << "Background Task " << id << " is running...\n";
+        }
+        boost::this_thread::sleep_for(boost::chrono::seconds(1));  // Simulate work
+    }
+
+    // Final message when thread exits
+    boost::lock_guard<boost::mutex> lock(coutMutex);
+    std::cout << "Background Task " << id << " exiting...\n";
+}
+
+// Main foreground task
+void foregroundTask() {
+    std::string input;
+    while (running) {
+        {
+            boost::lock_guard<boost::mutex> lock(coutMutex);
+            std::cout << "Foreground: Type 'quit' to exit.\n";
+        }
+        std::cin >> input;
+
+        if (input == "quit") {
+            running = false;
+        }
+    }
+}
+
+// Entry point
+int main() {
+    const int numThreads = 3;  // Number of background threads
+    std::vector<boost::thread> workers;
+
+    // Start background threads
+    for (int i = 0; i < numThreads; ++i) {
+        workers.emplace_back(backgroundTask, i + 1);
+    }
+
+    // Start foreground task (user interaction)
+    foregroundTask();
+
+    // Wait for all background threads to finish
+    for (auto& thread : workers) {
+        thread.join();
+    }
+
+    std::cout << "All threads exited. Program shutting down.\n";
+    return 0;
+}
+----
+
+== Thread-pool Sample
+
+Starting with the multi-threaded code above. If we engage the thread management features of boost:asio[], and the thread-safe counting of boost:atomic[], we reduce the need to manually handle the management of threads. In particular the updated sample:
+
+* Uses `boost::asio::thread_pool` instead of manually managing threads.
+* Handles atomic operations with `boost::atomic` for thread-safe counters.
+* Requires tasks to execute in a pool, instead of fixed background threads.
+* Adds a graceful shutdown, allowing running tasks to finish before exiting.
+
+[source,cpp]
+----
+#include <iostream>
+#include <boost/asio.hpp>
+#include <boost/thread.hpp>
+#include <boost/atomic.hpp>
+#include <boost/chrono.hpp>
+
+// Atomic flag to signal threads to stop
+boost::atomic<bool> running(true);
+boost::atomic<int> taskCounter(0);  // Tracks running tasks
+boost::mutex coutMutex;  // Synchronizes console output
+
+// Simulated background task
+void backgroundTask(int id) {
+    taskCounter++;  // Increment task count
+    while (running) {
+        {
+            boost::lock_guard<boost::mutex> lock(coutMutex);
+            std::cout << "Task " << id << " is running... (Active tasks: " 
+                      << taskCounter.load() << ")\n";
+        }
+        boost::this_thread::sleep_for(boost::chrono::seconds(1));  // Simulate work
+    }
+    
+    taskCounter--;  // Decrement task count
+    boost::lock_guard<boost::mutex> lock(coutMutex);
+    std::cout << "Task " << id << " exiting...\n";
+}
+
+// Foreground task handling user input
+void foregroundTask(boost::asio::thread_pool& pool) {
+    std::string input;
+    while (running) {
+        {
+            boost::lock_guard<boost::mutex> lock(coutMutex);
+            std::cout << "Foreground: Type 'quit' to exit, 'add' to add a task.\n";
+        }
+        std::cin >> input;
+
+        if (input == "quit") {
+            running = false;
+        } else if (input == "add") {
+            static boost::atomic<int> taskId(0);
+            boost::asio::post(pool, [id = ++taskId] { backgroundTask(id); });
+        }
+    }
+}
+
+// Main function
+int main() {
+    boost::asio::thread_pool pool(4);  // Thread pool with 4 worker threads
+
+    // Start foreground task
+    foregroundTask(pool);
+
+    // Wait for all tasks in the pool to complete
+    pool.join();
+
+    std::cout << "All tasks completed. Program shutting down.\n";
+    return 0;
+}
+----
+
+== Message-queue Sample
+
+Now comes the more challenging part, when we want the different threads to _securely_ communicate with each other. To do this we engage the features of boost:lockfree[] and boost:chrono[]:
+
+* A lock-free queue for messages, using `boost::lockfree::queue` for inter-thread communication.
+* Background tasks listen for messages, and process incoming messages asynchronously.
+* A user can type "msg <text>" to send messages to the background tasks.
+* All threads shut down cleanly when "quit" is entered.
+
+
+[source,cpp]
+----
+#include <iostream>
+#include <boost/asio.hpp>
+#include <boost/thread.hpp>
+#include <boost/atomic.hpp>
+#include <boost/chrono.hpp>
+#include <boost/lockfree/queue.hpp>
+
+// Atomic flag to signal threads to stop
+boost::atomic<bool> running(true);
+boost::atomic<int> taskCounter(0);
+boost::mutex coutMutex;  // Synchronizes console output
+
+// Lock-free queue for inter-thread communication
+boost::lockfree::queue<std::string> messageQueue(128);
+
+// Background task that processes messages
+void backgroundTask(int id) {
+    taskCounter++;  
+
+    while (running) {
+        std::string message;
+        if (messageQueue.pop(message)) {  // Check if there's a message
+            boost::lock_guard<boost::mutex> lock(coutMutex);
+            std::cout << "Task " << id << " received message: " << message << "\n";
+        }
+
+        {
+            boost::lock_guard<boost::mutex> lock(coutMutex);
+            std::cout << "Task " << id << " running... (Active tasks: " 
+                      << taskCounter.load() << ")\n";
+        }
+        boost::this_thread::sleep_for(boost::chrono::seconds(1));  
+    }
+
+    taskCounter--;  
+    boost::lock_guard<boost::mutex> lock(coutMutex);
+    std::cout << "Task " << id << " exiting...\n";
+}
+
+// Foreground task handling user input
+void foregroundTask(boost::asio::thread_pool& pool) {
+    std::string input;
+    while (running) {
+        {
+            boost::lock_guard<boost::mutex> lock(coutMutex);
+            std::cout << "Foreground: Type 'quit' to exit, 'add' to add a task, 'msg <text>' to send a message.\n";
+        }
+        std::getline(std::cin, input);
+
+        if (input == "quit") {
+            running = false;
+        } else if (input == "add") {
+            static boost::atomic<int> taskId(0);
+            boost::asio::post(pool, [id = ++taskId] { backgroundTask(id); });
+        } else if (input.rfind("msg ", 0) == 0) {  // Check if input starts with "msg "
+            std::string message = input.substr(4);  
+            messageQueue.push(message);  // Send message to background tasks
+        }
+    }
+}
+
+// Main function
+int main() {
+    boost::asio::thread_pool pool(4);  // Thread pool with 4 worker threads
+
+    // Start foreground task
+    foregroundTask(pool);
+
+    // Wait for all tasks in the pool to complete
+    pool.join();
+
+    std::cout << "All tasks completed. Program shutting down.\n";
+    return 0;
+}
+
+----
+
+If you compile and run this sample, the following would be a typical session!
+
+[source,bash]
+----
+Foreground: Type 'quit' to exit, 'add' to add a task, 'msg <text>' to send a message.
+add
+add
+msg Hello, Task!
+Task 1 received message: Hello, Task!
+Task 2 running... (Active tasks: 2)
+quit
+Task 1 exiting...
+Task 2 exiting...
+All tasks completed. Program shutting down.
+
+----
 
 == See Also
 

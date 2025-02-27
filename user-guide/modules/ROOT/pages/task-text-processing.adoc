@@ -9,28 +9,350 @@ Official repository: https://github.com/boostorg/website-v2-docs
 = Text Processing
 :navtitle: Text Processing
 
-Developing a word processor, or other text based app, involves handling text, GUI (Graphical User Interface), file operations, and possibly networking for cloud features. Boost does not provide a library for creating a GUI. You may want to consider using a library like Qt or wxWidgets for the GUI part of your word processor. Here are some Boost libraries that might assist you in this task:
+Developing a word processor, or other text based app, involves handling text, GUI (Graphical User Interface), file operations, and possibly networking for cloud features. Boost does not provide a library for creating a GUI. You may want to consider using a library like https://www.qt.io/product/development-tools[Qt] or https://wxwidgets.org/[wxWidgets] for the GUI part of your word processor.
+
+[square]
+* <<Libraries>>
+* <<Sample of Regular Expression Parsing>>
+* <<Add Robust Date and Time Parsing>>
+* <<Culturally Aware Date Formatting>>
+
+== Libraries
+
+Here are some Boost libraries that might assist you in processing text:
 
 [circle]
+* boost:regex[]:  For some simpler parsing tasks, regular expressions can be sufficient and easier to use than full-blown parsing libraries. You could use these features to match specific patterns in your input text, like specific commands or phrases, word boundaries, etc.
+
 * boost:locale[] : This library provides a way of handling and manipulating text in a culturally-aware manner. It provides localization and internationalization facilities, allowing your word processor to be used by people with different languages and locales.
 
-* boost:filesystem[] : This library provides a way of manipulating files and directories. This would be critical in a word processor for opening, saving, and managing documents.
-
 * boost:spirit[] : This library is a parser framework that can parse complex data structures. If you're creating a word processor, it could be useful to interpret different markup and file formats.
+
+* boost:date_time[] : If you need to timestamp changes or edits, or if you're implementing any kind of version history feature, this library can help.
+
+* boost:filesystem[] : This library provides a way of manipulating files and directories. This would be critical in a word processor for opening, saving, and managing documents.
 
 * boost:asio[] : If your word processor has network-related features, such as real-time collaboration or cloud-based storage, boost:asio[] provides a consistent asynchronous model for network programming.
 
 * boost:serialization[] : This library provides a way of serializing and deserializing data, which could be useful for saving and loading documents in a specific format.
 
-* boost:regex[] or boost:xpressive[] : Both libraries could be useful for implementing features like search and replace, spell-checking, and more.
+* boost:xpressive[] : Could be useful for implementing features like search and replace, spell-checking, and more.
 
 * boost:algorithm[] : This library includes a variety of algorithms for string and sequence processing, which can be useful for handling text.
-
-* boost:date-time[] : If you need to timestamp changes or edits, or if you're implementing any kind of version history feature, this library can help.
 
 * boost:multi-index[] : This library provides a way of maintaining a set of items sorted according to multiple keys, which could be useful for implementing features like an index or a sorted list of items.
 
 * boost:thread[] : If your application is multithreaded (for example, if you want to save a document while the user continues to work), this library will be useful.
+
+== Sample of Regular Expression Parsing
+
+If the text you are parsing is well-formatted then you can use boost:regex[], rather than a full-blown parser implementation using boost:spirit[].
+
+We'll write a program that scans a string for dates in the format "YYYY-MM-DD" and validates them. The code:
+
+. Finds dates in text
+. Validates correct formats (for example, 2024-02-20 is valid, but 2024-15-45 is not)
+. Handles multiple dates in a single input string
+
+[source,cpp]
+----
+#include <iostream>
+#include <string>
+#include <vector>
+#include <boost/regex.hpp>
+#include <boost/algorithm/string.hpp>
+
+// Function to check if a given date is valid (basic validation)
+bool is_valid_date(int year, int month, int day) {
+    if (month < 1 || month > 12 || day < 1 || day > 31) return false;
+    if ((month == 4 || month == 6 || month == 9 || month == 11) && day > 30) return false;
+    if (month == 2) { 
+        bool leap = (year % 4 == 0 && year % 100 != 0) || (year % 400 == 0);
+        if (day > (leap ? 29 : 28)) return false;
+    }
+    return true;
+}
+
+// Function to find and validate dates in a text
+void find_dates(const std::string& text) {
+    
+    // Regex pattern: YYYY-MM-DD format
+    boost::regex date_pattern(R"((\d{4})-(\d{2})-(\d{2}))");
+    boost::smatch match;
+    std::string::const_iterator start = text.begin();
+    std::string::const_iterator end = text.end();
+    
+    bool found = false;
+    while (boost::regex_search(start, end, match, date_pattern)) {
+        int year = std::stoi(match[1]);
+        int month = std::stoi(match[2]);
+        int day = std::stoi(match[3]);
+
+        if (is_valid_date(year, month, day)) {
+            std::cout << "✅ Valid date found: " << match[0] << "\n";
+        } else {
+            std::cout << "❌ Invalid date: " << match[0] << " (Incorrect month/day)\n";
+        }
+
+        start = match[0].second; // Move to next match
+        found = true;
+    }
+
+    if (!found) {
+        std::cout << "⚠️ No valid dates found in the input text.\n";
+    }
+}
+
+int main() {
+    std::string input;
+    std::cout << "Enter a sentence containing dates (YYYY-MM-DD format):\n";
+    std::getline(std::cin, input);
+    
+    find_dates(input);
+    return 0;
+}
+
+----
+
+The following shows a successful parse:
+
+[source,bash]
+----
+Enter a sentence containing dates (YYYY-MM-DD format):
+Today is 2024-02-19, and tomorrow is 2024-02-20.
+✅ Valid date found: 2024-02-19
+✅ Valid date found: 2024-02-20
+
+----
+
+And the following shows several unsuccessful parses:
+
+[source,bash]
+----
+Enter a sentence containing dates (YYYY-MM-DD format):
+The deadline is 2024-02-30.
+❌ Invalid date: 2024-02-30 (Incorrect month/day)
+
+Enter a sentence containing dates (YYYY-MM-DD format):
+There are no dates in this sentence.
+⚠️ No valid dates found in the input text.
+
+----
+
+== Add Robust Date and Time Parsing
+
+The date validation in the sample above can be improved integrating boost:date_time[], which provides tools for handling dates and times correctly.
+
+[source,cpp]
+----
+#include <iostream>
+#include <string>
+#include <vector>
+#include <boost/regex.hpp>
+#include <boost/algorithm/string.hpp>
+#include <boost/date_time/gregorian/gregorian.hpp>
+
+namespace greg = boost::gregorian;
+
+// Function to check if a date is valid using Boost.Date_Time
+bool is_valid_date(int year, int month, int day) {
+    try {
+        greg::date test_date(year, month, day);
+        return true;  // If no exception, it's valid
+    } catch (const std::exception& e) {
+        return false; // Invalid date
+    }
+}
+
+// Function to find and validate dates in a text
+void find_dates(const std::string& text) {
+    boost::regex date_pattern(R"((\d{4})-(\d{2})-(\d{2}))");
+    boost::smatch match;
+    std::string::const_iterator start = text.begin();
+    std::string::const_iterator end = text.end();
+
+    bool found = false;
+    while (boost::regex_search(start, end, match, date_pattern)) {
+        int year = std::stoi(match[1]);
+        int month = std::stoi(match[2]);
+        int day = std::stoi(match[3]);
+
+        if (is_valid_date(year, month, day)) {
+            greg::date valid_date(year, month, day);
+            std::cout << "✅ Valid date found: " << valid_date << "\n";
+        } else {
+            std::cout << "❌ Invalid date: " << match[0] << " (Does not exist)\n";
+        }
+
+        start = match[0].second; // Move to next match
+        found = true;
+    }
+
+    if (!found) {
+        std::cout << "⚠️ No valid dates found in the input text.\n";
+    }
+}
+
+int main() {
+    std::string input;
+    std::cout << "Enter a sentence containing dates (YYYY-MM-DD format):\n";
+    std::getline(std::cin, input);
+    
+    find_dates(input);
+    return 0;
+}
+
+----
+
+Note:: The code handles leap years correctly, and invalid dates throw an exception.
+
+The following shows a successful parse:
+
+[source,bash]
+----
+Enter a sentence containing dates (YYYY-MM-DD format):
+Today is 2024-02-29, and tomorrow is 2024-03-01.
+✅ Valid date found: 2024-Feb-29
+✅ Valid date found: 2024-Mar-01
+
+----
+
+Note:: The "Valid date found" output now includes text for the month name.
+
+And the following shows several unsuccessful parses:
+
+[source,bash]
+----
+Enter a sentence containing dates (YYYY-MM-DD format):
+The deadline is 2024-02-30.
+❌ Invalid date: 2024-02-30 (Does not exist)
+
+
+Enter a sentence containing dates (YYYY-MM-DD format):
+There are no dates in this sentence.
+⚠️ No valid dates found in the input text.
+
+----
+
+== Culturally Aware Date Formatting
+
+Dates are not represented consistently across the globe. Let's use boost:locale[] to format dates according to the user's locale. For example:
+
+* US: March 15, 2024
+* UK: 15 March, 2024
+* France: 15 mars 2024
+* Germany: 15. März 2024
+
+[source,cpp]
+----
+#include <iostream>
+#include <string>
+#include <vector>
+#include <boost/regex.hpp>
+#include <boost/algorithm/string.hpp>
+#include <boost/date_time/gregorian/gregorian.hpp>
+#include <boost/locale.hpp>
+
+namespace greg = boost::gregorian;
+namespace loc = boost::locale;
+
+// Function to check if a date is valid using Boost.Date_Time
+bool is_valid_date(int year, int month, int day) {
+    try {
+        greg::date test_date(year, month, day);
+        return true;  // If no exception, it's valid
+    } catch (const std::exception&) {
+        return false; // Invalid date
+    }
+}
+
+// Function to format and display dates based on locale
+void display_localized_date(const greg::date& date, const std::string& locale_name) {
+    std::locale locale = loc::generator().generate(locale_name);
+    std::cout.imbue(locale);  // Apply locale to std::cout
+
+    std::cout << "🌍 " << locale_name << " formatted date: "
+              << loc::as::date << date << "\n";
+}
+
+// Function to find and validate dates in a text
+void find_dates(const std::string& text, const std::string& locale_name) {
+    boost::regex date_pattern(R"((\d{4})-(\d{2})-(\d{2}))");
+    boost::smatch match;
+    std::string::const_iterator start = text.begin();
+    std::string::const_iterator end = text.end();
+
+    bool found = false;
+    while (boost::regex_search(start, end, match, date_pattern)) {
+        int year = std::stoi(match[1]);
+        int month = std::stoi(match[2]);
+        int day = std::stoi(match[3]);
+
+        if (is_valid_date(year, month, day)) {
+            greg::date valid_date(year, month, day);
+            std::cout << "✅ Valid date found: " << valid_date << "\n";
+            display_localized_date(valid_date, locale_name);
+        } else {
+            std::cout << "❌ Invalid date: " << match[0] << " (Does not exist)\n";
+        }
+
+        start = match[0].second; // Move to next match
+        found = true;
+    }
+
+    if (!found) {
+        std::cout << "⚠️ No valid dates found in the input text.\n";
+    }
+}
+
+int main() {
+    std::locale::global(loc::generator().generate("en_US.UTF-8")); // Default global locale
+    std::cout.imbue(std::locale());  // Apply to output stream
+
+    std::string input;
+    std::cout << "Enter a sentence containing dates (YYYY-MM-DD format):\n";
+    std::getline(std::cin, input);
+
+    std::string user_locale;
+    std::cout << "Enter your preferred locale (e.g., en_US.UTF-8, fr_FR.UTF-8, de_DE.UTF-8): ";
+    std::cin >> user_locale;
+
+    find_dates(input, user_locale);
+    return 0;
+}
+
+----
+
+The following shows successful parses:
+
+[source,bash]
+----
+Enter a sentence containing dates (YYYY-MM-DD format):
+The meeting is on 2024-03-15.
+Enter your preferred locale (e.g., en_US.UTF-8, fr_FR.UTF-8, de_DE.UTF-8): en_US.UTF-8
+✅ Valid date found: 2024-Mar-15
+🌍 en_US.UTF-8 formatted date: March 15, 2024
+
+Enter a sentence containing dates (YYYY-MM-DD format):
+Rendez-vous le 2024-07-20.
+Enter your preferred locale (e.g., en_US.UTF-8, fr_FR.UTF-8, de_DE.UTF-8): fr_FR.UTF-8
+✅ Valid date found: 2024-Jul-20
+🌍 fr_FR.UTF-8 formatted date: 20 juillet 2024
+
+----
+
+And the following shows an unsuccessful parse:
+
+[source,bash]
+----
+Enter a sentence containing dates (YYYY-MM-DD format):
+The deadline is 2024-02-30.
+Enter your preferred locale (e.g., en_US.UTF-8, fr_FR.UTF-8, de_DE.UTF-8): en_US.UTF-8
+❌ Invalid date: 2024-02-30 (Does not exist)
+
+----
+
+For a boost:spirit[] approach to parsing, refer to xref:task-natural-language-parsing.adoc[].
 
 == See Also
 
