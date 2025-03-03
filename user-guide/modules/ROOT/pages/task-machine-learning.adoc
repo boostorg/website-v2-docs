@@ -9,9 +9,15 @@ Official repository: https://github.com/boostorg/website-v2-docs
 = Machine Learning
 :navtitle: Machine Learning
 
-Developing a machine learning library involves tasks such as numerical computation, matrix operations, optimization, and sometimes xref:task-parallel-computation.adoc[].
+Developing a machine learning library or application involves tasks such as numerical computation, matrix operations, iteration and optimization (endless trial and error), and sometimes xref:task-parallel-computation.adoc[]. It requires not just programming but also a deep understanding of the underlying mathematical and statistical principles.
 
-Developing a machine learning library is a complex task that involves not just programming but also a deep understanding of the underlying mathematical and statistical principles. It's also a field where performance can be crucial, so careful design, implementation, and optimization are important.
+* <<Libraries>>
+* <<Machine Learning Algorithms>>
+* <<Sample of High-Precision Matrix Multiplication>>
+* <<Add Stochastic Gradient Descent>>
+* <<Add K-Means Clustering with a Real Dataset>>
+* <<Add Visualization of the K-Means Clustering>>
+* <<Footnotes>>
 
 == Libraries
 
@@ -34,6 +40,10 @@ Here are some Boost libraries that could be helpful for the supporting tasks:
 
 * boost:property-tree[] or boost:spirit[]:  These libraries can be useful for handling input and output, such as reading configuration files or parsing data.
 
+* boost:gil[] : A library designed for image processing, offering a flexible way to manipulate and process images.
+
+* boost:filesystem[] : This library provides a portable way of querying and manipulating paths, files, and directories.
+
 == Machine Learning Algorithms
 
 Here are some widely used and robust algorithms, each having its own strengths and suitable applications. The best way to identify the "most robust" algorithm is through experimentation: try multiple models and select the one that performs best on your specific task. Also, keep in mind that data quality and the way you pre-process and engineer your features often matter more than the choice of algorithm.
@@ -49,7 +59,7 @@ Here are some widely used and robust algorithms, each having its own strengths a
 [circle]
 * Support Vector Machines (SVM): SVMs are effective in high dimensional spaces and are suitable for binary classification tasks. They can handle non-linear classification using what is known as the kernel trick link:#footnote2[(2)].
 
-* Gradient Boosting Machines (like https://en.wikipedia.org/wiki/XGBoost[XGBoost] and https://en.wikipedia.org/wiki/LightGBM[LightGBM]): These are currently among the top performers for structured data (i.e., table-form data), based on their results in machine learning competitions.
+* Gradient Boosting Machines (like https://en.wikipedia.org/wiki/XGBoost[XGBoost] and https://en.wikipedia.org/wiki/LightGBM[LightGBM]): These are currently among the top performers for structured data (usually, table-form data), based on their results in machine learning competitions.
 
 * Neural Networks / Deep Learning: These models excel at tasks involving unstructured data, such as image recognition, natural language processing, and more. Convolutional Neural Networks (CNNs) are used for image-related tasks, while Recurrent Neural Networks (RNNs), Long Short-Term Memory (LSTM) units, and Transformers are used for sequential data like text or time series.
 
@@ -57,19 +67,536 @@ Here are some widely used and robust algorithms, each having its own strengths a
 
 * K-Means: This is a widely-used clustering algorithm for dividing data into distinct groups.
 
+== Sample of High-Precision Matrix Multiplication
+
+The following sample demonstrating the use of boost:numeric/ublas[] for matrix operations and boost:multiprecision[] for high-precision arithmetic (ensures 50-digit precision for matrix calculations). This is useful in machine learning applications where precision is critical, such as when dealing with ill-conditioned matrices or when high numerical accuracy is needed.
+
+[#footnote3-location]
+Randomized values are commonly used in machine language algorithms, such as Stochastic Gradient Descent (Neural networks and logistic regression), Monte Carlo simulations (simulating stochastic processes like Bayesian inference or Markov chains link:#footnote3[(3)]), and neural network weight initialization. So we'll also engage the features of boost:random[].
+
+[source,cpp]
+----
+#include <iostream>
+#include <boost/numeric/ublas/matrix.hpp>
+#include <boost/numeric/ublas/io.hpp>
+#include <boost/multiprecision/cpp_dec_float.hpp>
+#include <boost/random.hpp>
+#include <boost/random/random_device.hpp>
+
+namespace ublas = boost::numeric::ublas;
+namespace mp = boost::multiprecision;
+namespace br = boost::random;
+
+int main() {
+    // Define high-precision floating-point type (50 decimal places)
+    using high_prec = mp::cpp_dec_float_50;
+
+    // Define 3x3 matrices
+    ublas::matrix<high_prec> A(3, 3), B(3, 3), C(3, 3);
+
+    // Random number generation (high-precision floating-point)
+    br::random_device rd;  // Seed from system entropy
+    br::mt19937 gen(rd()); // Mersenne Twister RNG
+    br::uniform_real_distribution<double> dist(0.0, 1.0); // Uniform distribution [0,1]
+
+    // Fill matrices A and B with random values
+    for (std::size_t i = 0; i < A.size1(); ++i) {
+        for (std::size_t j = 0; j < A.size2(); ++j) {
+            A(i, j) = dist(gen);  // Random value between 0 and 1
+            B(i, j) = dist(gen);
+        }
+    }
+
+    // Perform matrix multiplication: C = A * B
+    C = prod(A, B);
+
+    // Print results
+    std::cout << "Matrix A (random values):\n" << A << "\n";
+    std::cout << "Matrix B (random values):\n" << B << "\n";
+    std::cout << "Result of A * B:\n" << C << "\n";
+
+    return 0;
+}
+
+----
+
+==  Add Stochastic Gradient Descent
+
+Stochastic Gradient Descent (SGD) is an optimization algorithm used to update model parameters (often called "weights") in machine learning by minimizing the error function (usually called "loss").
+
+The weight update rule is:
+
+image::stochastic-equation.png[Stochastic Gradient Descent]
+
+[#footnote4-location]
+Neural networks train with SGD and the many variants of the algorithm (such as Adam, RMSprop, and the alternative Batch Gradient Descent link:#footnote4[(4)]). This approach is efficient for big data and real-time learning.
+
+[source,cpp]
+----
+#include <iostream>
+#include <boost/numeric/ublas/matrix.hpp>
+#include <boost/numeric/ublas/vector.hpp>
+#include <boost/numeric/ublas/io.hpp>
+#include <boost/multiprecision/cpp_dec_float.hpp>
+#include <boost/random.hpp>
+#include <boost/random/random_device.hpp>
+
+namespace ublas = boost::numeric::ublas;
+namespace mp = boost::multiprecision;
+namespace br = boost::random;
+
+int main() {
+    // Define high-precision floating-point type (50 decimal places)
+    using high_prec = mp::cpp_dec_float_50;
+
+    // Parameters
+    const std::size_t num_features = 2;  // Simple linear regression (1 feature + bias)
+    const std::size_t num_samples = 5;   // Number of training samples
+    const high_prec learning_rate = 0.01; // Small learning rate
+
+    // Training Data (x, y) where y = mx + b + noise
+    ublas::matrix<high_prec> X(num_samples, num_features);
+    ublas::vector<high_prec> y(num_samples), weights(num_features);
+
+    // Random number generators
+    br::random_device rd;
+    br::mt19937 gen(rd());
+    br::uniform_real_distribution<double> dist(-1.0, 1.0); // Range [-1,1]
+
+    // Initialize feature matrix (X) and target vector (y)
+    for (std::size_t i = 0; i < num_samples; ++i) {
+        X(i, 0) = 1;  // Bias term (intercept)
+        X(i, 1) = dist(gen);  // Random feature value
+        y(i) = 2.0 * X(i, 1) + 1.0 + dist(gen) * 0.1;  // y = 2x + 1 + noise
+    }
+
+    // Initialize weights randomly
+    for (std::size_t i = 0; i < num_features; ++i) {
+        weights(i) = dist(gen);
+    }
+
+    std::cout << "Initial Weights:\n" << weights << "\n";
+
+    // Stochastic Gradient Descent (SGD) loop (10 iterations)
+    for (std::size_t epoch = 0; epoch < 10; ++epoch) {
+        for (std::size_t i = 0; i < num_samples; ++i) {
+            // Compute prediction: y_pred = dot(X[i], weights)
+            high_prec y_pred = ublas::inner_prod(row(X, i), weights);
+            
+            // Compute error: (y_pred - y)
+            high_prec error = y_pred - y(i);
+            
+            // Update weights: w = w - lr * error * x
+            weights -= learning_rate * error * row(X, i);
+        }
+    }
+
+    std::cout << "Final Weights after SGD:\n" << weights << "\n";
+
+    return 0;
+}
+
+----
+
+== Add K-Means Clustering with a Real Dataset
+
+Let's add K-Means Clustering to group data points into clusters. The statistical functions of boost:math[] measure Euclidean distances that are the basis of K-Means clustering, a centroid-based clustering algorithm that partitions data into K clusters based on the nearest mean (centroid).
+
+The clustering algorithm goes through the following cycle:
+
+. Randomly initialize K centroids
+. Assigns points to the nearest centroid
+. Recalculates centroids
+. Repeats (go back to step 2) until convergence
+
+We'll use the Iris dataset, a well-known sample dataset in machine learning containing 150 flower samples with four features (sepal length, sepal width, petal length, petal width) and three species. This dataset is loaded from a CSV file.
+
+[source,cpp]
+----
+#include <iostream>
+#include <fstream>
+#include <sstream>
+#include <vector>
+#include <boost/numeric/ublas/matrix.hpp>
+#include <boost/numeric/ublas/vector.hpp>
+#include <boost/numeric/ublas/io.hpp>
+#include <boost/random.hpp>
+#include <boost/math/tools/norms.hpp>
+
+namespace ublas = boost::numeric::ublas;
+namespace br = boost::random;
+namespace bm = boost::math::tools;
+
+using high_prec = double; // Change to multiprecision if needed
+
+// Function to calculate Euclidean distance
+high_prec euclidean_distance(const ublas::vector<high_prec>& a, const ublas::vector<high_prec>& b) {
+    return bm::l2_norm(a - b);
+}
+
+// K-Means Clustering function
+void k_means_clustering(ublas::matrix<high_prec>& data, int k, int max_iterations = 100) {
+    std::size_t num_samples = data.size1();
+    std::size_t num_features = data.size2();
+
+    // Initialize random number generator
+    br::random_device rd;
+    br::mt19937 gen(rd());
+    br::uniform_int_distribution<std::size_t> dist(0, num_samples - 1);
+
+    // Initialize centroids randomly from existing data points
+    std::vector<ublas::vector<high_prec>> centroids(k);
+    for (int i = 0; i < k; ++i) {
+        centroids[i] = row(data, dist(gen));
+    }
+
+    std::vector<int> cluster_assignment(num_samples, -1);
+
+    for (int iter = 0; iter < max_iterations; ++iter) {
+        bool changed = false;
+
+        // Step 1: Assign each point to the nearest centroid
+        for (std::size_t i = 0; i < num_samples; ++i) {
+            high_prec min_dist = std::numeric_limits<high_prec>::max();
+            int best_cluster = -1;
+
+            for (int j = 0; j < k; ++j) {
+                high_prec dist = euclidean_distance(row(data, i), centroids[j]);
+                if (dist < min_dist) {
+                    min_dist = dist;
+                    best_cluster = j;
+                }
+            }
+
+            if (cluster_assignment[i] != best_cluster) {
+                cluster_assignment[i] = best_cluster;
+                changed = true;
+            }
+        }
+
+        // Stop if no changes (convergence)
+        if (!changed) break;
+
+        // Step 2: Compute new centroids
+        std::vector<ublas::vector<high_prec>> new_centroids(k, ublas::zero_vector<high_prec>(num_features));
+        std::vector<int> cluster_sizes(k, 0);
+
+        for (std::size_t i = 0; i < num_samples; ++i) {
+            int cluster = cluster_assignment[i];
+            new_centroids[cluster] += row(data, i);
+            cluster_sizes[cluster]++;
+        }
+
+        for (int j = 0; j < k; ++j) {
+            if (cluster_sizes[j] > 0) {
+                centroids[j] = new_centroids[j] / cluster_sizes[j];
+            }
+        }
+    }
+
+    // Output results
+    std::cout << "Final Cluster Assignments:\n";
+    for (std::size_t i = 0; i < num_samples; ++i) {
+        std::cout << "Data Point " << i << " -> Cluster " << cluster_assignment[i] << "\n";
+    }
+}
+
+// Function to load the Iris dataset from a CSV file
+ublas::matrix<high_prec> load_iris_data(const std::string& filename) {
+    std::ifstream file(filename);
+    if (!file) {
+        throw std::runtime_error("Could not open file!");
+    }
+
+    std::vector<std::vector<high_prec>> data;
+    std::string line;
+
+    while (std::getline(file, line)) {
+        std::stringstream ss(line);
+        std::vector<high_prec> row;
+        std::string value;
+
+        while (std::getline(ss, value, ',')) {
+            row.push_back(std::stod(value));
+        }
+
+        data.push_back(row);
+    }
+
+    std::size_t num_samples = data.size();
+    std::size_t num_features = data[0].size();
+    ublas::matrix<high_prec> dataset(num_samples, num_features);
+
+    for (std::size_t i = 0; i < num_samples; ++i) {
+        for (std::size_t j = 0; j < num_features; ++j) {
+            dataset(i, j) = data[i][j];
+        }
+    }
+
+    return dataset;
+}
+
+int main() {
+    const int k = 3; // Number of clusters
+
+    // Load Iris dataset
+    ublas::matrix<high_prec> data = load_iris_data("iris_data.csv");
+
+    std::cout << "Loaded Data:\n" << data << "\n";
+
+    // Perform K-Means clustering
+    k_means_clustering(data, k);
+
+    return 0;
+}
+
+----
+
+=== The Iris CSV File
+
+Save the following as *iris_data.csv*, a test sample, (or download https://archive.ics.uci.edu/dataset/53/iris[Iris]):
+
+[source,bash]
+----
+5.1,3.5,1.4,0.2,setosa
+4.9,3.0,1.4,0.2,setosa
+5.7,2.8,4.1,1.3,versicolor
+6.3,3.3,6.0,2.5,virginica
+5.8,2.7,5.1,1.9,virginica
+7.1,3.0,5.9,2.1,virginica
+
+----
+
+== Add Visualization of the K-Means Clustering
+
+Finally, let's engage the features of boost:gil[] (Generic Image Library), and plot our clustered data. The following code maps clusters to colors, generates a scatter plot, and saves it as a PNG file. We'll also need boost:filesystem[] to manage output files.
+
+[source,cpp]
+----
+#include <iostream>
+#include <fstream>
+#include <sstream>
+#include <vector>
+#include <boost/numeric/ublas/matrix.hpp>
+#include <boost/numeric/ublas/vector.hpp>
+#include <boost/numeric/ublas/io.hpp>
+#include <boost/random.hpp>
+#include <boost/math/tools/norms.hpp>
+#include <boost/gil.hpp>
+#include <boost/gil/extension/io/png.hpp>
+#include <boost/filesystem.hpp>
+
+namespace ublas = boost::numeric::ublas;
+namespace br = boost::random;
+namespace bm = boost::math::tools;
+namespace gil = boost::gil;
+namespace bfs = boost::filesystem;
+
+using high_prec = double; // Use Boost.Multiprecision if needed
+
+const int IMAGE_SIZE = 500;
+const int POINT_RADIUS = 3;
+
+// Function to generate a color for each cluster
+gil::rgb8_pixel_t get_cluster_color(int cluster) {
+    static std::vector<gil::rgb8_pixel_t> colors = {
+        gil::rgb8_pixel_t(255, 0, 0),    // Red
+        gil::rgb8_pixel_t(0, 255, 0),    // Green
+        gil::rgb8_pixel_t(0, 0, 255),    // Blue
+        gil::rgb8_pixel_t(255, 255, 0),  // Yellow
+        gil::rgb8_pixel_t(255, 0, 255)   // Magenta
+    };
+    return colors[cluster % colors.size()];
+}
+
+// Function to plot the clustered data
+void plot_clusters(const ublas::matrix<high_prec>& data, const std::vector<int>& clusters, int k) {
+    gil::rgb8_image_t image(IMAGE_SIZE, IMAGE_SIZE);
+    auto view = gil::view(image);
+
+    // Clear background
+    gil::fill_pixels(view, gil::rgb8_pixel_t(255, 255, 255));
+
+    // Normalize data for plotting
+    high_prec x_min = std::numeric_limits<high_prec>::max();
+    high_prec x_max = std::numeric_limits<high_prec>::lowest();
+    high_prec y_min = x_min, y_max = x_max;
+
+    for (std::size_t i = 0; i < data.size1(); ++i) {
+        x_min = std::min(x_min, data(i, 0));
+        x_max = std::max(x_max, data(i, 0));
+        y_min = std::min(y_min, data(i, 1));
+        y_max = std::max(y_max, data(i, 1));
+    }
+
+    // Scale and plot points
+    for (std::size_t i = 0; i < data.size1(); ++i) {
+        int x = static_cast<int>(((data(i, 0) - x_min) / (x_max - x_min)) * (IMAGE_SIZE - 10) + 5);
+        int y = static_cast<int>(((data(i, 1) - y_min) / (y_max - y_min)) * (IMAGE_SIZE - 10) + 5);
+
+        gil::rgb8_pixel_t color = get_cluster_color(clusters[i]);
+
+        // Draw a simple point (circle approximation)
+        for (int dx = -POINT_RADIUS; dx <= POINT_RADIUS; ++dx) {
+            for (int dy = -POINT_RADIUS; dy <= POINT_RADIUS; ++dy) {
+                if (x + dx >= 0 && x + dx < IMAGE_SIZE && y + dy >= 0 && y + dy < IMAGE_SIZE) {
+                    view(x + dx, y + dy) = color;
+                }
+            }
+        }
+    }
+
+    // Save the image
+    gil::write_view("cluster_plot.png", view, gil::png_tag());
+    std::cout << "Cluster plot saved as cluster_plot.png!\n";
+}
+
+// Function to calculate Euclidean distance
+high_prec euclidean_distance(const ublas::vector<high_prec>& a, const ublas::vector<high_prec>& b) {
+    return bm::l2_norm(a - b);
+}
+
+// K-Means Clustering function
+void k_means_clustering(ublas::matrix<high_prec>& data, int k, int max_iterations = 100) {
+    std::size_t num_samples = data.size1();
+    std::size_t num_features = data.size2();
+
+    br::random_device rd;
+    br::mt19937 gen(rd());
+    br::uniform_int_distribution<std::size_t> dist(0, num_samples - 1);
+
+    std::vector<ublas::vector<high_prec>> centroids(k);
+    for (int i = 0; i < k; ++i) {
+        centroids[i] = row(data, dist(gen));
+    }
+
+    std::vector<int> cluster_assignment(num_samples, -1);
+
+    for (int iter = 0; iter < max_iterations; ++iter) {
+        bool changed = false;
+
+        for (std::size_t i = 0; i < num_samples; ++i) {
+            high_prec min_dist = std::numeric_limits<high_prec>::max();
+            int best_cluster = -1;
+
+            for (int j = 0; j < k; ++j) {
+                high_prec dist = euclidean_distance(row(data, i), centroids[j]);
+                if (dist < min_dist) {
+                    min_dist = dist;
+                    best_cluster = j;
+                }
+            }
+
+            if (cluster_assignment[i] != best_cluster) {
+                cluster_assignment[i] = best_cluster;
+                changed = true;
+            }
+        }
+
+        if (!changed) break;
+
+        std::vector<ublas::vector<high_prec>> new_centroids(k, ublas::zero_vector<high_prec>(num_features));
+        std::vector<int> cluster_sizes(k, 0);
+
+        for (std::size_t i = 0; i < num_samples; ++i) {
+            int cluster = cluster_assignment[i];
+            new_centroids[cluster] += row(data, i);
+            cluster_sizes[cluster]++;
+        }
+
+        for (int j = 0; j < k; ++j) {
+            if (cluster_sizes[j] > 0) {
+                centroids[j] = new_centroids[j] / cluster_sizes[j];
+            }
+        }
+    }
+
+    std::cout << "Final Cluster Assignments:\n";
+    for (std::size_t i = 0; i < num_samples; ++i) {
+        std::cout << "Data Point " << i << " -> Cluster " << cluster_assignment[i] << "\n";
+    }
+
+    // Generate cluster plot
+    plot_clusters(data, cluster_assignment, k);
+}
+
+// Function to load dataset from a CSV file
+ublas::matrix<high_prec> load_iris_data(const std::string& filename) {
+    std::ifstream file(filename);
+    if (!file) {
+        throw std::runtime_error("Could not open file!");
+    }
+
+    std::vector<std::vector<high_prec>> data;
+    std::string line;
+
+    while (std::getline(file, line)) {
+        std::stringstream ss(line);
+        std::vector<high_prec> row;
+        std::string value;
+
+        while (std::getline(ss, value, ',')) {
+            row.push_back(std::stod(value));
+        }
+
+        data.push_back(row);
+    }
+
+    std::size_t num_samples = data.size();
+    std::size_t num_features = data[0].size();
+    ublas::matrix<high_prec> dataset(num_samples, num_features);
+
+    for (std::size_t i = 0; i < num_samples; ++i) {
+        for (std::size_t j = 0; j < num_features; ++j) {
+            dataset(i, j) = data[i][j];
+        }
+    }
+
+    return dataset;
+}
+
+int main() {
+    const int k = 3;
+
+    ublas::matrix<high_prec> data = load_iris_data("iris_data.csv");
+
+    std::cout << "Loaded Data:\n" << data << "\n";
+
+    k_means_clustering(data, k);
+
+    return 0;
+}
+
+----
+
+All going well, you should get a cluster plot similar to this:
+
+image::cluster_plot.png[Clustering of Iris Data]
+
 == Footnotes
 
 [#footnote1]
 link:#footnote1-location[(1)]
-_Overfitting_ in the context of machine learning refers to a model that has been trained too well on the training data, to the point where it has started to memorize the noise or outliers in the data rather than generalizing from the underlying patterns or trends. As a result, the model will perform very well on the training data, but poorly on new, unseen data (i.e., it will have poor generalization performance). To mitigate overfitting, techniques such as cross-validation, regularization, pruning, or early stopping are often used. Another common strategy is to increase the amount of training data so the model can learn more generalized features.
+_Overfitting_ in the context of machine learning refers to a model that has been trained too well on the training data, to the point where it has started to memorize the noise or outliers in the data rather than generalizing from the underlying patterns or trends. As a result, the model will perform very well on the training data, but poorly on new, unseen data (that is, it will have poor generalization performance). To mitigate overfitting, techniques such as cross-validation, regularization, pruning, or early stopping are often used. Another common strategy is to increase the amount of training data so the model can learn more generalized features.
 
 [#footnote2]
-link:#footnote1-location[(2)]
+link:#footnote2-location[(2)]
 The _kernel trick_ is a method used in machine learning to apply a linear classifier to data that is not linearly separable. It works by mapping the original input features into a higher-dimensional space where a linear classifier can be used to separate the data. This mapping is done using a function known as a kernel function. The "trick" part of the kernel trick comes from the fact that the kernel function allows us to operate in the higher-dimensional space without explicitly computing the coordinates of the data in that space. Instead, the kernel function computes only the inner products between the images of all pairs of data in the higher-dimensional space.
+
+[#footnote3]
+link:#footnote3-location[(3)]
+_Bayesion inference_ is used to calculate a probability for a hypothesis (using Bayes theorum), based on existing evidence, and then update it as more data becomes available. This approach has proved to be robust as it does not require the sample size to be known in advance, and has a wide range of applications. There are downsides to this popular inference method, including a kind of self-contradiction called a _Dutch Book_. A _Markov chain_ describes a sequence of possible events, where the probability of an event occurring in the chain is _solely_ dependent on the previous event. Markov chains are popular in statistical modeling, partly because of the simplification it provides in that only the current state of affairs is important - not any previous history. Markov chain _Monte Carlo_ methods are often used to study probability distributions too complex for analytical methods alone.
+
+[#footnote4]
+link:#footnote4-location[(4)]
+_Gradient Descent_ is an optimization algorithm used to minimize a function by iteratively adjusting parameters in the direction of the steepest descent. There are several variations, each with trade-offs. _Stochastic Gradient Descent_ updates model parameters using a single randomly chosen training sample per iteration, making it computationally efficient but introducing high variance in updates, leading to noisy convergence. _Batch Gradient Descent_, in contrast, computes gradients over the entire dataset before making an update, leading to stable but computationally expensive iterations. A middle ground is _Mini-Batch Gradient Descent_, which processes small batches of data per iteration, balancing computational efficiency and convergence stability.
+
+* To improve upon standard gradient descent, adaptive optimization methods like _Adam_ (Adaptive Moment Estimation) and _RMSprop_ (Root Mean Square Propagation) were developed. RMSprop modifies the learning rate for each parameter based on recent gradient magnitudes, helping it navigate noisy gradients efficiently. Adam combines both momentum (which smooths updates) and adaptive learning rates (adjusting step sizes per parameter), making it one of the most widely used optimizers due to its robustness across different problems. These methods help accelerate convergence and handle sparse or non-stationary gradients better than traditional gradient descent techniques.
 
 == See Also
 
 * https://www.boost.org/doc/libs/1_87_0/libs/libraries.htm#Algorithms[Category: Algorithms]
 * https://www.boost.org/doc/libs/1_87_0/libs/libraries.htm#Iterators[Category: Iterators]
-* https://www.boost.org/doc/libs/1_87_0/libs/libraries.htm#Parsing[Category: Parsing]
 * https://www.boost.org/doc/libs/1_87_0/libs/libraries.htm#Math[Category: Math and numerics]
+* https://www.boost.org/doc/libs/1_87_0/libs/libraries.htm#Parsing[Category: Parsing]
+
