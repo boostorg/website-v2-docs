@@ -11,27 +11,574 @@ Official repository: https://github.com/boostorg/website-v2-docs
 
 Creating a high-performance database application in pass:[C++] involves a range of tasks, including network communication, concurrent programming, memory management, and more. Here are some Boost libraries that might be useful:
 
-* boost:asio[] : Provides a consistent asynchronous model using a modern pass:[C++] approach for network and low-level I/O programming. It supports a variety of network protocols, which could be helpful if your database needs to communicate over a network.
+[square]
+* <<Libraries>>
+* <<Sample of a Database Engine using Containers>>
+* <<Optimize Memory Allocation>>
+* <<Integrate Shared Memory>>
+* <<Create a Thread-safe Queue for Inter-thread Communication>>
+* <<Add Serialization to Persistently Store the Database>>
 
+== Libraries
+
+[circle]
 * boost:container[] : Provides STL-compatible containers, including stable vector, flat set/map and more. The containers provided by this library can offer performance benefits over their standard library equivalents, making them a good fit for a high-performance database application.
 
-* boost:serialization[] : If you need to serialize objects for storage, boost:serialization[] can be a useful tool. However, be aware that for many database applications, more specialized serialization formats (like Protocol Buffers, Thrift, etc.) might be more appropriate.
-
-* boost:thread[] : Provides a portable interface for multithreading, which can be crucial when creating a high-performance database that can handle multiple queries concurrently.
-
-* boost:fiber[] : Provides a framework for micro-/userland-threads (fibers) scheduled cooperatively. Fibers can be used to simplify asynchronous programming, especially when there are many I/O operations, which is typical in database applications.
+* boost:pool[] : This library is used for simple, fast memory allocation and can improve efficiency in some scenarios by managing memory in chunks.
 
 * boost:interprocess[] : This library allows for shared memory communication and synchronization between processes. In a database context, this can be useful for inter-process communication (IPC) and shared memory databases.
 
 * boost:lockfree[] : Provides lock-free data structures which could be useful in multi-threaded database applications where you want to avoid locking overhead.
 
+* boost:serialization[] : If you need to serialize objects for storage, boost:serialization[] can be a useful tool. However, be aware that for many database applications, more specialized serialization formats (like Protocol Buffers, Thrift, etc.) might be more appropriate.
+
+* boost:asio[] : Provides a consistent asynchronous model using a modern pass:[C++] approach for network and low-level I/O programming. It supports a variety of network protocols, which could be helpful if your database needs to communicate over a network.
+
+* boost:thread[] : Provides a portable interface for multithreading, which can be crucial when creating a high-performance database that can handle multiple queries concurrently.
+
+* boost:fiber[] : Provides a framework for micro-/userland-threads (fibers) scheduled cooperatively. Fibers can be used to simplify asynchronous programming, especially when there are many I/O operations, which is typical in database applications.
+
 * boost:polygon[] or boost:geometry[] : For storing and querying spatial data, these libraries can provide the necessary data types and algorithms.
 
-* boost:multiprecision[] : For handling high-precision numbers or calculations, this library can be useful.
+* boost:filesystem[] : Provides a portable way of querying and manipulating paths, files, and directories.
 
-* boost:pool[] : This library is used for simple, fast memory allocation and can improve efficiency in some scenarios by managing memory in chunks.
+== Sample of a Database Engine using Containers
 
-* boost:smart_ptr[] : It provides smart pointer class templates, which can be very helpful in managing resources and preventing memory leaks.
+A database engine requires efficient data structures for handling indexes, caches, and storage layouts. The boost:container[] library provides drop-in replacements for standard containers like `std::vector`, `std::map`, and `std::unordered_map`, but optimized for memory efficiency and performance.
+
+In the following sample code, we will use in-memory indexing as the basis of a database engine. The boost:container[] `flat_map` feature is used to store a sorted index for quick lookups, and the `stable_vector` feature to store persistent records with stable pointers. The sample simulates inserting and retrieving records efficiently.
+
+[source,cpp]
+----
+#include <boost/container/flat_map.hpp>
+#include <boost/container/stable_vector.hpp>
+#include <iostream>
+#include <string>
+
+// Define a Simple Database Table Structure
+struct Record {
+    int id;             // Primary Key
+    std::string name;   // Represents record data
+
+    Record(int id, std::string name) : id(id), name(std::move(name)) {}
+};
+
+// Implement a Database Table Class
+#include <boost/container/flat_map.hpp>
+#include <boost/container/stable_vector.hpp>
+#include <iostream>
+#include <string>
+
+class DatabaseTable {
+public:
+    using RecordStorage = boost::container::stable_vector<Record>;
+    using IndexMap = boost::container::flat_map<int, size_t>; // Fast lookup
+
+    void insert(int id, const std::string& name) {
+        size_t index = records.size();
+        records.emplace_back(id, name);
+        index_map[id] = index;
+    }
+
+    const Record* find(int id) {
+        auto it = index_map.find(id);
+        if (it != index_map.end()) {
+            return &records[it->second];
+        }
+        return nullptr;
+    }
+
+    void print_all() const {
+        for (const auto& record : records) {
+            std::cout << "ID: " << record.id << ", Name: " << record.name << "\n";
+        }
+    }
+
+private:
+    RecordStorage records;  // Stores records in a stable manner
+    IndexMap index_map;     // Provides fast ID lookups
+};
+
+// Demonstrate Database Operations
+int main() {
+    DatabaseTable db;
+
+    // Insert records
+    db.insert(101, "Alice");
+    db.insert(102, "Bob");
+    db.insert(103, "Charlie");
+
+    // Retrieve a record
+    const Record* record = db.find(102);
+    if (record) {
+        std::cout << "Found: ID = " << record->id << ", Name = " << record->name << "\n";
+    } else {
+        std::cout << "Record not found!\n";
+    }
+
+    // Print all records
+    std::cout << "All records:\n";
+    db.print_all();
+
+    return 0;
+}
+
+----
+
+Note:: Key features of this sample are that it is memory-efficient (reducing fragmentation and with good performance), `stable_vector` prevents invalid references when resizing, and `flat_map` is faster than `std::map` for heavy use.
+
+== Optimize Memory Allocation
+
+As we are dealing with frequent allocations of small objects (the database records) we'll enhance our database engine by using boost:pool[]. This library avoids repeated calls to `malloc`, `new` and `delete`.
+
+[source,cpp]
+----
+#include <boost/container/flat_map.hpp>
+#include <boost/pool/pool.hpp>
+#include <iostream>
+#include <string>
+
+struct Record {
+    int id;
+    std::string name;
+
+    Record(int id, std::string name) : id(id), name(std::move(name)) {}
+};
+
+class DatabaseTable {
+public:
+    using IndexMap = boost::container::flat_map<int, Record*>;
+
+    DatabaseTable() : recordPool(sizeof(Record)) {}
+
+    Record* insert(int id, const std::string& name) {
+        void* memory = recordPool.malloc(); // Allocate memory from the pool
+        if (!memory) {
+            throw std::bad_alloc();
+        }
+        
+        Record* newRecord = new (memory) Record(id, name); // Placement new
+        index_map[id] = newRecord;
+        return newRecord;
+    }
+
+    void remove(int id) {
+        auto it = index_map.find(id);
+        if (it != index_map.end()) {
+            it->second->~Record(); // Call destructor
+            recordPool.free(it->second); // Free memory back to the pool
+            index_map.erase(it);
+        }
+    }
+
+    Record* find(int id) {
+        auto it = index_map.find(id);
+        return (it != index_map.end()) ? it->second : nullptr;
+    }
+
+    void print_all() {
+        for (const auto& pair : index_map) {
+            std::cout << "ID: " << pair.first << ", Name: " << pair.second->name << "\n";
+        }
+    }
+
+    ~DatabaseTable() {
+        for (const auto& pair : index_map) {
+            pair.second->~Record();
+            recordPool.free(pair.second);
+        }
+    }
+
+private:
+    boost::pool<> recordPool;
+    IndexMap index_map;
+};
+
+// Demonstrate Efficient Memory Use
+int main() {
+    DatabaseTable db;
+
+    // Insert records
+    db.insert(101, "Alice");
+    db.insert(102, "Bob");
+    db.insert(103, "Charlie");
+
+    // Retrieve a record
+    Record* record = db.find(102);
+    if (record) {
+        std::cout << "Found: ID = " << record->id << ", Name = " << record->name << "\n";
+    }
+
+    // Remove a record
+    db.remove(102);
+    if (!db.find(102)) {
+        std::cout << "Record 102 removed successfully.\n";
+    }
+
+    // Print all records
+    std::cout << "All records:\n";
+    db.print_all();
+
+    return 0;
+}
+
+----
+
+Note:: Custom _Object Pools_ can be tuned for your specific object sizes.
+
+== Integrate Shared Memory
+
+In a realistic database environment, you would probably want to enable a shared-memory database table that multiple processes can access simultaneously. For this, we need the features of boost:interprocess[]. This library enables multiple processes to share the same data faster than inter-process communication (IPC) via files or sockets, and includes mutexes and condition variables.
+
+We modify our `DatabaseTable` to store records in shared memory instead of standard heap memory.
+
+[source,cpp]
+----
+#include <boost/interprocess/managed_shared_memory.hpp>
+#include <boost/interprocess/sync/named_mutex.hpp>
+#include <boost/container/flat_map.hpp>
+#include <iostream>
+#include <string>
+
+namespace bip = boost::interprocess;
+
+struct Record {
+    int id;
+    char name[32];
+
+    Record(int id, const std::string& name) : id(id) {
+        std::strncpy(this->name, name.c_str(), sizeof(this->name));
+        this->name[sizeof(this->name) - 1] = '\0'; // Ensure null termination
+    }
+};
+
+class SharedDatabase {
+public:
+    SharedDatabase() 
+        : segment(bip::open_or_create, "SharedMemory", 65536) // 64 KB shared memory
+    {
+        table = segment.find_or_construct<TableType>("RecordTable")();
+    }
+
+    void insert(int id, const std::string& name) {
+        bip::scoped_lock<bip::named_mutex> lock(mutex);
+        if (table->find(id) == table->end()) {
+            Record* record = segment.construct<Record>(bip::anonymous_instance)(id, name);
+            (*table)[id] = record;
+        }
+    }
+
+    Record* find(int id) {
+        bip::scoped_lock<bip::named_mutex> lock(mutex);
+        auto it = table->find(id);
+        return (it != table->end()) ? it->second : nullptr;
+    }
+
+    void remove(int id) {
+        bip::scoped_lock<bip::named_mutex> lock(mutex);
+        auto it = table->find(id);
+        if (it != table->end()) {
+            segment.destroy_ptr(it->second);
+            table->erase(it);
+        }
+    }
+
+    void print_all() {
+        bip::scoped_lock<bip::named_mutex> lock(mutex);
+        for (const auto& pair : *table) {
+            std::cout << "ID: " << pair.first << ", Name: " << pair.second->name << "\n";
+        }
+    }
+
+private:
+    using TableType = boost::container::flat_map<int, Record*, std::less<int>, bip::allocator<std::pair<const int, Record*>, bip::managed_shared_memory::segment_manager>>;
+    
+    bip::managed_shared_memory segment;
+    TableType* table;
+    static inline bip::named_mutex mutex{bip::open_or_create, "SharedDBMutex"};
+};
+
+// Process 1 (Writer) – Insert and Modify Data
+int main() {
+    SharedDatabase db;
+
+    db.insert(1, "Alice");
+    db.insert(2, "Bob");
+
+    std::cout << "Process 1 - Initial Records:\n";
+    db.print_all();
+
+    return 0;
+}
+
+// Process 2 (Reader) – Access Shared Memory Data
+int main() {
+    SharedDatabase db;
+
+    std::cout << "Process 2 - Records in Shared Memory:\n";
+    db.print_all();
+
+    return 0;
+}
+
+----
+
+Note:: The sample now avoids manual memory management, prevents race conditions through the use of mutexes, and multiple apps or processes can interact with the database.
+
+== Create a Thread-safe Queue for Inter-thread Communication
+
+With multiple apps or processes now accessing our database, would seem like a good idea to avoid locks or bottlenecks. boost:lockfree[] offers message queues and pre-allocated ring buffers for this purpose.
+
+
+[source,cpp]
+----
+#include <boost/interprocess/managed_shared_memory.hpp>
+#include <boost/interprocess/sync/named_mutex.hpp>
+#include <boost/container/flat_map.hpp>
+#include <boost/lockfree/queue.hpp>
+#include <iostream>
+#include <string>
+#include <thread>
+#include <atomic>
+
+namespace bip = boost::interprocess;
+
+// Structure for storing records
+struct Record {
+    int id;
+    char name[32];
+
+    Record(int id, const std::string& name) : id(id) {
+        std::strncpy(this->name, name.c_str(), sizeof(this->name));
+        this->name[sizeof(this->name) - 1] = '\0'; // Ensure null termination
+    }
+};
+
+// Enum for operation types in the queue
+enum class OperationType { INSERT, REMOVE, FIND, PRINT };
+
+// Structure for a queued database operation
+struct DatabaseTask {
+    OperationType type;
+    int id;
+    std::string name;
+};
+
+// Shared database class
+class SharedDatabase {
+public:
+    SharedDatabase()
+        : segment(bip::open_or_create, "SharedMemory", 65536), // 64 KB shared memory
+          task_queue(128) // Lock-free queue with capacity of 128 tasks
+    {
+        table = segment.find_or_construct<TableType>("RecordTable")();
+    }
+
+    void enqueue_task(const DatabaseTask& task) {
+        while (!task_queue.push(task)); // Non-blocking push
+    }
+
+    void process_tasks() {
+        DatabaseTask task;
+        while (task_queue.pop(task)) { // Non-blocking pop
+            execute_task(task);
+        }
+    }
+
+    void execute_task(const DatabaseTask& task) {
+        bip::scoped_lock<bip::named_mutex> lock(mutex);
+        
+        switch (task.type) {
+            case OperationType::INSERT:
+                if (table->find(task.id) == table->end()) {
+                    Record* record = segment.construct<Record>(bip::anonymous_instance)(task.id, task.name);
+                    (*table)[task.id] = record;
+                }
+                break;
+            
+            case OperationType::REMOVE:
+                if (table->find(task.id) != table->end()) {
+                    segment.destroy_ptr((*table)[task.id]);
+                    table->erase(task.id);
+                }
+                break;
+            
+            case OperationType::FIND:
+                if (table->find(task.id) != table->end()) {
+                    std::cout << "Found: ID=" << task.id << ", Name=" << (*table)[task.id]->name << "\n";
+                } else {
+                    std::cout << "Record with ID=" << task.id << " not found.\n";
+                }
+                break;
+
+            case OperationType::PRINT:
+                for (const auto& pair : *table) {
+                    std::cout << "ID: " << pair.first << ", Name: " << pair.second->name << "\n";
+                }
+                break;
+        }
+    }
+
+private:
+    using TableType = boost::container::flat_map<int, Record*, std::less<int>, bip::allocator<std::pair<const int, Record*>, bip::managed_shared_memory::segment_manager>>;
+    
+    bip::managed_shared_memory segment;
+    TableType* table;
+    static inline bip::named_mutex mutex{bip::open_or_create, "SharedDBMutex"};
+
+    boost::lockfree::queue<DatabaseTask> task_queue;
+};
+
+// Run Multiple Threads to Insert and Query Records
+int main() {
+    SharedDatabase db;
+
+    // Start a worker thread to process tasks
+    std::thread worker([&db]() {
+        while (true) {
+            db.process_tasks();
+            std::this_thread::sleep_for(std::chrono::milliseconds(100));
+        }
+    });
+
+    // Insert records
+    db.enqueue_task({OperationType::INSERT, 1, "Alice"});
+    db.enqueue_task({OperationType::INSERT, 2, "Bob"});
+    db.enqueue_task({OperationType::INSERT, 3, "Charlie"});
+
+    // Find a record
+    db.enqueue_task({OperationType::FIND, 2, ""});
+
+    // Print all records
+    db.enqueue_task({OperationType::PRINT, 0, ""});
+
+    // Remove a record
+    db.enqueue_task({OperationType::REMOVE, 2, ""});
+
+    // Print all records again
+    db.enqueue_task({OperationType::PRINT, 0, ""});
+
+    // Let the worker thread process
+    std::this_thread::sleep_for(std::chrono::seconds(1));
+
+    return 0;
+}
+
+----
+
+Note:: A lock-free queue prevents thread contention, while a separate worker thread processes the queued tasks.
+
+== Add Serialization to Persistently Store the Database
+
+Finally, let's add the features of boost:serialization[] to allow us to save and restore snapshots of our shared-memory database, making it persistent across program runs. We will extend our sample to serialize the records into an archive format (such as binary, XML, or text).
+
+[source,cpp]
+----
+#include <boost/serialization/access.hpp>
+#include <boost/serialization/string.hpp>
+
+struct Record {
+    int id;
+    std::string name;
+
+    Record() = default; // Needed for deserialization
+    Record(int id, const std::string& name) : id(id), name(name) {}
+
+    template<class Archive>
+    void serialize(Archive& ar, const unsigned int version) {
+        ar & id & name;
+    }
+};
+
+// Implement Save and Load Functions
+// Serialize the entire database to a file and deserialize it to restore data.
+#include <boost/archive/text_oarchive.hpp>
+#include <boost/archive/text_iarchive.hpp>
+#include <boost/serialization/map.hpp>
+#include <fstream>
+
+class SharedDatabase {
+public:
+    SharedDatabase()
+        : segment(bip::open_or_create, "SharedMemory", 65536),
+          task_queue(128) 
+    {
+        table = segment.find_or_construct<TableType>("RecordTable")();
+    }
+
+    void save_snapshot(const std::string& filename) {
+        std::map<int, Record> snapshot;
+        
+        for (const auto& pair : *table) {
+            snapshot[pair.first] = *pair.second;
+        }
+
+        std::ofstream ofs(filename);
+        boost::archive::text_oarchive oa(ofs);
+        oa << snapshot;
+
+        std::cout << "📀 Snapshot saved to " << filename << "\n";
+    }
+
+    void load_snapshot(const std::string& filename) {
+        std::ifstream ifs(filename);
+        if (!ifs) {
+            std::cerr << "⚠ Snapshot file not found!\n";
+            return;
+        }
+
+        std::map<int, Record> snapshot;
+        boost::archive::text_iarchive ia(ifs);
+        ia >> snapshot;
+
+        for (const auto& pair : snapshot) {
+            if (table->find(pair.first) == table->end()) {
+                Record* record = segment.construct<Record>(bip::anonymous_instance)(pair.first, pair.second.name);
+                (*table)[pair.first] = record;
+            }
+        }
+
+        std::cout << "📂 Snapshot loaded from " << filename << "\n";
+    }
+
+private:
+    using TableType = boost::container::flat_map<int, Record*, std::less<int>, bip::allocator<std::pair<const int, Record*>, bip::managed_shared_memory::segment_manager>>;
+    
+    bip::managed_shared_memory segment;
+    TableType* table;
+    static inline bip::named_mutex mutex{bip::open_or_create, "SharedDBMutex"};
+
+    boost::lockfree::queue<DatabaseTask> task_queue;
+};
+
+// Modify main to Save and Restore Snapshots
+int main() {
+    SharedDatabase db;
+
+    // Load a previous snapshot (if it exists)
+    db.load_snapshot("database_snapshot.txt");
+
+    // Insert new records
+    db.enqueue_task({OperationType::INSERT, 1, "Alice"});
+    db.enqueue_task({OperationType::INSERT, 2, "Bob"});
+    db.enqueue_task({OperationType::INSERT, 3, "Charlie"});
+
+    // Print current records
+    db.enqueue_task({OperationType::PRINT, 0, ""});
+
+    // Save snapshot before exiting
+    db.save_snapshot("database_snapshot.txt");
+
+    return 0;
+}
+
+----
+
+Note:: Text based snapshots are easily readable, editable, and help verify your code is running correctly. You can always switch to a binary format for some final testing.
+
+Perhaps now consider boost:filesystem[] for file management, and for a heavier duty database engine - integrate boost:asio[] to handle remote database transactions.
+
+The Boost libraries have a lot to offer this particular scenario!
 
 == See Also
 
