@@ -9,17 +9,20 @@ Official repository: https://github.com/boostorg/website-v2-docs
 = High-Performance Database Engine
 :navtitle: Database Engine
 
-Creating a high-performance database application in pass:[C++] involves a range of tasks, including network communication, concurrent programming, memory management, and more. Here are some Boost libraries that might be useful:
+Creating a high-performance database application in pass:[C++] involves a range of tasks, including efficient data structures, shared and optimized memory management, safe message and network communication, persistent storage, and so much more. This section examines how to get started.
 
 [square]
 * <<Libraries>>
-* <<Sample of a Database Engine using Containers>>
+* <<Sample Database Engine using Containers>>
 * <<Optimize Memory Allocation>>
 * <<Integrate Shared Memory>>
 * <<Create a Thread-safe Queue for Inter-thread Communication>>
 * <<Add Serialization to Persistently Store the Database>>
+* <<See Also>>
 
 == Libraries
+
+Here are some Boost libraries that might be useful when planning and building your database app:
 
 [circle]
 * boost:container[] : Provides STL-compatible containers, including stable vector, flat set/map and more. The containers provided by this library can offer performance benefits over their standard library equivalents, making them a good fit for a high-performance database application.
@@ -36,13 +39,13 @@ Creating a high-performance database application in pass:[C++] involves a range 
 
 * boost:thread[] : Provides a portable interface for multithreading, which can be crucial when creating a high-performance database that can handle multiple queries concurrently.
 
-* boost:fiber[] : Provides a framework for micro-/userland-threads (fibers) scheduled cooperatively. Fibers can be used to simplify asynchronous programming, especially when there are many I/O operations, which is typical in database applications.
+* boost:fiber[] : Allows you to write code that works with fibers, which are user-space threads that can be used to write concurrent code. This can be useful in situations where you have many tasks that need to run concurrently but are I/O-bound rather than CPU-bound.
 
 * boost:polygon[] or boost:geometry[] : For storing and querying spatial data, these libraries can provide the necessary data types and algorithms.
 
 * boost:filesystem[] : Provides a portable way of querying and manipulating paths, files, and directories.
 
-== Sample of a Database Engine using Containers
+== Sample Database Engine using Containers
 
 A database engine requires efficient data structures for handling indexes, caches, and storage layouts. The boost:container[] library provides drop-in replacements for standard containers like `std::vector`, `std::map`, and `std::unordered_map`, but optimized for memory efficiency and performance.
 

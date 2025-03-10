@@ -11,6 +11,7 @@ Official repository: https://github.com/boostorg/website-v2-docs
 
 Developing a machine learning library or application involves tasks such as numerical computation, matrix operations, iteration and optimization (endless trial and error), and sometimes xref:task-parallel-computation.adoc[]. It requires not just programming but also a deep understanding of the underlying mathematical and statistical principles.
 
+[square]
 * <<Libraries>>
 * <<Machine Learning Algorithms>>
 * <<Sample of High-Precision Matrix Multiplication>>
@@ -18,6 +19,7 @@ Developing a machine learning library or application involves tasks such as nume
 * <<Add K-Means Clustering with a Real Dataset>>
 * <<Add Visualization of the K-Means Clustering>>
 * <<Footnotes>>
+* <<See Also>>
 
 == Libraries
 
