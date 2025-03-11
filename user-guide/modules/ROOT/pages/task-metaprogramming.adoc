@@ -358,7 +358,7 @@ Note:: Tag dispatching is handled by `hana::make_map`, and runtime tuple process
 Serializing (Integer): 42
 Serializing (Floating Point): 3.14
 Serializing (String): Boost Rocks!
-Serializing (Custom Struct) -> {Name: Alice, Age: 30}
+Serializing (Custom Struct) -> { Name: Alice, Age: 30 }
 
 ----
 
@@ -414,7 +414,7 @@ void serialize(const T& value) {
 template <typename Tuple>
 void auto_generate_serializers(Tuple data) {
 
-    // 🎯 Filter only serializable types (arithmetic, strings, and custom structs)
+    // Filter only serializable types (arithmetic, strings, and custom structs)
     auto serializable_data = hana::filter(data, [](auto x) {
         using T = typename decltype(x)::type;
         return boost::is_arithmetic<T>::value || std::is_same<T, std::string>::value || boost::is_class<T>::value;
@@ -448,7 +448,7 @@ Note:: The data is filtered before `hana::for_each`, reducing unnecessary operat
 Serializing (Integer): 42
 Serializing (Floating Point): 3.14
 Serializing (String): Boost Rocks!
-Serializing (Custom Struct) -> {Name: Alice, Age: 30}
+Serializing (Custom Struct) -> { Name: Alice, Age: 30 }
 
 ----
 
