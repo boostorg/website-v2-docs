@@ -9,23 +9,33 @@ Official repository: https://github.com/boostorg/website-v2-docs
 = Metaprogramming
 :navtitle: Metaprogramming
 
-Boost provides several libraries that are highly useful in metaprogramming, and can greatly ease the process of building your own metaprogramming-based pass:[C++] library.
+Boost provides several libraries that are highly useful in metaprogramming, and can greatly ease the process of building your own metaprogramming-based pass:[C++] library. You will need to clearly understand _heterogeneous types_ link:#footnote1[(1)] and _tuples_ link:#footnote2[(2)].
 
-Metaprogramming in pass:[C++] is a complex topic that can lead to complex code. It should be used judiciously, as it can make code more difficult to understand and maintain. Also, modern pass:[C++] (pass:[C++]11 and later) provides many features, such as `constexpr` and https://en.wikipedia.org/wiki/Variadic_template[variadic templates], that can achieve at runtime what was previously only possible with metaprogramming, so make sure to familiarize yourself with these features before delving too deeply into metaprogramming.
+[square]
+* <<Libraries>>
+* <<Metaprogramming Applications>>
+* <<Automatic Code Generation Sample>>
+* <<Serialize a User-Defined Struct>>
+* <<Compile-time Type Checking>>
+* <<Add Tuple Processing at Runtime>>
+* <<Add Type-traits Filtering>>
+* <<Footnotes>>
+* <<See Also>>
+
+Caution:: Metaprogramming in pass:[C++] is a complex topic that can lead to complex code. It should be used judiciously, as it can make code more difficult to understand and maintain. Also, modern pass:[C++] (pass:[C++]11 and later) provides many features, such as `constexpr` and https://en.wikipedia.org/wiki/Variadic_template[variadic templates], that can achieve at runtime what was previously only possible with metaprogramming, so make sure to familiarize yourself with these features before delving too deeply into metaprogramming.
 
 == Libraries
 
-* boost:mp11[]:  A Metaprogramming library that provides a framework of compile-time algorithms, preprocessor directives, sequences and metafunctions, that can greatly facilitate metaprogramming tasks.
+[#footnote1-location]
+* boost:mp11[]: A metaprogramming library that provides a framework of compile-time algorithms, preprocessor directives, sequences and metafunctions, that can greatly facilitate metaprogramming tasks.
 
-* boost:fusion[]:  Provides a set of tools for working with tuples, which can be used to work with heterogeneous collections at compile time. It helps to bridge the gap between the compile-time world and the runtime world.
+* boost:hana[]: This is a modern, high-level library for metaprogramming. Like boost:fusion[], it is used for working with heterogeneous collections, but it uses modern pass:[C++] features and can be easier to use than (and can be considered a successor to) both boost:mpl[] and boost:fusion[].
 
-* boost:hana[]:  This is a modern, high-level library for metaprogramming. Like boost:fusion[], it is used for working with heterogeneous collections, but it uses modern pass:[C++] features and can be easier to use than (and can be considered the successor to) both boost:mpl[] and boost:fusion[].
+* boost:type-traits[]: Provides a collection of templates for information about types. This can be useful in many metaprogramming tasks, as it allows for compile-time introspection of types.
 
-* boost:type-traits[]:  Provides a collection of templates for information about types. This can be useful in many metaprogramming tasks, as it allows for compile-time introspection of types.
+* boost:static-assert[]: Provides a macro for compile-time assertions. This can be useful to enforce constraints at compile time.
 
-* boost:static-assert[]:  Provides a macro for compile-time assertions. This can be useful in metaprogramming to enforce constraints at compile time.
-
-NOTE: boost:mpl[] and boost:preprocessor[], both still available in the Boost library, have been superseded by boost:mp11[].
+Note:: boost:mpl[], boost:fusion[] and boost:preprocessor[], all still available in the Boost library, have been superseded by boost:mp11[] and boost:hana[].
 
 == Metaprogramming Applications
 
@@ -43,6 +53,431 @@ Metaprogramming, the practice of writing code that generates or manipulates othe
 * Reflection and Introspection: Although pass:[C++] does not support reflection directly, metaprogramming can be used to emulate some aspects of reflection, such as type traits and type-based dispatch.
 
 * Policy-based Design: This is a design paradigm in pass:[C++] where behavior is encapsulated in separate classes (policies), and classes are composed by specifying a set of policies as template parameters. This allows for high flexibility and reusability while maintaining performance.
+
+== Automatic Code Generation Sample
+
+The scenario is that we want to create a serializer for multiple types (`int`, `double`, `std::string`) without manually writing code for each one.
+
+We'll start by using boost:mp11[] to generate a tuple of types at compile-time, and apply a function to each type automatically.
+
+[source,cpp]
+----
+#include <boost/mp11.hpp>
+#include <iostream>
+#include <tuple>
+#include <string>
+
+namespace mp = boost::mp11;
+
+// Example function to "serialize" different types
+template <typename T>
+void serialize(const T& value) {
+    std::cout << "Serializing: " << value << "\n";
+}
+
+// Generate and call functions for multiple types
+template <typename... Types>
+void auto_generate_serializers(std::tuple<Types...> data) {
+
+    // Iterate over each type and call serialize()
+    mp::mp_for_each<std::tuple<Types...>>([&](auto type_wrapper) {
+        using T = decltype(type_wrapper);
+
+        serialize(std::get<T>(data));  // Automatically gets the correct type from tuple
+    });
+}
+
+int main() {
+
+    // Define a tuple of different types
+    std::tuple<int, double, std::string> data(42, 3.14, "Hello, MP11!");
+
+    // Automatically generate and call serializers
+    auto_generate_serializers(data);
+
+    return 0;
+}
+
+----
+
+=== Output
+
+[source,text]
+----
+Serializing: 42
+Serializing: 3.14
+Serializing: Hello, MP11!
+
+----
+
+The advantages of automatically generating correct functions include compile-time type safety, and eliminating runtime overhead of type checking.
+
+== Serialize a User-Defined Struct
+
+Our scenario makes more sense if we want to serialize a custom user-defined struct. A simple structure in this example, but it could be quite complex.
+
+[source,cpp]
+----
+#include <boost/mp11.hpp>
+#include <iostream>
+#include <tuple>
+#include <string>
+
+namespace mp = boost::mp11;
+
+// Custom struct
+struct Person {
+    std::string name;
+    int age;
+};
+
+// Overload `operator<<` to allow printing of Person objects
+std::ostream& operator<<(std::ostream& os, const Person& p) {
+    return os << "{ Name: " << p.name << ", Age: " << p.age << " }";
+}
+
+// Serialize function template
+template <typename T>
+void serialize(const T& value) {
+    std::cout << "Serializing: " << value << "\n";
+}
+
+// Specialization for Person (if needed)
+template <>
+void serialize(const Person& p) {
+    std::cout << "Serializing Person -> Name: " << p.name << ", Age: " << p.age << "\n";
+}
+
+// Automatically process multiple types in a tuple
+template <typename... Types>
+void auto_generate_serializers(std::tuple<Types...> data) {
+    mp::mp_for_each<std::tuple<Types...>>([&](auto type_wrapper) {
+        using T = decltype(type_wrapper);
+        serialize(std::get<T>(data));  // Extract correct type from tuple and serialize
+    });
+}
+
+int main() {
+    
+    // Define a tuple with primitive types + a custom struct
+    std::tuple<int, double, std::string, Person> data(42, 3.14, "Hello, MP11!", {"Alice", 30});
+
+    // Automatically generate and call serializers
+    auto_generate_serializers(data);
+
+    return 0;
+}
+
+----
+
+Note:: The code supports `operator<<` for printing, and now `mp_for_each` automatically handles `Person` just like other types.
+
+=== Output
+
+[source,text]
+----
+Serializing: 42
+Serializing: 3.14
+Serializing: Hello, MP11!
+Serializing Person -> Name: Alice, Age: 30
+
+----
+
+The beauty of this approach is that you can just add more types to the tuple, and it just works!
+
+== Compile-time Type Checking
+
+Let's extend the sample to integrate boost:type-traits[] to determine if a type is serializable at compile time. The functions we will use are `is_arithmetic<T>` to check if `T` is a number type (`int`, `double`, etc.), and `is_class<T>` to check if `T` is a user-defined class (`Person`, etc.). The idea is that the compile-time filtering ensures that the code can only process serializable types.
+
+Note:: `void` is an example of a non-serializable type.
+
+[source,cpp]
+----
+#include <boost/mp11.hpp>
+#include <boost/type_traits.hpp>
+#include <iostream>
+#include <tuple>
+#include <string>
+
+namespace mp = boost::mp11;
+
+// Custom struct
+struct Person {
+    std::string name;
+    int age;
+};
+
+// Overload `operator<<` to allow printing of Person objects
+std::ostream& operator<<(std::ostream& os, const Person& p) {
+    return os << "{ Name: " << p.name << ", Age: " << p.age << " }";
+}
+
+// Serialize function template
+template <typename T>
+void serialize(const T& value) {
+    if constexpr (boost::is_arithmetic<T>::value || std::is_same<T, std::string>::value) {
+        std::cout << "Serializing: " << value << "\n";
+    } else if constexpr (boost::is_class<T>::value) {
+        std::cout << "Serializing Class -> ";
+        std::cout << value << "\n"; // Uses operator<< overload
+    } else {
+        std::cout << "Skipping unsupported type!\n";
+    }
+}
+
+// Automatically process serializable types in a tuple
+template <typename... Types>
+void auto_generate_serializers(std::tuple<Types...> data) {
+    mp::mp_for_each<std::tuple<Types...>>([&](auto type_wrapper) {
+        using T = decltype(type_wrapper);
+
+        // Only serialize supported types
+        if constexpr (boost::is_arithmetic<T>::value || boost::is_class<T>::value || std::is_same<T, std::string>::value) {
+            serialize(std::get<T>(data));
+        } else {
+            std::cout << "Skipping non-serializable type\n";
+        }
+    });
+}
+
+int main() {
+
+    // Define a tuple with primitive types, a custom struct, and an unsupported type
+    std::tuple<int, double, std::string, Person, void*> data(42, 3.14, "Boost Rocks!", {"Alice", 30}, nullptr);
+
+    // Automatically generate and call serializers
+    auto_generate_serializers(data);
+
+    return 0;
+}
+
+----
+
+Note:: Uses `if constexpr` for compile-time filtering, and `std::string` is explicitly handled.
+
+=== Output
+
+[source,text]
+----
+Serializing: 42
+Serializing: 3.14
+Serializing: Boost Rocks!
+Serializing Class -> { Name: Alice, Age: 30 }
+Skipping non-serializable type
+
+----
+
+== Add Tuple Processing at Runtime
+
+boost:mp11[] is for pure type-based metaprogramming (so works only at compile time), whereas boost:hana[] takes a value-based metaprogramming approach (it works at both compile time and runtime). In a real application, you may well choose to use one of these two libraries, and not both!
+
+boost:hana[] adds efficient tuple handling at runtime (for example, easier access and transformation), in addition to tag-based dispatching to categorize different types (arithmetic, class, etc.), and concise functional-style operations. To summarize when to use each library:
+
+[width="100%",cols="12%,22%,66%",options="header",stripes=even,frame=none]
+|===
+| Feature	| boost:mp11[]	| boost:hana[]
+| Type-based Metaprogramming | Yes	| Yes
+| Value-based Metaprogramming	| No | Yes
+| Compile-time Transformations | Yes	| Yes
+| Runtime Tuple Handling	| No | Yes
+| Easier Type Mapping	| No | Yes
+| Better Compile-Time Speed	| Yes | No, Slower
+|===
+
+Let's update our sample to include tag dispatching, so each type is classified at compile time, and runtime tuple processing, so the sample iterates over heterogeneous types at runtime.
+
+[source,cpp]
+----
+#include <boost/hana.hpp>
+#include <boost/mp11.hpp>
+#include <boost/type_traits.hpp>
+#include <iostream>
+#include <string>
+
+namespace hana = boost::hana;
+namespace mp = boost::mp11;
+
+// Custom struct
+struct Person {
+    std::string name;
+    int age;
+};
+
+// Overload `operator<<` for printing
+std::ostream& operator<<(std::ostream& os, const Person& p) {
+    return os << "{ Name: " << p.name << ", Age: " << p.age << " }";
+}
+
+// Tag-based dispatching
+auto classify = hana::make_map(
+    hana::make_pair(hana::type_c<int>, "Integer"),
+    hana::make_pair(hana::type_c<double>, "Floating Point"),
+    hana::make_pair(hana::type_c<std::string>, "String"),
+    hana::make_pair(hana::type_c<Person>, "Custom Struct")
+);
+
+// Serialize function
+template <typename T>
+void serialize(const T& value) {
+    if constexpr (boost::is_arithmetic<T>::value || std::is_same<T, std::string>::value) {
+        std::cout << "Serializing (" << hana::find(classify, hana::type_c<T>).value() << "): " << value << "\n";
+    } else if constexpr (boost::is_class<T>::value) {
+        std::cout << "Serializing (Custom Struct) -> " << value << "\n";
+    } else {
+        std::cout << "Skipping non-serializable type!\n";
+    }
+}
+
+// Process a tuple
+template <typename Tuple>
+void auto_generate_serializers(Tuple data) {
+    hana::for_each(data, [](auto x) {
+        serialize(x);
+    });
+}
+
+int main() {
+
+    // Declare a tuple (runtime and compile-time)
+    auto data = hana::make_tuple(42, 3.14, "Boost Rocks!", Person{"Alice", 30});
+
+    // Automatically process serializable elements
+    auto_generate_serializers(data);
+
+    return 0;
+}
+
+----
+
+Note:: Tag dispatching is handled by `hana::make_map`, and runtime tuple processing is managed by `hana::for_each`.
+
+=== Output
+
+[source,text]
+----
+Serializing (Integer): 42
+Serializing (Floating Point): 3.14
+Serializing (String): Boost Rocks!
+Serializing (Custom Struct) -> { Name: Alice, Age: 30 }
+
+----
+
+== Add Type-traits Filtering
+
+Type filtering will allow us to selectively process elements of the tuple based on type traits, filtering out elements that don't match a given criterion.
+
+In the following code, `hana::filter` removes non-serializable types, for example the `nullptr` value is ignored. Only arithmetic, `std::string`, and custom structs are processed.
+
+[source,cpp]
+----
+#include <boost/hana.hpp>
+#include <boost/mp11.hpp>
+#include <boost/type_traits.hpp>
+#include <iostream>
+#include <string>
+
+namespace hana = boost::hana;
+namespace mp = boost::mp11;
+
+// Custom struct
+struct Person {
+    std::string name;
+    int age;
+};
+
+// Overload `operator<<` for printing
+std::ostream& operator<<(std::ostream& os, const Person& p) {
+    return os << "{ Name: " << p.name << ", Age: " << p.age << " }";
+}
+
+// Tag-based dispatching
+auto classify = hana::make_map(
+    hana::make_pair(hana::type_c<int>, "Integer"),
+    hana::make_pair(hana::type_c<double>, "Floating Point"),
+    hana::make_pair(hana::type_c<std::string>, "String"),
+    hana::make_pair(hana::type_c<Person>, "Custom Struct")
+);
+
+// Serialize function
+template <typename T>
+void serialize(const T& value) {
+    if constexpr (boost::is_arithmetic<T>::value || std::is_same<T, std::string>::value) {
+        std::cout << "Serializing (" << hana::find(classify, hana::type_c<T>).value() << "): " << value << "\n";
+    } else if constexpr (boost::is_class<T>::value) {
+        std::cout << "Serializing (Custom Struct) -> " << value << "\n";
+    } else {
+        std::cout << "Skipping non-serializable type!\n";
+    }
+}
+
+// Process a tuple
+template <typename Tuple>
+void auto_generate_serializers(Tuple data) {
+
+    // Filter only serializable types (arithmetic, strings, and custom structs)
+    auto serializable_data = hana::filter(data, [](auto x) {
+        using T = typename decltype(x)::type;
+        return boost::is_arithmetic<T>::value || std::is_same<T, std::string>::value || boost::is_class<T>::value;
+    });
+
+    // Process the filtered data
+    hana::for_each(serializable_data, [](auto x) {
+        serialize(x);
+    });
+}
+
+int main() {
+
+    // Declare a tuple (runtime and compile-time)
+    auto data = hana::make_tuple(42, 3.14, "Boost Rocks!", Person{"Alice", 30}, nullptr);
+
+    // Automatically process only serializable elements
+    auto_generate_serializers(data);
+
+    return 0;
+}
+
+----
+
+Note:: The data is filtered before `hana::for_each`, reducing unnecessary operations.
+
+=== Output
+
+[source,text]
+----
+Serializing (Integer): 42
+Serializing (Floating Point): 3.14
+Serializing (String): Boost Rocks!
+Serializing (Custom Struct) -> { Name: Alice, Age: 30 }
+
+----
+
+== Footnotes
+
+[#footnote1]
+link:#footnote1-location[(1)]
+_Heterogeneous_ refers to data structures or operations that can handle multiple types, rather than being restricted to a single type. This is particularly useful in template-based programming, where different types can be stored and manipulated in a type-safe manner at compile time. A key example is `std::tuple` or `boost::hana::tuple`, which allow elements of different types to coexist in a single structure, enabling powerful compile-time computations and flexible generic programming.
+
+[#footnote2]
+link:#footnote1-location[(2)]
+A _tuple_ is a fixed-size, ordered collection of heterogeneous types, typically represented at compile-time using template-based constructs. Unlike runtime tuples (such as `std::tuple`), metaprogramming tuples primarily serve as type lists or compile-time containers, enabling static type manipulation, transformations, and computations. Metaprogramming tuples are frequently used in boost:mp11[], boost:hana[], and boost:fusion[], where they allow for:
+
+. _Type introspection_ - examining contained types at compile-time
+. _Type transformations_ - modifying types before instantiation
+. _Static dispatching_ - choosing behavior based on type properties
+. _Compile-time iteration_ - for example, `mp_for_each` in boost:mp11[]
+
+For example, a metaprogramming tuple can represent a heterogeneous list of types:
+
+[source,cpp]
+----
+using my_types = boost::mp11::mp_list<int, double, std::string>;
+
+----
+
+This `mp_list` is a type-level tuple that can be manipulated without creating runtime instances.
+
+Unlike `std::tuple`, which holds actual values, metaprogramming tuples operate entirely at the type level, making them essential for  zero-runtime-cost template metaprogramming.
 
 == See Also
 
