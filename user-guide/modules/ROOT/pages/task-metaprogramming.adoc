@@ -9,6 +9,7 @@ Official repository: https://github.com/boostorg/website-v2-docs
 = Metaprogramming
 :navtitle: Metaprogramming
 
+[#footnote1-location]
 Boost provides several libraries that are highly useful in metaprogramming, and can greatly ease the process of building your own metaprogramming-based pass:[C++] library. You will need to clearly understand _heterogeneous types_ link:#footnote1[(1)] and _tuples_ link:#footnote2[(2)].
 
 [square]
@@ -26,7 +27,6 @@ Caution:: Metaprogramming in pass:[C++] is a complex topic that can lead to comp
 
 == Libraries
 
-[#footnote1-location]
 * boost:mp11[]: A metaprogramming library that provides a framework of compile-time algorithms, preprocessor directives, sequences and metafunctions, that can greatly facilitate metaprogramming tasks.
 
 * boost:hana[]: This is a modern, high-level library for metaprogramming. Like boost:fusion[], it is used for working with heterogeneous collections, but it uses modern pass:[C++] features and can be easier to use than (and can be considered a successor to) both boost:mpl[] and boost:fusion[].

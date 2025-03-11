@@ -19,7 +19,6 @@ Official repository: https://github.com/boostorg/website-v2-docs
 ** xref:task-system.adoc[]
 ** xref:task-text-processing.adoc[]
 ** xref:testing-debugging.adoc[]
-*** xref:boost-test-tutorial.adoc[]
 
 * Advanced Scenarios
 ** xref:advanced-introduction.adoc[]
