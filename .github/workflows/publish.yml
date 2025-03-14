@@ -16,6 +16,11 @@ on:
       - master
       - develop
   workflow_dispatch:
+    inputs:
+      boostlook_branch:
+        description: 'Branch to use for boostlook.css'
+        required: true
+        default: 'master'
 
 concurrency:
   group: ${{format('publish-{0}:{1}', github.repository, github.ref)}}
@@ -109,7 +114,7 @@ jobs:
           set -x
           # Comment out dynamic branch selection for now
           # BOOSTLOOK_BRANCH="${{ (startsWith(github.ref, 'refs/heads/develop') && 'develop') || 'master' }}"
-          export BOOSTLOOK_BRANCH="master"
+          export BOOSTLOOK_BRANCH="${{ github.event.inputs.boostlook_branch || 'master' }}"
           ./build.sh
 
       - name: Setup Ninja
