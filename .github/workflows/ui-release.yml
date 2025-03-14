@@ -14,6 +14,11 @@ on:
   pull_request:
     branches: [ "master", "develop" ]
   workflow_dispatch:
+    inputs:
+      boostlook_branch:
+        description: 'Branch to use for boostlook.css'
+        required: true
+        default: 'master'
 
 concurrency:
   group: ${{format('ui-release-{0}:{1}', github.repository, github.ref)}}
@@ -41,6 +46,7 @@ jobs:
     - name: Build
       working-directory: antora-ui
       run: |
+        export BOOSTLOOK_BRANCH="${{ github.event.inputs.boostlook_branch || 'master' }}"
         npm ci
         gulp bundle
 
