@@ -9,9 +9,28 @@ Official repository: https://github.com/boostorg/website-v2-docs
 = System Components
 :navtitle: System
 
-Developing a system component for an operating system in pass:[C++] involves a wide range of low-level tasks. The relevant Boost libraries will largely depend on the specifics of your project. Some operating systems may not support all of the features of these libraries, and for low-level tasks, it may be more appropriate to use system APIs directly. Here are some Boost libraries that should be useful:
+Developing a system component for an operating system in pass:[C++] involves a wide range of low-level tasks. The relevant Boost libraries will largely depend on the specifics of your project. Some operating systems may not support all of the features of these libraries, and for low-level tasks, it may be more appropriate to use system APIs directly. For higher-level system operations, or cross-platform tasks, Boost libraries have a lot to offer.
+
+[square]
+* <<Libraries>>
+* <<Sample System File and Error Handling>>
+* <<Support Configuration Settings>>
+* <<Time the System Operations>>
+* <<See Also>>
+
+== Libraries
+
+Here are some Boost libraries that are useful in building system components:
 
 [circle]
+* boost:filesystem[] : This library provides a portable way of querying and manipulating paths, files, and directories. It can be very helpful for system-level tasks that need to interact with the file system.
+
+* boost:program_options[] : This library allows program options to be defined, with types and default values, and their values to be retrieved from the command line, from config files, and programmatically.
+
+* boost:system[] : This library provides simple, light-weight error_code objects that encapsulate system-specific "error codes", distinct from pass:[C++] exceptions.
+
+* boost:chrono[] : This library provides a set of handy features for measuring time, which might be useful for system-level tasks that need to measure or manipulate time.
+
 * boost:asio[] : This library provides a consistent asynchronous model using a modern pass:[C++] approach for network and low-level I/O programming. This might be useful for network-related components or any component that interacts with hardware.
 
 * boost:interprocess[] : This library provides a way of sharing memory and communicating between processes. It's useful for creating shared memory regions, handling inter-process communication, managing shared objects, and synchronizing processes.
@@ -20,19 +39,365 @@ Developing a system component for an operating system in pass:[C++] involves a w
 
 * boost:fiber[] : A fiber is a lightweight thread of execution. boost:fiber[] provides a framework for creating and managing fibers, which can be useful in some system-level programming tasks.
 
-* boost:filesystem[] : This library provides a portable way of querying and manipulating paths, files, and directories. It can be very helpful for system-level tasks that need to interact with the file system.
-
-* boost:program_options[] : This library allows program options to be defined, with types and default values, and their values to be retrieved from the command line, from config files, and programmatically.
-
-* boost:system[] : This library provides simple, light-weight error_code objects that encapsulate system-specific "error codes", distinct from pass:[C++] exceptions.
-
 * boost:container[] : This provides advanced data structures beyond the ones provided by the pass:[C++] standard library, which may be useful in certain scenarios.
 
 * boost:process[] : This library allows you to create child processes, setup their environment and provides means to communicate with them asynchronously through various streams.
 
-* boost:chrono[] : This library provides a set of handy features for measuring time, which might be useful for system-level tasks that need to measure or manipulate time.
+== Sample System File and Error Handling
+
+Two core features of most systems are in file handling and robust error reporting. For a simpler sample we'll create an app that uses boost:filesystem[] to manipulate files and directories, and boost:system[] to capture and display specific errors.
+
+The following sample creates a directory (`example_directory`) if it does not exist, writes a file (`example_file.txt.`) to the directory, reads from the file, and handles system-specific errors. Finally, it cleans up by deleting the file and directory, still handling any errors.
+
+For examples of networking and threading code, refer to xref:task-networking.adoc[] and xref:task-parallel-computation.adoc[].
+
+[source,cpp]
+----
+#include <boost/filesystem.hpp>
+#include <boost/system/error_code.hpp>
+#include <iostream>
+#include <fstream>
+
+namespace fs = boost::filesystem;
+namespace sys = boost::system;
+
+//  Check and report system-specific errors
+void handle_error(const sys::error_code& ec, const std::string& action) {
+    if (ec) {
+        std::cerr << "Error while " << action << ": " << ec.message() 
+                  << " (Code: " << ec.value() << ")\n";
+    }
+}
+
+int main() {
+    fs::path dir = "example_directory";
+    fs::path file = dir / "example_file.txt";
+    sys::error_code ec;
+
+    // Create directory if it doesn't exist
+    if (!fs::exists(dir)) {
+        fs::create_directory(dir, ec);
+        handle_error(ec, "creating directory");
+    }
+
+    // Write to the file
+    {
+        std::ofstream ofs(file.string());
+        if (!ofs) {
+            std::cerr << "Failed to open file for writing!\n";
+            return 1;
+        }
+        ofs << "Hello, Boost.Filesystem!\n";
+    }
+
+    // Read from the file
+    {
+        std::ifstream ifs(file.string());
+        if (!ifs) {
+            std::cerr << "Failed to open file for reading!\n";
+            return 1;
+        }
+        std::string content;
+        std::getline(ifs, content);
+        std::cout << "File content: " << content << '\n';
+    }
+
+    // Remove file
+    fs::remove(file, ec);
+    handle_error(ec, "removing file");
+
+    // Remove directory
+    fs::remove(dir, ec);
+    handle_error(ec, "removing directory");
+
+    return 0;
+}
+
+----
+
+Note:: boost:filesystem[] ensures directory and file management is platform-independent.
+
+== Support Configuration Settings
+
+We are now going to include boost:program_options[] to allow configuration settings via command-line arguments and configuration files.
+
+The code now allows users to specify directory and file names, reads settings from a `.ini` file, and uses default values when one is not specified.
+
+[source,cpp]
+----
+#include <boost/filesystem.hpp>
+#include <boost/system/error_code.hpp>
+#include <boost/program_options.hpp>
+#include <iostream>
+#include <fstream>
+
+namespace fs = boost::filesystem;
+namespace sys = boost::system;
+namespace po = boost::program_options;
+
+//  Check and report system-specific errors
+void handle_error(const sys::error_code& ec, const std::string& action) {
+    if (ec) {
+        std::cerr << "Error while " << action << ": " << ec.message() 
+                  << " (Code: " << ec.value() << ")\n";
+    }
+}
+
+int main(int argc, char* argv[]) {
+    // Default configuration values
+    std::string dir = "default_directory";
+    std::string filename = "default_file.txt";
+    std::string config_file = "config.ini";
+
+    // Define command-line options
+    po::options_description desc("Allowed options");
+    desc.add_options()
+        ("help,h", "Show help message")
+        ("dir,d", po::value<std::string>(&dir), "Directory name")
+        ("file,f", po::value<std::string>(&filename), "File name")
+        ("config,c", po::value<std::string>(&config_file)->default_value("config.ini"), "Configuration file");
+
+    // Parse command-line options
+    po::variables_map vm;
+    po::store(po::parse_command_line(argc, argv, desc), vm);
+    po::notify(vm);
+
+    if (vm.count("help")) {
+        std::cout << desc << std::endl;
+        return 0;
+    }
+
+    // Read options from configuration file (if available)
+    std::ifstream ifs(config_file);
+    if (ifs) {
+        po::store(po::parse_config_file(ifs, desc), vm);
+        po::notify(vm);
+    }
+
+    fs::path directory(dir);
+    fs::path file = directory / filename;
+    sys::error_code ec;
+
+    // Create directory if it doesn't exist
+    if (!fs::exists(directory)) {
+        fs::create_directory(directory, ec);
+        handle_error(ec, "creating directory");
+    }
+
+    // Write to the file
+    {
+        std::ofstream ofs(file.string());
+        if (!ofs) {
+            std::cerr << "Failed to open file for writing!\n";
+            return 1;
+        }
+        ofs << "Hello, Boost.Program_Options and Boost.Filesystem!\n";
+    }
+
+    // Read from the file
+    {
+        std::ifstream ifs(file.string());
+        if (!ifs) {
+            std::cerr << "Failed to open file for reading!\n";
+            return 1;
+        }
+        std::string content;
+        std::getline(ifs, content);
+        std::cout << "File content: " << content << '\n';
+    }
+
+    // Remove file
+    fs::remove(file, ec);
+    handle_error(ec, "removing file");
+
+    // Remove directory
+    fs::remove(directory, ec);
+    handle_error(ec, "removing directory");
+
+    return 0;
+}
+
+----
+
+The command line options accepted by the sample are:
+
+[width="100%",cols="1,3",options="header",stripes=even,frame=none]
+|===
+| Option | Description
+| `--dir` or `-d`| Specify the directory.
+| `--file` or `-f` | Specify the filename.
+| `--config` or `-c`  | Specify the configuration file.
+| `--help` or `-h` | Display available options.
+|===
+
+The following is an example `config.ini` file:
+
+[source,text]
+----
+dir = my_directory
+file = my_file.txt
+
+----
+
+The following command lines show how to run with defaults, run with options specified manually, and then run with a config file:
+
+[source,text]
+----
+./program
+
+./program --dir=my_data --file=data.txt
+
+./program --config=my_config.ini
+
+----
+
+== Time the System Operations
+
+It might be important to record the time taken for system operations, both in testing and in the operation of a system app. So, let's integrate boost:chrono[] to measure the time taken for key filesystem operations, such as creating directories, writing to files, reading files, and deleting files.
+
+[source,cpp]
+----
+#include <boost/filesystem.hpp>
+#include <boost/system/error_code.hpp>
+#include <boost/program_options.hpp>
+#include <boost/chrono.hpp>
+#include <iostream>
+#include <fstream>
+
+namespace fs = boost::filesystem;
+namespace sys = boost::system;
+namespace po = boost::program_options;
+namespace chrono = boost::chrono;
+
+//  Check and report system-specific errors
+void handle_error(const sys::error_code& ec, const std::string& action) {
+    if (ec) {
+        std::cerr << "Error while " << action << ": " << ec.message()
+                  << " (Code: " << ec.value() << ")\n";
+    }
+}
+
+int main(int argc, char* argv[]) {
+    // Default configuration values
+    std::string dir = "default_directory";
+    std::string filename = "default_file.txt";
+    std::string config_file = "config.ini";
+
+    // Define command-line options
+    po::options_description desc("Allowed options");
+    desc.add_options()
+        ("help,h", "Show help message")
+        ("dir,d", po::value<std::string>(&dir), "Directory name")
+        ("file,f", po::value<std::string>(&filename), "File name")
+        ("config,c", po::value<std::string>(&config_file)->default_value("config.ini"), "Configuration file");
+
+    // Parse command-line options
+    po::variables_map vm;
+    po::store(po::parse_command_line(argc, argv, desc), vm);
+    po::notify(vm);
+
+    if (vm.count("help")) {
+        std::cout << desc << std::endl;
+        return 0;
+    }
+
+    // Read options from configuration file (if available)
+    std::ifstream ifs_config(config_file);
+    if (ifs_config) {
+        po::store(po::parse_config_file(ifs_config, desc), vm);
+        po::notify(vm);
+    }
+
+    fs::path directory(dir);
+    fs::path file = directory / filename;
+    sys::error_code ec;
+
+    // Measure time for directory creation
+    auto start = chrono::steady_clock::now();
+    if (!fs::exists(directory)) {
+        fs::create_directory(directory, ec);
+        handle_error(ec, "creating directory");
+    }
+    auto end = chrono::steady_clock::now();
+    std::cout << "Directory creation took: " 
+              << chrono::duration_cast<chrono::microseconds>(end - start).count() 
+              << " microseconds\n";
+
+    // Measure time for writing to file
+    start = chrono::steady_clock::now();
+    {
+        std::ofstream ofs(file.string());
+        if (!ofs) {
+            std::cerr << "Failed to open file for writing!\n";
+            return 1;
+        }
+        ofs << "Hello, Boost.Program_Options, Boost.Filesystem, and Boost.Chrono!\n";
+    }
+    end = chrono::steady_clock::now();
+    std::cout << "File writing took: " 
+              << chrono::duration_cast<chrono::microseconds>(end - start).count() 
+              << " microseconds\n";
+
+    // Measure time for reading from file
+    start = chrono::steady_clock::now();
+    {
+        std::ifstream ifs(file.string());
+        if (!ifs) {
+            std::cerr << "Failed to open file for reading!\n";
+            return 1;
+        }
+        std::string content;
+        std::getline(ifs, content);
+        std::cout << "File content: " << content << '\n';
+    }
+    end = chrono::steady_clock::now();
+    std::cout << "File reading took: " 
+              << chrono::duration_cast<chrono::microseconds>(end - start).count() 
+              << " microseconds\n";
+
+    // Measure time for file deletion
+    start = chrono::steady_clock::now();
+    fs::remove(file, ec);
+    handle_error(ec, "removing file");
+    end = chrono::steady_clock::now();
+    std::cout << "File deletion took: " 
+              << chrono::duration_cast<chrono::microseconds>(end - start).count() 
+              << " microseconds\n";
+
+    // Measure time for directory deletion
+    start = chrono::steady_clock::now();
+    fs::remove(directory, ec);
+    handle_error(ec, "removing directory");
+    end = chrono::steady_clock::now();
+    std::cout << "Directory deletion took: " 
+              << chrono::duration_cast<chrono::microseconds>(end - start).count() 
+              << " microseconds\n";
+
+    return 0;
+}
+
+----
+
+Note:: Measures execution time in microseconds for each operation.
+
+The following is example output from running our sample.
+
+[source,text]
+----
+$ ./program --dir=my_data --file=myfile.txt
+Directory creation took: 187 microseconds
+File writing took: 112 microseconds
+File content: Hello, Boost.Program_Options, Boost.Filesystem, and Boost.Chrono!
+File reading took: 98 microseconds
+File deletion took: 75 microseconds
+Directory deletion took: 88 microseconds
+
+----
+
+Adding timing features to your system operations will help you maintain more robust and performance-aware code, so as code is updated you will have built in the checks and balances so that if something goes awry - you will be able to capture and correct it early in the development cycle.
 
 == See Also
 
 * https://www.boost.org/doc/libs/1_87_0/libs/libraries.htm#Memory[Category: Memory]
+* https://www.boost.org/doc/libs/1_87_0/libs/libraries.htm#Miscellaneous[Category: Miscellaneous]
 * https://www.boost.org/doc/libs/1_87_0/libs/libraries.htm#System[Category: System]
