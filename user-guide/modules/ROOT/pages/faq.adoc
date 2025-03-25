@@ -14,6 +14,7 @@ This section contains answers to the common questions that new developers to Boo
 == Topics
 
 [square]
+* <<C++ Library Programming>>
 * <<Compatibility>>
 * <<Debugging>>
 * <<Dependencies>>
@@ -28,6 +29,270 @@ This section contains answers to the common questions that new developers to Boo
 * <<Smart Pointers>>
 * <<Standard Library>>
 * <<Templates>>
+
+== C++ Library Programming
+
+. *What is involved in using a Boost header-only library?*
++
+After installing the Boost libraries, not much, just include the libraries you want. Here is an example (`example1.cpp`) using boost:multiprecision[]:
++
+[source,cpp]
+----
+#include <boost/multiprecision/cpp_dec_float.hpp>
+#include <iostream>
+
+// Alias for a high-precision floating-point type
+using namespace boost::multiprecision;
+using BigFloat = cpp_dec_float_50;
+
+int main() {
+    BigFloat a = 1.0 / 3.0;
+    BigFloat b = sqrt(BigFloat(2));
+
+    std::cout << "1/3 with high precision: " << a << std::endl;
+    std::cout << "Square root of 2: " << b << std::endl;
+
+    return 0;
+}
+----
++
+Compile with:
++
+[source,text]
+----
+g++ -std=c++17 example1.cpp -o example1
+----
++
+No linking is required, just run the program!
+
+. *What is involved in using a Boost compiled-binary library?*
++
+Using a compiled-binary library involves linking to the library, and any dependent libraries that are also compiled. Here is an example (`example2.cpp`) using boost:filesystem[].
++
+[source,cpp]
+----
+#include <boost/filesystem.hpp>
+#include <iostream>
+
+namespace fs = boost::filesystem;
+
+int main() {
+    fs::path filePath("example.txt");
+
+    if (fs::exists(filePath)) {
+        std::cout << "File exists: " << filePath.string() << std::endl;
+    } else {
+        std::cout << "File does not exist, creating it..." << std::endl;
+        std::ofstream file(filePath.string());
+        file << "Hello, Boost.Filesystem!";
+        file.close();
+    }
+
+    return 0;
+}
+----
++
+This requires an extra step before running, linking to both boost:filesystem[] _and_ boost:system[]. We need to link to boost:system[] because boost:filesystem[] calls `boost::system::generic_category()` - for error handling - and this call is _only_ defined in the compiled version of boost:system[]:
++
+[source,text]
+----
+g++ -std=c++17 example2.cpp -o example2 -lboost_filesystem -lboost_system
+----
++
+Now you can run your program.
++
+Notes:: The example compiler used here is GNU pass:[C++]. If you are using the Clang compiler, simply replace `pass:[g++]` with `pass:[clang++]`. On macOS, if Boost is installed via Homebrew, you might need to specify the paths further:
++
+`pass:[clang++ -std=c++17 example2.cpp -o example2 -I/usr/local/include -L/usr/local/lib -lboost_filesystem -lboost_system]`
++
+If you are using MSVC, and the libraries are in the default path, then the command would be:
++
+`pass:[cl /std:c++17 example2.cpp /Fe:example2.exe /link boost_filesystem.lib boost_system.lib]`
+
+. *Given a choice, when should I use header-only or compiled-binary libraries?*
++
+Depends on your priorities:
++
+[cols="1,2,2",stripes=even,options="header",frame=none]
+|===
+| *Priority* | *Header-Only* | *Compiled-Binary*
+| Ease of Use | Yes - Easier (just include)	| No -  Requires linking
+| Compilation Time | No -  Slower | Yes - Faster
+| Binary Size | No -  Larger (possible code duplication) | Yes - Smaller
+| Performance | Yes - Optimized via inlining | Yes - Optimized via specialized builds
+| Portability | Yes - Highly portable | No -  Requires platform-specific builds
+| Debugging | No -  Harder (complex errors with templated code) | Yes - Easier
+| ABI Stability | No -  Less stable | Yes - More stable
+|===
++
+Also, with a header-only library the compiler has full visibility of the code, allowing inlining and optimizations that might not be possible with separately compiled binaries. This can reduce function call overhead when optimizations are applied. Since no precompiled binaries are needed, projects using header-only libraries are easier to distribute and deploy.
++
+However, header-only libraries are compiled within each project, so any minor changes (even updates) can lead to unexpected behavior due to template changes. Shared libraries with well-defined Application Binary Interfaces (ABIs) offer better versioning control.
++
+Header-only libraries are certainly easier to get going with. To optimize for better stability and debugging, and reducing binary size, refer to the next few questions on how to create binaries for header-only code - typically, when your project is becoming stable.
+
+. *Can I use C++20 Modules to precompile header-only libraries and import them when needed?*
++
+Yes, with pass:[C++]20 modules, you can precompile header-only libraries into a binary module and import them when needed. This significantly reduces compile times. Start by creating a module interface unit (say, `boost_module.cppm`) that includes the header-only Boost libraries. For example:
++
+[source,cpp]
+----
+// boost_module.cppm (Module Interface)
+export module boost_module;
+#include <boost/multiprecision/cpp_dec_float.hpp>
+
+export using BigFloat = boost::multiprecision::cpp_dec_float_50;
+----
++
+Now, compile the module:
++
+[source,text]
+----
+g++ -std=c++20 -fmodules-ts boost_module.cppm -o boost_module.o
+----
++
+Then, reference the precompiled module in another file:
++
+[source,cpp]
+----
+// main.cpp (Uses the module)
+import boost_module;
+#include <iostream>
+
+int main() {
+    BigFloat x = 1.0 / 3.0;
+    std::cout << "1/3 with high precision: " << x << std::endl;
+    return 0;
+}
+----
++
+Compile and link:
++
+[source,text]
+----
+g++ -std=c++20 -fmodules-ts main.cpp boost_module.o -o main
+----
++
+Note:: Done well, this results in cleaner dependency management.
+
+. *Can I create a Static Library from header-only libraries and link when needed?*
++
+Yes, even if the library is header-only, you can wrap it in a `.cpp` file, compile it into a static `.a` or `.lib` file, and link it. Start by creating a wrapper source file (`boost_wrapper.cpp`) that includes the header-only Boost libraries:
++
+[source,cpp]
+----
+#include <boost/multiprecision/cpp_dec_float.hpp>
+
+boost::multiprecision::cpp_dec_float_50 dummy_function() {
+    return 1.0 / 3.0; // Forces compilation of template instantiation
+}
+----
++
+Now, compile it into a static library:
++
+[source,text]
+----
+g++ -c boost_wrapper.cpp -o boost_wrapper.o
+ar rcs libboost_wrapper.a boost_wrapper.o
+----
++
+Use it in your code:
++
+[source,cpp]
+----
+#include <boost/multiprecision/cpp_dec_float.hpp>
+#include <iostream>
+
+int main() {
+    boost::multiprecision::cpp_dec_float_50 x = 1.0 / 3.0;
+    std::cout << "1/3: " << x << std::endl;
+    return 0;
+}
+----
++
+Compile and link:
++
+[source,text]
+----
+g++ main.cpp -L. -lboost_wrapper -o main
+----
++
+Note:: One advantage of this approach is it avoids re-parsing and re-instantiating templates in every translation unit.
+
+. *Can I create a precompiled header (PCH) that imports Boost libraries?*
++
+Yes, a precompiled header should enable faster recompilation when only the main code changes. And, unlike modules, it works in older pass:[C++] versions.
++
+For example, create an hpp file (boost_pch.hpp) containing the required libraries:
++
+[source,cpp]
+----
+// boost_pch.hpp
+#include <boost/multiprecision/cpp_dec_float.hpp>
+----
++
+Precompile it into a `.gch` file:
++
+[source,text]
+----
+g++ -std=c++17 -x c++-header boost_pch.hpp -o boost_pch.hpp.gch
+----
++
+Use it in your code:
++
+[source,cpp]
+----
+#include "boost_pch.hpp" // Uses precompiled header
+
+int main() {
+    boost::multiprecision::cpp_dec_float_50 x = 1.0 / 3.0;
+    std::cout << "1/3: " << x << std::endl;
+    return 0;
+}
+----
++
+Typically, when your project starts becoming "large" use of compiled libraries becomes more relevant.
+
+. *In the programming world, what qualifies as a small, medium, or large project?*
++
+While not perfect, _lines of code_ is a quick way to classify project sizes:
++
+[cols="1,1",stripes=even,options="header",frame=none]
+|===
+| *Project Size* | *Lines of Code Estimate*
+| Small	| less than 10,000
+| Medium | 10,000 to 100,000
+| Large	| 100,000 to 1,000,000
+| Enterprise/Monolithic | more than 1,000,000
+|===
++
+Or possibly classify a project by the number of developers:
++
+[cols="1,1",stripes=even,options="header",frame=none]
+|===
+| *Project Size* | *Developers*
+| Small	| less than 5
+| Medium | 6 to 50
+| Large	| 51+
+| Enterprise/Monolithic | Hundreds, across multiple time-zones
+|===
++
+There are other metrics too - if your incremental build takes minutes, it's getting large. If a full rebuild takes hours, it's definitely a large project. If the dependency tree is deep, requiring fine-grained modularization, it's large.
++
+Note:: Size alone is not a perfect measure of complexity. A templated metaprogramming-heavy project might be "large" in complexity but only a few thousand lines. Or a UI-heavy application might have tons of boilerplate but be relatively simple. Boost Libraries are available to help prevent a "large" project becoming a "beast"!
+
+. *When does a coding project become a "beast"?*
++
+A coding project becomes a beast when two or more of the following conditions are met:
++
+** Build times are measured in coffee breaks - if compiling takes longer than making (and drinking) a cup of coffee, it's a beast!
+** When you start considering distributed builds or caching everything, it's serious.
+** No one developer knows how everything works anymore.
+** The project is in "dependency hell" - adding one more library requires resolving a cascade of conflicts. Or, you start saying, "Do we really need this feature?" just to avoid the dependency headache.
+** Debugging feels like archaeology - code from years ago still exists, but no one remembers why. Or, comments like `// DO NOT TOUCH - IT JUST WORKS` litter the source code.
+** Refactoring is a nightmare - a simple rename breaks hundreds of files, or "Let's rewrite it from scratch" starts sounding reasonable.
+** Multi-minute CI/CD pipelines - your test suite takes longer to run than a lunch break.
+** Contributors live in fear of merge conflicts.
 
 == Compatibility
 
@@ -654,7 +919,6 @@ Future technological shifts, such as advances in quantum computing or entirely n
 . *If I was to learn one other language, in addition to pass:[C++], what should it be to best prepare myself for an uncertain future?*
 +
 Python is often the top recommendation due to its versatility, simplicity, and wide application in growing fields like artificial intelligence (AI), machine learning (ML), rapid prototyping, and data science. And boost:python[] is there to help you integrate with the Boost libraries. Rust is another strong contender, especially if you are interested in systems programming and are looking for reliability and security. If you see the future as more cloud computing, then Go makes a strong case for itself.  And let's not forget that so much computing is now web based, so JavaScript deserves a mention here too. All of these languages offer valuable resources that complement pass:[C++] and prepare you for an uncertain future.
-
 
 == Releases
 
