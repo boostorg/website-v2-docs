@@ -49,7 +49,7 @@ Here are some Boost libraries that might be useful when planning and building yo
 
 A database engine requires efficient data structures for handling indexes, caches, and storage layouts. The boost:container[] library provides drop-in replacements for standard containers like `std::vector`, `std::map`, and `std::unordered_map`, but optimized for memory efficiency and performance.
 
-In the following sample code, we will use in-memory indexing as the basis of a database engine. The boost:container[] `flat_map` feature is used to store a sorted index for quick lookups, and the `stable_vector` feature to store persistent records with stable pointers. The sample simulates inserting and retrieving records efficiently.
+In the following sample code, we will use in-memory indexing as the basis of a database engine. The boost:container[] `flat_map` feature is used to store a sorted index for quick lookups, and the `stable_vector` feature to store persistent records with stable pointers. The sample demonstrates inserting and retrieving records efficiently.
 
 [source,cpp]
 ----
@@ -330,7 +330,7 @@ Note:: The sample now avoids manual memory management, prevents race conditions 
 
 == Create a Thread-safe Queue for Inter-thread Communication
 
-With multiple apps or processes now accessing our database, would seem like a good idea to avoid locks or bottlenecks. boost:lockfree[] offers message queues and pre-allocated ring buffers for this purpose.
+With multiple apps or processes now accessing our database, would seem like a good idea to avoid locks or bottlenecks. boost:lockfree[] offers _message queues_ and _pre-allocated ring buffers_ for this purpose.
 
 
 [source,cpp]

@@ -63,7 +63,7 @@ Natural language parsing  (NLP) is a foundational technology that powers many mo
 
 == Simple English Parsing Sample
 
-Say we wanted to parse a subset of the English language, only sentence of the form: The <adjective> <noun> <verb>. Example sentences could be "The quick fox jumps." or "The lazy dog sleeps."
+Say we wanted to parse a subset of the English language, only sentences of the form: The <adjective> <noun> <verb>. Example sentences could be "The quick fox jumps." or "The lazy dog sleeps."
 
 If the input matches this grammar, the following parser will accept it. Otherwise, it rejects the input.
 
@@ -112,7 +112,7 @@ int main() {
 
 The following shows a successful parse:
 
-[source,bash]
+[source,text]
 ----
 Enter a sentence (format: The <adjective> <noun> <verb>.)
 The happy cat purrs.
@@ -122,7 +122,7 @@ Valid sentence!
 
 And the following shows an unsuccessful parse:
 
-[source,bash]
+[source,text]
 ----
 Enter a sentence (format: The <adjective> <noun> <verb>.)
 A small dog runs.
@@ -134,7 +134,7 @@ Our subset is clearly very limited, as simply replacing the word "The" with "A" 
 
 == Add a Dictionary of Valid Words
 
-We can extend the simple example to use a dictionary of valid words, allow multiple adjectives, and use https://www.boost.org/doc/libs/1_82_0/doc/html/string_algo.html[Boost.String_Algo] for some string processing tasks (trimming spaces, converting to lowercase).
+We can extend the simple example to use a dictionary of valid words, allow multiple adjectives, and use boost:algorithm[] for some string processing tasks (trimming spaces, converting to lowercase).
 
 [source,cpp]
 ----
@@ -210,7 +210,7 @@ int main() {
 
 The following shows a successful parse:
 
-[source,bash]
+[source,text]
 ----
 Enter a sentence (e.g., The big brown fox jumps.):
 The big brown fox jumps.
@@ -220,7 +220,7 @@ The big brown fox jumps.
 
 And the following shows an unsuccessful parse:
 
-[source,bash]
+[source,text]
 ----
 Enter a sentence (e.g., The big brown fox jumps.):
 The huge blue dragon flies.
@@ -229,6 +229,8 @@ The huge blue dragon flies.
 ----
 
 == Add Detailed Error Reporting
+
+Let's not forget to provide useful error messages:
 
 [source,cpp]
 ----
@@ -327,7 +329,7 @@ int main() {
 
 The following shows a successful parse:
 
-[source,bash]
+[source,text]
 ----
 Enter a sentence (e.g., The big brown fox jumps.):
 The big brown fox jumps.
@@ -337,7 +339,7 @@ The big brown fox jumps.
 
 And the following shows several unsuccessful parses:
 
-[source,bash]
+[source,text]
 ----
 Enter a sentence (e.g., The big brown fox jumps.):
 The huge blue dragon flies.
@@ -357,7 +359,7 @@ The big brown fox flies.
 
 ----
 
-You will notice how adding more features to a natural language parser starts to considerably increase the code length. This is a normal feature of language parsing - a lot of code can be required to cover all the options of something as flexible as language. For an example of a simpler approach to parsing well-formatted input, refer to the sample code in xref:task-text-processing.adoc[].
+You will notice how adding more features to a natural language parser starts to considerably increase the code length. This is a normal feature of language parsing - a lot of code can be required to cover all the options of something as flexible as language. For an example of a simpler approach to parsing _well-formatted_ input, refer to the sample code in xref:task-text-processing.adoc[].
 
 == See Also
 

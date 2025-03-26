@@ -47,7 +47,7 @@ Here are some Boost libraries that might assist you in processing text:
 
 == Sample of Regular Expression Parsing
 
-If the text you are parsing is well-formatted then you can use boost:regex[], rather than a full-blown parser implementation using boost:spirit[].
+If the text you are parsing is well-formatted then you can use boost:regex[] which we will base our sample on here, rather than a full-blown parser implementation using boost:spirit[].
 
 We'll write a program that scans a string for dates in the format "YYYY-MM-DD" and validates them. The code:
 
@@ -117,7 +117,7 @@ int main() {
 
 The following shows a successful parse:
 
-[source,bash]
+[source,text]
 ----
 Enter a sentence containing dates (YYYY-MM-DD format):
 Today is 2024-02-19, and tomorrow is 2024-02-20.
@@ -128,7 +128,7 @@ Today is 2024-02-19, and tomorrow is 2024-02-20.
 
 And the following shows several unsuccessful parses:
 
-[source,bash]
+[source,text]
 ----
 Enter a sentence containing dates (YYYY-MM-DD format):
 The deadline is 2024-02-30.
@@ -142,7 +142,7 @@ There are no dates in this sentence.
 
 == Add Robust Date and Time Parsing
 
-The date validation in the sample above can be improved integrating boost:date_time[], which provides tools for handling dates and times correctly.
+The clunky date validation in the sample above can be improved by integrating boost:date_time[], which provides functions for handling dates and times correctly.
 
 [source,cpp]
 ----
@@ -209,7 +209,7 @@ Note:: The code handles leap years correctly, and invalid dates throw an excepti
 
 The following shows a successful parse:
 
-[source,bash]
+[source,text]
 ----
 Enter a sentence containing dates (YYYY-MM-DD format):
 Today is 2024-02-29, and tomorrow is 2024-03-01.
@@ -222,7 +222,7 @@ Note:: The "Valid date found" output now includes text for the month name.
 
 And the following shows several unsuccessful parses:
 
-[source,bash]
+[source,text]
 ----
 Enter a sentence containing dates (YYYY-MM-DD format):
 The deadline is 2024-02-30.
@@ -326,7 +326,7 @@ int main() {
 
 The following shows successful parses:
 
-[source,bash]
+[source,text]
 ----
 Enter a sentence containing dates (YYYY-MM-DD format):
 The meeting is on 2024-03-15.
@@ -344,7 +344,7 @@ Enter your preferred locale (e.g., en_US.UTF-8, fr_FR.UTF-8, de_DE.UTF-8): fr_FR
 
 And the following shows an unsuccessful parse:
 
-[source,bash]
+[source,text]
 ----
 Enter a sentence containing dates (YYYY-MM-DD format):
 The deadline is 2024-02-30.

@@ -74,7 +74,7 @@ Here are some widely used and robust algorithms, each having its own strengths a
 The following sample demonstrating the use of boost:numeric/ublas[] for matrix operations and boost:multiprecision[] for high-precision arithmetic (ensures 50-digit precision for matrix calculations). This is useful in machine learning applications where precision is critical, such as when dealing with ill-conditioned matrices or when high numerical accuracy is needed.
 
 [#footnote3-location]
-Randomized values are commonly used in machine language algorithms, such as Stochastic Gradient Descent (Neural networks and logistic regression), Monte Carlo simulations (simulating stochastic processes like Bayesian inference or Markov chains link:#footnote3[(3)]), and neural network weight initialization. So we'll also engage the features of boost:random[].
+Randomized values are commonly used in machine language algorithms, such as _Stochastic Gradient Descent_ (Neural networks and logistic regression), _Monte Carlo simulations_ (simulating stochastic processes like _Bayesian inference_ or _Markov chains_ link:#footnote3[(3)]), and neural network weight initialization. So we'll also engage the features of boost:random[].
 
 [source,cpp]
 ----
@@ -131,7 +131,7 @@ The weight update rule is:
 image::stochastic-equation.png[Stochastic Gradient Descent]
 
 [#footnote4-location]
-Neural networks train with SGD and the many variants of the algorithm (such as Adam, RMSprop, and the alternative Batch Gradient Descent link:#footnote4[(4)]). This approach is efficient for big data and real-time learning.
+Neural networks train with SGD and the many variants of the algorithm (such as _Adam_, _RMSprop_, and the alternative _Batch Gradient Descent_ link:#footnote4[(4)]). This approach is efficient for big data and real-time learning.
 
 [source,cpp]
 ----
@@ -202,7 +202,7 @@ int main() {
 
 == Add K-Means Clustering with a Real Dataset
 
-Let's add K-Means Clustering to group data points into clusters. The statistical functions of boost:math[] measure Euclidean distances that are the basis of K-Means clustering, a centroid-based clustering algorithm that partitions data into K clusters based on the nearest mean (centroid).
+Let's add _K-Means Clustering_ to group data points into clusters. The statistical functions of boost:math[] measure Euclidean distances that are the basis of K-Means clustering, which is a centroid-based clustering algorithm that partitions data into K clusters based on the nearest mean (centroid).
 
 The clustering algorithm goes through the following cycle:
 
@@ -211,7 +211,7 @@ The clustering algorithm goes through the following cycle:
 . Recalculates centroids
 . Repeats (go back to step 2) until convergence
 
-We'll use the Iris dataset, a well-known sample dataset in machine learning containing 150 flower samples with four features (sepal length, sepal width, petal length, petal width) and three species. This dataset is loaded from a CSV file.
+We'll use the Iris dataset, a well-known sample dataset in machine learning containing 150 flower samples with four features (sepal length, sepal width, petal length, petal width) and three species (setosa, versicolor, and virginica). This dataset is loaded from a CSV file.
 
 [source,cpp]
 ----
@@ -358,7 +358,7 @@ int main() {
 
 Save the following as *iris_data.csv*, a test sample, (or download https://archive.ics.uci.edu/dataset/53/iris[Iris]):
 
-[source,bash]
+[source,text]
 ----
 5.1,3.5,1.4,0.2,setosa
 4.9,3.0,1.4,0.2,setosa

@@ -46,7 +46,7 @@ Here are the libraries that are most directly applicable to a networking app:
 
 The following code is a simple networking chat application using boost:asio[] that allows two computers to send messages to each other over TCP.
 
-This example assumes that you know the IP addresses (URLs) of both computers, and can set one as the server and the other as the client. The server listens for incoming connections, the client must connect to the server to communicate, and messages are exchanged asynchronously between the two computers.
+This example assumes that you know the IP address (URL) of one of the computers - to set as the server - and the other computer will act as the client. The server listens for incoming connections, the client must connect to the server to communicate, and messages are exchanged asynchronously between the two computers.
 
 === Server App
 
