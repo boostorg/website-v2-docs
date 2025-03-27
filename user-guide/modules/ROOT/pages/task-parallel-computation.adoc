@@ -140,7 +140,7 @@ int main() {
 
 == Thread-pool Sample
 
-Starting with the multi-threaded code above. If we engage the thread management features of boost:asio[], and the thread-safe counting of boost:atomic[], we reduce the need to manually handle the management of threads. In particular the updated sample:
+Starting with the multi-threaded code above. If we engage the thread management features of boost:asio[], and the thread-safe counting of boost:atomic[], we reduce the need to manually handle the management of threads. In particular, the updated sample:
 
 * Uses `boost::asio::thread_pool` instead of manually managing threads.
 * Handles atomic operations with `boost::atomic` for thread-safe counters.
@@ -302,7 +302,7 @@ int main() {
 
 If you compile and run this sample, the following would be a typical session!
 
-[source,bash]
+[source,text]
 ----
 Foreground: Type 'quit' to exit, 'add' to add a task, 'msg <text>' to send a message.
 add
@@ -316,6 +316,8 @@ Task 2 exiting...
 All tasks completed. Program shutting down.
 
 ----
+
+Parallel computing is an exciting challenge - success should come from focusing on problems that are inherently parallel.
 
 == See Also
 

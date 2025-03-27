@@ -378,7 +378,7 @@ int main(int argc, char* argv[]) {
 
 ----
 
-Note:: Measures execution time in microseconds for each operation.
+Note:: This code measures execution time in microseconds for each operation.
 
 The following is example output from running our sample.
 

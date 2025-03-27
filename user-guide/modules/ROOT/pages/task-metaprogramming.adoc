@@ -189,7 +189,7 @@ The beauty of this approach is that you can just add more types to the tuple, an
 
 Let's extend the sample to integrate boost:type-traits[] to determine if a type is serializable at compile time. The functions we will use are `is_arithmetic<T>` to check if `T` is a number type (`int`, `double`, etc.), and `is_class<T>` to check if `T` is a user-defined class (`Person`, etc.). The idea is that the compile-time filtering ensures that the code can only process serializable types.
 
-Note:: `void` is an example of a non-serializable type.
+Note:: A `void` is an example of a non-serializable type.
 
 [source,cpp]
 ----
@@ -284,7 +284,7 @@ boost:hana[] adds efficient tuple handling at runtime (for example, easier acces
 | Better Compile-Time Speed	| Yes | No, Slower
 |===
 
-Let's update our sample to include tag dispatching, so each type is classified at compile time, and runtime tuple processing, so the sample iterates over heterogeneous types at runtime.
+Let's update our sample to include _tag dispatching_, so each type is classified at compile time, and _runtime tuple processing_, so the sample iterates over heterogeneous types at runtime.
 
 [source,cpp]
 ----
@@ -364,7 +364,7 @@ Serializing (Custom Struct) -> { Name: Alice, Age: 30 }
 
 == Add Type-traits Filtering
 
-Type filtering will allow us to selectively process elements of the tuple based on type traits, filtering out elements that don't match a given criterion.
+_Type filtering_ will allow us to selectively process elements of the tuple based on type traits, filtering out elements that don't match a given criterion.
 
 In the following code, `hana::filter` removes non-serializable types, for example the `nullptr` value is ignored. Only arithmetic, `std::string`, and custom structs are processed.
 
@@ -477,7 +477,7 @@ using my_types = boost::mp11::mp_list<int, double, std::string>;
 
 This `mp_list` is a type-level tuple that can be manipulated without creating runtime instances.
 
-Unlike `std::tuple`, which holds actual values, metaprogramming tuples operate entirely at the type level, making them essential for  zero-runtime-cost template metaprogramming.
+Unlike `std::tuple`, which holds actual values, metaprogramming tuples operate entirely at the type level, making them invaluable for zero-runtime-cost template metaprogramming.
 
 == See Also
 
