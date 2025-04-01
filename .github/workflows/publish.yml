@@ -113,8 +113,8 @@ jobs:
         run: |
           set -x
           # Comment out dynamic branch selection for now
-          # BOOSTLOOK_BRANCH="${{ (startsWith(github.ref, 'refs/heads/develop') && 'develop') || 'master' }}"
-          export BOOSTLOOK_BRANCH="${{ github.event.inputs.boostlook_branch || 'master' }}"
+          BOOSTLOOK_BRANCH="${{ (startsWith(github.ref, 'refs/heads/develop') && 'develop') || 'master' }}"
+          export BOOSTLOOK_BRANCH
           ./build.sh
 
       - name: Setup Ninja
