@@ -14,12 +14,12 @@ Official repository: https://github.com/boostorg/website-v2-docs
 
 * Common Scenarios
 ** xref:common-introduction.adoc[]
+** xref:task-finance.adoc[]
 ** xref:task-networking.adoc[]
 ** xref:task-simulation.adoc[]
 ** xref:task-system.adoc[]
-** xref:task-text-processing.adoc[]
-** xref:task-finance.adoc[]
 ** xref:testing-debugging.adoc[]
+** xref:task-text-processing.adoc[]
 
 * Advanced Scenarios
 ** xref:advanced-introduction.adoc[]
