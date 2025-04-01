@@ -1,0 +1,729 @@
+////
+Copyright (c) 2024 The C++ Alliance, Inc. (https://cppalliance.org)
+
+Distributed under the Boost Software License, Version 1.0. (See accompanying
+file LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
+
+Official repository: https://github.com/boostorg/website-v2-docs
+////
+= Finance
+:navtitle: Finance
+
+Financial applications typically need functionality like secure storage for storing balances and transaction history, networking for interacting with blockchain or other financial APIs, cryptography for secure signing and verifying transactions, and configuration management for handling user settings.
+
+Of course, you can add highly accurate numerical calculations as an essential feature.
+
+[square]
+* <<Libraries>>
+* <<Sample Wallet App>>
+* <<Add Transaction History>>
+* <<Add Secure Transaction Signing>>
+* <<Add Secure Storage of Signed Transactions>>
+* <<Sample Wallet with Ed25519 Signing>>
+* <<Footnotes>>
+* <<See Also>>
+
+== Libraries
+
+Here are some Boost libraries that might assist you in building a finance app:
+
+[circle]
+* boost:filesystem[] : Provides a portable way of querying and manipulating paths, files, and directories.
+
+* boost:serialization[] : Provides a way of serializing and deserializing data, which will be useful for saving and loading data in a specific format.
+
+* boost:asio[] : If your app has network-related features, and its hard to envisage a finance app that does not, this library provides a consistent asynchronous model for network programming.
+
+* boost:beast[] : Built on top of boost:asio[] this library provides implementations of HTTP and WebSocket. These are common protocols for network programming.
+
+* boost:program_options[] : Allows program options to be defined, with types and default values, and their values to be retrieved from the command line, from config files, and programmatically.
+
+* boost:date_time[] : If you need to timestamp changes or edits, or if you're implementing any kind of version history feature, this library can help.
+
+* boost:multiprecision[] : For extended precision arithmetic.
+
+* boost:hash2[] : Hashing algorithms play a crucial role in financial applications by ensuring data integrity, authentication, and security in various transactions and records. Hashing enables fingerprinting of transactions, invoices, and records to detect duplicate or modified entries.
+
+== Sample Wallet App
+
+We'll start with a simple wallet application that stores balances, allows deposits/withdrawals, and fetches exchange rates using an API. Balances are saved and loaded again in XML format, and a user can deposit, withdraw or perform balance checks.
+
+[source,cpp]
+----
+#include <boost/filesystem.hpp>
+#include <boost/serialization/serialization.hpp>
+#include <boost/serialization/map.hpp>
+#include <boost/serialization/string.hpp>
+#include <boost/archive/xml_oarchive.hpp>
+#include <boost/archive/xml_iarchive.hpp>
+#include <boost/asio.hpp>
+#include <boost/beast.hpp>
+#include <boost/program_options.hpp>
+#include <iostream>
+#include <fstream>
+#include <map>
+
+namespace fs = boost::filesystem;
+namespace asio = boost::asio;
+namespace beast = boost::beast;
+namespace http = boost::beast::http;
+namespace po = boost::program_options;
+
+// Wallet data structure
+struct Wallet {
+    std::map<std::string, double> balances; // Currencies and amounts
+
+    template<class Archive>
+    void serialize(Archive &ar, const unsigned int version) {
+        ar & BOOST_SERIALIZATION_NVP(balances);
+    }
+
+    void deposit(const std::string &currency, double amount) {
+        balances[currency] += amount;
+    }
+
+    bool withdraw(const std::string &currency, double amount) {
+        if (balances[currency] >= amount) {
+            balances[currency] -= amount;
+            return true;
+        }
+        return false;
+    }
+
+    void show_balance() const {
+        for (const auto& [currency, amount] : balances) {
+            std::cout << currency << ": " << amount << std::endl;
+        }
+    }
+};
+
+// Save/Load Wallet
+void save_wallet(const Wallet &wallet, const std::string &filename) {
+    std::ofstream file(filename);
+    boost::archive::xml_oarchive oa(file);
+    oa << BOOST_SERIALIZATION_NVP(wallet);
+}
+
+void load_wallet(Wallet &wallet, const std::string &filename) {
+    if (fs::exists(filename)) {
+        std::ifstream file(filename);
+        boost::archive::xml_iarchive ia(file);
+        ia >> BOOST_SERIALIZATION_NVP(wallet);
+    }
+}
+
+// Fetch exchange rate from a free API
+std::string fetch_exchange_rate(const std::string& currency) {
+    try {
+        asio::io_context ioc;
+        asio::ip::tcp::resolver resolver(ioc);
+        asio::ip::tcp::socket socket(ioc);
+
+        auto const results = resolver.resolve("api.exchangerate.host", "80");
+        asio::connect(socket, results.begin(), results.end());
+
+        std::string request = "GET /latest?base=" + currency + " HTTP/1.1\r\n"
+                              "Host: api.exchangerate.host\r\n"
+                              "Connection: close\r\n\r\n";
+        asio::write(socket, asio::buffer(request));
+
+        beast::flat_buffer buffer;
+        http::response<http::string_body> res;
+        beast::http::read(socket, buffer, res);
+        
+        return res.body();
+    } catch (const std::exception& e) {
+        return "Error: " + std::string(e.what());
+    }
+}
+
+int main(int argc, char* argv[]) {
+    Wallet wallet;
+    std::string filename = "wallet.xml";
+    load_wallet(wallet, filename);
+
+    po::options_description desc("Wallet Options");
+    desc.add_options()
+        ("deposit,d", po::value<std::vector<std::string>>()->multitoken(), "Deposit money (currency amount)")
+        ("withdraw,w", po::value<std::vector<std::string>>()->multitoken(), "Withdraw money (currency amount)")
+        ("balance,b", "Show balance")
+        ("exchange,e", po::value<std::string>(), "Get exchange rate for currency")
+        ("help,h", "Show help");
+
+    po::variables_map vm;
+    po::store(po::parse_command_line(argc, argv, desc), vm);
+    po::notify(vm);
+
+    if (vm.count("help")) {
+        std::cout << desc << std::endl;
+        return 0;
+    }
+
+    if (vm.count("deposit")) {
+        auto values = vm["deposit"].as<std::vector<std::string>>();
+        if (values.size() == 2) {
+            wallet.deposit(values[0], std::stod(values[1]));
+        }
+    }
+
+    if (vm.count("withdraw")) {
+        auto values = vm["withdraw"].as<std::vector<std::string>>();
+        if (values.size() == 2) {
+            if (!wallet.withdraw(values[0], std::stod(values[1]))) {
+                std::cerr << "Insufficient funds!" << std::endl;
+            }
+        }
+    }
+
+    if (vm.count("balance")) {
+        wallet.show_balance();
+    }
+
+    if (vm.count("exchange")) {
+        std::cout << fetch_exchange_rate(vm["exchange"].as<std::string>()) << std::endl;
+    }
+
+    save_wallet(wallet, filename);
+    return 0;
+}
+
+----
+
+== Add Transaction History
+
+Wallet users will need to track all deposits, withdrawals, and balance changes. We'll add the features of boost:chrono[] to provide the timestamps, and the transaction history will be stored in XML again (in the `wallet.xml` file) - along with the wallet balance.
+
+
+[source,cpp]
+----
+#include <boost/filesystem.hpp>
+#include <boost/serialization/serialization.hpp>
+#include <boost/serialization/map.hpp>
+#include <boost/serialization/vector.hpp>
+#include <boost/serialization/string.hpp>
+#include <boost/archive/xml_oarchive.hpp>
+#include <boost/archive/xml_iarchive.hpp>
+#include <boost/asio.hpp>
+#include <boost/beast.hpp>
+#include <boost/program_options.hpp>
+#include <boost/chrono.hpp>
+#include <iostream>
+#include <fstream>
+#include <map>
+#include <vector>
+
+namespace fs = boost::filesystem;
+namespace asio = boost::asio;
+namespace beast = boost::beast;
+namespace http = boost::beast::http;
+namespace po = boost::program_options;
+namespace chrono = boost::chrono;
+
+// Structure for transaction history
+struct Transaction {
+    std::string type;   // "Deposit" or "Withdrawal"
+    std::string currency;
+    double amount;
+    std::string timestamp;
+
+    // Serialization support
+    template<class Archive>
+    void serialize(Archive &ar, const unsigned int version) {
+        ar & BOOST_SERIALIZATION_NVP(type);
+        ar & BOOST_SERIALIZATION_NVP(currency);
+        ar & BOOST_SERIALIZATION_NVP(amount);
+        ar & BOOST_SERIALIZATION_NVP(timestamp);
+    }
+};
+
+// Wallet structure with transaction history
+struct Wallet {
+    std::map<std::string, double> balances;
+    std::vector<Transaction> history;
+
+    template<class Archive>
+    void serialize(Archive &ar, const unsigned int version) {
+        ar & BOOST_SERIALIZATION_NVP(balances);
+        ar & BOOST_SERIALIZATION_NVP(history);
+    }
+
+    // Get current timestamp
+    std::string get_timestamp() const {
+        auto now = chrono::system_clock::now();
+        std::time_t time = chrono::system_clock::to_time_t(now);
+        return std::ctime(&time);
+    }
+
+    void deposit(const std::string &currency, double amount) {
+        balances[currency] += amount;
+        history.push_back({"Deposit", currency, amount, get_timestamp()});
+    }
+
+    bool withdraw(const std::string &currency, double amount) {
+        if (balances[currency] >= amount) {
+            balances[currency] -= amount;
+            history.push_back({"Withdrawal", currency, amount, get_timestamp()});
+            return true;
+        }
+        return false;
+    }
+
+    void show_balance() const {
+        for (const auto& [currency, amount] : balances) {
+            std::cout << currency << ": " << amount << std::endl;
+        }
+    }
+
+    void show_history() const {
+        if (history.empty()) {
+            std::cout << "No transactions recorded yet." << std::endl;
+            return;
+        }
+        for (const auto& tx : history) {
+            std::cout << "[" << tx.timestamp << "] " << tx.type 
+                      << " " << tx.amount << " " << tx.currency << std::endl;
+        }
+    }
+};
+
+// Save/Load Wallet with transactions
+void save_wallet(const Wallet &wallet, const std::string &filename) {
+    std::ofstream file(filename);
+    boost::archive::xml_oarchive oa(file);
+    oa << BOOST_SERIALIZATION_NVP(wallet);
+}
+
+void load_wallet(Wallet &wallet, const std::string &filename) {
+    if (fs::exists(filename)) {
+        std::ifstream file(filename);
+        boost::archive::xml_iarchive ia(file);
+        ia >> BOOST_SERIALIZATION_NVP(wallet);
+    }
+}
+
+// Fetch exchange rate from API
+std::string fetch_exchange_rate(const std::string& currency) {
+    try {
+        asio::io_context ioc;
+        asio::ip::tcp::resolver resolver(ioc);
+        asio::ip::tcp::socket socket(ioc);
+
+        auto const results = resolver.resolve("api.exchangerate.host", "80");
+        asio::connect(socket, results.begin(), results.end());
+
+        std::string request = "GET /latest?base=" + currency + " HTTP/1.1\r\n"
+                              "Host: api.exchangerate.host\r\n"
+                              "Connection: close\r\n\r\n";
+        asio::write(socket, asio::buffer(request));
+
+        beast::flat_buffer buffer;
+        http::response<http::string_body> res;
+        beast::http::read(socket, buffer, res);
+        
+        return res.body();
+    } catch (const std::exception& e) {
+        return "Error: " + std::string(e.what());
+    }
+}
+
+int main(int argc, char* argv[]) {
+    Wallet wallet;
+    std::string filename = "wallet.xml";
+    load_wallet(wallet, filename);
+
+    po::options_description desc("Wallet Options");
+    desc.add_options()
+        ("deposit,d", po::value<std::vector<std::string>>()->multitoken(), "Deposit money (currency amount)")
+        ("withdraw,w", po::value<std::vector<std::string>>()->multitoken(), "Withdraw money (currency amount)")
+        ("balance,b", "Show balance")
+        ("history,t", "Show transaction history")
+        ("exchange,e", po::value<std::string>(), "Get exchange rate for currency")
+        ("help,h", "Show help");
+
+    po::variables_map vm;
+    po::store(po::parse_command_line(argc, argv, desc), vm);
+    po::notify(vm);
+
+    if (vm.count("help")) {
+        std::cout << desc << std::endl;
+        return 0;
+    }
+
+    if (vm.count("deposit")) {
+        auto values = vm["deposit"].as<std::vector<std::string>>();
+        if (values.size() == 2) {
+            wallet.deposit(values[0], std::stod(values[1]));
+        }
+    }
+
+    if (vm.count("withdraw")) {
+        auto values = vm["withdraw"].as<std::vector<std::string>>();
+        if (values.size() == 2) {
+            if (!wallet.withdraw(values[0], std::stod(values[1]))) {
+                std::cerr << "Insufficient funds!" << std::endl;
+            }
+        }
+    }
+
+    if (vm.count("balance")) {
+        wallet.show_balance();
+    }
+
+    if (vm.count("history")) {
+        wallet.show_history();
+    }
+
+    if (vm.count("exchange")) {
+        std::cout << fetch_exchange_rate(vm["exchange"].as<std::string>()) << std::endl;
+    }
+
+    save_wallet(wallet, filename);
+    return 0;
+}
+
+----
+
+The range of command line options is now `deposit`, `withdraw`, `balance`, `history`, `exchange`, and `help`. The following shows some example commands:
+
+[source,text]
+----
+./wallet --deposit USD 100
+./wallet --withdraw USD 20
+./wallet --balance
+./wallet --history
+./wallet --exchange EUR
+
+----
+
+
+== Add Secure Transaction Signing
+
+[#footnote1-location]
+To sign transactions securely the example now generates an _ECDSA_ key pair link:#footnote1[(1)]. Obviously transactions must be signed before they are recorded in the ledger.
+
+The library of choice for this process is often https://openssl-library.org/[OpenSSL], and we have added features of boost:multiprecision[] for handling large transaction amounts.
+
+[source,cpp]
+----
+#include <boost/multiprecision/cpp_int.hpp>
+#include <boost/uuid/uuid.hpp>
+#include <boost/uuid/uuid_generators.hpp>
+#include <boost/uuid/uuid_io.hpp>
+#include <boost/property_tree/json_parser.hpp>
+#include <boost/property_tree/ptree.hpp>
+#include <boost/asio.hpp>
+#include <iostream>
+#include <vector>
+#include <openssl/ec.h>
+#include <openssl/ecdsa.h>
+#include <openssl/sha.h>
+
+using namespace boost::property_tree;
+using namespace boost::uuids;
+using boost::multiprecision::uint256_t;
+
+// Generate a new ECDSA key pair
+EC_KEY* generate_keypair() {
+    EC_KEY* key = EC_KEY_new_by_curve_name(NID_secp256k1);
+    EC_KEY_generate_key(key);
+    return key;
+}
+
+// Sign transaction data using private key
+std::vector<unsigned char> sign_transaction(EC_KEY* key, const std::string& data) {
+    unsigned char hash[SHA256_DIGEST_LENGTH];
+    SHA256((unsigned char*)data.c_str(), data.size(), hash);
+
+    std::vector<unsigned char> signature(ECDSA_size(key));
+    unsigned int sig_len;
+    ECDSA_sign(0, hash, SHA256_DIGEST_LENGTH, signature.data(), &sig_len, key);
+    signature.resize(sig_len);
+    
+    return signature;
+}
+
+// Verify transaction signature using public key
+bool verify_signature(EC_KEY* key, const std::string& data, const std::vector<unsigned char>& signature) {
+    unsigned char hash[SHA256_DIGEST_LENGTH];
+    SHA256((unsigned char*)data.c_str(), data.size(), hash);
+    return ECDSA_verify(0, hash, SHA256_DIGEST_LENGTH, signature.data(), signature.size(), key) == 1;
+}
+
+// Transaction structure
+struct Transaction {
+    uint256_t amount;
+    std::string sender;
+    std::string receiver;
+    std::vector<unsigned char> signature;
+
+    std::string to_string() const {
+        return sender + "->" + receiver + ":" + std::to_string(amount);
+    }
+};
+
+// Simulate sending a signed transaction
+void send_transaction(EC_KEY* key, const std::string& sender, const std::string& receiver, uint256_t amount) {
+    Transaction tx{amount, sender, receiver, {}};
+    tx.signature = sign_transaction(key, tx.to_string());
+
+    std::cout << "Transaction signed. Verifying...\n";
+    if (verify_signature(key, tx.to_string(), tx.signature)) {
+        std::cout << "Transaction verified and recorded: " << tx.to_string() << "\n";
+    } else {
+        std::cout << "Transaction verification failed!\n";
+    }
+}
+
+int main() {
+    // Generate key pair
+    EC_KEY* key = generate_keypair();
+    
+    // Simulate a transaction
+    send_transaction(key, "Alice", "Bob", 100);
+
+    EC_KEY_free(key);
+    return 0;
+}
+
+----
+
+== Add Secure Storage of Signed Transactions
+
+Let's securely store signed transactions using boost:interprocess[], ensuring safe, concurrent access to transaction history in shared memory.
+
+[source,cpp]
+----
+#include <boost/interprocess/managed_shared_memory.hpp>
+#include <boost/interprocess/allocators/allocator.hpp>
+#include <boost/interprocess/containers/vector.hpp>
+#include <boost/interprocess/containers/string.hpp>
+#include <boost/multiprecision/cpp_int.hpp>
+#include <boost/uuid/uuid.hpp>
+#include <boost/uuid/uuid_generators.hpp>
+#include <boost/uuid/uuid_io.hpp>
+#include <openssl/ec.h>
+#include <openssl/ecdsa.h>
+#include <openssl/sha.h>
+#include <iostream>
+
+using namespace boost::interprocess;
+using boost::multiprecision::uint256_t;
+
+// Define shared memory transaction storage
+struct Transaction {
+    uint256_t amount;
+    std::string sender;
+    std::string receiver;
+    std::vector<unsigned char> signature;
+
+    Transaction(uint256_t amt, std::string snd, std::string rcv, std::vector<unsigned char> sig)
+        : amount(amt), sender(std::move(snd)), receiver(std::move(rcv)), signature(std::move(sig)) {}
+
+    std::string to_string() const {
+        return sender + " -> " + receiver + " : " + std::to_string(amount);
+    }
+};
+
+// Shared-memory allocator for transactions
+typedef allocator<Transaction, managed_shared_memory::segment_manager> TransactionAllocator;
+typedef vector<Transaction, TransactionAllocator> TransactionVector;
+
+// Generate an ECDSA key pair
+EC_KEY* generate_keypair() {
+    EC_KEY* key = EC_KEY_new_by_curve_name(NID_secp256k1);
+    EC_KEY_generate_key(key);
+    return key;
+}
+
+// Sign transaction data
+std::vector<unsigned char> sign_transaction(EC_KEY* key, const std::string& data) {
+    unsigned char hash[SHA256_DIGEST_LENGTH];
+    SHA256((unsigned char*)data.c_str(), data.size(), hash);
+
+    std::vector<unsigned char> signature(ECDSA_size(key));
+    unsigned int sig_len;
+    ECDSA_sign(0, hash, SHA256_DIGEST_LENGTH, signature.data(), &sig_len, key);
+    signature.resize(sig_len);
+    
+    return signature;
+}
+
+// Verify transaction signature
+bool verify_signature(EC_KEY* key, const std::string& data, const std::vector<unsigned char>& signature) {
+    unsigned char hash[SHA256_DIGEST_LENGTH];
+    SHA256((unsigned char*)data.c_str(), data.size(), hash);
+    return ECDSA_verify(0, hash, SHA256_DIGEST_LENGTH, signature.data(), signature.size(), key) == 1;
+}
+
+// Store transaction in shared memory
+void store_transaction(EC_KEY* key, managed_shared_memory& segment, TransactionVector* tx_history, 
+                       const std::string& sender, const std::string& receiver, uint256_t amount) {
+    Transaction tx(amount, sender, receiver, sign_transaction(key, sender + receiver + std::to_string(amount)));
+
+    if (verify_signature(key, sender + receiver + std::to_string(amount), tx.signature)) {
+        tx_history->push_back(tx);
+        std::cout << "Transaction stored securely: " << tx.to_string() << "\n";
+    } else {
+        std::cout << "Transaction verification failed!\n";
+    }
+}
+
+int main() {
+    // Create or open shared memory
+    shared_memory_object::remove("WalletSharedMemory");
+    managed_shared_memory segment(create_only, "WalletSharedMemory", 65536);
+
+    // Create a shared-memory transaction vector
+    TransactionVector* tx_history = segment.construct<TransactionVector>("TransactionHistory")(segment.get_allocator<Transaction>());
+
+    // Generate key pair
+    EC_KEY* key = generate_keypair();
+
+    // Store transactions
+    store_transaction(key, segment, tx_history, "Alice", "Bob", 100);
+    store_transaction(key, segment, tx_history, "Bob", "Charlie", 50);
+
+    EC_KEY_free(key);
+    return 0;
+}
+
+----
+
+== Sample Wallet with Ed25519 Signing
+
+[#footnote2-location]
+In order to use the more advanced Ed25519 signing link:#footnote2[(2)], we will use the https://doc.libsodium.org/[libsodium] cryptographic library, which is a widely trusted and optimized implementation.
+
+You will need to install libsodium, with a command such as `sudo apt install libsodium-dev` on Linux, `brew install libsodium` on a Mac, or download prebuilt Windows binaries from the https://doc.libsodium.org/[libsodium] website.
+
+Removing the ECDSA signatures, and replacing them with Ed25519, give us the following code:
+
+[source,cpp]
+----
+#include <iostream>
+#include <boost/serialization/serialization.hpp>
+#include <boost/serialization/vector.hpp>
+#include <boost/serialization/string.hpp>
+#include <boost/filesystem.hpp>
+#include <boost/archive/text_oarchive.hpp>
+#include <boost/archive/text_iarchive.hpp>
+#include <sodium.h>  // For Ed25519 signing
+
+// Define a Transaction structure
+struct Transaction {
+    std::string sender;
+    std::string receiver;
+    double amount;
+    std::string signature;
+
+    template<class Archive>
+    void serialize(Archive& ar, const unsigned int version) {
+        ar & sender & receiver & amount & signature;
+    }
+};
+
+// Wallet class
+class Wallet {
+private:
+    std::vector<Transaction> transactions;
+    unsigned char public_key[crypto_sign_PUBLICKEYBYTES];
+    unsigned char secret_key[crypto_sign_SECRETKEYBYTES];
+
+public:
+    Wallet() {
+        if (crypto_sign_keypair(public_key, secret_key) != 0) {
+            throw std::runtime_error("Failed to generate Ed25519 key pair.");
+        }
+    }
+
+    void addTransaction(const std::string& sender, const std::string& receiver, double amount) {
+        Transaction tx{sender, receiver, amount, ""};
+
+        // Sign the transaction
+        unsigned char signed_message[crypto_sign_BYTES + sizeof(Transaction)];
+        unsigned long long signed_length;
+        
+        crypto_sign(signed_message, &signed_length,
+                    reinterpret_cast<const unsigned char*>(&tx), sizeof(Transaction),
+                    secret_key);
+
+        tx.signature = std::string(reinterpret_cast<char*>(signed_message), signed_length);
+        transactions.push_back(tx);
+        
+        std::cout << "Transaction added and signed with Ed25519!\n";
+    }
+
+    bool verifyTransaction(const Transaction& tx) {
+        unsigned char unsigned_message[sizeof(Transaction)];
+        unsigned long long unsigned_length;
+
+        if (crypto_sign_open(unsigned_message, &unsigned_length,
+                             reinterpret_cast<const unsigned char*>(tx.signature.data()),
+                             tx.signature.size(), public_key) != 0) {
+            return false; // Invalid signature
+        }
+        return true;
+    }
+
+    void saveToFile(const std::string& filename) {
+        std::ofstream ofs(filename);
+        boost::archive::text_oarchive oa(ofs);
+        oa << transactions;
+    }
+
+    void loadFromFile(const std::string& filename) {
+        if (boost::filesystem::exists(filename)) {
+            std::ifstream ifs(filename);
+            boost::archive::text_iarchive ia(ifs);
+            ia >> transactions;
+        }
+    }
+};
+
+int main() {
+    if (sodium_init() < 0) {
+        std::cerr << "Libsodium initialization failed!\n";
+        return 1;
+    }
+
+    Wallet myWallet;
+
+    // Add and sign transactions
+    myWallet.addTransaction("Alice", "Bob", 100.0);
+    myWallet.addTransaction("Charlie", "Dave", 50.5);
+
+    // Save to file
+    myWallet.saveToFile("wallet_data.txt");
+
+    // Load and verify
+    Wallet loadedWallet;
+    loadedWallet.loadFromFile("wallet_data.txt");
+
+    std::cout << "Transactions loaded and verified!\n";
+
+    return 0;
+}
+
+----
+
+A lot of research should be done into security in general and cryptography in particular. Refer also to the samples in xref:task-networking.adoc[] and xref:task-parallel-computation.adoc[].
+
+== Footnotes
+
+[#footnote1]
+link:#footnote1-location[(1)]
+ECDSA : An _Elliptic Curve Digital Signature Algorithm_ creates a public and private key pair. ECDSA provides a variant of digital signature algorithms that use _elliptic-curve cryptography_ to provide an additional level of complexity to the private key. However, care should be taken when implementing this algorithm (in particular, high-quality randomness in signatures) - only a proper implementation is secure. 
+
+[#footnote2]
+link:#footnote2-location[(2)]
+Ed25519 : A high-performance, secure, and efficient public-key signature algorithm based on the _Edwards-curve Digital Signature Algorithm_ (EdDSA), specifically designed for the Curve25519 elliptic curve. It offers 128-bit security, is resistant to side-channel attacks, and provides fast signing and verification speeds while maintaining small key and signature sizes (32-byte public keys and 64-byte signatures). Unlike ECDSA, Ed25519 does not require a secure random k value for signing, eliminating a major source of vulnerabilities. Widely adopted in cryptographic protocols like SSH, TLS, and cryptocurrency systems, Ed25519 is favored for its robustness, simplicity, and efficiency in modern security applications. 
+
+If you are writing a serious financial app, then you could also research _Schnorr Signatures_. Unlike ECDSA, where an attacker can slightly modify a valid signature to create a new one, _Schnorr Signatures_ prevent this, improving security in blockchain applications. And in addition, ECDSA (and all elliptic curve cryptography) and possibly Ed25519 can be broken by large-scale quantum computers - _Post-quantum cryptography_ (PQC) is designed to resist this by replacing these schemes with lattice-based, hash-based, multivariate, and code-based cryptography - and is a work in progress!
+
+== See Also
+
+* https://www.boost.org/doc/libs/1_87_0/libs/libraries.htm#Concurrent[Category: Concurrent Programming]
+* https://www.boost.org/doc/libs/1_87_0/libs/libraries.htm#IO[Category: Input/Output]
+* https://www.boost.org/doc/libs/1_87_0/libs/libraries.htm#Math[Category: Math and numerics]
+
+
