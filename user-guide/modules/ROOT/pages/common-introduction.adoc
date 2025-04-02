@@ -13,15 +13,17 @@ Official repository: https://github.com/boostorg/website-v2-docs
 
 There are many common use-cases for the Boost libraries.
 
+xref:task-finance.adoc[] can be relatively simple in terms of numerical operations - additions for deposits, subtractions for withdrawals, and multiplications for interest calculation and foreign currency trading - but delving into secure networking and cryptography makes this scenario a serious challenge. 
+
 In the realm of software development, xref:task-networking.adoc[] involves the communication and data exchange between different software systems across networks. Networking code often deals with protocols like HTTP, FTP, TCP/IP, UDP, and WebSockets, to name a few. Networking tasks might include creating a web server, crafting a custom protocol for communication between distributed parts of an application, or designing software that interacts with REST APIs. 
 
 xref:task-simulation.adoc[] in software is about creating a virtual model of a system in order to understand or predict its behavior. It’s often used in areas such as physics, engineering, biology, and finance to model complex real-world systems. Simulation code can involve heavy computations, data analysis, and often makes use of concurrent programming to speed up execution. 
 
-Developing xref:task-system.adoc[] involves writing software that interfaces closely with the underlying operating system, offering a platform for other software to run. This can include designing and implementing operating systems, device drivers, system utilities, and servers. It often involves lower-level programming, managing system resources, process control, and inter-process communication. 
+Developing xref:task-system.adoc[] involves writing software that interfaces closely with the underlying operating system, offering a platform for other software to run. This can include designing and implementing operating systems, device drivers, system utilities, and servers. It often involves lower-level programming, managing system resources, process control, and inter-process communication.
+
+xref:testing-debugging.adoc[] is a crucial part of the development process, aimed at evaluating the functionality of software applications to ensure they meet the specified requirements and to identify any bugs or issues. This might include writing unit tests for individual components, integration tests that evaluate how these components work together, and end-to-end tests that assess the system as a whole.
 
 xref:task-text-processing.adoc[] involves the manipulation and analysis of text data in software applications. This can include tasks like parsing, searching, modifying, tokenization, or extracting information from text. It often requires a strong understanding of string manipulation, regular expressions, and character encodings.
-
-xref:testing-debugging.adoc[] is a crucial part of the development process, aimed at evaluating the functionality of software applications to ensure they meet the specified requirements and to identify any bugs or issues. This might include writing unit tests for individual components, integration tests that evaluate how these components work together, and end-to-end tests that assess the system as a whole. 
 
 Each of these areas is a significant field in its own right, with specific techniques, practices, and tools that can be used to effectively tackle the challenges they present.
 

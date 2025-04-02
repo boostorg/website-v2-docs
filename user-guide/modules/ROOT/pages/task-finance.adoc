@@ -1,0 +1,555 @@
+////
+Copyright (c) 2024 The C++ Alliance, Inc. (https://cppalliance.org)
+
+Distributed under the Boost Software License, Version 1.0. (See accompanying
+file LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
+
+Official repository: https://github.com/boostorg/website-v2-docs
+////
+
+= Finance
+:navtitle: Finance
+
+[#footnote1-location]
+Financial applications typically need functionality like secure storage for storing balances and transaction history, networking for interacting with _blockchain_ link:#footnote1[(1)] or other financial APIs, cryptography for secure signing and verifying transactions, and configuration management for handling user settings.
+
+Of course, we should add highly accurate numerical calculations as an essential feature.
+
+[square]
+* <<Libraries>>
+* <<Signing Transactions>>
+* <<Sample Wallet with Ed25519 Signing>>
+* <<Wallet with Foreign Currency Exchange>>
+* <<Footnotes>>
+* <<See Also>>
+
+== Libraries
+
+Many Boost libraries should assist you in building a finance app, here are some to consider:
+
+[circle]
+* boost:interprocess[] : Allows for shared memory communication and synchronization between processes. It's useful for creating shared memory regions, handling inter-process communication, managing shared objects, and synchronizing processes.
+
+* boost:multiprecision[] : For extended precision arithmetic.
+
+* boost:asio[] : If your app has network-related features, and its hard to envisage a finance app that does not, this library provides a consistent asynchronous model for network programming.
+
+* boost:beast[] : Built on top of boost:asio[] this library provides implementations of HTTP and WebSocket. These are common protocols for network programming.
+
+* boost:json[] : An efficient library for parsing, serializing, and manipulating JSON data. This is useful specifically in client-server communication and web services. Also, if you are working with large JSON payloads, there is support for incremental parsing, so you can feed data to the parser as it arrives over the network.
+
+* boost:program_options[] : Allows program options to be defined, with types and default values, and their values to be retrieved from the command line, from config files, and programmatically.
+
+* boost:date_time[] or boost:chrono[]: If you need to timestamp changes or edits, or if you're implementing a version history feature, these libraries provide the required functions.
+
+* boost:property_tree[] : Provides a hierarchical data structure for representing and manipulating structured data, such as XML, JSON, INI, or property list formats. You can use it to parse, validate, and sanitize input data in various formats, ensuring that it conforms to expected schema or constraints before further processing.
+
+* https://www.boost.org/doc/libs/master/libs/hash2/doc/html/hash2.html[Boost.Hash2] : Hashing algorithms play a crucial role in financial applications by ensuring data integrity, authentication, and security in various transactions and records. Hashing enables fingerprinting of transactions, invoices, and records to detect duplicate or modified entries.
+
+Note:: Boost.Hash2 is a new library, first available in Boost version 1.88.
+
+== Signing Transactions
+
+Encrypting and securing transactions, one of the first tasks developers of a financial app should investigate, is a never-ending journey.
+
+_Public-key cryptography_, also known as asymmetric cryptography, was first conceptualized in the 1970s by Whitfield Diffie and Martin Hellman, who introduced the idea of key pairs — one public and one private — for secure communication. This breakthrough solved a major problem in cryptography: how to securely share encryption keys over an untrusted channel. Shortly after, Rivest, Shamir, and Adleman developed the RSA algorithm, which became one of the earliest widely used public-key systems, relying on the mathematical difficulty of factoring large prime numbers.
+
+[#footnote2-location]
+As cryptography evolved, new methods based on elliptic curves gained popularity due to their superior security per bit compared to RSA. The ECDSA or _Elliptic Curve Digital Signature Algorithm_ link:#footnote2[(2)] emerged as a widely adopted standard, particularly in financial applications and cryptocurrencies like Bitcoin. However, ECDSA has limitations in security and performance, leading to the development of EdDSA or _Edwards-curve Digital Signature Algorithm_  link:#footnote3[(3)], which offers improved speed, security, and resistance to side-channel attacks. The most well-known variant, *Ed25519*, is now favored in many modern cryptographic applications for its efficiency and robust security guarantees.
+
+If you are writing a serious financial app, then you could also research _Schnorr Signatures_. Unlike ECDSA, where an attacker can slightly modify a valid signature to create a new one, _Schnorr Signatures_ prevent this, improving security in blockchain applications. And in addition, ECDSA (and all elliptic curve cryptography) and possibly Ed25519 can be broken by large-scale quantum computers - _Post-Quantum Cryptography_ (PQC) is designed to resist this by replacing these schemes with lattice-based, hash-based, multivariate, and code-based cryptography - and is a currently developing story!
+
+== Sample Wallet with Ed25519 Signing
+
+Let's start with a simple wallet that enables transactions from a _sender_ to a _receiver_. We'll use Ed25519 signing, available in the https://www.openssl.org/[OpenSSL] library, to sign transactions.
+
+Signed transactions are then securely stored using boost:interprocess[], ensuring safe, concurrent and persistent access to transaction history in shared memory.
+
+[source,cpp]
+----
+#include <iostream>
+#include <vector>
+#include <string>
+#include <cstring>
+#include <boost/interprocess/managed_shared_memory.hpp>
+#include <openssl/evp.h>
+#include <openssl/sha.h>
+
+using namespace boost::interprocess;
+
+// Structure to store transactions
+struct Transaction {
+    char sender[50];
+    char receiver[50];
+    double amount;
+    unsigned char signature[64];
+
+    Transaction() = default;
+
+    Transaction(const std::string& s, const std::string& r, double amt, const unsigned char* sig) 
+        : amount(amt) {
+        strncpy(sender, s.c_str(), 50);
+        strncpy(receiver, r.c_str(), 50);
+        memcpy(signature, sig, 64);
+    }
+};
+
+// Function to generate an Ed25519 key pair
+void generateEd25519Key(EVP_PKEY** keypair) {
+    EVP_PKEY_CTX* ctx = EVP_PKEY_CTX_new_id(EVP_PKEY_ED25519, nullptr);
+    EVP_PKEY_keygen_init(ctx);
+    EVP_PKEY_keygen(ctx, keypair);
+    EVP_PKEY_CTX_free(ctx);
+}
+
+// Function to sign transactions using OpenSSL Ed25519
+void signTransaction(const std::string& sender, const std::string& receiver, double amount,
+                     unsigned char signature[64], EVP_PKEY* keypair) {
+    std::string data = sender + receiver + std::to_string(amount);
+    EVP_MD_CTX* mdctx = EVP_MD_CTX_new();
+    
+    EVP_DigestSignInit(mdctx, nullptr, nullptr, nullptr, keypair);
+    EVP_DigestSign(mdctx, signature, nullptr, (unsigned char*)data.c_str(), data.size());
+
+    EVP_MD_CTX_free(mdctx);
+}
+
+// Function to verify transaction signatures
+bool verifyTransaction(const Transaction& tx, EVP_PKEY* keypair) {
+    std::string data = std::string(tx.sender) + std::string(tx.receiver) + std::to_string(tx.amount);
+    EVP_MD_CTX* mdctx = EVP_MD_CTX_new();
+    
+    EVP_DigestVerifyInit(mdctx, nullptr, nullptr, nullptr, keypair);
+    bool valid = EVP_DigestVerify(mdctx, tx.signature, 64, (unsigned char*)data.c_str(), data.size());
+
+    EVP_MD_CTX_free(mdctx);
+    return valid;
+}
+
+int main() {
+    const std::string SHM_NAME = "SecureWalletMemory";
+    const std::size_t SHM_SIZE = 65536;
+
+    // Use Boost.Interprocess to create or open shared memory
+    managed_shared_memory segment(open_or_create, SHM_NAME.c_str(), SHM_SIZE);
+    Transaction* tx_list = segment.find_or_construct<Transaction>("TransactionList")[10](); 
+
+    // Generate an Ed25519 keypair using OpenSSL
+    EVP_PKEY* keypair = nullptr;
+    generateEd25519Key(&keypair);
+
+    while (true) {
+        std::cout << "\n-----------------------------------------\n";
+        std::cout << "1. View Transactions\n2. Add New Transaction\n3. Exit\n";
+        std::cout << "-----------------------------------------\nSelect an option: ";
+        
+        int choice;
+        std::cin >> choice;
+        std::cin.ignore();
+
+        if (choice == 1) {
+            std::cout << "\n[INFO] Retrieving stored transactions...\n-----------------------------------------\n";
+            for (int i = 0; i < 10; ++i) {
+                if (tx_list[i].amount == 0) break; 
+                bool valid = verifyTransaction(tx_list[i], keypair);
+                std::cout << i + 1 << ". [" << tx_list[i].sender << " -> " << tx_list[i].receiver 
+                          << ": " << tx_list[i].amount << "] ("
+                          << (valid ? "Signed, Verified" : "Signature Invalid") << ")\n";
+            }
+        } 
+        else if (choice == 2) {
+            std::string sender, receiver;
+            double amount;
+            std::cout << "Enter sender address: "; std::cin >> sender;
+            std::cout << "Enter receiver address: "; std::cin >> receiver;
+            std::cout << "Enter amount: "; std::cin >> amount;
+
+            unsigned char signature[64];
+            signTransaction(sender, receiver, amount, signature, keypair);
+
+            std::cout << "[INFO] Verifying transaction signature...\n";
+            if (verifyTransaction({sender.c_str(), receiver.c_str(), amount, signature}, keypair)) {
+                std::cout << "[INFO] Signature verification successful! Transaction is valid.\n";
+                
+                // This loop stores a new transaction in Boost.Interprocess shared memory,
+                // ensuring that transactions persist even after the program exits.
+                for (int i = 0; i < 10; ++i) {
+                    if (tx_list[i].amount == 0) {
+                        tx_list[i] = Transaction(sender, receiver, amount, signature);
+                        break;
+                    }
+                }
+                std::cout << "[INFO] Transaction successfully recorded!\n";
+            } else {
+                std::cout << "[ERROR] Signature verification failed! Transaction is invalid.\n";
+            }
+        } 
+        else if (choice == 3) {
+            std::cout << "[INFO] Exiting Secure Wallet. Goodbye!\n";
+            break;
+        } 
+        else {
+            std::cout << "[ERROR] Invalid option! Please try again.\n";
+        }
+    }
+
+    // Cleanup OpenSSL keypair
+    EVP_PKEY_free(keypair);
+
+    return 0;
+}
+
+----
+
+A sample run of the program might be:
+
+[source,text]
+----
+-----------------------------------------
+1. View Transactions
+2. Add New Transaction
+3. Exit
+-----------------------------------------
+Select an option: 2
+
+Enter sender address: Alice
+Enter receiver address: Bob
+Enter amount: 100.50
+
+[INFO] Signing transaction...
+[INFO] Verifying transaction signature...
+[INFO] Signature verification successful! Transaction is valid.
+[INFO] Transaction successfully recorded!
+
+-----------------------------------------
+1. View Transactions
+2. Add New Transaction
+3. Exit
+-----------------------------------------
+Select an option: 1
+
+[INFO] Retrieving stored transactions...
+-----------------------------------------
+1. [Alice -> Bob: 100.50] (Signed, Verified)
+
+-----------------------------------------
+1. View Transactions
+2. Add New Transaction
+3. Exit
+-----------------------------------------
+Select an option: 3
+
+[INFO] Exiting Secure Wallet. Goodbye!
+
+----
+
+== Wallet with Foreign Currency Exchange
+
+For a more functional wallet, we should add deposits and withdrawals that update the wallet, and balance checking and querying foreign currency rates that do not update the wallet, but provide information to the user.
+
+Let's add the features of boost:multiprecision[] to handle high-precision numbers for the currency conversion, so avoiding floating-point precision loss.
+
+We'll also use boost:beast[] to make an HTTP request to a public exchange rate API and fetch live rates for currency conversion. The JSON response is parsed using boost:json[].
+
+[source,cpp]
+----
+#include <boost/interprocess/managed_shared_memory.hpp>
+#include <boost/multiprecision/cpp_dec_float.hpp>
+#include <boost/json.hpp>
+#include <boost/beast.hpp>
+#include <boost/asio.hpp>
+#include <boost/program_options.hpp>
+#include <iostream>
+#include <map>
+#include <string>
+#include <cstring>
+#include <vector>
+#include <openssl/evp.h>
+#include <openssl/ec.h>
+#include <openssl/err.h>
+#include <openssl/ecdsa.h>
+#include <openssl/rand.h>
+
+using namespace boost::interprocess;
+using namespace boost::multiprecision;
+using namespace boost::asio;
+using namespace boost::beast;
+namespace po = boost::program_options;
+
+// Define high-precision decimal type
+using BigFloat = cpp_dec_float_50;
+
+// Currency exchange rate defaults
+std::map<std::string, BigFloat> exchange_rates = {
+    {"USD", 1.0}, 
+    {"EUR", 0.91},
+    {"GBP", 0.79},
+    {"JPY", 129.53}
+};
+
+// Shared structure for storing transaction history
+struct Transaction {
+    char sender[50];
+    char receiver[50];
+    BigFloat amount;
+    char currency[4];
+    char signature[64]; // Ed25519 signature
+};
+
+// Shared structure for storing user balances
+struct UserBalance {
+    char currency[4];
+    BigFloat balance;
+};
+
+// Function to create or load shared memory segment
+managed_shared_memory open_shared_memory(const std::string& segment_name) {
+    return managed_shared_memory(open_or_create, segment_name.c_str(), 65536);
+}
+
+// Fetch exchange rates from an external API (using Boost.Beast)
+void fetch_exchange_rates() {
+    try {
+        io_context io_context;
+        tcp::resolver resolver(io_context);
+        tcp::socket socket(io_context);
+
+        auto const results = resolver.resolve("api.exchangerate-api.com", "http");
+        boost::asio::connect(socket, results.begin(), results.end());
+
+        http::request<http::string_body> req;
+        req.method(http::verb::get);
+        req.target("/v4/latest/USD");  // Assume USD as the base currency
+        req.set(http::field::host, "api.exchangerate-api.com");
+        req.set(http::field::user_agent, "Boost.Beast/1.0");
+
+        http::write(socket, req);
+
+        flat_buffer buffer;
+        http::response<http::dynamic_body> res;
+        http::read(socket, buffer, res);
+
+        std::string body = buffers_to_string(res.body().data());
+        boost::json::value json_data = boost::json::parse(body);
+
+        auto rates = json_data.as_object()["rates"].as_object();
+        for (auto& rate : rates) {
+            exchange_rates[rate.key()] = boost::json::value_to<BigFloat>(rate.value());
+        }
+        std::cout << "[INFO] Exchange rates updated successfully.\n";
+    }
+    catch (const std::exception& e) {
+        std::cerr << "[ERROR] Error fetching exchange rates: " << e.what() << "\n";
+    }
+}
+
+// Convert between currencies using live rates
+BigFloat convert_currency(BigFloat amount, const std::string& from, const std::string& to) {
+    if (exchange_rates.find(from) == exchange_rates.end() || exchange_rates.find(to) == exchange_rates.end()) {
+        std::cerr << "[ERROR] Unsupported currency conversion!\n";
+        return 0;
+    }
+    return amount * (exchange_rates[to] / exchange_rates[from]);
+}
+
+// OpenSSL: Sign a transaction with Ed25519
+bool sign_transaction(const std::string& sender, const std::string& receiver, BigFloat amount, 
+                      const std::string& currency, const std::string& secret_key, char* signature) {
+    unsigned char message[256];
+    snprintf((char*)message, sizeof(message), "%s->%s: %f %s", sender.c_str(), receiver.c_str(), amount.convert_to<double>(), currency.c_str());
+
+    // Generate a new EC keypair using Ed25519 (OpenSSL)
+    EC_KEY *key = EC_KEY_new_by_curve_name(NID_ED25519);
+    if (!key) {
+        std::cerr << "[ERROR] Failed to create EC key!\n";
+        return false;
+    }
+
+    // Convert secret key to bytes
+    unsigned char sk[32];  // Ed25519 secret key size is 32 bytes
+    for (size_t i = 0; i < secret_key.size() && i < 32; ++i) {
+        sk[i] = static_cast<unsigned char>(secret_key[i]);
+    }
+
+    // Set the private key
+    if (!EC_KEY_oct2priv(key, sk, sizeof(sk))) {
+        std::cerr << "[ERROR] Failed to set private key!\n";
+        EC_KEY_free(key);
+        return false;
+    }
+
+    // Sign the message
+    unsigned char *sig = new unsigned char[ECDSA_size(key)];
+    unsigned int sig_len = 0;
+    if (ECDSA_sign(0, message, std::strlen((char*)message), sig, &sig_len, key) != 1) {
+        std::cerr << "[ERROR] Signing failed!\n";
+        delete[] sig;
+        EC_KEY_free(key);
+        return false;
+    }
+
+    // Copy the signature to the provided buffer
+    std::memcpy(signature, sig, sig_len);
+    delete[] sig;
+    EC_KEY_free(key);
+
+    return true;
+}
+
+// Use Boost.Interprocess to store a transaction in shared memory
+void store_transaction(managed_shared_memory& segment, const std::string& sender, const std::string& receiver, 
+                       BigFloat amount, const std::string& currency, const char* signature) {
+    Transaction* tx_list = segment.find_or_construct<Transaction>("TransactionList")[10]();
+    for (int i = 0; i < 10; ++i) {
+        if (tx_list[i].amount == 0) {
+            strncpy(tx_list[i].sender, sender.c_str(), 50);
+            strncpy(tx_list[i].receiver, receiver.c_str(), 50);
+            tx_list[i].amount = amount;
+            strncpy(tx_list[i].currency, currency.c_str(), 4);
+            std::memcpy(tx_list[i].signature, signature, 64);
+            break;
+        }
+    }
+    std::cout << "[INFO] Transaction stored successfully!\n";
+}
+
+// Use Boost.Interprocess to update user balance in shared memory
+void update_user_balance(managed_shared_memory& segment, const std::string& user, BigFloat amount, const std::string& currency) {
+    UserBalance* balances = segment.find_or_construct<UserBalance>("UserBalances")[10]();
+    
+    for (int i = 0; i < 10; ++i) {
+        if (strncmp(balances[i].currency, currency.c_str(), 4) == 0) {
+            balances[i].balance += amount;
+            std::cout << "[INFO] User balance updated: " << user << " " << currency << ": " << balances[i].balance.str() << "\n";
+            break;
+        }
+    }
+}
+
+int main(int argc, char* argv[]) {
+    po::options_description desc("Allowed options");
+    desc.add_options()
+        ("help,h", "Produce help message")
+        ("secret-key,s", po::value<std::string>(), "User's secret key");
+
+    po::variables_map vm;
+    po::store(po::parse_command_line(argc, argv, desc), vm);
+    po::notify(vm);
+
+    if (vm.count("help")) {
+        std::cout << desc << "\n";
+        return 1;
+    }
+
+    if (!vm.count("secret-key")) {
+        std::cerr << "[ERROR] Secret key is required.\n";
+        return 1;
+    }
+
+    const std::string secret_key = vm["secret-key"].as<std::string>();
+
+    const std::string SHM_NAME = "SecureWalletMemory";
+    managed_shared_memory segment = open_shared_memory(SHM_NAME);
+
+    // Fetch live exchange rates from the API
+    fetch_exchange_rates();
+
+    std::string sender, receiver, currency;
+    BigFloat amount;
+
+    while (true) {
+        std::cout << "\n-----------------------------------------\n";
+        std::cout << "1. Deposit\n2. Withdraw\n3. Check Balance\n4. Convert Currency\n5. Add New Transaction\n6. Exit\n";
+        std::cout << "-----------------------------------------\nSelect an option: ";
+        
+        int choice;
+        std::cin >> choice;
+        std::cin.ignore();
+
+        if (choice == 1) {
+
+            // Deposit money
+            std::cout << "Enter deposit amount: "; std::cin >> amount;
+            std::cout << "Enter currency (USD, EUR, GBP, JPY): "; std::cin >> currency;
+            update_user_balance(segment, sender, amount, currency);
+        }
+        else if (choice == 2) {
+
+            // Withdraw money
+            std::cout << "Enter withdrawal amount: "; std::cin >> amount;
+            std::cout << "Enter currency (USD, EUR, GBP, JPY): "; std::cin >> currency;
+            update_user_balance(segment, sender, -amount, currency);
+        }
+        else if (choice == 3) {
+
+            // Check balance
+            std::cout << "Enter currency (USD, EUR, GBP, JPY): "; std::cin >> currency;
+            for (int i = 0; i < 10; ++i) {
+                if (strncmp(balances[i].currency, currency.c_str(), 4) == 0) {
+                    std::cout << "[INFO] Balance: " << balances[i].balance.str() << " " << currency << "\n";
+                    break;
+                }
+            }
+        }
+        else if (choice == 4) {
+
+            // Currency conversion
+            std::cout << "Enter amount: "; std::cin >> amount;
+            std::cout << "Enter source currency (USD, EUR, GBP, JPY): "; std::cin >> currency;
+            std::cout << "Enter target currency (USD, EUR, GBP, JPY): "; std::cin >> currency;
+
+            BigFloat converted_amount = convert_currency(amount, currency, currency);
+            std::cout << "[INFO] Converted amount: " << converted_amount.str() << " " << currency << "\n";
+        }
+        else if (choice == 5) {
+
+            // Add new transaction
+            std::cout << "Enter sender address: "; std::cin >> sender;
+            std::cout << "Enter receiver address: "; std::cin >> receiver;
+            std::cout << "Enter amount: "; std::cin >> amount;
+            std::cout << "Enter currency (USD, EUR, GBP, JPY): "; std::cin >> currency;
+
+            char signature[64]; // Ed25519 signature size
+            if (sign_transaction(sender, receiver, amount, currency, secret_key, signature)) {
+                store_transaction(segment, sender, receiver, amount, currency, signature);
+                update_user_balance(segment, sender, -amount, currency);
+                update_user_balance(segment, receiver, amount, currency);
+            }
+        }
+        else if (choice == 6) {
+            std::cout << "[INFO] Exiting Secure Wallet. Goodbye!\n";
+            break;
+        }
+        else {
+            std::cout << "[ERROR] Invalid option! Please try again.\n";
+        }
+    }
+
+    return 0;
+}
+
+----
+
+For some ideas on how to expand this app, refer to the samples in xref:task-networking.adoc[] and xref:task-parallel-computation.adoc[].
+
+== Footnotes
+
+[#footnote1]
+link:#footnote1-location[(1)]
+_Blockchain_ : A technology that provides a decentralized, tamper-resistant ledger that ensures transparency, security, and trust in digital transactions. By distributing records across a network of nodes and using cryptographic techniques, like hashing and digital signatures, blockchain eliminates the need for intermediaries, reducing fraud and operational costs. Its applications extend beyond cryptocurrencies to areas such as supply chain tracking, smart contracts, secure identity verification, and financial services. The immutability and auditability make it particularly valuable for industries requiring verifiable and trustless interactions, though challenges like scalability and energy consumption remain areas of active development.
+
+[#footnote2]
+link:#footnote2-location[(2)]
+_ECDSA_ : An _Elliptic Curve Digital Signature Algorithm_ creates a public and private key pair. ECDSA provides a variant of digital signature algorithms that use _elliptic-curve cryptography_ to provide an additional level of complexity to the private key. However, care should be taken when implementing this algorithm - in particular, high-quality randomness in signatures is an absolutely essential.
+
+[#footnote3]
+link:#footnote2-location[(3)]
+_Ed25519_ : A high-performance, secure, and efficient public-key signature algorithm based on the _Edwards-curve Digital Signature Algorithm_ (EdDSA), specifically designed for the Curve25519 elliptic curve. It offers 128-bit security, is resistant to side-channel attacks, and provides fast signing and verification speeds while maintaining small key and signature sizes (32-byte public keys and 64-byte signatures). Unlike ECDSA, Ed25519 does not require a secure random k value for signing, eliminating a major source of vulnerabilities. Widely adopted in cryptographic protocols like SSH, TLS, and cryptocurrency systems, Ed25519 is favored for its robustness, simplicity, and efficiency in modern security applications. 
+
+== See Also
+
+* https://www.boost.org/doc/libs/1_87_0/libs/libraries.htm#Concurrent[Category: Concurrent Programming]
+* https://www.boost.org/doc/libs/1_87_0/libs/libraries.htm#IO[Category: Input/Output]
+* https://www.boost.org/doc/libs/1_87_0/libs/libraries.htm#Math[Category: Math and numerics]
+
+
