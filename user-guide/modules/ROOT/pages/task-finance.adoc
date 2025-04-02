@@ -18,7 +18,7 @@ Of course, we should add highly accurate numerical calculations as an essential 
 [square]
 * <<Libraries>>
 * <<Signing Transactions>>
-* <<Wallet with Ed25519 Signing>>
+* <<Sample Wallet with Ed25519 Signing>>
 * <<Wallet with Foreign Currency Exchange>>
 * <<Footnotes>>
 * <<See Also>>
@@ -57,11 +57,11 @@ _Public-key cryptography_, also known as asymmetric cryptography, was first conc
 [#footnote2-location]
 As cryptography evolved, new methods based on elliptic curves gained popularity due to their superior security per bit compared to RSA. The ECDSA or _Elliptic Curve Digital Signature Algorithm_ link:#footnote2[(2)] emerged as a widely adopted standard, particularly in financial applications and cryptocurrencies like Bitcoin. However, ECDSA has limitations in security and performance, leading to the development of EdDSA or _Edwards-curve Digital Signature Algorithm_  link:#footnote3[(3)], which offers improved speed, security, and resistance to side-channel attacks. The most well-known variant, *Ed25519*, is now favored in many modern cryptographic applications for its efficiency and robust security guarantees.
 
-If you are writing a serious financial app, then you could also research _Schnorr Signatures_. Unlike ECDSA, where an attacker can slightly modify a valid signature to create a new one, _Schnorr Signatures_ prevent this, improving security in blockchain applications. And in addition, ECDSA (and all elliptic curve cryptography) and possibly Ed25519 can be broken by large-scale quantum computers - _Post-quantum cryptography_ (PQC) is designed to resist this by replacing these schemes with lattice-based, hash-based, multivariate, and code-based cryptography - and is a currently developing story!
+If you are writing a serious financial app, then you could also research _Schnorr Signatures_. Unlike ECDSA, where an attacker can slightly modify a valid signature to create a new one, _Schnorr Signatures_ prevent this, improving security in blockchain applications. And in addition, ECDSA (and all elliptic curve cryptography) and possibly Ed25519 can be broken by large-scale quantum computers - _Post-Quantum Cryptography_ (PQC) is designed to resist this by replacing these schemes with lattice-based, hash-based, multivariate, and code-based cryptography - and is a currently developing story!
 
-== Wallet with Ed25519 Signing
+== Sample Wallet with Ed25519 Signing
 
-Let's start with a simple wallet, that enables transactions from a _sender_ to a _receiver_. We'll use Ed25519 signing, available in the https://www.openssl.org/[OpenSSL] library, to sign transactions.
+Let's start with a simple wallet that enables transactions from a _sender_ to a _receiver_. We'll use Ed25519 signing, available in the https://www.openssl.org/[OpenSSL] library, to sign transactions.
 
 Signed transactions are then securely stored using boost:interprocess[], ensuring safe, concurrent and persistent access to transaction history in shared memory.
 
@@ -247,9 +247,9 @@ Select an option: 3
 
 For a more functional wallet, we should add deposits and withdrawals that update the wallet, and balance checking and querying foreign currency rates that do not update the wallet, but provide information to the user.
 
-Let's add the features of boost:multiprecision[] to handle high-precision numbers for the currency conversion so avoiding floating-point precision loss.
+Let's add the features of boost:multiprecision[] to handle high-precision numbers for the currency conversion, so avoiding floating-point precision loss.
 
-We will also use boost:beast[] to make an HTTP request to a public exchange rate API and fetch live rates for currency conversion. The JSON response is parsed using boost:json[].
+We'll also use boost:beast[] to make an HTTP request to a public exchange rate API and fetch live rates for currency conversion. The JSON response is parsed using boost:json[].
 
 [source,cpp]
 ----
@@ -530,7 +530,7 @@ int main(int argc, char* argv[]) {
 
 ----
 
-For some ideas on how to make this app more efficent, refer to the samples in xref:task-networking.adoc[] and xref:task-parallel-computation.adoc[].
+For some ideas on how to expand this app, refer to the samples in xref:task-networking.adoc[] and xref:task-parallel-computation.adoc[].
 
 == Footnotes
 
