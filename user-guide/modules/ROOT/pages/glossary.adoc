@@ -12,6 +12,8 @@ You will find a myriad of jargon, acronyms and product or tool names used both i
 
 You will find well known acronyms such as DLL, URL and UUID in this list, because they also refer to Boost libraries of the same name.
 
+Where terms apply specifically to one technology, such as _Quantum Computing_ or _Safe C++_, many of the specific terms are only listed under the entry for that technology.
+
 == Contents
 [width="50%",stripes=odd,frame=none]
 |===
@@ -260,6 +262,7 @@ You will find well known acronyms such as DLL, URL and UUID in this list, becaus
 
 *PR* : Pull Request - a request to include specified content into a GitHub repository. An administrator can accept or reject the PR.
 
+[[q]]
 == Q
 
 *QBK* : Quickbook - a Boost tool for automated documentation, _not_ to be confused with Intuit Quickbooks accounting software.
@@ -273,6 +276,69 @@ You will find well known acronyms such as DLL, URL and UUID in this list, becaus
 *QoS* : Quality of Service - a concept that often appears in networking discussions, especially when pass:[C++] programs deal with real-time communications, distributed systems, or systems requiring specific performance guarantees.
 
 *Qt* : This is a widely-used pass:[C++] framework for cross-platform GUI applications. While not an acronym, it's often capitalized as Qt in discussions. Qt is known for its rich set of libraries and tools to develop not only graphical applications but also applications that require network handling, file I/O, and more.
+
+*Quantum Computing* : Unlike classical computing based on bits which must have a value of 0 or 1, quantum computing is based on _qubits_ (see definition below) that can exist in multiple states at the same time. Still in the research phase, this technology can dramatically improve the performance of certain algorithms - especially those we currently call "brute-force" computing - in fields such as cryptography, chemistry simulation, graph traversing, and no doubt many others as new algorithms are discovered. We can currently simulate quantum algorithms in pass:[C++] - refer to xref:task-quantum-computing.adoc[]. There is a mass of new terminology to grasp - many of which have completely different meanings outside of quantum computing - including:
+
+* *Bloch Sphere* : a geometric representation of a single qubit's state as a point on the surface of a unit sphere, useful for visualizing superposition and phase.
++
+image::bloch-sphere.png[Bloch Sphere]
++
+_The Bloch sphere is a 3D representation of a single qubit's state. Any point on the sphere's surface corresponds to a valid qubit state, with poles representing |0⟩ and |1⟩, and equatorial points representing equal superpositions. This tool helps visualize qubit transformations, such as rotations from quantum gates or decoherence effects over time._
+
+* *Clifford+T Gate Set* : a universal set of quantum gates that includes _Clifford_ gates and the _T_ gate, used to construct fault-tolerant quantum circuits. The Clifford gate is a type of quantum gate that forms a foundational set of operations used in quantum error correction and stabilizer circuits. The T gate is a single-qubit quantum gate that applies a π/4 phase shift to the |1⟩ state, making it essential for achieving universal quantum computation when combined with Clifford gates.
+
+* *Decoherence* : the process by which a quantum system loses its quantum properties (like superposition or entanglement) due to environmental interaction.
+
+* *Entanglement* : a quantum phenomenon where two or more qubits become linked, such that measuring one affects the state of the others, regardless of distance.
++
+image::entanglement.png[Entanglement]
++
+_This shows a classic quantum circuit diagram demonstrating how to create an entangled pair of qubits (often called a Bell State). Qubit 0 (q₀) — starts in state |0⟩. Qubit 1 (q₁) — also starts in state |0⟩. A Hadamard Gate (H) is applied to q₀, which puts q₀ into a superposition: (|0⟩ + |1⟩) / √2. A CNOT gate is applied with q₀ as the control qubit, and q₁ as the target qubit. This entangles the qubits — their states become correlated. This means measuring q₀ as 0 forces q₁ to be 0, and measuring q₀ as 1 forces q₁ to be 1. Even if far apart, their outcomes are perfectly correlated — the hallmark of entanglement._
+
+* *Hamiltonian* : an operator representing the total energy of a quantum system, governing how its state evolves over time via Schrödinger's equation.
+
+* *Interference* : arises from the wave-like nature of quantum states, allowing quantum algorithms to amplify correct answers while canceling out incorrect ones, enhancing computational efficiency.
+
+* *Measurement* : the act of observing a qubit's state, which causes its wavefunction to collapse into a definite classical outcome (0 or 1).
+
+* *Noisy Intermediate-Scale Quantum (NISQ)* : 
+A classification of current quantum devices with dozens to hundreds of qubits that are not yet error-corrected or scalable but still useful for experimentation.
+
+* *QASM (Quantum Assembly Language)* : a low-level language for describing quantum circuits and operations, often used to interface with quantum simulators and hardware.
+
+* *Qubit* : the basic unit of quantum information, capable of existing in a superposition of 0 and 1, unlike a classical bit which is strictly one or the other.
+
+* *Qubit Connectivity (Topology)* : the layout that defines which qubits in a quantum computer can directly interact, affecting how efficiently quantum circuits can be executed.
+
+* *Qubit Decoherence Time (T1, T2)* : _T1_ refers to how long a qubit holds its energy state (relaxation), and _T2_ refers to how long it maintains its phase (coherence) — both affect quantum stability.
+
+* *Quantum Annealing* : an optimization technique that finds the lowest-energy configuration of a system by slowly evolving its quantum state.
+
+* *Quantum Circuit* : a structured sequence of quantum gates applied to qubits to implement a quantum algorithm.
++
+image::quantum-circuit.png[Quantum Circuit]
++
+_This diagram shows a basic quantum circuit composed of qubit wires (horizontal lines) and quantum gates. The gates — such as Hadamard (H), CNOT, and Measurement (M) — manipulate the quantum state of the qubits. The circuit structure visually represents the flow of operations over time from left to right, forming the basis of all quantum algorithms._
+
+* *Quantum Error Correction (QEC)* : techniques used to detect and correct quantum errors by encoding logical qubits across multiple physical qubits.
+
+* *Quantum Fourier Transform (QFT)* : a quantum algorithm for transforming a quantum state into its frequency domain - used in Shor's algorithm and other applications.
+
+* *Quantum Gate* : a basic operation applied to qubits that changes their state, analogous to logic gates in classical circuits but with quantum behavior.
+
+* *Quantum Phase Estimation (QPE)* : an algorithm used to estimate the eigenvalue (phase) associated with an eigenvector of a unitary operator—central to many quantum applications.
+
+* *Quantum Teleportation* : a process where the state of a qubit is transferred from one location to another, without moving the physical particle itself, by using entanglement and classical communication. It doesn't transmit matter or energy like in science fiction — instead, it “teleports” quantum information perfectly, but always requires destroying the original state.
++
+image::quantum-teleportation.png[Quantum Teleportation]
++
+_This diagram shows the basic process of quantum teleportation, where the unknown state of qubit |ψ⟩ (held by Alice) is transferred to Bob using entanglement and classical communication. The circuit begins with an entangled pair of qubits shared between Alice (qubit A) and Bob (qubit B). Alice performs a set of quantum operations — a CNOT gate followed by a Hadamard gate — on her qubits, then measures them. She sends the two classical measurement results (bits) to Bob over a classical channel. Bob then applies specific quantum gates (Pauli X and/or Z) depending on Alice's results, reconstructing the original state |ψ⟩ on his qubit — effectively completing the teleportation without physically moving the qubit itself._
+
+* *Quantum Volume* : a benchmark that evaluates a quantum computer's ability to run complex circuits by factoring in gate fidelity, connectivity, and qubit count.
+
+* *Superposition* : a principle in quantum mechanics where a qubit can exist in multiple states simultaneously, enabling parallelism in computation.
+
+* *Trotterization* : a technique for approximating quantum evolution by breaking time-dependent Hamiltonians into discrete, manageable steps.
 
 *QVM* : Quaternions Vectors and Matrices - refer to boost:qvm[]
 

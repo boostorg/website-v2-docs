@@ -852,6 +852,7 @@ A _Directed Acyclic Graph_ (DAG) is a finite directed graph with no cycles, mean
 * https://www.boost.org/doc/libs/1_87_0/libs/libraries.htm#Algorithms[Category: Algorithms]
 * https://www.boost.org/doc/libs/1_87_0/libs/libraries.htm#Concurrent[Category: Concurrent Programming]
 * https://www.boost.org/doc/libs/1_87_0/libs/libraries.htm#Math[Category: Math and numerics]
+* xref:glossary.adoc#q[Glossary: Quantum Computing]
 
 
 
