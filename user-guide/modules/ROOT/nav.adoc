@@ -28,6 +28,7 @@ Official repository: https://github.com/boostorg/website-v2-docs
 ** xref:task-metaprogramming.adoc[]
 ** xref:task-natural-language-parsing.adoc[]
 ** xref:task-parallel-computation.adoc[]
+** xref:task-quantum-computing.adoc[]
 
 * Development
 ** xref:boost-macros.adoc[]

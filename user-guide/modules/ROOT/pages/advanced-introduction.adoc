@@ -23,6 +23,8 @@ xref:task-natural-language-parsing.adoc[] (NLP) is another branch of artificial 
 
 xref:task-parallel-computation.adoc[] is a type of computation in which multiple calculations or processes are carried out simultaneously, leveraging multiple cores or processors. It's particularly useful for tasks that can be broken down into independent subtasks and run concurrently, often leading to significant performance improvements.
 
+xref:task-quantum-computing.adoc[] is still in the research stage. However, this topic is an educational tutorial on what we might expect from quantum applications, simulating quantum algorithms in pass:[C++] where we can.
+
 These areas each represent advanced fields of software development, requiring a deep understanding of specific concepts and techniques. However, they also offer exciting opportunities to build cutting-edge software applications.
 
 == See Also
