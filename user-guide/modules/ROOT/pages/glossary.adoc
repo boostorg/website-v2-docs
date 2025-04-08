@@ -359,7 +359,7 @@ _This diagram shows the basic process of quantum teleportation, where the unknow
 [[s]]
 == S
 
-*Safe pass:[C++]* : Currently a https://safecpp.org/P3390R0.html[proposal for a memory-safe set of pass:[C++] operations]. Key concepts of memory safety include:
+*Safe pass:[C++]* : There are memory-safe discussions and initiatives going on in the wider pass:[C++] development world, though it seems like it's a tough nut to crack. The https://safecpp.org/P3390R0.html[Safe pass:[C++]] proposal is currently in a state of indefinite hiatus. Key concepts of _memory-safety_, and it's partners _type-safety_ and _thread-safety_, include:
 
 * *Borrowing* : this refers to a feature of an ownership system that allows a variable to grant temporary access to its data without giving up ownership. _Immutable borrowing_ allows others to read but not modify data. Multiple immutable borrows are allowed at the same time. With _mutable borrowing_ others can modify the data, but only one mutable borrow is allowed at any one time (to prevent data races), and the owner cannot modify the value until the borrow ends. Borrowing enforces lifetimes - so borrowed references do not outlive the original data.
 * *Borrow checking* : a kind of compile-time analysis that prevents using a reference after an object has gone out of scope.
@@ -367,8 +367,8 @@ _This diagram shows the basic process of quantum teleportation, where the unknow
 * *Explicit mutation* : all mutations are explicit, so there are no uncertain side-effects.
 * *Interior mutability* : types with interior mutability implement deconfliction strategies to support shared mutation, without the risk of data races or violating exclusivity.
 * *Pattern matching* : the only way to access alternatives of _Choice types_ to ensure type-safety.
-* *Relocation object model* : a memory model that supports relocation/destruction of local objects, in order to satisfy type safety.
-* *Send and sync* : these are _type traits_ that ensure memory safety between threads. The _send_ is enabled for a variable if it is safe to transfer ownership of its value to another thread. A _sync_ trait is enabled if it is safe to share a reference to a value with other threads. 
+* *Relocation object model* : a memory model that supports relocation/destruction of local objects, in order to satisfy type-safety.
+* *Send and sync* : these are _type traits_ that ensure memory-safety between threads. The _send_ is enabled for a variable if it is safe to transfer ownership of its value to another thread. A _sync_ trait is enabled if it is safe to share a reference to a value with other threads. 
 * *The `safe` context* : operations in the `safe` context are guaranteed not to cause undefined behavior. 
 
 *SHA* : Secure Hash Algorithm, a function that will reliably give different hash values for different inputs.
