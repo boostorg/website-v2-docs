@@ -1,0 +1,97 @@
+/* Base16 One Dark Theme for highlight.js */
+.hljs {
+  background: #282c34;
+  color: #abb2bf;
+}
+
+.hljs-comment,
+.hljs-quote {
+  color: #5c6370;
+  font-style: italic;
+}
+
+.hljs-keyword,
+.hljs-selector-tag,
+.hljs-subst {
+  color: #c678dd;
+  font-weight: var(--monospace-font-weight-bold);
+}
+
+.hljs-number,
+.hljs-literal,
+.hljs-variable,
+.hljs-template-variable,
+.hljs-tag .hljs-attr {
+  color: #d19a66;
+}
+
+.hljs-string,
+.hljs-doctag {
+  color: #98c379;
+}
+
+.hljs-title,
+.hljs-section,
+.hljs-selector-id {
+  color: #e06c75;
+  font-weight: var(--monospace-font-weight-bold);
+}
+
+.hljs-subst {
+  font-weight: normal;
+}
+
+.hljs-type,
+.hljs-class .hljs-title {
+  color: #e5c07b;
+  font-weight: var(--monospace-font-weight-bold);
+}
+
+.hljs-tag,
+.hljs-name,
+.hljs-attribute {
+  color: #56b6c2;
+  font-weight: normal;
+}
+
+.hljs-regexp,
+.hljs-link {
+  color: #98c379;
+}
+
+.hljs-symbol,
+.hljs-bullet {
+  color: #61aeee;
+}
+
+.hljs-built_in,
+.hljs-builtin-name {
+  color: #e5c07b;
+}
+
+.hljs-meta {
+  color: #61aeee;
+  font-weight: var(--monospace-font-weight-bold);
+}
+
+.hljs-deletion {
+  background: #ffeef0;
+}
+
+.hljs-addition {
+  background: #e6ffed;
+}
+
+.hljs-emphasis {
+  font-style: italic;
+}
+
+.hljs-strong {
+  font-weight: var(--monospace-font-weight-bold);
+}
+
+/* Additional styling for code blocks with this theme */
+pre.highlight {
+  background-color: #282c34;
+  border: 1px solid #181a1f;
+}

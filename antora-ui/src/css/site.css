@@ -13,7 +13,8 @@
 @import "pagination.css";
 @import "header.css";
 @import "footer.css";
-@import "highlight.css";
+/* highlight.css is now managed by the theme-switcher.js */
+/* @import "highlight.css"; */
 @import "print.css";
 @import "tailwindcss/base";
 @import "tailwindcss/components";

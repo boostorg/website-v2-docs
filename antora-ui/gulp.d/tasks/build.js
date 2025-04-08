@@ -189,7 +189,7 @@ function getAllTasks (opts, sourcemaps, postcssPlugins, preview, src) {
       ])
     ),
     vfs
-      .src(['css/site.css', 'css/vendor/*.css'], { ...opts, sourcemaps })
+      .src(['css/site.css', 'css/vendor/*.css', 'css/highlight*.css'], { ...opts, sourcemaps })
       .pipe(postcss((file) => ({ plugins: postcssPlugins, options: { file } }))),
     // Task for getting font files
     vfs.src('font/*.{ttf,woff*(2)}', opts),
