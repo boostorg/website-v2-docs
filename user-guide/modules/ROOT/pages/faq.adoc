@@ -954,7 +954,7 @@ Refer to the xref:contributor-guide:ROOT:index.adoc[]. Note that shareware libra
 
 . *I use Boost Libraries in my current projects. What do I need to know about Safe pass:[C++]?*
 +
-Currently, https://safecpp.org/P3390R0.html[Safe pass:[C++]] is a proposal, under discussion, to develop a memory-safe set of extensions to pass:[C++]. There is no current timeline for release of these extensions, but for more information, refer to xref:contributor-guide:ROOT:contributors-faq#safecpp[Contributors FAQ: Safe pass:[C++]], and for terminology explanations see xref:glossary.adoc#s[Glossary: S].
+Retrofitting the pass:[C++] language with memory-safe constructs has proven to be daunting. The https://safecpp.org/P3390R0.html[Safe pass:[C++]] proposal for a memory-safe set of operations is currently in a state of indefinite hiatus. For more information, including current safe coding practices, refer to xref:contributor-guide:ROOT:contributors-faq#safecpp[Contributors FAQ: Safe pass:[C++]]. For terminology - refer to xref:glossary.adoc#s[Glossary: S].
 
 == Smart Pointers
 

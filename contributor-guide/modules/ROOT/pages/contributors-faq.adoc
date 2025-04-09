@@ -299,41 +299,33 @@ Financial contributions or sponsorships as a token of appreciation are rare!
 
 . *As a contributor of a library to Boost, what do I need to know about Safe pass:[C++]?*
 +
-Currently, https://safecpp.org/P3390R0.html[Safe pass:[C++]] is a proposal, under discussion, to develop a memory-safe set of extensions to pass:[C++]. The push is because the current lack of memory safety makes it too easy for malicious software to exploit language vulnerabilities and perform a variety of attacks. Safe pass:[C++] would provide robust memory-safe, type-safe, and thread-safe operations.
+The current lack of memory-safety makes it too easy for malicious software to exploit pass:[C++] language vulnerabilities and perform a variety of attacks. However, retrofitting the pass:[C++] language with memory-safe constructs has proven to be daunting. The https://safecpp.org/P3390R0.html[Safe pass:[C++]] proposal for a memory-safe set of operations is currently in a state of indefinite hiatus. 
 +
-Clearly there could be significant interest in safe versions of Boost libraries, though the level of work involved extends well beyond rewriting a library using the safe extensions, as _all_ dependencies would also have to be safe versions too.
+Clearly there could be significant interest in safe versions of Boost libraries, though the level of work involved extends well beyond rewriting a library using safe extensions, as _all_ dependencies would also have to be safe versions too.
 +
-Both the stakes and the workloads are high! If the proposal leads to a solid set of extensions, then as a library developer you will have a decision to make - whether to refactor your library using these extensions, or not. Many factors might influence this decision.
+Currently, an astute developer should use known safe practices (some of which are shown below), avoid unsafe libraries if there is a choice, and be aware of the discussions on safe coding practices going on in social media.
 
-. *Is Safe C++ part of Boost?*
+. *What kind of feedback did the proposal for Safe C++ receive?*
 +
-No, it is an independent initiative. The pass:[C++] Alliance has partnered with Sean Baxter, a key proponent of Safe pass:[C++], to further develop the proposal, and seek feedback from developers, researchers, and other stakeholders to refine the project's scope.
-
-. *Is there an official release schedule for Safe C++?*
-+
-No, it is still at the proposal and design refinement stage.
-
-. *What kind of feedback has the proposal garnered so far?*
-+
-Positive feedback centers on appreciation of the initiative to address longstanding safety concerns in pass:[C++]. More challenging feedback has included concerns about the complexity of integrating new safety features into the existing pass:[C++] framework, balancing enhanced safety with the language's core design features of performance and flexibility, and competition from the https://www.rust-lang.org/[RUST] and https://developer.apple.com/swift/[Swift] programming languages.
+Positive feedback centered on appreciation of the initiative to address longstanding safety concerns in pass:[C++]. More challenging feedback has included concerns about the complexity of integrating new safety features into the existing pass:[C++] framework, balancing enhanced safety with the language's core design features of performance and flexibility, and competition from the https://www.rust-lang.org/[RUST] and https://developer.apple.com/swift/[Swift] programming languages.
 
 . *Are there references I can read that will help me understand safe concepts and so understand the online discussions?*
 +
-Yes, in addition to the https://safecpp.org/P3390R0.html[Safe pass:[C++] proposal] from Sean Baxter, the https://herbsutter.com/2024/03/11/safety-in-context/[pass:[C++] safety, in context] blog post, by Herb Sutter, has been written for a broad audience. Also by Herb Sutter, there is a paper entitled https://www.open-std.org/jtc1/sc22/wg21/docs/papers/2024/p3081r0.pdf[Core safety Profiles: Specification, adoptability, and impact].
+Yes, in addition to the, now stalled, https://safecpp.org/P3390R0.html[Safe pass:[C++]] proposal, the https://herbsutter.com/2024/03/11/safety-in-context/[pass:[C++] safety, in context] blog post, by Herb Sutter, has been written for a broad audience. Also by Herb Sutter, there is a paper entitled https://www.open-std.org/jtc1/sc22/wg21/docs/papers/2024/p3081r0.pdf[Core safety Profiles: Specification, adoptability, and impact].
 +
-If you refer to the *References* section of any of these papers, you will find a range of books, papers, presentations and the like that delve to various depths into safety issues. For example, the https://open-std.org/JTC1/SC22/WG21/docs/papers/2023/p2816r0.pdf[Safety Profiles:Type-and-resource Safe programming in ISO Standard pass:[C++]], by Bjarne Stroustrup and Gabriel Dos Reis, outlines a talk on the broad spectrum of safety issues in a chattier style than the more formal programming papers - and might be a good place to start!
+If you refer to the *References* section of any of these papers, you will find a range of books, papers, presentations and the like that delve to various depths into safety issues. For example, the https://open-std.org/JTC1/SC22/WG21/docs/papers/2023/p2816r0.pdf[Safety Profiles: Type-and-resource Safe programming in ISO Standard pass:[C++]], by Bjarne Stroustrup and Gabriel Dos Reis, outlines a talk on the broad spectrum of safety issues in a chattier style than the more formal programming papers - and might be a good place to start!
 
 . *Can you recommend some Boost libraries that demonstrate current best safe-coding practices?*
 +
 By examining the source code and documentation for any of these libraries, you should be able to educate yourself on a robust approach to safe programming, using current development tools.
 +
-For _memory safety_, boost:smart_ptr[] provides smart pointer types like `boost::shared_ptr`, `boost::weak_ptr`, and `boost::scoped_ptr` to manage dynamic memory safely and avoid common pitfalls like memory leaks and dangling pointers. boost:pool[] offers memory pooling utilities that efficient managing of memory allocations while minimizing fragmentation. It can help show how to avoid unsafe manual memory management.
+For _memory-safety_, boost:smart_ptr[] provides smart pointer types like `boost::shared_ptr`, `boost::weak_ptr`, and `boost::scoped_ptr` to manage dynamic memory safely and avoid common pitfalls like memory leaks and dangling pointers. boost:pool[] offers memory pooling utilities that efficient managing of memory allocations while minimizing fragmentation. It can help show how to avoid unsafe manual memory management.
 +
-For _type-safety_, boost:static-assert[] facilitates compile-time checks with `BOOST_STATIC_ASSERT`, ensuring that certain conditions are met during compilation, thus improving type safety. Also, boost:type-traits[] supplies a set of tools for type introspection, enabling safer template programming by providing ways to query and manipulate types.
+For _type-safety_, boost:static-assert[] facilitates compile-time checks with `BOOST_STATIC_ASSERT`, ensuring that certain conditions are met during compilation, thus improving type-safety. Also, boost:type-traits[] supplies a set of tools for type introspection, enabling safer template programming by providing ways to query and manipulate types.
 +
 For _resource-safety_ boost:filesystem[] is designed to work with file paths and directories safely, minimizing errors in handling filesystem resources and ensuring proper cleanup. boost:scope_exit[] provides a mechanism for ensuring cleanup of resources (e.g., releasing locks or closing file handles) when a scope is exited, both normally or due to an exception. And boost:interprocess[] facilitates safe and efficient interprocess communication (IPC), managing shared memory and other resources in a resource-safe way.
 +
-For _thread-safety_ boost:thread[] offers portable thread management and synchronization primitives (such as `boost::mutex`, `boost::lock_guard`) to help developers write thread-safe code. boost:asio[] enables asynchronous I/O operations with an emphasis on thread safety, making it easier to build safe and scalable networked applications. At a lower level, boost:atomic[] provides atomic operations for thread-safe programming, avoiding data races in concurrent applications.
+For _thread-safety_ boost:thread[] offers portable thread management and synchronization primitives (such as `boost::mutex`, `boost::lock_guard`) to help developers write thread-safe code. boost:asio[] enables asynchronous I/O operations with an emphasis on thread-safety, making it easier to build safe and scalable networked applications. At a lower level, boost:atomic[] provides atomic operations for thread-safe programming, avoiding data races in concurrent applications.
 +
 For a more general approach to safety, boost:optional[] introduces a way to handle optional values safely, avoiding issues like null pointer dereferencing.
 boost:variant2[] provides a type-safe `union` type, ensuring that only one active type is stored at any time, preventing type misuse errors. boost:coroutine2[] implements stackful coroutines with resource management in mind, preventing unsafe usage patterns.
@@ -667,7 +659,7 @@ There are several libraries that provide functionalities for input validation, s
 
 . *Are there Boost libraries that help with secure memory management?*
 +
-You can leverage various libraries to help ensure memory safety, prevent memory-related vulnerabilities, and manage resources efficiently:
+You can leverage various libraries to help ensure memory-safety, prevent memory-related vulnerabilities, and manage resources efficiently:
 +
 * boost:smart_ptr[] provides smart pointer classes such as `shared_ptr`, `unique_ptr`, and `weak_ptr`, which help manage dynamic memory allocation and deallocation automatically. By using smart pointers, you can prevent common memory-related vulnerabilities such as memory leaks, dangling pointers, and double frees.
 +
