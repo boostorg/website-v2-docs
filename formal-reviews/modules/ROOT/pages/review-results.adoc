@@ -19,7 +19,7 @@ In addition to upcoming reviews, the schedule includes recent reviews already co
 [cols="1,1,1,2,2",stripes=even,options="header",frame=none]
 |===
 | *Submission* | *Submitter* | *Review Manager* | *Review Dates* | *Result*
-| https://jll63.github.io/Boost.OpenMethod/[OpenMethod] | Jean-Louis Leroy | TBD | TBD | TBD
+| https://jll63.github.io/Boost.OpenMethod/[OpenMethod] | Jean-Louis Leroy | Dmitry Arkhipov | April 28, 2025 - May 07, 2025 | TBD
 
 | *Boost 1.88.0 Beta* |  - |   Marshall Clow |  TBD | https://www.boost.org/users/history/version_1_88_0.html[Notes] 
 |===
