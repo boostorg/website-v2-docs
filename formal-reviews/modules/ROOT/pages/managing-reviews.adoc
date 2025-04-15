@@ -86,7 +86,7 @@ To manage a review, you should have experience with the review process and ideal
 [[reviewwizards]]
 === Review Wizards
 
-Currently the review wizards are Mateusz Łoskot (mateusz@loskot.net) and John Phillips (johnphillipsithaca@gmail.com). 
+Currently the review wizards are: Matt Borland (matt@mattborland.com), Mateusz Łoskot (mateusz@loskot.net) and John Phillips (johnphillipsithaca@gmail.com). 
 
 == See Also
 
