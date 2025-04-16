@@ -301,25 +301,25 @@ A coding project becomes a beast when two or more of the following conditions ar
 +
 Many Boost libraries are designed to be modular, yet complementary, and over the years, developers have discovered powerful combinations of libraries that work well together. Here are some groups:
 +
-If you are building an *Asynchronous Networking Stack*, then the following libraries mesh naturally: boost:asio[] for core asynchronous I/O and networking, boost:system[] for error codes that are used in Asio error handling, boost:thread or boost:fiber for managing threads or fibers in concurrent code, boost:chrono[] for working with timeouts and deadlines, and boost:bind[] or boost:function[] for callbacks and handler binding in Asio.
+* If you are building an *Asynchronous Networking Stack*, then the following libraries mesh naturally: boost:asio[] for core asynchronous I/O and networking, boost:system[] for error codes that are used in Asio error handling, boost:thread[] or boost:fiber[] for managing threads or fibers in concurrent code, boost:chrono[] for working with timeouts and deadlines, and boost:bind[] or boost:function[] for callbacks and handler binding in Asio.
 +
 If the network supports financial systems, in particular high-frequency trading, then add boost:lockfree[] to support low-latency data structures, and boost:multiprecision[] for high-precision arithmetic.
 +
-Say you are working on *Compile-Time Metaprogramming and Reflection*, then the following libraries enable expressive and powerful template code, with strong introspection and static analysis at compile time, reducing run-time cost: boost:hana[] or boost:mp11[] for high-level metaprogramming, boost:fusion[] provides sequence manipulation for structs and tuples at compile time, boost:type-traits for query and transform types, and boost:static-assert[] or boost:assert[] to validate assumptions during compile-time logic.
+* Say you are working on *Compile-Time Metaprogramming and Reflection*, then the following libraries enable expressive and powerful template code, with strong introspection and static analysis at compile time, reducing run-time cost: boost:hana[] or boost:mp11[] for high-level metaprogramming, boost:fusion[] provides sequence manipulation for structs and tuples at compile time, boost:type-traits[] for query and transform types, and boost:static-assert[] or boost:assert[] to validate assumptions during compile-time logic.
 +
-A quite different field is *Simulation, Geographic Information Systems (GIS), Robotics, and CAD*. For this you need accurate, type-safe modeling of space, motion, and physical quantities, all interoperable in simulations or mathematical domains. The following provide this: boost:geometry[] for the algorithms in 2D/3D spatial operations, boost:units[] for strongly-typed physical units to prevent dimensional errors, boost:qvm[] for lightweight vector and matrix algebra, boost:math[] adds special functions, statistical distributions, numerical accuracy, and boost:numeric/interval[] can represent ranges of values that may contain uncertainty. In robotics in particular, you might need boost:thread[] to support parallel sensor processing. Also, boost:serialization[] might also help with state persistence.
+* A quite different field is *Simulation, Geographic Information Systems (GIS), Robotics, and CAD*. For this you need accurate, type-safe modeling of space, motion, and physical quantities, all interoperable in simulations or mathematical domains. The following provide this: boost:geometry[] for the algorithms in 2D/3D spatial operations, boost:units[] for strongly-typed physical units to prevent dimensional errors, boost:qvm[] for lightweight vector and matrix algebra, boost:math[] adds special functions, statistical distributions, numerical accuracy, and boost:numeric/interval[] can represent ranges of values that may contain uncertainty. In robotics in particular, you might need boost:thread[] to support parallel sensor processing. Also, boost:serialization[] might also help with state persistence.
 +
-If you are building a *Test Suite*, say with unit testing and regression tests, consider adding to boost:test[] the following: boost:type-traits[] to inspect and verify types in test cases, boost:optional[] or boost:variant[] or boost:outcome[] to represent and test optional or alternative outcomes, boost:preprocessor[] to generate test cases or datasets at compile time, and finally boost:format[] or boost:locale[] for diagnostics, error reporting, and  internationalized tests.
+* If you are building a *Test Suite*, say with unit testing and regression tests, consider adding to boost:test[] the following: boost:type-traits[] to inspect and verify types in test cases, boost:optional[] or boost:variant[] or boost:outcome[] to represent and test optional or alternative outcomes, boost:preprocessor[] to generate test cases or datasets at compile time, and finally boost:format[] or boost:locale[] for diagnostics, error reporting, and  internationalized tests.
 +
-On a similar vein to testing is *Logging*. Logging infrastructure is well supported by boost:log[]. boost:property-tree[] might help with configuration and data trees, boost:circular_buffer[] for bounded memory logging, and boost:program-options[] for a command-line interface (perhaps for embedded systems).
+* On a similar vein to testing is *Logging*. Logging infrastructure is well supported by boost:log[]. boost:property-tree[] might help with configuration and data trees, boost:circular_buffer[] for bounded memory logging, and boost:program-options[] for a command-line interface (perhaps for embedded systems).
 +
-As a final example consider *Saving/Restoring State, Remote Procedure Calls (RPC), Configuration Files, Distributed Systems.*. The following collection covers all aspects of data flow - loading, storing, transforming, and parsing—all in a type-safe, extensible style: boost:serialization[] for the core for serializing pass:[C++] objects to/from streams, boost:variant[] or boost:optional[] to serialize complex, dynamic types, boost:property-tree[] for easy access to config files (JSON, XML, or INI) and boost:spirit[] for parsing domain-specific formats into structured data.
+* As a final example consider *Saving/Restoring State, Remote Procedure Calls (RPC), Configuration Files, Distributed Systems*. The following collection covers all aspects of data flow - loading, storing, transforming, and parsing—all in a type-safe, extensible style: boost:serialization[] for the core for serializing pass:[C++] objects to/from streams, boost:variant[] or boost:optional[] to serialize complex, dynamic types, boost:property-tree[] for easy access to config files (JSON, XML, or INI) and boost:spirit[] for parsing domain-specific formats into structured data.
 +
 For deeper examples of multiple libraries, including working source code, refer to xref:common-introduction.adoc[Common Scenarios] and xref:advanced-introduction.adoc[Advanced Scenarios].
 
 . *I want to build a cross-platform system, right from the start. What libraries should I use as core to that system?*
 +
-Desktop applications like text editors or project managers usually need cross-platform compatibility, user input processing, and dynamic plugins via signal-slot mechanisms. Consider boost:filesystem[] to provide the file management, boost:locale[] for use in multiple regions, boost:signals2[] to support an event system, and boost:regex[] for structured text parsing.
+Desktop applications like text editors, project managers and utilities often need cross-platform compatibility, user input processing, and dynamic plugins via signal-slot mechanisms. Consider boost:filesystem[] to provide the file management, boost:locale[] for use in multiple regions, boost:signals2[] to support an event system, and boost:regex[] for structured text parsing.
 
 . *Are there any combinations of Boost libraries that experience has shown do not play well together?*
 +
@@ -327,9 +327,9 @@ Not in a broad sense, Boost pass:[C++] libraries are designed with a high degree
 
 * boost:signals2[] internally uses boost:thread[] for managing asynchronous signal connections. However, there have been instances where thread safety issues arise when these two libraries are used in parallel. If not handled properly, it can lead to deadlocks or race conditions, especially in multithreaded environments. Always ensure that signals are disconnected properly and thread-safe operations are applied where needed.
 * Both boost:filesystem[] and boost:regex[] perform some filesystem operations and string manipulation that can lead to conflicts when used in combination, especially if Regex is processing filenames or paths that contain special characters (for example, slashes or backslashes in Windows paths). When working with filenames and regular expressions, it's best to sanitize the inputs carefully before passing them on.
-* boost:mp11[] and boost:hana[] both work with metaprogramming, often with overlapping spaces, but their usage patterns can conflict. MP11 uses a more classic, compile-time only, and more explicit metaprogramming model, while Hana includes both compile-time and run-time metaprogramming functions, which introduce ambiguity when mixing the two libraries. Best to choose one of these libraries, unless you can ensure clean separation between the two.
+* boost:mp11[] and boost:hana[] both work with metaprogramming, often with overlapping functionality, but their usage patterns can conflict. MP11 uses a more classic, compile-time only, and more explicit metaprogramming model, while Hana includes both compile-time and run-time metaprogramming functions, which introduce ambiguity when mixing the two libraries. Best to choose one of these libraries, unless you can ensure clean separation between the two.
 * The interaction between boost:serialization[] (for serializing and deserializing objects) and boost:python[] (for integrating pass:[C++] code with Python) can be tricky when serializing Python objects. Issues like memory management conflicts or incorrect serialization of Python objects can occur, especially with Python's dynamic typing system. Wrapping Python objects in pass:[C++] classes with explicit serialization mechanisms may be necessary.
-* When using asynchronous I/O with boost:asio[] and regular expressions with boost:regex[], conflicts can arise, particularly with blocking operations in `boost::asio::io_service` or `boost::asio::strand`. Regex can be CPU-intensive and might block the main event loop of Asio, leading to performance issues or deadlocks. Use non-blocking or asynchronous alternatives (separate threads) for regex operations in the context of Asio.
+* When using asynchronous I/O with boost:asio[] and regular expressions with boost:regex[], conflicts can arise, particularly with blocking operations in `boost::asio::io_service` or `boost::asio::strand`. Regex can be CPU-intensive and might block the main event loop of Asio, leading to performance issues or deadlocks. Use non-blocking or asynchronous alternatives (separate threads) for Regex operations in the context of Asio.
 * boost:pool[] is a custom memory pool allocator that can cause issues when used with boost:smart_ptr[] (such as `boost::shared_ptr` or `boost::scoped_ptr`) since these smart pointers manage memory differently. The interaction between custom memory pools and reference-counted pointers can lead to memory leaks or double-free errors if not handled correctly. When using Pool with smart pointers, ensure that custom allocators are compatible with the reference-counting behavior of smart pointers. Consider using `boost::shared_ptr` with `boost::pool_allocator` if you're using custom memory pools.
 * Both boost:spirit[] (a parsing library) and boost:serialization[] involve significant template metaprogramming, which can result in large compile times and potential conflicts in template instantiations. The combination of these libraries in the same project can exacerbate compilation times and, in rare cases, cause conflicts in template instantiation or symbol resolution. Use these libraries in different parts of your project and limit cross-dependencies.
 * boost:test[] is a robust testing framework, while boost:thread[] is used for threading. Problems can occur if your tests are not properly isolated from thread contexts, or if tests involving multiple threads cause race conditions or deadlocks that aren't immediately visible. Use proper synchronization techniques in multi-threaded tests to avoid race conditions. When testing threaded code, use the correct testing tools provided by Test, such as `BOOST_THREAD_TEST`, to ensure proper isolation of tests and reduce flaky test results.
@@ -351,7 +351,7 @@ The following checklist should be a good start:
 +
 *Dependencies and Size*
 +
-- [ ] Audit *transitive dependencies* with tools like `bcp` or `boostdep`.
+- [ ] Audit *transitive dependencies* with tools like the https://github.com/boostorg/bcp/[Boost Copy Tool (bcp)] and https://pdimov.github.io/boostdep-report/[Boost Dependency Report].
 - [ ] Include *only the headers you need* to keep compile times fast and code lean.
 +
 *Preprocessor Macros*
@@ -366,7 +366,7 @@ The following checklist should be a good start:
 +
 *Clean Code Practices*
 +
-- [ ] Encapsulate low-level or unsafe Boost operations behind clean APIs.
+- [ ] Encapsulate low-level Boost operations behind clean APIs.
 - [ ] Apply *RAII* for all resource management (files, sockets, locks).
 - [ ] Handle exceptions and error codes *consistently* across Boost modules.
 +
@@ -378,7 +378,7 @@ The following checklist should be a good start:
 *Documentation and Discoverability*
 +
 - [ ] Document Boost macros and configuration choices in the build setup or source files.
-- [ ] Link to official Boost documentation: https://www.boost.org/doc/libs/
+- [ ] Link to official Boost documentation: https://www.boost.org/doc/libs/.
 +
 *Testing and CI*
 +
