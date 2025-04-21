@@ -6,14 +6,18 @@ file LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
 
 Official repository: https://github.com/boostorg/website-v2-docs
 ////
-= Introduction to Boost Formal Reviews
+= Formal Review Guide
 :navtitle: Introduction
 
-This Formal Review Guide provides information for the main roles in library submission:
+The Boost library collection is known for the formal review process. A process that needs to be carefully navigated before a new library is accepted for inclusion.
 
-. The authors who wish to submit the library to the Boost collection: refer to the xref:submissions.adoc[].
+== Introduction
+
+This guide provides detailed information on the main roles in library submission:
+
+. The _Authors_ who wish to submit the library to the Boost collection: refer to xref:submissions.adoc[], and xref:contributor-checklist.adoc[].
 . The _Review Manager_ who's job it is to lead and coordinate the review process: refer to xref:managing-reviews.adoc[].
-. The developers who test the submission, or elements of it, and write up their findings: refer to xref:writing-reviews.adoc[].
+. The _Reviewers_ who test the submission, or elements of it, and write up their findings: refer to xref:writing-reviews.adoc[].
 
 This guide also includes a comprehensive history of submissions, most with links to the rationale and announcements made during the evaluation process: refer to the xref:review-results.adoc[].
 
