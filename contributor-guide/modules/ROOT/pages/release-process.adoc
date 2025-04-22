@@ -12,9 +12,9 @@ Official repository: https://github.com/boostorg/website-v2-docs
 The Boost libraries are released publicly three times per year:
 
 [circle]
-* 2nd April
-* 2nd August
-* 2nd December
+* Second week of April
+* Second week of August
+* Second week of December
 
 Each release will contain updates to existing libraries, and some releases will contain new libraries. The release is built from the *master* branch of Boost's GitHub site: https://github.com/boostorg/boost.
 
