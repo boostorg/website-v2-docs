@@ -45,6 +45,21 @@ Where terms apply specifically to one technology, such as _Quantum Computing_ or
 
 *Bikeshedding* or *BS* : _Focusing on trivial issues_
 
+*Bloom Filter* : A space-efficient, fast, and probabilistic structure that can tell you if an item is _definitely not in a database_ or is _possibly in the database_. For example, say you have a database of bad actors that is used to help prevent fraudulent access to a financial web app. A bloom filter can be used to tell if a new transaction _definitely_ does not come from this set, so proceed normally, or _possibly comes from this set_ in which case a deeper investigation into its validity (a full search of the bad actors) should be carried out. The following diagram shows the flow of control:
+
+image::bloom-filter.png[Bloom filter]
+
+Bloom filters are stealthy players in many performance-critical applications. They're used in areas where fast lookups, limited memory, and tolerable false positive rates are acceptable. Blacklisted entity checks (fraud detection, compliance with sensitive data) is a top contender - other uses include:
+
+* High-frequency trading, to track recent orders or trades to avoid duplicate processing.
+* In URL, File or Query caches, to reduce IO and memory overhead by quickly testing if a URL/File/Query has been visited (cached) already.
+* Database engines, to avoid unnecessary disk reads during key lookup - anything to avoid a full-text search.
+* Bioinformatics, to reduce the number of comparisons between huge DNA sequences.
+
+A Boost.Bloom library is currently in the formal review process.
+
+Note:: The Bloom filter is named after its inventor, Burton Howard Bloom, who described its purpose in a 1970 paper - “Space/Time Trade-offs in Hash Coding with Allowable Errors.”
+
 *BOFH* : _B'd Operator From Hell_ - referring to a grumpy system admin
 
 *BOGOSITY* : A measure of how bogus something is - typically bogus code or bogus logic
