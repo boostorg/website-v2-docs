@@ -58,6 +58,8 @@ Bloom filters are stealthy players in many performance-critical applications. Th
 
 A Boost.Bloom library is currently in the formal review process.
 
+Note:: The Bloom filter is named after its inventor, Burton Howard Bloom, who described its purpose in a 1970 paper - “Space/Time Trade-offs in Hash Coding with Allowable Errors.”
+
 *BOFH* : _B'd Operator From Hell_ - referring to a grumpy system admin
 
 *BOGOSITY* : A measure of how bogus something is - typically bogus code or bogus logic
