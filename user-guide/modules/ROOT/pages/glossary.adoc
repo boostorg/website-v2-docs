@@ -58,7 +58,7 @@ Bloom filters are stealthy players in many performance-critical applications. Th
 
 A Boost.Bloom library is currently in the formal review process.
 
-Note:: The Bloom filter is named after its inventor, Burton Howard Bloom, who described its purpose in a 1970 paper - “Space/Time Trade-offs in Hash Coding with Allowable Errors.”
+Note:: The Bloom filter is named after its inventor, Burton Howard Bloom, who described its purpose in a 1970 paper - _Space/Time Trade-offs in Hash Coding with Allowable Errors_.
 
 *BOFH* : _B'd Operator From Hell_ - referring to a grumpy system admin
 
@@ -250,6 +250,12 @@ Note:: The Bloom filter is named after its inventor, Burton Howard Bloom, who de
 *OOB* : Out of Bounds or Out of Band - meaning irrelevant
 
 *OOP* : Object-Oriented Programming
+
+*Open-Methods* : Refers to a language mechanism that allows you to define new behaviors (essentially, methods) for existing types _without_ modifying those types. pass:[C++] doesn't natively support open methods in the way that some dynamic languages (like Common Lisp) do. Keys to the purpose of open methods are the _Open/Closed Principle_ (OCP) - where a software entity (class, module, function, etc.) should be open for extension but closed for modification - and _multiple dispatch_. In _single dispatch_ method resolution is based on the runtime type of a single object, usually the one the method is called on. With multiple dispatch method resolution is based on the runtime types of two or more arguments. pass:[C++] supports single dispatch via virtual functions, multiple dispatch has to be simulated and typically coded into a library.
+
+The main advantage of open methods is that they help prevent bugs when modifying stable code. For example, when a new file format becomes popular, code can be extended to support it without modifying the existing code. In simple terms, they allow for safer scaling of software. Another specific use is you can add behavior involving multiple types, for example adding collision handling between type `A` and type `B` that is to date unsupported in your code.
+
+An open-method library is currently in the Boost formal review process.
 
 == P
 
