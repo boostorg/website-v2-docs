@@ -56,6 +56,8 @@ Bloom filters are stealthy players in many performance-critical applications. Th
 * Database engines, to avoid unnecessary disk reads during key lookup - anything to avoid a full-text search.
 * Bioinformatics, to reduce the number of comparisons between huge DNA sequences.
 
+Databases used with bloom filters have the entries hashed (see *Hash Functions*) before they are stored.
+
 A Boost.Bloom library is currently in the formal review process.
 
 Note:: The Bloom filter is named after its inventor, Burton Howard Bloom, who described its purpose in a 1970 paper - _Space/Time Trade-offs in Hash Coding with Allowable Errors_.
@@ -135,6 +137,39 @@ Note:: The Bloom filter is named after its inventor, Burton Howard Bloom, who de
 *GIL* : Generic Image Library - boost:gil[] is a library designed for image processing, offering a flexible way to manipulate and process images.
 
 == H
+
+*Hash Functions* : A hash function takes a string and converts it into a number. Often used in fraud detection to store details such as: email addresses (normalized/lowered), credit card fingerprints (not full PANs as this might expose sensitive data, usually the last four digits or a _tokenized_ version of the numbers), device IDs, IP and user-agent strings, phone numbers (E.164 format), and usernames / login handles. Once hashed, these numbers can be stored in a database and searched for patterns to create *Bloom Filters* (to detect fake accounts) as well as searched on a per-item basis. Commonly used hash algorithms include:
+
+* *MurmurHash3 / MurmurHash2*, which is fast, multithreaded, but non-cryptographic. It has excellent _avalanche_ properties (small input changes can lead to big output changes) and is used in many real-time systems due to speed and low collision rate. Redis Bloom, Apache Hadoop, and Apache Hive use it for sketch-based analytics.
+
+* *CityHash / FarmHash*, was developed by Google and optimized for short strings and performance on modern CPUs. It is useful for hashing things like IP addresses, usernames, or device IDs. FarmHash is a successor to CityHash with better SIMD support.
+
+* *FNV-1a / Fowler-Noll-Vo*, is super simple and fast, and often used when a lightweight, deterministic hash is needed. It is low-quality for cryptographic purposes, but fine for many *Bloom Filters*.
+
+* *xxHash* is an extremely fast, modern non-crypto hash function that is gaining popularity in streaming analytics and fraud pipelines. Great choice when you're hashing millions of records per second.
+
+* *SHA-512 / SHA-256 / SHA-3* are cryptographic hashes, developed by the NSA and published by NIST in 2001. SHA simply stands for _Secure Hash Algorithm_. They are slower than non-cryptographic hashes, but resilient to collisions and attacks. Often used in fraud systems when storing user personal information (emails, phone numbers) in a filter, and you need to protect against reverse-engineering the filter contents. 
+
+The following shows an example of a string hashed with the SHA-256 algorithm:
+
+[source,text]
+----
+Email: fraudster@example.com
+SHA-256 Hash: 0a89310b6c5fc95e6fcb53a19ad4d80d65cf63d1870076859ec79dc21d1c47f2
+----
+
+Terms related to hashing include:
+
+* *Fingerprint* - a combination of strings that are hashed as one - for example: 
+`SHA-256(email + deviceID + timestamp)`.
+
+* *PCI DSS Compliance* - the _Payment Card Industry Data Security Standard_ (PCI DSS) which strictly regulates the handling of credit card PANs.
+
+* *Rainbow Tables* - precomputed databases of common inputs and their hash values, used by attackers to quickly reverse hashes by looking up matches instead of computing them.
+
+* *Salting* - the process of adding a unique, random value to input data before hashing it, to prevent attackers from using precomputed hash tables (like _rainbow tables_) to reverse-engineer the original input.
+
+Note:: For uses of hash functions in Boost libraries, refer to boost:hash2[] and the Boost.Bloom library currently in the formal review process.
 
 *HCF* : _Halt and Catch Fire_ - a bug that crashes everything, usually exaggerated
 
