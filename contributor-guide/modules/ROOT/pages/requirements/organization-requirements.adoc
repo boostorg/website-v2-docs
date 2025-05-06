@@ -9,39 +9,91 @@ Official repository: https://github.com/boostorg/website-v2-docs
 = Organization Requirements
 :navtitle: Organization
 
-The quality of the Boost libraries is not just about the APIs and code design. But also about presenting a consistent view to users of the libraries as a whole. Upon acceptance libraries must adhere to this directory and file structure:
+The quality of the Boost libraries is not just about the APIs and code design, but also about presenting a consistent view to users of the libraries as a whole. Upon acceptance libraries should adhere to this directory and file structure.
 
-== Boost Standard Library Organization
+== Boost Repository Library Organization
 
-[cols="1,5,2",options="header",stripes=even]
+Referring to accepted libraries is a great way to educate yourself on the library directory structure. In the examples given below, boost:atomic[], boost:json[], and boost:serialization[] are examples of libraries that requires building, and boost:asio[], boost:geometry[], and boost:hana[] are examples of libraries that are header-only.
+
+=== Sub-Directory
+
+The following directories should appear, along with others specific to the library, as top-level sub-directories for the library.
+
+[cols="1,5,2,2",options="header",stripes=even,frame=none]
 |===
-|*Sub-directory or file*	|*Contents*	|*Required*
-|*build*	|Library build files such as a Jamfile, IDE projects, Makefiles, Cmake files, etc.	|Required if the library has sources to build.
-|*config*	|Files used for build-time configuration checks. This directory may contain source files and build system scripts to be used when building the library, tests or examples to check if the target system satisfies certain conditions. For example, a check may test if the compiler implements a certain feature, or if the target system supports a certain API.	|Optional.
-|*doc*	|Sources to build with and built documentation for the library. If the library needs to build documentation from non-HTML files this location must be build-able with Boost Build.	|Required for all libraries.
-|*doc/html*	|Documentation (HTML) files.	|Required for all libraries with pregenerated documentation. And generated documentation must be generated here.
-|*example*	|Sample program files.	|Required if library has sample files. Which is highly recommended.
-|*index.html*	|Redirection to HTML documentation. Refer to xref:design-guide/design-best-practices.adoc#redirection[Design Guide/Redirection] for a template for this file.	|Required for all libraries.
-|*include/boost/library*	|Header files for the library.	|Required for all libraries.
-|*meta*	|Meta-data about the library.	|Required for all libraries.
-|*meta/libraries.json*	|A JSON file containing information about the library, which is used to generate website and documentation for the Boost Libraries collection. Refer to xref:requirements/library-metadata.adoc[].	|Required for all libraries.
-|*meta/explicit-failures-markup.xml*	|XML file describing expected test failures, used to generate the test report.	|Optional
-|*src*	|Source files which must be compiled to build the library.	|Required if the library has source files to build.
-|*test*	|Regression or other test programs or scripts. This is the only location considered for automated testing. If you have additional locations that need to be part of automated testing it is required that this location refer to the additional test locations.	|Required for all libraries.
-|*test/cmake_test* | CMake sub-folders can be named for the type of xref:testing/continuous-integration.adoc[Continuous Integration] tests they contain (`cmake_install_test` for example). The structure of your tests should match that in https://github.com/boostorg/boost-ci[boostorg/boost-ci], and refer to the https://github.com/boostorg/boost-ci/blob/master/README.md[Boost.CI Readme] for process details. Also, consider referring to the `cmake_install_test` folder in https://github.com/vinniefalco/mp11/tree/52fd7817e85e2d208d364f2ff4bde74594308945/test[mp11/test] and https://github.com/boostorg/json/tree/66d925116740c1063eab814be7821fc7611ac480/test[json/test] as examples. | Not required, though most new libraries include these tests.
-|*tools*	|Tools used, or offered, by the library. The structure within this is up to the library, but it's recommended to use similar structure as a regular Boost library or tool.	|Required for libraries that have run-able tools.
-|*CMakeLists.txt* | Refer to https://github.com/boostorg/cmake/blob/develop/developer.md[CMake for Boost Developers]. | Required
+| *Sub-Directory* | *Contents*	| *Required* | *Examples*
+|*build*	|Library build files such as a Jamfile, IDE projects, Makefiles, Cmake files, etc.	|Required if the library has sources to build. a| 
+- https://github.com/boostorg/json/tree/0b1048adf7571b42ae9f684b63e4383241b9e4a1/build[json/build/] 
+- https://github.com/boostorg/serialization/tree/a20c4d97c37e5f437c8ba78f296830edb79cff9e/build[serialization/build/]
+|*config*	|Files used for build-time configuration checks. This directory may contain source files and build system scripts to be used when building the library, tests or examples to check if the target system satisfies certain conditions. For example, a check may test if the compiler implements a certain feature, or if the target system supports a certain API.	|Optional. a| 
+- https://github.com/boostorg/atomic/tree/199906f4e1789d8d182d478842ea4df9543d5fea/config[atomic/config/] 
+- https://github.com/boostorg/math/tree/529f3a759d83aa9437613666ea6293c9336d4069/config[math/config/]
+|*doc*	|Sources to build with and built documentation for the library. If the library needs to build documentation from non-HTML files this location must be build-able with Boost Build.	|Required for all libraries. a| 
+- https://github.com/boostorg/json/tree/0b1048adf7571b42ae9f684b63e4383241b9e4a1/doc[json/doc/] 
+- https://github.com/boostorg/geometry/tree/c12caf96084766105f9da53ac11efec6ba0e5e73/doc[geometry/doc/]
+|*doc/html*	|Documentation (HTML) files.	|Required for all libraries with pregenerated documentation. And generated documentation must be generated here. a| 
+- https://github.com/boostorg/multiprecision/tree/6511131d128b054f66c6a657d93ac3490cc01281/doc/html[multiprecision/doc/html/] 
+- https://github.com/boostorg/math/tree/529f3a759d83aa9437613666ea6293c9336d4069/doc/html[math/doc/html/]
+|*example*	|Sample program files.	|Required if library has sample files. Which is highly recommended. a| 
+- https://github.com/boostorg/json/tree/0b1048adf7571b42ae9f684b63e4383241b9e4a1/example[json/example/]
+- https://github.com/boostorg/geometry/tree/c12caf96084766105f9da53ac11efec6ba0e5e73/example[geometry/example/]
+|*include/boost/<library-name>*	|Header files for the library.	|Required for all libraries. a| 
+- https://github.com/boostorg/json/tree/0b1048adf7571b42ae9f684b63e4383241b9e4a1/include/boost/json[json/include/boost/json/] 
+- https://github.com/boostorg/geometry/tree/c12caf96084766105f9da53ac11efec6ba0e5e73/include/boost/geometry[geometry/include/boost/geometry/]
+|*meta*	|Meta-data about the library.	|Required for all libraries. a| 
+- https://github.com/boostorg/json/tree/0b1048adf7571b42ae9f684b63e4383241b9e4a1/meta[json/meta/] 
+- https://github.com/boostorg/hana/tree/275ee334d4c406643e9f560c40f9b73638cd9c7e/meta[hana/meta/]
+|*src*	|Source files which must be compiled to build the library.	|Required if the library has source files to build. a| 
+- https://github.com/boostorg/json/tree/0b1048adf7571b42ae9f684b63e4383241b9e4a1/src[json/src/] 
+- https://github.com/boostorg/atomic/tree/199906f4e1789d8d182d478842ea4df9543d5fea/src[atomic/src/]
+|*test*	|Regression or other test programs or scripts. This is the only location considered for automated testing. If you have additional locations that need to be part of automated testing it is required that this location refer to the additional test locations.	|Required for all libraries. a| 
+- https://github.com/boostorg/json/tree/0b1048adf7571b42ae9f684b63e4383241b9e4a1/test[json/test/] 
+- https://github.com/boostorg/geometry/tree/c12caf96084766105f9da53ac11efec6ba0e5e73/test[geometry/test/]
+|*test/cmake_test* | CMake sub-folders can be named for the type of xref:testing/continuous-integration.adoc[Continuous Integration] tests they contain (`cmake_install_test` for example). The structure of your tests should match that in https://github.com/boostorg/boost-ci[boostorg/boost-ci], and refer to the https://github.com/boostorg/boost-ci/blob/master/README.md[Boost.CI Readme] for process details. | Not required, though most new libraries include these tests. a| 
+- https://github.com/boostorg/json/tree/0b1048adf7571b42ae9f684b63e4383241b9e4a1/test/cmake-subdir[json/test/cmake-subdir/] 
+- https://github.com/boostorg/tuple/tree/f8bc34da9a0cf38a305f3cad1670200638bfb728/test/cmake_install_test[tuple/test/cmake_install_test/]
+|*tools*	|Tools used, or offered, by the library. The structure within this is up to the library, but it's recommended to use similar structure as a regular Boost library or tool.	|Required for libraries that have run-able tools. a| 
+- https://github.com/boostorg/asio/tree/8ce699c7d8c10a7d3e6187bc98244d1d2f2958c8/tools[asio/tools/] 
+- https://github.com/boostorg/xpressive/tree/bd1db9341abd303dacc2979422d8809a9a1e0558/tools[xpressive/tools/]
 |===
+
+To reference the existing master repo, refer to https://github.com/cppalliance/boost/tree/master/libs[boost/libs/].
+
+For a list of libraries that require building, refer to xref:user-guide:ROOT:header-organization-compilation.adoc#compiled[Required Compiled Binaries].
+
+=== Files
+
+There are some individual files that are also required, or are optional and recognized by the build system.
+
+[cols="1,5,2,2",options="header",stripes=even,frame=none]
+|===
+|*File*	|*Contents*	|*Required* | *Examples*
+|*build.jam*	|Top level jamfile.	|Required if the library has sources to build. a| 
+- https://github.com/boostorg/asio/blob/8ce699c7d8c10a7d3e6187bc98244d1d2f2958c8/build.jam[asio/build.jam] 
+- https://github.com/boostorg/hana/blob/275ee334d4c406643e9f560c40f9b73638cd9c7e/build.jam[hana/build.jam]
+|*CMakeLists.txt* | Refer to https://github.com/boostorg/cmake/blob/develop/developer.md[CMake for Boost Developers]. | Required for all libraries. a| 
+- https://github.com/boostorg/asio/blob/8ce699c7d8c10a7d3e6187bc98244d1d2f2958c8/CMakeLists.txt[asio/CMakeLists.txt] 
+- https://github.com/boostorg/hana/blob/275ee334d4c406643e9f560c40f9b73638cd9c7e/CMakeLists.txt[hana/CMakeLists.txt]
+|*index.html*	|Redirection to HTML documentation. Refer to xref:design-guide/design-best-practices.adoc#redirection[Design Guide/Redirection] for a template for this file.	| Required for all libraries. a| 
+- https://github.com/boostorg/asio/blob/8ce699c7d8c10a7d3e6187bc98244d1d2f2958c8/index.html[asio/index.html] 
+- https://github.com/boostorg/hana/blob/275ee334d4c406643e9f560c40f9b73638cd9c7e/index.html[hana/index.html]
+|*meta/libraries.json*	|A JSON file containing information about the library, which is used to generate website and documentation for the Boost Libraries collection. Refer to xref:requirements/library-metadata.adoc[].	|Required for all libraries. a| 
+- https://github.com/boostorg/json/blob/0b1048adf7571b42ae9f684b63e4383241b9e4a1/meta/libraries.json[json/meta/libraries.json] 
+- https://github.com/boostorg/geometry/blob/c12caf96084766105f9da53ac11efec6ba0e5e73/meta/libraries.json[geometry/meta/libraries.json]
+|*meta/explicit-failures-markup.xml*	|XML file describing expected test failures, used to generate the test report.	|Optional a| 
+- https://github.com/boostorg/json/blob/0b1048adf7571b42ae9f684b63e4383241b9e4a1/meta/explicit-failures-markup.xml[json/meta/explicit-failures-markup.xml]
+|===
+
 
 == Integration
 
-Once a library is accepted as part of the Boost Libraries it is required that it integrate properly into the development, testing, documentation, and release processes. This integration increases the eventual quality of all the libraries and is integral to the expected quality of the whole of the Boost C++ Libraries from users. In addition to the organization requirements above the following integration is required:
+After a library is accepted as part of the Boost Libraries it is required that it integrate properly into the development, testing, documentation, and release processes. This integration increases the eventual quality of all the libraries and is integral to the expected quality of the whole of the Boost pass:[C++] Libraries from users. In addition to the organization requirements above the following integration is required:
 
 === Building Sources
 
-The library needs to provide a Boost Build project that the user, and the top level Boost project, can use to build the library if it has sources to build. The Jamfile for the source build needs to minimally declare the project, the library target(s), and register the target(s) for installation. For example:
+The library needs to provide a Boost Build project that the user, and the top level Boost project, can use to build the library if it has sources to build. The Jamfile for the source build needs to minimally declare the project, the library targets, and register the targets for installation. For example:
 
-[source,bash]
+[source,text]
 ----
 project boost/my_lib ;
 
@@ -52,10 +104,11 @@ boost-install boost_my_lib ;
 
 === Testing
 
-The library needs to provide a Boost Build project that the user, and the root Boost test script, can use to build and run the tests for the library. The testing build project must reside in the project-root/test directory and must be build-able from this or another directory (for example, b2 libs/library/test from the Boost root must work.)
+The library needs to provide a Boost Build project that the user, and the root Boost test script, can use to build and run the tests for the library. The testing build project must reside in the project-root/test directory and must be build-able from this or another directory, for example, `b2 libs/library/test` from the Boost root must work.
 
 An example test/Jamfile is given below:
-[source,bash]
+
+[source,text]
 ----
 import testing ;
 
@@ -67,9 +120,9 @@ compile-fail invalid_conversion_1.cpp ;
 
 WARNING:: This is the only location considered for testing by the top level testing script. If you want to test additional locations you must declare such that they are built as dependencies or by using build-project.
 
-If the library requires a level of C++ conformance that precludes certain compilers or configurations from working, it's possible (and recommended) to declare these requirements in the test Jamfile so that the tests aren't run, to conserve test resources, as given in the example below:
+If the library requires a level of pass:[C++] conformance that precludes certain compilers or configurations from working, it's recommended to declare these requirements in the test Jamfile. This ensures that unnecessary tests aren't run, to conserve test resources, as given in the example below:
 
-[source,bash]
+[source,text]
 ----
 import testing ;
 import ../../config/checks/config : requires ;
@@ -79,7 +132,7 @@ project : requirements [ requires cxx11_variadic_templates cxx11_template_aliase
 run cpp11_test.cpp ;
 ----
 
-For more information, see the documentation of Boost.Config.
+For more information, see the documentation for boost:config[].
 
 [#building_documentation]
 === Building Documentation
@@ -88,7 +141,7 @@ The library needs to provide a Boost Build project for building the documentatio
 
 Define a `boostrelease`  target. This target should likely be an alias that looks roughly like:
 
-[source,bash]
+[source,text]
 ----
 alias boostrelease  : my_boostbook_target
     : : : <implicit-dependency>my_boostbook_target ;
@@ -96,7 +149,7 @@ alias boostrelease  : my_boostbook_target
 
 But if your project doesn't integrate into the global documentation book you can use an empty alias like:
 
-[source,bash]
+[source,text]
 ----
 alias boostrelease  ;
 ----
@@ -104,3 +157,7 @@ alias boostrelease  ;
 The project must default to building standalone documentation if it has any. The release scripts build this default so as to guarantee all projects have up to date documentation.
 
 Note:: _Integrated_ documentation, using the `boostdoc` target (instead of the `boostrelease` target) is now considered legacy, and should be avoided for new library documentation.
+
+== See Also
+
+* xref:superproject/overview.adoc[]
