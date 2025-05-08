@@ -33,7 +33,8 @@ Where terms apply specifically to one technology, such as _Quantum Computing_ or
 
 *ASIO* : Asynchronous Input/Output - refer to boost:asio[]
 
-*AST* : Abstract Syntax Tree - a data structure used in compilers to represent the structure of code in a hierarchical, tree-like form. It's a crucial intermediate step in parsing code for tasks like analysis, compilation, and optimizations.
+[[ast]]
+*AST* : Abstract Syntax Tree - a data structure used in compilers to represent the structure of code in a hierarchical, tree-like form. It's a crucial intermediate step in parsing code for tasks like analysis, compilation, and optimizations. See also, <<multiple-dispatch, Multiple Dispatch>>.
 
 *ATM* : _At The Moment_
 
@@ -45,6 +46,7 @@ Where terms apply specifically to one technology, such as _Quantum Computing_ or
 
 *Bikeshedding* or *BS* : _Focusing on trivial issues_
 
+[[bloom-filter]]
 *Bloom Filter* : A space-efficient, fast, and probabilistic structure that can tell you if an item is _definitely not in a database_ or is _possibly in the database_. For example, say you have a database of bad actors that is used to help prevent fraudulent access to a financial web app. A bloom filter can be used to tell if a new transaction _definitely_ does not come from this set, so proceed normally, or _possibly comes from this set_ in which case a deeper investigation into its validity (a full search of the bad actors) should be carried out. The following diagram shows the flow of control:
 
 image::bloom-filter.png[Bloom filter]
@@ -56,7 +58,7 @@ Bloom filters are stealthy players in many performance-critical applications. Th
 * Database engines, to avoid unnecessary disk reads during key lookup - anything to avoid a full-text search.
 * Bioinformatics, to reduce the number of comparisons between huge DNA sequences.
 
-Databases used with bloom filters have the entries hashed (see *Hash Functions*) before they are stored.
+Databases used with bloom filters have the entries hashed (see <<hash-functions, Hash Functions>> ) before they are stored.
 
 A Boost.Bloom library is currently in the formal review process.
 
@@ -136,9 +138,11 @@ Note:: The Bloom filter is named after its inventor, Burton Howard Bloom, who de
 
 *GIL* : Generic Image Library - boost:gil[] is a library designed for image processing, offering a flexible way to manipulate and process images.
 
+[[h]]
 == H
 
-*Hash Functions* : A hash function takes a string and converts it into a number. Often used in fraud detection to store details such as: email addresses (normalized/lowered), credit card fingerprints (not full PANs as this might expose sensitive data, usually the last four digits or a _tokenized_ version of the numbers), device IDs, IP and user-agent strings, phone numbers (E.164 format), and usernames / login handles. Once hashed, these numbers can be stored in a database and searched for patterns to create *Bloom Filters* (to detect fake accounts) as well as searched on a per-item basis. Commonly used hash algorithms include:
+[[hash-functions]]
+*Hash Functions* : A hash function takes a string and converts it into a number. Often used in fraud detection to store details such as: email addresses (normalized/lowered), credit card fingerprints (not full PANs as this might expose sensitive data, usually the last four digits or a _tokenized_ version of the numbers), device IDs, IP and user-agent strings, phone numbers (E.164 format), and usernames / login handles. Once hashed, these numbers can be stored in a database and searched for patterns to create <<bloom-filter,Bloom Filters>> (to detect fake accounts) as well as searched on a per-item basis. Commonly used hash algorithms include:
 
 * *MurmurHash3 / MurmurHash2*, which is fast, multithreaded, but non-cryptographic. It has excellent _avalanche_ properties (small input changes can lead to big output changes) and is used in many real-time systems due to speed and low collision rate. Redis Bloom, Apache Hadoop, and Apache Hive use it for sketch-based analytics.
 
@@ -169,7 +173,7 @@ Terms related to hashing include:
 
 * *Salting* - the process of adding a unique, random value to input data before hashing it, to prevent attackers from using precomputed hash tables (like _rainbow tables_) to reverse-engineer the original input.
 
-Note:: For uses of hash functions in Boost libraries, refer to boost:hash2[] and the Boost.Bloom library currently in the formal review process.
+Note:: For uses of hash functions in Boost libraries, refer to boost:hash2[], and the proposed Boost.Bloom library.
 
 *HCF* : _Halt and Catch Fire_ - a bug that crashes everything, usually exaggerated
 
@@ -258,13 +262,20 @@ Note:: For uses of hash functions in Boost libraries, refer to boost:hash2[] and
 
 *MFW* : _My Face When_ - used humorously or sarcastically depending heavily on the accompanying context or image.
 
-*MIR, MLIR* : Mid-level Intermediate Representation - an intermediate form of code that is generated by the compiler during the compilation process, designed to be easier for the compiler to analyze and optimize. In particular, this mid-level code aids with *borrow checking*, incremental compilation and ensuring safety (type, memory, etc.) issue.
+*MIR, MLIR* : Mid-level Intermediate Representation - an intermediate form of code that is generated by the compiler during the compilation process, designed to be easier for the compiler to analyze and optimize. In particular, this mid-level code aids with <<borrow-checking, Borrow Checking>>, incremental compilation and ensuring safety (type, memory, etc.) issue.
 
 *MOC* : In the context of Qt and pass:[C++], this refers to the Meta-Object Compiler - a tool that processes Qt's extensions to pass:[C++], such as signals and slots (a mechanism for event-driven programming) and other meta-object features (like introspection and dynamic properties). The MOC generates additional pass:[C++] code that enables these features to work seamlessly.
 
 *MPI* : Message Parsing Interface - refer to boost:mpi[]
 
 *MPL* or *MP11* : Metaprogramming Libraries - refer to boost:mpl[] and the later boost:mp11[]
+
+[[multiple-dispatch]]
+*Multiple Dispatch* : Refers to the ability of a function or method to _dynamically_ select its implementation based on the runtime types of multiple arguments, rather than just the type of the receiver (`this`) or a single argument. While pass:[C++] natively supports _single dispatch_ (via virtual functions), it does not have built-in multiple dispatch like some languages (for example, https://julialang.org/[Julia] or https://lisp-lang.org/[Common Lisp]). However, it can be emulated in pass:[C++] using design patterns like the _visitor pattern_, double dispatch, or external libraries. This technique is useful when the behavior of a function genuinely depends on the combination of several objects' dynamic types - for example, a complex collision between multiple object types. See <<open-methods, Open Methods>>.
+
+* *Single Dispatch* is the most common form of dispatch in pass:[C++] and many languages — it means that the method or function to call is determined only by the type of the first (usually the calling) object at runtime, typically using virtual functions. For example, when you call `shape->draw()`, the `draw()` method selected depends only on the runtime type of shape, not on the types of any other arguments.
+
+* *Visitor Pattern* : a design pattern that lets you separate an algorithm from the objects it operates on — by letting you “visit” objects and perform operations on them without modifying their classes. It allows you to add new operations to a group of existing object types without changing those types, by defining a `Visitor` class that implements the operation for each type. It's commonly used to achieve double dispatch and to apply operations across complex object structures like trees or <<ast, ASTs>>.
 
 *MVP* : Model-View-Presenter
 
@@ -274,7 +285,7 @@ Note:: For uses of hash functions in Boost libraries, refer to boost:hash2[] and
 
 *NIMBY* : _Not In My Back Yard_ - when a programmer doesn't want to deal with a particular issue
 
-*NLL* : Non-Lexical Lifetimes - an NLL borrow checker in the https://www.rust-lang.org/[Rust] language that uses a more precise, dataflow-based analysis to determine when a borrow starts and ends, based on the actual usage of the variables. This allows for more flexible and intuitive borrowing rules.
+*NLL* : Non-Lexical Lifetimes - an NLL <<borrow-checking, borrow checker>> in the https://www.rust-lang.org/[Rust] language that uses a more precise, dataflow-based analysis to determine when a borrow starts and ends, based on the actual usage of the variables. This allows for more flexible and intuitive borrowing rules.
 
 *NTTP* : Non-Type Template Parameter
 
@@ -284,9 +295,10 @@ Note:: For uses of hash functions in Boost libraries, refer to boost:hash2[] and
 
 *OOB* : Out of Bounds or Out of Band - meaning irrelevant
 
-*OOP* : Object-Oriented Programming
+*OOP* : Object-Ori
 
-*Open-Methods* : Refers to a language mechanism that allows you to define new behaviors (essentially, methods) for existing types _without_ modifying those types. pass:[C++] doesn't natively support open methods in the way that some dynamic languages (like Common Lisp) do. Keys to the purpose of open methods are the _Open/Closed Principle_ (OCP) - where a software entity (class, module, function, etc.) should be open for extension but closed for modification - and _multiple dispatch_. In _single dispatch_ method resolution is based on the runtime type of a single object, usually the one the method is called on. With multiple dispatch method resolution is based on the runtime types of two or more arguments. pass:[C++] supports single dispatch via virtual functions, multiple dispatch has to be simulated and typically coded into a library.
+[[open-methods]]
+*Open-Methods* : Refers to a language mechanism that allows you to define new behaviors (essentially, methods) for existing types _without_ modifying those types. pass:[C++] doesn't natively support open methods in the way that some dynamic languages (like Common Lisp) do. Keys to the purpose of open methods are the _Open/Closed Principle_ (OCP) - where a software entity (class, module, function, etc.) should be open for extension but closed for modification - and _multiple dispatch_. In _single dispatch_ method resolution is based on the runtime type of a single object, usually the one the method is called on. With multiple dispatch method resolution is based on the runtime types of two or more arguments. pass:[C++] supports single dispatch via virtual functions, <<multiple-dispatch, Multiple Dispatch>> has to be simulated and typically coded into a library.
 
 The main advantage of open methods is that they help prevent bugs when modifying stable code. For example, when a new file format becomes popular, code can be extended to support it without modifying the existing code. In simple terms, they allow for safer scaling of software. Another specific use is you can add behavior involving multiple types, for example adding collision handling between type `A` and type `B` that is to date unsupported in your code.
 
@@ -298,7 +310,8 @@ An open-method library is currently in the Boost formal review process.
 
 *PFR* : A library to perform basic reflection - refer to boost:pfr[]
 
-*Phi function* : a construct used in Static Single Assignment (see *SSA*) form to resolve multiple possible values for a variable when control flow converges in a program. It selects a value based on the control flow path taken to reach the convergence point. Phi functions are not visible to developers — they exist in the intermediate representation (IR) of compilers working with low-level code optimizations.
+[[phi-function]]
+*Phi Function* : a construct used in Static Single Assignment (see <<ssa, SSA>>) form to resolve multiple possible values for a variable when control flow converges in a program. It selects a value based on the control flow path taken to reach the convergence point. Phi functions are not visible to developers — they exist in the intermediate representation (IR) of compilers working with low-level code optimizations.
 
 *PICNIC* : _Problem In Chair, Not In Computer_
 
@@ -333,7 +346,7 @@ An open-method library is currently in the Boost formal review process.
 
 *Qt* : This is a widely-used pass:[C++] framework for cross-platform GUI applications. While not an acronym, it's often capitalized as Qt in discussions. Qt is known for its rich set of libraries and tools to develop not only graphical applications but also applications that require network handling, file I/O, and more.
 
-*Quantum Computing* : Unlike classical computing based on bits which must have a value of 0 or 1, quantum computing is based on _qubits_ (see definition below) that can exist in multiple states at the same time. Still in the research phase, this technology can dramatically improve the performance of certain algorithms - especially those we currently call "brute-force" computing - in fields such as cryptography, chemistry simulation, graph traversing, and no doubt many others as new algorithms are discovered. We can currently simulate quantum algorithms in pass:[C++] - refer to xref:task-quantum-computing.adoc[]. There is a mass of new terminology to grasp - many of which have completely different meanings outside of quantum computing - including:
+*Quantum Computing* : Unlike classical computing based on bits which must have a value of 0 or 1, quantum computing is based on <<qubit, qubits>> that can exist in multiple states at the same time. Still in the research phase, this technology can dramatically improve the performance of certain algorithms - especially those we currently call "brute-force" computing - in fields such as cryptography, chemistry simulation, graph traversing, and no doubt many others as new algorithms are discovered. We can currently simulate quantum algorithms in pass:[C++] - refer to xref:task-quantum-computing.adoc[]. There is a mass of new terminology to grasp - many of which have completely different meanings outside of quantum computing - including:
 
 * *Bloch Sphere* : a geometric representation of a single qubit's state as a point on the surface of a unit sphere, useful for visualizing superposition and phase.
 +
@@ -362,6 +375,7 @@ A classification of current quantum devices with dozens to hundreds of qubits th
 
 * *QASM (Quantum Assembly Language)* : a low-level language for describing quantum circuits and operations, often used to interface with quantum simulators and hardware.
 
+[[qubit]]
 * *Qubit* : the basic unit of quantum information, capable of existing in a superposition of 0 and 1, unlike a classical bit which is strictly one or the other.
 
 * *Qubit Connectivity (Topology)* : the layout that defines which qubits in a quantum computer can directly interact, affecting how efficiently quantum circuits can be executed.
@@ -408,17 +422,20 @@ _This diagram shows the basic process of quantum teleportation, where the unknow
 
 *RTTI* : Run-Time Type Information
 
-*RUST* : https://www.rust-lang.org/[Rust] is a relatively new programming language incorporating memory-safety, thread-safety and type-safety constructs. This language provides many of the concepts proposed for *Safe pass:[C++]*.
+*RUST* : https://www.rust-lang.org/[Rust] is a relatively new programming language incorporating memory-safety, thread-safety and type-safety constructs. This language provides many of the concepts proposed for <<safecpp, Safe pass:[C++]>>.
 
 *Rustaceans* : Aficionados of the https://www.rust-lang.org/[Rust] programming language
 
 [[s]]
 == S
 
+[[safecpp]]
 *Safe pass:[C++]* : There are memory-safe discussions and initiatives going on in the wider pass:[C++] development world, though it seems like it's a tough nut to crack. The https://safecpp.org/P3390R0.html[Safe pass:[C++]] proposal is currently in a state of indefinite hiatus. Key concepts of _memory-safety_, and it's partners _type-safety_ and _thread-safety_, include:
 
 * *Borrowing* : this refers to a feature of an ownership system that allows a variable to grant temporary access to its data without giving up ownership. _Immutable borrowing_ allows others to read but not modify data. Multiple immutable borrows are allowed at the same time. With _mutable borrowing_ others can modify the data, but only one mutable borrow is allowed at any one time (to prevent data races), and the owner cannot modify the value until the borrow ends. Borrowing enforces lifetimes - so borrowed references do not outlive the original data.
-* *Borrow checking* : a kind of compile-time analysis that prevents using a reference after an object has gone out of scope.
+
+[[borrow-checking]]
+* *Borrow Checking* : a kind of compile-time analysis that prevents using a reference after an object has gone out of scope.
 * *Choice types* : a _choice type_ is similar to an enum, but contains a type-safe selection of alternative types.
 * *Explicit mutation* : all mutations are explicit, so there are no uncertain side-effects.
 * *Interior mutability* : types with interior mutability implement deconfliction strategies to support shared mutation, without the risk of data races or violating exclusivity.
@@ -437,7 +454,8 @@ _This diagram shows the basic process of quantum teleportation, where the unknow
 
 *SOLID* : Single Responsibility, Open/Closed, Liskov Substitution, Interface Segregation, Dependency Inversion (Design principles)
 
-*SSA* : Static Single Assignment - a property of intermediate representations (IRs) used in compilers. SSA is a popular technique in modern compilers to make optimizations and analysis simpler and more efficient. Each variable is assigned exactly once and is immutable after assignment. If a variable is updated, a new variable is created instead. Refer also to *Phi functions*.
+[[ssa]]
+*SSA* : Static Single Assignment - a property of intermediate representations (IRs) used in compilers. SSA is a popular technique in modern compilers to make optimizations and analysis simpler and more efficient. Each variable is assigned exactly once and is immutable after assignment. If a variable is updated, a new variable is created instead. Refer also to <<phi-function, Phi Functions>>.
 
 *STL* : Standard Template Library
 
