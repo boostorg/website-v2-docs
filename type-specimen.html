@@ -3,14 +3,42 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Type Specimen</title>
+    <title>Comprehensive HTML Type Specimen</title>
     <link rel="stylesheet" href="boostlook.css" />
+    <meta name="description" content="A comprehensive showcase of HTML5 tags, incorporating content from Boost.URL type specimen.">
+    <meta name="keywords" content="HTML5, tags, Boost.URL, type specimen">
+    <style>
+      .boostlook {
+        font-family: Noto Sans Display!important;
+        font-stretch: 90%;
+        font-size: .83333rem;
+        box-sizing: border-box;
+        line-height: 1.5;
+        -webkit-font-smoothing: antialiased;
+        border-radius: 0;
+        margin: 0 auto;
+        max-width: 80rem;
+        padding: 2rem;
+      }
+
+      img, 
+      video, 
+      svg, 
+      iframe, 
+      object {
+        max-width: 100%;
+        height: auto;
+        display: block;
+      }
+    </style>
   </head>
 
   <body class="boostlook">
- 
-    <h1>Overview</h1>
+    <section id="boost-url-specimen">
+      <h1>Boost.URL Type Specimen Content</h1>
 
+      <section id="overview">
+        <h2>Overview</h2>
     <p>
     Boost.URL is a portable C++ library which provides containers and algorithms
     which model a "URL," more formally described using the
@@ -19,14 +47,16 @@
     (henceforth referred to as rfc3986). A URL is a compact sequence of characters
     that identifies an abstract or physical resource. For example, this is a valid URL:
     </p>
-    <pre>https://www.example.com/path/to/file.txt?userid=1001&pages=3&results=full#page1
-</pre>
+        <pre>https://www.example.com/path/to/file.txt?userid=1001&pages=3&results=full#page1</pre>
+        <p>
     This library understands the grammars related to URLs and provides
     functionality to validate, parse, examine, and modify urls, and apply
-    normalization or resolution algorithms
+        normalization or resolution algorithms.
+        </p>
+      </section>
 
+      <section id="features">
     <h2>Features</h2>
-
     <p>
     While the library is general purpose, special care has been taken to ensure
     that the implementation and data representation are friendly to network
@@ -36,6 +66,7 @@
     have the means to opt-out of dynamic memory allocation. Another feature of
     the library is that all modifications leave the URL in a valid state. Code
     which uses this library is easy to read, flexible, and performant.
+        </p>
     <p>
     Boost.URL offers these features:
     </p>
@@ -49,9 +80,10 @@
       <li>Support for -fno-exceptions, detected automatically</li>
       <li>Features that work well on embedded devices</li>
     </ul>
+      </section>
 
+      <section id="requirements">
     <h2>Requirements</h2>
-
     <p>
     The library requires a compiler supporting at least C++11.
     </p>
@@ -61,14 +93,17 @@
     <a href="https://www.boost.org/doc/libs/master/libs/url/doc/html/url/ref/boost__urls__string_view.html"><code>string_view</code></a>,
     use their Boost equivalents.
     </p>
+      </section>
 
-    <h2>Reference</h2>
+      <section id="reference-examples">
+        <h2>Reference Examples</h2>
 
+        <section id="serializer-example">
     <h3>serializer</h3>
     <p>A serializer for JSON.</p>
 
     <h4>Synopsis</h4>
-    <p>Defined in header &lt;<a href="">boost/json/serializer.hpp</a>&gt;</p>
+          <p>Defined in header &lt;<a href="#">boost/json/serializer.hpp</a>&gt;</p>
     <pre>class serializer</pre>
 
     <h4>Member Functions</h4>
@@ -98,8 +133,8 @@
           </td>
           <td>Reset the serializer for a new string.</td>
         </tr>
-        <tr> </tr></tbody
-    ></table>
+            </tbody>
+          </table>
 
     <h4>Description</h4>
     <p>
@@ -114,7 +149,8 @@
 
     <h4>Example</h4>
     <p>This demonstrates how the serializer may be used to print a JSON value to an output stream.</p>
-    <pre>void print( std::ostream& os, value const & jv)
+          <pre>
+void print( std::ostream& os, value const & jv)
 {
   serializer sr;
   sr.reset( &jv );
@@ -124,8 +160,10 @@
       os << sr.read( buf );
   }
 }</pre>
+        </section>
 
-    <h6 class="table">Table 1.33. Character Sets</h6>
+        <section id="character-sets-example">
+          <h4>Character Sets (Example Table)</h4>
     <table>
       <thead>
         <tr>
@@ -152,22 +190,398 @@
           </td>
           <td>Contains the decimal digit characters.</td>
         </tr>
-        <tr> </tr></tbody
-    ></table>
+            </tbody>
+          </table>
+        </section>
 
+        <section id="thread-safety-example">
     <h4>Thread Safety</h4>
     <p>The same instance may not be accessed concurrently.</p>
-    <p
-      >Convenience header &lt;<code><a href="">boost/json.hpp</a></code
-      >&gt;</p
-    >
+          <p>Convenience header &lt;<code><a href="#">boost/json.hpp</a></code>&gt;</p>
+        </section>
+      </section>
+    </section>
 
-    <h1>Heading 1</h1>
-    <h2>Heading 2</h2>
-    <h3>Heading 3</h3>
-    <h4>Heading 4</h4>
-    <h5>Heading 5</h5>
-    <h6>Heading 6</h6>
+    <hr style="margin: 2em 0;">
 
+    <section id="html5-showcase">
+      <h1>HTML5 Tag Showcase</h1>
+
+      <section id="doc-structure-tags">
+        <h2>Basic Document Structure</h2>
+        <header>
+          <p>Demo Header Element</p>
+          <nav>
+            <p>Navigation inside Header:</p>
+            <menu type="context" id="navmenu">
+              <menuitem label="Home" icon="icon.png"> <a href="#html5-showcase">Home (Showcase Top)</a> </menuitem>
+              <menuitem label="About"> <a href="#">About (dummy)</a> </menuitem>
+            </menu>
+          </nav>
+        </header>
+
+        <main>
+          <p>This is the main content area of this showcase section.</p>
+
+          <article>
+            <header>
+              <h2>Title of Demo Article</h2>
+              <span>by Arthur T. Writer</span>
+            </header>
+            <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nullam volutpat sollicitudin nisi, at convallis nunc semper et. Donec ultrices odio ac purus facilisis, at mollis urna finibus.</p>
+            <figure>
+              <img src="https://placehold.it/300x150" alt="placeholder-image">
+              <figcaption> Article Figure Caption.</figcaption>
+            </figure>
+            <footer> <dl> <dt>Published</dt> <dd>17 August 2020</dd> <dt>Tags</dt> <dd>Sample Posts, html example</dd> </dl> </footer>
+          </article>
+
+          <section class="subsection-demo">
+            <h3>A Subsection within Main</h3>
+            <p>Informations about this subsection's content.</p>
+          </section>
+
+        </main>
+
+        <aside>
+          <h4>Aside Content</h4>
+          <p> This is content within an <code>&lt;aside&gt;</code> tag. It could be a sidebar, related links, or advertisements. </p>
+        </aside>
+
+        <footer>
+          <p>Demo Footer Element</p>
+          <address>Contact us at: <a href="mailto:mail@example.com">mail@example.com</a>.</address>
+          <div>Created by <a href="https://blazardsky.space">@blazardsky</a> (original example)</div>
+        </footer>
+      </section>
+
+      <hr style="margin: 2em 0;">
+      <section id="heading-tags">
+        <h2>Headings</h2>
+        <h1>Heading Level 1</h1>
+        <h2>Heading Level 2</h2>
+        <h3>Heading Level 3</h3>
+        <h4>Heading Level 4</h4>
+        <h5>Heading Level 5</h5>
+        <h6>Heading Level 6</h6>
+      </section>
+
+      <hr style="margin: 2em 0;">
+      <section id="text-level-semantics">
+        <h2>Paragraphs and Text-Level Semantics</h2>
+        <p>
+          Lorem ipsum dolor sit amet, consectetur adipiscing elit. Phasellus nisi lacus, auctor sit amet purus vel, gravida luctus lectus. Aenean rhoncus dapibus enim, sit amet faucibus leo ornare vitae. <br>
+          This is a <span>span element</span>.
+          <b>This is bold text using &lt;b&gt;</b>.
+          <i>This is italic text using &lt;i&gt;</i>.
+          <em>This is emphasized text using &lt;em&gt;</em>.
+          <mark>This is marked (highlighted) text</mark>.
+          <small>This is small text</small>.
+          This is <sub>subscript</sub> text.
+          This is <sup>superscript</sup> text.
+          <u>This text is underlined using &lt;u&gt; (use with caution)</u>.
+          <abbr title="National Aeronautics and Space Administration">NASA</abbr> is an abbreviation.
+          <strike>This text is strikethrough (deprecated, use &lt;s&gt; or &lt;del&gt;)</strike>.
+          <span>This is <del>deprecated info</del> and this is <ins>newly inserted info</ins>.</span>
+          <s>This text is no longer relevant or accurate</s>.
+          This is a <a href="#link-target">link to a page section</a>.
+          The event is at <time datetime="2024-08-17 08:00">Monday at 8:00 AM</time>.
+          <ruby><rb>漢字</rb><rt>かんじ</rt></ruby> is a ruby annotation.
+          <br>
+          Press <kbd>CTRL</kbd>+<kbd>ALT</kbd>+<kbd>DEL</kbd>.
+        </p>
+        <p>This is a <q>short inline quotation</q> using the &lt;q&gt; tag.</p>
+        <blockquote>This, instead, is a long quote that is going to use a lot of words and also cite who said that. —<cite>Some People</cite></blockquote>
+        <p>A <dfn>definition</dfn> is an explanation of the meaning of a word or phrase, shown here with &lt;dfn&gt;.</p>
+        <p>
+          Code example: <var>myVariable</var> = <var>anotherVariable</var> + 1000;
+          <br>
+          Sample output: <samp>Traceback (most recent call last):<br>NameError: name 'variabl' is not defined</samp>
+        </p>
+      </section>
+
+      <hr style="margin: 2em 0;">
+      <section id="link-tags">
+        <h2>Links</h2>
+        <p><a id="link-target" href="https://www.example.com" target="_blank">This is a link to example.com (opens in new tab)</a>.</p>
+        <p><a href="mailto:info@example.com">Mail to info@example.com</a></p>
+        <p><a href="#top">Link to top of this page</a></p>
+      </section>
+
+      <hr style="margin: 2em 0;">
+      <section id="list-tags">
+        <h2>Lists</h2>
+        <h3>Ordered List</h3>
+        <ol>
+          <li><data value="21053">Item with data (value: 21053)</data></li>
+          <li><data value="23452">Item with data (value: 23452)</data></li>
+          <li><data value="42545">Item with data (value: 42545)</data></li>
+          <li>Regular list item</li>
+          <li>Another list item</li>
+        </ol>
+
+        <h3>Unordered List</h3>
+        <ul>
+          <li>List item A</li>
+          <li>List item B</li>
+          <li>List item C</li>
+        </ul>
+
+        <h3>Definition List</h3>
+        <dl>
+          <dt>HTML</dt>
+          <dd>HyperText Markup Language</dd>
+          <dt>CSS</dt>
+          <dd>Cascading Style Sheets</dd>
+        </dl>
+      </section>
+
+      <hr style="margin: 2em 0;">
+      <section id="table-tags">
+        <h2>Tables</h2>
+        <table>
+          <caption>Sample Table Caption</caption>
+          <thead>
+            <tr>
+              <th>Numbers</th>
+              <th>Letters</th>
+              <th>Colors</th>
+            </tr>
+          </thead>
+          <tfoot>
+            <tr>
+              <td>Total: 6</td>
+              <td>Unique: C</td>
+              <td>Palette: Primary</td>
+            </tr>
+          </tfoot>
+          <tbody>
+            <tr>
+              <td>1</td>
+              <td>A</td>
+              <td>Red</td>
+            </tr>
+            <tr>
+              <td>2</td>
+              <td>B</td>
+              <td>Green</td>
+            </tr>
+            <tr>
+              <td>3</td>
+              <td>C</td>
+              <td>Blue</td>
+            </tr>
+          </tbody>
+        </table>
+      </section>
+
+      <hr style="margin: 2em 0;">
+      <section id="media-tags">
+        <h2>Media Elements</h2>
+
+        <h3>Image with map</h3>
+        <img src="https://placehold.it/460x230/aabbcc/ffffff&text=Image+for+Map" alt="Placeholder for imagemap" usemap="#shapesmap-demo">
+        <map name="shapesmap-demo">
+          <area shape="rect" coords="29,32,230,215" href="#media-tags" alt="Square link">
+          <area shape="circle" coords="360,130,100" href="#media-tags" alt="Circle link">
+        </map>
+
+        <h3>Video</h3>
+        <video width="320" height="240" controls poster="https://placehold.it/320x240/cccccc/000000&text=Video+Poster">
+          <source src="https://archive.org/download/Popeye_forPresident/Popeye_forPresident_512kb.mp4" type="video/mp4">
+          <track kind="subtitles" src="subtitles_en.vtt" srclang="en" label="English">
+          <track kind="subtitles" src="subtitles_de.vtt" srclang="de" label="German">
+          Sorry, your browser doesn't support HTML5 <code>video</code>.
+          Download from <a href="https://archive.org/details/Popeye_forPresident" target="_blank">Internet Archive</a>.
+        </video>
+        <p><small>Note: Actual .vtt files are not provided here, so subtitles won't display.</small></p>
+
+        <h3>Audio</h3>
+        <audio controls>
+          <source src="https://archive.org/download/ReclaimHtml5/ReclaimHtml5.ogg" type="audio/ogg">
+          <source src="https://archive.org/download/ReclaimHtml5/ReclaimHtml5.mp3" type="audio/mpeg">
+          Your browser does not support the <code>audio</code> element.
+        </audio>
+        <p><small>Audio from <a href="https://archive.org/details/ReclaimHtml5" target="_blank">The Internet Archive</a>.</small></p>
+
+        <h3>SVG</h3>
+        <svg width="100" height="100">
+          <circle cx="50" cy="50" r="40" stroke="green" stroke-width="4" fill="yellow" />
+          <text x="50" y="55" text-anchor="middle" fill="black">SVG</text>
+        </svg>
+
+        <h3>Object (Flash example - likely won't render)</h3>
+        <object data="flashmovie.swf" width="300" height="200" type="application/x-shockwave-flash">
+          <param name="movie" value="flashmovie.swf">
+          Please install the Shockwave plugin to watch this movie (or if Flash is disabled).
+        </object>
+
+        <h3>Iframe</h3>
+        <iframe src="https://example.com" width="300" height="200" style="border:1px solid black;">
+          Your browser does not support iframes.
+        </iframe>
+        <p><small>Above iframe attempts to load example.com.</small></p>
+      </section>
+
+      <hr style="margin: 2em 0;">
+      <section id="form-tags">
+        <h2>Forms and Input</h2>
+        <form action="#" method="get">
+          <fieldset>
+            <legend>Personal Information</legend>
+            <p>
+              <label for="name-demo">Name:</label><br>
+              <input type="text" name="name" id="name-demo" placeholder="Your Name">
+            </p>
+            <p>
+              <label for="dob-demo">Date of Birth:</label><br>
+              <input type="date" name="dob" id="dob-demo">
+            </p>
+            <p>
+              <label for="email-demo">Email:</label><br>
+              <input type="email" name="email" id="email-demo" required placeholder="your@email.com">
+            </p>
+          </fieldset>
+
+          <fieldset>
+            <legend>Preferences</legend>
+            <p>
+              <label for="browser-demo">Choose your browser:</label>
+              <input list="browsers-demo" name="browser" id="browser-demo">
+              <datalist id="browsers-demo">
+                <option value="Edge">
+                <option value="Firefox">
+                <option value="Chrome">
+                <option value="Opera">
+                <option value="Safari">
+              </datalist>
+            </p>
+            <p>
+              <label for="choice-demo">Select an option:</label><br>
+              <select name="choice" id="choice-demo">
+                <optgroup label="Choice [1-3]">
+                  <option value="1">One</option>
+                  <option value="2" selected>Two (default)</option>
+                  <option value="3">Three</option>
+                </optgroup>
+                <optgroup label="Choice [4-6]" disabled>
+                  <option value="4">Four</option>
+                  <option value="5">Five</option>
+                  <option value="6">Six</option>
+                </optgroup>
+              </select>
+            </p>
+            <p>
+              <label for="textarea-demo">Comments:</label><br>
+              <textarea id="textarea-demo" name="textarea" rows="4" cols="50" placeholder="Write something in here"></textarea>
+            </p>
+            <p>
+              <input type="checkbox" id="agree-demo" name="agree" value="yes">
+              <label for="agree-demo">I agree to the terms.</label>
+            </p>
+            <p>
+              <input type="radio" id="radio1-demo" name="radiogroup" value="opt1" checked>
+              <label for="radio1-demo">Option 1</label><br>
+              <input type="radio" id="radio2-demo" name="radiogroup" value="opt2">
+              <label for="radio2-demo">Option 2</label>
+            </p>
+          </fieldset>
+          <p>
+            <input type="submit" value="Submit Form">
+            <input type="reset" value="Reset Form">
+            <button type="button" onclick="alert('Button clicked!')">Click Me Button</button>
+          </p>
+        </form>
+
+        <h3>Progress and Meter</h3>
+        <p>
+          Task Progress: <progress value="77" max="100">77%</progress>
+        </p>
+        <p>
+          Disk Usage: <meter value="33" min="0" max="100" low="40" high="80" optimum="10">33GB out of 100GB</meter><br>
+          Fuel Level: <meter value="0.8" optimum="1">High</meter> (80%)
+        </p>
+        <p>Calculated result: 2+2 = <output name="result-demo" for="a b">4</output> (assuming inputs a,b)</p>
+      </section>
+
+      <hr style="margin: 2em 0;">
+      <section id="interactive-tags">
+        <h2>Interactive Elements</h2>
+        <details>
+          <summary>Summary of Collapsible Content Below</summary>
+          <p>Content 1: This is some hidden content that appears when the summary is clicked.</p>
+          <p>Content 2: More details can be provided here.</p>
+          <p>Content 3: You can put various HTML elements inside a details tag.</p>
+        </details>
+        <br>
+        <details open>
+          <summary>Initially Open Details Element</summary>
+          <p>This content is visible by default because the 'open' attribute is present.</p>
+        </details>
+      </section>
+
+      <hr style="margin: 2em 0;">
+      <section id="misc-grouping-tags">
+        <h2>Miscellaneous &amp; Grouping</h2>
+        <p>A horizontal rule to separate content:</p>
+        <hr>
+        <p>Above was an <code>&lt;hr&gt;</code> tag.</p>
+
+        <h3>Divs for Grouping</h3>
+        <div>
+          <p>This is a paragraph inside a <code>&lt;div&gt;</code>.</p>
+          <div>
+            <p>This is a paragraph inside a nested <code>&lt;div&gt;</code>.</p>
+          </div>
+        </div>
+
+        <h3>Preformatted Text (e.g. ASCII Art)</h3>
+        <pre>
+   /\_/\
+  ( o.o )
+   > ^ <
+  User's ASCII art would go here if it was small.
+  For larger art, it might be better to link or omit for brevity in a combined file.
+  The original example had a large ASCII art cat.
+        </pre>
+
+        <h3>Code Block</h3>
+        <code>
+<pre>
+// C++ code tag example
+#include &lt;iostream&gt;
+
+int main()
+{
+    std::cout &lt;&lt; "Hello World from &lt;code&gt;!" &lt;&lt; std::endl;
+    return 0;
+}
+</pre>
+        </code>
+        <p><small>Note: For syntax highlighting, a JS library would typically be needed.</small></p>
+
+        <h3>Template Element</h3>
+        <template id="my-template">
+          <h4>Hidden Content from Template</h4>
+          <p>This content is inside a <code>&lt;template&gt;</code> tag. It's not rendered by default but can be used by JavaScript.</p>
+          <img src="https://placehold.it/100x50/0000ff/ffffff&text=Template+Img" alt="Template Image">
+        </template>
+        <p>The content of the <code>&lt;template&gt;</code> above is not visible. (JavaScript could be used to display it.)</p>
+        <button onclick="showTemplateContent()">Show Template Content</button>
+        <div id="template-output"></div>
+        <script>
+          function showTemplateContent() {
+            const template = document.getElementById('my-template');
+            const clone = template.content.cloneNode(true);
+            document.getElementById('template-output').appendChild(clone);
+            // Optionally disable button after one use
+            // event.target.disabled = true;
+          }
+        </script>
+      </section>
+
+    </section>
+
+    <hr style="margin: 2em 0;">
   </body>
 </html>
