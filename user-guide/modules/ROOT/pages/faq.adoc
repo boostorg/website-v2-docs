@@ -25,6 +25,7 @@ This section contains answers to the common questions that new developers to Boo
 * <<Metaprogramming>>
 * <<Modular Boost>>
 * <<Other Languages>>
+* <<Production and Debug Builds>>
 * <<Releases>>
 * <<Safe C++>>
 * <<Smart Pointers>>
@@ -1019,6 +1020,150 @@ Future technological shifts, such as advances in quantum computing or entirely n
 . *If I was to learn one other language, in addition to pass:[C++], what should it be to best prepare myself for an uncertain future?*
 +
 Python is often the top recommendation due to its versatility, simplicity, and wide application in growing fields like artificial intelligence (AI), machine learning (ML), rapid prototyping, and data science. And boost:python[] is there to help you integrate with the Boost libraries. Rust is another strong contender, especially if you are interested in systems programming and are looking for reliability and security. If you see the future as more cloud computing, then Go makes a strong case for itself.  And let's not forget that so much computing is now web based, so JavaScript deserves a mention here too. All of these languages offer valuable resources that complement pass:[C++] and prepare you for an uncertain future.
+
+== Production and Debug Builds
+
+. *What is the value of using `BOOST_ASSERT` or `BOOST_STATIC_ASSERT` over the Standard Library assert macros?*
++
+There are a few advantages of using the Boost asserts, available in `<boost/assert.hpp>`, including that the Boost macros are fully customizable using `BOOST_ENABLE_ASSERT_HANDLER`. Other considerations are that `BOOST_ASSERT` can be used to log extra data or stack traces, and there is better integration with boost:test[]. The `BOOST_STATIC_ASSERT` is best utilized when using older pass:[C++] standards (pre-pass:[C++17]), or you are using deeply templated code. You might also prefer the Boost macros if you are engaging the features of other Boost libraries and are looking for consistent tooling. For a fuller discussion, refer to xref:boost-macros.adoc[].
+
+. *For maximum performance, is it good practice to remove, or comment out, the `BOOST_ASSERT`s for the final production code, or do they simply not get compiled into anything so there is no performance cost for leaving them as is?*
++
+By default, `BOOST_ASSERT` macros are completely removed from the compiled binary when `NDEBUG` is defined, just like the standard assert macro. If `NDEBUG` is not defined a `BOOST_ASSERT(x)` will expand, usually to an `assertion_failed()` if the assert condition fails. If NDEBUG is defined it expands to `((void)0)` so nothing is generated. Boost does provide the `BOOST_DISABLE_ASSERTS` macro, which has the same effect on Boost asserts as `NDEBUG` - but will leave other asserts alone.
+
+. *What is usually considered to be best practices in handling assertions that fire with a production build?*
++
+Instead of throwing an exception when an assert fails, it is often the best practice to log the failure. For example, here is a custom assert handler using the features of boost:log[] to record the event:
++
+[source,cpp]
+----
+#include <boost/assert.hpp>
+#include <boost/log/trivial.hpp>
+#include <boost/log/utility/setup/file.hpp>
+#include <boost/log/utility/setup/console.hpp>
+#include <boost/log/utility/setup/common_attributes.hpp>
+#include <boost/log/expressions.hpp>
+#include <sstream>
+#include <cstdlib>
+
+namespace logging = boost::log;
+
+// Configure Boost.Log (call once at startup)
+void init_logging() {
+    logging::add_common_attributes();
+
+    // Console output
+    logging::add_console_log(
+        std::clog,
+        logging::keywords::format = "[%TimeStamp%] [%Severity%] %Message%"
+    );
+
+    // File output
+    logging::add_file_log(
+        logging::keywords::file_name = "assert_failures_%N.log",
+        logging::keywords::rotation_size = 10 * 1024 * 1024, // 10 MB
+        logging::keywords::format = "[%TimeStamp%] [%Severity%] %Message%"
+    );
+}
+
+// Custom handler for BOOST_ASSERT
+namespace boost {
+    void assertion_failed(char const* expr, char const* function, char const* file, long line) {
+        std::ostringstream oss;
+        oss << "BOOST_ASSERT failed!\n"
+            << "  Expression: " << expr << "\n"
+            << "  Function:   " << function << "\n"
+            << "  File:       " << file << "\n"
+            << "  Line:       " << line;
+
+        BOOST_LOG_TRIVIAL(error) << oss.str();
+
+        std::abort(); // Optional: comment out if soft fail is desired
+    }
+}
+
+----
++
+An example use of this handler would be:
++
+[source,cpp]
+----
+#include <boost/assert.hpp>
+#include <iostream>
+
+// Declare logging initializer
+void init_logging();
+
+void test_logic(int value) {
+    BOOST_ASSERT(value >= 0);
+    std::cout << "Value is: " << value << std::endl;
+}
+
+int main() {
+    init_logging();
+
+    std::cout << "Testing BOOST_ASSERT with value = 42..." << std::endl;
+    test_logic(42);
+
+    std::cout << "Testing BOOST_ASSERT with value = -1..." << std::endl;
+    test_logic(-1); // Logs to file and console, then aborts
+
+    return 0;
+}
+
+----
+
+. *What should I be aware of when moving from a Debug to a Production release?*
++
+Use this checklist to ensure your application correctly integrates Boost libraries across **Debug** and **Release** configurations.
++
+*Linking and Compatibility*
+
+- [ ] Link with the correct Boost library variant (`-gd` for Debug, none for Release).
+- [ ] Ensure runtime settings (Debug CRT or Release CRT) match Boost binaries.
+- [ ] Avoid mixing Debug-built Boost libraries with Release-built applications.
++
+*Macro Definitions and Configuration*
+
+- [ ] Define `BOOST_DEBUG` in Debug builds to enable extra runtime checks (if applicable).
+- [ ] Define `BOOST_DISABLE_ASSERTS` in Release builds to remove `BOOST_ASSERT` checks.
+- [ ] Optionally define `BOOST_ENABLE_ASSERT_HANDLER` to install custom assertion handlers.
+- [ ] Review conditional macros like `BOOST_NO_EXCEPTIONS`, `BOOST_NO_RTTI`, etc.
++
+*Assertions and Diagnostics*
+
+- [ ] Use `BOOST_ASSERT` for critical development-time checks.
+- [ ] Consider diagnostic logging using `BOOST_LOG_TRIVIAL`.
+- [ ] Ensure failing assertions are tested and logged in Debug builds.
++
+*Debugging and Tooling*
+
+- [ ] Run AddressSanitizer, Valgrind, or Visual Leak Detector in Debug builds. Refer to xref:contributor-guide:ROOT:testing/sanitizers.adoc[Contributor Guide: Sanitizers].
+- [ ] Confirm boost:pool[], boost:container[], and alloc-heavy libraries don't leak memory.
+- [ ] Validate boost:thread[], boost:asio[], and boost:fiber[] components using thread sanitizers.
++
+*Performance Awareness*
+
+- [ ] Avoid benchmarking with Debug builds — optimization is disabled.
+- [ ] Use Release builds to test compile times for boost:mp11[], boost:spirit[], and any heavy use of templates.
+- [ ] Validate any `BOOST_FORCEINLINE` or `BOOST_NOINLINE` effects in both builds.
++
+*Unit Testing*
+
+- [ ] Run the full suite of unit tests in both Debug and Release.
+- [ ] Ensure no logic is only covered by Debug-only paths or assertions.
+- [ ] Use boost:test[] to validate results across optimization levels.
++
+*CMake Tip*
+
+[source,cmake]
+----
+# Recommended compile definitions based on configuration
+add_compile_definitions(
+  "$<$<CONFIG:Debug>:BOOST_DEBUG>"
+  "$<$<CONFIG:Release>:BOOST_DISABLE_ASSERTS>"
+)
+----
 
 == Releases
 
