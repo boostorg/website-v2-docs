@@ -18,6 +18,7 @@ This section contains answers to the common questions that new contributors to B
 * <<Boost Software License>>
 * <<Development Environments>>
 * <<Existing Boost Libraries>>
+* <<Generative Artificial Intelligence>>
 * <<Modular Boost>>
 * <<Post-Release Engagement>>
 * <<Safe C++>>
@@ -157,6 +158,109 @@ The many notable examples include:
 +
 The useful utilities such as boost:any[], boost:variant[], and boost:optional[] offer relatively simple functionality. Another simpler library is boost:bimap[] which provides a container for maintaining one-to-one mappings between keys and values. While bidirectional maps are a useful data structure, the functionality provided is relatively straightforward and focused on this specific use case.
 
+== Generative Artificial Intelligence
+
+. *I have always been interested in Artificial Intelligence (AI), and would like to contribute an AI component library to Boost. Within the field of Generative AI, what components would work well as a C++ library?*
++
+In simple terms, generative AI works by first breaking down known constructs (for example, text or images) into small reusable components. This might be _tokens_, _subwords_, or _characters_ for textual input, or _pixels_, _patches_, or _semantic elements_ (sky, tree, car, etc.) for an image. Then, using statistical models, patterns, or learned rules, generative AI assembles these atomic components into something new, ideally in novel and interesting ways.
++
+Of course, text and images are not the only complex constructs you might want to work with. There are too many others to list, but high-value constructs include *audio and speech* (breaking them down into phonemes, spectral features, or waveforms), *video* (decomposing into frames, objects, motion vectors, or scene segments), and *time series data* such as sensor data or stock prices (breaking down into patterns, cycles, and perhaps anomalies). More esoteric examples would include *molecular structures and chemical compounds*, *social graph data*, *handwriting and gesture data*, *3D models*, and so on.
++
+A new Boost library could address one or more of the tasks involved in decomposing existing structures into atomic components, then the processes involved in rebuilding these components into something new that adheres to a significant set of rules/patterns/behavior. Handling user-input to guide the process is another challenging component.
++
+Perhaps take inspiration from the following table:
++
+[cols="1,3,4",options="header",stripes=even,frame=none]
+|===
+| Construct       | Subcomponents / Atomic Units | Notes
+| **Text**           | Subwords, Characters, Tokens, Words  | BPE (Byte Pair Encoding), WordPiece, SentencePiece, or character-based tokenization
+| **Images**         | Pixels, Patches, Segments, Regions, Object Masks                  | Vision Transformers often use image patches; segmentation maps are used for context
+| **Audio**          | Frames, Spectrogram Windows, Mel-Frequency Cepstral Coefficients (MFCCs), Waveform Samples              | Typically converted into spectrograms or embeddings for processing. MFCCs determine how humans perceive sound.
+| **Speech**         | Phonemes, Syllables, Graphemes, Acoustic Frames                   | Combines audio processing and linguistic modeling
+| **Video**          | Frames, Clips, Objects per Frame, Motion Vectors, Scene Changes   | Often handled as sequences of images with temporal dependencies 
+| **Time Series**| Time Steps, Sliding Windows, Seasonal Components, Trends         | Used in forecasting models like Long-Short Term Memory (LSTMs), Transformers, etc. 
+| **3D Models**      | Mesh Vertices, Faces, Point Clouds, Voxels, Primitives            | Decomposed for neural rendering or reconstruction 
+| **Code**           | Tokens, AST Nodes, Lines, Statements, Functions                   | Abstract Syntax Trees (ASTs) used by code Large Language Models (LLMs) 
+| **Music**          | Notes, Chords, Bars, Timing Events, MIDI Tokens                   | Representation varies: symbolic (MIDI), waveform, or spectrogram 
+| **Sensor Data**    | Events, Packets, Timestamps, Multimodal Vectors                   | Used in robotics and IoT, often real-time 
+|===
+
+. *Many current AI libraries are built using Python or Rust, is there a need for C++ versions of these libraries?*
++
+Perhaps not in all cases, but many applications will need performance, cross-platform portability, or integration with existing or embedded systems, all of which pass:[C++] excels at. Imagine adding real-time generative AI into a game or visual simulation, the performance requirement is the deciding factor.
+
+. *Can you give me some ideas for libraries that could be created and added to Boost?*
++
+Here are some good candidates for AI libraries, with their respective use-cases:
+
+* Boost.TokenStream - efficiently tokenizes words into subwords and characters so that a command such as "Turn on the lights" is understood. A pass:[C++] version could support inference on an edge device such as a microcontroller to run offline voice assistance.
+* Boost.AIGen - rapidly prototypes models that generate descriptions of simulation states, and returns generated descriptions or structured images. This could be a lightweight generative model abstraction layer that enables experimentation with text, image, audio, or multi-modal generation.
+* Boost.Autograd - provides a lightweight automatic differentiation engine to 
+simulate and optimize fluid flow using neural networks that respect physical laws. This requires differentiation of physical equations.
+* Boost.MLGraph - defines and executes computation graphs with typed nodes and edges, enabling graph-based machine language research using custom model formats.
+* Boost.Prompting - a pass:[C++] toolkit to structure, serialize, and test prompts for Large Lanugage Model (LLM)-based applications. Prompts could be built dynamically and used by assistants, chatbots, games, and perhaps robotics.
+
+. *Would the project structure of a generative AI library be any different for any other Boost library?*
++
+Not at all, if you were to take our Boost.TokenStream idea and develop it, the project structure could look like this:
++
+[source,text]
+----
+boost-token-stream/
+├── include/
+│   └── boost/
+│       └── token-stream/
+│           ├── bpe.hpp             # Public API
+│           ├── vocab.hpp           # Vocab structure
+│           ├── merge_rules.hpp     # Merge rules structure
+│           └── error.hpp           # Error handling and outcome types
+├── src/
+│   └── bpe.cpp                     # Implementation (if not header-only)
+├── test/
+│   ├── test_bpe.cpp                # Unit tests
+│   └── test_vocab.cpp              # Vocab loading/lookup tests
+├── CMakeLists.txt
+└── README.md
+
+----
+
+. *I want to experiment with creating a library for scene based generative AI, but I find all the necessary components somewhat daunting. Are there Boost libraries that can lighten the load?*
++
+For an experimental project, consider structuring it around the following, assuming the input is a raw still image, and the output is a generated image:
+
+* boost:gil[] : Loads your image and provides pixel access
+* boost:graph[] : Represents the layout/scene structure
+* boost:variant2[] : Stores object types (components such as Tree, Sky, Road, Building, etc.)
+* boost:fusion[]: Serializes scene components
+* boost:log[] : Records scene parsing statistics
+* boost:program_options[] : CLI for batch parsing and config
++
+For more ideas, refer to xref:user-guide:ROOT:task-machine-learning.adoc[].
+
+. *What is considered to be best practices when testing a generative AI model, given we can never be sure when it has got it all right?*
++
+Testing a generative AI model, or library component, is fundamentally different from traditional software testing because there's no single correct output — outputs are often subjective, diverse, and probabilistic. However, there are best practices that help ensure quality, safety, and usefulness. Start by engaging the following methods:
++
+[cols="1,3,2,2",options="header",stripes=even,frame=none]
+|===
+| Method | Description | Pros | Cons
+| *Automated Metrics*	| BLEU, ROUGE, METEOR, Perplexity, FID (for images), etc. |	Fast, repeatable | Poor at capturing nuance
+| *Human Evaluation* | Judges rate quality, relevance, etc. |	High-quality insights | Time-consuming, subjective
+| *Adversarial Testing* | Try to break the model with edge cases or trick inputs | Uncovers weaknesses | Requires creativity and care
+| *Behavioral Unit Tests* | Small, targeted tests for expected responses | Precise | Limited coverage
+|===
++
+_Perfect_ doesn't apply in generative AI. Instead, strive for consistent quality, clear boundaries, and safe behavior:
+
+* Define clear evaluation goals and test across diverse datasets
+* Simulate misuse - prompt injection, toxic output, sensitive topics
+* Track _hallucinations_ - the AI term for clearly incorrect statements or images
+* Track consistency - does the model contradict itself
+* Conduct _temperature sweeps_ - AI term for measuring the balance between boring/repetitive and overly chaotic output
+* Be transparent and document limitations
+* Consider continuous monitoring in production - collect and analyze feedback
++
+A prospective generative AI Boost library would only need testing within its own domain of functionality, but the design should be cognizant of the testing a finished application is going to require.
 
 == Modular Boost
 
