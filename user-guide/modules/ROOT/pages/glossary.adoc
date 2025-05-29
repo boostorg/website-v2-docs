@@ -136,6 +136,28 @@ Note:: The Bloom filter is named after its inventor, Burton Howard Bloom, who de
 
 *GDB* : Often used as short for GNU Debugger, though can mean Graph Database.
 
+*Generative AI* : A field of Artificial Intelligence (AI) that works by first breaking down known constructs (for example, text or images) into small reusable components. This might be _tokens_, _subwords_, or _characters_ for textual input, or _pixels_, _patches_, or _semantic elements_ (sky, tree, car, etc.) for an image. Then, using statistical models, patterns, or learned rules, generative AI assembles these atomic components into something new, ideally in novel and interesting ways, based on user input. Generative AI has borrowed many terms from everyday English, but repurposed them with specific technical meanings, for example:
+
+[cols="1,3",options="header",stripes=even,frame=none]
+|===
+| Term | AI Meaning
+| _Attention_ | A mechanism that lets models weigh the importance of different input parts dynamically.
+| _Beam Search_ | A decoding algorithm that keeps top candidate sequences during generation.
+| _Bias_ | Model parameters or training data patterns that skew outputs in certain directions.
+| _Gradient Clipping_ | A technique used during training neural networks to prevent exploding gradients by limiting their size.
+| _Hallucination_	| When a model confidently outputs false or fabricated information. For example, with the question "What is the capital of Mars" the model confidently responds "Obviously, Olympus Mons"!
+| _Latent Space_ | A compressed, abstract representation of data in machine learning models, where relationships between data points can be more easily explored.
+| _Loss_ | A numerical measure of how wrong a model's predictions are during training.
+| _Overfitting_ | When a model learns the training data too well, including the noise, and fails to generalize to new data.
+| _Prompt_ | The input text given to a generative model to guide its response.
+| _Prompt Injection_ | A security vulnerability where a user sneaks malicious or unintended instructions into an AI's prompt, causing it to misbehave.
+| _Sampling_ | Selecting outputs probabilistically from a distribution of next-token predictions.
+| _Temperature_ | A parameter controlling randomness in output sampling: low = deterministic/boring, high = random/chaotic.
+| _Token_	| A unit of text, like a word or subword, that a model processes.
+| _Token Embedding_ | A numeric representation of words or subwords that captures their meaning and context, used as input to AI models.
+|===
+
+
 *GIL* : Generic Image Library - boost:gil[] is a library designed for image processing, offering a flexible way to manipulate and process images.
 
 [[h]]
