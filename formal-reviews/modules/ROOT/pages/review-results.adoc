@@ -23,10 +23,6 @@ Note:: The review results include recent completed reviews - where the library m
 [cols="1,1,1,2,2",stripes=even,options="header",frame=none]
 |===
 | *Submission* | *Submitter* | *Review Manager* | *Review Dates* | *Result*
-| https://master.bloom.cpp.al/html/index.html[Bloom] | Joaquin M Lopez Munoz | Arnaud Becheler | May 13, 2025 - May 22, 2025 | TBD
-
-| https://jll63.github.io/Boost.OpenMethod/[OpenMethod] | Jean-Louis Leroy | Dmitry Arkhipov | April 28, 2025 - May 07, 2025 | TBD
-
 | *Boost 1.89.0 Beta* |  - |   Marshall Clow |  TBD | TBD
 |===
 
@@ -40,6 +36,10 @@ In order for a review to proceed, a Boost member must volunteer to manage the re
 [cols="1,1,1,2,2",stripes=even,options="header",frame=none]
 |===
 | *Submission* | *Submitter* | *Review Manager* | *Review/Release Dates* | *Result*
+
+| https://master.bloom.cpp.al/html/index.html[Bloom] | Joaquin M Lopez Munoz | Arnaud Becheler | May 13, 2025 - May 22, 2025 | https://lists.boost.org/Archives/boost/2025/05/259631.php[Accepted]
+
+| https://jll63.github.io/Boost.OpenMethod/[OpenMethod] | Jean-Louis Leroy | Dmitry Arkhipov | April 28, 2025 - May 07, 2025 | https://lists.boost.org/Archives/boost/2025/05/259629.php[Accepted]
 
 | *Boost 1.88.0 Released* |  - |   Marshall Clow |  April 10, 2025 | https://www.boost.org/users/history/version_1_88_0.html[Notes] 
 
