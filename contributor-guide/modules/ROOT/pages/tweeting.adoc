@@ -37,7 +37,7 @@ for guidance using the same submission channel.
 
 == Post structure
 
-image::tweet_structure.png[Structure of an X post]
+image::tweet_structure.jpg[Structure of an X post]
 
 *Text:* Make it short and attractive. Posts in X are currently capped at
 280 characters, but you should strive for even less than that: one or two sentences
