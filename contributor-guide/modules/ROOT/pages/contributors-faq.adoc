@@ -27,12 +27,25 @@ This section contains answers to the common questions that new contributors to B
 
 == Adding New Libraries
 
+. *Do Boost libraries typically come from gauging outside interest, or perhaps more from developers following their own interests?*
++
+Most Boost Libraries originate from individual developers, or small teams, following their own interests, rather than from organized external demand. Typically, self-motivated developers identify a gap in the pass:[C++] ecosystem or have a strong interest in a particular domain. To be clear, Boost is _not_ driven by corporate feature requests, community polling or public wishlists, nor top-down direction (though The pass:[C++] Alliance might sponsor, or partially sponsor, work it deems of specific value, such as it did with boost:json[]). The community acts as a gatekeeper to ensure quality, generality, and long-term usefulness, rather than as a source for library concepts.
+
 . *When considering developing a library for Boost, what is the right balance between ambitious functionality and limited functionality?*
 +
 The keys to a successful development of a new library are to identify core functionality and start simple. Prioritize functionality that provides significant value to developers and aligns with Boost's goals of promoting high-quality, reusable libraries. Avoid adding unnecessary features that may increase complexity without adding much value. It's often beneficial to start with a simpler implementation that addresses a specific problem or use case effectively. A library with a narrow focus and a clear, intuitive API is more likely to be accepted by the Boost community than one that attempts to solve too many problems at once or introduces unnecessary complexity.
 +
 In addition to this, consider future extensibility, performance, portability, current trends, and always remember you can seek community advice and feedback through the Boost mailing lists.
 
+. *Am I right in thinking that Boost libraries are typically low-level and very specific, rather than higher-level and for tackling large scale issues such as generative AI, a modern game engine, or quantum computing, to name a few examples?*
++
+Yes, Boost libraries have traditionally excelled in areas such as high-performance computing, cross-platform, embedded systems, and networking. Taking your example of generative AI, many Boost libraries could be used as _components_ of a new AI model - such as parsing, networking, serialization, errors and exception handling, math and statistics, randomness, and so on. A new quality generative AI model is a considerable undertaking, and Boost libraries could do a lot of the grunt work and leave a development team with the most creative aspects. Simulating quantum computing, or creating a modern game engine, gets a similar answer, a development team could focus on the interactive UI, with Boost libraries handling a myriad of administrative and operational tasks.
++
+A key aspect of a successful Boost library is _focus_: what is the problem that the library in question is the solution for? 
+
+. *If there is social media discussion on new libraries, typically what does the discussion entail?*
++
+The new libraries most requested tend to be more like updates to existing libraries. There's a common desire for more comprehensive asynchronous programming support, often for higher-level abstractions or more extensive async features. Another example is more programming options, say for an enhanced version of boost:program_options[], or for libraries supporting earlier or later pass:[C++] standards, such as requests to support pre-pass:[C++]17 standards. 
 
 [[boostsoftwarelicense]]
 == Boost Software License
