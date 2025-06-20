@@ -9,54 +9,66 @@ Official repository: https://github.com/boostorg/website-v2-docs
 = Logo Policy and Media Guide
 :navtitle: Logo Policy and Media Guide
 
-== The Boost trademark
+== The Boost Trademark
 
 The Boost C++ Library collection (or “Libraries”) is a community-driven, open source project published under the terms of xref:user-guide:ROOT:bsl.adoc[The Boost Software License] (the “BSL”). It is governed by a core team (the “Developers”), consisting of the members of the official Boost GitHub organization located at https://github.com/boostorg (the “Boost GitHub”) having the Owner role, plus any proxies they designate.
 
-The Libraries are sponsored in part by https://cppalliance.org/[The C++ Alliance, Inc.] (or “Alliance”), a California 501(c)(3) non-profit which owns and protects the Boost logo trademark (the “Boost Logo”) shown below. This document provides information about the use of the Logo, as well as examples of common ways people might want to use this trademark, with explanations as to whether those uses are permitted or not or require additional written permission.
+The Libraries are sponsored in part by https://cppalliance.org/[The C++ Alliance, Inc.] (or “Alliance”), a California 501(c)(3) non-profit which owns and protects the Boost logo trademark (the “Boost Logo”) shown below. This document provides information about the use of the Boost Logo, as well as examples of common ways people might want to use this trademark, with explanations as to whether those uses are permitted or not, or require additional <<Written Approval>>.
 
-The Boost Logo:
+Note:: All licensing decisions are the purview of xref:oversight-committee.adoc[]. 
+
+=== The Boost Logo
 
 image::boost-logo.png[Boost logo,width=400]
 
 Note:: The background is transparent. The source for the image is available at https://github.com/boostorg/website-v2-docs/blob/develop/antora-ui/src/img/boost-logo-transparent.svg[boost-logo-transparent.svg].
 
-A trademark is a name or design that tells the world the source of a good or service. Protecting trademarks for an open-source project is particularly important. Anyone can change the source code and produce a product from that code, so it's important that only the original product, or variations that have been approved by the project, use the project's trademarks. By limiting use of the Boost Logo, the Alliance and the Developers can help users and contributors know they are getting an official product and not someone else's modified version, or something unrelated. The trademark assures users and developers of the quality and safety of the product they are using.
+A trademark is a name or design that tells the world the source of a good or service. Protecting trademarks for an open-source project is particularly important. Anyone can change the source code and produce a product from that code, so it's important that only the original product, or variations that have been approved by the project, use the project's trademarks. *By limiting use of the Boost Logo, the Alliance and the Developers can help users and contributors know they are getting an official product and not someone else's modified version, or something unrelated.* The trademark assures users and developers of the quality and safety of the product they are using.
 
-== Trademark policy
+== Trademark Policy
 
 The Boost Logo (bitmap and vectors) are owned by the Alliance and distributed under the terms of the license granted by this policy.
 
 Note:: _The use of the Boost Logo is also governed by trademark, whose policy is described herein._
 
-The Boost Logo makes it possible to determine whether or not a library is officially a part of Boost, and whether or not a communication is from the Developers. So we’re careful about where we allow it to appear. But at the same time, we want the community to have confidence using it in prescribed ways without written approval. The policy laid out here explains how we strike a balance. If you have any doubts about whether your intended use requires permission, please contact us (https://lists.boost.org/mailman/listinfo.cgi/boost[Boost developers mailing list]).
+The Boost Logo makes it possible to determine whether or not a library is officially a part of Boost, and whether or not a communication is from the Developers. So we're careful about where we allow it to appear. But at the same time, we want the community to have confidence using it in a number of prescribed ways _without_ written approval. The policy laid out here explains how we strike a balance. If you have any doubts about whether your intended use requires approval, contact the https://lists.boost.org/mailman/listinfo.cgi/boost[Boost developers mailing list].
 
-_The Boost Logo may not be used in ways that appear (to a casual observer) official, affiliated, or endorsed by the Developers or part of the Libraries, unless you have written permission from the Alliance._
+== Referring to the Libraries
 
-== Referring to Boost
+As with any trademark, the Boost Logo can be used with minimal restriction to refer to unmodified versions of the Libraries, or on official communication from the Developers such as when announcing the results of a formal review, or announcing the publishing of a new version of the Libraries.
 
-As with any trademark, the Boost Logo can be used with minimal restriction to refer to the Libraries, or on official communication from the Developers such as when announcing the results of a formal review, or announcing the publishing of a new version of the Libraries. If you use the Boost Logo to distribute any product or content created by someone else, then you must give appropriate credit to the creator(s) of the content and you must indicate if you made changes to the content.
+Note:: If you use the Boost Logo to refer to any product or content created by someone else, then you must give appropriate credit to the creator(s) of the content and you must indicate if you made changes to the content.
+
+== Prohibited Uses
 
 The Boost Logo may not be used:
 
+* in ways that appear (to a casual observer) official, affiliated, or endorsed by the Developers or part of the Libraries, unless you have written approval from xref:oversight-committee.adoc[], or
 * to refer to any other library or collection of libraries,
 * in a way that is misleading or may imply an association between the Libraries and unrelated modules, tools, documentation, or other resources, or
 * in a way that implies an endorsement or communication from the Developers, or
 * in ways that confuse the community as to whether the Libraries are open source and free to use.
 
-== Uses that do not require explicit approval
+== Uses that do not Require Explicit Approval
 
-* Indicating accurately that a work (components such as source code, documentation, and tests) is part of the Libraries. In this case you may reflect this by using the Boost Logo without prior approval, for both commercial and non-commercial uses.
+* Indicating accurately that a work (components such as source code, documentation, and tests) is _part of_ the Libraries. In this case you may reflect this by using the Boost Logo without prior approval, for both commercial and non-commercial uses.
 * Watermarking official communications from the Developers when referencing milestones or events related to the Libraries such as formal review results or releases is allowed.
-* Using the Boost Logo on websites, brochures, documentation, academic papers, and books to refer to the Libraries is allowed.
+* Using the Boost Logo on websites, brochures, documentation, academic papers, and books to refer to unmodified versions of the Libraries is allowed.
+* Using the Boost Logo for social events like meetups, tutorials, and the like is allowed for events that are related to the Libraries and, critically, are free to attend. The event cannot appear to be officially endorsed or run by the Developers without written approval.
 
-== Uses that require written approval
+== Uses that Require Written Approval
 
-* Using the Boost Logo where the products are not part of the Libraries. In this case, written approval from the Alliance is required to ensure that the usage of the Boost Logo does not confuse users or indicate an official association.
-* Using the Boost Logo on any thing you wear such as T-shirts, hats, and other artwork or merchandise, requires written approval from the Alliance to ensure that the presentation of the mark reflects the high quality of the brand, and does not confuse users or indicate an official association.
-* Using the Boost Logo for social events like meetups, tutorials, and the like is allowed for events that are related to the Libraries and free to attend. For commercial events (including sponsored ones), prior written approval from the Alliance is required. The event cannot appear to be officially endorsed or run by the Developers without written permission.
+* If you have developed software that uses the Libraries, and would like to use the Boost Logo in promotional material, then written approval is required.
+* Using the Boost Logo on any thing you wear such as T-shirts, hats, and other artwork or merchandise, requires written approval to ensure that the presentation of the mark reflects the high quality of the brand, and does not confuse users or indicate an official association.
+* Using the Boost Logo for commercial events (including sponsored ones), prior written approval is required. The event cannot appear to be officially endorsed or run by the Developers without written approval.
 
-== Logo reproduction requirements
+== Written Approval
+
+To obtain written approval, contact xref:oversight-committee.adoc#contact[].
+
+_Permission to use the Boost Logo is granted for as long as the usage is consistent with the terms and conditions herein. Usage of the Boost Logo not in accordance with this document is expressly prohibited._
+
+== Logo Reproduction Requirements
 
 Reproduction of the Boost Logo in compliance with the terms and conditions stated above must meet the following additional requirements:
 
@@ -69,9 +81,8 @@ Reproduction of the Boost Logo in compliance with the terms and conditions state
 * The logo may only appear once on any individual page, artwork, or product packaging.
 * The logo cannot be combined with any other artwork without prior written approval from the Alliance.
 
-Permission to use the Boost Logo is granted for as long as the usage is consistent with the terms and conditions herein. Usage of the Boost Logo not in accordance with this document and without written approval from Alliance is expressly prohibited.
-
 == See Also
 
+* xref:user-guide:ROOT:bsl.adoc[The Boost Software License]
 * xref:contributors-faq.adoc#boostsoftwarelicense[Contributors FAQ: Boost Software License]
 
