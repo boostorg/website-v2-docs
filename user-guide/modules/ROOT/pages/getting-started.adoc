@@ -609,7 +609,7 @@ Here's an example `CMakeLists.txt` file that uses Boost:
 [source,cmake]
 .CMakeLists.txt
 ----
-cmake_minimum_required(VERSION 3.0)
+cmake_minimum_required(VERSION 3.5)
 project(MyProject)
 
 find_package(Boost REQUIRED)
@@ -779,7 +779,7 @@ Edit the contents of `CMakeLists.txt`:
 [source,cmake]
 .CMakeLists.txt
 ----
-cmake_minimum_required(VERSION 3.0)
+cmake_minimum_required(VERSION 3.5)
 project(MyProject)
 
 find_package(Boost REQUIRED COMPONENTS json)
