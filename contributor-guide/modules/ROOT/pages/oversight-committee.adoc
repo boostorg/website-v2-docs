@@ -37,6 +37,7 @@ Boost's community of contributors and users is one of its most valuable assets. 
 
 Boost operates as part of the https://cppalliance.org/[C++ Alliance], a non-profit organization that ensures proper legal and financial management of Boost resources. The committee collaborates with the Alliance on these matters. If funding or sponsorships are received (for example, for infrastructure or events), the committee helps ensure these are used appropriately.
 
+[[contact]]
 == Contact Information
 
 Currently, to contact the committee either post on the `#boost` Slack channel, or email the https://lists.boost.org/mailman/listinfo.cgi/boost[Boost Developers Mailing List], clearly mentioning the "Fiscal Sponsorship Committee" as the intended recipient.
@@ -45,4 +46,5 @@ Currently, to contact the committee either post on the `#boost` Slack channel, o
 
 * xref:contributors-faq.adoc[]
 * xref:getting-involved.adoc[]
+* xref:docs/logo-policy-media-guide.adoc[]
 * xref:user-guide:ROOT:bsl.adoc[]

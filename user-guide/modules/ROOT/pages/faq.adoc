@@ -669,6 +669,10 @@ Refer to xref:task-simulation.adoc[].
 +
 The Boost libraries are licensed under the Boost Software License, a permissive free software license that allows you to use, modify, and distribute the software under minimal restrictions. Refer to xref:bsl.adoc[].
 
+. *Can I use the Boost Logo, after I have built software using the Boost libraries, to help promote my product?*
++
+Only with written permission from xref:contributor-guide:ROOT:oversight-committee.adoc[]. For full details refer to xref:contributor-guide:ROOT:docs/logo-policy-media-guide.adoc[].
+
 
 == Metaprogramming
 
