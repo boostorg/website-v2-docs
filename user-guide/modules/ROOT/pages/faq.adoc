@@ -19,6 +19,7 @@ This section contains answers to the common questions that new developers to Boo
 * <<Compatibility>>
 * <<Debugging>>
 * <<Dependencies>>
+* <<Documentation>>
 * <<ISO C++ Committee Meetings>>
 * <<Libraries>>
 * <<Licensing>>
@@ -526,6 +527,29 @@ There is also the https://pdimov.github.io/boostdep-report/[Boost Dependency Rep
 . *Are there generally available tools that help with dependency issues?*
 +
 You can use static analysis tools, like https://clang.llvm.org/extra/clang-tidy/[Clang-Tidy] or https://cppcheck.sourceforge.io/[Cppcheck], to analyze your application and see which parts of any dependency are actually being used. Once identified, you can both remove unnecessary headers or dependencies, and perhaps rewrite portions of your code to avoid unnecessary functionality.
+
+[[documentation]]
+== Documentation
+
+. *Who writes the documentation for a Boost library?*
++
+The library authors are responsible for all the documentation specific to their library. The authors are clearly the most knowledgeable on the design decisions, architecture, API calls, inner workings, and potential limitations of their library. Contributor guidelines on documentation help maintain consistency in styling and content across the library collection. Refer to xref:contributor-guide:ROOT:docs/layout.adoc[].
+
+. *If I find an issue with the documentation, or would like to suggest an improvement, can I make a formal request?*
++
+Yes you can, file an issue on the library. Typically library authors welcome feedback that enhances the useability of their work - refer to xref:reporting-issues.adoc[].
+
+. *Has any Boost library documentation been translated into languages other than English?*
++
+There is no formal localization of library documentation. However, translation efforts have existed at various times for Japanese, Chinese and Russian. Most current effort is into Japanese - refer to https://boostjp.github.io/[boostjp].
+
+. *If I wanted to translate my favorite library documentation into my native language, who do contact to get started?*
++
+The copyright ownership of library documentation remains with the documentation authors. Contact the authors via the https://lists.boost.org/mailman/listinfo.cgi/boost[Boost Developers Mailing List] if you are inspired to take on this task.
+
+. *Have there ever been efforts to localize not just the documentation but the API calls themselves?*
++
+Not for the Boost libraries. Microsoft did experiment with localized API calls many years ago, though the project was abandoned as way too complicated, unmaintainable, and not particularly useful.
 
 [[isocommitteemeetings]]
 == ISO C++ Committee Meetings
