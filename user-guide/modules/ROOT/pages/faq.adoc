@@ -25,6 +25,7 @@ This section contains answers to the common questions that new developers to Boo
 * <<Licensing>>
 * <<Metaprogramming>>
 * <<Modular Boost>>
+* <<Numbers>>
 * <<Other Languages>>
 * <<Production and Debug Builds>>
 * <<Releases>>
@@ -669,6 +670,10 @@ Refer to xref:task-simulation.adoc[].
 +
 The Boost libraries are licensed under the Boost Software License, a permissive free software license that allows you to use, modify, and distribute the software under minimal restrictions. Refer to xref:bsl.adoc[].
 
+. *Can I use the Boost Logo, after I have built software using the Boost libraries, to help promote my product?*
++
+Only with written permission from xref:contributor-guide:ROOT:oversight-committee.adoc[]. For full details refer to xref:contributor-guide:ROOT:docs/logo-policy-media-guide.adoc[].
+
 
 == Metaprogramming
 
@@ -767,6 +772,295 @@ Correct - backwards-compatibility should be maintained.
 +
 An exact timeline requires issues to be resolved, though later in 2024 is the current plan-of-record.
 
+== Numbers
+
+. *Are there any Boost libraries that extend floating point precision, and at what cost?*
++
+In pass:[C++], the precision of `float` and `double` types is determined by the IEEE 754 standard for floating-point arithmetic, which is used by nearly all modern compilers and hardware. A `float` (with 24 significant bits) is accurate to about 6 or 7 decimal places, a `double` (53 significant bits) to 15 to 17 decimal digits. A long double (80+ significant bits) extends this to 18 to 21 decimal digits. 
++
+Boost does not replace these types, but extends your range of options (using boost:multiprecision[]) with the type `cpp_dec_float_<N>`, where you decide the value of N. cpp_dec_float_50 would obviously give 50 decimal digits, and `cpp_dec_float_200` 200 decimal digits. For example:
++
+[source,cpp]
+----
+#include <boost/multiprecision/cpp_dec_float.hpp>
+using namespace boost::multiprecision;
+
+cpp_dec_float_50 pi("3.14159265358979323846264338327950288419716939937510");
+auto result = pi * pi;
+
+----
++
+[source,cpp]
+----
+#include <boost/multiprecision/cpp_dec_float.hpp>
+#include <iostream>
+
+using boost::multiprecision::cpp_dec_float_200;
+
+int main() {
+    cpp_dec_float_200 pi("3.1415926535897932384626433832795028841971693993751058209749445923078164062862089986280348253421170679"
+                         "8214808651328230664709384460955058223172535940812848111745028410270193852110555964462294895493038196");
+    
+    std::cout << std::setprecision(200) << pi << std::endl;
+}
+
+----
++
+boost:math[] adds high-quality special functions that integrate well with these types from boost:multiprecision[]. For example, `boost::math::gamma`, `boost::math::exp`, and `boost::math::lgamma` are available. Also, boost:qvm[] (quaternions, vectors, matrices) supports these custom precision types.
++
+The cost as you can imagine is performance, the benefit is extreme accuracy. Under the hood, `cpp_dec_float<N>` stores `N` decimal digits of precision, using a base-10 representation, and uses an array of limbs to manage arbitrary-length mantissas.
+
+. *Is there a Boost library that can help me with numbers like infinity, or the imaginary number that is the square root of -1?*
++
+Yes, there is support for `infinity`, `NaN` (Not a Number), and imaginary numbers through different libraries. boost:math[] includes constants and utilities for working with `infinity` and `NaN`, which are part of IEEE 754 floating-point standards.
++
+[source,cpp]
+----
+#include <boost/math/constants/constants.hpp>
+#include <limits>
+#include <iostream>
+#include <cmath>
+
+int main() {
+    double inf = std::numeric_limits<double>::infinity();
+    double nan = std::numeric_limits<double>::quiet_NaN();
+
+    std::cout << "Infinity: " << inf << "\n";
+    std::cout << "NaN: " << nan << "\n";
+
+    // Or to test for them:
+    if (std::isinf(inf)) std::cout << "This is infinity!\n";
+    if (std::isnan(nan)) std::cout << "This is NaN!\n";
+
+}
+
+----
++
+The complex functions of boost:math[] support imaginary numbers, such as the square root of -1.
++
+[source,cpp]
+----
+#include <boost/math/complex.hpp>
+#include <iostream>
+
+int main() {
+    std::complex<double> i(0.0, 1.0);
+    std::complex<double> result = std::sqrt(std::complex<double>(-1.0, 0.0));
+
+    std::cout << "sqrt(-1) = " << result << "\n"; // outputs (0,1)
+}
+
+----
++
+boost:multiprecision[] supports high-precision complex types, for example:
++
+[source,cpp]
+----
+#include <boost/multiprecision/cpp_dec_float.hpp>
+#include <boost/multiprecision/cpp_complex.hpp>
+
+using namespace boost::multiprecision;
+using complex50 = cpp_complex_50;
+
+int main() {
+    complex50 c(0, 1);
+    auto r = sqrt(complex50(-1, 0));
+    std::cout << r << "\n";  // (0,1)
+}
+
+----
+
+. *Can Boost.Multiprecision help calcuate a huge number of prime numbers?*
++
+Use the type `boost::multiprecision::cpp_int` to safely store large prime numbers beyond the capacity of the standard `int64_t`, and the core algorithm known as the _Sieve of Eratosthenes_:
++
+[source,cpp]
+----
+#include <boost/multiprecision/cpp_int.hpp>
+#include <iostream>
+#include <vector>
+#include <cmath>
+#include <chrono>
+
+using boost::multiprecision::cpp_int;
+
+std::vector<cpp_int> generate_primes(size_t count) {
+    // Rough upper bound for nth prime using approximation: n * log(n) * 1.2
+    size_t estimate = static_cast<size_t>(count * std::log(count) * 1.2);
+    std::vector<bool> is_prime(estimate + 1, true);
+    std::vector<cpp_int> primes;
+
+    is_prime[0] = is_prime[1] = false;
+
+    for (size_t i = 2; i <= estimate && primes.size() < count; ++i) {
+        if (is_prime[i]) {
+            primes.emplace_back(i); // Store as cpp_int
+            for (size_t j = i * 2; j <= estimate; j += i) {
+                is_prime[j] = false;
+            }
+        }
+    }
+
+    return primes;
+}
+
+int main() {
+    size_t prime_count = 100000; // adjust this to your needs (10 million may need 6+ GB of RAM)
+    
+    auto start = std::chrono::high_resolution_clock::now();
+    std::vector<cpp_int> primes = generate_primes(prime_count);
+    auto end = std::chrono::high_resolution_clock::now();
+
+    std::chrono::duration<double> elapsed = end - start;
+    std::cout << "Generated " << primes.size() << " primes.\n";
+    std::cout << "Largest prime found: " << primes.back() << "\n";
+    std::cout << "Time elapsed: " << elapsed.count() << " seconds.\n";
+
+    return 0;
+}
+
+----
+
+Note:: `cpp_int` is overkill for small primes, but essential if you're working with large ones, such as 512+ bit cryptographic primes.
+
+. *Am I right that Boost libraries do not improve on the performance of the standard floating point `double`?*
++
+Correct. Use `double` if you can, and only use higher precision types when you're accumulating billions of values and errors grow unbounded, or you need more than 17 digits of accuracy, or you're solving numerically unstable equations, or you're doing astronomy, cryptography, quantum physics, symbolic algebra, or working with scientific constants.
+
+Note:: A _numerically unstable equation_ is one in which small changes or errors in input, or intermediate calculations, can lead to large errors in the final result due to the amplification of rounding or truncation errors in floating-point arithmetic. Numerical instability often arises when subtracting two nearly equal numbers (called _catastrophic cancellation_), dividing by very small numbers, performing many iterations where small errors accumulate, and poor choice of algorithm. A catastrophic cancellation might occur when subtracting 1.0000001 from 1.0000002 - precision and rounding errors might distort the result. Stable algorithms preserve significant digits and give reliable results even with floating-point limits.
+
+. *What scientific numbers, similar to pi, require precision beyond that provided by the standard `double`?*
++
+Here is a table of the usual suspects:
++
+[cols="2,1,3",options="header",stripes=even,frame=none]
+|===
+| *Constant* | *Typical Digits Needed* | *Why `double` Isn't Enough*
+| π (pi) | 50-100+ | Needed with extreme accuracy in orbital mechanics, quantum computing, etc.
+| e (Euler's number) | 30-100+ | Used in high-precision financial models, calculus, and exponential growth systems.
+| γ (Euler-Mascheroni constant) | 50-100+ | Arises in analytic number theory and integrals.
+| φ (Golden ratio) | 30+ | Used in precise design and algorithmic ratios.
+| Planck's constant (h) | 25-100 | Central to quantum mechanics; precise modeling demands high precision.
+| Fine-structure constant (α) | 30-80 | Key in atomic physics and fundamental interactions.
+| Avogadro's number | 23+ | Often stored as a float, but high-accuracy simulations may demand higher precision.
+| Speed of light (c) | 17+ | For ultra-precise relativistic calculations.
+| Gravitational constant (G) | 20-100 | Known only to limited digits experimentally, but simulations may push precision.
+| Riemann zeta constants | 30-200+ | Arise in number theory and string theory.
+| Catalan's constant | 50+ | Appears in combinatorics and integrals.
+| Apéry's constant | 50-200 | Arises in irrationality proofs and advanced analysis.
+|===
+
+Note:: Precision can become an obsession. Pi has been computed to over 100 trillion digits, but NASA's orbital calculations use only around the first 15 digits of pi (so a `double` would work!).
+
+. *To avoid floating point numbers altogether, I could use fractions. For example, storing a third as 1 over 3 avoids using 0.33333 ad infinitum. Is there a Boost library that would make sense of numbers stored only as integer fractions?*
++
+Yes. boost:rational[] is a library designed specifically to represent and manipulate rational numbers — that is, numbers stored as fractions of two integers (such as, 1/3, 355/113).
++
+It avoids floating-point approximation entirely, preserving mathematical exactness throughout arithmetic operations. The library automatically normalizes (reduces) fractions - so 3/6 would be reduced to 1/2. And it can interoperate with `int`, `long`, or even `boost::multiprecision::cpp_int`. For example:
++
+[source,cpp]
+----
+#include <boost/rational.hpp>
+#include <iostream>
+
+int main() {
+    boost::rational<int> a(1, 3);  // 1/3
+    boost::rational<int> b(2, 5);  // 2/5
+
+    auto sum = a + b;              // 1/3 + 2/5 = 11/15
+    auto product = a * b;          // 1/3 * 2/5 = 2/15
+
+    std::cout << "Sum: " << sum.numerator() << "/" << sum.denominator() << "\n";
+    std::cout << "Product: " << product << "\n";  // prints as 2/15
+
+    // Comparison
+    if (a < b)
+        std::cout << "a is less than b\n";
+}
+
+----
+
+Note:: Using rational numbers there is a risk of integer overflow, so consider using large integers for inputs (`boost::multiprecision::cpp_int` or similar), and this approach is not ideal for numbers known to be irrational (square root of 2, and the scientific constants listed above).
+
+. *Can I use Boost.Multiprecision or Boost.Math to help with my project on RSA public-key encryption?*
++
+Yes. Starting with the basic algorithm for RSA (Rivest-Shamir-Adleman - the authors of the algorithm) which follows these steps:
++
+.. Choose two large prime numbers `p` and `q`
+.. Compute `n = p * q`
+.. Compute Euler's totient `ϕ(n) = (p-1)(q-1)`
+.. Choose public exponent `e` such that `1 < e < ϕ(n)` and `gcd(e,ϕ(n)) = 1`
+.. Compute private exponent `d` such that `e⋅d ≡ 1 mod ϕ(n)`
+.. Now you have: `public-key = (e,n)` and `private-key = (d,n)`
++
+We can now use `cpp_int` from boost:multiprecision[] to handle arbitrary-precision integers. And, if need be, you can use `is_prime` from boost:math[] for primality checks on larger randomly generated values (which you may want to add at a later date, using boost:random[]).
++
+[source,cpp]
+----
+#include <boost/multiprecision/cpp_int.hpp>
+#include <boost/integer/common_factor_rt.hpp>
+#include <iostream>
+
+using namespace boost::multiprecision;
+
+// Compute modular inverse of a modulo m using Extended Euclidean Algorithm
+cpp_int modinv(cpp_int a, cpp_int m) {
+    cpp_int m0 = m, t, q;
+    cpp_int x0 = 0, x1 = 1;
+
+    while (a > 1) {
+        q = a / m;
+        t = m;
+        m = a % m;
+        a = t;
+        t = x0;
+        x0 = x1 - q * x0;
+        x1 = t;
+    }
+
+    return (x1 < 0) ? x1 + m0 : x1;
+}
+
+int main() {
+    // Small primes for demo
+    cpp_int p = 61;
+    cpp_int q = 53;
+
+    cpp_int n = p * q;                     // n = 3233
+    cpp_int phi = (p - 1) * (q - 1);       // φ(n) = 3120
+
+    cpp_int e = 17; // Common public exponent
+    cpp_int d = modinv(e, phi);            // Compute private key
+
+    // Display keys
+    std::cout << "Public Key (e, n): (" << e << ", " << n << ")\n";
+    std::cout << "Private Key (d, n): (" << d << ", " << n << ")\n";
+
+    // Encrypt message
+    cpp_int message = 65;
+    cpp_int encrypted = powm(message, e, n); // m^e mod n
+    std::cout << "Encrypted message: " << encrypted << "\n";
+
+    // Decrypt message
+    cpp_int decrypted = powm(encrypted, d, n); // c^d mod n
+    std::cout << "Decrypted message: " << decrypted << "\n";
+
+    return 0;
+}
+
+----
+
+Note:: Consider using `independent_bits_engine` from boost:random[] for a clean way to get large random integers of fixed bit-width, and then consider very large prime numbers of perhaps 1024 bits.
+
+. *What does a 1024-bit prime number look like?*
++
+Here is one:
++
+[source,cpp]
+----
+cpp_int prime = 165918700393058288029118516503856682928352034064210292320510526037152431960844672521054555721941412725769027652540094762345484278576411078143188748708281181119556988860248537167684663864334811189453410905241474311369868568296877192226227785240656833746573473244854528133231976802973699288063056142727481235873
+
+----
 
 == Other Languages
 
