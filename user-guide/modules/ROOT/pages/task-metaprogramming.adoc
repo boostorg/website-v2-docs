@@ -19,7 +19,6 @@ Boost provides several libraries that are highly useful in metaprogramming, and 
 * <<Serialize a User-Defined Struct>>
 * <<Compile-time Type Checking>>
 * <<Add Tuple Processing at Runtime>>
-* <<Add Type-traits Filtering>>
 * <<Footnotes>>
 * <<See Also>>
 
@@ -35,7 +34,9 @@ Caution:: Metaprogramming in pass:[C++] is a complex topic that can lead to comp
 
 * boost:static-assert[]: Provides a macro for compile-time assertions. This can be useful to enforce constraints at compile time.
 
-Note:: boost:mpl[], boost:fusion[] and boost:preprocessor[], all still available in the Boost library, have been superseded by boost:mp11[] and boost:hana[].
+Notes:: boost:mpl[], boost:fusion[] and boost:preprocessor[], all still available in the Boost library, have been superseded by boost:mp11[] and boost:hana[].
++
+The code in this tutorial was written and tested using Microsoft Visual Studio (Visual C++ 2022, Console App project) with Boost version 1.88.0.
 
 == Metaprogramming Applications
 
@@ -357,97 +358,7 @@ Note:: Tag dispatching is handled by `hana::make_map`, and runtime tuple process
 ----
 Serializing (Integer): 42
 Serializing (Floating Point): 3.14
-Serializing (String): Boost Rocks!
-Serializing (Custom Struct) -> { Name: Alice, Age: 30 }
-
-----
-
-== Add Type-traits Filtering
-
-_Type filtering_ will allow us to selectively process elements of the tuple based on type traits, filtering out elements that don't match a given criterion.
-
-In the following code, `hana::filter` removes non-serializable types, for example the `nullptr` value is ignored. Only arithmetic, `std::string`, and custom structs are processed.
-
-[source,cpp]
-----
-#include <boost/hana.hpp>
-#include <boost/mp11.hpp>
-#include <boost/type_traits.hpp>
-#include <iostream>
-#include <string>
-
-namespace hana = boost::hana;
-namespace mp = boost::mp11;
-
-// Custom struct
-struct Person {
-    std::string name;
-    int age;
-};
-
-// Overload `operator<<` for printing
-std::ostream& operator<<(std::ostream& os, const Person& p) {
-    return os << "{ Name: " << p.name << ", Age: " << p.age << " }";
-}
-
-// Tag-based dispatching
-auto classify = hana::make_map(
-    hana::make_pair(hana::type_c<int>, "Integer"),
-    hana::make_pair(hana::type_c<double>, "Floating Point"),
-    hana::make_pair(hana::type_c<std::string>, "String"),
-    hana::make_pair(hana::type_c<Person>, "Custom Struct")
-);
-
-// Serialize function
-template <typename T>
-void serialize(const T& value) {
-    if constexpr (boost::is_arithmetic<T>::value || std::is_same<T, std::string>::value) {
-        std::cout << "Serializing (" << hana::find(classify, hana::type_c<T>).value() << "): " << value << "\n";
-    } else if constexpr (boost::is_class<T>::value) {
-        std::cout << "Serializing (Custom Struct) -> " << value << "\n";
-    } else {
-        std::cout << "Skipping non-serializable type!\n";
-    }
-}
-
-// Process a tuple
-template <typename Tuple>
-void auto_generate_serializers(Tuple data) {
-
-    // Filter only serializable types (arithmetic, strings, and custom structs)
-    auto serializable_data = hana::filter(data, [](auto x) {
-        using T = typename decltype(x)::type;
-        return boost::is_arithmetic<T>::value || std::is_same<T, std::string>::value || boost::is_class<T>::value;
-    });
-
-    // Process the filtered data
-    hana::for_each(serializable_data, [](auto x) {
-        serialize(x);
-    });
-}
-
-int main() {
-
-    // Declare a tuple (runtime and compile-time)
-    auto data = hana::make_tuple(42, 3.14, "Boost Rocks!", Person{"Alice", 30}, nullptr);
-
-    // Automatically process only serializable elements
-    auto_generate_serializers(data);
-
-    return 0;
-}
-
-----
-
-Note:: The data is filtered before `hana::for_each`, reducing unnecessary operations.
-
-=== Output
-
-[source,text]
-----
-Serializing (Integer): 42
-Serializing (Floating Point): 3.14
-Serializing (String): Boost Rocks!
+Skipping non-serializable type!
 Serializing (Custom Struct) -> { Name: Alice, Age: 30 }
 
 ----

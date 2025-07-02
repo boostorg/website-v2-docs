@@ -43,6 +43,8 @@ Here are some Boost libraries that are useful in building system components:
 
 * boost:process[] : This library allows you to create child processes, setup their environment and provides means to communicate with them asynchronously through various streams.
 
+Note:: The code in this tutorial was written and tested using Microsoft Visual Studio (Visual C++ 2022, Console App project) with Boost version 1.88.0.
+
 == Sample System File and Error Handling
 
 Two core features of most systems are in file handling and robust error reporting. For a simpler sample we'll create an app that uses boost:filesystem[] to manipulate files and directories, and boost:system[] to capture and display specific errors.
@@ -64,8 +66,12 @@ namespace sys = boost::system;
 //  Check and report system-specific errors
 void handle_error(const sys::error_code& ec, const std::string& action) {
     if (ec) {
-        std::cerr << "Error while " << action << ": " << ec.message() 
-                  << " (Code: " << ec.value() << ")\n";
+        std::cerr << "Error while " << action << ": " << ec.message()
+            << " (Code: " << ec.value() << ")\n";
+    }
+    else
+    {
+        std::cout << "All OK while " << action << '\n';
     }
 }
 
@@ -117,11 +123,13 @@ int main() {
 
 Note:: boost:filesystem[] ensures directory and file management is platform-independent.
 
+Tip:: The first time you run this code, comment out the code to remove the file and directory at the end. After running the code, locate `example_directory`, then you can both verify the content of `example_file.txt` and record the parent directory of `example_directory` - which you will need in later examples.
+
 == Support Configuration Settings
 
 We are now going to include boost:program_options[] to allow configuration settings via command-line arguments and configuration files.
 
-The code now allows users to specify directory and file names, reads settings from a `.ini` file, and uses default values when one is not specified.
+The code now allows users to specify directory and file names, reads settings from a `config.ini` file, and uses default values when one is not specified or located.
 
 [source,cpp]
 ----
@@ -138,8 +146,12 @@ namespace po = boost::program_options;
 //  Check and report system-specific errors
 void handle_error(const sys::error_code& ec, const std::string& action) {
     if (ec) {
-        std::cerr << "Error while " << action << ": " << ec.message() 
-                  << " (Code: " << ec.value() << ")\n";
+        std::cerr << "Error while " << action << ": " << ec.message()
+            << " (Code: " << ec.value() << ")\n";
+    }
+    else
+    {
+        std::cout << "All OK while " << action << '\n';
     }
 }
 
@@ -230,7 +242,7 @@ The command line options accepted by the sample are:
 | `--help` or `-h` | Display available options.
 |===
 
-The following is an example `config.ini` file:
+The following is an example `config.ini` file, create it and store it to the parent directory you recorded in the previous example.
 
 [source,text]
 ----
@@ -275,9 +287,14 @@ void handle_error(const sys::error_code& ec, const std::string& action) {
         std::cerr << "Error while " << action << ": " << ec.message()
                   << " (Code: " << ec.value() << ")\n";
     }
+    else
+    {
+        std::cout << "All OK while " << action << '\n';
+    }
 }
 
 int main(int argc, char* argv[]) {
+
     // Default configuration values
     std::string dir = "default_directory";
     std::string filename = "default_file.txt";
@@ -378,19 +395,21 @@ int main(int argc, char* argv[]) {
 
 ----
 
-Note:: This code measures execution time in microseconds for each operation.
+Note:: The code measures operation execution time in microseconds.
 
-The following is example output from running our sample.
+The following is example output from running the sample.
 
 [source,text]
 ----
-$ ./program --dir=my_data --file=myfile.txt
-Directory creation took: 187 microseconds
-File writing took: 112 microseconds
+All OK while creating directory
+Directory creation took: 459 microseconds
+File writing took: 631 microseconds
 File content: Hello, Boost.Program_Options, Boost.Filesystem, and Boost.Chrono!
-File reading took: 98 microseconds
-File deletion took: 75 microseconds
-Directory deletion took: 88 microseconds
+File reading took: 1385 microseconds
+All OK while removing file
+File deletion took: 339 microseconds
+All OK while removing directory
+Directory deletion took: 386 microseconds
 
 ----
 
