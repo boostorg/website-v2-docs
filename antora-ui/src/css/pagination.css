@@ -86,3 +86,9 @@ Spirit style navigation
   border-width: 0;
   vertical-align: middle;
 }
+
+.spirit-nav .disabled {
+  opacity: 0.35;
+  cursor: not-allowed;
+  pointer-events: none;
+}
