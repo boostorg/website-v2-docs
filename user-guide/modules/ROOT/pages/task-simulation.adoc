@@ -16,7 +16,6 @@ Creating a real-time simulation of objects or processes involves various aspects
 * <<Simulate Movement in 3D Space>>
 * <<Add Collision Detection>>
 * <<Deformation on Impact>>
-* <<Narrate the Action>>
 * <<See Also>>
 
 == Libraries
@@ -45,6 +44,8 @@ Here are some libraries that may be helpful:
 
 * boost:log[]: Supports severity levels, which you can use to categorize and filter your log messages. This can help you control the amount of log output and focus on what's important.
 
+Note:: The code in this tutorial was written and tested using Microsoft Visual Studio (Visual C++ 2022, Console App project) with Boost version 1.88.0.
+
 == Simulate Movement in 3D Space
 
 The following sample simulates the movement of a geometric shape (a 3D box) in space using boost:geometry[] for shape representation, boost:chrono[] for timing, and boost:algorithm[] for numerical adjustments, such as scaling, normalization and smoothing movement (avoiding unrealistic motion).
@@ -57,6 +58,7 @@ The simulation itself runs for just a few seconds.
 #include <boost/geometry.hpp>
 #include <boost/chrono.hpp>
 #include <boost/algorithm/clamp.hpp>
+#include <boost/thread/thread.hpp>
 
 namespace bg = boost::geometry;
 using namespace boost::chrono;
@@ -65,22 +67,58 @@ using namespace boost::chrono;
 using point3d = bg::model::point<double, 3, bg::cs::cartesian>;
 using box3d = bg::model::box<point3d>;
 
-// Function to update the position of the box
+const int xcoord = 0;
+const int ycoord = 1;
+const int zcoord = 2;
+const double increment = 0.2;       // Guideline time increment in seconds
+
+// Retrieve a point3d co-ordinate
+double getCoord(int i, point3d p)
+{
+    switch (i)
+    {
+    case 0: return bg::get<xcoord>(p);
+    case 1: return bg::get<ycoord>(p);
+    case 2: return bg::get<zcoord>(p);
+    }
+}
+
+// Set a point3d co-ordinate
+void setCoord(int i, point3d& p, double v)
+{
+    switch (i)
+    {
+    case 0: bg::set<xcoord>(p, v);
+        break;
+
+    case 1: bg::set<ycoord>(p, v);
+        break;
+
+    case 2: bg::set<zcoord>(p, v);
+        break;
+
+    }
+}
+
+// Update the position of the box
 void move_box(box3d& box, const point3d& velocity, double delta_time) {
+
+    // Temporary variables for use in the movement calculations
     point3d min_corner = box.min_corner();
     point3d max_corner = box.max_corner();
 
-    // Update position using velocity * time step
+    // Update the box position using velocity * delta time
     for (int i = 0; i < 3; ++i) {
-        double new_min = bg::get<i>(min_corner) + bg::get<i>(velocity) * delta_time;
-        double new_max = bg::get<i>(max_corner) + bg::get<i>(velocity) * delta_time;
 
-        // Clamp to avoid excessive movement (Boost.Algorithm)
+        double new_min = getCoord(i,min_corner) + (getCoord(i,velocity) * delta_time);
+        double new_max = getCoord(i,max_corner) + (getCoord(i,velocity) * delta_time);
+
+        // Example clamp to avoid excessive movement (Boost.Algorithm)
         new_min = boost::algorithm::clamp(new_min, -100.0, 100.0);
         new_max = boost::algorithm::clamp(new_max, -100.0, 100.0);
 
-        bg::set<i>(min_corner, new_min);
-        bg::set<i>(max_corner, new_max);
+        setCoord(i, min_corner, new_min);
+        setCoord(i, max_corner, new_max);
     }
 
     // Update the box with new corners
@@ -88,6 +126,10 @@ void move_box(box3d& box, const point3d& velocity, double delta_time) {
 }
 
 int main() {
+
+    // Set the sleep duration based on the guideline increment in seconds
+    boost::chrono::duration<double> sleep_duration(increment);
+
     // Create a 3D box (min corner and max corner)
     box3d box(point3d(0.0, 0.0, 0.0), point3d(1.0, 1.0, 1.0));
 
@@ -96,37 +138,56 @@ int main() {
 
     // Start timing
     steady_clock::time_point start_time = steady_clock::now();
+    steady_clock::time_point current_time;
+    steady_clock::time_point previous_time = start_time;
+    double elapsed_seconds, increment_seconds;
 
-    // Run simulation for 5 seconds
+    // Run simulation for 50 increments
     for (int i = 0; i < 50; ++i) {
-        // Measure elapsed time
-        steady_clock::time_point current_time = steady_clock::now();
-        double elapsed_seconds = duration<double>(current_time - start_time).count();
 
-        // Move the box
-        move_box(box, velocity, 0.1); // Simulate movement every 0.1 sec
+        // Measure elapsed time - both from the start, and from the previous move
+        current_time = steady_clock::now();
+        elapsed_seconds = duration<double>(current_time - start_time).count();
+        increment_seconds = duration<double>(current_time - previous_time).count();
+        previous_time = current_time;
 
-        // Print updated position
+        // Move the box every increment, noting the increment will vary by tiny fractions of a second each time.
+        move_box(box, velocity, increment_seconds);
+
+        // Print times and the updated box position
         point3d min_corner = box.min_corner();
         point3d max_corner = box.max_corner();
         std::cout << "Time: " << elapsed_seconds << " sec | "
-                  << "Box Position: Min(" 
-                  << bg::get<0>(min_corner) << ", " 
-                  << bg::get<1>(min_corner) << ", " 
-                  << bg::get<2>(min_corner) << ") "
-                  << " Max(" 
-                  << bg::get<0>(max_corner) << ", " 
-                  << bg::get<1>(max_corner) << ", " 
-                  << bg::get<2>(max_corner) << ")\n";
+            << "Inc: " << increment_seconds << " sec | "
+            << "Box Position: Min("
+            << getCoord(xcoord,min_corner) << ", "
+            << getCoord(ycoord,min_corner) << ", "
+            << getCoord(zcoord,min_corner) << ") "
+            << " Max("
+            << getCoord(xcoord, max_corner) << ", "
+            << getCoord(ycoord, max_corner) << ", "
+            << getCoord(zcoord, max_corner) << ")\n";
 
-        // Sleep for simulation step
-        boost::this_thread::sleep_for(milliseconds(100));
+        boost::this_thread::sleep_for(sleep_duration);       
     }
 
     return 0;
 }
 
 ----
+
+An example of the output:
+
+[source,text]
+----
+Time: 0.209428 sec | Inc: 0.209424 sec | Box Position: Min(0.104714, 0.0628285, -0.0418857)  Max(1.10471, 1.06283, 0.958114)
+Time: 0.429642 sec | Inc: 0.220214 sec | Box Position: Min(0.214821, 0.128893, -0.0859284)  Max(1.21482, 1.12889, 0.914072)
+Time: 0.648115 sec | Inc: 0.218473 sec | Box Position: Min(0.324058, 0.194435, -0.129623)  Max(1.32406, 1.19443, 0.870377)
+......
+
+----
+
+Note:: The time increment varies slightly on each loop, and this value is used when calculating movement.
 
 == Add Collision Detection
 
@@ -140,7 +201,7 @@ Collision detection is handled by checking if the box's min/max corners exceed t
 #include <boost/geometry.hpp>
 #include <boost/chrono.hpp>
 #include <boost/algorithm/clamp.hpp>
-#include <boost/thread.hpp>
+#include <boost/thread/thread.hpp>
 
 namespace bg = boost::geometry;
 using namespace boost::chrono;
@@ -149,43 +210,95 @@ using namespace boost::chrono;
 using point3d = bg::model::point<double, 3, bg::cs::cartesian>;
 using box3d = bg::model::box<point3d>;
 
-// Function to check and handle collisions with the bounding box
-void handle_collision(box3d& box, point3d& velocity, const box3d& bounds) {
-    for (int i = 0; i < 3; ++i) {
-        double min_pos = bg::get<i>(box.min_corner());
-        double max_pos = bg::get<i>(box.max_corner());
-        double bound_min = bg::get<i>(bounds.min_corner());
-        double bound_max = bg::get<i>(bounds.max_corner());
+const int xcoord = 0;
+const int ycoord = 1;
+const int zcoord = 2;
+const double increment = 0.2;       // Guideline time increment in seconds
 
-        // If box collides with environment limits, reverse velocity
-        if (min_pos <= bound_min || max_pos >= bound_max) {
-            bg::set<i>(velocity, -bg::get<i>(velocity));  // Reverse direction
-        }
+// Retrieve a point3d co-ordinate
+double getCoord(int i, point3d p)
+{
+    switch (i)
+    {
+    case 0: return bg::get<xcoord>(p);
+    case 1: return bg::get<ycoord>(p);
+    case 2: return bg::get<zcoord>(p);
     }
 }
 
-// Function to update the position of the box
-void move_box(box3d& box, point3d& velocity, double delta_time) {
+// Set a point3d co-ordinate
+void setCoord(int i, point3d& p, double v)
+{
+    switch (i)
+    {
+    case 0: bg::set<xcoord>(p, v);
+        break;
+
+    case 1: bg::set<ycoord>(p, v);
+        break;
+
+    case 2: bg::set<zcoord>(p, v);
+        break;
+
+    }
+}
+
+// Update the position of the box
+void move_box(box3d& box, const point3d& velocity, double delta_time) {
+
+    // Temporary variables for use in the movement calculations
     point3d min_corner = box.min_corner();
     point3d max_corner = box.max_corner();
 
+    // Update the box position using velocity * delta time
     for (int i = 0; i < 3; ++i) {
-        double new_min = bg::get<i>(min_corner) + bg::get<i>(velocity) * delta_time;
-        double new_max = bg::get<i>(max_corner) + bg::get<i>(velocity) * delta_time;
 
-        bg::set<i>(min_corner, new_min);
-        bg::set<i>(max_corner, new_max);
+        double new_min = getCoord(i,min_corner) + (getCoord(i,velocity) * delta_time);
+        double new_max = getCoord(i,max_corner) + (getCoord(i,velocity) * delta_time);
+
+        // Example clamp to avoid excessive movement (Boost.Algorithm)
+        new_min = boost::algorithm::clamp(new_min, -100.0, 100.0);
+        new_max = boost::algorithm::clamp(new_max, -100.0, 100.0);
+
+        setCoord(i, min_corner, new_min);
+        setCoord(i, max_corner, new_max);
     }
 
     // Update the box with new corners
     box = box3d(min_corner, max_corner);
 }
 
-int main() {
-    // Define the 3D simulation space (bounding box)
-    box3d bounds(point3d(-10.0, -10.0, -10.0), point3d(10.0, 10.0, 10.0));
+// Function to check and handle collisions with the bounding box
+void handle_collision(box3d& box, point3d& velocity, const box3d& bounds) {
+    for (int i = 0; i < 3; ++i) {
+        double min_pos = getCoord(i, box.min_corner());
+        double max_pos = getCoord(i, box.max_corner());
+        double bound_min = getCoord(i, bounds.min_corner());
+        double bound_max = getCoord(i, bounds.max_corner());
 
-    // Create a moving 3D box
+        // If box collides with environment limits, reverse velocity
+        if (min_pos <= bound_min || max_pos >= bound_max) {
+            setCoord(i, velocity, -getCoord(i, velocity));              // Reverse direction
+            double impact_force = std::abs(getCoord(i,velocity));       // Impact force = velocity along the impact axis
+           std::cout << "\nCollision with impact force: " << impact_force << "\n"
+                << "New velocity : ("
+                << getCoord(xcoord, velocity) << ", "
+                << getCoord(ycoord, velocity) << ", "
+                << getCoord(zcoord, velocity) << ")\n\n";
+        }
+    }
+}
+
+
+int main() {
+
+    // Set the sleep duration based on the guideline increment in seconds
+    boost::chrono::duration<double> sleep_duration(increment);
+
+    // Define the 3D simulation space (bounding box)
+    box3d bounds(point3d(-5.0, -5.0, -5.0), point3d(5.0, 5.0, 5.0));
+
+    // Create a 3D box (min corner and max corner)
     box3d box(point3d(0.0, 0.0, 0.0), point3d(1.0, 1.0, 1.0));
 
     // Define velocity (units per second)
@@ -193,48 +306,71 @@ int main() {
 
     // Start timing
     steady_clock::time_point start_time = steady_clock::now();
+    steady_clock::time_point current_time;
+    steady_clock::time_point previous_time = start_time;
+    double elapsed_seconds, increment_seconds;
 
-    // Run simulation for 5 seconds
-    for (int i = 0; i < 50; ++i) {
-        // Measure elapsed time
-        steady_clock::time_point current_time = steady_clock::now();
-        double elapsed_seconds = duration<double>(current_time - start_time).count();
+    // Run simulation for 80 increments
+    for (int i = 0; i < 80; ++i) {
 
-        // Move the box
-        move_box(box, velocity, 0.1);
+        // Measure elapsed time - both from the start, and from the previous move
+        current_time = steady_clock::now();
+        elapsed_seconds = duration<double>(current_time - start_time).count();
+        increment_seconds = duration<double>(current_time - previous_time).count();
+        previous_time = current_time;
+
+        // Move the box every increment, noting the increment will vary by tiny fractions of a second each time.
+        move_box(box, velocity, increment_seconds);
 
         // Check for collision
         handle_collision(box, velocity, bounds);
 
-        // Print updated position
+        // Print times and the updated box position
         point3d min_corner = box.min_corner();
         point3d max_corner = box.max_corner();
         std::cout << "Time: " << elapsed_seconds << " sec | "
-                  << "Box Position: Min(" 
-                  << bg::get<0>(min_corner) << ", " 
-                  << bg::get<1>(min_corner) << ", " 
-                  << bg::get<2>(min_corner) << ") "
-                  << " Max(" 
-                  << bg::get<0>(max_corner) << ", " 
-                  << bg::get<1>(max_corner) << ", " 
-                  << bg::get<2>(max_corner) << ")\n";
+            << "Inc: " << increment_seconds << " sec | "
+            << "Box Position: Min("
+            << getCoord(xcoord,min_corner) << ", "
+            << getCoord(ycoord,min_corner) << ", "
+            << getCoord(zcoord,min_corner) << ") "
+            << " Max("
+            << getCoord(xcoord, max_corner) << ", "
+            << getCoord(ycoord, max_corner) << ", "
+            << getCoord(zcoord, max_corner) << ")\n";
 
-        // Sleep for simulation step
-        boost::this_thread::sleep_for(milliseconds(100));
+        boost::this_thread::sleep_for(sleep_duration);       
     }
 
     return 0;
 }
 
 ----
-Note:: Some features of boost:thread[] have been added to the sample. Ultimately, different objects and processes could be simulated simultaneously in different threads.
 
+Note:: An unlikely event perhaps, but a collision between the box and two or three sides of the bounding area will be handled by this code.
+
+
+An example of the output:
+
+[source,text]
+----
+Time: 7.76744 sec | Inc: 0.2183 sec | Box Position: Min(3.88372, 2.33023, -1.55349)  Max(4.88372, 3.33023, -0.553488)
+Time: 7.98306 sec | Inc: 0.215622 sec | Box Position: Min(3.99153, 2.39492, -1.59661)  Max(4.99153, 3.39492, -0.596613)
+
+Collision with impact force: 0.5
+New velocity : (-0.5, 0.3, -0.2)
+
+Time: 8.19834 sec | Inc: 0.21528 sec | Box Position: Min(4.09917, 2.4595, -1.63967)  Max(5.09917, 3.4595, -0.639669)
+Time: 8.41678 sec | Inc: 0.218435 sec | Box Position: Min(3.98995, 2.52503, -1.68336)  Max(4.98995, 3.52503, -0.683356)
+......
+
+----
 
 == Deformation on Impact
 
-Collisions rarely have no consequences. To simulate deformation on impact, we can modify the shape of the box when it collides with a boundary. The deformation will depend on the impact velocity, and we'll again use the scaling features of boost:geometry[], to adjust the box shape dynamically.
+Collisions rarely have no consequences. To simulate deformation on impact, we can modify the shape of the box when it collides with a boundary.
 
-The box will compress (scale) along the axis of impact, based on the velocity, and will slowly return to its original shape over time.
+The box will deform along the axis of impact, based on the velocity.
 
 [source,cpp]
 ----
@@ -242,7 +378,7 @@ The box will compress (scale) along the axis of impact, based on the velocity, a
 #include <boost/geometry.hpp>
 #include <boost/chrono.hpp>
 #include <boost/algorithm/clamp.hpp>
-#include <boost/thread.hpp>
+#include <boost/thread/thread.hpp>
 
 namespace bg = boost::geometry;
 using namespace boost::chrono;
@@ -250,6 +386,47 @@ using namespace boost::chrono;
 // Define a 3D box with min and max corners
 using point3d = bg::model::point<double, 3, bg::cs::cartesian>;
 using box3d = bg::model::box<point3d>;
+
+const int xcoord = 0;
+const int ycoord = 1;
+const int zcoord = 2;
+const double increment = 0.2;       // Guideline time increment in seconds
+
+// Retrieve a point3d co-ordinate
+double getCoord(int i, point3d p)
+{
+    switch (i)
+    {
+    case 0: return bg::get<xcoord>(p);
+    case 1: return bg::get<ycoord>(p);
+    case 2: return bg::get<zcoord>(p);
+    }
+}
+
+// Set a point3d co-ordinate
+void setCoord(int i, point3d& p, double v)
+{
+    switch (i)
+    {
+    case 0: bg::set<xcoord>(p, v);
+        break;
+
+    case 1: bg::set<ycoord>(p, v);
+        break;
+
+    case 2: bg::set<zcoord>(p, v);
+        break;
+
+    }
+}
+
+// To verify deformation, calculate the volume of the box
+double volume(const box3d& box) {
+    double dx = getCoord(xcoord, box.max_corner()) - getCoord(xcoord, box.min_corner());
+    double dy = getCoord(ycoord, box.max_corner()) - getCoord(ycoord, box.min_corner());
+    double dz = getCoord(zcoord, box.max_corner()) - getCoord(zcoord, box.min_corner());
+    return dx * dy * dz;
+}
 
 // Function to deform the box upon collision
 void deform_box(box3d& box, int axis, double impact_force) {
@@ -262,253 +439,112 @@ void deform_box(box3d& box, int axis, double impact_force) {
     deformation = boost::algorithm::clamp(deformation, 0.7, 1.0);  // Prevent over-deformation
 
     // Scale the box on the axis of impact
-    double center = (bg::get<axis>(min_corner) + bg::get<axis>(max_corner)) / 2.0;
-    bg::set<axis>(min_corner, center - (center - bg::get<axis>(min_corner)) * deformation);
-    bg::set<axis>(max_corner, center + (bg::get<axis>(max_corner) - center) * deformation);
+    double center = (getCoord(axis,min_corner) + getCoord(axis,max_corner)) / 2.0;
+    setCoord(axis,min_corner, center - (center - getCoord(axis,min_corner)) * deformation);
+    setCoord(axis,max_corner, center + (getCoord(axis,max_corner) - center) * deformation);
 
     // Update the box
     box = box3d(min_corner, max_corner);
 }
 
-// Function to gradually restore box shape
-void restore_box(box3d& box, const box3d& original_box, double restore_speed) {
-    for (int i = 0; i < 3; ++i) {
-        double orig_min = bg::get<i>(original_box.min_corner());
-        double orig_max = bg::get<i>(original_box.max_corner());
-        double curr_min = bg::get<i>(box.min_corner());
-        double curr_max = bg::get<i>(box.max_corner());
+// Update the position of the box
+void move_box(box3d& box, const point3d& velocity, double delta_time) {
 
-        // Gradually move towards original shape
-        bg::set<i>(box.min_corner(), curr_min + (orig_min - curr_min) * restore_speed);
-        bg::set<i>(box.max_corner(), curr_max + (orig_max - curr_max) * restore_speed);
+    // Temporary variables for use in the movement calculations
+    point3d min_corner = box.min_corner();
+    point3d max_corner = box.max_corner();
+
+    // Update the box position using velocity * delta time
+    for (int i = 0; i < 3; ++i) {
+
+        double new_min = getCoord(i,min_corner) + (getCoord(i,velocity) * delta_time);
+        double new_max = getCoord(i,max_corner) + (getCoord(i,velocity) * delta_time);
+
+        // Example clamp to avoid excessive movement (Boost.Algorithm)
+        new_min = boost::algorithm::clamp(new_min, -100.0, 100.0);
+        new_max = boost::algorithm::clamp(new_max, -100.0, 100.0);
+
+        setCoord(i, min_corner, new_min);
+        setCoord(i, max_corner, new_max);
     }
+
+    // Update the box with new corners
+    box = box3d(min_corner, max_corner);
 }
 
-// Function to check for collision and apply deformation
+// Function to check and handle collisions with the bounding box
 void handle_collision(box3d& box, point3d& velocity, const box3d& bounds) {
     for (int i = 0; i < 3; ++i) {
-        double min_pos = bg::get<i>(box.min_corner());
-        double max_pos = bg::get<i>(box.max_corner());
-        double bound_min = bg::get<i>(bounds.min_corner());
-        double bound_max = bg::get<i>(bounds.max_corner());
+        double min_pos = getCoord(i, box.min_corner());
+        double max_pos = getCoord(i, box.max_corner());
+        double bound_min = getCoord(i, bounds.min_corner());
+        double bound_max = getCoord(i, bounds.max_corner());
 
-        // If collision occurs, reverse velocity and deform box
+        // If box collides with environment limits, reverse velocity
         if (min_pos <= bound_min || max_pos >= bound_max) {
-            double impact_force = std::abs(bg::get<i>(velocity));  // Higher velocity = more deformation
-            bg::set<i>(velocity, -bg::get<i>(velocity));  // Reverse direction
-            deform_box(box, i, impact_force);  // Apply deformation
+            setCoord(i, velocity, -getCoord(i, velocity));          // Reverse direction
+            double impact_force = std::abs(getCoord(i,velocity));   // Higher velocity = more deformation
+            deform_box(box, i, impact_force);                       // Apply deformation
+            std::cout << "\nCollision with impact force: " << impact_force << "\n"
+                << "New velocity : ("
+                << getCoord(xcoord, velocity) << ", "
+                << getCoord(ycoord, velocity) << ", "
+                << getCoord(zcoord, velocity) << "), Volume of box: "
+                << volume(box) << "\n\n";
         }
     }
 }
 
-// Function to move the box
-void move_box(box3d& box, point3d& velocity, double delta_time) {
-    point3d min_corner = box.min_corner();
-    point3d max_corner = box.max_corner();
-
-    for (int i = 0; i < 3; ++i) {
-        double new_min = bg::get<i>(min_corner) + bg::get<i>(velocity) * delta_time;
-        double new_max = bg::get<i>(max_corner) + bg::get<i>(velocity) * delta_time;
-
-        bg::set<i>(min_corner, new_min);
-        bg::set<i>(max_corner, new_max);
-    }
-
-    // Update box with new position
-    box = box3d(min_corner, max_corner);
-}
-
 int main() {
-    // Define the simulation space (bounding box)
-    box3d bounds(point3d(-10.0, -10.0, -10.0), point3d(10.0, 10.0, 10.0));
 
-    // Create a moving 3D box
+    // Set the sleep duration based on the guideline increment in seconds
+    boost::chrono::duration<double> sleep_duration(increment);
+
+    // Define the 3D simulation space (bounding box)
+    box3d bounds(point3d(-5.0, -5.0, -5.0), point3d(5.0, 5.0, 5.0));
+
+    // Create a 3D box (min corner and max corner)
     box3d box(point3d(0.0, 0.0, 0.0), point3d(1.0, 1.0, 1.0));
-    box3d original_box = box;  // Store original shape
 
-    // Define velocity
+    // Define velocity (units per second)
     point3d velocity(0.5, 0.3, -0.2);
 
     // Start timing
     steady_clock::time_point start_time = steady_clock::now();
+    steady_clock::time_point current_time;
+    steady_clock::time_point previous_time = start_time;
+    double elapsed_seconds, increment_seconds;
 
-    // Run simulation for 5 seconds
-    for (int i = 0; i < 50; ++i) {
-        steady_clock::time_point current_time = steady_clock::now();
-        double elapsed_seconds = duration<double>(current_time - start_time).count();
+    // Run simulation for 80 increments
+    for (int i = 0; i < 80; ++i) {
 
-        // Move the box
-        move_box(box, velocity, 0.1);
+        // Measure elapsed time - both from the start, and from the previous move
+        current_time = steady_clock::now();
+        elapsed_seconds = duration<double>(current_time - start_time).count();
+        increment_seconds = duration<double>(current_time - previous_time).count();
+        previous_time = current_time;
 
-        // Check for collision
-        handle_collision(box, velocity, bounds);
-
-        // Restore shape gradually
-        restore_box(box, original_box, 0.1);
-
-        // Print updated position and deformation
-        point3d min_corner = box.min_corner();
-        point3d max_corner = box.max_corner();
-        std::cout << "Time: " << elapsed_seconds << " sec | "
-                  << "Box Min(" << bg::get<0>(min_corner) << ", " << bg::get<1>(min_corner) << ", " << bg::get<2>(min_corner) << ") "
-                  << " Max(" << bg::get<0>(max_corner) << ", " << bg::get<1>(max_corner) << ", " << bg::get<2>(max_corner) << ")\n";
-
-        // Sleep for simulation step
-        boost::this_thread::sleep_for(milliseconds(100));
-    }
-
-    return 0;
-}
-
-----
-
-== Narrate the Action
-
-In any simulation, whether it be for testing and evaluation of a design, or for a game, or any other purpose, it is usually important to record the significant events in some way. To keep our sample simple, we'll dynamically generate descriptive narration for each collision.
-
-The program now describes impacts in a human-readable way based on the velocity and axis of impact - the harder the impact the more dramatic the wording! And if collisions are complex, say with multiple axes, all events are described.
-
-[source,cpp]
-----
-#include <iostream>
-#include <boost/geometry.hpp>
-#include <boost/chrono.hpp>
-#include <boost/algorithm/clamp.hpp>
-#include <boost/algorithm/string/join.hpp>
-#include <boost/algorithm/string.hpp>
-#include <boost/thread.hpp>
-
-namespace bg = boost::geometry;
-using namespace boost::chrono;
-
-// Define a 3D box with min and max corners
-using point3d = bg::model::point<double, 3, bg::cs::cartesian>;
-using box3d = bg::model::box<point3d>;
-
-// Generate dynamic collision messages
-void print_collision_message(int axis, double impact_force, bool multiple_axes) {
-    std::vector<std::string> impact_descriptions;
-    
-    std::string axis_desc;
-    if (axis == 0) axis_desc = "X";
-    else if (axis == 1) axis_desc = "Y";
-    else if (axis == 2) axis_desc = "Z";
-
-    std::string force_desc = (impact_force > 1.5) ? "hard" : "gently";
-
-    std::string surface_desc;
-    if (axis == 0) surface_desc = "left/right wall";
-    else if (axis == 1) surface_desc = "floor/ceiling";
-    else if (axis == 2) surface_desc = "front/back wall";
-
-    impact_descriptions.push_back("Impacted the " + surface_desc + " " + force_desc);
-    impact_descriptions.push_back("deformed along the " + axis_desc + " axis");
-
-    // If multiple axes are involved, mention multi-axis impact
-    std::string message = boost::algorithm::join(impact_descriptions, " and ");
-    std::cout << message << "!\n";
-}
-
-// Function to deform the box upon collision
-void deform_box(box3d& box, int axis, double impact_force) {
-    point3d min_corner = box.min_corner();
-    point3d max_corner = box.max_corner();
-
-    double deformation = 1.0 - (impact_force * 0.2);
-    deformation = boost::algorithm::clamp(deformation, 0.7, 1.0);
-
-    double center = (bg::get<axis>(min_corner) + bg::get<axis>(max_corner)) / 2.0;
-    bg::set<axis>(min_corner, center - (center - bg::get<axis>(min_corner)) * deformation);
-    bg::set<axis>(max_corner, center + (bg::get<axis>(max_corner) - center) * deformation);
-
-    box = box3d(min_corner, max_corner);
-}
-
-// Function to restore box shape gradually
-void restore_box(box3d& box, const box3d& original_box, double restore_speed) {
-    for (int i = 0; i < 3; ++i) {
-        double orig_min = bg::get<i>(original_box.min_corner());
-        double orig_max = bg::get<i>(original_box.max_corner());
-        double curr_min = bg::get<i>(box.min_corner());
-        double curr_max = bg::get<i>(box.max_corner());
-
-        bg::set<i>(box.min_corner(), curr_min + (orig_min - curr_min) * restore_speed);
-        bg::set<i>(box.max_corner(), curr_max + (orig_max - curr_max) * restore_speed);
-    }
-}
-
-// Function to check for collision and apply deformation
-void handle_collision(box3d& box, point3d& velocity, const box3d& bounds) {
-    bool multiple_axes = false;
-    for (int i = 0; i < 3; ++i) {
-        double min_pos = bg::get<i>(box.min_corner());
-        double max_pos = bg::get<i>(box.max_corner());
-        double bound_min = bg::get<i>(bounds.min_corner());
-        double bound_max = bg::get<i>(bounds.max_corner());
-
-        if (min_pos <= bound_min || max_pos >= bound_max) {
-            double impact_force = std::abs(bg::get<i>(velocity));
-            bg::set<i>(velocity, -bg::get<i>(velocity));  // Reverse direction
-            deform_box(box, i, impact_force);  // Apply deformation
-            print_collision_message(i, impact_force, multiple_axes);  // Narrate event
-            multiple_axes = true;
-        }
-    }
-}
-
-// Function to move the box
-void move_box(box3d& box, point3d& velocity, double delta_time) {
-    point3d min_corner = box.min_corner();
-    point3d max_corner = box.max_corner();
-
-    for (int i = 0; i < 3; ++i) {
-        double new_min = bg::get<i>(min_corner) + bg::get<i>(velocity) * delta_time;
-        double new_max = bg::get<i>(max_corner) + bg::get<i>(velocity) * delta_time;
-
-        bg::set<i>(min_corner, new_min);
-        bg::set<i>(max_corner, new_max);
-    }
-
-    box = box3d(min_corner, max_corner);
-}
-
-int main() {
-    // Define the simulation space (bounding box)
-    box3d bounds(point3d(-10.0, -10.0, -10.0), point3d(10.0, 10.0, 10.0));
-
-    // Create a moving 3D box
-    box3d box(point3d(0.0, 0.0, 0.0), point3d(1.0, 1.0, 1.0));
-    box3d original_box = box;
-
-    // Define velocity
-    point3d velocity(0.5, 0.3, -0.2);
-
-    // Start timing
-    steady_clock::time_point start_time = steady_clock::now();
-
-    // Run simulation for 5 seconds
-    for (int i = 0; i < 50; ++i) {
-        steady_clock::time_point current_time = steady_clock::now();
-        double elapsed_seconds = duration<double>(current_time - start_time).count();
-
-        // Move the box
-        move_box(box, velocity, 0.1);
+        // Move the box every increment, noting the increment will vary by tiny fractions of a second each time.
+        move_box(box, velocity, increment_seconds);
 
         // Check for collision
         handle_collision(box, velocity, bounds);
 
-        // Restore shape gradually
-        restore_box(box, original_box, 0.1);
-
-        // Print updated position and deformation
+        // Print times and the updated box position
         point3d min_corner = box.min_corner();
         point3d max_corner = box.max_corner();
         std::cout << "Time: " << elapsed_seconds << " sec | "
-                  << "Box Min(" << bg::get<0>(min_corner) << ", " << bg::get<1>(min_corner) << ", " << bg::get<2>(min_corner) << ") "
-                  << " Max(" << bg::get<0>(max_corner) << ", " << bg::get<1>(max_corner) << ", " << bg::get<2>(max_corner) << ")\n";
+            << "Inc: " << increment_seconds << " sec | "
+            << "Box Position: Min("
+            << getCoord(xcoord,min_corner) << ", "
+            << getCoord(ycoord,min_corner) << ", "
+            << getCoord(zcoord,min_corner) << ") "
+            << " Max("
+            << getCoord(xcoord, max_corner) << ", "
+            << getCoord(ycoord, max_corner) << ", "
+            << getCoord(zcoord, max_corner) << ")\n";
 
-        // Sleep for simulation step
-        boost::this_thread::sleep_for(milliseconds(100));
+        boost::this_thread::sleep_for(sleep_duration);       
     }
 
     return 0;
@@ -520,16 +556,19 @@ An example of the output:
 
 [source,text]
 ----
-Impacted the floor/ceiling hard and deformed along the Y axis!
-Time: 0.2 sec | Box Min(-9.5, -9.0, -9.8)  Max(-8.5, -8.5, -8.8)
-Impacted the left/right wall gently and deformed along the X axis!
-Time: 0.4 sec | Box Min(-8.5, -8.7, -8.6)  Max(-7.5, -8.2, -7.6)
+Time: 7.40482 sec | Inc: 0.20316 sec | Box Position: Min(3.70241, 2.22145, -1.48096)  Max(4.70241, 3.22145, -0.480964)
+Time: 7.62483 sec | Inc: 0.22001 sec | Box Position: Min(3.81242, 2.28745, -1.52497)  Max(4.81242, 3.28745, -0.524966)
+Time: 7.8286 sec | Inc: 0.203764 sec | Box Position: Min(3.9143, 2.34858, -1.56572)  Max(4.9143, 3.34858, -0.565719)
+
+Collision with impact force:0.5
+New velocity : (-0.5, 0.3, -0.2), Volume of box: 0.9
+
+Time: 8.03252 sec | Inc: 0.203922 sec | Box Position: Min(4.06626, 2.40976, -1.6065)  Max(4.96626, 3.40976, -0.606503)
+Time: 8.25219 sec | Inc: 0.219674 sec | Box Position: Min(3.95642, 2.47566, -1.65044)  Max(4.85642, 3.47566, -0.650438)
 
 ----
 
-Adding narration, visuals, or sound effects adds fun to the function of a simulation.
-
-For a sample of multi-threading code, refer to xref:task-parallel-computation.adoc[].
+It is good practice when designing a simulation of real-world activity to clearly define what is to be simulated and what is not. All simulations are simplifications to an extent, though they do tend to be large and challenging programs to write. A complex simulation might have several processes running on different threads. For a sample of multi-threading code, refer to xref:task-parallel-computation.adoc[].
 
 == See Also
 
