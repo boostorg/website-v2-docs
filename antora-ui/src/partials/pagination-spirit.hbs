@@ -1,11 +1,21 @@
 <div class="spirit-nav">
   {{#with page.previous}}
-    <a accesskey="p" href="{{{relativize ./url}}}"><span class="material-symbols-outlined" title="Previous: {{{./content}}}">arrow_back</span></a>
+    <a accesskey="p" href="{{{relativize ./url}}}">
+      <span class="material-symbols-outlined" title="Previous: {{{./content}}}">arrow_back</span>
+    </a>
   {{/with}}
-  {{#with page.parent}}
-    <a accesskey="p" href="{{{relativize ./url}}}"><span class="material-symbols-outlined" title="Up: {{{./content}}}">arrow_upward</span></a>
-  {{/with}}
+  {{#if page.parent}}
+    <a accesskey="u" href="{{{relativize page.parent.url}}}">
+      <span class="material-symbols-outlined" title="Up: {{{page.parent.content}}}">arrow_upward</span>
+    </a>
+  {{else}}
+    <a class="disabled" accesskey="u" aria-disabled="true" tabindex="-1">
+      <span class="material-symbols-outlined" title="Up:">arrow_upward</span>
+    </a>
+  {{/if}}
   {{#with page.next}}
-    <a accesskey="p" href="{{{relativize ./url}}}"><span class="material-symbols-outlined" title="Next: {{{./content}}}">arrow_forward</span></a>
+    <a accesskey="n" href="{{{relativize ./url}}}">
+      <span class="material-symbols-outlined" title="Next: {{{./content}}}">arrow_forward</span>
+    </a>
   {{/with}}
 </div>
