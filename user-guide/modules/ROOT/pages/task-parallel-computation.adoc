@@ -42,6 +42,8 @@ The Boost libraries provide several tools that can help in writing parallel code
 
 * boost:chrono[]: Measures time intervals, which help control the timing of your app.
 
+Note:: The code in this tutorial was written and tested using Microsoft Visual Studio (Visual C++ 2022, Console App project) with Boost version 1.88.0.
+
 == Parallel Computing Applications
 
 Parallel computing has been successful in a wide range of applications, especially those involving large-scale computation or data processing. Here are some key areas where parallel computing has been particularly effective:
@@ -79,6 +81,7 @@ The sample has the following features:
 #include <vector>
 #include <boost/thread.hpp>
 #include <boost/chrono.hpp>
+#include <boost/atomic.hpp>
 
 // Shared flag to signal when to stop background threads
 boost::atomic<bool> running(true);
@@ -86,12 +89,14 @@ boost::mutex coutMutex;  // Synchronizes console output
 
 // Simulated background task
 void backgroundTask(int id) {
+    int count = 0;
     while (running) {
         {
             boost::lock_guard<boost::mutex> lock(coutMutex);
-            std::cout << "Background Task " << id << " is running...\n";
+            std::cout << count << ": Background Task " << id << " is running...\n";
         }
         boost::this_thread::sleep_for(boost::chrono::seconds(1));  // Simulate work
+        ++count;
     }
 
     // Final message when thread exits
@@ -105,11 +110,12 @@ void foregroundTask() {
     while (running) {
         {
             boost::lock_guard<boost::mutex> lock(coutMutex);
-            std::cout << "Foreground: Type 'quit' to exit.\n";
+            std::cout << "Foreground: Type 'x' then <return> to exit.\n\n";
         }
         std::cin >> input;
 
-        if (input == "quit") {
+        if (input == "x") {
+            std::cout << "\nForeground task exiting...\n\n";
             running = false;
         }
     }
@@ -136,6 +142,30 @@ int main() {
     std::cout << "All threads exited. Program shutting down.\n";
     return 0;
 }
+
+----
+
+Run the program:
+
+[source,text]
+----
+Foreground: Type 'x' then <return> to exit.
+
+0: Background Task 3 is running...
+0: Background Task 2 is running...
+0: Background Task 1 is running...
+1: Background Task 1 is running...
+1: Background Task 3 is running...
+1: Background Task 2 is running...
+x
+
+Foreground task exiting...
+
+Background Task 2 exiting...
+Background Task 1 exiting...
+Background Task 3 exiting...
+All threads exited. Program shutting down.
+
 ----
 
 == Thread-pool Sample
@@ -155,23 +185,25 @@ Starting with the multi-threaded code above. If we engage the thread management 
 #include <boost/atomic.hpp>
 #include <boost/chrono.hpp>
 
-// Atomic flag to signal threads to stop
-boost::atomic<bool> running(true);
+boost::atomic<bool> running(true);  // Atomic flag to signal threads to stop
 boost::atomic<int> taskCounter(0);  // Tracks running tasks
-boost::mutex coutMutex;  // Synchronizes console output
+boost::mutex coutMutex;             // Synchronizes console output
+
+const int max_tasks = 4;
 
 // Simulated background task
 void backgroundTask(int id) {
     taskCounter++;  // Increment task count
+    int count = 0;
     while (running) {
         {
             boost::lock_guard<boost::mutex> lock(coutMutex);
-            std::cout << "Task " << id << " is running... (Active tasks: " 
-                      << taskCounter.load() << ")\n";
+            std::cout << count++ << ") Task " << id << " is running... (Active tasks: "
+                << taskCounter.load() << ")\n";
         }
         boost::this_thread::sleep_for(boost::chrono::seconds(1));  // Simulate work
     }
-    
+
     taskCounter--;  // Decrement task count
     boost::lock_guard<boost::mutex> lock(coutMutex);
     std::cout << "Task " << id << " exiting...\n";
@@ -183,13 +215,14 @@ void foregroundTask(boost::asio::thread_pool& pool) {
     while (running) {
         {
             boost::lock_guard<boost::mutex> lock(coutMutex);
-            std::cout << "Foreground: Type 'quit' to exit, 'add' to add a task.\n";
+            std::cout << "Foreground: Type 'x' <return> to exit, 'a' <return> to add a task.\n";
         }
         std::cin >> input;
 
-        if (input == "quit") {
+        if (input == "x") {
             running = false;
-        } else if (input == "add") {
+        }
+        else if (input == "a" && taskCounter < max_tasks) {
             static boost::atomic<int> taskId(0);
             boost::asio::post(pool, [id = ++taskId] { backgroundTask(id); });
         }
@@ -198,7 +231,7 @@ void foregroundTask(boost::asio::thread_pool& pool) {
 
 // Main function
 int main() {
-    boost::asio::thread_pool pool(4);  // Thread pool with 4 worker threads
+    boost::asio::thread_pool pool(max_tasks);  // Thread pool with max_tasks worker threads
 
     // Start foreground task
     foregroundTask(pool);
@@ -206,114 +239,148 @@ int main() {
     // Wait for all tasks in the pool to complete
     pool.join();
 
-    std::cout << "All tasks completed. Program shutting down.\n";
+    std::cout << "\nAll tasks completed. Program shutting down.\n";
     return 0;
 }
+
+----
+
+Run the program and you should get output similar to this:
+
+[source,text]
+----
+...
+10) Task 1 is running... (Active tasks: 2)
+a
+
+Foreground: Type 'x' <return> to exit, 'a' <return> to add a task.
+0) Task 3 is running... (Active tasks: 3)
+5) Task 2 is running... (Active tasks: 3)
+11) Task 1 is running... (Active tasks: 3)
+6) Task 2 is running... (Active tasks: 3)
+1) Task 3 is running... (Active tasks: 3)
+12) Task 1 is running... (Active tasks: 3)
+
+x
+Task 1 exiting...
+Task 3 exiting...
+Task 2 exiting...
 ----
 
 == Message-queue Sample
 
-Now comes the more challenging part, when we want the different threads to _securely_ communicate with each other. To do this we engage the features of boost:lockfree[] and boost:chrono[]:
+For message queues, consider the following sample using boost:fiber[], where you can type messages manually, starting with a receiver Id, and a receiver fiber prints the messages from the queue, if the message is for that receiver.
 
-* A lock-free queue for messages, using `boost::lockfree::queue` for inter-thread communication.
-* Background tasks listen for messages, and process incoming messages asynchronously.
-* A user can type "msg <text>" to send messages to the background tasks.
-* All threads shut down cleanly when "quit" is entered.
-
+This simulates a very lightweight fiber-based message loop using user input. Receivers 1 and 2 only take messages where they have been identified as the desired receiver. Receiver 3 takes any message.
 
 [source,cpp]
 ----
+#include <boost/fiber/all.hpp>
 #include <iostream>
-#include <boost/asio.hpp>
-#include <boost/thread.hpp>
-#include <boost/atomic.hpp>
-#include <boost/chrono.hpp>
-#include <boost/lockfree/queue.hpp>
+#include <queue>
+#include <string>
+#include <atomic>
 
-// Atomic flag to signal threads to stop
-boost::atomic<bool> running(true);
-boost::atomic<int> taskCounter(0);
-boost::mutex coutMutex;  // Synchronizes console output
-
-// Lock-free queue for inter-thread communication
-boost::lockfree::queue<std::string> messageQueue(128);
-
-// Background task that processes messages
-void backgroundTask(int id) {
-    taskCounter++;  
-
-    while (running) {
-        std::string message;
-        if (messageQueue.pop(message)) {  // Check if there's a message
-            boost::lock_guard<boost::mutex> lock(coutMutex);
-            std::cout << "Task " << id << " received message: " << message << "\n";
-        }
-
-        {
-            boost::lock_guard<boost::mutex> lock(coutMutex);
-            std::cout << "Task " << id << " running... (Active tasks: " 
-                      << taskCounter.load() << ")\n";
-        }
-        boost::this_thread::sleep_for(boost::chrono::seconds(1));  
+class MessageQueue {
+public:
+    void send(const std::string& msg) {
+        std::unique_lock<boost::fibers::mutex> lock(mutex_);
+        queue_.push(msg);
+        cond_.notify_one();
     }
 
-    taskCounter--;  
-    boost::lock_guard<boost::mutex> lock(coutMutex);
-    std::cout << "Task " << id << " exiting...\n";
-}
+    std::string receive(std::string to) {
+        std::unique_lock<boost::fibers::mutex> lock(mutex_);
+        cond_.wait(lock, [this]() { return !queue_.empty(); });
+        std::string msg = queue_.front();
+        if (msg[0] == to[0] || to[0] == 'x' || msg == "/quit")
+        {
+            queue_.pop();
+            return msg;
+        }
+        else
+            return "";
+    }
 
-// Foreground task handling user input
-void foregroundTask(boost::asio::thread_pool& pool) {
+private:
+    std::queue<std::string> queue_;
+    boost::fibers::mutex mutex_;
+    boost::fibers::condition_variable cond_;
+};
+
+int main() {
+    MessageQueue msg_queue;
+    std::atomic<bool> running(true);
+    const int num_receivers = 3;
+    std::string to;
+
+    // Launch multiple receiver fibers
+    std::vector<boost::fibers::fiber> receivers;
+    for (int i = 0; i < num_receivers; ++i) {
+        receivers.emplace_back([&, id = i + 1]() {
+            while (running) {
+                switch (id)
+                {
+                case 1: to = "1";
+                    break;
+                case 2: to = "2";
+                    break;
+                case 3: to = "x";
+                    break;
+                }
+                std::string msg = msg_queue.receive(to);
+
+                if (msg == "/quit") {
+                    running = false;
+                    msg_queue.send("/quit"); // Ensure all receivers get the quit signal
+                    break;
+                }
+                if (msg != "")
+                    std::cout << "[Receiver " << id << "] Received: " << msg << std::endl;
+                boost::this_fiber::yield(); // Yield to allow fair scheduling
+            }
+            });
+    }
+
+    // Main thread handles user input
     std::string input;
     while (running) {
-        {
-            boost::lock_guard<boost::mutex> lock(coutMutex);
-            std::cout << "Foreground: Type 'quit' to exit, 'add' to add a task, 'msg <text>' to send a message.\n";
-        }
+        std::cout << "Enter a message starting with the receiver Id (1,2,3) or /quit to exit > ";
         std::getline(std::cin, input);
 
-        if (input == "quit") {
-            running = false;
-        } else if (input == "add") {
-            static boost::atomic<int> taskId(0);
-            boost::asio::post(pool, [id = ++taskId] { backgroundTask(id); });
-        } else if (input.rfind("msg ", 0) == 0) {  // Check if input starts with "msg "
-            std::string message = input.substr(4);  
-            messageQueue.push(message);  // Send message to background tasks
+        if (!input.empty()) {
+            msg_queue.send(input);
+            if (input == "/quit") {
+                break;
+            }
+            boost::this_fiber::yield();
         }
     }
-}
 
-// Main function
-int main() {
-    boost::asio::thread_pool pool(4);  // Thread pool with 4 worker threads
+    // Join all receiver fibers
+    for (auto& f : receivers) {
+        f.join();
+    }
 
-    // Start foreground task
-    foregroundTask(pool);
-
-    // Wait for all tasks in the pool to complete
-    pool.join();
-
-    std::cout << "All tasks completed. Program shutting down.\n";
+    std::cout << "All receivers exited. Program shutting down.\n";
     return 0;
 }
-
 ----
 
 If you compile and run this sample, the following would be a typical session!
 
 [source,text]
 ----
-Foreground: Type 'quit' to exit, 'add' to add a task, 'msg <text>' to send a message.
-add
-add
-msg Hello, Task!
-Task 1 received message: Hello, Task!
-Task 2 running... (Active tasks: 2)
-quit
-Task 1 exiting...
-Task 2 exiting...
-All tasks completed. Program shutting down.
+Enter a message starting with the receiver Id (1,2,3) or /quit to exit > 1 hello
+[Receiver 1] Received: 1 hello
+Enter a message starting with the receiver Id (1,2,3) or /quit to exit > 2 hi
+[Receiver 2] Received: 2 hi
+Enter a message starting with the receiver Id (1,2,3) or /quit to exit > 3 howdy
+[Receiver 3] Received: 3 howdy
+Enter a message starting with the receiver Id (1,2,3) or /quit to exit > 4 anyone
+[Receiver 3] Received: 4 anyone
+Enter a message starting with the receiver Id (1,2,3) or /quit to exit > /quit
+All receivers exited. Program shutting down.
 
 ----
 
