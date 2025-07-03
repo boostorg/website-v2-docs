@@ -359,6 +359,6 @@ For a boost:spirit[] approach to parsing, refer to xref:task-natural-language-pa
 
 == See Also
 
-* https://www.boost.org/doc/libs/1_87_0/libs/libraries.htm#Miscellaneous[Category: Miscellaneous]
-* https://www.boost.org/doc/libs/1_87_0/libs/libraries.htm#Parsing[Category: Parsing]
-* https://www.boost.org/doc/libs/1_87_0/libs/libraries.htm#String[Category: String and text processing]
+* https://www.boost.org/doc/libs/latest/libs/libraries.htm#Miscellaneous[Category: Miscellaneous]
+* https://www.boost.org/doc/libs/latest/libs/libraries.htm#Parsing[Category: Parsing]
+* https://www.boost.org/doc/libs/latest/libs/libraries.htm#String[Category: String and text processing]

@@ -200,5 +200,5 @@ A library can be in one or more categories. The string is not case-sensitive. In
 
 == See Also
 
-* https://www.boost.org/doc/libs/1_82_0/libs/libraries.htm[Boost Libraries]
+* https://www.boost.org/doc/libs/latest/libs/libraries.htm[Boost Libraries]
 

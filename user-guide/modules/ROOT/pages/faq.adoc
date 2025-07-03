@@ -433,7 +433,7 @@ While Boost strives to ensure compatibility with a wide range of compilers and s
 
 . *What support does Boost provide for debugging and testing?*
 +
-Boost provides boost:test[] for unit testing, which can be an integral part of the debugging process. It also provides the boost:stacktrace[] library that can be used to produce useful debug information during a crash or from a running application. Refer also to https://www.boost.org/doc/libs/1_87_0/libs/libraries.htm#Correctness[Category: Correctness and testing].
+Boost provides boost:test[] for unit testing, which can be an integral part of the debugging process. It also provides the boost:stacktrace[] library that can be used to produce useful debug information during a crash or from a running application. Refer also to https://www.boost.org/doc/libs/latest/libs/libraries.htm#Correctness[Category: Correctness and testing].
 
 . *How do I enable assertions in Boost?*
 +

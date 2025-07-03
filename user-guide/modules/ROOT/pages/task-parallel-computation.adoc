@@ -388,5 +388,5 @@ Parallel computing is an exciting challenge - success should come from focusing 
 
 == See Also
 
-* https://www.boost.org/doc/libs/1_87_0/libs/libraries.htm#Concurrent[Category: Concurrent Programming]
-* https://www.boost.org/doc/libs/1_87_0/libs/libraries.htm#System[Category: System]
+* https://www.boost.org/doc/libs/latest/libs/libraries.htm#Concurrent[Category: Concurrent Programming]
+* https://www.boost.org/doc/libs/latest/libs/libraries.htm#System[Category: System]

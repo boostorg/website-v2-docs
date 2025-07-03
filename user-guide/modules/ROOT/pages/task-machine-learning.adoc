@@ -597,8 +597,8 @@ _Gradient Descent_ is an optimization algorithm used to minimize a function by i
 
 == See Also
 
-* https://www.boost.org/doc/libs/1_87_0/libs/libraries.htm#Algorithms[Category: Algorithms]
-* https://www.boost.org/doc/libs/1_87_0/libs/libraries.htm#Iterators[Category: Iterators]
-* https://www.boost.org/doc/libs/1_87_0/libs/libraries.htm#Math[Category: Math and numerics]
-* https://www.boost.org/doc/libs/1_87_0/libs/libraries.htm#Parsing[Category: Parsing]
+* https://www.boost.org/doc/libs/latest/libs/libraries.htm#Algorithms[Category: Algorithms]
+* https://www.boost.org/doc/libs/latest/libs/libraries.htm#Iterators[Category: Iterators]
+* https://www.boost.org/doc/libs/latest/libs/libraries.htm#Math[Category: Math and numerics]
+* https://www.boost.org/doc/libs/latest/libs/libraries.htm#Parsing[Category: Parsing]
 

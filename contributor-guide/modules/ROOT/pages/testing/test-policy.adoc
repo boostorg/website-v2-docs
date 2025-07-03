@@ -27,9 +27,9 @@ Boost uses an automatic regression test suite which generates HTML compiler stat
 
 == Optional
 
-* Use boost:test[] to create individual test cases and group them into test suites. Then use the library's test tools for https://www.boost.org/doc/libs/1_83_0/libs/test/doc/html/boost_test/test_output.html[Controlling outputs] to verify the expected behavior.
+* Use boost:test[] to create individual test cases and group them into test suites. Then use the library's test tools for https://www.boost.org/doc/libs/latest/libs/test/doc/html/boost_test/test_output.html[Controlling outputs] to verify the expected behavior.
 
-* For simple cases, you can use the https://www.boost.org/doc/libs/1_83_0/libs/core/doc/html/core/lightweight_test.html[lightweight_test] features of boost:core[].
+* For simple cases, you can use the https://www.boost.org/doc/libs/latest/libs/core/doc/html/core/lightweight_test.html[lightweight_test] features of boost:core[].
 
 == Protocol for Fixing Bugs or Adding Features
 

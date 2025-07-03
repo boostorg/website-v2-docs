@@ -392,5 +392,5 @@ Unlike `std::tuple`, which holds actual values, metaprogramming tuples operate e
 
 == See Also
 
-* https://www.boost.org/doc/libs/1_87_0/libs/libraries.htm#Preprocessor[Category: Preprocessor Metaprogramming]
-* https://www.boost.org/doc/libs/1_87_0/libs/libraries.htm#Metaprogramming[Category: Template Metaprogramming]
+* https://www.boost.org/doc/libs/latest/libs/libraries.htm#Preprocessor[Category: Preprocessor Metaprogramming]
+* https://www.boost.org/doc/libs/latest/libs/libraries.htm#Metaprogramming[Category: Template Metaprogramming]

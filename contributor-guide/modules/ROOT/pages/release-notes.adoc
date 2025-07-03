@@ -84,14 +84,14 @@ Provide any specific instructions or recommendations for users upgrading from a 
 
 The following examples show some different approaches. Note how many rely on links to issues to provide the detailed information.
 
-* https://www.boost.org/doc/libs/1_83_0/libs/json/doc/html/json/release_notes.html[JSON Release Notes]
-* https://www.boost.org/doc/libs/1_83_0/libs/nowide/doc/html/changelog_page.html[NoWide Change Log]
-* https://www.boost.org/doc/libs/1_83_0/libs/type_traits/doc/html/boost_typetraits/history.html[Type Traits History]
-* https://www.boost.org/doc/libs/1_81_0/libs/variant2/doc/html/variant2.html#changelog[Variant2 Revision History]
+* https://www.boost.org/doc/libs/latest/libs/json/doc/html/json/release_notes.html[JSON Release Notes]
+* https://www.boost.org/doc/libs/latest/libs/nowide/doc/html/changelog_page.html[NoWide Change Log]
+* https://www.boost.org/doc/libs/latest/libs/type_traits/doc/html/boost_typetraits/history.html[Type Traits History]
+* https://www.boost.org/doc/libs/latest/libs/variant2/doc/html/variant2.html#changelog[Variant2 Revision History]
 
 == Update Boost History
 
-When you have completed the library release notes, add the required information to the `[section New Libraries]` or `[section Updated Libraries]` of the https://github.com/boostorg/website/tree/master/feed/history[Boostorg History]. Copy the formatting of the examples below, which for reference is https://www.boost.org/doc/libs/1_83_0/doc/html/quickbook.html[Quickbook format].
+When you have completed the library release notes, add the required information to the `[section New Libraries]` or `[section Updated Libraries]` of the https://github.com/boostorg/website/tree/master/feed/history[Boostorg History]. Copy the formatting of the examples below, which for reference is https://www.boost.org/doc/libs/latest/doc/html/quickbook.html[Quickbook format].
 
 The examples below come from the https://github.com/boostorg/website/blob/master/feed/history/boost_1_83_0.qbk[boost_1_83_0.qbk] file:
 

@@ -334,6 +334,6 @@ And check out the full functionality of boost:test[].
 
 == See Also
 
-* https://www.boost.org/doc/libs/1_87_0/libs/libraries.htm#Workarounds[Category: Broken compiler workarounds]
-* https://www.boost.org/doc/libs/1_87_0/libs/libraries.htm#Correctness[Category: Correctness and testing]
-* https://www.boost.org/doc/libs/1_87_0/libs/libraries.htm#Error-handling[Category: Error handling and recovery]
+* https://www.boost.org/doc/libs/latest/libs/libraries.htm#Workarounds[Category: Broken compiler workarounds]
+* https://www.boost.org/doc/libs/latest/libs/libraries.htm#Correctness[Category: Correctness and testing]
+* https://www.boost.org/doc/libs/latest/libs/libraries.htm#Error-handling[Category: Error handling and recovery]

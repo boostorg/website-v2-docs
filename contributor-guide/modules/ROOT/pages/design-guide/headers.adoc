@@ -30,7 +30,7 @@ Here are the standards for boost headers. Many of these are also reasonable guid
 
 * The preferred ordering for class definitions is `public` members, `protected` members, and finally `private` members.
 
-* Include the https://www.boost.org/doc/libs/1_83_0/boost/config.hpp[`boost/config.hpp`] if there is a need to deal with compiler or platform configuration issues.
+* Include the https://www.boost.org/doc/libs/latest/boost/config.hpp[`boost/config.hpp`] if there is a need to deal with compiler or platform configuration issues.
 
 == Sample
 

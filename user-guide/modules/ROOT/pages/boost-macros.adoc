@@ -11,7 +11,7 @@ Official repository: https://github.com/boostorg/website-v2-docs
 
 Boost provides many useful macros that help with configuration, debugging, portability, and convenience when working with the libraries. 
 
-There are thousands of defined macros (refer to the https://www.boost.org/doc/libs/1_87_0/libs/config/doc/html/boost_config/boost_macro_reference.html[Boost Macro Reference]). However, here are some of the most commonly used, and some sample code showing how to work them into your code.
+There are thousands of defined macros (refer to the https://www.boost.org/doc/libs/latest/libs/config/doc/html/boost_config/boost_macro_reference.html[Boost Macro Reference]). However, here are some of the most commonly used, and some sample code showing how to work them into your code.
 
 [square]
 * <<Library Inclusion and Linking>>
@@ -382,5 +382,5 @@ int main() {
 
 == See Also
 
-* https://www.boost.org/doc/libs/1_87_0/libs/config/doc/html/boost_config/boost_macro_reference.html[Boost Macro Reference]
+* https://www.boost.org/doc/libs/latest/libs/config/doc/html/boost_config/boost_macro_reference.html[Boost Macro Reference]
 * xref:testing-debugging.adoc[]

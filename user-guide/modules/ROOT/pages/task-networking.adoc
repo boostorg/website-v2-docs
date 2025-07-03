@@ -779,5 +779,5 @@ Other libraries, such as boost:mysql[], are also based on boost:asio[].
 
 == See Also
 
-* https://www.boost.org/doc/libs/1_87_0/libs/libraries.htm#Concurrent[Category: Concurrent Programming]
-* https://www.boost.org/doc/libs/1_87_0/libs/libraries.htm#IO[Category: Input/Output]
+* https://www.boost.org/doc/libs/latest/libs/libraries.htm#Concurrent[Category: Concurrent Programming]
+* https://www.boost.org/doc/libs/latest/libs/libraries.htm#IO[Category: Input/Output]

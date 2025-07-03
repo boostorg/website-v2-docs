@@ -30,7 +30,7 @@ Natural language processing is a complex field that goes beyond just programming
 
 * boost:regex[]:  For some simpler parsing tasks, regular expressions can be sufficient and easier to use than full-blown parsing libraries. You could use boost:regex[] to match specific patterns in your input text, like specific words or phrases, word boundaries, etc.
 
-* https://www.boost.org/doc/libs/1_82_0/doc/html/string_algo.html[Boost.String_Algo]:  Provides various string manipulation algorithms, such as splitting strings, trimming whitespace, or replacing substrings. These can be useful in preprocessing text before parsing it.
+* https://www.boost.org/doc/libs/latest/doc/html/string_algo.html[Boost.String_Algo]:  Provides various string manipulation algorithms, such as splitting strings, trimming whitespace, or replacing substrings. These can be useful in preprocessing text before parsing it.
 
 * boost:optional[] and boost:variant[]:  These libraries can be helpful in representing the result of a parsing operation, which could be a successful parse (yielding a specific result), an error, or an ambiguous parse (yielding multiple possible results).
 
@@ -149,8 +149,8 @@ Our subset is clearly very limited, as simply replacing the word "The" with "A" 
 
 The following example shows how to create a vocabulary of valid words, and allow optional adjectives and adverbs.
 
-The parsing makes repeated use of statements such as `-adj_syms[phoenix::ref(adj1) = qi::_1]`, which in English means _"Try to match an adjective from adj_syms. If one is found, store it in adj1. If not found, continue without error."_. This functionality is a feature of boost:phoenix[], the statement attaches a semantic action to `adj_syms`, so that whenever a match occurs, it will execute `adj1 = matched_value`. The unary minus in front of `adj_syms` means this match is optional. 
-`
+The parsing makes repeated use of statements such as `-adj_syms[phoenix::ref(adj1) = qi::_1]`, which in English means _"Try to match an adjective from adj_syms. If one is found, store it in adj1. If not found, continue without error."_. This functionality is a feature of boost:phoenix[], the statement attaches a semantic action to `adj_syms`, so that whenever a match occurs, it will execute `adj1 = matched_value`. The unary minus in front of `adj_syms` means this match is optional.
+
 [source,cpp]
 ----
 #include <boost/spirit/include/qi.hpp>
@@ -414,8 +414,8 @@ You will notice how adding more features to a natural language parser starts to 
 
 == See Also
 
-* https://www.boost.org/doc/libs/1_87_0/libs/libraries.htm#Parsing[Category: Parsing]
-* https://www.boost.org/doc/libs/1_87_0/libs/libraries.htm#Patterns[Category: Patterns and Idioms]
-* https://www.boost.org/doc/libs/1_87_0/libs/libraries.htm#String[Category: String and text processing]
+* https://www.boost.org/doc/libs/latest/libs/libraries.htm#Parsing[Category: Parsing]
+* https://www.boost.org/doc/libs/latest/libs/libraries.htm#Patterns[Category: Patterns and Idioms]
+* https://www.boost.org/doc/libs/latest/libs/libraries.htm#String[Category: String and text processing]
 
 
