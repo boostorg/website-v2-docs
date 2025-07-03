@@ -45,6 +45,8 @@ Here are some Boost libraries that might assist you in processing text:
 
 * boost:thread[] : If your application is multithreaded (for example, if you want to save a document while the user continues to work), this library will be useful.
 
+Note:: The code in this tutorial was written and tested using Microsoft Visual Studio (Visual C++ 2022, Console App project) with Boost version 1.88.0.
+
 == Sample of Regular Expression Parsing
 
 If the text you are parsing is well-formatted then you can use boost:regex[] which we will base our sample on here, rather than a full-blown parser implementation using boost:spirit[].
