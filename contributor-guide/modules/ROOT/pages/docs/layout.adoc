@@ -28,9 +28,9 @@ For example:
 
 [source,asciidoc]
 ----
-https://www.boost.org/doc/libs/1_81_0/libs/json/index.html
-https://www.boost.org/doc/libs/1_82_0/libs/serialization/index.html
-https://www.boost.org/doc/libs/1_83_0/libs/beast/index.html
+https://www.boost.org/doc/libs/latest/libs/json/index.html
+https://www.boost.org/doc/libs/latest/libs/serialization/index.html
+https://www.boost.org/doc/libs/latest/libs/beast/index.html
 ----
 
 Although the content of the `index.html` file is up to the library author, libraries use this `index.html` entry point to redirect to the main documentation page located elsewhere.

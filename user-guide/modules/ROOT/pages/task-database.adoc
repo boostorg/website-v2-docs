@@ -67,11 +67,6 @@ struct Record {
 };
 
 // Implement a Database Table Class
-#include <boost/container/flat_map.hpp>
-#include <boost/container/stable_vector.hpp>
-#include <iostream>
-#include <string>
-
 class DatabaseTable {
 public:
     using RecordStorage = boost::container::stable_vector<Record>;
@@ -129,6 +124,18 @@ int main() {
 ----
 
 Note:: Key features of this sample are that it is memory-efficient (reducing fragmentation and with good performance), `stable_vector` prevents invalid references when resizing, and `flat_map` is faster than `std::map` for heavy use.
+
+Run the program, the output should be:
+
+[source,text]
+----
+Found: ID = 102, Name = Bob
+All records:
+ID: 101, Name: Alice
+ID: 102, Name: Bob
+ID: 103, Name: Charlie
+
+----
 
 == Optimize Memory Allocation
 
@@ -228,6 +235,18 @@ int main() {
 ----
 
 Note:: Custom _Object Pools_ can be tuned for your specific object sizes.
+
+The output should be:
+
+[source,text]
+----
+Found: ID = 102, Name = Bob
+Record 102 removed successfully.
+All records:
+ID: 101, Name: Alice
+ID: 103, Name: Charlie
+
+----
 
 == Integrate Shared Memory
 
@@ -585,6 +604,6 @@ The Boost libraries have a lot to offer this particular scenario!
 
 == See Also
 
-* https://www.boost.org/doc/libs/1_87_0/libs/libraries.htm#Containers[Category: Containers] 
-* https://www.boost.org/doc/libs/1_87_0/libs/libraries.htm#Data[Category: Data structures]
-* https://www.boost.org/doc/libs/1_87_0/libs/libraries.htm#Memory[Category: Memory]
+* https://www.boost.org/doc/libs/latest/libs/libraries.htm#Containers[Category: Containers] 
+* https://www.boost.org/doc/libs/latest/libs/libraries.htm#Data[Category: Data structures]
+* https://www.boost.org/doc/libs/latest/libs/libraries.htm#Memory[Category: Memory]

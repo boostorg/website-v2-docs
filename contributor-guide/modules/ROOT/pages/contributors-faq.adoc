@@ -764,7 +764,7 @@ While there is not a specific library dedicated solely to null pointer dereferen
 +
 There are several libraries that provide functionalities for input validation, sanitization, and handling, helping to mitigate security vulnerabilities related to invalid or malicious input data:
 +
-* https://www.boost.org/doc/libs/1_83_0/doc/html/string_algo.html[Boost.String_Algo] provides a collection of algorithms for string manipulation, including functions for removing leading or trailing whitespace, case conversion, tokenization, and search.
+* https://www.boost.org/doc/libs/latest/doc/html/string_algo.html[Boost.String_Algo] provides a collection of algorithms for string manipulation, including functions for removing leading or trailing whitespace, case conversion, tokenization, and search.
 +
 * boost:tokenizer[] provides a tokenizer class for splitting input strings into tokens based on delimiter characters or regular expressions. This can be useful for parsing and validating input data that is structured or delimited, such as CSV files, configuration files, or network protocols. The tokenizer class allows you to define custom tokenization rules and handle edge cases effectively, improving the reliability and security of input data processing.
 +

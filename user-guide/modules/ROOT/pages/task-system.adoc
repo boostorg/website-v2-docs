@@ -417,6 +417,6 @@ Adding timing features to your system operations will help you maintain more rob
 
 == See Also
 
-* https://www.boost.org/doc/libs/1_87_0/libs/libraries.htm#Memory[Category: Memory]
-* https://www.boost.org/doc/libs/1_87_0/libs/libraries.htm#Miscellaneous[Category: Miscellaneous]
-* https://www.boost.org/doc/libs/1_87_0/libs/libraries.htm#System[Category: System]
+* https://www.boost.org/doc/libs/latest/libs/libraries.htm#Memory[Category: Memory]
+* https://www.boost.org/doc/libs/latest/libs/libraries.htm#Miscellaneous[Category: Miscellaneous]
+* https://www.boost.org/doc/libs/latest/libs/libraries.htm#System[Category: System]

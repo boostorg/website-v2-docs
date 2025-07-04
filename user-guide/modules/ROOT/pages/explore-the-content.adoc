@@ -9,7 +9,7 @@ Official repository: https://github.com/boostorg/website-v2-docs
 = Explore the Content
 :navtitle: Explore the Content
 
-There are a number of ways you can approach exploring Boost. Clearly, examining the documentation for any of the https://www.boost.org/doc/libs/1_82_0/libs/libraries.htm[Boost libraries] is a great way to start. However, with 180 or so libraries to choose from, you might want to consider a range of options to get going. This section covers a number of approaches you have to focus your exploration of the libraries, and get deeper into Boost content.
+There are a number of ways you can approach exploring Boost. Clearly, examining the documentation for any of the https://www.boost.org/doc/libs/latest/libs/libraries.htm[Boost libraries] is a great way to start. However, with 180 or so libraries to choose from, you might want to consider a range of options to get going. This section covers a number of approaches you have to focus your exploration of the libraries, and get deeper into Boost content.
 
 If knowing what others have done before you helps, refer to <<High-Profile users of Boost>>. 
 

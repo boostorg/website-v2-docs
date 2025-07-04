@@ -572,7 +572,7 @@ It is good practice when designing a simulation of real-world activity to clearl
 
 == See Also
 
-* https://www.boost.org/doc/libs/1_87_0/libs/libraries.htm#Algorithms[Category: Algorithms]
-* https://www.boost.org/doc/libs/1_87_0/libs/libraries.htm#Image-processing[Category: Image processing]
-* https://www.boost.org/doc/libs/1_87_0/libs/libraries.htm#Math[Category: Math and numerics]
-* https://www.boost.org/doc/libs/1_87_0/libs/libraries.htm#State[Category: State Machines]
+* https://www.boost.org/doc/libs/latest/libs/libraries.htm#Algorithms[Category: Algorithms]
+* https://www.boost.org/doc/libs/latest/libs/libraries.htm#Image-processing[Category: Image processing]
+* https://www.boost.org/doc/libs/latest/libs/libraries.htm#Math[Category: Math and numerics]
+* https://www.boost.org/doc/libs/latest/libs/libraries.htm#State[Category: State Machines]
