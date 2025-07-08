@@ -42,6 +42,8 @@ Here are the libraries that are most directly applicable to a networking app:
 
 * boost:url[]: Parses URL strings into components (scheme, user info, host, port, path, query, and fragment), and provides support for building URLs piece by piece. Also, there is support for modifying an existing URL (changing the query parameters, for example) and handling percent-encoded characters. This library basically makes even complex URLs easy to work with.
 
+Note:: The code in this tutorial was written and tested using Microsoft Visual Studio (Visual C++ 2022, Console App project) with Boost version 1.88.0. The client-server samples can be run on the same computer, the peer-to-peer chat sample requires two computers to function correctly.
+
 == Sample Client-Server Messaging 
 
 The following code is a simple networking chat application using boost:asio[] that allows two computers to send messages to each other over TCP.
@@ -165,37 +167,36 @@ int main() {
 
 === Compile and Run
 
-Compile both programs, for example:
+Compile both programs. The server and client can now exchange messages - give it a shot!
+
+First, start the server:
 
 [source,text]
 ----
-g++ chat_server.cpp -o server -pthread -lboost_system
-g++ chat_client.cpp -o client -pthread -lboost_system
+Server started. Waiting for client...
+Client connected!
+Client: Hello from the client
+You: Hey client, this is the server!
 
 ----
 
-Run the server on one computer:
-[source,text]
-----
-./server
-
-----
-
-Run the client on another computer, and enter the server's IP address when prompted:
+Now run the client, and enter the server's IP address when prompted:
 
 [source,text]
 ----
-./client
-
+Enter server IP: <IP address in the format xx.x.x.xx>
+Connected to server at xx.x.x.xx
+You: Hello from the client
+Server: Hey client, this is the server!
 ----
-
-The server and client can now exchange messages - give it a shot!
 
 == Peer to Peer Chat
 
-Client-server architectures are perhaps the most useful and most common, but sometimes a peer-to-peer relationship between computers is more appropriate.
+Client-server architectures are the most useful and most common, but sometimes a peer-to-peer relationship between computers is more appropriate.
 
 The following app implements peer-to-peer chatting - that is, both can send and receive messages without a client-server distinction. One key difference in coding is that _both_ computers run the same program. However, one peer must initiate the connection using the other peer's IP address and port. Once connected, both peers can send and receive messages asynchronously.
+
+Note:: When testing this code, the server and client programs should be on different computers. In the sample below one is called `desktop` and the other `laptop` - both Windows PCs.
 
 `peer_chat.cpp`
 
@@ -208,7 +209,7 @@ The following app implements peer-to-peer chatting - that is, both can send and 
 
 using boost::asio::ip::tcp;
 
-std::atomic<bool> connected{false};
+std::atomic<bool> connected{ false };
 
 void receive_messages(tcp::socket& socket) {
     try {
@@ -222,14 +223,16 @@ void receive_messages(tcp::socket& socket) {
                 std::cout << "Connection closed by peer.\n";
                 connected = false;
                 break;
-            } else if (error) {
+            }
+            else if (error) {
                 throw boost::system::system_error(error);
             }
 
             std::cout << "\nPeer: " << data << "\nYou: ";
             std::cout.flush();
         }
-    } catch (std::exception& e) {
+    }
+    catch (std::exception& e) {
         std::cerr << "Receive error: " << e.what() << "\n";
     }
 }
@@ -246,7 +249,8 @@ void send_messages(tcp::socket& socket) {
             }
             boost::asio::write(socket, boost::asio::buffer(message));
         }
-    } catch (std::exception& e) {
+    }
+    catch (std::exception& e) {
         std::cerr << "Send error: " << e.what() << "\n";
     }
 }
@@ -260,7 +264,8 @@ void run_peer(boost::asio::io_context& io_context, const std::string& peer_ip, i
         if (!peer_ip.empty()) {
             std::cout << "Trying to connect to peer " << peer_ip << ":" << peer_port << "...\n";
             socket.connect(tcp::endpoint(boost::asio::ip::make_address(peer_ip), peer_port));
-        } else {
+        }
+        else {
             std::cout << "Waiting for a peer to connect on port " << local_port << "...\n";
             acceptor.accept(socket);
         }
@@ -272,7 +277,8 @@ void run_peer(boost::asio::io_context& io_context, const std::string& peer_ip, i
         send_messages(socket);
         receive_thread.join();
 
-    } catch (std::exception& e) {
+    }
+    catch (std::exception& e) {
         std::cerr << "Error: " << e.what() << "\n";
     }
 }
@@ -284,7 +290,7 @@ int main() {
 
     std::cout << "Enter local port to listen on: ";
     std::cin >> local_port;
-    
+
     std::cout << "Enter peer IP (leave blank to wait for connection): ";
     std::cin.ignore();
     std::getline(std::cin, peer_ip);
@@ -303,15 +309,36 @@ int main() {
 
 Note:: As before, messages are exchanged over TCP sockets.
 
-To compile the program use a command such as:
+To run the program, on Computer A, set a local port (say, 12345) and leave the peer IP empty to wait for a connection. On Computer B, enter Computer A's IP and port (12345) to connect. Messages will be exchanged in real-time.
+
+Start one program, typing `<Enter>` for the IP:
 
 [source,text]
 ----
-g++ peer_chat.cpp -o peer_chat -pthread -lboost_system
+Enter local port to listen on: 12345
+Enter peer IP (leave blank to wait for connection):
+Waiting for a peer to connect on port 12345...
+Connected!
+Peer: Hello from laptop
+You: Hello from desktop
+Peer: a working chat!
+You: yes, fun isn't it
 
 ----
 
-To run the program, on Computer A, set a local port (say, 5000) and leave the peer IP empty to wait for a connection. On Computer B, enter Computer A's IP and port (5000) to connect. Messages will be exchanged in real-time.
+[source,text]
+----
+Enter local port to listen on: 12345
+Enter peer IP (leave blank to wait for connection): <IP address in the format xx.x.x.xx>
+Enter peer's port: 12345
+Trying to connect to peer xx.x.x.xx:12345...
+Connected!
+You: Hello from laptop
+Peer: Hello from desktop
+You: a working chat!
+Peer: yes, fun isn't it!
+
+----
 
 Type `/quit` on either computer to exit - which will perform a graceful disconnection.
 
@@ -321,6 +348,8 @@ Type `/quit` on either computer to exit - which will perform a graceful disconne
 If we want more than chat, let's add boost:json[] to handle structured requests and responses. 
 
 This version introduces JSON-based communication, where the client sends JSON-encoded requests, and the server processes and responds accordingly. The appropriate architecture is client-server. The server listens for connections and expects JSON requests. The client sends JSON-formatted messages (for example, { "command": "greet", "name": "Peter" }). The server parses the JSON and returns a JSON response.
+
+Note:: JSON request and response processing is essential for extensible REST API development (GET, POST, etc.).
 
 === JSON-based Server
 
@@ -460,9 +489,7 @@ int main() {
 
 === Compile and Run
 
-Use the same commands as the first sample to compile the programs.
-
-Then run the programs and enter the commands:
+The following commands are valid:
 
 [width="100%",cols="1,3",options="header",stripes=even,frame=none]
 |===
@@ -473,6 +500,31 @@ Then run the programs and enter the commands:
 |===
 
 Note:: This sample can cope with multiple clients, using multithreading.
+
+Start the server:
+
+[source,text]
+----
+Server listening on port 5000...
+
+----
+
+Then run the client and enter the commands:
+
+[source,text]
+----
+Enter command (greet/status/exit): status
+Server: Server is running.
+Enter command (greet/status/exit): greet
+Enter name: Peter
+Server: Hello, Peter!
+
+[Server is closed at this point]
+
+Enter command (greet/status/exit): status
+Client error: write: An existing connection was forcibly closed by the remote host [system:10054]
+
+----
 
 == Add HTTP Requests
 
@@ -496,18 +548,23 @@ using tcp = asio::ip::tcp;
 // Function to handle incoming HTTP requests
 void handle_request(http::request<http::string_body> req, http::response<http::string_body>& res) {
     json::object response_json;
-
+    std::cout << "Method: " << req.method() << "...\n";
+    std::cout << "Target: " << req.target() << "...\n";
+    std::cout << "Body: " << req.body() << "...\n\n";
     if (req.method() == http::verb::get && req.target() == "/status") {
         response_json["status"] = "Server is running!";
-    } else if (req.method() == http::verb::post && req.target() == "/greet") {
+    }
+    else if (req.method() == http::verb::post && req.target() == "/greet") {
         try {
             json::value parsed_body = json::parse(req.body());
             std::string name = parsed_body.as_object()["name"].as_string().c_str();
             response_json["message"] = "Hello, " + name + "!";
-        } catch (...) {
+        }
+        catch (...) {
             response_json["error"] = "Invalid JSON format.";
         }
-    } else {
+    }
+    else {
         response_json["error"] = "Unknown endpoint.";
     }
 
@@ -521,7 +578,7 @@ void handle_request(http::request<http::string_body> req, http::response<http::s
 void run_server(asio::io_context& ioc, unsigned short port) {
     tcp::acceptor acceptor(ioc, tcp::endpoint(tcp::v4(), port));
 
-    std::cout << "HTTP Server running on port " << port << "...\n";
+    std::cout << "HTTP Server running on port " << port << "...\n\n";
 
     while (true) {
         tcp::socket socket(ioc);
@@ -533,7 +590,7 @@ void run_server(asio::io_context& ioc, unsigned short port) {
 
         http::response<http::string_body> res;
         handle_request(req, res);
-        
+
         http::write(socket, res);
     }
 }
@@ -542,7 +599,8 @@ int main() {
     try {
         asio::io_context io_context;
         run_server(io_context, 8080);
-    } catch (std::exception& e) {
+    }
+    catch (std::exception& e) {
         std::cerr << "Server error: " << e.what() << "\n";
     }
     return 0;
@@ -575,9 +633,11 @@ std::string send_request(const std::string& host, const std::string& port, http:
         auto const results = resolver.resolve(host, port);
         stream.connect(results);
 
-        http::request<http::string_body> req{method, target, 11};
+        http::request<http::string_body> req{ method, target, 11 };
         req.set(http::field::host, host);
+        req.set(http::field::user_agent, BOOST_BEAST_VERSION_STRING);
         req.set(http::field::content_type, "application/json");
+        req.body() = body;
         req.prepare_payload();
 
         if (!body.empty()) req.body() = body;
@@ -586,9 +646,10 @@ std::string send_request(const std::string& host, const std::string& port, http:
         beast::flat_buffer buffer;
         http::response<http::string_body> res;
         http::read(stream, buffer, res);
-        
+
         return res.body();
-    } catch (std::exception& e) {
+    }
+    catch (std::exception& e) {
         return std::string("Client error: ") + e.what();
     }
 }
@@ -604,8 +665,9 @@ int main() {
 
         if (command == "status") {
             std::string response = send_request(host, port, http::verb::get, "/status");
-            std::cout << "Server Response: " << response << "\n";
-        } else if (command == "greet") {
+            std::cout << "Server Response: " << response << "\n\n";
+        }
+        else if (command == "greet") {
             std::string name;
             std::cout << "Enter name: ";
             std::cin >> name;
@@ -615,10 +677,12 @@ int main() {
             std::string request_str = json::serialize(request);
 
             std::string response = send_request(host, port, http::verb::post, "/greet", request_str);
-            std::cout << "Server Response: " << response << "\n";
-        } else if (command == "exit") {
+            std::cout << "Server Response: " << response << "\n\n";
+        }
+        else if (command == "exit") {
             break;
-        } else {
+        }
+        else {
             std::cout << "Invalid command!\n";
         }
     }
@@ -630,7 +694,7 @@ int main() {
 
 === Compile and Run
 
-Compile and run the programs, and enter the commands:
+The following commands are valid.
 
 [width="100%",cols="1,3",options="header",stripes=even,frame=none]
 |===
@@ -640,13 +704,60 @@ Compile and run the programs, and enter the commands:
 | `exit`  | Closes the client.
 |===
 
-Note:: JSON request and response processing is essential for extensible REST API development (GET, POST, etc.).
+Set the server running:
+
+[source,text]
+----
+HTTP Server running on port 8080...
+
+----
+
+Enter commands into the client:
+
+[source,text]
+----
+Enter command (status/greet/exit): status
+Server Response: {"status":"Server is running!"}
+
+Enter command (status/greet/exit): greet
+Enter name: Peter
+Server Response: {"message":"Hello, Peter!"}
+
+Enter command (status/greet/exit): greet
+Enter name: Johnny
+Server Response: {"message":"Hello, Johnny!"}
+
+Enter command (status/greet/exit): exit
+
+----
+
+View the responses on the server:
+
+[source,text]
+----
+HTTP Server running on port 8080...
+
+Method: GET...
+Target: /status...
+Body: ...
+
+Method: POST...
+Target: /greet...
+Body: {"name":"Peter"}...
+
+Method: POST...
+Target: /greet...
+Body: {"name":"Johnny"}...
+
+----
 
 == Add Websockets
 
 As a final step, let's add WebSockets, as this will allow real-time bidirectional communication between the client and server. This is useful for chat applications, game servers, stock updates, and other timing-critical applications.
 
 We will use the features of boost:beast[] to accept Websocket connections, and echo received messages.
+
+The Websocket server runs on `ws://127.0.0.1:9002`.
 
 === Websocket Server
 
@@ -675,15 +786,16 @@ void websocket_session(tcp::socket socket) {
             ws.read(buffer);
             std::string msg = beast::buffers_to_string(buffer.data());
 
-            std::cout << "Received: " << msg << std::endl;
-            
+            std::cout << "\nReceived: " << msg << std::endl;
+
             // Echo message back to client
             ws.text(ws.got_text());
             ws.write(buffer.data());
 
             buffer.consume(buffer.size()); // Clear buffer for next message
         }
-    } catch (std::exception& e) {
+    }
+    catch (std::exception& e) {
         std::cerr << "WebSocket session error: " << e.what() << "\n";
     }
 }
@@ -692,7 +804,7 @@ void websocket_session(tcp::socket socket) {
 void run_server(asio::io_context& ioc, unsigned short port) {
     tcp::acceptor acceptor(ioc, tcp::endpoint(tcp::v4(), port));
 
-    std::cout << "WebSocket Server running on ws://127.0.0.1:" << port << "\n";
+    std::cout << "WebSocket Server running on ws://127.0.0.1:" << port << "\n\n";
 
     while (true) {
         tcp::socket socket(ioc);
@@ -705,7 +817,8 @@ int main() {
     try {
         asio::io_context io_context;
         run_server(io_context, 9002);
-    } catch (std::exception& e) {
+    }
+    catch (std::exception& e) {
         std::cerr << "Server error: " << e.what() << "\n";
     }
     return 0;
@@ -740,20 +853,21 @@ void run_client(const std::string& host, const std::string& port) {
 
         std::string message;
         while (true) {
-            std::cout << "Enter message (or 'exit' to quit): ";
+            std::cout << "\nEnter message (or 'exit' to quit): ";
             std::getline(std::cin, message);
 
             if (message == "exit") break;
 
             ws.write(asio::buffer(message));
-            
+
             beast::flat_buffer buffer;
             ws.read(buffer);
             std::cout << "Server Response: " << beast::buffers_to_string(buffer.data()) << "\n";
         }
 
         ws.close(websocket::close_code::normal);
-    } catch (std::exception& e) {
+    }
+    catch (std::exception& e) {
         std::cerr << "Client error: " << e.what() << "\n";
     }
 }
@@ -767,15 +881,37 @@ int main() {
 
 === Compile and Run
 
-The Websocket server runs on `ws://127.0.0.1:9002`.
+In the client, type any message and hit `Enter`. The server should echo the message. Type `exit` to close the client.
 
-In the client, type any message and hit *Enter*. The server should echo the message. Type `exit` to close the client.
+[source,text]
+----
+Connected to WebSocket server!
+
+Enter message (or 'exit' to quit): hi there
+Server Response: hi there
+
+Enter message (or 'exit' to quit): we are connected!
+Server Response: we are connected!
+
+Enter message (or 'exit' to quit):
+----
+
+The server should be responding as follows:
+
+[source,text]
+----
+WebSocket Server running on ws://127.0.0.1:9002
+
+Client connected!
+
+Received: hi there
+
+Received: we are connected!
+----
 
 == Summary
 
 The samples shown here are portable and cross-platform (Windows/Linux/Mac), and the servers are asynchronous to handle multiple clients.
-
-Other libraries, such as boost:mysql[], are also based on boost:asio[]. 
 
 == See Also
 

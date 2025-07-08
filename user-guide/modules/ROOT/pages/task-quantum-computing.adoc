@@ -25,7 +25,7 @@ This topic is an educational tutorial on what we might expect from quantum appli
 ** <<Other Quantum Algorithms>>
 * <<Libraries>>
 ** <<Quantum Walk Simulation using Boost.MultiArray>>
-** <<Quantum Gate Simulation with GPU Acceleration using Boost.Compute>>
+** <<Quantum Gate Simulation using Boost Numeric Libraries>>
 ** <<Hybrid Classic-Quantum Algorithms>>
 * <<Next Steps for Quantum Computing>>
 * <<Footnotes>>
@@ -34,6 +34,8 @@ This topic is an educational tutorial on what we might expect from quantum appli
 == Quantum Algorithms
 
 Quantum computing is much easier to understand with a deep dive into some specific algorithms.
+
+Note:: The code in this tutorial was written and tested using Microsoft Visual Studio (Visual C++ 2022, Console App project) with Boost version 1.88.0.
 
 === The Shor Algorithm
 
@@ -660,73 +662,118 @@ int main() {
 
 ----
 
-=== Quantum Gate Simulation with GPU Acceleration using Boost.Compute
+The output should be similar to the following:
 
-Let's simulate a quantum gate (a Hadamard gate) and accelerate the simulation using boost:compute[].
+[source,text]
+----
+-100: 0
+-99: 3.86581e-27
+-98: 5.02749e-24
+-97: 2.90701e-21
+-96: 9.63774e-19
+-95: 2.08484e-16
+-94: 3.19241e-14
+-93: 3.66019e-12
+-92: 3.27387e-10
+-91: 2.35719e-08
+-90: 1.40029e-06
+...
 
-The program simulates the application of a Hadamard gate on a qubit state. The qubit state is stored in a vector and transferred to the GPU using a compute buffer. The Hadamard gate kernel performs the quantum transformation - applying the Hadamard operation.
+----
 
-The results are read back from the GPU and displayed.
+=== Quantum Gate Simulation using Boost Numeric Libraries
+
+Let's simulate some quantum gates (a Hadamard gate and a PauliX gate), ensuring high precision with boost:multiprecision[], and with matrix and vector calculations using boost:numeric/ublas[]. The sample simulates a single qubit as a 2-element complex vector, and applies quantum gates using 2x2 complex matrices.
+
+Note:: The Pauli gates (PauliX, PauliY, and PauliZ) equate to rotation about the respective axis, in each case by pi radians. The Hadamard gate is the proverbial _coin flip_.
 
 [source,cpp]
 ----
-#include <boost/compute.hpp>
 #include <iostream>
-#include <vector>
-#include <complex>
+#include <boost/numeric/ublas/matrix.hpp>
+#include <boost/numeric/ublas/io.hpp>
+#include <boost/multiprecision/cpp_complex.hpp>
+#include <boost/math/constants/constants.hpp>
 
-namespace compute = boost::compute;
-using namespace std;
+namespace ublas = boost::numeric::ublas;
+namespace mp = boost::multiprecision;
 
-const int NUM_QUBITS = 2;
-using Complex = std::complex<float>;
+using Complex = mp::cpp_complex_100;  // or std::complex<double> for normal precision
+using Matrix2 = ublas::matrix<Complex>;
+using Vector2 = ublas::vector<Complex>;
 
-// Kernel for applying a Hadamard gate to a qubit state
-const char *hadamard_kernel = R"(
-__kernel void apply_hadamard(__global float2* qubit) {
-    float2 val = qubit[get_global_id(0)];
-    float real_part = val.x;
-    float imag_part = val.y;
+const Complex I(0, 1);
 
-    float real_new = (real_part + imag_part) / sqrt(2);
-    float imag_new = (real_part - imag_part) / sqrt(2);
-
-    qubit[get_global_id(0)] = (float2)(real_new, imag_new);
+// Quantum gate definitions
+Matrix2 Hadamard() {
+    Matrix2 H(2, 2);
+    Complex norm = 1.0 / sqrt(2.0);
+    H(0, 0) = norm; H(0, 1) = norm;
+    H(1, 0) = norm; H(1, 1) = -norm;
+    return H;
 }
-)";
+
+Matrix2 PauliX() {
+    Matrix2 X(2, 2);
+    X(0, 0) = 0; X(0, 1) = 1;
+    X(1, 0) = 1; X(1, 1) = 0;
+    return X;
+}
+
+// Print a qubit's state vector
+void print_state(const Vector2& qubit) {
+    std::cout << "Qubit state:\n";
+    std::cout << "  |0⟩: " << qubit(0) << "\n";
+    std::cout << "  |1⟩: " << qubit(1) << "\n";
+}
 
 int main() {
-    // Create an OpenCL context and queue
-    compute::device device = compute::system::default_device();
-    compute::context context(device);
-    compute::command_queue queue(context, device);
+    // Initial state |0⟩ = [1, 0]
+    Vector2 qubit(2);
+    qubit(0) = 1.0;
+    qubit(1) = 0.0;
 
-    // Quantum state (initial |0⟩ state)
-    vector<Complex> qubit_state(NUM_QUBITS, Complex(1.0f, 0.0f));  // |0⟩
+    std::cout << "Initial state:\n";
+    print_state(qubit);
 
-    // Create OpenCL buffer
-    compute::buffer buffer_state(context, qubit_state.size() * sizeof(Complex), CL_MEM_READ_WRITE);
-    queue.enqueue_write_buffer(buffer_state, 0, qubit_state.size() * sizeof(Complex), qubit_state.data());
+    // Apply Hadamard gate
+    Matrix2 H = Hadamard();
+    qubit = ublas::prod(H, qubit);
 
-    // Compile and execute the Hadamard kernel
-    compute::program program = compute::program::create_with_source(hadamard_kernel, context);
-    program.build();
-    compute::kernel kernel(program, "apply_hadamard");
+    std::cout << "\nAfter Hadamard gate:\n";
+    print_state(qubit);
 
-    kernel.set_arg(0, buffer_state);
-    queue.enqueue_nd_range_kernel(kernel, compute::dim(1), compute::dim(qubit_state.size()));
+    // Apply Pauli-X gate
+    Matrix2 X = PauliX();
+    qubit = ublas::prod(X, qubit);
 
-    // Read the results
-    queue.enqueue_read_buffer(buffer_state, 0, qubit_state.size() * sizeof(Complex), qubit_state.data());
-
-    // Output the results
-    for (size_t i = 0; i < qubit_state.size(); i++) {
-        cout << "Qubit " << i << ": " << qubit_state[i] << endl;
-    }
+    std::cout << "\nAfter Pauli-X gate:\n";
+    print_state(qubit);
 
     return 0;
 }
 
+----
+
+Running this code should give output simlar to the following:
+
+[source,text]
+----
+Initial state:
+Qubit state:
+  |0?: 1
+  |1?: 0
+
+After Hadamard gate:
+Qubit state:
+  |0?: 0.707107
+  |1?: 0.707107
+
+After Pauli-X gate:
+Qubit state:
+  |0?: 0.707107
+  |1?: 0.707107
+  
 ----
 
 === Hybrid Classic-Quantum Algorithms
@@ -735,77 +782,88 @@ Let's explore a hybrid quantum-classical algorithm using Boost pass:[C++] librar
 
 The classic part of VQE is that a classical optimizer is used to find optimal parameters for a parameterized quantum circuit. The quantum part is that a quantum circuit generates quantum states based on these parameters, and the energy expectation is measured. The classical optimizer updates the parameters iteratively, with the quantum part computing the energy each time.
 
-We'll simulate a very basic version of this with a quantum Hamiltonian (energy function) and use a classical optimizer (from the optimization functions of boost:math[]) to minimize the energy.
+We'll simulate a very basic version of this with a quantum Hamiltonian (energy function) and use a classical optimizer (from the functions of boost:numeric/ublas[]) to minimize the energy.
 
 The quantum state will be parameterized, and the energy will be computed classically, simulating how a quantum system would behave in a real quantum computer.
 
 [source,cpp]
 ----
-#include <iostream>
-#include <boost/array.hpp>
-#include <boost/numeric/ublas/vector.hpp>
 #include <boost/numeric/ublas/matrix.hpp>
-#include <boost/optimization/constraint.hpp>
-#include <boost/optimization/line_search.hpp>
-#include <boost/optimization/optimizer.hpp>
-#include <boost/optimization/value.hpp>
+#include <boost/numeric/ublas/io.hpp>
+#include <boost/numeric/ublas/vector.hpp>
+#include <cmath>
+#include <iostream>
 
-using namespace std;
 namespace ublas = boost::numeric::ublas;
+constexpr double pi = 3.14159265358979323846;
 
-// Hamiltonian function (simulate energy function)
-double hamiltonian(const ublas::vector<double>& params) {
-    // Simple Hamiltonian: H = aX + bY + cZ (simulate 1-qubit)
-    double a = 1.0, b = 0.5, c = 0.25;
-    double energy = a * params[0] + b * params[1] + c * params[2];
-    return energy;
+// Pauli-Z Hamiltonian
+ublas::matrix<double> pauli_z() {
+    ublas::matrix<double> z(2, 2);
+    z(0, 0) = 1.0; z(0, 1) = 0.0;
+    z(1, 0) = 0.0; z(1, 1) = -1.0;
+    return z;
 }
 
-// Objective function for optimization (we want to minimize this)
-double objective_function(const ublas::vector<double>& params) {
-    return hamiltonian(params);  // Energy expectation
+// Rotation around Y-axis (parameterized gate)
+ublas::matrix<double> ry(double theta) {
+    ublas::matrix<double> ry_gate(2, 2);
+    ry_gate(0, 0) = std::cos(theta / 2);
+    ry_gate(0, 1) = -std::sin(theta / 2);
+    ry_gate(1, 0) = std::sin(theta / 2);
+    ry_gate(1, 1) = std::cos(theta / 2);
+    return ry_gate;
 }
 
-// Optimization constraint (could be bounds or conditions)
-boost::optimization::constraint::function energy_constraint(double target_energy) {
-    return [target_energy](const ublas::vector<double>& params) {
-        return hamiltonian(params) - target_energy;
-    };
+// Expectation value: ⟨ψ|H|ψ⟩
+double expectation_value(const ublas::matrix<double>& hamiltonian, const ublas::vector<double>& state) {
+    ublas::vector<double> h_psi = ublas::prod(hamiltonian, state);
+    return ublas::inner_prod(state, h_psi);
+}
+
+// Normalize a vector
+void normalize(ublas::vector<double>& v) {
+    double norm = std::sqrt(ublas::inner_prod(v, v));
+    if (norm > 0.0) v /= norm;
 }
 
 int main() {
-    // Step 1: Initialize parameters (quantum state parameters)
-    ublas::vector<double> params(3);
-    params[0] = 0.1; // Initial guess for parameter 1 (angle)
-    params[1] = 0.2; // Initial guess for parameter 2 (angle)
-    params[2] = 0.3; // Initial guess for parameter 3 (angle)
+    ublas::matrix<double> H = pauli_z();
 
-    // Step 2: Set up optimization problem
-    boost::optimization::algorithm_type algo = boost::optimization::conjugate_gradient;
-    boost::optimization::optimizer opt(algo);
-    
-    // Set objective function (VQE energy minimization)
-    opt.set_objective(objective_function);
-    
-    // Set optimization constraints (optional)
-    opt.set_constraint(energy_constraint(0.5));  // Targeting a specific energy
-    
-    // Step 3: Perform optimization
-    auto result = opt.optimize(params);
-    
-    // Step 4: Print the result (optimized parameters and energy)
-    cout << "Optimized parameters: ";
-    for (size_t i = 0; i < params.size(); ++i) {
-        cout << params[i] << " ";
+    // Initial state |0> = [1, 0]
+    ublas::vector<double> init_state(2);
+    init_state(0) = 1.0;
+    init_state(1) = 0.0;
+
+    // Sweep over theta to minimize expectation value
+    double min_energy = 1e9;
+    double best_theta = 0.0;
+
+    for (double theta = 0.0; theta <= 2 * pi; theta += 0.01) {
+        ublas::matrix<double> U = ry(theta);
+        ublas::vector<double> psi = ublas::prod(U, init_state);
+        normalize(psi);
+
+        double energy = expectation_value(H, psi);
+        if (energy < min_energy) {
+            min_energy = energy;
+            best_theta = theta;
+        }
     }
-    cout << "\nOptimized energy: " << hamiltonian(params) << endl;
-    
+
+    std::cout << "Minimum energy: " << min_energy << " at theta = " << best_theta << " radians\n";
     return 0;
 }
 
 ----
 
-This hybrid quantum-classical algorithm showcases how classical optimization can be combined with a quantum-inspired Hamiltonian simulation to solve quantum problems like finding the ground state energy.
+Running the code should give you this result:
+
+[source,text]
+----
+Minimum energy: -0.999999 at theta = 3.14 radians
+
+----
 
 == Next Steps for Quantum Computing
 
