@@ -15,9 +15,10 @@ Creating a high-performance database application in pass:[C++] involves a range 
 * <<Libraries>>
 * <<Sample Database Engine using Containers>>
 * <<Optimize Memory Allocation>>
-* <<Integrate Shared Memory>>
-* <<Create a Thread-safe Queue for Inter-thread Communication>>
-* <<Add Serialization to Persistently Store the Database>>
+* <<Use Persistent Shared Memory>>
+* <<Safely Allow Access from Multiple Processes>>
+* <<Add Serialization to Archive the Database>>
+* <<Next Steps>>
 * <<See Also>>
 
 == Libraries
@@ -44,6 +45,8 @@ Here are some Boost libraries that might be useful when planning and building yo
 * boost:polygon[] or boost:geometry[] : For storing and querying spatial data, these libraries can provide the necessary data types and algorithms.
 
 * boost:filesystem[] : Provides a portable way of querying and manipulating paths, files, and directories.
+
+Note:: The code in this tutorial was written and tested using Microsoft Visual Studio (Visual C++ 2022, Console App project) with Boost version 1.88.0.
 
 == Sample Database Engine using Containers
 
@@ -248,357 +251,579 @@ ID: 103, Name: Charlie
 
 ----
 
-== Integrate Shared Memory
+== Use Persistent Shared Memory
 
-In a realistic database environment, you would probably want to enable a shared-memory database table that multiple processes can access simultaneously. For this, we need the features of boost:interprocess[]. This library enables multiple processes to share the same data faster than inter-process communication (IPC) via files or sockets, and includes mutexes and condition variables.
-
-We modify our `DatabaseTable` to store records in shared memory instead of standard heap memory.
+In a realistic database environment, you would probably want to enable a shared-memory database table that multiple processes can access simultaneously. For this, we need the features of boost:interprocess[]. This library enables multiple processes to share the same data faster than inter-process communication (IPC) via files or sockets, and includes mutexes and condition variables. 
 
 [source,cpp]
 ----
 #include <boost/interprocess/managed_shared_memory.hpp>
-#include <boost/interprocess/sync/named_mutex.hpp>
-#include <boost/container/flat_map.hpp>
+#include <boost/interprocess/containers/vector.hpp>
 #include <iostream>
-#include <string>
 
 namespace bip = boost::interprocess;
 
-struct Record {
+const char* SHM_NAME = "SharedDatabase";
+const char* TABLE_NAME = "UserTable";
+const std::size_t MAX_USERS = 10;
+
+struct UserRecord {
     int id;
     char name[32];
-
-    Record(int id, const std::string& name) : id(id) {
-        std::strncpy(this->name, name.c_str(), sizeof(this->name));
-        this->name[sizeof(this->name) - 1] = '\0'; // Ensure null termination
-    }
 };
 
-class SharedDatabase {
-public:
-    SharedDatabase() 
-        : segment(bip::open_or_create, "SharedMemory", 65536) // 64 KB shared memory
-    {
-        table = segment.find_or_construct<TableType>("RecordTable")();
+using ShmemAllocator = bip::allocator<UserRecord, bip::managed_shared_memory::segment_manager>;
+using UserTable = bip::vector<UserRecord, ShmemAllocator>;
+
+void create_table() {
+    bip::shared_memory_object::remove(SHM_NAME);
+
+    bip::managed_shared_memory segment(bip::create_only, SHM_NAME, 65536);
+    const ShmemAllocator alloc_inst(segment.get_segment_manager());
+    UserTable* table = segment.construct<UserTable>(TABLE_NAME)(alloc_inst);
+
+    for (int i = 0; i < 3; ++i) {
+        UserRecord user;
+        user.id = 1 + table->size();
+        std::snprintf(user.name, sizeof(user.name), "User%d", user.id);
+        table->push_back(user);
     }
 
-    void insert(int id, const std::string& name) {
-        bip::scoped_lock<bip::named_mutex> lock(mutex);
-        if (table->find(id) == table->end()) {
-            Record* record = segment.construct<Record>(bip::anonymous_instance)(id, name);
-            (*table)[id] = record;
-        }
-    }
-
-    Record* find(int id) {
-        bip::scoped_lock<bip::named_mutex> lock(mutex);
-        auto it = table->find(id);
-        return (it != table->end()) ? it->second : nullptr;
-    }
-
-    void remove(int id) {
-        bip::scoped_lock<bip::named_mutex> lock(mutex);
-        auto it = table->find(id);
-        if (it != table->end()) {
-            segment.destroy_ptr(it->second);
-            table->erase(it);
-        }
-    }
-
-    void print_all() {
-        bip::scoped_lock<bip::named_mutex> lock(mutex);
-        for (const auto& pair : *table) {
-            std::cout << "ID: " << pair.first << ", Name: " << pair.second->name << "\n";
-        }
-    }
-
-private:
-    using TableType = boost::container::flat_map<int, Record*, std::less<int>, bip::allocator<std::pair<const int, Record*>, bip::managed_shared_memory::segment_manager>>;
-    
-    bip::managed_shared_memory segment;
-    TableType* table;
-    static inline bip::named_mutex mutex{bip::open_or_create, "SharedDBMutex"};
-};
-
-// Process 1 (Writer) – Insert and Modify Data
-int main() {
-    SharedDatabase db;
-
-    db.insert(1, "Alice");
-    db.insert(2, "Bob");
-
-    std::cout << "Process 1 - Initial Records:\n";
-    db.print_all();
-
-    return 0;
+    std::cout << "Shared memory table created with 3 initial users.\n";
 }
 
-// Process 2 (Reader) – Access Shared Memory Data
+void show_table() {
+
+    try
+    {
+        bip::managed_shared_memory segment(bip::open_only, SHM_NAME);
+        UserTable* table = segment.find<UserTable>(TABLE_NAME).first;
+
+        if (!table) {
+            std::cerr << "Table not found.\n";
+            return;
+        }
+
+        std::cout << "User Table:\n";
+        for (const auto& user : *table) {
+            std::cout << "  ID: " << user.id << ", Name: " << user.name << "\n";
+        }
+    }
+    catch (...)
+    {
+        std::cerr << "Shared Memory error - create a table\n";
+    }
+}
+
+void add_user() {
+
+    try
+    {
+        bip::managed_shared_memory segment(bip::open_only, SHM_NAME);
+        UserTable* table = segment.find<UserTable>(TABLE_NAME).first;
+
+        if (!table) {
+            std::cerr << "Table not found.\n";
+            return;
+        }
+
+        if (table->size() >= MAX_USERS) {
+            std::cerr << "Table is full (max " << MAX_USERS << " users).\n";
+            return;
+        }
+
+        std::string name;
+
+        std::cout << "Enter user name: ";
+        std::getline(std::cin, name);
+
+        UserRecord user;
+        user.id = 1 + table->size();
+        std::snprintf(user.name, sizeof(user.name) - 1, "%s", name.c_str());
+        user.name[sizeof(user.name) - 1] = '\0';
+
+        table->push_back(user);
+        std::cout << "User added.\n";
+    }
+    catch (...)
+    {
+        std::cerr << "Shared Memory error - create a table\n";
+    }
+}
+
+void print_menu() {
+    std::cout << "\n=== Shared Memory User Table Menu ===\n";
+    std::cout << "1. Create table   2. Show table   3. Add user   4. Clear shared memory   5. Exit: ";
+}
+
 int main() {
-    SharedDatabase db;
+    while (true) {
+        print_menu();
 
-    std::cout << "Process 2 - Records in Shared Memory:\n";
-    db.print_all();
+        int choice = 0;
+        std::cin >> choice;
+        std::cin.ignore(); // discard newline
 
-    return 0;
+        switch (choice) {
+        case 1:
+            create_table();
+            show_table();
+            break;
+        case 2:
+            show_table();
+            break;
+        case 3:
+            add_user();
+            break;
+        case 4:
+            bip::shared_memory_object::remove(SHM_NAME);
+            break;
+        case 5:
+            std::cout << "Exiting...\n";
+            return 0;
+        default:
+            std::cout << "Invalid option. Try again.\n";
+        }
+    }
 }
 
 ----
 
-Note:: The sample now avoids manual memory management, prevents race conditions through the use of mutexes, and multiple apps or processes can interact with the database.
+Boost shared memory is persistent. Run the program, add some user records, and exit without choosing option `4`. Then run the program again and note the records you added have persisted.
 
-== Create a Thread-safe Queue for Inter-thread Communication
+First run:
 
-With multiple apps or processes now accessing our database, would seem like a good idea to avoid locks or bottlenecks. boost:lockfree[] offers _message queues_ and _pre-allocated ring buffers_ for this purpose.
+[source,text]
+----
+=== Shared Memory User Table Menu ===
+1. Create table   2. Show table   3. Add user   4. Clear shared memory   5. Exit: 1
+Shared memory table created with 3 initial users.
+User Table:
+  ID: 1, Name: User1
+  ID: 2, Name: User2
+  ID: 3, Name: User3
+
+=== Shared Memory User Table Menu ===
+1. Create table   2. Show table   3. Add user   4. Clear shared memory   5. Exit: 3
+Enter user name: Nigel
+User added.
+
+=== Shared Memory User Table Menu ===
+1. Create table   2. Show table   3. Add user   4. Clear shared memory   5. Exit: 2
+User Table:
+  ID: 1, Name: User1
+  ID: 2, Name: User2
+  ID: 3, Name: User3
+  ID: 4, Name: Nigel
+
+=== Shared Memory User Table Menu ===
+1. Create table   2. Show table   3. Add user   4. Clear shared memory   5. Exit: 5
+Exiting...
+----
+
+Second run:
+
+[source,text]
+----
+=== Shared Memory User Table Menu ===
+1. Create table   2. Show table   3. Add user   4. Clear shared memory   5. Exit: 2
+User Table:
+  ID: 1, Name: User1
+  ID: 2, Name: User2
+  ID: 3, Name: User3
+  ID: 4, Name: Nigel
+----
+
+== Safely Allow Access from Multiple Processes
+
+To safely allow multiple processes to access and modify shared memory concurrently in your boost:interprocess[] program, you should use interprocess synchronization primitives — like `interprocess_mutex` to guard critical sections. 
 
 
 [source,cpp]
 ----
 #include <boost/interprocess/managed_shared_memory.hpp>
-#include <boost/interprocess/sync/named_mutex.hpp>
-#include <boost/container/flat_map.hpp>
-#include <boost/lockfree/queue.hpp>
+#include <boost/interprocess/containers/vector.hpp>
 #include <iostream>
-#include <string>
-#include <thread>
-#include <atomic>
 
 namespace bip = boost::interprocess;
 
-// Structure for storing records
-struct Record {
+const char* SHM_NAME = "SharedDatabase";
+const std::size_t MAX_USERS = 10;
+
+struct UserRecord {
     int id;
     char name[32];
-
-    Record(int id, const std::string& name) : id(id) {
-        std::strncpy(this->name, name.c_str(), sizeof(this->name));
-        this->name[sizeof(this->name) - 1] = '\0'; // Ensure null termination
-    }
 };
 
-// Enum for operation types in the queue
-enum class OperationType { INSERT, REMOVE, FIND, PRINT };
+using SegmentManager = bip::managed_shared_memory::segment_manager;
+using ShmemAllocator = bip::allocator<UserRecord, SegmentManager>;
+using UserTable = bip::vector<UserRecord, ShmemAllocator>;
 
-// Structure for a queued database operation
-struct DatabaseTask {
-    OperationType type;
-    int id;
-    std::string name;
+// Wrap the shared data and the mutex
+struct SharedData {
+    bip::interprocess_mutex mutex;
+    UserTable table;
+
+    SharedData(const ShmemAllocator& alloc) : table(alloc) {}
 };
 
-// Shared database class
-class SharedDatabase {
-public:
-    SharedDatabase()
-        : segment(bip::open_or_create, "SharedMemory", 65536), // 64 KB shared memory
-          task_queue(128) // Lock-free queue with capacity of 128 tasks
-    {
-        table = segment.find_or_construct<TableType>("RecordTable")();
-    }
+const char* TABLE_NAME = "SharedUserTable";
 
-    void enqueue_task(const DatabaseTask& task) {
-        while (!task_queue.push(task)); // Non-blocking push
-    }
+void create_table() {
+    bip::shared_memory_object::remove(SHM_NAME);
 
-    void process_tasks() {
-        DatabaseTask task;
-        while (task_queue.pop(task)) { // Non-blocking pop
-            execute_task(task);
+    bip::managed_shared_memory segment(bip::create_only, SHM_NAME, 65536);
+    ShmemAllocator alloc_inst(segment.get_segment_manager());
+
+    // Construct SharedData in shared memory
+    segment.construct<SharedData>(TABLE_NAME)(alloc_inst);
+
+    std::cout << "Shared memory table created.\n";
+}
+
+void show_table() {
+    try {
+        bip::managed_shared_memory segment(bip::open_only, SHM_NAME);
+        SharedData* data = segment.find<SharedData>(TABLE_NAME).first;
+        if (!data) {
+            std::cerr << "Table not found.\n";
+            return;
+        }
+
+        bip::scoped_lock<bip::interprocess_mutex> lock(data->mutex);
+        std::cout << "User Table:\n";
+        for (const auto& user : data->table) {
+            std::cout << "  ID: " << user.id << ", Name: " << user.name << "\n";
         }
     }
-
-    void execute_task(const DatabaseTask& task) {
-        bip::scoped_lock<bip::named_mutex> lock(mutex);
-        
-        switch (task.type) {
-            case OperationType::INSERT:
-                if (table->find(task.id) == table->end()) {
-                    Record* record = segment.construct<Record>(bip::anonymous_instance)(task.id, task.name);
-                    (*table)[task.id] = record;
-                }
-                break;
-            
-            case OperationType::REMOVE:
-                if (table->find(task.id) != table->end()) {
-                    segment.destroy_ptr((*table)[task.id]);
-                    table->erase(task.id);
-                }
-                break;
-            
-            case OperationType::FIND:
-                if (table->find(task.id) != table->end()) {
-                    std::cout << "Found: ID=" << task.id << ", Name=" << (*table)[task.id]->name << "\n";
-                } else {
-                    std::cout << "Record with ID=" << task.id << " not found.\n";
-                }
-                break;
-
-            case OperationType::PRINT:
-                for (const auto& pair : *table) {
-                    std::cout << "ID: " << pair.first << ", Name: " << pair.second->name << "\n";
-                }
-                break;
-        }
+    catch (...) {
+        std::cerr << "Error accessing shared memory. Is it created?\n";
     }
+}
 
-private:
-    using TableType = boost::container::flat_map<int, Record*, std::less<int>, bip::allocator<std::pair<const int, Record*>, bip::managed_shared_memory::segment_manager>>;
-    
-    bip::managed_shared_memory segment;
-    TableType* table;
-    static inline bip::named_mutex mutex{bip::open_or_create, "SharedDBMutex"};
+void add_user() {
+    try {
+        bip::managed_shared_memory segment(bip::open_only, SHM_NAME);
+        SharedData* data = segment.find<SharedData>(TABLE_NAME).first;
+        if (!data) {
+            std::cerr << "Table not found.\n";
+            return;
+        }
 
-    boost::lockfree::queue<DatabaseTask> task_queue;
-};
+        bip::scoped_lock<bip::interprocess_mutex> lock(data->mutex);
 
-// Run Multiple Threads to Insert and Query Records
+        if (data->table.size() >= MAX_USERS) {
+            std::cerr << "Table is full (max " << MAX_USERS << " users).\n";
+            return;
+        }
+
+        std::string name;
+        std::cout << "Enter user name: ";
+        std::cin.ignore();
+        std::getline(std::cin, name);
+
+        UserRecord user;
+        user.id = 1 + static_cast<int>(data->table.size());
+        std::snprintf(user.name, sizeof(user.name) - 1, "%s", name.c_str());
+        user.name[sizeof(user.name) - 1] = '\0';
+
+        data->table.push_back(user);
+        std::cout << "User added.\n";
+
+    }
+    catch (...) {
+        std::cerr << "Error accessing shared memory. Is it created?\n";
+    }
+}
+
+void print_menu() {
+    std::cout << "\n=== Shared Memory User Table Menu ===\n";
+    std::cout << "1. Create table   2. Show table   3. Add user   4. Clear shared memory   5. Exit\n";
+    std::cout << "Choose an option: ";
+}
+
 int main() {
-    SharedDatabase db;
+    while (true) {
+        print_menu();
 
-    // Start a worker thread to process tasks
-    std::thread worker([&db]() {
-        while (true) {
-            db.process_tasks();
-            std::this_thread::sleep_for(std::chrono::milliseconds(100));
+        int choice = 0;
+        std::cin >> choice;
+
+        switch (choice) {
+        case 1:
+            create_table();
+            show_table();
+            break;
+        case 2:
+            show_table();
+            break;
+        case 3:
+            add_user();
+            break;
+        case 4:
+            bip::shared_memory_object::remove(SHM_NAME);
+            std::cout << "Shared memory cleared.\n";
+            break;
+        case 5:
+            std::cout << "Exiting...\n";
+            return 0;
+        default:
+            std::cout << "Invalid option. Try again.\n";
         }
-    });
-
-    // Insert records
-    db.enqueue_task({OperationType::INSERT, 1, "Alice"});
-    db.enqueue_task({OperationType::INSERT, 2, "Bob"});
-    db.enqueue_task({OperationType::INSERT, 3, "Charlie"});
-
-    // Find a record
-    db.enqueue_task({OperationType::FIND, 2, ""});
-
-    // Print all records
-    db.enqueue_task({OperationType::PRINT, 0, ""});
-
-    // Remove a record
-    db.enqueue_task({OperationType::REMOVE, 2, ""});
-
-    // Print all records again
-    db.enqueue_task({OperationType::PRINT, 0, ""});
-
-    // Let the worker thread process
-    std::this_thread::sleep_for(std::chrono::seconds(1));
-
-    return 0;
+    }
 }
 
 ----
 
-Note:: A lock-free queue prevents thread contention, while a separate worker thread processes the queued tasks.
+Now it is safe to run this program from two, or more, terminal sessions. 
 
-== Add Serialization to Persistently Store the Database
+== Add Serialization to Archive the Database
 
-Finally, let's add the features of boost:serialization[] to allow us to save and restore snapshots of our shared-memory database, making it persistent across program runs. We will extend our sample to serialize the records into an archive format (such as binary, XML, or text).
+Finally, let's add the features of boost:serialization[] to allow us to save and restore snapshots of our shared-memory database, making it persistent across program runs even when the shared memory is cleared. We will extend our sample to serialize the records into an archive format.
 
 [source,cpp]
 ----
-#include <boost/serialization/access.hpp>
-#include <boost/serialization/string.hpp>
-
-struct Record {
-    int id;
-    std::string name;
-
-    Record() = default; // Needed for deserialization
-    Record(int id, const std::string& name) : id(id), name(name) {}
-
-    template<class Archive>
-    void serialize(Archive& ar, const unsigned int version) {
-        ar & id & name;
-    }
-};
-
-// Implement Save and Load Functions
-// Serialize the entire database to a file and deserialize it to restore data.
+#include <boost/interprocess/managed_shared_memory.hpp>
+#include <boost/interprocess/containers/vector.hpp>
+#include <boost/interprocess/sync/named_mutex.hpp>
+#include <boost/serialization/vector.hpp>
 #include <boost/archive/text_oarchive.hpp>
 #include <boost/archive/text_iarchive.hpp>
-#include <boost/serialization/map.hpp>
+#include <iostream>
 #include <fstream>
 
-class SharedDatabase {
-public:
-    SharedDatabase()
-        : segment(bip::open_or_create, "SharedMemory", 65536),
-          task_queue(128) 
-    {
-        table = segment.find_or_construct<TableType>("RecordTable")();
+namespace bip = boost::interprocess;
+
+const char* SHM_NAME = "SharedDatabase";
+const char* TABLE_NAME = "UserTable";
+const char* MUTEX_NAME = "SharedTableMutex";
+const std::size_t MAX_USERS = 10;
+
+// ---- User Record with Serialization ----
+struct UserRecord {
+    int id;
+    char name[32];
+
+    template<class Archive>
+    void serialize(Archive& ar, const unsigned int) {
+        ar& id;
+        ar& boost::serialization::make_array(name, sizeof(name));
+    }
+};
+
+// ---- Type Definitions ----
+using ShmemAllocator = bip::allocator<UserRecord, bip::managed_shared_memory::segment_manager>;
+using UserTable = bip::vector<UserRecord, ShmemAllocator>;
+
+// ---- Table Operations ----
+void create_table() {
+    bip::shared_memory_object::remove(SHM_NAME);
+    bip::named_mutex::remove(MUTEX_NAME);
+
+    bip::managed_shared_memory segment(bip::create_only, SHM_NAME, 65536);
+    ShmemAllocator alloc(segment.get_segment_manager());
+
+    //segment.construct<UserTable>(TABLE_NAME)(alloc);
+
+    //std::cout << "Shared memory table created.\n";
+    UserTable* table = segment.construct<UserTable>(TABLE_NAME)(alloc);
+
+    for (int i = 0; i < 3; ++i) {
+        UserRecord user;
+        user.id = 1 + table->size();
+        std::snprintf(user.name, sizeof(user.name), "User%d", user.id);
+        table->push_back(user);
     }
 
-    void save_snapshot(const std::string& filename) {
-        std::map<int, Record> snapshot;
-        
-        for (const auto& pair : *table) {
-            snapshot[pair.first] = *pair.second;
+    std::cout << "Shared memory table created with 3 initial users.\n";
+}
+
+void show_table() {
+    try {
+        bip::managed_shared_memory segment(bip::open_only, SHM_NAME);
+        bip::named_mutex mutex(bip::open_or_create, MUTEX_NAME);
+        bip::scoped_lock<bip::named_mutex> lock(mutex);
+
+        UserTable* table = segment.find<UserTable>(TABLE_NAME).first;
+        if (!table) {
+            std::cerr << "Table not found.\n";
+            return;
         }
+
+        std::cout << "User Table:\n";
+        for (const auto& user : *table) {
+            std::cout << "  ID: " << user.id << ", Name: " << user.name << "\n";
+        }
+    }
+    catch (...) {
+        std::cerr << "Unable to access shared memory.\n";
+    }
+}
+
+void add_user() {
+    try {
+        bip::managed_shared_memory segment(bip::open_only, SHM_NAME);
+        bip::named_mutex mutex(bip::open_or_create, MUTEX_NAME);
+        bip::scoped_lock<bip::named_mutex> lock(mutex);
+
+        UserTable* table = segment.find<UserTable>(TABLE_NAME).first;
+        if (!table || table->size() >= MAX_USERS) {
+            std::cerr << "Table not found or full.\n";
+            return;
+        }
+
+        std::string name;
+        std::cin.ignore(); // Flush newline
+        std::cout << "Enter user name: ";
+        std::getline(std::cin, name);
+
+        UserRecord user;
+        user.id = 1 + table->size();
+        std::snprintf(user.name, sizeof(user.name) - 1, "%s", name.c_str());
+        table->push_back(user);
+        std::cout << "User added.\n";
+    }
+    catch (...) {
+        std::cerr << "Failed to add user.\n";
+    }
+}
+
+// ---- Serialization ----
+void save_snapshot(const std::string& filename) {
+    try {
+        bip::managed_shared_memory segment(bip::open_only, SHM_NAME);
+        bip::named_mutex mutex(bip::open_or_create, MUTEX_NAME);
+        bip::scoped_lock<bip::named_mutex> lock(mutex);
+
+        UserTable* table = segment.find<UserTable>(TABLE_NAME).first;
+        if (!table) {
+            std::cerr << "Table not found.\n";
+            return;
+        }
+
+        std::vector<UserRecord> snapshot(table->begin(), table->end());
 
         std::ofstream ofs(filename);
         boost::archive::text_oarchive oa(ofs);
         oa << snapshot;
 
-        std::cout << "📀 Snapshot saved to " << filename << "\n";
+        std::cout << "Snapshot saved to " << filename << "\n";
     }
+    catch (...) {
+        std::cerr << "Failed to save snapshot.\n";
+    }
+}
 
-    void load_snapshot(const std::string& filename) {
+void load_snapshot(const std::string& filename) {
+    try {
         std::ifstream ifs(filename);
         if (!ifs) {
-            std::cerr << "⚠ Snapshot file not found!\n";
+            std::cerr << "Snapshot file not found.\n";
             return;
         }
 
-        std::map<int, Record> snapshot;
+        std::vector<UserRecord> snapshot;
         boost::archive::text_iarchive ia(ifs);
         ia >> snapshot;
 
-        for (const auto& pair : snapshot) {
-            if (table->find(pair.first) == table->end()) {
-                Record* record = segment.construct<Record>(bip::anonymous_instance)(pair.first, pair.second.name);
-                (*table)[pair.first] = record;
-            }
+        bip::shared_memory_object::remove(SHM_NAME);
+        bip::managed_shared_memory segment(bip::create_only, SHM_NAME, 65536);
+        bip::named_mutex::remove(MUTEX_NAME);
+        bip::named_mutex mutex(bip::create_only, MUTEX_NAME);
+        bip::scoped_lock<bip::named_mutex> lock(mutex);
+
+        ShmemAllocator alloc(segment.get_segment_manager());
+        UserTable* table = segment.construct<UserTable>(TABLE_NAME)(alloc);
+
+        for (const auto& user : snapshot) {
+            table->push_back(user);
         }
 
-        std::cout << "📂 Snapshot loaded from " << filename << "\n";
+        std::cout << "Snapshot loaded from " << filename << "\n";
     }
+    catch (...) {
+        std::cerr << "Failed to load snapshot.\n";
+    }
+}
 
-private:
-    using TableType = boost::container::flat_map<int, Record*, std::less<int>, bip::allocator<std::pair<const int, Record*>, bip::managed_shared_memory::segment_manager>>;
-    
-    bip::managed_shared_memory segment;
-    TableType* table;
-    static inline bip::named_mutex mutex{bip::open_or_create, "SharedDBMutex"};
+void clear_shared_memory() {
+    bip::shared_memory_object::remove(SHM_NAME);
+    bip::named_mutex::remove(MUTEX_NAME);
+    std::cout << "Shared memory cleared.\n";
+}
 
-    boost::lockfree::queue<DatabaseTask> task_queue;
-};
+// ---- Menu ----
+void print_menu() {
+    std::cout << "\n=== Shared Memory Menu ===\n"
+        << "1. Create table  2. Show table  3. Add user  4. Save snapshot  5. Load snapshot  6. Clear shared memory  7. Exit:";
+}
 
-// Modify main to Save and Restore Snapshots
 int main() {
-    SharedDatabase db;
+    while (true) {
+        print_menu();
+        int choice;
+        std::cin >> choice;
 
-    // Load a previous snapshot (if it exists)
-    db.load_snapshot("database_snapshot.txt");
-
-    // Insert new records
-    db.enqueue_task({OperationType::INSERT, 1, "Alice"});
-    db.enqueue_task({OperationType::INSERT, 2, "Bob"});
-    db.enqueue_task({OperationType::INSERT, 3, "Charlie"});
-
-    // Print current records
-    db.enqueue_task({OperationType::PRINT, 0, ""});
-
-    // Save snapshot before exiting
-    db.save_snapshot("database_snapshot.txt");
-
-    return 0;
+        switch (choice) {
+        case 1: 
+            create_table();
+            show_table();
+            break;
+        case 2: show_table(); break;
+        case 3: add_user(); break;
+        case 4: save_snapshot("snapshot.txt"); break;
+        case 5: 
+            load_snapshot("snapshot.txt");
+            show_table();
+            break;
+        case 6: clear_shared_memory(); break;
+        case 7: return 0;
+        default: std::cout << "Invalid choice.\n";
+        }
+    }
 }
 
 ----
 
-Note:: Text based snapshots are easily readable, editable, and help verify your code is running correctly. You can always switch to a binary format for some final testing.
+Run the sample, and verify that the saved file persists after shared memory has been cleared.
 
-Perhaps now consider boost:filesystem[] for file management, and for a heavier duty database engine - integrate boost:asio[] to handle remote database transactions.
+[source,text]
+----
+=== Shared Memory Menu ===
+1. Create table  2. Show table  3. Add user  4. Save snapshot  5. Load snapshot  6. Clear shared memory  7. Exit:1
+Shared memory table created with 3 initial users.
+User Table:
+  ID: 1, Name: User1
+  ID: 2, Name: User2
+  ID: 3, Name: User3
+
+=== Shared Memory Menu ===
+1. Create table  2. Show table  3. Add user  4. Save snapshot  5. Load snapshot  6. Clear shared memory  7. Exit:3
+Enter user name: Nigel
+User added.
+
+=== Shared Memory Menu ===
+1. Create table  2. Show table  3. Add user  4. Save snapshot  5. Load snapshot  6. Clear shared memory  7. Exit:4
+Snapshot saved to snapshot.txt
+
+=== Shared Memory Menu ===
+1. Create table  2. Show table  3. Add user  4. Save snapshot  5. Load snapshot  6. Clear shared memory  7. Exit:6
+Shared memory cleared.
+
+=== Shared Memory Menu ===
+1. Create table  2. Show table  3. Add user  4. Save snapshot  5. Load snapshot  6. Clear shared memory  7. Exit:5
+Snapshot loaded from snapshot.txt
+User Table:
+  ID: 1, Name: User1
+  ID: 2, Name: User2
+  ID: 3, Name: User3
+  ID: 4, Name: Nigel
+
+----
+
+== Next Steps
+
+Perhaps now consider boost:filesystem[] for file management, and for a heavier duty database engine - integrate boost:asio[] to handle remote database transactions. Referring to the xref:task-networking.adoc[] sample would be a good place to start.
 
 The Boost libraries have a lot to offer this particular scenario!
 
