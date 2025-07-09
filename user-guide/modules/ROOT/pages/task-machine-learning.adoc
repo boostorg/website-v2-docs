@@ -9,15 +9,18 @@ Official repository: https://github.com/boostorg/website-v2-docs
 = Machine Learning
 :navtitle: Machine Learning
 
-Developing a machine learning library or application involves tasks such as numerical computation, matrix operations, iteration and optimization (endless trial and error), and sometimes xref:task-parallel-computation.adoc[]. It requires not just programming but also a deep understanding of the underlying mathematical and statistical principles.
+Developing a machine learning library or application involves tasks such as numerical computation, matrix operations, iteration and optimization (endless trial and error), classification and clustering procedures, and sometimes xref:task-parallel-computation.adoc[]. It requires not just skillful programming but also a deep understanding of the underlying mathematical and statistical principles.
+
+This section investigates how you might get started with machine learning processes.
 
 [square]
 * <<Libraries>>
 * <<Machine Learning Algorithms>>
 * <<Sample of High-Precision Matrix Multiplication>>
-* <<Add Stochastic Gradient Descent>>
-* <<Add K-Means Clustering with a Real Dataset>>
-* <<Add Visualization of the K-Means Clustering>>
+* <<Train a Model with Stochastic Gradient Descent>>
+* <<Classify Data using K-Means Clustering>>
+* <<Predict Future Values of Time Series Data>>
+* <<Next Steps>>
 * <<Footnotes>>
 * <<See Also>>
 
@@ -45,6 +48,7 @@ Here are some Boost libraries that could be helpful for the supporting tasks:
 * boost:gil[] : A library designed for image processing, offering a flexible way to manipulate and process images.
 
 * boost:filesystem[] : This library provides a portable way of querying and manipulating paths, files, and directories.
+
 
 == Machine Learning Algorithms
 
@@ -78,7 +82,6 @@ Randomized values are commonly used in machine language algorithms, such as _Sto
 
 [source,cpp]
 ----
-#include <iostream>
 #include <boost/numeric/ublas/matrix.hpp>
 #include <boost/numeric/ublas/io.hpp>
 #include <boost/multiprecision/cpp_dec_float.hpp>
@@ -113,8 +116,8 @@ int main() {
     C = prod(A, B);
 
     // Print results
-    std::cout << "Matrix A (random values):\n" << A << "\n";
-    std::cout << "Matrix B (random values):\n" << B << "\n";
+    std::cout << "Matrix A (random values):\n" << A << "\n\n";
+    std::cout << "Matrix B (random values):\n" << B << "\n\n";
     std::cout << "Result of A * B:\n" << C << "\n";
 
     return 0;
@@ -122,85 +125,111 @@ int main() {
 
 ----
 
-==  Add Stochastic Gradient Descent
+Running the code should give you output similar to the following:
+
+[source,text]
+----
+Matrix A (random values):
+[3,3]((0.6344,0.797229,0.149486),(0.205832,0.854583,0.444135),(0.175206,0.261295,0.244765))
+
+Matrix B (random values):
+[3,3]((0.622424,0.111231,0.326372),(0.148841,0.4861,0.0497033),(0.876468,0.0207629,0.314664))
+
+Result of A * B:
+[3,3]((0.644546,0.461201,0.293713),(0.644582,0.447529,0.249407),(0.362473,0.151586,0.147188))
+
+----
+
+==  Train a Model with Stochastic Gradient Descent
 
 Stochastic Gradient Descent (SGD) is an optimization algorithm used to update model parameters (often called "weights") in machine learning by minimizing the error function (usually called "loss").
 
-The weight update rule is:
+A common weight update rule is:
 
 image::stochastic-equation.png[Stochastic Gradient Descent]
 
 [#footnote4-location]
 Neural networks train with SGD and the many variants of the algorithm (such as _Adam_, _RMSprop_, and the alternative _Batch Gradient Descent_ link:#footnote4[(4)]). This approach is efficient for big data and real-time learning.
 
+The following code shows a linear model of *y = w * x + b* being trained to fit synthetic data with some added noise.
+
 [source,cpp]
 ----
-#include <iostream>
-#include <boost/numeric/ublas/matrix.hpp>
 #include <boost/numeric/ublas/vector.hpp>
 #include <boost/numeric/ublas/io.hpp>
-#include <boost/multiprecision/cpp_dec_float.hpp>
 #include <boost/random.hpp>
-#include <boost/random/random_device.hpp>
 
 namespace ublas = boost::numeric::ublas;
-namespace mp = boost::multiprecision;
-namespace br = boost::random;
+
+using Vector = ublas::vector<double>;
+
+// Create synthetic training data: y = 2x + 1 + noise
+void generate_data(std::vector<std::pair<double, double>>& data, int n) {
+    boost::random::mt19937 rng;
+    boost::random::uniform_real_distribution<> x_dist(0.0, 10.0);
+    boost::random::normal_distribution<> noise(0.0, 1.0);
+
+    for (int i = 0; i < n; ++i) {
+        double x = x_dist(rng);
+        double y = 2.0 * x + 1.0 + noise(rng);  // true model + noise
+        data.emplace_back(x, y);
+    }
+}
 
 int main() {
-    // Define high-precision floating-point type (50 decimal places)
-    using high_prec = mp::cpp_dec_float_50;
+    std::vector<std::pair<double, double>> data;
+    generate_data(data, 100);  // 100 training samples
 
-    // Parameters
-    const std::size_t num_features = 2;  // Simple linear regression (1 feature + bias)
-    const std::size_t num_samples = 5;   // Number of training samples
-    const high_prec learning_rate = 0.01; // Small learning rate
+    double w = 0.0;  // weight
+    double b = 0.0;  // bias
+    double learning_rate = 0.01;
+    int epochs = 100;
 
-    // Training Data (x, y) where y = mx + b + noise
-    ublas::matrix<high_prec> X(num_samples, num_features);
-    ublas::vector<high_prec> y(num_samples), weights(num_features);
+    boost::random::mt19937 rng;
+    boost::random::uniform_int_distribution<> index_dist(0, data.size() - 1);
 
-    // Random number generators
-    br::random_device rd;
-    br::mt19937 gen(rd());
-    br::uniform_real_distribution<double> dist(-1.0, 1.0); // Range [-1,1]
+    for (int epoch = 0; epoch < epochs; ++epoch) {
+        // SGD: pick one random point
+        auto [x, y_true] = data[index_dist(rng)];
 
-    // Initialize feature matrix (X) and target vector (y)
-    for (std::size_t i = 0; i < num_samples; ++i) {
-        X(i, 0) = 1;  // Bias term (intercept)
-        X(i, 1) = dist(gen);  // Random feature value
-        y(i) = 2.0 * X(i, 1) + 1.0 + dist(gen) * 0.1;  // y = 2x + 1 + noise
-    }
+        double y_pred = w * x + b;
+        double error = y_pred - y_true;
 
-    // Initialize weights randomly
-    for (std::size_t i = 0; i < num_features; ++i) {
-        weights(i) = dist(gen);
-    }
+        // Update parameters
+        w -= learning_rate * error * x;
+        b -= learning_rate * error;
 
-    std::cout << "Initial Weights:\n" << weights << "\n";
-
-    // Stochastic Gradient Descent (SGD) loop (10 iterations)
-    for (std::size_t epoch = 0; epoch < 10; ++epoch) {
-        for (std::size_t i = 0; i < num_samples; ++i) {
-            // Compute prediction: y_pred = dot(X[i], weights)
-            high_prec y_pred = ublas::inner_prod(row(X, i), weights);
-            
-            // Compute error: (y_pred - y)
-            high_prec error = y_pred - y(i);
-            
-            // Update weights: w = w - lr * error * x
-            weights -= learning_rate * error * row(X, i);
+        if (epoch % 10 == 0) {
+            std::cout << "Epoch " << epoch << ": w=" << w << ", b=" << b << ", error=" << error << "\n";
         }
     }
 
-    std::cout << "Final Weights after SGD:\n" << weights << "\n";
-
+    std::cout << "\nTrained Model: y = " << w << " * x + " << b << "\n";
     return 0;
 }
 
+
 ----
 
-== Add K-Means Clustering with a Real Dataset
+Running the code should give you output similar to the following:
+
+[source,text]
+----
+Epoch 0: w=1.51034, b=0.184796, error=-18.4796
+Epoch 10: w=2.05504, b=0.293644, error=-1.20787
+Epoch 20: w=2.15505, b=0.327562, error=0.9483
+Epoch 30: w=2.13036, b=0.345799, error=-1.19758
+Epoch 40: w=2.10543, b=0.340667, error=-0.0997447
+Epoch 50: w=2.12241, b=0.352897, error=-0.0906088
+Epoch 60: w=2.0156, b=0.333943, error=0.738856
+Epoch 70: w=2.02403, b=0.369294, error=1.36926
+Epoch 80: w=2.17905, b=0.411506, error=-0.849716
+Epoch 90: w=2.1482, b=0.430549, error=-0.839941
+
+Trained Model: y = 2.11625 * x + 0.455491
+----
+
+== Classify Data using K-Means Clustering
 
 Let's add _K-Means Clustering_ to group data points into clusters. The statistical functions of boost:math[] measure Euclidean distances that are the basis of K-Means clustering, which is a centroid-based clustering algorithm that partitions data into K clusters based on the nearest mean (centroid).
 
@@ -211,369 +240,294 @@ The clustering algorithm goes through the following cycle:
 . Recalculates centroids
 . Repeats (go back to step 2) until convergence
 
-We'll use the Iris dataset, a well-known sample dataset in machine learning containing 150 flower samples with four features (sepal length, sepal width, petal length, petal width) and three species (setosa, versicolor, and virginica). This dataset is loaded from a CSV file.
+The following code clusters randomly generated points.
 
 [source,cpp]
 ----
-#include <iostream>
-#include <fstream>
-#include <sstream>
-#include <vector>
-#include <boost/numeric/ublas/matrix.hpp>
 #include <boost/numeric/ublas/vector.hpp>
-#include <boost/numeric/ublas/io.hpp>
 #include <boost/random.hpp>
-#include <boost/math/tools/norms.hpp>
 
 namespace ublas = boost::numeric::ublas;
-namespace br = boost::random;
-namespace bm = boost::math::tools;
+using Point = ublas::vector<double>;
 
-using high_prec = double; // Change to multiprecision if needed
+struct Cluster {
+    Point centroid;
+    std::vector<Point> points;
+};
 
-// Function to calculate Euclidean distance
-high_prec euclidean_distance(const ublas::vector<high_prec>& a, const ublas::vector<high_prec>& b) {
-    return bm::l2_norm(a - b);
+double euclidean_distance(const Point& a, const Point& b) {
+    return std::sqrt(ublas::inner_prod(a - b, a - b));
 }
 
-// K-Means Clustering function
-void k_means_clustering(ublas::matrix<high_prec>& data, int k, int max_iterations = 100) {
-    std::size_t num_samples = data.size1();
-    std::size_t num_features = data.size2();
+// Generate synthetic 2D data around predefined cluster centers
+std::vector<Point> generate_data(int num_points, int seed = 42) {
+    boost::random::mt19937 rng(seed);
+    boost::random::normal_distribution<> d1x(2.0, 0.5), d1y(2.0, 0.5);
+    boost::random::normal_distribution<> d2x(5.0, 0.5), d2y(5.0, 0.5);
+    boost::random::normal_distribution<> d3x(8.0, 0.5), d3y(2.0, 0.5);
 
-    // Initialize random number generator
-    br::random_device rd;
-    br::mt19937 gen(rd());
-    br::uniform_int_distribution<std::size_t> dist(0, num_samples - 1);
+    std::vector<Point> data;
+    for (int i = 0; i < num_points; ++i) {
+        Point p(2);
+        if (i < num_points / 3) {
+            p(0) = d1x(rng); p(1) = d1y(rng);
+        }
+        else if (i < 2 * num_points / 3) {
+            p(0) = d2x(rng); p(1) = d2y(rng);
+        }
+        else {
+            p(0) = d3x(rng); p(1) = d3y(rng);
+        }
+        data.push_back(p);
+    }
+    return data;
+}
 
-    // Initialize centroids randomly from existing data points
-    std::vector<ublas::vector<high_prec>> centroids(k);
+void kmeans(std::vector<Point>& data, int k, int iterations = 10) {
+    const int dimensions = data[0].size();
+    std::vector<Cluster> clusters(k);
+
+    // Randomly initialize centroids
+    boost::random::mt19937 rng(static_cast<unsigned int>(std::time(0)));
+    boost::random::uniform_int_distribution<> index_dist(0, data.size() - 1);
     for (int i = 0; i < k; ++i) {
-        centroids[i] = row(data, dist(gen));
+        clusters[i].centroid = data[index_dist(rng)];
     }
 
-    std::vector<int> cluster_assignment(num_samples, -1);
+    for (int iter = 0; iter < iterations; ++iter) {
+        // Clear cluster assignments
+        for (auto& cluster : clusters) {
+            cluster.points.clear();
+        }
 
-    for (int iter = 0; iter < max_iterations; ++iter) {
-        bool changed = false;
-
-        // Step 1: Assign each point to the nearest centroid
-        for (std::size_t i = 0; i < num_samples; ++i) {
-            high_prec min_dist = std::numeric_limits<high_prec>::max();
-            int best_cluster = -1;
-
-            for (int j = 0; j < k; ++j) {
-                high_prec dist = euclidean_distance(row(data, i), centroids[j]);
+        // Assign each point to the nearest centroid
+        for (const auto& point : data) {
+            double min_dist = std::numeric_limits<double>::max();
+            int cluster_idx = 0;
+            for (int i = 0; i < k; ++i) {
+                double dist = euclidean_distance(point, clusters[i].centroid);
                 if (dist < min_dist) {
                     min_dist = dist;
-                    best_cluster = j;
+                    cluster_idx = i;
                 }
             }
+            clusters[cluster_idx].points.push_back(point);
+        }
 
-            if (cluster_assignment[i] != best_cluster) {
-                cluster_assignment[i] = best_cluster;
-                changed = true;
+        // Recompute centroids
+        for (auto& cluster : clusters) {
+            Point new_centroid(dimensions);
+            std::fill(new_centroid.begin(), new_centroid.end(), 0.0);
+
+            for (const auto& pt : cluster.points) {
+                new_centroid += pt;
+            }
+
+            if (!cluster.points.empty()) {
+                cluster.centroid = new_centroid / cluster.points.size();
             }
         }
 
-        // Stop if no changes (convergence)
-        if (!changed) break;
-
-        // Step 2: Compute new centroids
-        std::vector<ublas::vector<high_prec>> new_centroids(k, ublas::zero_vector<high_prec>(num_features));
-        std::vector<int> cluster_sizes(k, 0);
-
-        for (std::size_t i = 0; i < num_samples; ++i) {
-            int cluster = cluster_assignment[i];
-            new_centroids[cluster] += row(data, i);
-            cluster_sizes[cluster]++;
+        std::cout << "Iteration " << iter + 1 << " centroids:\n";
+        for (int i = 0; i < k; ++i) {
+            std::cout << "  Cluster " << i << ": ("
+                << clusters[i].centroid(0) << ", "
+                << clusters[i].centroid(1) << ")\n";
         }
+    }
 
+    // Final assignments
+    std::cout << "\nSample Final Cluster Assignments:\n";
+    for (int i = 0; i < std::min(10, (int)data.size()); ++i) {
+        const auto& point = data[i];
+        double min_dist = std::numeric_limits<double>::max();
+        int cluster_idx = 0;
         for (int j = 0; j < k; ++j) {
-            if (cluster_sizes[j] > 0) {
-                centroids[j] = new_centroids[j] / cluster_sizes[j];
+            double dist = euclidean_distance(point, clusters[j].centroid);
+            if (dist < min_dist) {
+                min_dist = dist;
+                cluster_idx = j;
             }
         }
+        std::cout << "Point (" << point(0) << ", " << point(1)
+            << ") -> Cluster " << cluster_idx << "\n";
     }
-
-    // Output results
-    std::cout << "Final Cluster Assignments:\n";
-    for (std::size_t i = 0; i < num_samples; ++i) {
-        std::cout << "Data Point " << i << " -> Cluster " << cluster_assignment[i] << "\n";
-    }
-}
-
-// Function to load the Iris dataset from a CSV file
-ublas::matrix<high_prec> load_iris_data(const std::string& filename) {
-    std::ifstream file(filename);
-    if (!file) {
-        throw std::runtime_error("Could not open file!");
-    }
-
-    std::vector<std::vector<high_prec>> data;
-    std::string line;
-
-    while (std::getline(file, line)) {
-        std::stringstream ss(line);
-        std::vector<high_prec> row;
-        std::string value;
-
-        while (std::getline(ss, value, ',')) {
-            row.push_back(std::stod(value));
-        }
-
-        data.push_back(row);
-    }
-
-    std::size_t num_samples = data.size();
-    std::size_t num_features = data[0].size();
-    ublas::matrix<high_prec> dataset(num_samples, num_features);
-
-    for (std::size_t i = 0; i < num_samples; ++i) {
-        for (std::size_t j = 0; j < num_features; ++j) {
-            dataset(i, j) = data[i][j];
-        }
-    }
-
-    return dataset;
 }
 
 int main() {
-    const int k = 3; // Number of clusters
+    int num_points = 90;
+    auto data = generate_data(num_points);
 
-    // Load Iris dataset
-    ublas::matrix<high_prec> data = load_iris_data("iris_data.csv");
-
-    std::cout << "Loaded Data:\n" << data << "\n";
-
-    // Perform K-Means clustering
-    k_means_clustering(data, k);
+    int k = 3;
+    std::cout << "Running K-Means with k = " << k << "...\n";
+    kmeans(data, k);
 
     return 0;
 }
 
 ----
 
-=== The Iris CSV File
-
-Save the following as *iris_data.csv*, a test sample, (or download https://archive.ics.uci.edu/dataset/53/iris[Iris]):
+Running this code should give you:
 
 [source,text]
 ----
-5.1,3.5,1.4,0.2,setosa
-4.9,3.0,1.4,0.2,setosa
-5.7,2.8,4.1,1.3,versicolor
-6.3,3.3,6.0,2.5,virginica
-5.8,2.7,5.1,1.9,virginica
-7.1,3.0,5.9,2.1,virginica
+Running K-Means with k = 3...
+Iteration 1 centroids:
+  Cluster 0: (3.21469, 2.93469)
+  Cluster 1: (7.98841, 2.11692)
+  Cluster 2: (4.08385, 4.89693)
+Iteration 2 centroids:
+  Cluster 0: (2.12261, 1.97237)
+  Cluster 1: (7.98841, 2.11692)
+  Cluster 2: (4.82826, 5.07435)
+Iteration 3 centroids:
+  Cluster 0: (2.12261, 1.97237)
+  Cluster 1: (7.98841, 2.11692)
+  Cluster 2: (4.82826, 5.07435)
+Iteration 4 centroids:
+  Cluster 0: (2.12261, 1.97237)
+  Cluster 1: (7.98841, 2.11692)
+  Cluster 2: (4.82826, 5.07435)
+Iteration 5 centroids:
+  Cluster 0: (2.12261, 1.97237)
+  Cluster 1: (7.98841, 2.11692)
+  Cluster 2: (4.82826, 5.07435)
+Iteration 6 centroids:
+  Cluster 0: (2.12261, 1.97237)
+  Cluster 1: (7.98841, 2.11692)
+  Cluster 2: (4.82826, 5.07435)
+Iteration 7 centroids:
+  Cluster 0: (2.12261, 1.97237)
+  Cluster 1: (7.98841, 2.11692)
+  Cluster 2: (4.82826, 5.07435)
+Iteration 8 centroids:
+  Cluster 0: (2.12261, 1.97237)
+  Cluster 1: (7.98841, 2.11692)
+  Cluster 2: (4.82826, 5.07435)
+Iteration 9 centroids:
+  Cluster 0: (2.12261, 1.97237)
+  Cluster 1: (7.98841, 2.11692)
+  Cluster 2: (4.82826, 5.07435)
+Iteration 10 centroids:
+  Cluster 0: (2.12261, 1.97237)
+  Cluster 1: (7.98841, 2.11692)
+  Cluster 2: (4.82826, 5.07435)
 
+Sample Final Cluster Assignments:
+Point (1.68064, 1.5816) -> Cluster 0
+Point (1.79972, 1.56538) -> Cluster 0
+Point (1.51398, 1.62053) -> Cluster 0
+Point (1.34782, 2.61498) -> Cluster 0
+Point (2.1247, 2.14342) -> Cluster 0
+Point (2.31555, 3.44066) -> Cluster 0
+Point (2.17959, 2.00728) -> Cluster 0
+Point (2.51907, 0.773036) -> Cluster 0
+Point (2.4533, 2.0738) -> Cluster 0
+Point (2.06517, 1.78315) -> Cluster 0
 ----
 
-== Add Visualization of the K-Means Clustering
 
-Finally, let's engage the features of boost:gil[] (Generic Image Library), and plot our clustered data. The following code maps clusters to colors, generates a scatter plot, and saves it as a PNG file. We'll also need boost:filesystem[] to manage output files.
+== Predict Future Values of Time Series Data
+
+[#footnote5-location]
+The following code tries to predict the next value in a 1D time series, using a simplified _Transformer-style self-attention mechanism_ link:#footnote4[(5)].
 
 [source,cpp]
 ----
-#include <iostream>
-#include <fstream>
-#include <sstream>
-#include <vector>
-#include <boost/numeric/ublas/matrix.hpp>
 #include <boost/numeric/ublas/vector.hpp>
-#include <boost/numeric/ublas/io.hpp>
+#include <boost/numeric/ublas/matrix.hpp>
 #include <boost/random.hpp>
-#include <boost/math/tools/norms.hpp>
-#include <boost/gil.hpp>
-#include <boost/gil/extension/io/png.hpp>
-#include <boost/filesystem.hpp>
+
 
 namespace ublas = boost::numeric::ublas;
-namespace br = boost::random;
-namespace bm = boost::math::tools;
-namespace gil = boost::gil;
-namespace bfs = boost::filesystem;
 
-using high_prec = double; // Use Boost.Multiprecision if needed
+using Vector = ublas::vector<double>;
+using Matrix = ublas::matrix<double>;
 
-const int IMAGE_SIZE = 500;
-const int POINT_RADIUS = 3;
-
-// Function to generate a color for each cluster
-gil::rgb8_pixel_t get_cluster_color(int cluster) {
-    static std::vector<gil::rgb8_pixel_t> colors = {
-        gil::rgb8_pixel_t(255, 0, 0),    // Red
-        gil::rgb8_pixel_t(0, 255, 0),    // Green
-        gil::rgb8_pixel_t(0, 0, 255),    // Blue
-        gil::rgb8_pixel_t(255, 255, 0),  // Yellow
-        gil::rgb8_pixel_t(255, 0, 255)   // Magenta
-    };
-    return colors[cluster % colors.size()];
+// Create a simple sine wave time series
+std::vector<double> generate_time_series(int length) {
+    std::vector<double> series(length);
+    for (int i = 0; i < length; ++i)
+        series[i] = std::sin(i * 0.1) + 0.1 * std::sin(i * 0.5);
+    return series;
 }
 
-// Function to plot the clustered data
-void plot_clusters(const ublas::matrix<high_prec>& data, const std::vector<int>& clusters, int k) {
-    gil::rgb8_image_t image(IMAGE_SIZE, IMAGE_SIZE);
-    auto view = gil::view(image);
+// Apply scaled dot-product attention on a sequence matrix
+Vector self_attention(const Matrix& sequence) {
+    const std::size_t seq_len = sequence.size1();
+    const std::size_t dim = sequence.size2();
 
-    // Clear background
-    gil::fill_pixels(view, gil::rgb8_pixel_t(255, 255, 255));
+    Vector attention_output(dim, 0.0);
 
-    // Normalize data for plotting
-    high_prec x_min = std::numeric_limits<high_prec>::max();
-    high_prec x_max = std::numeric_limits<high_prec>::lowest();
-    high_prec y_min = x_min, y_max = x_max;
-
-    for (std::size_t i = 0; i < data.size1(); ++i) {
-        x_min = std::min(x_min, data(i, 0));
-        x_max = std::max(x_max, data(i, 0));
-        y_min = std::min(y_min, data(i, 1));
-        y_max = std::max(y_max, data(i, 1));
-    }
-
-    // Scale and plot points
-    for (std::size_t i = 0; i < data.size1(); ++i) {
-        int x = static_cast<int>(((data(i, 0) - x_min) / (x_max - x_min)) * (IMAGE_SIZE - 10) + 5);
-        int y = static_cast<int>(((data(i, 1) - y_min) / (y_max - y_min)) * (IMAGE_SIZE - 10) + 5);
-
-        gil::rgb8_pixel_t color = get_cluster_color(clusters[i]);
-
-        // Draw a simple point (circle approximation)
-        for (int dx = -POINT_RADIUS; dx <= POINT_RADIUS; ++dx) {
-            for (int dy = -POINT_RADIUS; dy <= POINT_RADIUS; ++dy) {
-                if (x + dx >= 0 && x + dx < IMAGE_SIZE && y + dy >= 0 && y + dy < IMAGE_SIZE) {
-                    view(x + dx, y + dy) = color;
-                }
-            }
+    // Self-attention weights using dot-product of each timestep with others
+    for (std::size_t t = 0; t < seq_len; ++t) {
+        double score = 0.0;
+        for (std::size_t j = 0; j < seq_len; ++j) {
+            for (std::size_t d = 0; d < dim; ++d)
+                score += sequence(t, d) * sequence(j, d);
         }
+        score /= (seq_len * dim);  // normalize
+
+        for (std::size_t d = 0; d < dim; ++d)
+            attention_output[d] += score * sequence(t, d);
     }
 
-    // Save the image
-    gil::write_view("cluster_plot.png", view, gil::png_tag());
-    std::cout << "Cluster plot saved as cluster_plot.png!\n";
-}
-
-// Function to calculate Euclidean distance
-high_prec euclidean_distance(const ublas::vector<high_prec>& a, const ublas::vector<high_prec>& b) {
-    return bm::l2_norm(a - b);
-}
-
-// K-Means Clustering function
-void k_means_clustering(ublas::matrix<high_prec>& data, int k, int max_iterations = 100) {
-    std::size_t num_samples = data.size1();
-    std::size_t num_features = data.size2();
-
-    br::random_device rd;
-    br::mt19937 gen(rd());
-    br::uniform_int_distribution<std::size_t> dist(0, num_samples - 1);
-
-    std::vector<ublas::vector<high_prec>> centroids(k);
-    for (int i = 0; i < k; ++i) {
-        centroids[i] = row(data, dist(gen));
-    }
-
-    std::vector<int> cluster_assignment(num_samples, -1);
-
-    for (int iter = 0; iter < max_iterations; ++iter) {
-        bool changed = false;
-
-        for (std::size_t i = 0; i < num_samples; ++i) {
-            high_prec min_dist = std::numeric_limits<high_prec>::max();
-            int best_cluster = -1;
-
-            for (int j = 0; j < k; ++j) {
-                high_prec dist = euclidean_distance(row(data, i), centroids[j]);
-                if (dist < min_dist) {
-                    min_dist = dist;
-                    best_cluster = j;
-                }
-            }
-
-            if (cluster_assignment[i] != best_cluster) {
-                cluster_assignment[i] = best_cluster;
-                changed = true;
-            }
-        }
-
-        if (!changed) break;
-
-        std::vector<ublas::vector<high_prec>> new_centroids(k, ublas::zero_vector<high_prec>(num_features));
-        std::vector<int> cluster_sizes(k, 0);
-
-        for (std::size_t i = 0; i < num_samples; ++i) {
-            int cluster = cluster_assignment[i];
-            new_centroids[cluster] += row(data, i);
-            cluster_sizes[cluster]++;
-        }
-
-        for (int j = 0; j < k; ++j) {
-            if (cluster_sizes[j] > 0) {
-                centroids[j] = new_centroids[j] / cluster_sizes[j];
-            }
-        }
-    }
-
-    std::cout << "Final Cluster Assignments:\n";
-    for (std::size_t i = 0; i < num_samples; ++i) {
-        std::cout << "Data Point " << i << " -> Cluster " << cluster_assignment[i] << "\n";
-    }
-
-    // Generate cluster plot
-    plot_clusters(data, cluster_assignment, k);
-}
-
-// Function to load dataset from a CSV file
-ublas::matrix<high_prec> load_iris_data(const std::string& filename) {
-    std::ifstream file(filename);
-    if (!file) {
-        throw std::runtime_error("Could not open file!");
-    }
-
-    std::vector<std::vector<high_prec>> data;
-    std::string line;
-
-    while (std::getline(file, line)) {
-        std::stringstream ss(line);
-        std::vector<high_prec> row;
-        std::string value;
-
-        while (std::getline(ss, value, ',')) {
-            row.push_back(std::stod(value));
-        }
-
-        data.push_back(row);
-    }
-
-    std::size_t num_samples = data.size();
-    std::size_t num_features = data[0].size();
-    ublas::matrix<high_prec> dataset(num_samples, num_features);
-
-    for (std::size_t i = 0; i < num_samples; ++i) {
-        for (std::size_t j = 0; j < num_features; ++j) {
-            dataset(i, j) = data[i][j];
-        }
-    }
-
-    return dataset;
+    return attention_output;
 }
 
 int main() {
-    const int k = 3;
+    const int sequence_length = 10;
+    const int embedding_dim = 4;
+    const int total_samples = 200;
 
-    ublas::matrix<high_prec> data = load_iris_data("iris_data.csv");
+    // Generate synthetic sine wave data
+    auto series = generate_time_series(total_samples);
 
-    std::cout << "Loaded Data:\n" << data << "\n";
+    // Simple random projection into embedding space
+    boost::random::mt19937 rng;
+    boost::random::uniform_real_distribution<> dist(-1.0, 1.0);
+    Matrix embedding(sequence_length, embedding_dim);
+    for (std::size_t i = 0; i < sequence_length; ++i)
+        for (std::size_t j = 0; j < embedding_dim; ++j)
+            embedding(i, j) = dist(rng);
 
-    k_means_clustering(data, k);
+    // Feed input sequence through attention
+    for (int t = 0; t < total_samples - sequence_length - 1; ++t) {
+        Matrix seq_matrix(sequence_length, embedding_dim);
+        for (int i = 0; i < sequence_length; ++i) {
+            for (int d = 0; d < embedding_dim; ++d)
+                seq_matrix(i, d) = series[t + i] * embedding(i, d);  // embed input
+        }
+
+        Vector context = self_attention(seq_matrix);
+        double prediction = ublas::sum(context) / embedding_dim;  // crude projection to scalar
+
+        double target = series[t + sequence_length];
+        std::cout << "Predicted: " << prediction << ", Target: " << target << '\n';
+    }
 
     return 0;
 }
 
 ----
 
-All going well, you should get a cluster plot similar to this:
+[source,text]
+----
+Predicted: 0.0469448, Target: 0.745579
+Predicted: 0.06675, Target: 0.820653
+Predicted: 0.0893931, Target: 0.904098
+Predicted: 0.115752, Target: 0.98507
+Predicted: 0.147007, Target: 1.05115
+Predicted: 0.18403, Target: 1.09129
+Predicted: 0.226992, Target: 1.09851
+Predicted: 0.274918, Target: 1.07151
+....
 
-image::cluster_plot.png[Clustering of Iris Data]
+----
+
+== Next Steps
+
+Machine learning is a challenging task. This section just touched on some algorithms and processes that might be considered. Investigating decision trees, neural networks, different classification approaches, linear regression algorithms, all might help in gaining a programmers understanding of the daunting issues involved in making smart decisions, and getting smarter over time!
 
 == Footnotes
 
@@ -593,7 +547,14 @@ _Bayesion inference_ is used to calculate a probability for a hypothesis (using 
 link:#footnote4-location[(4)]
 _Gradient Descent_ is an optimization algorithm used to minimize a function by iteratively adjusting parameters in the direction of the steepest descent. There are several variations, each with trade-offs. _Stochastic Gradient Descent_ updates model parameters using a single randomly chosen training sample per iteration, making it computationally efficient but introducing high variance in updates, leading to noisy convergence. _Batch Gradient Descent_, in contrast, computes gradients over the entire dataset before making an update, leading to stable but computationally expensive iterations. A middle ground is _Mini-Batch Gradient Descent_, which processes small batches of data per iteration, balancing computational efficiency and convergence stability.
 
-* To improve upon standard gradient descent, adaptive optimization methods like _Adam_ (Adaptive Moment Estimation) and _RMSprop_ (Root Mean Square Propagation) were developed. RMSprop modifies the learning rate for each parameter based on recent gradient magnitudes, helping it navigate noisy gradients efficiently. Adam combines both momentum (which smooths updates) and adaptive learning rates (adjusting step sizes per parameter), making it one of the most widely used optimizers due to its robustness across different problems. These methods help accelerate convergence and handle sparse or non-stationary gradients better than traditional gradient descent techniques.
+To improve upon standard gradient descent, adaptive optimization methods like _Adam_ (Adaptive Moment Estimation) and _RMSprop_ (Root Mean Square Propagation) were developed. RMSprop modifies the learning rate for each parameter based on recent gradient magnitudes, helping it navigate noisy gradients efficiently. Adam combines both momentum (which smooths updates) and adaptive learning rates (adjusting step sizes per parameter), making it one of the most widely used optimizers due to its robustness across different problems. These methods help accelerate convergence and handle sparse or non-stationary gradients better than traditional gradient descent techniques.
+
+[#footnote5]
+link:#footnote5-location[(5)]
+A Transformer-style _self-attention mechanism_ is a powerful technique used in modern machine learning models — especially in natural language processing — to allow a model to weigh the importance of different parts of the input data relative to each other. In simple terms, self-attention enables a model to "look at" all elements of a sequence (like words in a sentence or time steps in a series) and determine how much focus each element should get when processing a specific item. For example, in a sentence, the meaning of a word may depend heavily on another word several positions away. The self-attention mechanism calculates attention scores that capture these dependencies, regardless of distance, and transforms the input into a new representation that highlights the most relevant relationships.
+
+The _Transformer-style_ part refers to the architecture introduced in the groundbreaking 2017 paper "Attention Is All You Need" (Vaswani et al), which relies on stacking multiple layers of self-attention and _feedforward_ operations without using recurrent or convolutional components. This approach enables parallel processing and captures complex patterns in data, making it a foundation for models like GPT and BERT.
+
 
 == See Also
 
