@@ -231,7 +231,7 @@ Trained Model: y = 2.11625 * x + 0.455491
 
 == Classify Data using K-Means Clustering
 
-Let's add _K-Means Clustering_ to group data points into clusters. The statistical functions of boost:math[] measure Euclidean distances that are the basis of K-Means clustering, which is a centroid-based clustering algorithm that partitions data into K clusters based on the nearest mean (centroid).
+_K-Means Clustering_ is a classification system to group data points into clusters. The statistical functions of boost:math[] measure Euclidean distances that are the basis of K-Means clustering, which is a centroid-based clustering algorithm that partitions data into K clusters based on the nearest mean (centroid).
 
 The clustering algorithm goes through the following cycle:
 
@@ -240,128 +240,161 @@ The clustering algorithm goes through the following cycle:
 . Recalculates centroids
 . Repeats (go back to step 2) until convergence
 
-The following code clusters randomly generated points.
+First let's download a real dataset, the Iris data contains around 150 entries in the format: sepal_length, sepal_width, petal_length, petal_width, species. 
+
+Download https://gist.githubusercontent.com/curran/a08a1080b88344b0c8a7/raw/0e7a9b0a5d22642a06d3d5b9bcbad9890c8ee534/iris.csv[Iris data in CSV format].
+
+The file should look like the following:
+
+[source,text]
+----
+sepal_length,sepal_width,petal_length,petal_width,species
+5.1, 3.5, 1.4, 0.2, setosa
+4.9, 3.0, 1.4, 0.2, setosa
+4.7, 3.2, 1.3, 0.2, setosa
+...
+7.0, 3.2, 4.7, 1.4, versicolor
+6.4, 3.2, 4.5, 1.5, versicolor
+6.9, 3.1, 4.9, 1.5, versicolor
+...
+6.3, 3.3, 6.0, 2.5, virginica
+5.8, 2.7, 5.1, 1.9, virginica
+7.1, 3.0, 5.9, 2.1, virginica
+----
+
+Save the Iris data to your local computer, and update the following code with the path.
 
 [source,cpp]
 ----
+#include <fstream>
 #include <boost/numeric/ublas/vector.hpp>
 #include <boost/random.hpp>
+#include <boost/random/random_device.hpp>
 
-namespace ublas = boost::numeric::ublas;
-using Point = ublas::vector<double>;
 
-struct Cluster {
-    Point centroid;
-    std::vector<Point> points;
-};
+namespace br = boost::random;
+using namespace boost::numeric::ublas;
+using DataPoint = vector<double>;
+using Cluster = std::vector<DataPoint>;
 
-double euclidean_distance(const Point& a, const Point& b) {
-    return std::sqrt(ublas::inner_prod(a - b, a - b));
-}
+constexpr size_t FEATURES = 4;
+constexpr size_t K = 3;
+constexpr size_t MAX_ITER = 100;
 
-// Generate synthetic 2D data around predefined cluster centers
-std::vector<Point> generate_data(int num_points, int seed = 42) {
-    boost::random::mt19937 rng(seed);
-    boost::random::normal_distribution<> d1x(2.0, 0.5), d1y(2.0, 0.5);
-    boost::random::normal_distribution<> d2x(5.0, 0.5), d2y(5.0, 0.5);
-    boost::random::normal_distribution<> d3x(8.0, 0.5), d3y(2.0, 0.5);
+std::vector<DataPoint> load_iris_csv(const std::string& filename) {
+    std::ifstream file(filename);
+    std::vector<DataPoint> data;
+    std::string line;
 
-    std::vector<Point> data;
-    for (int i = 0; i < num_points; ++i) {
-        Point p(2);
-        if (i < num_points / 3) {
-            p(0) = d1x(rng); p(1) = d1y(rng);
-        }
-        else if (i < 2 * num_points / 3) {
-            p(0) = d2x(rng); p(1) = d2y(rng);
-        }
-        else {
-            p(0) = d3x(rng); p(1) = d3y(rng);
-        }
-        data.push_back(p);
+    if (!file.is_open()) {
+        throw std::runtime_error("Could not open file.");
     }
+
+    // Skip the first line of text
+    std::getline(file, line);
+
+    //sepal_length, sepal_width, petal_length, petal_width, species
+    while (std::getline(file, line)) {
+        std::stringstream ss(line);
+        std::string token;
+        DataPoint point(FEATURES);
+
+        for (size_t i = 0; i < FEATURES; ++i) {
+            if (!std::getline(ss, token, ',')) break;
+            point(i) = std::stod(token);
+        }
+
+        if (point.size() == FEATURES)
+            data.push_back(point);
+    }
+
     return data;
 }
 
-void kmeans(std::vector<Point>& data, int k, int iterations = 10) {
-    const int dimensions = data[0].size();
-    std::vector<Cluster> clusters(k);
+double euclidean_distance(const DataPoint& a, const DataPoint& b) {
+    double sum = 0.0;
+    for (size_t i = 0; i < a.size(); ++i)
+        sum += std::pow(a[i] - b[i], 2);
+    return std::sqrt(sum);
+}
 
-    // Randomly initialize centroids
-    boost::random::mt19937 rng(static_cast<unsigned int>(std::time(0)));
-    boost::random::uniform_int_distribution<> index_dist(0, data.size() - 1);
-    for (int i = 0; i < k; ++i) {
-        clusters[i].centroid = data[index_dist(rng)];
-    }
-
-    for (int iter = 0; iter < iterations; ++iter) {
-        // Clear cluster assignments
-        for (auto& cluster : clusters) {
-            cluster.points.clear();
-        }
-
-        // Assign each point to the nearest centroid
-        for (const auto& point : data) {
-            double min_dist = std::numeric_limits<double>::max();
-            int cluster_idx = 0;
-            for (int i = 0; i < k; ++i) {
-                double dist = euclidean_distance(point, clusters[i].centroid);
-                if (dist < min_dist) {
-                    min_dist = dist;
-                    cluster_idx = i;
-                }
-            }
-            clusters[cluster_idx].points.push_back(point);
-        }
-
-        // Recompute centroids
-        for (auto& cluster : clusters) {
-            Point new_centroid(dimensions);
-            std::fill(new_centroid.begin(), new_centroid.end(), 0.0);
-
-            for (const auto& pt : cluster.points) {
-                new_centroid += pt;
-            }
-
-            if (!cluster.points.empty()) {
-                cluster.centroid = new_centroid / cluster.points.size();
-            }
-        }
-
-        std::cout << "Iteration " << iter + 1 << " centroids:\n";
-        for (int i = 0; i < k; ++i) {
-            std::cout << "  Cluster " << i << ": ("
-                << clusters[i].centroid(0) << ", "
-                << clusters[i].centroid(1) << ")\n";
+size_t closest_centroid(const DataPoint& point, const std::vector<DataPoint>& centroids) {
+    double min_dist = std::numeric_limits<double>::max();
+    size_t index = 0;
+    for (size_t i = 0; i < centroids.size(); ++i) {
+        double dist = euclidean_distance(point, centroids[i]);
+        if (dist < min_dist) {
+            min_dist = dist;
+            index = i;
         }
     }
+    return index;
+}
 
-    // Final assignments
-    std::cout << "\nSample Final Cluster Assignments:\n";
-    for (int i = 0; i < std::min(10, (int)data.size()); ++i) {
-        const auto& point = data[i];
-        double min_dist = std::numeric_limits<double>::max();
-        int cluster_idx = 0;
-        for (int j = 0; j < k; ++j) {
-            double dist = euclidean_distance(point, clusters[j].centroid);
-            if (dist < min_dist) {
-                min_dist = dist;
-                cluster_idx = j;
+DataPoint compute_centroid(const Cluster& cluster) {
+    DataPoint centroid(FEATURES, 0.0);
+    if (cluster.empty()) return centroid;
+    for (const auto& point : cluster)
+        centroid += point;
+    return centroid / static_cast<double>(cluster.size());
+}
+
+std::vector<DataPoint> init_random_centroids(const std::vector<DataPoint>& data, size_t k) {
+    br::random_device rd;  // Seed from system entropy
+    br::mt19937 gen(rd()); // Mersenne Twister RNG
+    br::uniform_int_distribution<> dist(0, data.size() - 1);
+    std::vector<DataPoint> centroids;
+    for (size_t i = 0; i < k; ++i)
+        centroids.push_back(data[dist(gen)]);
+    return centroids;
+}
+
+void kmeans(const std::vector<DataPoint>& data, size_t k) {
+    auto centroids = init_random_centroids(data, k);
+    std::vector<size_t> assignments(data.size(), 0);
+
+    for (size_t iter = 0; iter < MAX_ITER; ++iter) {
+        bool changed = false;
+        std::vector<Cluster> clusters(k);
+
+        for (size_t i = 0; i < data.size(); ++i) {
+            size_t idx = closest_centroid(data[i], centroids);
+            if (idx != assignments[i]) {
+                changed = true;
+                assignments[i] = idx;
             }
+            clusters[idx].push_back(data[i]);
         }
-        std::cout << "Point (" << point(0) << ", " << point(1)
-            << ") -> Cluster " << cluster_idx << "\n";
+
+        if (!changed) {
+            std::cout << "\nConverged after " << iter << " iterations.\n";
+            break;
+        }
+
+        for (size_t i = 0; i < k; ++i)
+            centroids[i] = compute_centroid(clusters[i]);
+    }
+
+    // Output cluster summaries
+    for (size_t i = 0; i < k; ++i) {
+        std::cout << "Cluster " << i + 1 << ": "
+            << std::count(assignments.begin(), assignments.end(), i)
+            << " samples\n";
     }
 }
 
 int main() {
-    int num_points = 90;
-    auto data = generate_data(num_points);
+    try {
 
-    int k = 3;
-    std::cout << "Running K-Means with k = " << k << "...\n";
-    kmeans(data, k);
-
+        // Enter the path to your copy of the Iris data
+        auto data = load_iris_csv("<path>/iris.csv");
+        std::cout << "Loaded " << data.size() << " samples.\n";
+        kmeans(data, K);
+    }
+    catch (const std::exception& e) {
+        std::cerr << "Error: " << e.what() << "\n";
+        return 1;
+    }
     return 0;
 }
 
@@ -371,61 +404,15 @@ Running this code should give you:
 
 [source,text]
 ----
-Running K-Means with k = 3...
-Iteration 1 centroids:
-  Cluster 0: (3.21469, 2.93469)
-  Cluster 1: (7.98841, 2.11692)
-  Cluster 2: (4.08385, 4.89693)
-Iteration 2 centroids:
-  Cluster 0: (2.12261, 1.97237)
-  Cluster 1: (7.98841, 2.11692)
-  Cluster 2: (4.82826, 5.07435)
-Iteration 3 centroids:
-  Cluster 0: (2.12261, 1.97237)
-  Cluster 1: (7.98841, 2.11692)
-  Cluster 2: (4.82826, 5.07435)
-Iteration 4 centroids:
-  Cluster 0: (2.12261, 1.97237)
-  Cluster 1: (7.98841, 2.11692)
-  Cluster 2: (4.82826, 5.07435)
-Iteration 5 centroids:
-  Cluster 0: (2.12261, 1.97237)
-  Cluster 1: (7.98841, 2.11692)
-  Cluster 2: (4.82826, 5.07435)
-Iteration 6 centroids:
-  Cluster 0: (2.12261, 1.97237)
-  Cluster 1: (7.98841, 2.11692)
-  Cluster 2: (4.82826, 5.07435)
-Iteration 7 centroids:
-  Cluster 0: (2.12261, 1.97237)
-  Cluster 1: (7.98841, 2.11692)
-  Cluster 2: (4.82826, 5.07435)
-Iteration 8 centroids:
-  Cluster 0: (2.12261, 1.97237)
-  Cluster 1: (7.98841, 2.11692)
-  Cluster 2: (4.82826, 5.07435)
-Iteration 9 centroids:
-  Cluster 0: (2.12261, 1.97237)
-  Cluster 1: (7.98841, 2.11692)
-  Cluster 2: (4.82826, 5.07435)
-Iteration 10 centroids:
-  Cluster 0: (2.12261, 1.97237)
-  Cluster 1: (7.98841, 2.11692)
-  Cluster 2: (4.82826, 5.07435)
+Loaded 150 samples.
 
-Sample Final Cluster Assignments:
-Point (1.68064, 1.5816) -> Cluster 0
-Point (1.79972, 1.56538) -> Cluster 0
-Point (1.51398, 1.62053) -> Cluster 0
-Point (1.34782, 2.61498) -> Cluster 0
-Point (2.1247, 2.14342) -> Cluster 0
-Point (2.31555, 3.44066) -> Cluster 0
-Point (2.17959, 2.00728) -> Cluster 0
-Point (2.51907, 0.773036) -> Cluster 0
-Point (2.4533, 2.0738) -> Cluster 0
-Point (2.06517, 1.78315) -> Cluster 0
+Converged after 3 iterations.
+Cluster 1: 22 samples
+Cluster 2: 31 samples
+Cluster 3: 97 samples
 ----
 
+Note:: Due to the random element, running the code repeatedly can give slightly different results, typically from 3 to 5 iterations and varying sample sizes.
 
 == Predict Future Values of Time Series Data
 
