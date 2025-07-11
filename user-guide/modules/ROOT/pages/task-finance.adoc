@@ -20,6 +20,7 @@ Of course, we should add highly accurate numerical calculations as an essential 
 * <<Signing Transactions>>
 * <<Sample Wallet with Ed25519 Signing>>
 * <<Wallet with Foreign Currency Exchange>>
+* <<Next Steps>>
 * <<Footnotes>>
 * <<See Also>>
 
@@ -28,6 +29,12 @@ Of course, we should add highly accurate numerical calculations as an essential 
 Many Boost libraries should assist you in building a finance app, here are some to consider:
 
 [circle]
+* boost:uuid[] : A useful utility library for generating unique identifiers.
+
+* boost:serialization[] : To save and restore data.
+
+* boost:hash2[] : https://www.boost.org/doc/libs/master/libs/hash2/doc/html/hash2.html[Boost.Hash2] : Hashing algorithms play a crucial role in financial applications by ensuring data integrity, authentication, and security in various transactions and records. Hashing enables fingerprinting of transactions, invoices, and records to detect duplicate or modified entries. Boost.Hash2 is a new library, first available in Boost version 1.88.
+
 * boost:interprocess[] : Allows for shared memory communication and synchronization between processes. It's useful for creating shared memory regions, handling inter-process communication, managing shared objects, and synchronizing processes.
 
 * boost:multiprecision[] : For extended precision arithmetic.
@@ -44,9 +51,20 @@ Many Boost libraries should assist you in building a finance app, here are some 
 
 * boost:property_tree[] : Provides a hierarchical data structure for representing and manipulating structured data, such as XML, JSON, INI, or property list formats. You can use it to parse, validate, and sanitize input data in various formats, ensuring that it conforms to expected schema or constraints before further processing.
 
-* https://www.boost.org/doc/libs/master/libs/hash2/doc/html/hash2.html[Boost.Hash2] : Hashing algorithms play a crucial role in financial applications by ensuring data integrity, authentication, and security in various transactions and records. Hashing enables fingerprinting of transactions, invoices, and records to detect duplicate or modified entries.
-
-Note:: Boost.Hash2 is a new library, first available in Boost version 1.88.
+Notes:: The code in this tutorial was written and tested using Microsoft Visual Studio (Visual pass:[C++] 2022, Console App project) with Boost version 1.88.0.
++
+In Visual Studio, the pass:[C++] Language Standard (in the Project Properties pass:[C++] Language section) has been set to `ISO C++17 Standard (/std:c++17)`. The *libsodium* library has been installed with the following Git Bash commands:
++
+[source,bash]
+----
+git clone https://github.com/Microsoft/vcpkg.git
+cd vcpkg
+./bootstrap-vcpkg.bat
+./vcpkg install libsodium
+./vcpkg integrate install
+----
++
+Finally, the location of the libsodium headers has been added to the Additional Include Libraries section of the Project Properties.
 
 == Signing Transactions
 
@@ -59,478 +77,495 @@ As cryptography evolved, new methods based on elliptic curves gained popularity 
 
 If you are writing a serious financial app, then you could also research _Schnorr Signatures_. Unlike ECDSA, where an attacker can slightly modify a valid signature to create a new one, _Schnorr Signatures_ prevent this, improving security in blockchain applications. And in addition, ECDSA (and all elliptic curve cryptography) and possibly Ed25519 can be broken by large-scale quantum computers - _Post-Quantum Cryptography_ (PQC) is designed to resist this by replacing these schemes with lattice-based, hash-based, multivariate, and code-based cryptography - and is a currently developing story!
 
-== Sample Wallet with Ed25519 Signing
-
-Let's start with a simple wallet that enables transactions from a _sender_ to a _receiver_. We'll use Ed25519 signing, available in the https://www.openssl.org/[OpenSSL] library, to sign transactions.
-
-Signed transactions are then securely stored using boost:interprocess[], ensuring safe, concurrent and persistent access to transaction history in shared memory.
+The following sample shows signing of a transaction, using Ed25519 public/private key signing with the libsodium library, supported by boost:uuid[] and boost:serialization[].
 
 [source,cpp]
 ----
+#include <sodium.h>
+#include <boost/archive/text_oarchive.hpp>
+#include <boost/archive/text_iarchive.hpp>
+#include <boost/serialization/string.hpp>
+#include <boost/uuid/uuid.hpp>
+#include <boost/uuid/uuid_generators.hpp>
+#include <boost/uuid/uuid_io.hpp>
+
 #include <iostream>
-#include <vector>
-#include <string>
-#include <cstring>
-#include <boost/interprocess/managed_shared_memory.hpp>
-#include <openssl/evp.h>
-#include <openssl/sha.h>
+#include <sstream>
 
-using namespace boost::interprocess;
 
-// Structure to store transactions
+// Transaction Structure
 struct Transaction {
-    char sender[50];
-    char receiver[50];
+    std::string sender;
+    std::string receiver;
     double amount;
-    unsigned char signature[64];
+    boost::uuids::uuid tx_id;
 
-    Transaction() = default;
-
-    Transaction(const std::string& s, const std::string& r, double amt, const unsigned char* sig) 
-        : amount(amt) {
-        strncpy(sender, s.c_str(), 50);
-        strncpy(receiver, r.c_str(), 50);
-        memcpy(signature, sig, 64);
+    template<class Archive>
+    void serialize(Archive& ar, const unsigned int) {
+        ar& sender;
+        ar& receiver;
+        ar& amount;
+        ar& tx_id;
     }
 };
 
-// Function to generate an Ed25519 key pair
-void generateEd25519Key(EVP_PKEY** keypair) {
-    EVP_PKEY_CTX* ctx = EVP_PKEY_CTX_new_id(EVP_PKEY_ED25519, nullptr);
-    EVP_PKEY_keygen_init(ctx);
-    EVP_PKEY_keygen(ctx, keypair);
-    EVP_PKEY_CTX_free(ctx);
+// Serialization Utility
+std::string serialize_transaction(const Transaction& tx) {
+    std::ostringstream oss;
+    boost::archive::text_oarchive oa(oss);
+    oa << tx;
+    return oss.str();
 }
 
-// Function to sign transactions using OpenSSL Ed25519
-void signTransaction(const std::string& sender, const std::string& receiver, double amount,
-                     unsigned char signature[64], EVP_PKEY* keypair) {
-    std::string data = sender + receiver + std::to_string(amount);
-    EVP_MD_CTX* mdctx = EVP_MD_CTX_new();
-    
-    EVP_DigestSignInit(mdctx, nullptr, nullptr, nullptr, keypair);
-    EVP_DigestSign(mdctx, signature, nullptr, (unsigned char*)data.c_str(), data.size());
-
-    EVP_MD_CTX_free(mdctx);
+// Signing and Verifying
+bool sign_transaction(const std::string& serialized_tx,
+    std::array<unsigned char, crypto_sign_BYTES>& signature,
+    const std::array<unsigned char, crypto_sign_SECRETKEYBYTES>& sk) {
+    return crypto_sign_detached(signature.data(),
+        nullptr,
+        reinterpret_cast<const unsigned char*>(serialized_tx.data()),
+        serialized_tx.size(),
+        sk.data()) == 0;
 }
 
-// Function to verify transaction signatures
-bool verifyTransaction(const Transaction& tx, EVP_PKEY* keypair) {
-    std::string data = std::string(tx.sender) + std::string(tx.receiver) + std::to_string(tx.amount);
-    EVP_MD_CTX* mdctx = EVP_MD_CTX_new();
-    
-    EVP_DigestVerifyInit(mdctx, nullptr, nullptr, nullptr, keypair);
-    bool valid = EVP_DigestVerify(mdctx, tx.signature, 64, (unsigned char*)data.c_str(), data.size());
-
-    EVP_MD_CTX_free(mdctx);
-    return valid;
+bool verify_transaction(const std::string& serialized_tx,
+    const std::array<unsigned char, crypto_sign_BYTES>& signature,
+    const std::array<unsigned char, crypto_sign_PUBLICKEYBYTES>& pk) {
+    return crypto_sign_verify_detached(signature.data(),
+        reinterpret_cast<const unsigned char*>(serialized_tx.data()),
+        serialized_tx.size(),
+        pk.data()) == 0;
 }
 
+// Main Flow
 int main() {
-    const std::string SHM_NAME = "SecureWalletMemory";
-    const std::size_t SHM_SIZE = 65536;
-
-    // Use Boost.Interprocess to create or open shared memory
-    managed_shared_memory segment(open_or_create, SHM_NAME.c_str(), SHM_SIZE);
-    Transaction* tx_list = segment.find_or_construct<Transaction>("TransactionList")[10](); 
-
-    // Generate an Ed25519 keypair using OpenSSL
-    EVP_PKEY* keypair = nullptr;
-    generateEd25519Key(&keypair);
-
-    while (true) {
-        std::cout << "\n-----------------------------------------\n";
-        std::cout << "1. View Transactions\n2. Add New Transaction\n3. Exit\n";
-        std::cout << "-----------------------------------------\nSelect an option: ";
-        
-        int choice;
-        std::cin >> choice;
-        std::cin.ignore();
-
-        if (choice == 1) {
-            std::cout << "\n[INFO] Retrieving stored transactions...\n-----------------------------------------\n";
-            for (int i = 0; i < 10; ++i) {
-                if (tx_list[i].amount == 0) break; 
-                bool valid = verifyTransaction(tx_list[i], keypair);
-                std::cout << i + 1 << ". [" << tx_list[i].sender << " -> " << tx_list[i].receiver 
-                          << ": " << tx_list[i].amount << "] ("
-                          << (valid ? "Signed, Verified" : "Signature Invalid") << ")\n";
-            }
-        } 
-        else if (choice == 2) {
-            std::string sender, receiver;
-            double amount;
-            std::cout << "Enter sender address: "; std::cin >> sender;
-            std::cout << "Enter receiver address: "; std::cin >> receiver;
-            std::cout << "Enter amount: "; std::cin >> amount;
-
-            unsigned char signature[64];
-            signTransaction(sender, receiver, amount, signature, keypair);
-
-            std::cout << "[INFO] Verifying transaction signature...\n";
-            if (verifyTransaction({sender.c_str(), receiver.c_str(), amount, signature}, keypair)) {
-                std::cout << "[INFO] Signature verification successful! Transaction is valid.\n";
-                
-                // This loop stores a new transaction in Boost.Interprocess shared memory,
-                // ensuring that transactions persist even after the program exits.
-                for (int i = 0; i < 10; ++i) {
-                    if (tx_list[i].amount == 0) {
-                        tx_list[i] = Transaction(sender, receiver, amount, signature);
-                        break;
-                    }
-                }
-                std::cout << "[INFO] Transaction successfully recorded!\n";
-            } else {
-                std::cout << "[ERROR] Signature verification failed! Transaction is invalid.\n";
-            }
-        } 
-        else if (choice == 3) {
-            std::cout << "[INFO] Exiting Secure Wallet. Goodbye!\n";
-            break;
-        } 
-        else {
-            std::cout << "[ERROR] Invalid option! Please try again.\n";
-        }
+    if (sodium_init() < 0) {
+        std::cerr << "Failed to initialize libsodium\n";
+        return 1;
     }
 
-    // Cleanup OpenSSL keypair
-    EVP_PKEY_free(keypair);
+    // Key pair
+    std::array<unsigned char, crypto_sign_PUBLICKEYBYTES> pk;
+    std::array<unsigned char, crypto_sign_SECRETKEYBYTES> sk;
+    crypto_sign_keypair(pk.data(), sk.data());
+
+    // Create a sample transaction
+    Transaction tx{
+        "alice@example.com",
+        "bob@example.com",
+        100.5,
+        boost::uuids::random_generator()()
+    };
+
+    // Serialize the transaction
+    std::string serialized = serialize_transaction(tx);
+
+    // Sign it
+    std::array<unsigned char, crypto_sign_BYTES> signature;
+    if (!sign_transaction(serialized, signature, sk)) {
+        std::cerr << "Signing failed.\n";
+        return 1;
+    }
+
+    std::cout << "Transaction signed with Ed25519.\n";
+    std::cout << "Transaction ID: " << tx.tx_id << "\n";
+
+    // Verify the signature
+    if (verify_transaction(serialized, signature, pk)) {
+        std::cout << "Signature verified\n";
+    }
+    else {
+        std::cout << "Signature verification failed\n";
+    }
 
     return 0;
 }
 
+----
+
+Run the program and you should get a verified signature:
+
+[source,text]
+----
+Transaction signed with Ed25519.
+Transaction ID: 77f104be-815d-4800-b424-244d0e8ee7c0
+Signature verified
+
+----
+
+== Sample Wallet with Ed25519 Signing
+
+Let's start with a simple wallet that enables transactions from a _sender_ to a _receiver_, using Ed25519 signing as before.
+
+[source,cpp]
+----
+#pragma once
+#include <sodium.h>
+#include <iostream>
+#include <fstream>
+#include <sstream>
+#include <boost/uuid/uuid.hpp>
+#include <boost/uuid/random_generator.hpp>
+#include <boost/uuid/uuid_io.hpp>
+#include <boost/serialization/string.hpp>
+#include <boost/serialization/array.hpp>
+#include <boost/archive/text_oarchive.hpp>
+#include <boost/archive/text_iarchive.hpp>
+
+class Wallet {
+public:
+    Wallet() {
+        crypto_sign_keypair(public_key.data(), private_key.data());
+        id = boost::uuids::to_string(boost::uuids::random_generator()());
+    }
+
+    std::string get_id() const { return id; }
+    const std::array<unsigned char, crypto_sign_PUBLICKEYBYTES>& pubkey() const { return public_key; }
+    const std::array<unsigned char, crypto_sign_SECRETKEYBYTES>& privkey() const { return private_key; }
+
+private:
+    std::string id;
+    std::array<unsigned char, crypto_sign_PUBLICKEYBYTES> public_key{};
+    std::array<unsigned char, crypto_sign_SECRETKEYBYTES> private_key{};
+};
+
+
+struct Transaction {
+    std::string sender_id;
+    std::string recipient_id;
+    double amount;
+    std::array<unsigned char, crypto_sign_BYTES> signature{};
+
+    Transaction() = default;
+    Transaction(const std::string& sender, const std::string& recipient, double amt)
+        : sender_id(sender), recipient_id(recipient), amount(amt) {
+    }
+
+    std::string serialize_data() const {
+        std::ostringstream oss;
+        oss << sender_id << "|" << recipient_id << "|" << std::fixed << std::setprecision(2) << amount;
+        return oss.str();
+    }
+
+    void sign(const std::array<unsigned char, crypto_sign_SECRETKEYBYTES>& sk) {
+        std::string msg = serialize_data();
+        crypto_sign_detached(signature.data(),
+            nullptr,
+            reinterpret_cast<const unsigned char*>(msg.data()),
+            msg.size(),
+            sk.data());
+    }
+
+    bool verify(const std::array<unsigned char, crypto_sign_PUBLICKEYBYTES>& pk) const {
+        std::string msg = serialize_data();
+        return crypto_sign_verify_detached(signature.data(),
+            reinterpret_cast<const unsigned char*>(msg.data()),
+            msg.size(),
+            pk.data()) == 0;
+    }
+
+private:
+    friend class boost::serialization::access;
+    template<class Archive>
+    void serialize(Archive& ar, const unsigned int) {
+        ar& sender_id;
+        ar& recipient_id;
+        ar& amount;
+        ar& signature;
+    }
+};
+
+int main() {
+    if (sodium_init() < 0) {
+        std::cerr << "libsodium initialization failed\n";
+        return 1;
+    }
+
+    Wallet sender;
+    Wallet recipient;
+
+    std::cout << "Created wallets:\n";
+    std::cout << "Sender ID: " << sender.get_id() << "\n";
+    std::cout << "Recipient ID: " << recipient.get_id() << "\n";
+
+    Transaction tx(sender.get_id(), recipient.get_id(), 123.45);
+    tx.sign(sender.privkey());
+
+    if (tx.verify(sender.pubkey())) {
+        std::cout << "Signature verified successfully.\n";
+    }
+    else {
+        std::cout << "Signature verification failed.\n";
+    }
+
+    // Block the write code to ensure the write buffers are flushed
+    {
+        std::ofstream ofs("transactions.dat");
+        boost::archive::text_oarchive oa(ofs);
+        oa << tx;
+    }
+    std::cout << "Transaction saved.\n";
+
+    Transaction loaded_tx;
+    std::ifstream ifs("transactions.dat");
+    boost::archive::text_iarchive ia(ifs);
+    ia >> loaded_tx;
+
+    std::cout << "Loaded transaction: " << loaded_tx.sender_id << " -> "
+        << loaded_tx.recipient_id << ", $" << loaded_tx.amount << "\n";
+}
 ----
 
 A sample run of the program might be:
 
 [source,text]
 ----
------------------------------------------
-1. View Transactions
-2. Add New Transaction
-3. Exit
------------------------------------------
-Select an option: 2
-
-Enter sender address: Alice
-Enter receiver address: Bob
-Enter amount: 100.50
-
-[INFO] Signing transaction...
-[INFO] Verifying transaction signature...
-[INFO] Signature verification successful! Transaction is valid.
-[INFO] Transaction successfully recorded!
-
------------------------------------------
-1. View Transactions
-2. Add New Transaction
-3. Exit
------------------------------------------
-Select an option: 1
-
-[INFO] Retrieving stored transactions...
------------------------------------------
-1. [Alice -> Bob: 100.50] (Signed, Verified)
-
------------------------------------------
-1. View Transactions
-2. Add New Transaction
-3. Exit
------------------------------------------
-Select an option: 3
-
-[INFO] Exiting Secure Wallet. Goodbye!
+Created wallets:
+Sender ID: 782ded6c-4eda-47d6-a62c-d87bcf2c8f79
+Recipient ID: 48ff8851-f638-4bfc-ad39-33547d82fbcb
+Signature verified successfully.
+Transaction saved.
+Loaded transaction: 782ded6c-4eda-47d6-a62c-d87bcf2c8f79 -> 48ff8851-f638-4bfc-ad39-33547d82fbcb, $123.45
 
 ----
 
 == Wallet with Foreign Currency Exchange
 
-For a more functional wallet, we should add deposits and withdrawals that update the wallet, and balance checking and querying foreign currency rates that do not update the wallet, but provide information to the user.
-
-Let's add the features of boost:multiprecision[] to handle high-precision numbers for the currency conversion, so avoiding floating-point precision loss.
-
-We'll also use boost:beast[] to make an HTTP request to a public exchange rate API and fetch live rates for currency conversion. The JSON response is parsed using boost:json[].
+For a more functional wallet, we should add foreign currency exchange. In this sample the rates are hard-coded, however the <<Next Steps>> section includes information on how to access live currency exchange rates.
 
 [source,cpp]
 ----
-#include <boost/interprocess/managed_shared_memory.hpp>
-#include <boost/multiprecision/cpp_dec_float.hpp>
-#include <boost/json.hpp>
-#include <boost/beast.hpp>
-#include <boost/asio.hpp>
-#include <boost/program_options.hpp>
+#include <sodium.h>
 #include <iostream>
-#include <map>
-#include <string>
-#include <cstring>
-#include <vector>
-#include <openssl/evp.h>
-#include <openssl/ec.h>
-#include <openssl/err.h>
-#include <openssl/ecdsa.h>
-#include <openssl/rand.h>
+#include <fstream>
+#include <sstream>
+#include <boost/uuid/uuid.hpp>
+#include <boost/uuid/random_generator.hpp>
+#include <boost/uuid/uuid_io.hpp>
+#include <boost/serialization/string.hpp>
+#include <boost/serialization/map.hpp>
+#include <boost/archive/text_oarchive.hpp>
+#include <boost/archive/text_iarchive.hpp>
 
-using namespace boost::interprocess;
-using namespace boost::multiprecision;
-using namespace boost::asio;
-using namespace boost::beast;
-namespace po = boost::program_options;
+enum class Currency { USD, EUR, JPY };
 
-// Define high-precision decimal type
-using BigFloat = cpp_dec_float_50;
+inline std::string to_string(Currency c) {
+    switch (c) {
+    case Currency::USD: return "USD";
+    case Currency::EUR: return "EUR";
+    case Currency::JPY: return "JPY";
+    }
+    return "UNK";
+}
 
-// Currency exchange rate defaults
-std::map<std::string, BigFloat> exchange_rates = {
-    {"USD", 1.0}, 
-    {"EUR", 0.91},
-    {"GBP", 0.79},
-    {"JPY", 129.53}
+inline Currency from_string(const std::string& s) {
+    if (s == "USD") return Currency::USD;
+    if (s == "EUR") return Currency::EUR;
+    if (s == "JPY") return Currency::JPY;
+    throw std::runtime_error("Unknown currency");
+}
+
+static const std::map<std::pair<Currency, Currency>, double> exchange_rates = {
+    {{Currency::USD, Currency::EUR}, 0.91},
+    {{Currency::EUR, Currency::USD}, 1.10},
+    {{Currency::USD, Currency::JPY}, 146.0},
+    {{Currency::JPY, Currency::USD}, 0.0068},
+    {{Currency::EUR, Currency::JPY}, 160.0},
+    {{Currency::JPY, Currency::EUR}, 0.0062}
 };
 
-// Shared structure for storing transaction history
+class Wallet {
+public:
+    Wallet(double usd, double eur, double jpy) {
+        crypto_sign_keypair(public_key.data(), private_key.data());
+        id = boost::uuids::to_string(boost::uuids::random_generator()());
+        balances[Currency::USD] = usd;
+        balances[Currency::EUR] = eur;
+        balances[Currency::JPY] = jpy;
+    }
+
+    void credit(Currency cur, double amt) {
+        balances[cur] += amt;
+    }
+
+    bool debit(Currency cur, double amt) {
+        if (balances[cur] >= amt) {
+            balances[cur] -= amt;
+            return true;
+        }
+        return false;
+    }
+
+    void print_balances() const {
+        std::cout << "\nBalances for " << id << ":\n";
+        for (const auto& [cur, val] : balances) {
+            std::cout << "  " << to_string(cur) << ": " << val << "\n";
+        }
+    }
+
+    std::string get_id() const { return id; }
+    const std::array<unsigned char, crypto_sign_PUBLICKEYBYTES>& pubkey() const { return public_key; }
+    const std::array<unsigned char, crypto_sign_SECRETKEYBYTES>& privkey() const { return private_key; }
+
+private:
+    std::string id;
+    std::array<unsigned char, crypto_sign_PUBLICKEYBYTES> public_key{};
+    std::array<unsigned char, crypto_sign_SECRETKEYBYTES> private_key{};
+    std::map<Currency, double> balances;
+};
+
 struct Transaction {
-    char sender[50];
-    char receiver[50];
-    BigFloat amount;
-    char currency[4];
-    char signature[64]; // Ed25519 signature
+    std::string sender_id;
+    std::string recipient_id;
+    double amount;
+    Currency sender_currency;
+    Currency recipient_currency;
+    std::array<unsigned char, crypto_sign_BYTES> signature{};
+
+    Transaction() = default;
+    Transaction(const std::string& s, const std::string& r, double amt, Currency scur, Currency rcur)
+        : sender_id(s), recipient_id(r), amount(amt), sender_currency(scur), recipient_currency(rcur) {
+    }
+
+    std::string serialize_data() const {
+        std::ostringstream oss;
+        oss << sender_id << "|" << recipient_id << "|" << std::fixed << std::setprecision(2)
+            << amount << "|" << to_string(sender_currency) << "|" << to_string(recipient_currency);
+        return oss.str();
+    }
+
+    double converted_amount() const {
+        if (sender_currency == recipient_currency) return amount;
+        auto it = exchange_rates.find({ sender_currency, recipient_currency });
+        if (it != exchange_rates.end()) return amount * it->second;
+        throw std::runtime_error("No exchange rate available.");
+    }
+
+    void sign(const std::array<unsigned char, crypto_sign_SECRETKEYBYTES>& sk) {
+        std::string msg = serialize_data();
+        crypto_sign_detached(signature.data(), nullptr,
+            reinterpret_cast<const unsigned char*>(msg.data()),
+            msg.size(), sk.data());
+    }
+
+    bool verify(const std::array<unsigned char, crypto_sign_PUBLICKEYBYTES>& pk) const {
+        std::string msg = serialize_data();
+        return crypto_sign_verify_detached(signature.data(),
+            reinterpret_cast<const unsigned char*>(msg.data()),
+            msg.size(), pk.data()) == 0;
+    }
+
+private:
+    friend class boost::serialization::access;
+    template<class Archive>
+    void serialize(Archive& ar, const unsigned int) {
+        ar& sender_id& recipient_id& amount;
+        std::string scur = to_string(sender_currency);
+        std::string rcur = to_string(recipient_currency);
+        ar& scur& rcur;
+        sender_currency = from_string(scur);
+        recipient_currency = from_string(rcur);
+        ar& signature;
+    }
 };
 
-// Shared structure for storing user balances
-struct UserBalance {
-    char currency[4];
-    BigFloat balance;
-};
+void make_transaction(Wallet &sender, Wallet &recipient, double amount, Currency scur, Currency rcur)
+{
+    Transaction tx(sender.get_id(), recipient.get_id(), amount, scur, rcur);
+    tx.sign(sender.privkey());
 
-// Function to create or load shared memory segment
-managed_shared_memory open_shared_memory(const std::string& segment_name) {
-    return managed_shared_memory(open_or_create, segment_name.c_str(), 65536);
-}
-
-// Fetch exchange rates from an external API (using Boost.Beast)
-void fetch_exchange_rates() {
-    try {
-        io_context io_context;
-        tcp::resolver resolver(io_context);
-        tcp::socket socket(io_context);
-
-        auto const results = resolver.resolve("api.exchangerate-api.com", "http");
-        boost::asio::connect(socket, results.begin(), results.end());
-
-        http::request<http::string_body> req;
-        req.method(http::verb::get);
-        req.target("/v4/latest/USD");  // Assume USD as the base currency
-        req.set(http::field::host, "api.exchangerate-api.com");
-        req.set(http::field::user_agent, "Boost.Beast/1.0");
-
-        http::write(socket, req);
-
-        flat_buffer buffer;
-        http::response<http::dynamic_body> res;
-        http::read(socket, buffer, res);
-
-        std::string body = buffers_to_string(res.body().data());
-        boost::json::value json_data = boost::json::parse(body);
-
-        auto rates = json_data.as_object()["rates"].as_object();
-        for (auto& rate : rates) {
-            exchange_rates[rate.key()] = boost::json::value_to<BigFloat>(rate.value());
-        }
-        std::cout << "[INFO] Exchange rates updated successfully.\n";
-    }
-    catch (const std::exception& e) {
-        std::cerr << "[ERROR] Error fetching exchange rates: " << e.what() << "\n";
-    }
-}
-
-// Convert between currencies using live rates
-BigFloat convert_currency(BigFloat amount, const std::string& from, const std::string& to) {
-    if (exchange_rates.find(from) == exchange_rates.end() || exchange_rates.find(to) == exchange_rates.end()) {
-        std::cerr << "[ERROR] Unsupported currency conversion!\n";
-        return 0;
-    }
-    return amount * (exchange_rates[to] / exchange_rates[from]);
-}
-
-// OpenSSL: Sign a transaction with Ed25519
-bool sign_transaction(const std::string& sender, const std::string& receiver, BigFloat amount, 
-                      const std::string& currency, const std::string& secret_key, char* signature) {
-    unsigned char message[256];
-    snprintf((char*)message, sizeof(message), "%s->%s: %f %s", sender.c_str(), receiver.c_str(), amount.convert_to<double>(), currency.c_str());
-
-    // Generate a new EC keypair using Ed25519 (OpenSSL)
-    EC_KEY *key = EC_KEY_new_by_curve_name(NID_ED25519);
-    if (!key) {
-        std::cerr << "[ERROR] Failed to create EC key!\n";
-        return false;
-    }
-
-    // Convert secret key to bytes
-    unsigned char sk[32];  // Ed25519 secret key size is 32 bytes
-    for (size_t i = 0; i < secret_key.size() && i < 32; ++i) {
-        sk[i] = static_cast<unsigned char>(secret_key[i]);
-    }
-
-    // Set the private key
-    if (!EC_KEY_oct2priv(key, sk, sizeof(sk))) {
-        std::cerr << "[ERROR] Failed to set private key!\n";
-        EC_KEY_free(key);
-        return false;
-    }
-
-    // Sign the message
-    unsigned char *sig = new unsigned char[ECDSA_size(key)];
-    unsigned int sig_len = 0;
-    if (ECDSA_sign(0, message, std::strlen((char*)message), sig, &sig_len, key) != 1) {
-        std::cerr << "[ERROR] Signing failed!\n";
-        delete[] sig;
-        EC_KEY_free(key);
-        return false;
-    }
-
-    // Copy the signature to the provided buffer
-    std::memcpy(signature, sig, sig_len);
-    delete[] sig;
-    EC_KEY_free(key);
-
-    return true;
-}
-
-// Use Boost.Interprocess to store a transaction in shared memory
-void store_transaction(managed_shared_memory& segment, const std::string& sender, const std::string& receiver, 
-                       BigFloat amount, const std::string& currency, const char* signature) {
-    Transaction* tx_list = segment.find_or_construct<Transaction>("TransactionList")[10]();
-    for (int i = 0; i < 10; ++i) {
-        if (tx_list[i].amount == 0) {
-            strncpy(tx_list[i].sender, sender.c_str(), 50);
-            strncpy(tx_list[i].receiver, receiver.c_str(), 50);
-            tx_list[i].amount = amount;
-            strncpy(tx_list[i].currency, currency.c_str(), 4);
-            std::memcpy(tx_list[i].signature, signature, 64);
-            break;
-        }
-    }
-    std::cout << "[INFO] Transaction stored successfully!\n";
-}
-
-// Use Boost.Interprocess to update user balance in shared memory
-void update_user_balance(managed_shared_memory& segment, const std::string& user, BigFloat amount, const std::string& currency) {
-    UserBalance* balances = segment.find_or_construct<UserBalance>("UserBalances")[10]();
-    
-    for (int i = 0; i < 10; ++i) {
-        if (strncmp(balances[i].currency, currency.c_str(), 4) == 0) {
-            balances[i].balance += amount;
-            std::cout << "[INFO] User balance updated: " << user << " " << currency << ": " << balances[i].balance.str() << "\n";
-            break;
-        }
-    }
-}
-
-int main(int argc, char* argv[]) {
-    po::options_description desc("Allowed options");
-    desc.add_options()
-        ("help,h", "Produce help message")
-        ("secret-key,s", po::value<std::string>(), "User's secret key");
-
-    po::variables_map vm;
-    po::store(po::parse_command_line(argc, argv, desc), vm);
-    po::notify(vm);
-
-    if (vm.count("help")) {
-        std::cout << desc << "\n";
-        return 1;
-    }
-
-    if (!vm.count("secret-key")) {
-        std::cerr << "[ERROR] Secret key is required.\n";
-        return 1;
-    }
-
-    const std::string secret_key = vm["secret-key"].as<std::string>();
-
-    const std::string SHM_NAME = "SecureWalletMemory";
-    managed_shared_memory segment = open_shared_memory(SHM_NAME);
-
-    // Fetch live exchange rates from the API
-    fetch_exchange_rates();
-
-    std::string sender, receiver, currency;
-    BigFloat amount;
-
-    while (true) {
-        std::cout << "\n-----------------------------------------\n";
-        std::cout << "1. Deposit\n2. Withdraw\n3. Check Balance\n4. Convert Currency\n5. Add New Transaction\n6. Exit\n";
-        std::cout << "-----------------------------------------\nSelect an option: ";
-        
-        int choice;
-        std::cin >> choice;
-        std::cin.ignore();
-
-        if (choice == 1) {
-
-            // Deposit money
-            std::cout << "Enter deposit amount: "; std::cin >> amount;
-            std::cout << "Enter currency (USD, EUR, GBP, JPY): "; std::cin >> currency;
-            update_user_balance(segment, sender, amount, currency);
-        }
-        else if (choice == 2) {
-
-            // Withdraw money
-            std::cout << "Enter withdrawal amount: "; std::cin >> amount;
-            std::cout << "Enter currency (USD, EUR, GBP, JPY): "; std::cin >> currency;
-            update_user_balance(segment, sender, -amount, currency);
-        }
-        else if (choice == 3) {
-
-            // Check balance
-            std::cout << "Enter currency (USD, EUR, GBP, JPY): "; std::cin >> currency;
-            for (int i = 0; i < 10; ++i) {
-                if (strncmp(balances[i].currency, currency.c_str(), 4) == 0) {
-                    std::cout << "[INFO] Balance: " << balances[i].balance.str() << " " << currency << "\n";
-                    break;
-                }
-            }
-        }
-        else if (choice == 4) {
-
-            // Currency conversion
-            std::cout << "Enter amount: "; std::cin >> amount;
-            std::cout << "Enter source currency (USD, EUR, GBP, JPY): "; std::cin >> currency;
-            std::cout << "Enter target currency (USD, EUR, GBP, JPY): "; std::cin >> currency;
-
-            BigFloat converted_amount = convert_currency(amount, currency, currency);
-            std::cout << "[INFO] Converted amount: " << converted_amount.str() << " " << currency << "\n";
-        }
-        else if (choice == 5) {
-
-            // Add new transaction
-            std::cout << "Enter sender address: "; std::cin >> sender;
-            std::cout << "Enter receiver address: "; std::cin >> receiver;
-            std::cout << "Enter amount: "; std::cin >> amount;
-            std::cout << "Enter currency (USD, EUR, GBP, JPY): "; std::cin >> currency;
-
-            char signature[64]; // Ed25519 signature size
-            if (sign_transaction(sender, receiver, amount, currency, secret_key, signature)) {
-                store_transaction(segment, sender, receiver, amount, currency, signature);
-                update_user_balance(segment, sender, -amount, currency);
-                update_user_balance(segment, receiver, amount, currency);
-            }
-        }
-        else if (choice == 6) {
-            std::cout << "[INFO] Exiting Secure Wallet. Goodbye!\n";
-            break;
+    if (tx.verify(sender.pubkey())) {
+        std::cout << "\nTransaction verified.\n";
+        if (sender.debit(tx.sender_currency, tx.amount)) {
+            recipient.credit(tx.recipient_currency, tx.converted_amount());
         }
         else {
-            std::cout << "[ERROR] Invalid option! Please try again.\n";
+            std::cout << "Sender has insufficient funds.\n";
         }
     }
+    else {
+        std::cout << "Transaction verification failed.\n";
+    }
+    sender.print_balances();
+    recipient.print_balances();
+}
 
+int main() {
+    if (sodium_init() < 0) {
+        std::cerr << "libsodium initialization failed\n";
+        return 1;
+    }
+
+    Wallet sender = Wallet(500, 300, 5000);
+    Wallet recipient = Wallet(0, 0, 0);
+    std::cout << "Created wallets:\n";
+    std::cout << "Sender ID: " << sender.get_id() << "\n";
+    std::cout << "Recipient ID: " << recipient.get_id() << "\n";
+
+    make_transaction(sender, recipient, 100.0, Currency::EUR, Currency::USD);
+    make_transaction(sender, recipient, 2500.0, Currency::JPY, Currency::USD);
+    make_transaction(recipient, sender, 50.0, Currency::USD, Currency::EUR);    
+    
     return 0;
 }
 
 ----
 
-For some ideas on how to expand this app, refer to the samples in xref:task-networking.adoc[] and xref:task-parallel-computation.adoc[].
+Note:: Wallets contain three amounts, one for each currency. If a transaction is made from a currency the Wallet does not have enough of, amounts are not transferred from the other currencies to cover it. On receipt of a transaction, the amounts are converted to the specified currency.
+
+Run the program:
+
+[source,text]
+----
+Created wallets:
+Sender ID: 48b711fd-8197-4e39-bbaf-06e931ab9cc3
+Recipient ID: fdda420d-820a-4670-99a9-3320864ef990
+
+Transaction verified.
+
+Balances for 48b711fd-8197-4e39-bbaf-06e931ab9cc3:
+  USD: 500
+  EUR: 200
+  JPY: 5000
+
+Balances for fdda420d-820a-4670-99a9-3320864ef990:
+  USD: 110
+  EUR: 0
+  JPY: 0
+
+Transaction verified.
+
+Balances for 48b711fd-8197-4e39-bbaf-06e931ab9cc3:
+  USD: 500
+  EUR: 200
+  JPY: 2500
+
+Balances for fdda420d-820a-4670-99a9-3320864ef990:
+  USD: 127
+  EUR: 0
+  JPY: 0
+
+Transaction verified.
+
+Balances for fdda420d-820a-4670-99a9-3320864ef990:
+  USD: 77
+  EUR: 0
+  JPY: 0
+
+Balances for 48b711fd-8197-4e39-bbaf-06e931ab9cc3:
+  USD: 500
+  EUR: 245.5
+  JPY: 2500
+
+----
+
+== Next Steps
+
+Consider using boost:beast[] to make an HTTP request to a public exchange rate API and fetch live rates for currency conversion. The JSON response can be parsed using boost:json[].
+
+Consider adding a user interface to the wallet to allow you to make deposits, withdrawals, transfers, and balance checks.
+
+For some ideas on how to expand this app with remote access, refer to the samples in xref:task-networking.adoc[].
 
 == Footnotes
 

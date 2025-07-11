@@ -49,6 +49,7 @@ Here are some Boost libraries that could be helpful for the supporting tasks:
 
 * boost:filesystem[] : This library provides a portable way of querying and manipulating paths, files, and directories.
 
+Note:: The code in this tutorial was written and tested using Microsoft Visual Studio (Visual C++ 2022, Console App project) with Boost version 1.88.0.
 
 == Machine Learning Algorithms
 
