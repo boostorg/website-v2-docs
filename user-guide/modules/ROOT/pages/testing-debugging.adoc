@@ -186,7 +186,7 @@ Other libraries that might help you with testing and debugging include:
 
 * boost:exception[]: This library enhances the error handling capabilities of pass:[C++]. It enables attaching arbitrary data to exceptions, transporting of exceptions between threads, and more, thereby providing richer error information during debugging.
 
-* boost:static_assert[]: It provides a macro, `BOOST_STATIC_ASSERT`, which can be used to perform assertions that are checked at compile time rather than at run time. This can be used to catch programming errors as early as possible.
+* boost:static_assert[]: Provides two macros, `BOOST_STATIC_ASSERT` and `BOOST_STATIC_ASSERT_MSG`, which can be used to perform assertions that are checked at compile time rather than at run time. These can be used to catch programming errors as early as possible.
 
 * boost:bind[] and boost:lambda[]: These libraries allow for the creation of small, unnamed function objects at the point where they are used. These can be useful in writing concise tests.
 

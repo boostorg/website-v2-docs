@@ -122,7 +122,7 @@ Our code snippets include pass:[C++] examples on using libraries, but also Comma
 
 === Asciidoc Code Snippet
 
-Note the four hyphens delimiting the start and finish of the snippet, and the `c++` tag for the `source` to enable syntax highlighting (if available).
+To include a snippet of source code like the following, precede it with `[source, cpp]` on one line, followed by `----`, then the code itself, and finish it with a second `----`, again on its own line.
 
 [source, c++]
 ----
@@ -139,6 +139,7 @@ int main()
     std::for_each(
         in(std::cin), in(), std::cout << (_1 * 3) << " ");
 }
+
 ----
 
 
