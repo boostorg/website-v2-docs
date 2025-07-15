@@ -153,6 +153,7 @@ int main() {
 | *Macro* | *Description* 
 | `BOOST_ASSERT`(expr) | Asserts an expression, throwing an error in debug builds.
 | `BOOST_STATIC_ASSERT`(expr) | Performs a compile-time assertion.
+| `BOOST_STATIC_ASSERT_MSG`(expr, msg) | Performs a compile-time assertion, with an added message.
 | `BOOST_VERIFY`(expr) | Like `BOOST_ASSERT`, but always evaluates the expression, even in release mode.
 | `BOOST_ENABLE_ASSERT_HANDLER` | Enables a custom assertion handler.
 | `BOOST_ASIO_ENABLE_HANDLER_TRACKING` | Enables the debugging of handlers when using boost:asio[].
@@ -165,6 +166,7 @@ Using `BOOST_ASSERT`, `BOOST_STATIC_ASSERT`, and `BOOST_VERIFY` for debugging.
 [source,cpp]
 ----
 #include <boost/assert.hpp>
+#include <boost/static_assert.hpp>
 #include <iostream>
 
 void process(int value) {

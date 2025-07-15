@@ -35,6 +35,8 @@ This section contains answers to the common questions that new developers to Boo
 * <<Templates>>
 * <<See Also>>
 
+Note:: The code samples in these topics was written and tested using Microsoft Visual Studio (Visual C++ 2022, Console App project) with Boost version 1.88.0.
+
 == C++ Library Programming
 
 . *What is involved in using a Boost header-only library?*
@@ -54,8 +56,9 @@ int main() {
     BigFloat a = 1.0 / 3.0;
     BigFloat b = sqrt(BigFloat(2));
 
-    std::cout << "1/3 with high precision: " << a << std::endl;
-    std::cout << "Square root of 2: " << b << std::endl;
+    // Note that setprecision has been specified as slightly longer than the floating point numbers
+    std::cout << "1/3 with high precision: " << std::setprecision(51) << a << std::endl;
+    std::cout << "Square root of 2: " << std::setprecision(51) << b << std::endl;
 
     return 0;
 }
@@ -78,6 +81,7 @@ Using a compiled-binary library involves linking to the library, and any depende
 ----
 #include <boost/filesystem.hpp>
 #include <iostream>
+#include <fstream>
 
 namespace fs = boost::filesystem;
 
@@ -114,6 +118,7 @@ If you are using MSVC, and the libraries are in the default path, then the comma
 +
 `pass:[cl /std:c++17 example2.cpp /Fe:example2.exe /link boost_filesystem.lib boost_system.lib]`
 
+
 . *Given a choice, when should I use header-only or compiled-binary libraries?*
 +
 Depends on your priorities:
@@ -138,47 +143,34 @@ Header-only libraries are certainly easier to get going with. To optimize for be
 
 . *Can I use C++20 Modules to precompile header-only libraries and import them when needed?*
 +
-Yes, with pass:[C++]20 modules, you can precompile header-only libraries into a binary module and import them when needed. This significantly reduces compile times. Start by creating a module interface unit (say, `boost_module.cppm`) that includes the header-only Boost libraries. For example:
+Not reliably or consistently. Boost libraries are not currently written as pass:[C++]20 modules. They use traditional headers, macros, and complex template structures that don't cooperate well with the pass:[C++]20 export module syntax.
++
+As a workaround, consider using old-fashioned header files. For example, for `boost_module.hpp`:
 +
 [source,cpp]
 ----
-// boost_module.cppm (Module Interface)
-export module boost_module;
+#pragma once
 #include <boost/multiprecision/cpp_dec_float.hpp>
 
-export using BigFloat = boost::multiprecision::cpp_dec_float_50;
+using BigFloat = boost::multiprecision::cpp_dec_float_50;
 ----
 +
-Now, compile the module:
-+
-[source,text]
-----
-g++ -std=c++20 -fmodules-ts boost_module.cppm -o boost_module.o
-----
-+
-Then, reference the precompiled module in another file:
+Then for the main code:
 +
 [source,cpp]
 ----
-// main.cpp (Uses the module)
-import boost_module;
+#include "boost_module.hpp"
 #include <iostream>
 
 int main() {
     BigFloat x = 1.0 / 3.0;
-    std::cout << "1/3 with high precision: " << x << std::endl;
+    std::cout << "1/3 with high precision: " << std::setprecision(51) << x << std::endl;
     return 0;
 }
+
 ----
 +
-Compile and link:
-+
-[source,text]
-----
-g++ -std=c++20 -fmodules-ts main.cpp boost_module.o -o main
-----
-+
-Note:: Done well, this results in cleaner dependency management.
+Even if Boost were module-friendly, `cpp_dec_float_50` is a template instantiated from a header, and exporting it in a module interface would require exposing a lot of detail that header-only libraries don't support out of the box.
 
 . *Can I create a Static Library from header-only libraries and link when needed?*
 +
@@ -778,15 +770,22 @@ An exact timeline requires issues to be resolved, though later in 2024 is the cu
 +
 In pass:[C++], the precision of `float` and `double` types is determined by the IEEE 754 standard for floating-point arithmetic, which is used by nearly all modern compilers and hardware. A `float` (with 24 significant bits) is accurate to about 6 or 7 decimal places, a `double` (53 significant bits) to 15 to 17 decimal digits. A long double (80+ significant bits) extends this to 18 to 21 decimal digits. 
 +
-Boost does not replace these types, but extends your range of options (using boost:multiprecision[]) with the type `cpp_dec_float_<N>`, where you decide the value of N. cpp_dec_float_50 would obviously give 50 decimal digits, and `cpp_dec_float_200` 200 decimal digits. For example:
+Boost does not replace these types, but extends your range of options using boost:multiprecision[]. There are the predefined types `cpp_dec_float_50` and `cpp_dec_float_100`, and the unlimited type `cpp_dec_float_<N>`, where you decide the value of N. `cpp_dec_float_50` would obviously give 50 digits, and `cpp_dec_float_201` gives 201 digits. For example:
 +
 [source,cpp]
 ----
 #include <boost/multiprecision/cpp_dec_float.hpp>
+#include <iostream>
+
 using namespace boost::multiprecision;
 
-cpp_dec_float_50 pi("3.14159265358979323846264338327950288419716939937510");
-auto result = pi * pi;
+int main() {
+    cpp_dec_float_50 pi("3.14159265358979323846264338327950288419716939937510");
+    auto result = pi * pi;
+
+    // Set the precision slightly higher than the number of digits
+    std::cout << std::setprecision(51) << result << std::endl;
+}
 
 ----
 +
@@ -795,13 +794,15 @@ auto result = pi * pi;
 #include <boost/multiprecision/cpp_dec_float.hpp>
 #include <iostream>
 
-using boost::multiprecision::cpp_dec_float_200;
+// Let's define a type to take pi to 200 decimal places, 201 including the initial "3"
+using cpp_dec_float_201 = boost::multiprecision::number<boost::multiprecision::cpp_dec_float<201> >;
 
 int main() {
-    cpp_dec_float_200 pi("3.1415926535897932384626433832795028841971693993751058209749445923078164062862089986280348253421170679"
-                         "8214808651328230664709384460955058223172535940812848111745028410270193852110555964462294895493038196");
-    
-    std::cout << std::setprecision(200) << pi << std::endl;
+
+    cpp_dec_float_201 pi("3.1415926535897932384626433832795028841971693993751058209749445923078164062862089986280348253421170679"
+        "8214808651328230664709384460955058223172535940812848111745028410270193852110555964462294895493038196");
+
+    std::cout << std::setprecision(201) << pi << std::endl;
 }
 
 ----
@@ -920,8 +921,18 @@ int main() {
 }
 
 ----
++
+Running this code:
++
+[source,text]
+----
+Generated 100000 primes.
+Largest prime found: 1299709
+Time elapsed: 1.86556 seconds.
 
-Note:: `cpp_int` is overkill for small primes, but essential if you're working with large ones, such as 512+ bit cryptographic primes.
+----
+
+Note:: `cpp_int` is overkill for small primes, but essential if you're working with large ones, such as 512-bit cryptographic primes.
 
 . *Am I right that Boost libraries do not improve on the performance of the standard floating point `double`?*
 +
@@ -1036,8 +1047,11 @@ int main() {
     std::cout << "Public Key (e, n): (" << e << ", " << n << ")\n";
     std::cout << "Private Key (d, n): (" << d << ", " << n << ")\n";
 
-    // Encrypt message
+    // Create message
     cpp_int message = 65;
+    std::cout << "Initial message: " << message << "\n";
+
+    // Encrypt message
     cpp_int encrypted = powm(message, e, n); // m^e mod n
     std::cout << "Encrypted message: " << encrypted << "\n";
 

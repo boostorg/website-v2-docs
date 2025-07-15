@@ -572,15 +572,15 @@ You can add these `export` commands to your `~/.bashrc` or `~/.profile` file to 
 
 === Header-only libraries
 
-Let’s start by using a header-only library.
+Let's start by using a header-only library.
 Copy the following program into a file called `example.cpp`.
 
 [source,C++]
 .example.cpp
 ----
-#include <boost/lambda/lambda.hpp> <1>
+// Include a header from the Boost.Lambda library
+#include <boost/lambda/lambda.hpp>
 #include <iostream>
-#include <iterator>
 #include <algorithm>
 
 int main()
@@ -588,13 +588,13 @@ int main()
     using namespace boost::lambda;
     typedef std::istream_iterator<int> in;
 
+    std::cout << "Enter numbers: ";
+
+    // Read a sequence of integers from standard input, use Boost.Lambda to multiply each number by three, then write it to the standard output
     std::for_each(
-        in(std::cin), in(), std::cout << (_1 * 3) << " "); <2>
+        in(std::cin), in(), std::cout << (_1 * 3) << " ");
 }
 ----
-
-<1> Including a header from the boost:lambda[] library
-<2> Reads a sequence of integers from standard input, using boost:lambda[] to multiply each number by three and write it to the standard output
 
 We can now compile this program:
 
