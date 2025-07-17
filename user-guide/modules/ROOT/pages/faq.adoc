@@ -1083,95 +1083,6 @@ cpp_int prime = 1659187003930582880291185165038566829283520340642102923205105260
 Yes, developers have successfully used Boost libraries in applications written in languages other than pass:[C++] by leveraging language interoperability features and creating bindings or wrappers.
 +
 The most notable example is the use of boost:python[], a library specifically designed to enable seamless interoperability between pass:[C++] and Python. boost:python[] allows developers to expose pass:[C++] classes, functions, and objects to Python, enabling the use of the libraries from Python code. This has been used extensively in scientific computing, game development, and other fields where the performance of pass:[C++] is combined with the ease of Python.
-+
-Here is an example, wrapping a pass:[C++] class for use with boost:python[] and including exception handling:
-+
-[source,cpp]
-----
-// my_class.cpp
-#include <boost/python.hpp>
-#include <iostream>
-#include <stdexcept>
-
-class MyClass {
-public:
-    void hello() {
-        std::cout << "Hello from C++!" << std::endl;
-    }
-
-    int add(int a, int b) {
-        return a + b;
-    }
-
-    void throw_exception() {
-        throw std::runtime_error("An error occurred in C++ code");
-    }
-};
-
-// Function to translate C++ exceptions to Python exceptions
-void translate_runtime_error(const std::runtime_error& e) {
-    PyErr_SetString(PyExc_RuntimeError, e.what());
-}
-
-BOOST_PYTHON_MODULE(my_module) {
-    using namespace boost::python;
-    // Register the exception translator
-    register_exception_translator<std::runtime_error>(translate_runtime_error);
-
-    class_<MyClass>("MyClass")
-        .def("hello", &MyClass::hello)
-        .def("add", &MyClass::add)
-        .def("throw_exception", &MyClass::throw_exception);
-}
-
-----
-+
-You need to compile this pass:[C++] code into a shared library that Python can load. Here's an example command for compiling using g++ on Linux. Make sure to adjust the Python include path and boost:python[] library name according to your system's configuration:
-+
-----
-g++ -shared -fPIC -I/usr/include/python3.8 -lboost_python38 -o my_module.so my_class.cpp
-----
-+
-Next, write the Python code that will use the wrapped class:
-+
-[source,python]
-----
-# test_my_module.py
-import my_module
-
-# Create an instance of MyClass
-my_class_instance = my_module.MyClass()
-
-# Call the hello method
-my_class_instance.hello()
-
-# Call the add method
-result = my_class_instance.add(3, 4)
-print(f"The result of adding 3 and 4 is: {result}")
-
-# Call the throw_exception method and handle the exception
-try:
-    my_class_instance.throw_exception()
-except RuntimeError as e:
-    print(f"Caught an exception: {e}")
-
-----
-+
-Ensure that the shared library (`my_module.so`) is in the same directory as your Python script or in a directory that's included in the Python module search path. Then run the script:
-+
-----
-python3 test_my_module.py
-----
-+
-When you run the Python script, you should see the following output:
-+
-----
-Hello from C++!
-The result of adding 3 and 4 is: 7
-Caught an exception: An error occurred in C++ code
-----
-+
-Note:: By registering an exception translator, you can ensure that pass:[C++] exceptions are correctly translated into Python exceptions, making your pass:[C++] library more robust and easier to use from Python.
 
 . *What real world applications have combined Python with the Boost libraries?*
 +
@@ -1197,102 +1108,143 @@ Here are some great examples:
 
 . *Can I see some sample code of how to wrap Boost functions to be available for use in a C# app?*
 +
-The following code shows how to create a wrapper for a pass:[C++] class that uses Boost, and then calls this from a C# application. The handling of return values and exceptions are shown too:
+The following code shows how to create a wrapper for a pass:[C++] class that uses Boost, and then calls this class from a C# application. The handling of return values and exceptions are shown too. All the class does is convert a string to upper case.
++ 
+_The following code was written and tested using Visual Studio 2022, with Boost version 1.88. Visual Studio has been installed with tools to create both native pass:[C++] and .NET C# apps._
++
+In Visual Studio, create a pass:[C++] *Dynamic Link Library (DLL)* project, `MyDLL`, and in the project properties make sure the *Additional Include Directories* has the path to your Boost `include` files, and *Additional Library Directories* has the path to your Boost `lib` files. Most importantly in the *Configuration Properties/Advanced* section, make sure the *Common Language Runtime Support* setting is *.NET Framework Runtime Support (/clr)*. Delete the default `dllmain.cpp` file.
++
+Create a header file, `MyClass.h`, and copy in the following code:
 +
 [source,cpp]
 ----
-// my_class.cpp
-#include <boost/algorithm/string.hpp>
-#include <iostream>
-#include <stdexcept>
+#pragma once
 #include <string>
 
 class MyClass {
 public:
-    std::string to_upper(const std::string& input) {
-        if (input.empty()) {
-            throw std::runtime_error("Input string is empty");
-        }
-        return boost::to_upper_copy(input);
-    }
+    std::string to_upper(const std::string& input);
 };
+
 ----
 +
-Next, create a wrapper to expose the class to .NET:
+Create a second header file, `MyClassWrapper.h`, and copy in:
 +
 [source,cpp]
 ----
-// MyClassWrapper.cpp
-#include "my_class.cpp"
-#include <string>
+#pragma once
+
+#include "MyClass.h"
+
+using namespace System;
 
 public ref class MyClassWrapper {
 private:
     MyClass* instance;
 
 public:
-    MyClassWrapper() {
-        instance = new MyClass();
-    }
+    MyClassWrapper();
+    ~MyClassWrapper();
+    !MyClassWrapper();
 
-    ~MyClassWrapper() {
-        this->!MyClassWrapper();
-    }
-
-    !MyClassWrapper() {
-        delete instance;
-    }
-
-    System::String^ ToUpper(System::String^ input) {
-        try {
-            std::string nativeInput = msclr::interop::marshal_as<std::string>(input);
-            std::string result = instance->to_upper(nativeInput);
-            return gcnew System::String(result.c_str());
-        } catch (const std::runtime_error& e) {
-            throw gcnew System::Runtime::InteropServices::ExternalException(gcnew System::String(e.what()));
-        }
-    }
+    String^ ToUpper(String^ input);
 };
+
 ----
 +
-Now create the C# application that uses the wrapper:
+Create a new source file, `MyClass.cpp`, and copy in:
++
+[source,cpp]
+----
+#include "pch.h"
+#include "MyClass.h"
+#include <boost/algorithm/string.hpp>
+#include <stdexcept>
+
+std::string MyClass::to_upper(const std::string& input) {
+    if (input.empty()) {
+        throw std::runtime_error("Input string is empty");
+    }
+    return boost::to_upper_copy(input);
+}
+
+----
++
+We use boost:algorithm[] here, to show how to engage our libraries.
++
+Next, create a second source file, `MyClassWrapper.cpp`, to expose the class to .NET:
++
+[source,cpp]
+----
+#include "pch.h"
+#include "MyClassWrapper.h"
+#include <msclr/marshal_cppstd.h>
+#include <stdexcept>
+
+using namespace msclr::interop;
+using namespace System::Runtime::InteropServices;
+
+MyClassWrapper::MyClassWrapper() {
+    instance = new MyClass();
+}
+
+MyClassWrapper::~MyClassWrapper() {
+    this->!MyClassWrapper();
+}
+
+MyClassWrapper::!MyClassWrapper() {
+    delete instance;
+}
+
+String^ MyClassWrapper::ToUpper(String^ input) {
+    try {
+        std::string nativeInput = marshal_as<std::string>(input);
+        std::string result = instance->to_upper(nativeInput);
+        return gcnew String(result.c_str());
+    }
+    catch (const std::exception& e) {
+        throw gcnew ExternalException(gcnew String(e.what()));
+    }
+}
+----
++
+Now, build your DLL, and hopefully it will build correctly. If it does, close that solution. Errors are usually because of missing components, rather than faulty code.
++
+Now create the C# application that uses the wrapper. In Visual Studio, create a C# Console app, `CppCsharp`, noting that a .NET framework is part of the project, and overwrite the default with the following code.
 +
 [source,csharp]
 ----
-// Program.cs
 using System;
 
-class Program {
-    static void Main() {
+class Program
+{
+    static void Main()
+    {
         MyClassWrapper myClass = new MyClassWrapper();
-        
-        try {
+
+        try
+        {
             string result = myClass.ToUpper("hello world");
             Console.WriteLine("Result: " + result);
-            
+
             // Test with an empty string to trigger the exception
             result = myClass.ToUpper("");
             Console.WriteLine("Result: " + result);
-        } catch (System.Runtime.InteropServices.ExternalException e) {
+
+        }
+        catch (System.Runtime.InteropServices.ExternalException e)
+        {
             Console.WriteLine("Caught an exception: " + e.Message);
         }
     }
 }
 ----
 +
-Compile the C++ code into a DLL:
+You will notice that the `MyClassWrapper` declaration is marked as erroneous.
 +
-----
-cl /c /EHsc my_class.cpp
-----
+In Visual Studio, in the *Project* menu, select *Add Project Reference*, and then use the *Browse* option to locate your `MyDLL.dll`. You should notice the error marks disappear.
 +
-Compile the wrapper:
-+
-----
-cl /clr /EHsc /I"path\to\boost" MyClassWrapper.cpp my_class.obj /link /OUT:MyClassWrapper.dll
-----
-+
-Finally, create a C# project (say, using Visual Studio), add a reference to the `MyClassWrapper.dll`, then build and run the application:
+Run the program, noting the initial string is converted to upper case, and the second call correctly returns the exception:
 +
 ----
 Result: HELLO WORLD
@@ -1301,35 +1253,7 @@ Caught an exception: Input string is empty
 
 . *Does the Java Native Interface (JNI) work with the Boost libraries?*
 +
-Through the use of the Java Native Interface (JNI) or Java Native Access (JNA), developers can call Boost libraries from Java applications. It involves creating native methods in Java that are implemented in pass:[C++] and using Boost libraries as part of those implementations. Here is a simple example (without error handling or return values):
-+
-[source,cpp]
-----
-// C++ implementation
-#include <jni.h>
-#include "MyClass.h"
-
-JNIEXPORT void JNICALL Java_MyClass_hello(JNIEnv* env, jobject obj) {
-    MyClass myClass;
-    myClass.hello();
-}
-----
-+
-[source,java]
-----
-// Java class
-public class MyClass {
-    static {
-        System.loadLibrary("myclass");
-    }
-    
-    private native void hello();
-    
-    public static void main(String[] args) {
-        new MyClass().hello();
-    }
-}
-----
+Through the use of the Java Native Interface (JNI) or Java Native Access (JNA), developers can call Boost libraries from Java applications. It involves creating native methods in Java that are implemented in pass:[C++] and using Boost libraries as part of those implementations.
 
 Note:: Similar techniques can be applied to other languages, such as R, Ruby, Perl, and Lua, using their respective foreign function interfaces (FFI) or binding libraries. 
 
