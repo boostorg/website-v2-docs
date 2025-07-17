@@ -1106,6 +1106,151 @@ Here are some great examples:
 +
 * Scientific computing applications that need high-performance computation often use pass:[C++] for core algorithms. C# is great for visualization, user interaction, and orchestration. Computational chemistry and physics applications sometimes use Boost for numerical computations and data handling, while C# provides the tools for managing simulations and visualizing results.
 
+. *Can I see some sample code of how to wrap Boost functions to be available for use in a C# app?*
++
+The following code shows how to create a wrapper for a pass:[C++] class that uses Boost, and then calls this class from a C# application. The handling of return values and exceptions are shown too. All the class does is convert a string to upper case.
++ 
+_The following code was written and tested using Visual Studio 2022, with Boost version 1.88. Visual Studio has been installed with tools to create both native pass:[C++] and .NET C# apps._
++
+In Visual Studio, create a pass:[C++] *Dynamic Link Library (DLL)* project, `MyDLL`, and in the project properties make sure the *Additional Include Directories* has the path to your Boost `include` files, and *Additional Library Directories* has the path to your Boost `lib` files. Most importantly in the *Configuration Properties/Advanced* section, make sure the *Common Language Runtime Support* setting is *.NET Framework Runtime Support (/clr)*. Delete the default `dllmain.cpp` file.
++
+Create a header file, `MyClass.h`, and copy in the following code:
++
+[source,cpp]
+----
+#pragma once
+#include <string>
+
+class MyClass {
+public:
+    std::string to_upper(const std::string& input);
+};
+
+----
++
+Create a second header file, `MyClassWrapper.h`, and copy in:
++
+[source,cpp]
+----
+#pragma once
+
+#include "MyClass.h"
+
+using namespace System;
+
+public ref class MyClassWrapper {
+private:
+    MyClass* instance;
+
+public:
+    MyClassWrapper();
+    ~MyClassWrapper();
+    !MyClassWrapper();
+
+    String^ ToUpper(String^ input);
+};
+
+----
++
+Create a new source file, `MyClass.cpp`, and copy in:
++
+[source,cpp]
+----
+#include "pch.h"
+#include "MyClass.h"
+#include <boost/algorithm/string.hpp>
+#include <stdexcept>
+
+std::string MyClass::to_upper(const std::string& input) {
+    if (input.empty()) {
+        throw std::runtime_error("Input string is empty");
+    }
+    return boost::to_upper_copy(input);
+}
+
+----
++
+We use boost:algorithm[] here, to show how to engage our libraries.
++
+Next, create a second source file, `MyClassWrapper.cpp`, to expose the class to .NET:
++
+[source,cpp]
+----
+#include "pch.h"
+#include "MyClassWrapper.h"
+#include <msclr/marshal_cppstd.h>
+#include <stdexcept>
+
+using namespace msclr::interop;
+using namespace System::Runtime::InteropServices;
+
+MyClassWrapper::MyClassWrapper() {
+    instance = new MyClass();
+}
+
+MyClassWrapper::~MyClassWrapper() {
+    this->!MyClassWrapper();
+}
+
+MyClassWrapper::!MyClassWrapper() {
+    delete instance;
+}
+
+String^ MyClassWrapper::ToUpper(String^ input) {
+    try {
+        std::string nativeInput = marshal_as<std::string>(input);
+        std::string result = instance->to_upper(nativeInput);
+        return gcnew String(result.c_str());
+    }
+    catch (const std::exception& e) {
+        throw gcnew ExternalException(gcnew String(e.what()));
+    }
+}
+----
++
+Now, build your DLL, and hopefully it will build correctly. If it does, close that solution. Errors are usually because of missing components, rather than faulty code.
++
+Now create the C# application that uses the wrapper. In Visual Studio, create a C# Console app, `CppCsharp`, noting that a .NET framework is part of the project, and overwrite the default with the following code.
++
+[source,csharp]
+----
+using System;
+
+class Program
+{
+    static void Main()
+    {
+        MyClassWrapper myClass = new MyClassWrapper();
+
+        try
+        {
+            string result = myClass.ToUpper("hello world");
+            Console.WriteLine("Result: " + result);
+
+            // Test with an empty string to trigger the exception
+            result = myClass.ToUpper("");
+            Console.WriteLine("Result: " + result);
+
+        }
+        catch (System.Runtime.InteropServices.ExternalException e)
+        {
+            Console.WriteLine("Caught an exception: " + e.Message);
+        }
+    }
+}
+----
++
+You will notice that the `MyClassWrapper` declaration is marked as erroneous.
++
+In Visual Studio, in the *Project* menu, select *Add Project Reference*, and then use the *Browse* option to locate your `MyDLL.dll`. You should notice the error marks disappear.
++
+Run the program, noting the initial string is converted to upper case, and the second call correctly returns the exception:
++
+----
+Result: HELLO WORLD
+Caught an exception: Input string is empty
+----
+
 . *Does the Java Native Interface (JNI) work with the Boost libraries?*
 +
 Through the use of the Java Native Interface (JNI) or Java Native Access (JNA), developers can call Boost libraries from Java applications. It involves creating native methods in Java that are implemented in pass:[C++] and using Boost libraries as part of those implementations.
