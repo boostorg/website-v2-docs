@@ -1613,26 +1613,75 @@ The benefits of using templates include code reusability, type safety, and the a
 
 . *How can I use templates to implement a generic sort function in pass:[C++]?*
 +
-Here's a simple example of how you might use a function template to implement a generic sort function:
+Here's an example of how you might use a function template to implement a generic sort function, working with boost:range[], so any type that is supported by this library can be sorted using the following function:
 +
 [source,cpp]
 ----
-template <typename T>
-void sort(T* array, int size) {
-    for(int i = 0; i < size; i++) {
-        for(int j = i + 1; j < size; j++) {
-            if(array[i] > array[j]) {
-                T temp = array[i];
-                array[i] = array[j];
-                array[j] = temp;
+#include <boost/range/iterator_range.hpp>
+
+// Bubble sort using Boost.Range-compatible interface
+template<typename Range>
+void bubble_sort_range(Range& r) {
+    using std::begin;
+    using std::end;
+
+    using Iterator = typename boost::range_iterator<Range>::type;
+    using Category = typename std::iterator_traits<Iterator>::iterator_category;
+
+    // Enforce random access iterators at compile time
+    BOOST_STATIC_ASSERT((std::is_base_of<std::random_access_iterator_tag, Category>::value));
+
+    Iterator first = boost::begin(r);
+    Iterator last = boost::end(r);
+
+    if (first == last) return;
+
+    bool swapped = true;
+    while (swapped) {
+        swapped = false;
+        for (Iterator it = first; it + 1 != last; ++it) {
+            if (*(it + 1) < *it) {
+                std::iter_swap(it, it + 1);
+                swapped = true;
             }
         }
+        --last;
     }
 }
+
+// Usage example:
+
+#include <iostream>
+#include <vector>
+
+int main() {
+    std::vector<int> nums = { 9, 3, 7, 1, 4, 6, 12, 21, 14, 13, 11, 9, -1, -4 };
+    bubble_sort_range(nums);
+
+    for (int n : nums)
+        std::cout << n << " ";
+    std::cout << "\n";
+
+    std::vector<std::string> names = { "charlie", "alice", "bob", "pete", "vanessa", "dave", "alexi"};
+    bubble_sort_range(names);
+
+    for (const auto& name : names)
+        std::cout << name << " ";
+    std::cout << "\n";
+}
+
 ----
 +
-This function can now be used to sort arrays of any type (that supports the `<` and `>` operators), not just a specific type.
+Running the example you should get the output:
++
+[source,text]
+----
+-4 -1 1 3 4 6 7 9 9 11 12 13 14 21
+alexi alice bob charlie dave pete vanessa
 
+----
+
+Note:: This use of templates is given as an example only, the `std::sort`, `std::stable_sort`, and `std::spreadsort` are super efficient and should be used whenever possible. However, if you have a special process you would like to apply to different types of ranges, this templated approach may work well for you. For specialized sorts, refer to boost:sort[].
 
 == See Also
 
