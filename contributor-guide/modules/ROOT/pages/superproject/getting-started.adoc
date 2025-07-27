@@ -9,7 +9,7 @@ Official repository: https://github.com/boostorg/website-v2-docs
 = Getting Started with the Super-Project
 :navtitle: Getting Started
 
-Boost libraries reside in subdirectories under the `libs` directory. For example, the contents of the boost:filesystem[] library are in `libs/filesystem.` This includes the build scripts (in l`ibs/filesystem/build`), the source files (in `libs/filesystem/src`), the tests (in `libs/filesystem/test`), the documentation (in `libs/filesystem/doc`), and so on.
+Boost libraries reside in subdirectories under the `libs` directory. For example, the contents of the boost:filesystem[] library are in `libs/filesystem.` This includes the build scripts (in `libs/filesystem/build`), the source files (in `libs/filesystem/src`), the tests (in `libs/filesystem/test`), the documentation (in `libs/filesystem/doc`), and so on.
 
 In the past, when Boost used SVN as its version control system, the header files were an exception. The header files of all libraries resided in the `boost` subdirectory, and it wasn't possible to accurately determine which header belonged to which library.
 
