@@ -823,6 +823,10 @@ User Table:
 
 == Next Steps
 
+In the design of a database, consider all the independent processes, and how they might access persistent memory, for example:
+
+image::database-persistent-memory.png[]
+
 Perhaps now consider boost:filesystem[] for file management, and for a heavier duty database engine - integrate boost:asio[] to handle remote database transactions. Referring to the xref:task-networking.adoc[] sample would be a good place to start.
 
 The Boost libraries have a lot to offer this particular scenario!
@@ -832,3 +836,4 @@ The Boost libraries have a lot to offer this particular scenario!
 * https://www.boost.org/doc/libs/latest/libs/libraries.htm#Containers[Category: Containers] 
 * https://www.boost.org/doc/libs/latest/libs/libraries.htm#Data[Category: Data structures]
 * https://www.boost.org/doc/libs/latest/libs/libraries.htm#Memory[Category: Memory]
+
