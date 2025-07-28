@@ -126,6 +126,10 @@ Each of these levels can be used to log messages of different importance:
 
 You can customize these levels to fit your app, and you can also filter logs based on their severity level. For example, in a production environment, you might ignore `trace` and `debug` logs and only record `info`, `warning`, `error`, and `fatal` logs.
 
+Careful logging of events, not too much information and not to little, will tell a story:
+
+image::logging-trace-to-fatal.png[]
+
 == Using Boost.Test
 
 boost:test[] is a robust, powerful library designed to facilitate writing unit tests in pass:[C++]. It provides a framework for creating, managing, and running tests, enabling developers to ensure that their code functions as expected.
