@@ -333,6 +333,14 @@ Loaded transaction: 782ded6c-4eda-47d6-a62c-d87bcf2c8f79 -> 48ff8851-f638-4bfc-a
 
 For a more functional wallet, we should add foreign currency exchange. In this sample the rates are hard-coded, however the <<Next Steps>> section includes information on how to access live currency exchange rates.
 
+*Sender*:
+
+image::digital-wallet.png[Digital Wallet]
+
+*Recipient*:
+
+image::digital-wallet-empty.png[Digital Wallet]
+
 [source,cpp]
 ----
 #include <sodium.h>

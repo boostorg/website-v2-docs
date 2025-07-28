@@ -370,6 +370,8 @@ Time: 8.41678 sec | Inc: 0.218435 sec | Box Position: Min(3.98995, 2.52503, -1.6
 
 Collisions rarely have no consequences. To simulate deformation on impact, we can modify the shape of the box when it collides with a boundary.
 
+image::deformation.png[cube deforming in 3D space]
+
 The box will deform along the axis of impact, based on the velocity.
 
 [source,cpp]
