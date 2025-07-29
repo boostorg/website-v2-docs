@@ -913,6 +913,10 @@ Received: we are connected!
 
 The samples shown here are portable and cross-platform (Windows/Linux/Mac), and the servers are asynchronous to handle multiple clients.
 
+The following diagram shows how the different layers work together in the samples:
+
+image::client-server-layers.png[]
+
 == See Also
 
 * https://www.boost.org/doc/libs/latest/libs/libraries.htm#Concurrent[Category: Concurrent Programming]
