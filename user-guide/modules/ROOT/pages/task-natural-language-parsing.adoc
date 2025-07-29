@@ -19,6 +19,7 @@ Natural language processing is a complex field that goes beyond just programming
 * <<Simple English Parsing Sample>>
 * <<Add a Dictionary of Valid Words>>
 * <<Add Detailed Error Reporting>>
+* <<Next Steps>>
 * <<See Also>>
 
 == Libraries
@@ -410,12 +411,20 @@ The sentence must be of the form:
   Noun 2:      - invalid
 ----
 
+== Next Steps
+
 You will notice how adding more features to a natural language parser starts to considerably increase the code length. This is a normal feature of language parsing - a lot of code can be required to cover all the options of something as flexible as language. For an example of a simpler approach to parsing _well-formatted_ input, refer to the sample code in xref:task-text-processing.adoc[].
+
+When designing a natural language system, it is good practice to divide the process into three main steps: *syntax analysis* (parsing), *semantic analysis* (grammar), and *interpretation*. Even though it might be possible to combine some grammar checking with the syntax checking, it is often better practice not to do this but complete the syntax checking first - this makes for greater maintainability and comprehension as the code is developed over time. The final stage, interpretation, usually depends on context. In the following sequence, a phrase as simple as "time flies" contains ambiguity:
+
+image::natural-language-parsing.png[]
+
+The phrase is so widely known it obscures the interpretation of "flies" as a noun. Context is required during interpretation to treat the input as a phrase, and not as something of the form "horse flies". Natural language parsers can remind us of ambiguity when at first we don't see it!
+
 
 == See Also
 
 * https://www.boost.org/doc/libs/latest/libs/libraries.htm#Parsing[Category: Parsing]
 * https://www.boost.org/doc/libs/latest/libs/libraries.htm#Patterns[Category: Patterns and Idioms]
 * https://www.boost.org/doc/libs/latest/libs/libraries.htm#String[Category: String and text processing]
-
 

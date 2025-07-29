@@ -267,6 +267,8 @@ The following command lines show how to run with defaults, run with options spec
 
 It might be important to record the time taken for system operations, both in testing and in the operation of a system app. So, let's integrate boost:chrono[] to measure the time taken for key filesystem operations, such as creating directories, writing to files, reading files, and deleting files.
 
+image::system-timing.png[]
+
 [source,cpp]
 ----
 #include <boost/filesystem.hpp>
@@ -395,9 +397,7 @@ int main(int argc, char* argv[]) {
 
 ----
 
-Note:: The code measures operation execution time in microseconds.
-
-The following is example output from running the sample.
+The following is example output from running the sample:
 
 [source,text]
 ----
