@@ -271,7 +271,11 @@ Task 2 exiting...
 
 For message queues, consider the following sample using boost:fiber[], where you can type messages manually, starting with a receiver Id, and a receiver fiber prints the messages from the queue, if the message is for that receiver.
 
-This simulates a very lightweight fiber-based message loop using user input. Receivers 1 and 2 only take messages where they have been identified as the desired receiver. Receiver 3 takes any message.
+This simulates a very lightweight fiber-based message loop using user input. Receivers 1 and 2 only take messages where they have been identified as the desired receiver. Receiver 3 takes any message, and as such is the _fallback handler_. For example:
+
+image::message-queue.png[]
+
+Now for the code:
 
 [source,cpp]
 ----
