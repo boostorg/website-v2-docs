@@ -520,6 +520,8 @@ If you run this code you will get something like:
 
 Again, the result shows the probability distribution of being at any one of the positions at the end of the 2D walk.
 
+image::quantum-walk-simulation.png[]
+
 
 === Other Quantum Algorithms
 

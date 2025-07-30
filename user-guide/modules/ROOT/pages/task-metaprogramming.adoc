@@ -285,7 +285,9 @@ boost:hana[] adds efficient tuple handling at runtime (for example, easier acces
 | Better Compile-Time Speed	| Yes | No, Slower
 |===
 
-Let's update our sample to include _tag dispatching_, so each type is classified at compile time, and _runtime tuple processing_, so the sample iterates over heterogeneous types at runtime.
+Let's update our sample to include _tag dispatching_, so each type is classified at compile time, and _runtime tuple processing_, so the sample iterates over heterogeneous types at runtime. Not having all metaprogramming processes occur at the same time does add a level to your program complexity!
+
+image::template-time-machine.png[]
 
 [source,cpp]
 ----
