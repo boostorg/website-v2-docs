@@ -16,6 +16,7 @@ Official repository: https://github.com/boostorg/website-v2-docs
 ** xref:common-introduction.adoc[]
 ** xref:task-finance.adoc[]
 ** xref:task-networking.adoc[]
+** xref:task-ai-client.adoc[]
 ** xref:task-simulation.adoc[]
 ** xref:task-system.adoc[]
 ** xref:testing-debugging.adoc[]
