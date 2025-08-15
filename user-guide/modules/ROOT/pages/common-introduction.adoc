@@ -15,7 +15,9 @@ There are many common use-cases for the Boost libraries.
 
 xref:task-finance.adoc[] can be relatively simple in terms of numerical operations - additions for deposits, subtractions for withdrawals, and multiplications for interest calculation and foreign currency trading - but delving into secure networking and cryptography makes this scenario a serious challenge. 
 
-In the realm of software development, xref:task-networking.adoc[] involves the communication and data exchange between different software systems across networks. Networking code often deals with protocols like HTTP, FTP, TCP/IP, UDP, and WebSockets, to name a few. Networking tasks might include creating a web server, crafting a custom protocol for communication between distributed parts of an application, or designing software that interacts with REST APIs. 
+In the realm of software development, xref:task-networking.adoc[] involves the communication and data exchange between different software systems across networks. Networking code often deals with protocols like HTTP, FTP, TCP/IP, UDP, and WebSockets, to name a few. Networking tasks might include creating a web server, crafting a custom protocol for communication between distributed parts of an application, or designing software that interacts with REST APIs.
+
+For a variation of the client/server scenario, the xref:task-ai-client.adoc[] examples show how to make requests and parse responses from an AI model. Certainly fun, it's usefulness can vary.
 
 xref:task-simulation.adoc[] in software is about creating a virtual model of a system in order to understand or predict its behavior. It’s often used in areas such as physics, engineering, biology, and finance to model complex real-world systems. Simulation code can involve heavy computations, data analysis, and often makes use of concurrent programming to speed up execution. 
 
