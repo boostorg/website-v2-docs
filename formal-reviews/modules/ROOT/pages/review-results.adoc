@@ -24,6 +24,7 @@ Note:: The review results include recent completed reviews - where the library m
 |===
 | *Submission* | *Submitter* | *Review Manager* | *Review Dates* | *Result*
 | *Boost 1.89.0 Beta* |  - |   Marshall Clow |  TBD | TBD
+| Decimal Re-Review  | Matt Borland and Chris Kormanyos | John Maddock | October 6, 2025 - October 15, 2025 | TBD
 |===
 
 === Review Managers
