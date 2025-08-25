@@ -25,11 +25,17 @@ Where terms apply specifically to one technology, such as _Quantum Computing_ or
 
 *ABI* : Application Binary Interface
 
+*Abseil* : https://abseil.io/[Abseil] is a collection of pass:[C++] libraries, developed by Google (drawn from it's codebase), and designed to be compatible with the pass:[C++] Standards.
+
 *ADL* : Argument-Dependent Lookup
 
 *AFAICT* : _As Far As I Can Tell_
 
 *AFAIK* : _As Far As I Know_
+
+*Antora* : An open-source documentation site generator built around AsciiDoc, designed for managing and publishing large, multi-repository documentation collections. It produces modular, versioned, and navigation-rich websites, making it especially popular for technical docs and developer portals.
+
+*AppVeyor* : A cloud-based Continuous Integration (CI) and Continuous Delivery (CD) service. It's similar to GitHub Actions, Travis CI, or CircleCI, but with some unique strengths, such as it is a hosted service so you don't need to set up your own build servers, it has a Windows-first focus (originally designed to fill a gap when most CI services were Linux-only), and is great for testing MSVC builds, PowerShell scripts, and Windows installers. It does now also support Linux and macOS. It integrates well with GitHub and uses YAML configuration files.
 
 *ASIO* : Asynchronous Input/Output - refer to boost:asio[]
 
@@ -67,6 +73,8 @@ Note:: The Bloom filter is named after its inventor, Burton Howard Bloom, who de
 *BOFH* : _B'd Operator From Hell_ - referring to a grumpy system admin
 
 *BOGOSITY* : A measure of how bogus something is - typically bogus code or bogus logic
+
+*Brave* : An open-source, Chromium-based browser. Brave is a fork of Chromium, which itself is mostly written in pass:[C++]. The Blink rendering engine, V8 JavaScript engine, and much of the browser's core (networking, storage, DOM, etc.) are implemented in pass:[C++].
 
 *BTW* : _By The Way_
 
@@ -116,6 +124,8 @@ Note:: The Bloom filter is named after its inventor, Burton Howard Bloom, who de
 
 == F
 
+*FarmHash* : Google developed FarmHash as a family of non-cryptographic hash functions, designed to be fast on modern CPUs (both 32-bit and 64-bit), deterministic (same input results in the same output), well-distributed (low collision rate for typical data), but non-cryptographic (not secure against intentional collisions, so it should not be used for passwords, signatures, or security tokens). Good for hash tables, checksums, data partitioning, bloom filters, or fingerprinting content where cryptographic security isn't required.
+
 *FIFO* : First In, First Out
 
 *FOMO* : _Fear Of Missing Out_
@@ -157,8 +167,13 @@ Note:: The Bloom filter is named after its inventor, Burton Howard Bloom, who de
 | _Token Embedding_ | A numeric representation of words or subwords that captures their meaning and context, used as input to AI models.
 |===
 
+*GH* : Usually means GitHub.
+
+*GHA* : Short for GitHub Actions.
 
 *GIL* : Generic Image Library - boost:gil[] is a library designed for image processing, offering a flexible way to manipulate and process images.
+
+*gRPC* : A high-performance, open-source RPC (Remote Procedure Call) framework developed by Google that uses Protocol Buffers (protobuf) for defining service interfaces and message types. It enables efficient, strongly-typed communication between distributed systems over HTTP/2, supporting features like streaming, authentication, and load balancing. It is a competitor to a point of REST and OpenAPI.
 
 [[h]]
 == H
@@ -233,6 +248,8 @@ Note:: For uses of hash functions in Boost libraries, refer to boost:hash2[], an
 *IWYU* : https://include-what-you-use.org/[include-what-you-use] - a tool for use with clang to analyze `#includes` in C and pass:[C++] source files.
 
 == J
+
+*Jamfile* : A plain text configuration file that describes how to build a project using Boost.Build (B2). The file defines targets (executables, libraries, tests), specifies sources, include paths, compiler/linker options, and dependencies, and uses a high-level declarative syntax (not low-level Makefiles). The file is typically named `Jamfile` or `Jamfile.v2`.
 
 *Jinja* or *Jinga2* : Jinga is a popular Python text template engine. https://jinja2cpp.github.io/[Jinga2pass:[C++]] is a modern C++ implementation of Jinga.
 
@@ -325,6 +342,8 @@ Note:: For uses of hash functions in Boost libraries, refer to boost:hash2[], an
 The main advantage of open methods is that they help prevent bugs when modifying stable code. For example, when a new file format becomes popular, code can be extended to support it without modifying the existing code. In simple terms, they allow for safer scaling of software. Another specific use is you can add behavior involving multiple types, for example adding collision handling between type `A` and type `B` that is to date unsupported in your code.
 
 An open-method library is currently in the Boost formal review process.
+
+*OTOH* : _On the other hand_
 
 == P
 
@@ -472,6 +491,9 @@ _This diagram shows the basic process of quantum teleportation, where the unknow
 
 *SIGILS* : refers to symbols or characters that precede a variable, literal, or keyword to indicate its type or purpose. For example, in "%hash" the "%" is a sigil. It is occasionally used with a tongue-in-cheek tone because of its mystical connotations, referring to how these symbols can seem "magical" in making the code work! 
 
+*SipHash* : A cryptographic hash for short messages (designed in 2012 by Jean-Philippe Aumasson and Daniel J. Bernstein). Specifically a pseudorandom function (PRF) keyed with a secret key to SipHash(k, message) to 64-bit hash.
+It is fast enough for hash table lookups, but unlike MurmurHash/FarmHash, it resists _hash-flooding attacks_.
+
 *SMOP* : _Small Matter of Programming_ - sarcastically downplaying complex problems
 
 *SOLID* : Single Responsibility, Open/Closed, Liskov Substitution, Interface Segregation, Dependency Inversion (Design principles)
@@ -510,6 +532,8 @@ _This diagram shows the basic process of quantum teleportation, where the unknow
 *UB* : Undefined Behavior
 
 *UBlas* : Basic Linear Algebra - refer to boost:numeric/ublas[]
+
+*UBSan targets* : Refers to builds or test configurations that are compiled and run with Undefined Behavior Sanitizer (UBSan) enabled. UBSan is a runtime checker built into Clang and GCC that detects undefined behavior such as signed integer overflow, misaligned memory access, null pointer dereference in some contexts, out-of-bounds array access, and type punning violations (bad casts).
 
 *URL* : Universal Resource Locator - refer to boost:url[]
 
