@@ -845,7 +845,7 @@ Clang:
 
 [source,none,subs="attributes+"]
 ----
-clang++ -I /usr/local/include example.cpp -L /usr/local/libboost_json.a -o example
+clang++ -I /usr/local/include example.cpp -L /usr/local/lib -l boost_json -o example
 ----
 
 NOTE: Replace `C:\boost` or `/usr/local` with your Boost installation prefix if necessary.
