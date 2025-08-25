@@ -972,5 +972,6 @@ image::client-server-layers.png[]
 
 == See Also
 
+* xref:task-ai-client.adoc[]
 * https://www.boost.org/doc/libs/latest/libs/libraries.htm#Concurrent[Category: Concurrent Programming]
 * https://www.boost.org/doc/libs/latest/libs/libraries.htm#IO[Category: Input/Output]

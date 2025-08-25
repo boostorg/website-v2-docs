@@ -541,3 +541,5 @@ For more information and examples on the use of Boost libraries in client/server
 * https://www.boost.org/doc/libs/latest/libs/libraries.htm#Concurrent[Category: Concurrent Programming]
 * https://www.boost.org/doc/libs/latest/libs/libraries.htm#IO[Category: Input/Output]
 * https://www.boost.org/doc/libs/latest/libs/libraries.htm#Parsing[Category: Parsing]
+* xref:task-machine-learning.adoc[]
+* xref:task-networking.adoc[]
