@@ -551,6 +551,7 @@ The _Transformer-style_ part refers to the architecture introduced in the ground
 
 == See Also
 
+* xref:task-ai-client.adoc[]
 * https://www.boost.org/doc/libs/latest/libs/libraries.htm#Algorithms[Category: Algorithms]
 * https://www.boost.org/doc/libs/latest/libs/libraries.htm#Iterators[Category: Iterators]
 * https://www.boost.org/doc/libs/latest/libs/libraries.htm#Math[Category: Math and numerics]
