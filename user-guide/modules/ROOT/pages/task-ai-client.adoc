@@ -16,7 +16,7 @@ Many apps across all sorts of scenarios might significantly benefit from some ar
 * <<Libraries>>
 * <<AI Text Client>>
 * <<Secure AI Text and ASCII Diagram Client>>
-* <<Image Client>>
+* <<AI Generated Image Client>>
 * <<Next Steps>>
 * <<See Also>>
 
@@ -528,7 +528,7 @@ Enter your request (ASCII diagram or text) or 'exit': exit
 
 Clearly AI produced ASCII diagrams have their limitations!
 
-== Image Client
+== AI Generated Image Client
 
 Let's improve on those ASCII diagrams by calling the *images generation endpoint* (`/v1/images/generations`), taking a text description of the required image, and returning JSON containing a URL with the download link to the image.
 
@@ -566,7 +566,7 @@ int main()
         const std::string org_id = "<YOUR_ORG_ID>";   // Optional: can be blank
 
         // Path to a certificate bundle (needed so TLS can verify api.openai.com is trusted)
-        _putenv_s("SSL_CERT_FILE", "C:\\Users\\Peter\\OneDrive\\Documents\\CppAlliance\\certs\\cacert.pem");
+        _putenv_s("SSL_CERT_FILE", "<YOUR_CERT_PATH>\\cacert.pem");
 
         //-----------------------------------------
         // SSL/TLS CONTEXT
@@ -704,7 +704,7 @@ Run the program:
 
 [source,text]
 ----
-Enter an image request (e.g. 'a sunset over the mountains') or 'exit': A sunset over the mountain
+Enter an image request (e.g. 'A sunset over the mountains') or 'exit': A sunset over the mountain
 
 Download your image here:
 https://oaidalleapiprodscus.blob.core.windows.net/private/org-DOWNLOAD-LINK-DETAILS
@@ -717,7 +717,7 @@ Try a stylized image:
 
 [source,text]
 ----
-Enter an image request (e.g. 'a sunset over the mountains') or 'exit': A cartoon image of a volcanic eruption
+Enter an image request (e.g. 'A sunset over the mountains') or 'exit': A cartoon image of a volcanic eruption
 
 Download your image here:
 https://oaidalleapiprodscus.blob.core.windows.net/private/org-DOWNLOAD-LINK-DETAILS
@@ -730,7 +730,7 @@ Try a more complex subject:
 
 [source,text]
 ----
-Enter an image request (e.g. 'a sunset over the mountains') or 'exit': A C++ computer programmer hard at work
+Enter an image request (e.g. 'A sunset over the mountains') or 'exit': A C++ computer programmer hard at work
 
 Download your image here:
 https://oaidalleapiprodscus.blob.core.windows.net/private/org-DOWNLOAD-LINK-DETAILS
@@ -743,7 +743,7 @@ Push the limits to reveal limitations:
 
 [source,text]
 ----
-Enter an image request (e.g. 'a sunset over the mountains') or 'exit': A diagram with text showing how a jet engine works
+Enter an image request (e.g. 'A sunset over the mountains') or 'exit': A diagram with text showing how a jet engine works
 
 Download your image here:
 https://oaidalleapiprodscus.blob.core.windows.net/private/org-DOWNLOAD-LINK-DETAILS
@@ -752,17 +752,19 @@ https://oaidalleapiprodscus.blob.core.windows.net/private/org-DOWNLOAD-LINK-DETA
 
 image:jet-engine-with-text.png[Jet engine with text]
 
+Clearly, asking for text annotations in this case was asking too much!
+
 [source,text]
 ----
-Enter an image request (e.g. 'a sunset over the mountains') or 'exit': exit
+Enter an image request (e.g. 'A sunset over the mountains') or 'exit': exit
 
 ----
 
 == Next Steps
 
-Making requests to an AI model can be a lot of fun. To be useful a lot of experimentation and honing of requests may well be necessary.
+Making requests to an AI model is fun. However, to be useful a lot of experimentation and honing of requests may well be necessary.
 
-Consider updating the examples to tailor the requests to a particular scenario you have in mind!
+Consider updating the examples to tailor the requests to a particular scenario you have in mind. There are also speech-to-text, text-to-speech, and translation endpoints you might give a try.
 
 For more information and examples on the use of Boost libraries in client/server connections, refer to xref:task-networking.adoc[].
 
@@ -772,4 +774,3 @@ For more information and examples on the use of Boost libraries in client/server
 * https://www.boost.org/doc/libs/latest/libs/libraries.htm#IO[Category: Input/Output]
 * https://www.boost.org/doc/libs/latest/libs/libraries.htm#Parsing[Category: Parsing]
 * xref:task-machine-learning.adoc[]
-* xref:task-networking.adoc[]
