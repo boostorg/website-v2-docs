@@ -16,6 +16,7 @@ Many apps across all sorts of scenarios might significantly benefit from some ar
 * <<Libraries>>
 * <<AI Text Client>>
 * <<Secure AI Text and ASCII Diagram Client>>
+* <<AI Generated Image Client>>
 * <<Next Steps>>
 * <<See Also>>
 
@@ -527,12 +528,243 @@ Enter your request (ASCII diagram or text) or 'exit': exit
 
 Clearly AI produced ASCII diagrams have their limitations!
 
+== AI Generated Image Client
+
+Let's improve on those ASCII diagrams by calling the *images generation endpoint* (`/v1/images/generations`), taking a text description of the required image, and returning JSON containing a URL with the download link to the image.
+
+[source,cpp]
+----
+#include <boost/beast/core.hpp>      // Core Beast utilities
+#include <boost/beast/ssl.hpp>       // SSL/TLS support for Beast
+#include <boost/beast/http.hpp>      // HTTP request/response
+#include <boost/beast/version.hpp>   // Version macros
+#include <boost/json.hpp>            // Boost.JSON for parsing API responses
+#include <iostream>
+#include <fstream>
+
+namespace beast = boost::beast;          // From <boost/beast.hpp>
+namespace http = beast::http;            // From <boost/beast/http.hpp>
+namespace net = boost::asio;             // From <boost/asio.hpp>
+namespace ssl = boost::asio::ssl;        // From <boost/asio/ssl.hpp>
+namespace json = boost::json;            // From <boost/json.hpp>
+using tcp = boost::asio::ip::tcp;        // TCP protocol abstraction
+
+int main()
+{
+    try
+    {
+        //-----------------------------------------
+        // USER CONFIGURATION
+        //-----------------------------------------
+        const std::string host = "api.openai.com";   // OpenAI API host
+        const std::string port = "443";              // HTTPS (TLS) port
+        const std::string target = "/v1/images/generations"; // OpenAI endpoint for image generation
+        const int version = 11; // HTTP/1.1 (11 = 1.1, 10 = 1.0)
+
+        // Replace these with your actual credentials
+        const std::string api_key = "<YOUR_API_KEY>"; 
+        const std::string org_id = "<YOUR_ORG_ID>";   // Optional: can be blank
+
+        // Path to a certificate bundle (needed so TLS can verify api.openai.com is trusted)
+        _putenv_s("SSL_CERT_FILE", "<YOUR_CERT_PATH>\\cacert.pem");
+
+        //-----------------------------------------
+        // SSL/TLS CONTEXT
+        //-----------------------------------------
+        ssl::context ctx(ssl::context::tls_client);  // Create a client-side TLS context
+        ctx.set_default_verify_paths();              // Use system default trusted certificates
+        ctx.set_verify_mode(ssl::verify_peer);       // Verify server certificate authenticity
+
+        //-----------------------------------------
+        // I/O CONTEXT
+        //-----------------------------------------
+        net::io_context ioc;  // Asynchronous event loop (needed for networking)
+
+        //-----------------------------------------
+        // RESOLVE HOSTNAME → TCP ENDPOINT
+        //-----------------------------------------
+        tcp::resolver resolver(ioc);
+        auto const results = resolver.resolve(host, port);
+
+        //-----------------------------------------
+        // CREATE SSL STREAM WRAPPED AROUND TCP SOCKET
+        //-----------------------------------------
+        beast::ssl_stream<tcp::socket> stream(ioc, ctx);
+
+        // Enable SNI (Server Name Indication), required by many servers including OpenAI
+        if (!SSL_set_tlsext_host_name(stream.native_handle(), host.c_str()))
+            throw beast::system_error(
+                beast::error_code(static_cast<int>(::ERR_get_error()), net::error::get_ssl_category()),
+                "Failed to set SNI hostname");
+
+        //-----------------------------------------
+        // CONNECT TO SERVER AND HANDSHAKE TLS
+        //-----------------------------------------
+        net::connect(stream.next_layer(), results.begin(), results.end()); // TCP connect
+        stream.handshake(ssl::stream_base::client);                        // TLS handshake
+
+        //-----------------------------------------
+        // MAIN LOOP: ASK USER FOR PROMPT
+        //-----------------------------------------
+        std::string user_input;
+        while (true)
+        {
+            std::cout << "\nEnter an image request (e.g. 'A sunset over the mountain') or 'exit': ";
+            std::getline(std::cin, user_input);
+
+            if (user_input == "exit")
+                break; // Exit program cleanly
+
+            //-----------------------------------------
+            // BUILD JSON REQUEST BODY
+            //-----------------------------------------
+            json::object body;
+            body["prompt"] = user_input;     // User's text description
+            body["n"] = 1;                   // Number of images to generate
+            body["size"] = "512x512";        // Image resolution
+            body["response_format"] = "url"; // We want a downloadable URL back
+            std::string body_str = json::serialize(body);
+
+            //-----------------------------------------
+            // CREATE HTTP POST REQUEST
+            //-----------------------------------------
+            http::request<http::string_body> req{ http::verb::post, target, version };
+            req.set(http::field::host, host);
+            req.set(http::field::content_type, "application/json");  // JSON request body
+            req.set(http::field::authorization, "Bearer " + api_key); // API key
+            req.set("OpenAI-Organization", org_id);                 // Optional header
+            req.body() = body_str;                                  // JSON as request body
+            req.prepare_payload();                                  // Update headers (like Content-Length)
+
+            //-----------------------------------------
+            // SEND REQUEST TO OPENAI
+            //-----------------------------------------
+            http::write(stream, req);
+
+            //-----------------------------------------
+            // RECEIVE RESPONSE
+            //-----------------------------------------
+            beast::flat_buffer buffer;          // Temporary storage for network data
+            http::response<http::string_body> res;
+            http::read(stream, buffer, res);    // Read HTTP response into `res`
+
+            //-----------------------------------------
+            // PARSE JSON RESPONSE
+            //-----------------------------------------
+            try {
+                json::value jv = json::parse(res.body());
+
+                if (jv.is_object()) {
+                    auto& obj = jv.as_object();
+                    if (obj.contains("data")) {
+                        auto& data = obj["data"].as_array();
+                        if (!data.empty()) {
+
+                            // Extract URL of generated image
+                            std::string url = data[0].as_object()["url"].as_string().c_str();
+                            std::cout << "\nDownload your image here:\n" << url << "\n";
+                        }
+                    }
+                }
+            }
+            catch (const std::exception& e) {
+                std::cerr << "Failed to parse JSON: " << e.what() << "\n";
+                std::cerr << "Raw response:\n" << res.body() << "\n";
+            }
+        }
+
+        //-----------------------------------------
+        // CLEANLY SHUTDOWN TLS CONNECTION
+        //-----------------------------------------
+        beast::error_code ec;
+        stream.shutdown(ec);
+
+        // Ignore common "truncated" shutdowns that happen when the peer closes first
+        if (ec == net::error::eof || ec == ssl::error::stream_truncated) {
+            ec = {};
+        }
+
+        if (ec) {
+            throw beast::system_error{ ec };
+        }
+
+    }
+    catch (std::exception const& e)
+    {
+        // If anything throws, report it
+        std::cerr << "Error: " << e.what() << "\n";
+        return EXIT_FAILURE;
+    }
+
+    return EXIT_SUCCESS;
+}
+----
+
+Run the program:
+
+[source,text]
+----
+Enter an image request (e.g. 'A sunset over the mountains') or 'exit': A sunset over the mountain
+
+Download your image here:
+https://oaidalleapiprodscus.blob.core.windows.net/private/org-DOWNLOAD-LINK-DETAILS
+
+----
+
+image::a-sunset-over-the-mountain.png[A sunset over the mountain]
+
+Try a stylized image:
+
+[source,text]
+----
+Enter an image request (e.g. 'A sunset over the mountains') or 'exit': A cartoon image of a volcanic eruption
+
+Download your image here:
+https://oaidalleapiprodscus.blob.core.windows.net/private/org-DOWNLOAD-LINK-DETAILS
+
+----
+
+image:cartoon-volcanic-eruption.png[Cartoon volcanic eruption]
+
+Try a more complex subject:
+
+[source,text]
+----
+Enter an image request (e.g. 'A sunset over the mountains') or 'exit': A C++ computer programmer hard at work
+
+Download your image here:
+https://oaidalleapiprodscus.blob.core.windows.net/private/org-DOWNLOAD-LINK-DETAILS
+
+----
+
+image:cpp-programmer-at-work.png[Cpp programmer at work]
+
+Push the limits to reveal limitations:
+
+[source,text]
+----
+Enter an image request (e.g. 'A sunset over the mountains') or 'exit': A diagram with text showing how a jet engine works
+
+Download your image here:
+https://oaidalleapiprodscus.blob.core.windows.net/private/org-DOWNLOAD-LINK-DETAILS
+
+----
+
+image:jet-engine-with-text.png[Jet engine with text]
+
+Clearly, asking for text annotations in this case was asking too much!
+
+[source,text]
+----
+Enter an image request (e.g. 'A sunset over the mountains') or 'exit': exit
+
+----
 
 == Next Steps
 
-Making requests to an AI model can be a lot of fun. To be useful a lot of experimentation and honing of requests may well be necessary.
+Making requests to an AI model is fun. However, to be useful a lot of experimentation and honing of requests may well be necessary.
 
-Consider updating the examples to request real images (JPEG or PNG perhaps), or to tailor the requests to a particular scenario you have in mind!
+Consider updating the examples to tailor the requests to a particular scenario you have in mind. There are also speech-to-text, text-to-speech, and translation endpoints you might give a try.
 
 For more information and examples on the use of Boost libraries in client/server connections, refer to xref:task-networking.adoc[].
 
@@ -542,4 +774,3 @@ For more information and examples on the use of Boost libraries in client/server
 * https://www.boost.org/doc/libs/latest/libs/libraries.htm#IO[Category: Input/Output]
 * https://www.boost.org/doc/libs/latest/libs/libraries.htm#Parsing[Category: Parsing]
 * xref:task-machine-learning.adoc[]
-* xref:task-networking.adoc[]
