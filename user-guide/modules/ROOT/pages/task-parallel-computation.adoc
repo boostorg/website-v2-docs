@@ -279,96 +279,137 @@ Now for the code:
 
 [source,cpp]
 ----
-#include <boost/fiber/all.hpp>
-#include <iostream>
-#include <queue>
-#include <string>
-#include <atomic>
+#include <boost/fiber/all.hpp>   // Boost.Fiber for lightweight cooperative threading
+#include <queue>                 // Standard queue container for storing messages
 
+// --------------------------------------
+// A simple thread/fiber-safe message queue
+// --------------------------------------
 class MessageQueue {
 public:
+
+    // Send a message into the queue
     void send(const std::string& msg) {
+
+        // Lock the queue so only one fiber can access it at a time
         std::unique_lock<boost::fibers::mutex> lock(mutex_);
-        queue_.push(msg);
-        cond_.notify_one();
+        queue_.push(msg);              // Push the new message
+        cond_.notify_one();            // Wake up one waiting receiver
     }
 
+    // Receive a message for a given "to" address (like filtering messages)
     std::string receive(std::string to) {
+
+        // Lock the queue
         std::unique_lock<boost::fibers::mutex> lock(mutex_);
+
+        // Wait until queue is not empty (blocks this fiber cooperatively)
         cond_.wait(lock, [this]() { return !queue_.empty(); });
+
+        // Look at the first message in the queue
         std::string msg = queue_.front();
+
+        // Filter messages: 
+        // - If first char of message == receiver's "to" char
+        // - OR receiver is "x" (wildcard, accepts everything)
+        // - OR message is "/quit" (global shutdown signal)
+
         if (msg[0] == to[0] || to[0] == 'x' || msg == "/quit")
         {
-            queue_.pop();
-            return msg;
+            queue_.pop(); // Remove message from queue since it's consumed
+            return msg;   // Return it to caller
         }
         else
+
+            // If this message isn't meant for this receiver, just return ""
+            // (message stays in queue for someone else)
             return "";
     }
 
 private:
-    std::queue<std::string> queue_;
-    boost::fibers::mutex mutex_;
-    boost::fibers::condition_variable cond_;
+    std::queue<std::string> queue_;          // FIFO queue of messages
+    boost::fibers::mutex mutex_;             // Mutex for synchronizing access
+    boost::fibers::condition_variable cond_; // Condition variable for waiting
 };
 
+// --------------------------------------
+// MAIN PROGRAM
+// --------------------------------------
 int main() {
-    MessageQueue msg_queue;
-    std::atomic<bool> running(true);
-    const int num_receivers = 3;
-    std::string to;
+    MessageQueue msg_queue;             // Shared message queue
+    std::atomic<bool> running(true);    // Atomic flag for stopping all fibers safely
+    const int num_receivers = 3;        // Number of receivers
+    std::string to;                     // "Address" string for each receiver
 
+        // -----------------------------
     // Launch multiple receiver fibers
+    // -----------------------------
     std::vector<boost::fibers::fiber> receivers;
     for (int i = 0; i < num_receivers; ++i) {
+
+        // Launch fiber with unique receiver ID (1, 2, or 3)
         receivers.emplace_back([&, id = i + 1]() {
             while (running) {
+
+                // Assign "to" value depending on receiver ID:
+                // Receiver 1 listens for "1", Receiver 2 listens for "2",
+                // Receiver 3 listens for "x" (wildcard, accepts all messages).
                 switch (id)
                 {
-                case 1: to = "1";
-                    break;
-                case 2: to = "2";
-                    break;
-                case 3: to = "x";
-                    break;
+                case 1: to = "1"; break;
+                case 2: to = "2"; break;
+                case 3: to = "x"; break;
                 }
+
+                // Try to receive a message intended for this receiver
                 std::string msg = msg_queue.receive(to);
 
+                // Special case: quit message
                 if (msg == "/quit") {
-                    running = false;
-                    msg_queue.send("/quit"); // Ensure all receivers get the quit signal
-                    break;
+                    running = false;            // Tell everyone to stop
+                    msg_queue.send("/quit");    // Re-send quit message so others can see it
+                    break;                      // Break out of loop, end this fiber
                 }
+
+                // Only print if message was actually for us
                 if (msg != "")
                     std::cout << "[Receiver " << id << "] Received: " << msg << std::endl;
-                boost::this_fiber::yield(); // Yield to allow fair scheduling
+
+                // Yield to allow other fibers to run (cooperative multitasking)
+                boost::this_fiber::yield();
             }
             });
     }
 
+    // -----------------------------
     // Main thread handles user input
+    // -----------------------------
     std::string input;
     while (running) {
         std::cout << "Enter a message starting with the receiver Id (1,2,3) or /quit to exit > ";
         std::getline(std::cin, input);
 
         if (!input.empty()) {
-            msg_queue.send(input);
+            msg_queue.send(input);          // Send the input to the message queue
             if (input == "/quit") {
-                break;
+                break;                      // Stop reading if quit was typed
             }
-            boost::this_fiber::yield();
+            boost::this_fiber::yield();     // Yield so receivers get a chance to process
         }
     }
 
+    // -----------------------------
     // Join all receiver fibers
+    // -----------------------------
     for (auto& f : receivers) {
-        f.join();
+
+        f.join();                           // Wait for each receiver fiber to exit
     }
 
     std::cout << "All receivers exited. Program shutting down.\n";
     return 0;
 }
+
 ----
 
 If you compile and run this sample, the following would be a typical session!
