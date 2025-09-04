@@ -16,6 +16,7 @@ Developing a word processor, or other text based app, involves handling text, GU
 * <<Sample of Regular Expression Parsing>>
 * <<Add Robust Date and Time Parsing>>
 * <<Culturally Aware Date Formatting>>
+* <<Local Time>>
 * <<See Also>>
 
 == Libraries
@@ -60,8 +61,6 @@ We'll write a program that scans a string for dates in the format "YYYY-MM-DD" a
 [source,cpp]
 ----
 #include <iostream>
-#include <string>
-#include <vector>
 #include <boost/regex.hpp>
 #include <boost/algorithm/string.hpp>
 
@@ -92,9 +91,9 @@ void find_dates(const std::string& text) {
         int day = std::stoi(match[3]);
 
         if (is_valid_date(year, month, day)) {
-            std::cout << "✅ Valid date found: " << match[0] << "\n";
+            std::cout << "Valid date found: " << match[0] << "\n";
         } else {
-            std::cout << "❌ Invalid date: " << match[0] << " (Incorrect month/day)\n";
+            std::cout << "Invalid date: " << match[0] << " (Incorrect month/day)\n";
         }
 
         start = match[0].second; // Move to next match
@@ -102,7 +101,7 @@ void find_dates(const std::string& text) {
     }
 
     if (!found) {
-        std::cout << "⚠️ No valid dates found in the input text.\n";
+        std::cout << "No valid dates found in the input text.\n";
     }
 }
 
@@ -123,8 +122,8 @@ The following shows a successful parse:
 ----
 Enter a sentence containing dates (YYYY-MM-DD format):
 Today is 2024-02-19, and tomorrow is 2024-02-20.
-✅ Valid date found: 2024-02-19
-✅ Valid date found: 2024-02-20
+Valid date found: 2024-02-19
+Valid date found: 2024-02-20
 
 ----
 
@@ -134,11 +133,11 @@ And the following shows several unsuccessful parses:
 ----
 Enter a sentence containing dates (YYYY-MM-DD format):
 The deadline is 2024-02-30.
-❌ Invalid date: 2024-02-30 (Incorrect month/day)
+Invalid date: 2024-02-30 (Incorrect month/day)
 
 Enter a sentence containing dates (YYYY-MM-DD format):
 There are no dates in this sentence.
-⚠️ No valid dates found in the input text.
+No valid dates found in the input text.
 
 ----
 
@@ -148,11 +147,7 @@ The clunky date validation in the sample above can be improved by integrating bo
 
 [source,cpp]
 ----
-#include <iostream>
-#include <string>
-#include <vector>
 #include <boost/regex.hpp>
-#include <boost/algorithm/string.hpp>
 #include <boost/date_time/gregorian/gregorian.hpp>
 
 namespace greg = boost::gregorian;
@@ -162,7 +157,8 @@ bool is_valid_date(int year, int month, int day) {
     try {
         greg::date test_date(year, month, day);
         return true;  // If no exception, it's valid
-    } catch (const std::exception& e) {
+    }
+    catch (const std::exception& e) {
         return false; // Invalid date
     }
 }
@@ -182,9 +178,10 @@ void find_dates(const std::string& text) {
 
         if (is_valid_date(year, month, day)) {
             greg::date valid_date(year, month, day);
-            std::cout << "✅ Valid date found: " << valid_date << "\n";
-        } else {
-            std::cout << "❌ Invalid date: " << match[0] << " (Does not exist)\n";
+            std::cout << "Valid date found: " << valid_date << "\n";
+        }
+        else {
+            std::cout << "Invalid date: " << match[0] << " (Does not exist)\n";
         }
 
         start = match[0].second; // Move to next match
@@ -192,7 +189,7 @@ void find_dates(const std::string& text) {
     }
 
     if (!found) {
-        std::cout << "⚠️ No valid dates found in the input text.\n";
+        std::cout << "No valid dates found in the input text.\n";
     }
 }
 
@@ -200,7 +197,7 @@ int main() {
     std::string input;
     std::cout << "Enter a sentence containing dates (YYYY-MM-DD format):\n";
     std::getline(std::cin, input);
-    
+
     find_dates(input);
     return 0;
 }
@@ -215,8 +212,8 @@ The following shows a successful parse:
 ----
 Enter a sentence containing dates (YYYY-MM-DD format):
 Today is 2024-02-29, and tomorrow is 2024-03-01.
-✅ Valid date found: 2024-Feb-29
-✅ Valid date found: 2024-Mar-01
+Valid date found: 2024-Feb-29
+Valid date found: 2024-Mar-01
 
 ----
 
@@ -228,12 +225,12 @@ And the following shows several unsuccessful parses:
 ----
 Enter a sentence containing dates (YYYY-MM-DD format):
 The deadline is 2024-02-30.
-❌ Invalid date: 2024-02-30 (Does not exist)
+Invalid date: 2024-02-30 (Does not exist)
 
 
 Enter a sentence containing dates (YYYY-MM-DD format):
 There are no dates in this sentence.
-⚠️ No valid dates found in the input text.
+No valid dates found in the input text.
 
 ----
 
@@ -248,11 +245,8 @@ Dates are not represented consistently across the globe. Let's use boost:locale[
 
 [source,cpp]
 ----
-#include <iostream>
-#include <string>
-#include <vector>
+
 #include <boost/regex.hpp>
-#include <boost/algorithm/string.hpp>
 #include <boost/date_time/gregorian/gregorian.hpp>
 #include <boost/locale.hpp>
 
@@ -264,7 +258,8 @@ bool is_valid_date(int year, int month, int day) {
     try {
         greg::date test_date(year, month, day);
         return true;  // If no exception, it's valid
-    } catch (const std::exception&) {
+    }
+    catch (const std::exception&) {
         return false; // Invalid date
     }
 }
@@ -274,8 +269,8 @@ void display_localized_date(const greg::date& date, const std::string& locale_na
     std::locale locale = loc::generator().generate(locale_name);
     std::cout.imbue(locale);  // Apply locale to std::cout
 
-    std::cout << "🌍 " << locale_name << " formatted date: "
-              << loc::as::date << date << "\n";
+    std::cout << locale_name << " formatted date: "
+        << loc::as::date << date << "\n";
 }
 
 // Function to find and validate dates in a text
@@ -293,10 +288,11 @@ void find_dates(const std::string& text, const std::string& locale_name) {
 
         if (is_valid_date(year, month, day)) {
             greg::date valid_date(year, month, day);
-            std::cout << "✅ Valid date found: " << valid_date << "\n";
+            std::cout << "Valid date found: " << valid_date << "\n";
             display_localized_date(valid_date, locale_name);
-        } else {
-            std::cout << "❌ Invalid date: " << match[0] << " (Does not exist)\n";
+        }
+        else {
+            std::cout << "Invalid date: " << match[0] << " (Does not exist)\n";
         }
 
         start = match[0].second; // Move to next match
@@ -304,7 +300,7 @@ void find_dates(const std::string& text, const std::string& locale_name) {
     }
 
     if (!found) {
-        std::cout << "⚠️ No valid dates found in the input text.\n";
+        std::cout << "No valid dates found in the input text.\n";
     }
 }
 
@@ -333,14 +329,14 @@ The following shows successful parses:
 Enter a sentence containing dates (YYYY-MM-DD format):
 The meeting is on 2024-03-15.
 Enter your preferred locale (e.g., en_US.UTF-8, fr_FR.UTF-8, de_DE.UTF-8): en_US.UTF-8
-✅ Valid date found: 2024-Mar-15
-🌍 en_US.UTF-8 formatted date: March 15, 2024
+Valid date found: 2024-Mar-15
+en_US.UTF-8 formatted date: March 15, 2024
 
 Enter a sentence containing dates (YYYY-MM-DD format):
 Rendez-vous le 2024-07-20.
 Enter your preferred locale (e.g., en_US.UTF-8, fr_FR.UTF-8, de_DE.UTF-8): fr_FR.UTF-8
-✅ Valid date found: 2024-Jul-20
-🌍 fr_FR.UTF-8 formatted date: 20 juillet 2024
+Valid date found: 2024-Jul-20
+fr_FR.UTF-8 formatted date: 20 juillet 2024
 
 ----
 
@@ -351,11 +347,126 @@ And the following shows an unsuccessful parse:
 Enter a sentence containing dates (YYYY-MM-DD format):
 The deadline is 2024-02-30.
 Enter your preferred locale (e.g., en_US.UTF-8, fr_FR.UTF-8, de_DE.UTF-8): en_US.UTF-8
-❌ Invalid date: 2024-02-30 (Does not exist)
+Invalid date: 2024-02-30 (Does not exist)
 
 ----
 
-For a boost:spirit[] approach to parsing, refer to xref:task-natural-language-parsing.adoc[].
+== Local Time
+
+On a similar global vein, when you install the boost:date_time[] library (or all the Boost libraries), a file containing definitions of time zones across the world is available for your use at: `boost_<version>\\libs\\date_time\\data\\date_time_zonespec.csv`. 
+
+The following short sample shows how to use the contents of the file. Enter a city and timezone in the IANA format (such as: 'Europe/Berlin' or 'Asia/Tokyo'), and the current date and time will be output.
+
+[source,cpp]
+----
+#include <boost/date_time/local_time/local_time.hpp>
+
+namespace pt = boost::posix_time;
+namespace lt = boost::local_time;
+
+int main() {
+    try {
+
+        //---------------------------------------------
+        // Load the Boost tz_database from CSV
+        //---------------------------------------------
+        lt::tz_database tz_db;
+        tz_db.load_from_file("<YOUR PATH>\\date_time_zonespec.csv"); // Adjust the path to your Boost installation
+
+        // Extract all valid timezone names
+        std::vector<std::string> valid_timezones;
+        for (const auto& tz_name : tz_db.region_list()) {
+            valid_timezones.push_back(tz_name);
+        }
+
+        std::string city;
+        while (true) {
+            std::cout << "\nEnter 'city/timezone' (or 'exit' to quit, or 'zones' for list of options): ";
+            std::getline(std::cin, city);
+            if (city == "exit") break;
+
+            if (city == "zones")
+            {
+                std::cout << "Available timezones:\n";
+                for (const auto& tz : valid_timezones) {
+                    std::cout << tz << "\n";
+                }
+
+            }
+            else
+            {
+
+                // Find the timezone (case-sensitive, must match CSV)
+                lt::time_zone_ptr tz = tz_db.time_zone_from_region(city);
+                if (!tz) {
+                    std::cout << "Invalid timezone! Try again.\n";
+                    continue;
+                }
+
+                // Get current UTC time
+                pt::ptime utc_now = pt::second_clock::universal_time();
+
+                // Convert UTC to local time in the chosen timezone
+                lt::local_date_time local_now(utc_now, tz);
+
+                // Get user's local machine time
+                pt::ptime user_now = pt::second_clock::local_time();
+
+                std::cout << "\nYour local system time:   " << user_now << "\n";
+
+                std::cout << "Current local time in " << city << ": " << local_now << "\n";
+            }
+        }
+    }
+    catch (const std::exception& e) {
+        std::cerr << "Fatal error: " << e.what() << "\n";
+        return 1;
+    }
+
+    return 0;
+}
+
+----
+
+Run the program and test out a few options:
+
+[source,text]
+----
+Enter 'city/timezone' (or 'exit' to quit, or 'zones' for list of options): America/New_York
+
+Your local system time:   2025-Sep-03 16:38:02
+Current local time in America/New_York: 2025-Sep-03 19:38:02 EDT
+
+Enter 'city/timezone' (or 'exit' to quit, or 'zones' for list of options): Antarctica/South_Pole
+
+Your local system time:   2025-Sep-03 16:38:20
+Current local time in Antarctica/South_Pole: 2025-Sep-04 11:38:20 NZST
+
+Enter 'city/timezone' (or 'exit' to quit, or 'zones' for list of options): zones
+Available timezones:
+Africa/Abidjan
+Africa/Accra
+Africa/Addis_Ababa
+Africa/Algiers
+Africa/Asmara
+Africa/Asmera
+Africa/Bamako
+Africa/Bangui
+Africa/Banjul
+Africa/Bissau
+Africa/Blantyre
+Africa/Brazzaville
+Africa/Bujumbura
+Africa/Cairo
+Africa/Casablanca
+Africa/Ceuta
+Africa/Conakry
+....
+----
+
+== Next Steps
+
+If more complex input is required, consider the boost:spirit[] approach to parsing, refer to xref:task-natural-language-parsing.adoc[].
 
 == See Also
 
