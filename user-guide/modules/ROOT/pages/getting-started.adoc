@@ -100,7 +100,7 @@ clang++ --version
 == Binaries
 
 Installing Boost with a package manager might simplify the process and ensure that all dependencies are installed correctly.
-In this guide, we will discuss two types of package managers: xref:#cpp-package-managers[] package managers such as Conan and Vcpkg, and xref:#cpp-package-managers[System Package Managers], such as APT and Homebrew.
+In this guide, we will discuss two types of package managers: xref:#cpp-package-managers[] package managers such as Conan and Vcpkg, and xref:#_system_level_installation[System Package Managers], such as APT and Homebrew.
 
 [NOTE]
 ====
