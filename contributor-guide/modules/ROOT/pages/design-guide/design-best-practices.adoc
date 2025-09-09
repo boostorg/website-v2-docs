@@ -11,6 +11,16 @@ Official repository: https://github.com/boostorg/website-v2-docs
 
 Use these guidelines as recommendations based on past author's experiences of preparing content for a library submission. 
 
+* <<Overview>>
+* <<Source Files>>
+* <<Naming>>
+* <<Testing and Error Handling>>
+* <<Redirection>>
+* <<Rationale>>
+* <<Good and Less-Good Examples of API Design>>
+* <<See Also>>
+
+
 == Overview
 
 When designing a new library:
@@ -247,6 +257,166 @@ Consider those reasons if you decide that JavaScript is something you must use. 
 
 As a library matures, it almost always accumulates improvements suggested to the authors by other Boost members. It is a part of the culture of boost.org to acknowledge such contributions, identifying the person making the suggestion. Major contributions are usually acknowledged in the documentation, while minor fixes are often mentioned in comments within the code itself.
 
+== Good and Less-Good Examples of API Design
+
+The following section provides examples of good and not-so-good API design, with examples.
+
+=== Class Sizes
+
+A class should represent one concept (for example `boost::filesystem::path`, `boost::asio::ip::address`, `boost::gregorian::date`). Avoid “god objects” that know or do everything. If a class has too many unrelated members, split into smaller classes or helpers. If more than seven private members, ask: “should this be two classes?”, and if a class requires long docs to explain, maybe the abstraction is too fat.
+
+Most Boost classes behave like values, not like heavy opaque handles: copyable, movable, comparable, assignable. This makes them easy to store in containers and pass by value.
+
+Keep private data small and tightly scoped. Avoid storing things that can be recomputed cheaply.
+
+If something doesn't need state, make it a free function or template, not a class. Boost prefers non-member functions when possible (for example `boost::algorithm::to_upper_copy` vs. a string utility class).
+
+Classes don't usually embed “last error” members. Errors are surfaced via exceptions, or dual APIs with `error_code&`.
+
+=== Namespaces
+
+Namespaces in pass:[C++] are a balancing act - they prevent name collisions (especially in template-heavy libraries), they clarify context (`boost::asio::ip::tcp::socket` is very precise), but they can get verbose and intimidating for new users.
+
+The rule of thumb for namespaces is to have a single obvious point of entry, with a namespace depth of no more than three. If you need more, consider grouping with traits or helper classes instead of new namespaces.
+
+Consider using inline namespaces for versioning, as they are useful when evolving APIs without breaking existing code.
+
+Namespaces should reflect what the user thinks about, not how you implemented it.
+
+[cols="1,1",options="header",stripes=even,frame=none]
+|===
+| *Less-Good* | *Good* 
+| `boost::asio::detail::socket_ops`
+| `boost::asio::ip`
+
+|===
+
+=== Clear Overloads
+
+It is easier to understand multiple clear, simple overloads instead of one monster function.
+
+[cols="1,1",options="header",stripes=even,frame=none]
+|===
+| *Less-Good* | *Good* 
+| `remove(const path& p, bool recursive, bool force, bool follow_symlinks, ...);`
+|
+`boost::filesystem::remove("file.txt");            // simple
+boost::filesystem::remove_all("dir");              // recursive
+boost::filesystem::remove(path("file.txt"), ec);   // with error_code`
+| `connect(host, port, use_ssl, timeout, retries, verbose, follow_redirects);`
+| `connect(host, port);                     // minimal
+connect(host, port, connection_options); // advanced`
+|===
+
+=== Option Objects
+
+Group each concern into option objects, which are practically self-documenting, extensible, and avoids parameter overload. Boolean parameters in particular quickly become unreadable (`true, false, true`). Wrap them in option types.
+
+[cols="1,1",options="header",stripes=even,frame=none]
+|===
+| *Less-Good* | *Good* 
+|
+`socket::set_options(...parameters...);`
+|
+`boost::asio::ip::tcp::socket socket(io_context);
+socket.set_option(boost::asio::ip::tcp::no_delay(true));
+socket.set_option(boost::asio::socket_base::reuse_address(true));
+socket.set_option(boost::asio::socket_base::linger(true, 30));`
+
+|===
+
+=== Flexible Constructors
+
+Clear constructors, each handling one case. Use factory functions for anything fancy.
+
+[cols="1,1",options="header",stripes=even,frame=none]
+|===
+| *Less-Good* | *Good* 
+|
+`date(int year, int month, int day, int calendar_type, int offset, bool validate, ...);`
+|
+`boost::gregorian::date d1(2025, 9, 6);
+boost::gregorian::date d2 = boost::gregorian::from_simple_string("2025-09-06");`
+
+|===
+
+
+=== Attribute-Based Configuration
+
+Named keyword parameters (via `boost::parameter`) give clarity without giant parameter lists.
+
+[cols="1,1",options="header",stripes=even,frame=none]
+|===
+| *Less-Good* | *Good* 
+|
+`log.add_file_log(...parameters...);`
+|
+`boost::log::add_file_log(
+boost::log::keywords::file_name = "sample_%N.log",
+boost::log::keywords::rotation_size = 10 * 1024 * 1024,
+boost::log::keywords::format = "[%TimeStamp%] <%Severity%>: %Message%");`
+| `parse(argc, argv, true, true, true, "default.cfg");`
+| `po::options_description desc("Options");
+desc.add_options()
+("help", "Show help")
+("config", po::value<std::string>(), "Config file");
+po::store(po::parse_command_line(argc, argv, desc), vm);`
+
+|===
+
+=== Handling Errors
+
+Allow both exception-throwing and error_code style.
+
+[cols="1,1",options="header",stripes=even,frame=none]
+|===
+| *Less-Good* | *Good* 
+|
+`file f("data.txt");   // throws only`
+|
+`file f("data.txt", ec);   // no-throw version`
+
+|===
+
+=== Return Values
+
+Return the result directly if there is only one natural result. Use output parameters (or error_code) only when performance matters (avoiding temporaries), or multiple results must be returned. Avoid returning `int` or `bool` for multi-state results. Use enums, optionals, variants to make meaning clear.
+
+[cols="1,1",options="header",stripes=even,frame=none]
+|===
+| *Less-Good* | *Good* 
+|
+`void file_size(const path& p, uintmax_t& size);   // output param for main result`
+
+|
+`bool exists(const path& p);
+uintmax_t file_size(const path& p, error_code& ec);  // returns via value + error_code`
+| `int parse_number(const std::string&); // -1 means failure`
+
+| `boost::optional<int> parse_number(const std::string&);`
+
+|===
+
+=== Interfaces
+
+If a beginner can do something useful in one line of code, and an expert can still optimize/control everything with traits/policies, you've designed a good interface.
+
+Keep interfaces minimal but composable. Boost often prefers non-member, non-friend functions to avoid bloating classes. Free functions are easier to extend later without breaking ABI.
+
+Avoid `int` or `std::string` everywhere when domain types make intent clear.
+
+[cols="1,1",options="header",stripes=even,frame=none]
+|===
+| *Less-Good* | *Good* 
+| `my_vector.reverse_in_place_with_allocator_and_logging(...);`
+| `auto r = boost::adaptors::reverse(my_vector);`
+| `bool schedule(const std::string& d);`
+| `bool schedule(const boost::gregorian::date& d);`
+
+|===
+
+
 == See Also
 
+* xref:best-practices.adoc[]
 * xref:requirements/library-requirements.adoc[]
