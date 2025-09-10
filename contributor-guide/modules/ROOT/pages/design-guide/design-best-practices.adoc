@@ -281,6 +281,10 @@ The rule of thumb for namespaces is to have a single obvious point of entry, wit
 
 Consider using inline namespaces for versioning, as they are useful when evolving APIs without breaking existing code.
 
+Repetition does not work well with namespaces, if a higher namespace already disambiguates the purpose, keep lower level namespace names short.
+
+Implementation details can be encapsulated in a `detail` namespace, such as `boost::asio::detail`, and all entries in the detail namespace should be `private`.
+
 Namespaces should reflect what the user thinks about, not how you implemented it.
 
 [cols="1,1",options="header",stripes=even,frame=none]
@@ -288,7 +292,8 @@ Namespaces should reflect what the user thinks about, not how you implemented it
 | *Less-Good* | *Good* 
 | `boost::asio::detail::socket_ops`
 | `boost::asio::ip`
-
+| `boost::filesystem::filesystem_error`
+| `boost::filesystem::error`
 |===
 
 === Clear Overloads
@@ -378,23 +383,30 @@ Allow both exception-throwing and error_code style.
 
 |===
 
+
 === Return Values
 
 Return the result directly if there is only one natural result. Use output parameters (or error_code) only when performance matters (avoiding temporaries), or multiple results must be returned. Avoid returning `int` or `bool` for multi-state results. Use enums, optionals, variants to make meaning clear.
+
+When algorithms partially consume input, returns iterators to mark progress, for example the following calls return iterators and not counts: `boost::sregex_iterator it(text.begin(), text.end(), pattern);` and `auto new_end = boost::remove(vec, 42);`. Another example of returning a more complex object is the use of _lazy proxy objects_ that behave like containers but defer computation. This enables zero-cost abstraction and makes pipelines composable. An example is `auto rng = boost::adaptors::filter(vec, pred);`. It is a key to good return values though not to get too clever, consistency is the king.
+
 
 [cols="1,1",options="header",stripes=even,frame=none]
 |===
 | *Less-Good* | *Good* 
 |
 `void file_size(const path& p, uintmax_t& size);   // output param for main result`
-
 |
 `bool exists(const path& p);
 uintmax_t file_size(const path& p, error_code& ec);  // returns via value + error_code`
 | `int parse_number(const std::string&); // -1 means failure`
-
 | `boost::optional<int> parse_number(const std::string&);`
-
+| `void file_size(const path& p, uintmax_t& out_size); // output param`	|  `uintmax_t file_size(const path& p);uintmax_t file_size(const path& p, error_code& ec) noexcept; // alt API`
+| `std::string find_user(int id); // returns empty string if not found`	| `boost::optional<std::string> find_user(int id);`
+| `int divide(int a, int b); // returns 0 if divide-by-zero`	| `boost::system::result<int> divide(int a, int b); // success or error_code`
+| `int remove(std::vector<int>& v, int x); // returns count removed`	| `auto new_end = boost::remove(v, x); // returns iterator (range style)`
+| `std::vector<int> filter_positive(const std::vector<int>& v); // always allocates`	| `auto rng = boost::adaptors::filter(v, [](int n){ return n > 0; }); // lazy view`
+| `Config& set_option(Config& c, int x); // modifies existing config`	| `Config c = Config().set_option(42).set_flag(true); // fluent style`
 |===
 
 === Interfaces
@@ -403,7 +415,7 @@ If a beginner can do something useful in one line of code, and an expert can sti
 
 Keep interfaces minimal but composable. Boost often prefers non-member, non-friend functions to avoid bloating classes. Free functions are easier to extend later without breaking ABI.
 
-Avoid `int` or `std::string` everywhere when domain types make intent clear.
+Avoid `int` or `std::string` everywhere when domain types make intent clear. 
 
 [cols="1,1",options="header",stripes=even,frame=none]
 |===
@@ -412,6 +424,7 @@ Avoid `int` or `std::string` everywhere when domain types make intent clear.
 | `auto r = boost::adaptors::reverse(my_vector);`
 | `bool schedule(const std::string& d);`
 | `bool schedule(const boost::gregorian::date& d);`
+
 
 |===
 
