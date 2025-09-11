@@ -11,12 +11,13 @@ Official repository: https://github.com/boostorg/website-v2-docs
 
 This section contains guidance on how to reduce development time from concept through to publishing of a new library, whilst ensuring a quality and maintainability to the open source project that will be the result.
 
-* <<Beneficial Dependencies>>
-* <<GitHub Strategies>>
-* <<Commenting Code>>
+* <<Engage Beneficial Dependencies>>
+* <<Use Robust GitHub Strategies>>
+* <<Take Time to Comment Your Code>>
+* <<Craft Helpful Error Messages>>
 * <<See Also>>
 
-== Beneficial Dependencies
+== Engage Beneficial Dependencies
 
 Some libraries are published with the intended primary audience, or in some cases the sole audience, being developers of other libraries. These libraries are published to make some of the time consuming and awkward processes of Boost-compliance easier. It is good practice for a new library developer to read the introductions to each of these libraries, and ascertain if they might be of value to the library they are developing. 
 
@@ -31,7 +32,7 @@ Some libraries are published with the intended primary audience, or in some case
 |===
 
 [[githubstrategies]]
-== GitHub Strategies
+== Use Robust GitHub Strategies
 
 Always submit changes to a Boost repo using a Pull Request (PR), never use the GitHub website to change the contents of a repository directly.
 
@@ -121,7 +122,7 @@ This ensures that when changes are rebased or fast-forwarded, the history remain
 By following these practices, you'll avoid merge commits and maintain a clean, linear history in your Git repository while keeping the dev community happy! 
 
 [[comments]]
-== Commenting Code
+== Take Time to Comment Your Code
 
 Boost has informal coding standards that encourage clear, concise, and useful comments. The following are the main policy recommendations:
 
@@ -451,6 +452,57 @@ int main() {
 ----
 
 Note:: Inline comments are clearer if they are preceded by a blank line. Many libraries do not strictly stick to this practice, but it should be clear from the above example that the preceding-blank-line is a best practice for readability.
+
+== Craft Helpful Error Messages
+
+Ideally, when writing error message text, use the following rules of thumb:
+
+. Name the library (so user knows the source)
+. Show the input and expected type/value
+. Give context (function name, file, line, operation)
+. Provide standard error codes (for example: POSIX, errno)
+. Avoid low-level noise (memory addresses)
+. Be actionable (help the user fix the error)
+
+Here are some example error messages that have issues:
+
+[cols="1,1",options="header",stripes=even,frame=none]
+|===
+| *Message* | *Issue* 
+| `error C2679: binary '=': no operator found which takes a right-hand operand of type 'boost::gregorian::date' (or there is no acceptable conversion)`
+| Too verbose, compiler jargon, doesn't say what the user did wrong.
+| `boost::system::system_error`
+| Just the type name, no context, no error code, no description.
+| `Error in lexical_cast`
+| What input? What target type? Which file/line?
+| `terminate called after throwing an instance of boost::archive::archive_exception what():  input stream error`
+| Too vague - “input stream error” — which input, which archive format?
+| `Unhandled exception at 0x00007FF9B7114ED9 in test.exe: Microsoft C++ exception: boost::bad_any_cast at memory location 0x0000009F4A2FD9A0.`
+| Very low-level, memory address is useless to most users.
+| `assertion failed`
+| No filename, no condition, no hint at what caused it.
+|===
+
+Here are some useful error messages:
+
+[cols="1,1",options="header",stripes=even,frame=none]
+|===
+| *Message* | *Notes* 
+| `boost::date_time::invalid_date: "2025-02-30" is not a valid Gregorian date`
+| Names the library, the invalid input, and the problem.
+| `boost::system::system_error: connect() failed: Connection refused [ECONNREFUSED]`
+| Explains what call failed and gives a standard POSIX error code.
+| `boost::lexical_cast: cannot convert string "abc" to int`
+| Shows the input ("abc") and the target type (`int`).
+| `boost::serialization::archive_exception: failed to open file "savegame.dat" for reading`
+| Explains the archive issue and gives the file name.
+| `boost::any_cast failed: stored type is 'std::string', requested type was 'int'`
+| Shows both the stored and requested types — no guesswork.
+| `boost::assertion failed: vec.size() == 3, function normalize_vector, file vector_utils.hpp, line 42`
+| Includes condition, function, file, and line number.
+|===
+
+Well written error messages can be one of the hidden superpowers of your library. A well-crafted message can save hours of debugging, while a cryptic one can scare away even experienced devs - part of the approachable vs hostile experience!
 
 == See Also
 
