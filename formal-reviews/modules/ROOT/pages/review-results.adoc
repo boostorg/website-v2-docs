@@ -23,8 +23,6 @@ Note:: The review results include recent completed reviews - where the library m
 [cols="1,1,1,2,2",stripes=even,options="header",frame=none]
 |===
 | *Submission* | *Submitter* | *Review Manager* | *Review Dates* | *Result*
-| *Boost 1.89.0 Beta* |  - |   Marshall Clow |  TBD | TBD
-| SQLite Re-Review | Klemens Morgenstern | Mohammad Nejati | August 22, 2025 - August 31, 2025 | TBD
 | Decimal Re-Review  | Matt Borland and Chris Kormanyos | John Maddock | October 6, 2025 - October 15, 2025 | TBD
 |===
 
@@ -38,6 +36,10 @@ In order for a review to proceed, a Boost member must volunteer to manage the re
 [cols="1,1,1,2,2",stripes=even,options="header",frame=none]
 |===
 | *Submission* | *Submitter* | *Review Manager* | *Review/Release Dates* | *Result*
+
+| SQLite Re-Review | Klemens Morgenstern | Mohammad Nejati | August 22, 2025 - August 31, 2025 | https://lists.boost.org/archives/list/boost@lists.boost.org/message/J74OTT6TZ5W6ZHCBTPPBGM6WW54PBFNR/[Rejected]
+
+| *Boost 1.89.0 Released* |  - |   Marshall Clow |  August 14, 2025 | https://www.boost.org/users/history/version_1_89_0.html[Notes] 
 
 | https://master.bloom.cpp.al/html/index.html[Bloom] | Joaquin M Lopez Munoz | Arnaud Becheler | May 13, 2025 - May 22, 2025 | https://lists.boost.org/Archives/boost/2025/05/259631.php[Accepted]
 
