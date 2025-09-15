@@ -1,0 +1,343 @@
+////
+Copyright (c) 2024 The C++ Alliance, Inc. (https://cppalliance.org)
+
+Distributed under the Boost Software License, Version 1.0. (See accompanying
+file LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
+
+Official repository: https://github.com/boostorg/website-v2-docs
+////
+= Diagnostics
+:navtitle: Diagnostics
+
+Testing, improving, and refining software can take as long as developing the code in the first place. Experience has shown that well-placed, well-timed and clear diagnostic output is the key to improving a code base.
+
+*Boost offers a range of macros and functions that allow customized diagnostics beyond what is available in the Standard Library.* Boost offers improved versions of some diagnostic output, and other features that do not have any equivalent in the Standard. When it comes to errors and exceptions, the Standard has been a long time in catching up with some of Boost functionality.
+
+This topic explores the range of diagnostic calls available when Boost libraries are installed into your development environment.
+
+* <<Diagnostics Symbols>>
+* <<Configurable Failure Handling>>
+* <<Flexible Run-Time Logic>>
+* <<Catching and Throwing>>
+* <<See Also>>
+
+Notes:: The code in this tutorial was written and tested using Microsoft Visual Studio (Visual pass:[C++] 2022, Console App project) with Boost version 1.88.0.
+
+
+== Diagnostics Symbols
+
+The following table shows symbols (macros, function calls) that offer more than their Standard equivalent, or have no Standard equivalent.
+
+[cols="1,1,2",options="header",stripes=even,frame=none]
+|===
+| *Symbol* | *Location* | *Description* 
+| `BOOST_ASSERT`(expr)| Macro in boost:assert[]| Asserts an expression, throwing an error in debug builds. The Boost assert is more flexible and diagnostics-friendly than the std:assert, as it enables <<Configurable Failure Handling>>. 
+| `BOOST_ASSERT_MSG`(expr) | Macro in boost:assert[]| Similar to BOOST_ASSERT but for use in DEBUG mode and with your own error message. There is no equivalent in the standard library. Refer to <<Configurable Failure Handling>> for an example.
+| `BOOST_VERIFY`(expr) | Macro in boost:assert[] | Similar to `BOOST_ASSERT`, but always evaluates the expression, even in Release mode. The use case is where you always want some code to run as there are useful side effects (often instrumentation of some sort). There is no Standard equivalent to this macro. Refer to <<Flexible Run-Time Logic>> for an example.
+| `boost::throw_exception` | Function in boost:throw_exception[] | Provides a customizable hook for throwing exceptions across Boost and user code. By defining `BOOST_NO_EXCEPTIONS`, you can replace exception throwing with your own handler. Integrates with `boost::source_location` (to capture file, line, function name info) for centralized and portable exception throwing. The `std::throw_with_nested` does not provide this additional value. If you want to support no-exceptions builds (embedded systems, kernel code), the flexibility of this function is ideal. Refer to <<Catching and Throwing>> for example code.
+
+|===
+
+There are some legacy symbols that can be used to maintain backward compatibility, but do not offer more features or flexibility than current Standard calls.
+
+[cols="1,1,2",options="header",stripes=even,frame=none]
+|===
+| *Symbol* | *Location* | *Description* 
+| `BOOST_STATIC_ASSERT`(expr) | Macro in boost:static_assert[]| Performs a compile-time assertion.
+| `BOOST_STATIC_ASSERT_MSG`(expr, msg) | Macro in boost:static_assert[]| Debug version of `BOOST_STATIC_ASSERT`. Performs a compile-time assertion, with an added message. 
+| `boost::system::error_code` | Type in boost:system[] | A unique error code number.
+| `boost::source_location` | Type in boost:assert[] | Captures where in the source code a function was called, including file name, function name, line number, and column number.
+|===
+
+
+
+== Configurable Failure Handling
+
+The `std::assert` function is hardwired in the sense that it always prints to `stderr` and calls `abort`. The Boost assert let's you customize what happens on failure, by allowing you to write your own error handler. You might do this to log to syslog, throw an exception, record telemetry, send data to a debugger, or any combination of these. A key missing component of `std::assert` is the function name where the failure occurred.
+
+To access the feature you need to define a custom `boost::assertion_failed` function, within the `boost` namespace. In addition, you must define `BOOST_ENABLE_ASSERT_HANDLER` before including `boost/assert.hpp`. If you miss this step, `boost::assert` defaults to `std::assert` behavior. For example:
+
+[source,cpp]
+----
+#define BOOST_ENABLE_ASSERT_HANDLER   // must be defined before including <boost/assert.hpp>
+
+#include <boost/assert.hpp>
+#include <iostream>
+
+// Provide your own handler
+namespace boost {
+    void assertion_failed(char const* expr, char const* function,
+        char const* file, long line) {
+        std::cerr << "Custom assert failed:\n"
+            << "  Expression: " << expr << "\n"
+            << "  Function:   " << function << "\n"
+            << "  Location:   " << file << ":" << line << "\n";
+
+        // Maybe throw an exception here
+    }
+}
+
+int main() {
+    int x = -1;
+    BOOST_ASSERT(x >= 0);  // This calls the custom handler
+}
+
+----
+
+If you run this code, you will see:
+
+[source,text]
+----
+Custom assert failed:
+  Expression: x >= 0
+  Function:   int __cdecl main(void)
+  Location:   <PATH TO YOUR SOURCE FILE>
+----
+
+Note:: As an alternative to `#define BOOST_ENABLE_ASSERT_HANDLER`, you can pass `-DBOOST_ENABLE_ASSERT_HANDLER` as a compiler flag.
+
+You can take customization one step further with `BOOST_ASSERT_MSG`. This call is designed to work in Debug builds (when `NDEBUG` is not defined). In Release builds (when `NDEBUG` is defined) the macro compiles to nothing so there is no runtime cost, not even an evaluation of the condition.
+
+In the following example, the library function is designed to safely index into a container, and we need to guard against invalid indices.
+
+[source,cpp]
+----
+#define BOOST_ENABLE_ASSERT_DEBUG_HANDLER
+
+#include <boost/assert.hpp>
+#include <iostream>
+#include <vector>
+
+// Custom handler for BOOST_ASSERT_MSG
+namespace boost {
+    void assertion_failed_msg(char const* expr, char const* msg,
+        char const* function,
+        char const* file, long line) {
+        std::cerr << "[Boost assert triggered]\n"
+            << "  Expression: " << expr << "\n"
+            << "  Message:    " << msg << "\n"
+            << "  Function:   " << function << "\n"
+            << "  File:       " << file << ":" << line << "\n";
+        throw std::out_of_range(msg);
+    }
+}
+
+// A "Boost-style" utility: Safe access with asserts
+template <typename T>
+T& safe_at(std::vector<T>& v, std::size_t idx) {
+    BOOST_ASSERT_MSG(idx < v.size(),
+        "safe_at: Index out of range");
+    return v[idx];
+}
+
+int main() {
+    std::vector<int> numbers{ 10, 20, 30 };
+
+    try {
+        std::cout << "numbers[1] = " << safe_at(numbers, 1) << "\n";  // valid
+        std::cout << "numbers[5] = " << safe_at(numbers, 5) << "\n";  // invalid
+    }
+    catch (const std::exception& e) {
+        std::cerr << "Caught exception: " << e.what() << "\n";
+    }
+}
+----
+
+Run the code:
+
+[source,text]
+----
+numbers[1] = 20
+[Boost assert triggered]
+  Expression: idx < v.size()
+  Message:    safe_at: Index out of range
+  Function:   int &__cdecl safe_at<int>(class std::vector<int,class std::allocator<int> > &,unsigned __int64)
+  File:       <PATH TO YOUR SOURCE FILE>
+Caught exception: safe_at: Index out of range
+----
+
+You can certainly add more context to the error examples shown above, and log to a file within your error handlers too.
+
+== Flexible Run-Time Logic
+
+Sometimes when changing from a Debug to Release build, you still want to run some code associated with assert checks. In the example below, in a Debug build if `remove()` fails, `BOOST_VERIFY` asserts. In a Release build, `remove()` still runs, even if the expression result is disabled.
+
+[source,cpp]
+----
+#include <boost/assert.hpp>
+#include <iostream>
+
+int main() {
+    const char* filename = "temp.txt";
+
+    // Create a file safely using fopen_s
+    FILE* f = nullptr;
+    errno_t err = fopen_s(&f, filename, "w"); // "w" = write mode
+    if (err == 0 && f != nullptr) {
+        std::fputs("temporary data", f);
+        std::fclose(f);
+    }
+    else {
+        std::cerr << "Failed to create file: " << filename << "\n";
+        return 1;
+    }
+
+    BOOST_VERIFY(std::remove(filename) == 0);
+
+    std::cout << "File removal attempted.\n";
+    return 0;
+}
+----
+
+To show the mechanism at work, we'll write some broken code, and run it in Debug then Release modes. The following example tries to remove a file twice.
+
+[source,cpp]
+----
+//#define NDEBUG
+
+#include <boost/assert.hpp>
+#include <iostream>
+
+int main() {
+    const char* filename = "nonexistent_file.txt";
+
+    // Try opening a file in write mode (this will succeed, so we create it)
+    FILE* f = nullptr;
+    errno_t err = fopen_s(&f, filename, "w");
+    if (err == 0 && f != nullptr) {
+        std::fputs("temporary data", f);
+        std::fclose(f);
+    } else {
+        std::cerr << "Failed to create file: " << filename << "\n";
+        return 1;
+    }
+
+    // First removal works
+    if (std::remove(filename) == 0) {
+        std::cout << "File successfully removed the first time.\n";
+    }
+
+    // Second removal should fail (file no longer exists)
+    std::cout << "Now trying to remove the file again...\n";
+
+    // This will assert in Debug mode, because std::remove() != 0
+    BOOST_VERIFY(std::remove(filename) == 0);
+
+    std::cout << "If you see this line in Release mode, BOOST_VERIFY still ran remove().\n";
+    return 0;
+}
+----
+
+Run the code as is, and you should get an assertion:
+
+[source,text]
+----
+File successfully removed the first time.
+Now trying to remove the file again...
+Assertion failed: std::remove(filename) == 0, file <PATH TO YOUR SOURCE FILE>, line 313
+----
+
+Next, uncomment the first line (`//#define NDEBUG`), and run the program in Release mode:
+
+[source,text]
+----
+File successfully removed the first time.
+Now trying to remove the file again...
+If you see this line in Release mode, BOOST_VERIFY still ran remove().
+----
+
+The second attempt to remove the file still went ahead, but the program continued to run normally. This kind of behavior can be required in systems, and similar, low-level programming.
+
+== Catching and Throwing
+
+The `boost::throw_exception` call gives you a single, unified mechanism that adapts to different runtime/compile-time environments — diagnostics when available, graceful fallback when not.
+
+For example, let's write a file loader with fallback behavior:
+
+[source,cpp]
+----
+//#define BOOST_NO_EXCEPTIONS
+
+#include <boost/throw_exception.hpp>
+#include <fstream>
+#include <iostream>
+
+// ===============================================
+// Custom handler when exceptions are disabled
+// ===============================================
+#ifdef BOOST_NO_EXCEPTIONS
+namespace boost {
+    [[noreturn]] void throw_exception(std::exception const& e,
+        boost::source_location const& loc = BOOST_CURRENT_LOCATION)
+    {
+        // This could log the error in a file
+        std::cerr << "FATAL ERROR: " << e.what() << "\n"
+            << "  at " << loc.file_name() << ":" << loc.line() << "\n"
+            << "  in function " << loc.function_name() << "\n";
+       
+        // Consider a graceful shutdown instead of throw
+    }
+}
+#endif
+
+// ===============================================
+// Function that might fail
+// ===============================================
+std::string load_file(const std::string& filename) {
+    std::ifstream file(filename);
+    if (!file) {
+
+        // Instead of `throw std::runtime_error(...)`, use Boost
+        boost::throw_exception(
+            std::runtime_error("Failed to open file: " + filename),
+            BOOST_CURRENT_LOCATION
+        );
+    }
+
+    std::string content((std::istreambuf_iterator<char>(file)),
+        std::istreambuf_iterator<char>());
+    return content;
+}
+
+// ===============================================
+// Demo
+// ===============================================
+int main() {
+    try {
+        std::string data = load_file("missing.txt");
+        std::cout << "File contents: " << data << "\n";
+    }
+    catch (const std::exception& e) {
+
+        // Normal C++ exception handling if enabled
+        std::cerr << "Caught exception: " << e.what() << "\n";
+    }
+}
+----
+
+Note:: The macro BOOST_CURRENT_LOCATION, used twice in the code above, is defined in `<boost/throw_exception.hpp>` to return the current file location.
+
+Run this program as is:
+
+[source,text]
+----
+Caught exception: Failed to open file: missing.txt
+----
+
+Now, uncomment the first line (`//#define BOOST_NO_EXCEPTIONS`), and run the program again:
+
+[source,text]
+----
+FATAL ERROR: Failed to open file: missing.txt
+  at <PATH TO YOUR SOURCE FILE>
+  in function class std::basic_string<char,struct std::char_traits<char>,class std::allocator<char> > __cdecl load_file(const class std::basic_string<char,struct std::char_traits<char>,class std::allocator<char> > &)
+File contents:
+----
+
+Notice the last line (`File contents:`) is output as the exception is caught but the program continues, which may well be a better situation in an embedded system (flight control software, for example) or kernel code - which should just keep running.
+
+== See Also
+
+* xref:boost-macros.adoc[]
+* xref:task-text-processing.adoc[]
+
