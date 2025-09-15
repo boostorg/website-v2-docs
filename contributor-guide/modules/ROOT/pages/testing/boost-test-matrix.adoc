@@ -23,8 +23,8 @@ The results of library tests are published on the
 [cols="1,1,1",options="header",stripes=even,frame=none]
 |===
 | *Version* | *Results* | *Issues*
-| Develop branch | https://regression.boost.io/develop/developer/summary.html[Summary] | https://regression.boost.io/develop/developer/issues.html[Unresolved Issues]
-| Master branch | https://regression.boost.io/master/developer/summary.html[Summary] | https://regression.boost.io/master/developer/issues.html[Unresolved Issues]
+| Develop branch | https://regression.boost.org/develop/developer/summary.html[Summary] | https://regression.boost.org/develop/developer/issues.html[Unresolved Issues]
+| Master branch | https://regression.boost.org/master/developer/summary.html[Summary] | https://regression.boost.org/master/developer/issues.html[Unresolved Issues]
 |===
 
 This dashboard is publicly accessible and provides detailed information about the test results for most libraries.
