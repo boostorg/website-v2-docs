@@ -8,13 +8,13 @@ Official repository: https://github.com/boostorg/website-v2-docs
 ////
 = Getting Started
 :navtitle: Getting Started
-:latest_tag: 1_85_0
-:latest_version: 1.85.0
+:latest_tag: 1_89_0
+:latest_version: 1.89.0
 :release_basename: boost_{latest_tag}
 :release_filename: {release_basename}.tar.bz2
 :release_zip_filename: {release_basename}.zip
-:release_url: https://boostorg.jfrog.io/artifactory/main/release/{latest_version}/source/{release_filename}
-:release_zip_url: https://boostorg.jfrog.io/artifactory/main/release/{latest_version}/source/{release_zip_filename}
+:release_url: https://archives.boost.io/release/{latest_version}/source/{release_filename}
+:release_zip_url: https://archives.boost.io/release/{latest_version}/source/{release_zip_filename}
 :linkattrs:
 
 This section explains how to get your first Boost app running.
@@ -459,9 +459,9 @@ Unix variants:
 
 [source]
 ----
-./bootstrap.sh
+./bootstrap.sh --prefix=/usr/local
 ./b2
-./b2 install --prefix=/usr/local
+./b2 install
 ----
 
 You can adjust the installation `prefix` to your preference in this command.
@@ -470,7 +470,7 @@ The build process creates all variants of each library.
 For example, there may be _Release_ and _Debug_ variants, or possibly _Multithreaded_ and _Static_ runtime variants.
 Also, libraries that are _header-only_ (in other words, do not require being built) are copied to your installation folder.
 
-TIP: Consider using the `--show-libraries` and `--with-library=library-a --with-library=library-b` options if you want to limit the wait instead of building everything.
+TIP: Instead of building everything, you can specify which libraries to build using the `--with-libraries=librarya,libraryb` option for `bootstrap.sh`. Use the `--show-libraries` to see which libraries need to be built.
 --
 
 CMake::
