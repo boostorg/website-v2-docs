@@ -1,39 +1,41 @@
 ////
-Copyright (c) 2024 The C++ Alliance, Inc. (https://cppalliance.org)
 Distributed under the Boost Software License, Version 1.0. (See accompanying
 file LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
 Official repository: https://github.com/boostorg/website-v2-docs
 ////
-= Release Notes
-These are the release notes for Boost version X.XX.XX.
+
+== Version X.XX.XX
+
+// Date of release
+Month Day, Year Hour::Minute GMT
+
+https://www.boost.org/doc/libs/X_XX_X/[Documentation]
+
+// Formatting reference: https://docs.asciidoctor.org/asciidoc/latest/syntax-quick-reference/
+// Please keep the list of libraries sorted in lexicographical order.
+
 == New Libraries
-// List new libraries in lexicographical order (library name, purpose, authors)
+
 // Example:
-// * Accumulators : performs incremental calculation, and collection of statistical accumulators, from Eric Niebler.
-* Library 1 name : purpose, author
-* Library 2 name : purpose, author
+//
+// * phrase::[library,at::/libs/accumulators/[Accumulators]:] Framework for
+// incremental calculation, and collection of statistical accumulators, from Eric Niebler.
+
 == Updated Libraries
-// List updated libraries in lexicographical order.
+
 // Example:
-// * Interprocess
-// ** Dependency on Boost.TypeTraits removed
-// ** Shared memory feature added
-// ** Support for C++ 03 removed
-* Library 1 name
-** update 1 text
-*** indented note for update 1, if needed
-*** another indented note for update 1, if needed
-** update 2 text
-** update 3 text
-* Library 2 name
-** update 1 text
-*** indented note for update 1, if needed
-*** another indented note for update 1, if needed
-** update 2 text
-** update 3 text
+// 
+// * phrase::[library,at::/libs/Interprocess/[Interprocess]:]
+// ** Added anonymous shared memory for UNIX systems.
+// ** Conform to `std::pointer_traits` requirements (github_pr::[interprocess,32]).
+// ** Fixed `named_condition_any` fails to notify (github_issue::[interprocess,62]).
+
 == Compilers Tested
+
 // Edit this section as approrpriate
+
 Boost's primary test compilers are:
+
 * Linux:
 ** Clang, C++03: 3.4, 3.5, 3.6, 3.7, 3.8, 3.9, 12.0.0, 13.0.0, 14.0.0, 15.0.0
 ** Clang, C++11: 3.4, 11.0.0, 13.0.0, 14.0.0, 15.0.0
@@ -53,7 +55,9 @@ Boost's primary test compilers are:
 ** Apple Clang, C++20: 11.0.3
 * Windows:
 ** Visual C++: 10.0, 11.0, 12.0, 14.0, 14.1, 14.2, 14.3
+
 == Acknowledgements
-// Example:  * Marshall Clow and Glen Fernandes managed this release.
-* ack 1
-* ack 2
+
+// Edit this section as approrpriate
+
+Marshall Clow, Glen Fernandes and Ion Gaztañaga managed this release. 
