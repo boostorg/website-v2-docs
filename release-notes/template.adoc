@@ -32,7 +32,7 @@ https://www.boost.org/doc/libs/X_XX_X/[Documentation]
 
 == Compilers Tested
 
-// Edit this section as approrpriate
+// Edit this section as appropriate
 
 Boost's primary test compilers are:
 
@@ -58,6 +58,6 @@ Boost's primary test compilers are:
 
 == Acknowledgements
 
-// Edit this section as approrpriate
+// Edit this section as appropriate
 
 Marshall Clow, Glen Fernandes and Ion Gaztañaga managed this release. 
