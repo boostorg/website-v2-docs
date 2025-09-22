@@ -25,7 +25,7 @@ https://www.boost.org/doc/libs/X_XX_X/[Documentation]
 
 // Example:
 // 
-// * phrase::[library,at::/libs/Interprocess/[Interprocess]:]
+// * phrase::[library,at::/libs/interprocess/[Interprocess]:]
 // ** Added anonymous shared memory for UNIX systems.
 // ** Conform to `std::pointer_traits` requirements (github_pr::[interprocess,32]).
 // ** Fixed `named_condition_any` fails to notify (github_issue::[interprocess,62]).
