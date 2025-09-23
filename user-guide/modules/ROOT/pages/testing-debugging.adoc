@@ -380,3 +380,4 @@ And check out the full functionality of boost:test[] and boost:log[].
 * https://www.boost.org/doc/libs/latest/libs/libraries.htm#Workarounds[Category: Broken compiler workarounds]
 * https://www.boost.org/doc/libs/latest/libs/libraries.htm#Correctness[Category: Correctness and testing]
 * https://www.boost.org/doc/libs/latest/libs/libraries.htm#Error-handling[Category: Error handling and recovery]
+* xref:diagnostics.adoc[]

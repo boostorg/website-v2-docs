@@ -385,4 +385,5 @@ int main() {
 == See Also
 
 * https://www.boost.org/doc/libs/latest/libs/config/doc/html/boost_config/boost_macro_reference.html[Boost Macro Reference]
+* xref:diagnostics.adoc[]
 * xref:testing-debugging.adoc[]
