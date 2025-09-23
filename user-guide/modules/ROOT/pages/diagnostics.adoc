@@ -23,7 +23,7 @@ Boost offers a rich collection of utilities that significantly improve diagnosti
 
 Each of these features demonstrates why Boost remains an invaluable companion to modern pass:[C++] developers concerned with diagnostics and instrumentation.
 
-Note:: The code in this topic was written and tested using Microsoft Visual Studio (Visual pass:[C++] 2022, Console App project) with Boost version 1.88.0.
+Note:: The code in this topic was written and tested using Microsoft Visual Studio (Visual pass:[C++] 2022, Console App project) with Boost version 1.88.0. Refer to libraries boost:assert[], boost:exception[], and boost:system[].
 
 == Configurable Assertions
 
@@ -37,7 +37,7 @@ For example:
 
 [source,cpp]
 ----
-#define BOOST_ENABLE_ASSERT_HANDLER   // must be defined before including <boost/assert.hpp>
+#define BOOST_ENABLE_ASSERT_HANDLER   // Must be defined before including <boost/assert.hpp>
 
 #include <boost/assert.hpp>
 #include <iostream>
@@ -60,6 +60,16 @@ int main() {
     BOOST_ASSERT(x >= 0);  // This calls the custom handler
 }
 
+----
+
+Run the program:
+
+[source,text]
+----
+Custom assert failed:
+  Expression: x >= 0
+  Function:   int __cdecl main(void)
+  Location:   <PATH TO YOUR SOURCE FILE>
 ----
 
 Here, rather than letting the system's default behavior decide what happens, the programmer gains full control. This flexibility makes `BOOST_ASSERT` far more suitable for production systems, where diagnostic output must be carefully managed.
@@ -111,6 +121,19 @@ int main() {
         std::cerr << "Caught exception: " << e.what() << "\n";
     }
 }
+----
+
+Run the program:
+
+[source,text]
+----
+numbers[1] = 20
+[Boost assert triggered]
+  Expression: idx < v.size()
+  Message:    safe_at: Index out of range
+  Function:   int &__cdecl safe_at<int>(class std::vector<int,class std::allocator<int> > &,unsigned __int64)
+  File:        <PATH TO YOUR SOURCE FILE>
+Caught exception: safe_at: Index out of range
 ----
 
 == Release-Mode Expression Checking
@@ -334,6 +357,14 @@ int main() {
 }
 ----
 
+Run this program:
+
+[source,text]
+----
+Error at <PATH TO YOUR SOURCE FILE> in int __cdecl main(void)
+Error value: 5
+----
+
 This capability goes far beyond what `std::error_code` offers. By associating source locations with error codes, Boost enables a hybrid model: the lightweight efficiency of error codes with much of the traceability typically reserved for exceptions.
 
 == Conclusion
@@ -368,3 +399,8 @@ Together, these facilities form a compelling case for using Boost in diagnostic 
 | **`BOOST_ERROR(code)`**          | *None*                   | Reports runtime errors without aborting the test suite. Standard testing needs external frameworks.
 |===
 
+== See Also
+
+* xref:boost-macros.adoc[]
+* xref:exception-safety.adoc[]
+* xref:testing-debugging.adoc[]
