@@ -20,10 +20,10 @@ Note:: The review results include recent completed reviews - where the library m
 [[currentschedule]]
 == Current Schedule
 
-[cols="1,1,1,2,2",stripes=even,options="header",frame=none]
+[cols="1,1,1,1,2,2",stripes=even,options="header",frame=none]
 |===
-| *Submission* | *Submitter* | *Review Manager* | *Review Dates* | *Result*
-| Decimal Re-Review  | Matt Borland and Chris Kormanyos | John Maddock | October 6, 2025 - October 15, 2025 | TBD
+| *Submission* | *Submitter* | *Links* | *Review Manager* | *Review Dates* | *Result*
+| Decimal Re-Review  | Matt Borland and Chris Kormanyos | https://develop.decimal.cpp.al/decimal/overview.html[Docs] and https://github.com/cppalliance/decimal[Repo] | John Maddock | October 6, 2025 - October 15, 2025 | TBD
 |===
 
 === Review Managers
