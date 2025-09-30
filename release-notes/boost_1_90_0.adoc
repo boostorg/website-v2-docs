@@ -1,0 +1,74 @@
+////
+Distributed under the Boost Software License, Version 1.0. (See accompanying
+file LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
+Official repository: https://github.com/boostorg/website-v2-docs
+////
+
+== Version 1.90.0
+
+// Date of release
+Month Day, Year Hour::Minute GMT
+
+boost_at:/doc/libs/1_90_0/[Documentation]
+
+// Formatting reference: https://docs.asciidoctor.org/asciidoc/latest/syntax-quick-reference/
+// Boost-specific macros: https://github.com/cppalliance/asciidoctor-boost?tab=readme-ov-file#macros
+// Please keep the list of libraries sorted in lexicographical order.
+
+== New Libraries
+
+// Example:
+// 
+// * boost_phrase:library[Accumulators,/libs/accumulators]:
+// ** Framework for incremental calculation, and collection of statistical
+// accumulators, from Eric Niebler.
+
+== Updated Libraries
+
+// Example:
+//  
+// * boost_phrase:library[Interprocess,/libs/interprocess/]:
+// ** Added anonymous shared memory for UNIX systems.
+// ** Conform to `std::pointer_traits` requirements (boost_gh:pr[interprocess,32]).
+// ** Fixed `named_condition_any` fails to notify (boost_gh:issue[interprocess,62]).
+
+* boost_phrase:library[Bloom,/libs/bloom/]:
+** Added bulk-mode insertion and lookup for increased performance.
+** Made lookup implementation branchless for `block`, `fast_multiblock32`
+and `fast_multiblock64`, which results in some performance gains,
+particularly for mixed successful/unsuccessful queries.
+
+* boost_phrase:library[Flyweight,/libs/flyweight/]:
+** Fixed compile errors in Clang 19 and later due to https://wg21.link/p0522r0[P0522R0] support.
+
+== Compilers Tested
+
+// Edit this section as appropriate
+
+Boost's primary test compilers are:
+
+* Linux:
+** Clang, C++03: 3.4, 3.5, 3.6, 3.7, 3.8, 3.9, 12.0.0, 13.0.0, 14.0.0, 15.0.0
+** Clang, C++11: 3.4, 11.0.0, 13.0.0, 14.0.0, 15.0.0
+** Clang, C++14: 3.5, 3.6, 3.7, 3.8, 3.9, 4.0, 5.0, 12.0.0, 13.0.0, 14.0.0, 15.0.0
+** Clang, C++17: 6.0.1, 7.0.0, 8.0.0, 9.0.0, 10.0.0, 11.0.0, 12.0.0, 13.0.0, 14.0.0, 15.0.0
+** Clang, C++20: 11.0.0, 12.0.0, 13.0.0, 14.0.0, 15.0.0
+** GCC, C++03: 4.6.3, 11, 12
+** GCC, C++11: 4.7.3, 4.8.5, 11, 12
+** GCC, C++14: 5.4.0, 6.4.0, 7.3.0, 8.0.1, 9.1.0, 11, 12
+** GCC, C++17: 7.3.0, 8.0.1, 9.1.0, 11, 12
+** GCC, C++20: 8.0.1, 9.1.0, 10, 11, 12
+* OS X:
+** Apple Clang, C++03: 11.0.3
+** Apple Clang, C++11: 11.0.3
+** Apple Clang, C++14: 11.0.3
+** Apple Clang, C++17: 11.0.3
+** Apple Clang, C++20: 11.0.3
+* Windows:
+** Visual C++: 10.0, 11.0, 12.0, 14.0, 14.1, 14.2, 14.3
+
+== Acknowledgements
+
+// Edit this section as appropriate
+
+Marshall Clow, Glen Fernandes and Ion Gaztañaga managed this release.
