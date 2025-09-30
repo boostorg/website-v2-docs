@@ -20,6 +20,7 @@ Before submitting a library for review, work through this checklist to help poli
 * <<Usability and API Design>>
 * <<Pre-Review Feedback>>
 * <<Examples of Successful Libraries>>
+* <<See Also>>
 
 == Code Quality and Design
 

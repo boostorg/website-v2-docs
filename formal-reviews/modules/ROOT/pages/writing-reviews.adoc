@@ -17,6 +17,15 @@ Ask questions for the library authors, on the https://lists.boost.org/mailman/li
 
 Here's a structured approach to writing a review of a library, covering all the bases:
 
+* <<Introduction>>
+* <<Design and Architecture>>
+* <<Implementation>>
+* <<Documentation>>
+* <<Conclusion>>
+* <<Review Template>>
+* <<Best Practices>>
+* <<See Also>>
+
 == Introduction
 
 Introduce yourself, and your knowledge of the problem domain. Remember that input from a newcomer to a domain is valuable. Briefly introduce the library and its purpose as you see it.

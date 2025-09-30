@@ -13,6 +13,10 @@ Before a library can be scheduled for formal review, an active Boost member (not
 
 Before submitting a library, it will help to understand the role of the review manager.
 
+* <<The Role of Review Manager>>
+* <<Becoming a Review Manager>>
+* <<See Also>>
+
 == The Role of Review Manager
 
 The review manager works through the following process:
