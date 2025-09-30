@@ -33,6 +33,7 @@ boost_at:/doc/libs/1_90_0/[Documentation]
 // ** Fixed `named_condition_any` fails to notify (boost_gh:issue[interprocess,62]).
 
 * boost_phrase:library[Bloom,/libs/bloom/]:
+** Added bulk-mode insertion and lookup for increased performance.
 ** Made lookup implementation branchless for `block`, `fast_multiblock32`
 and `fast_multiblock64`, which results in some performance gains,
 particularly for mixed successful/unsuccessful queries.
