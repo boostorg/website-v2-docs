@@ -583,51 +583,59 @@ Finally, let's add the features of boost:serialization[] to allow us to save and
 
 [source,cpp]
 ----
-#include <boost/interprocess/managed_shared_memory.hpp>
-#include <boost/interprocess/containers/vector.hpp>
-#include <boost/interprocess/sync/named_mutex.hpp>
-#include <boost/serialization/vector.hpp>
-#include <boost/archive/text_oarchive.hpp>
-#include <boost/archive/text_iarchive.hpp>
+#include <boost/interprocess/managed_shared_memory.hpp>   // For managing shared memory segments
+#include <boost/interprocess/containers/vector.hpp>       // STL-like vector that works inside shared memory
+#include <boost/interprocess/sync/named_mutex.hpp>        // Mutex across processes
+#include <boost/serialization/vector.hpp>                 // Serialization support for std::vector
+#include <boost/archive/text_oarchive.hpp>                // For saving serialized data to text files
+#include <boost/archive/text_iarchive.hpp>                // For loading serialized data from text files
 #include <iostream>
 #include <fstream>
 
 namespace bip = boost::interprocess;
 
-const char* SHM_NAME = "SharedDatabase";
-const char* TABLE_NAME = "UserTable";
-const char* MUTEX_NAME = "SharedTableMutex";
-const std::size_t MAX_USERS = 10;
+// ---- Global configuration constants ----
+const char* SHM_NAME = "SharedDatabase";                // Name of the shared memory segment
+const char* TABLE_NAME = "UserTable";                   // Name of the container object inside shared memory
+const char* MUTEX_NAME = "SharedTableMutex";            // Name of the interprocess mutex
+const std::size_t MAX_USERS = 10;                       // Maximum number of users allowed in table
 
-// ---- User Record with Serialization ----
+// ---- User Record structure, supports Boost.Serialization ----
 struct UserRecord {
-    int id;
-    char name[32];
+    int id;                 // Unique user ID
+    char name[32];          // Fixed-size character buffer for username
 
+    // Serialization function used by Boost.Archive
     template<class Archive>
     void serialize(Archive& ar, const unsigned int) {
         ar& id;
+
+        // Wrap raw array in make_array so Boost knows how to handle it
         ar& boost::serialization::make_array(name, sizeof(name));
     }
 };
 
-// ---- Type Definitions ----
+// ---- Type aliases for clarity ----
 using ShmemAllocator = bip::allocator<UserRecord, bip::managed_shared_memory::segment_manager>;
-using UserTable = bip::vector<UserRecord, ShmemAllocator>;
 
-// ---- Table Operations ----
+// Vector of UserRecords in shared memory
+using UserTable = bip::vector<UserRecord, ShmemAllocator>;   
+
+// ---- Create a new table in shared memory ----
 void create_table() {
+
+    // Remove any old shared memory segment and mutex (cleanup)
     bip::shared_memory_object::remove(SHM_NAME);
     bip::named_mutex::remove(MUTEX_NAME);
 
+    // Create new shared memory segment of fixed size (64 KB here)
     bip::managed_shared_memory segment(bip::create_only, SHM_NAME, 65536);
     ShmemAllocator alloc(segment.get_segment_manager());
 
-    //segment.construct<UserTable>(TABLE_NAME)(alloc);
-
-    //std::cout << "Shared memory table created.\n";
+    // Construct a UserTable object inside shared memory
     UserTable* table = segment.construct<UserTable>(TABLE_NAME)(alloc);
 
+    // Pre-populate with three sample users
     for (int i = 0; i < 3; ++i) {
         UserRecord user;
         user.id = 1 + table->size();
@@ -638,18 +646,23 @@ void create_table() {
     std::cout << "Shared memory table created with 3 initial users.\n";
 }
 
+// ---- Display the contents of the table ----
 void show_table() {
     try {
         bip::managed_shared_memory segment(bip::open_only, SHM_NAME);
         bip::named_mutex mutex(bip::open_or_create, MUTEX_NAME);
+
+        // Lock table to prevent concurrent modifications
         bip::scoped_lock<bip::named_mutex> lock(mutex);
 
+        // Find UserTable in shared memory
         UserTable* table = segment.find<UserTable>(TABLE_NAME).first;
         if (!table) {
             std::cerr << "Table not found.\n";
             return;
         }
 
+        // Print all users
         std::cout << "User Table:\n";
         for (const auto& user : *table) {
             std::cout << "  ID: " << user.id << ", Name: " << user.name << "\n";
@@ -660,6 +673,7 @@ void show_table() {
     }
 }
 
+// ---- Add a user to the shared memory table ----
 void add_user() {
     try {
         bip::managed_shared_memory segment(bip::open_only, SHM_NAME);
@@ -672,15 +686,21 @@ void add_user() {
             return;
         }
 
+        // Get new user name from console
         std::string name;
-        std::cin.ignore(); // Flush newline
+
+        // Discard leftover newline from previous input
+        std::cin.ignore();
+
         std::cout << "Enter user name: ";
         std::getline(std::cin, name);
 
+        // Create new record and append
         UserRecord user;
         user.id = 1 + table->size();
         std::snprintf(user.name, sizeof(user.name) - 1, "%s", name.c_str());
         table->push_back(user);
+
         std::cout << "User added.\n";
     }
     catch (...) {
@@ -688,7 +708,7 @@ void add_user() {
     }
 }
 
-// ---- Serialization ----
+// ---- Save snapshot of current table to a text file ----
 void save_snapshot(const std::string& filename) {
     try {
         bip::managed_shared_memory segment(bip::open_only, SHM_NAME);
@@ -701,8 +721,10 @@ void save_snapshot(const std::string& filename) {
             return;
         }
 
+        // Copy data from shared memory into std::vector (heap memory)
         std::vector<UserRecord> snapshot(table->begin(), table->end());
 
+        // Save serialized snapshot to file
         std::ofstream ofs(filename);
         boost::archive::text_oarchive oa(ofs);
         oa << snapshot;
@@ -714,8 +736,11 @@ void save_snapshot(const std::string& filename) {
     }
 }
 
+// ---- Load snapshot from text file into shared memory ----
 void load_snapshot(const std::string& filename) {
     try {
+
+        // Open file and load into vector
         std::ifstream ifs(filename);
         if (!ifs) {
             std::cerr << "Snapshot file not found.\n";
@@ -726,12 +751,14 @@ void load_snapshot(const std::string& filename) {
         boost::archive::text_iarchive ia(ifs);
         ia >> snapshot;
 
+        // Reset shared memory segment and mutex
         bip::shared_memory_object::remove(SHM_NAME);
         bip::managed_shared_memory segment(bip::create_only, SHM_NAME, 65536);
         bip::named_mutex::remove(MUTEX_NAME);
         bip::named_mutex mutex(bip::create_only, MUTEX_NAME);
         bip::scoped_lock<bip::named_mutex> lock(mutex);
 
+        // Recreate UserTable and repopulate
         ShmemAllocator alloc(segment.get_segment_manager());
         UserTable* table = segment.construct<UserTable>(TABLE_NAME)(alloc);
 
@@ -746,18 +773,20 @@ void load_snapshot(const std::string& filename) {
     }
 }
 
+// ---- Clear all shared memory resources ----
 void clear_shared_memory() {
     bip::shared_memory_object::remove(SHM_NAME);
     bip::named_mutex::remove(MUTEX_NAME);
     std::cout << "Shared memory cleared.\n";
 }
 
-// ---- Menu ----
+// ---- Print the interactive menu ----
 void print_menu() {
     std::cout << "\n=== Shared Memory Menu ===\n"
         << "1. Create table  2. Show table  3. Add user  4. Save snapshot  5. Load snapshot  6. Clear shared memory  7. Exit:";
 }
 
+// ---- Program entry point ----
 int main() {
     while (true) {
         print_menu();
@@ -765,14 +794,16 @@ int main() {
         std::cin >> choice;
 
         switch (choice) {
-        case 1: 
+        case 1:
             create_table();
-            show_table();
+
+            // Show immediately after creation
+            show_table();       
             break;
         case 2: show_table(); break;
         case 3: add_user(); break;
         case 4: save_snapshot("snapshot.txt"); break;
-        case 5: 
+        case 5:
             load_snapshot("snapshot.txt");
             show_table();
             break;
@@ -782,7 +813,6 @@ int main() {
         }
     }
 }
-
 ----
 
 Run the sample, and verify that the saved file persists after shared memory has been cleared.
