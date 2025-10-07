@@ -28,6 +28,7 @@ This section contains answers to the common questions that new developers to Boo
 * <<Numbers>>
 * <<Other Languages>>
 * <<Production and Debug Builds>>
+* <<Reflection>>
 * <<Releases>>
 * <<Safe C++>>
 * <<Smart Pointers>>
@@ -1439,6 +1440,75 @@ target_compile_definitions(MyBoostApp PRIVATE
 # Optional: You can define a custom assert handler in debug builds
 # by linking a file like the assert handler shown above that defines `boost::assertion_failed`
 
+----
+
+== Reflection
+
+. *Is there a native library or system that approximates the capabilities of .NET System.Reflection?*
++
+Reflection in .NET is the ability of a program to inspect and manipulate its own structure and metadata at runtime. Think of reflection as a runtime mirror — it lets a program look at itself and act accordingly. Boost does not have a full runtime reflection system like .NET's System.Reflection, but it does include several libraries and utilities that provide partial or compile-time reflection capabilities — the kind that are most practical and efficient in pass:[C++]. The closest Boost comes to real reflection is encapsualted in boost:describe[]. This library allows you to describe the structure of a class — its members, base classes, and enums — at compile time, so you can iterate over them generically. Internally, boost:describe[] uses the features of boost:mp11[].
++
+Other libraries that you might find value in include boost:pfr[] (_Precise Function Reflection_), which lets you reflect on structure fields without macros or metadata, using clever template magic. For richer type information there is boost:type_index[] and boost:callable_traits[], and for metaprogramming there is boost:mp11[], boost:fusion[], and boost:hana[].
+
+. *Are there plans to extend Reflection further into Boost or the Standard C++ Library?*
++
+The short answer is yes, into the Standard, but not yet. There are some niggling downsides to enabling full reflection, including slower than normal code, more difficult code maintenance and debugging, and string related issues (as string names are relied on). The standard work is known as the Reflection TS (_Technical Specification_).
+
+. *Can you show me example code demonstrating how to use Boost.Describe for Reflection?*
++
+The following example shows how boost:describe[] and boost:mp11[] work together to achieve something close to automatic runtime reflection:
++
+[source,cpp]
+----
+#include <boost/describe.hpp>
+#include <boost/mp11.hpp>
+#include <iostream>
+
+
+// Describe a simple struct
+struct User {
+    int id;
+    std::string name;
+};
+
+// Generate reflection metadata
+BOOST_DESCRIBE_STRUCT(User, (), (id, name))
+
+// Print fields using Boost.MP11 iteration
+template <typename T>
+void print_fields(const T& obj) {
+    boost::mp11::mp_for_each<boost::describe::describe_members<T, boost::describe::mod_public>>(
+        [&](auto D) {
+            std::cout << D.name << " = " << obj.*D.pointer << "\n";
+        });
+}
+
+int main() {
+    User u{ 42, "Ada" };
+    print_fields(u);
+}
+----
+
+. *Can you show me example code demonstrating how to use Boost.PFR for Reflection?*
++
+boost:pfr[] provides the `io` function for automatic input/output stream operators (`<<` and `>>`) for aggregate types — meaning you can print or read structs directly without manually defining stream operators. It reflects all public fields of a type at compile time (without macros or boilerplate), producing readable output like {field1, field2, field3} automatically, for example:
++
+[source,cpp]
+----
+#include <boost/pfr.hpp>
+#include <iostream>
+
+struct User {
+    int id;
+    std::string name;
+    double balance;
+};
+
+int main() {
+    User u{ 42, "Alice", 100.5 };
+
+    std::cout << "As tuple: " << boost::pfr::io(u) << "\n";
+}
 ----
 
 == Releases
