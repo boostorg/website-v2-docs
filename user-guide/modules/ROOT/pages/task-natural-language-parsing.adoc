@@ -75,7 +75,6 @@ If the input matches this grammar, the following parser will accept it. Otherwis
 [source,cpp]
 ----
 #include <iostream>
-#include <string>
 #include <boost/spirit/include/qi.hpp>
 
 namespace qi = boost::spirit::qi;
@@ -157,9 +156,6 @@ The parsing makes repeated use of statements such as `-adj_syms[phoenix::ref(adj
 #include <boost/spirit/include/qi.hpp>
 #include <boost/spirit/include/phoenix.hpp>
 #include <iostream>
-#include <string>
-#include <vector>
-#include <algorithm>
 
 namespace qi = boost::spirit::qi;
 namespace ascii = boost::spirit::ascii;
@@ -262,22 +258,22 @@ Parsed successfully!
 
 == Add Detailed Error Reporting
 
-Let's not forget to provide useful error messages:
+Let's not forget to provide useful comments and error messages:
 
 [source,cpp]
 ----
-#include <boost/spirit/include/qi.hpp>
-#include <boost/spirit/include/phoenix.hpp>
+#include <boost/spirit/include/qi.hpp>       // Boost.Spirit Qi — parsing framework
+#include <boost/spirit/include/phoenix.hpp>  // Boost.Phoenix — allows assignment actions in parsers
 #include <iostream>
-#include <string>
-#include <vector>
-#include <algorithm>
 
-namespace qi = boost::spirit::qi;
-namespace ascii = boost::spirit::ascii;
-namespace phoenix = boost::phoenix;
+namespace qi = boost::spirit::qi;            // Namespace alias for parser components
+namespace ascii = boost::spirit::ascii;      // Namespace alias for ASCII space skipping, literals, etc.
+namespace phoenix = boost::phoenix;          // Namespace alias for expression templates used in actions
 
-// Helper to populate symbol tables
+// -----------------------------------------------------------------------------
+// Helper: Adds words into a Qi symbol table
+// Each word is added as both key and value, enabling quick lookup and extraction.
+// -----------------------------------------------------------------------------
 template <typename SymbolTable>
 void add_words(SymbolTable& symbols, const std::vector<std::string>& words) {
     for (const auto& word : words) {
@@ -285,23 +281,37 @@ void add_words(SymbolTable& symbols, const std::vector<std::string>& words) {
     }
 }
 
+// -----------------------------------------------------------------------------
+// Helper: Validates a word against a known list
+// Returns "- valid" or "- invalid" for display when parsing fails.
+// -----------------------------------------------------------------------------
 std::string is_valid(std::string word, std::vector<std::string> list)
 {
     if (std::find(list.begin(), list.end(), word) != list.end())
-        return "- valid"; else
+        return "- valid";
+    else
         return "- invalid";
 }
 
+// -----------------------------------------------------------------------------
+// Main function — interactive grammar demo
+// Uses Boost.Spirit to parse simple English-like sentences with defined syntax.
+// -----------------------------------------------------------------------------
 int main() {
 
-    // Word categories
+    // -------------------------------------------------------------------------
+    // Word categories (predefined vocabulary)
+    // -------------------------------------------------------------------------
     std::vector<std::string> determiners = { "The", "A", "My" };
-    std::vector<std::string> nouns = { "fox", "dog", "cat", "squirrel" };
-    std::vector<std::string> verbs = { "jumps", "chased", "caught", "scared" };
-    std::vector<std::string> adjectives = { "quick", "lazy", "sneaky", "clever" };
-    std::vector<std::string> adverbs = { "loudly", "quickly", "angrily", "silently" };
+    std::vector<std::string> nouns       = { "fox", "dog", "cat", "squirrel" };
+    std::vector<std::string> verbs       = { "jumps", "chased", "caught", "scared" };
+    std::vector<std::string> adjectives  = { "quick", "lazy", "sneaky", "clever" };
+    std::vector<std::string> adverbs     = { "loudly", "quickly", "angrily", "silently" };
 
-    // Symbol tables for parsing
+    // -------------------------------------------------------------------------
+    // Create Qi symbol tables for each word type
+    // qi::symbols maps literal strings to stored values — used as grammar terminals.
+    // -------------------------------------------------------------------------
     qi::symbols<char, std::string> dets, noun_syms, verb_syms, adj_syms, adv_syms;
     add_words(dets, determiners);
     add_words(noun_syms, nouns);
@@ -309,40 +319,60 @@ int main() {
     add_words(adj_syms, adjectives);
     add_words(adv_syms, adverbs);
 
-    // Input
+    // -------------------------------------------------------------------------
+    // Interactive input loop
+    // The user can enter sentences repeatedly until typing "exit".
+    // -------------------------------------------------------------------------
     std::string input = "";
 
     while (input != "exit")
     {
-        std::cout << "Enter a sentence (format: <Determiner> [<adjective>] <noun> [<adverb>] <verb> [<adjective>] <noun>.) Enter exit to quit.\n";
+        std::cout << "Enter a sentence (format: <Determiner> [<adjective>] <noun> "
+                     "[<adverb>] <verb> [<adjective>] <noun>.) Enter exit to quit.\n";
         std::getline(std::cin, input);
 
         if (input != "exit")
         {
-            // Iterators
+            // -----------------------------------------------------------------
+            // Iterator pair used by Boost.Spirit parsers
+            // -----------------------------------------------------------------
             auto begin = input.begin();
-            auto end = input.end();
+            auto end   = input.end();
 
-            // Output fields
+            // -----------------------------------------------------------------
+            // Variables to store parsed components of the sentence
+            // The Phoenix library binds parsed tokens to these variables.
+            // -----------------------------------------------------------------
             std::string det1, adj1, noun1, adv, verb, adj2, noun2;
 
-            // Grammar: Determiner [adjective] noun [adverb] verb [adjective] noun.
+            // -----------------------------------------------------------------
+            // Grammar definition using Boost.Spirit.Qi
+            // Sentence pattern:
+            //   Determiner [Adjective] Noun [Adverb] Verb [Adjective] Noun .
+            // The '>>' operator sequences parsing rules.
+            // The '-' operator makes a parser optional.
+            // The '[phoenix::ref(x) = qi::_1]' assigns the parsed value to 'x'.
+            // -----------------------------------------------------------------
             bool success = qi::phrase_parse(
                 begin, end,
                 (
-                    dets[phoenix::ref(det1) = qi::_1] >>
-                    -adj_syms[phoenix::ref(adj1) = qi::_1] >>
-                    noun_syms[phoenix::ref(noun1) = qi::_1] >>
-                    -adv_syms[phoenix::ref(adv) = qi::_1] >>
-                    verb_syms[phoenix::ref(verb) = qi::_1] >>
-                    -adj_syms[phoenix::ref(adj2) = qi::_1] >>
-                    noun_syms[phoenix::ref(noun2) = qi::_1] >>
-                    qi::lit('.')
-                    ),
-                ascii::space
+                    dets[phoenix::ref(det1) = qi::_1] >>           // Determiner
+                    -adj_syms[phoenix::ref(adj1) = qi::_1] >>      // Optional adjective
+                    noun_syms[phoenix::ref(noun1) = qi::_1] >>     // First noun
+                    -adv_syms[phoenix::ref(adv) = qi::_1] >>       // Optional adverb
+                    verb_syms[phoenix::ref(verb) = qi::_1] >>      // Verb
+                    -adj_syms[phoenix::ref(adj2) = qi::_1] >>      // Optional adjective
+                    noun_syms[phoenix::ref(noun2) = qi::_1] >>     // Second noun
+                    qi::lit('.')                                   // Sentence must end with '.'
+                ),
+                ascii::space                                       // Skips whitespace automatically
             );
 
-            // Result
+            // -----------------------------------------------------------------
+            // Result handling
+            // If parsing succeeded and the entire string was consumed, show parts.
+            // Otherwise, report failure and show which words are invalid.
+            // -----------------------------------------------------------------
             if (success && begin == end) {
                 std::cout << "\nParsed successfully!\n";
                 if (!det1.empty())  std::cout << "  Determiner:  " << det1 << "\n";
@@ -358,6 +388,7 @@ int main() {
                 std::cout << "The sentence must be of the form:\n";
                 std::cout << "<Determiner> [<adjective>] <noun> [<adverb>] <verb> [<adjective>] <noun>.\n";
 
+                // Display what parts were recognized and whether valid words were used
                 if (!det1.empty())
                     std::cout << "  Determiner:  " << det1 << is_valid(det1, determiners) << "\n";
                 if (!adj1.empty())
@@ -369,7 +400,6 @@ int main() {
                 if (!adj2.empty())
                     std::cout << "  Adjective 2: " << adj2 << is_valid(adj2, adjectives) << "\n";
                 std::cout << "  Noun 2:      " << noun2 << is_valid(noun2, nouns) << "\n";
-
             }
         }
     }
