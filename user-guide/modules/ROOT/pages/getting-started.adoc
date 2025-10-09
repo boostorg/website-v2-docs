@@ -8,8 +8,8 @@ Official repository: https://github.com/boostorg/website-v2-docs
 ////
 = Getting Started
 :navtitle: Getting Started
-:latest_tag: 1_85_0
-:latest_version: 1.85.0
+:latest_tag: 1_89_0
+:latest_version: 1.89.0
 :release_basename: boost_{latest_tag}
 :release_filename: {release_basename}.tar.bz2
 :release_zip_filename: {release_basename}.zip
