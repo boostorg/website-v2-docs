@@ -117,9 +117,9 @@ int main() {
     C = prod(A, B);
 
     // Print results
-    std::cout << "Matrix A (random values):\n" << A << "\n\n";
-    std::cout << "Matrix B (random values):\n" << B << "\n\n";
-    std::cout << "Result of A * B:\n" << C << "\n";
+    std::cout << "Matrix A (random values):\n" << std::setprecision(51) << A << "\n\n";
+    std::cout << "Matrix B (random values):\n" << std::setprecision(51) << B << "\n\n";
+    std::cout << "Result of A * B:\n" << std::setprecision(51) << C << "\n";
 
     return 0;
 }
@@ -131,13 +131,13 @@ Running the code should give you output similar to the following:
 [source,text]
 ----
 Matrix A (random values):
-[3,3]((0.6344,0.797229,0.149486),(0.205832,0.854583,0.444135),(0.175206,0.261295,0.244765))
+[3,3]((0.070812058635056018829345703125,0.80709342076443135738372802734375,0.6618001046590507030487060546875),(0.849498252384364604949951171875,0.95166688528843224048614501953125,0.8414736413396894931793212890625),(0.732556092552840709686279296875,0.607468723319470882415771484375,0.10045330529101192951202392578125))
 
 Matrix B (random values):
-[3,3]((0.622424,0.111231,0.326372),(0.148841,0.4861,0.0497033),(0.876468,0.0207629,0.314664))
+[3,3]((0.8722223858349025249481201171875,0.7344769672490656375885009765625,0.66293510119430720806121826171875),(0.36406232439912855625152587890625,0.86651482223533093929290771484375,0.35279963747598230838775634765625),(0.75558476778678596019744873046875,0.78821337711997330188751220703125,0.7253504456020891666412353515625))
 
 Result of A * B:
-[3,3]((0.644546,0.461201,0.293713),(0.644582,0.447529,0.249407),(0.362473,0.151586,0.147188))
+[3,3]((0.855642247899371810907712815330583566719724331051111,1.27300793356359748150765862084732304992940044030547,0.811723066325901586521348457514690721836814191192389),(1.72322211665940665047775867679824557399115292355418,2.11183114262540423141214021574008086190588073804975,1.50927322274462834299961835893277850573213072493672),(0.936009285567514438288188455272731403056241106241941,1.14360486900502322343527519810102432984422193840146,0.772815742467169064793160171422670146057498641312122))
 
 ----
 
@@ -272,21 +272,24 @@ Save the Iris file to your local computer, and update the following code with th
 
 [source,cpp]
 ----
-#include <fstream>
-#include <boost/numeric/ublas/vector.hpp>
-#include <boost/random.hpp>
-#include <boost/random/random_device.hpp>
+#include <fstream> 
+#include <boost/numeric/ublas/vector.hpp>      // Boost linear algebra: vector, matrix, etc.
+#include <boost/random.hpp>                    // Boost Random library (random_device, mt19937, distributions)
+#include <boost/random/random_device.hpp>      // Ensures random_device is available
 
+namespace br = boost::random;                  // Alias for convenience
+using namespace boost::numeric::ublas;         // For uBLAS vector<>
+using DataPoint = vector<double>;              // A single data point = 4 numeric features
+using Cluster = std::vector<DataPoint>;        // A cluster = collection of data points
 
-namespace br = boost::random;
-using namespace boost::numeric::ublas;
-using DataPoint = vector<double>;
-using Cluster = std::vector<DataPoint>;
+// Constants for the Iris dataset and K-Means parameters
+constexpr size_t FEATURES = 4;                 // Number of features per sample (Iris = 4)
+constexpr size_t K = 3;                        // Number of clusters (3 Iris species)
+constexpr size_t MAX_ITER = 100;               // Max number of K-Means iterations
 
-constexpr size_t FEATURES = 4;
-constexpr size_t K = 3;
-constexpr size_t MAX_ITER = 100;
-
+// -----------------------------
+// Load data from CSV file
+// -----------------------------
 std::vector<DataPoint> load_iris_csv(const std::string& filename) {
     std::ifstream file(filename);
     std::vector<DataPoint> data;
@@ -296,20 +299,22 @@ std::vector<DataPoint> load_iris_csv(const std::string& filename) {
         throw std::runtime_error("Could not open file.");
     }
 
-    // Skip the first line of text
+    // Skip header line (contains column names)
     std::getline(file, line);
 
-    //sepal_length, sepal_width, petal_length, petal_width, species
+    // CSV format: sepal_length, sepal_width, petal_length, petal_width, species
     while (std::getline(file, line)) {
         std::stringstream ss(line);
         std::string token;
         DataPoint point(FEATURES);
 
+        // Parse first 4 numeric values
         for (size_t i = 0; i < FEATURES; ++i) {
             if (!std::getline(ss, token, ',')) break;
             point(i) = std::stod(token);
         }
 
+        // Only add valid 4-element vectors
         if (point.size() == FEATURES)
             data.push_back(point);
     }
@@ -317,6 +322,9 @@ std::vector<DataPoint> load_iris_csv(const std::string& filename) {
     return data;
 }
 
+// -----------------------------
+// Euclidean distance function
+// -----------------------------
 double euclidean_distance(const DataPoint& a, const DataPoint& b) {
     double sum = 0.0;
     for (size_t i = 0; i < a.size(); ++i)
@@ -324,6 +332,9 @@ double euclidean_distance(const DataPoint& a, const DataPoint& b) {
     return std::sqrt(sum);
 }
 
+// -----------------------------
+// Find index of nearest centroid
+// -----------------------------
 size_t closest_centroid(const DataPoint& point, const std::vector<DataPoint>& centroids) {
     double min_dist = std::numeric_limits<double>::max();
     size_t index = 0;
@@ -337,51 +348,67 @@ size_t closest_centroid(const DataPoint& point, const std::vector<DataPoint>& ce
     return index;
 }
 
+// -----------------------------
+// Compute centroid (mean of cluster points)
+// -----------------------------
 DataPoint compute_centroid(const Cluster& cluster) {
     DataPoint centroid(FEATURES, 0.0);
     if (cluster.empty()) return centroid;
+
     for (const auto& point : cluster)
-        centroid += point;
-    return centroid / static_cast<double>(cluster.size());
+        centroid += point;                     // Sum all data points in cluster
+
+    return centroid / static_cast<double>(cluster.size()); // Average each dimension
 }
 
+// -----------------------------
+// Initialize centroids randomly
+// -----------------------------
 std::vector<DataPoint> init_random_centroids(const std::vector<DataPoint>& data, size_t k) {
-    br::random_device rd;  // Seed from system entropy
-    br::mt19937 gen(rd()); // Mersenne Twister RNG
-    br::uniform_int_distribution<> dist(0, data.size() - 1);
+    br::random_device rd;                      // Hardware entropy source
+    br::mt19937 gen(rd());                     // Mersenne Twister engine
+    br::uniform_int_distribution<> dist(0, data.size() - 1); // Random index range
     std::vector<DataPoint> centroids;
     for (size_t i = 0; i < k; ++i)
-        centroids.push_back(data[dist(gen)]);
+        centroids.push_back(data[dist(gen)]);  // Pick random samples as initial centroids
     return centroids;
 }
 
+// -----------------------------
+// K-Means clustering algorithm
+// -----------------------------
 void kmeans(const std::vector<DataPoint>& data, size_t k) {
     auto centroids = init_random_centroids(data, k);
-    std::vector<size_t> assignments(data.size(), 0);
+    std::vector<size_t> assignments(data.size(), 0); // Each data point’s assigned cluster
 
     for (size_t iter = 0; iter < MAX_ITER; ++iter) {
         bool changed = false;
-        std::vector<Cluster> clusters(k);
+        std::vector<Cluster> clusters(k);      // One cluster per centroid
 
+        // Step 1: Assign each point to the closest centroid
         for (size_t i = 0; i < data.size(); ++i) {
             size_t idx = closest_centroid(data[i], centroids);
             if (idx != assignments[i]) {
-                changed = true;
+                changed = true;                // Track if any point changed cluster
                 assignments[i] = idx;
             }
             clusters[idx].push_back(data[i]);
         }
 
+        // Stop early if clusters no longer change
         if (!changed) {
             std::cout << "\nConverged after " << iter << " iterations.\n";
             break;
         }
 
+        // Step 2: Recompute centroids as cluster means
         for (size_t i = 0; i < k; ++i)
             centroids[i] = compute_centroid(clusters[i]);
     }
 
+    // -----------------------------
     // Output cluster summaries
+    // -----------------------------
     for (size_t i = 0; i < k; ++i) {
         std::cout << "Cluster " << i + 1 << ": "
             << std::count(assignments.begin(), assignments.end(), i)
@@ -389,15 +416,20 @@ void kmeans(const std::vector<DataPoint>& data, size_t k) {
     }
 }
 
+// -----------------------------
+// Main program
+// -----------------------------
 int main() {
     try {
-
-        // Enter the path to your copy of the Iris data
-        auto data = load_iris_csv("<path>/iris.csv");
+        // Load the Iris dataset (CSV path required)
+        auto data = load_iris_csv("<path>\\iris.csv");
         std::cout << "Loaded " << data.size() << " samples.\n";
+
+        // Run K-Means clustering
         kmeans(data, K);
     }
     catch (const std::exception& e) {
+        // Handle file or numeric parsing errors gracefully
         std::cerr << "Error: " << e.what() << "\n";
         return 1;
     }
