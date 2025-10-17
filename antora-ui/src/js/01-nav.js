@@ -89,7 +89,7 @@
       return
     }
     if (navItem === currentPageItem) return
-    find(menuPanel, '.nav-item.is-active').forEach(function (el) {
+    find(menuPanel, '.is-active, .is-current-path, .is-current-page').forEach(function (el) {
       el.classList.remove('is-active', 'is-current-path', 'is-current-page')
     })
     navItem.classList.add('is-current-page')
@@ -107,7 +107,7 @@
     var ancestorClasses
     var ancestor = navItem.parentNode
     while (!(ancestorClasses = ancestor.classList).contains('nav-menu')) {
-      if (ancestor.tagName === 'LI' && ancestorClasses.contains('nav-item')) {
+      if (ancestor.tagName === 'LI') {
         ancestorClasses.add('is-active', 'is-current-path')
       }
       ancestor = ancestor.parentNode
