@@ -20,6 +20,7 @@ This section contains answers to the common questions that new developers to Boo
 * <<Debugging>>
 * <<Dependencies>>
 * <<Documentation>>
+* <<Graphics and Games>>
 * <<ISO C++ Committee Meetings>>
 * <<Libraries>>
 * <<Licensing>>
@@ -544,6 +545,52 @@ The copyright ownership of library documentation remains with the documentation 
 . *Have there ever been efforts to localize not just the documentation but the API calls themselves?*
 +
 Not for the Boost libraries. Microsoft did experiment with localized API calls many years ago, though the project was abandoned as way too complicated, unmaintainable, and not particularly useful.
+
+== Graphics and Games
+
+. *If I wanted to use the Boost libraries in conjunction with a graphics library, to write a 3D game, what graphics library would be most compatible with Boost?*
++
+The following libraries work well with Boost because they don't impose custom build systems or incompatible runtime dependencies — they're just pass:[C++] libraries, and that's exactly Boost's domain.
++
+[cols="1,2,2",stripes=even,options="header",frame=none]
+|===
+| *Graphics Library*   | *Why It's Compatible with Boost* | *Ideal Boost Libraries to Pair*
+| https://github.com/OGRECave[*Ogre3D*]         | Modular, C++03/11 compatible, uses STL-style containers and patterns similar to Boost | boost:filesystem[], boost:smart_ptr[], boost:signals2[], boost:asio[]
+| https://github.com/bkaradzic/bgfx[*bgfx*]           | Minimal dependencies, works well with Boost threading and filesystem    | boost:thread[], boost:lockfree[], boost:system[] 
+| https://magnum.graphics/[*Magnum*]         | Modern, header-only components, great for C++17+ and fits Boost idioms | boost:geometry[], boost:math[], boost:uuid[] 
+| https://github.com/buildaworldnet[*IrrlichtBAW*]    | Easy to integrate with Boost for physics, networking, or file I/O        | boost:filesystem[], boost:serialization[], boost:program_options[] 
+| https://www.vulkan.org/[*Vulkan]* | Boost helps manage complexity: asynchronous loading, configuration, math, logging     | boost:asio[], boost:log[], boost:multi-array[], boost:gil[]
+|===
+
+. *What would be the simplest solution to 3D graphics and Boost working in harmony?*
++
+Probably the https://github.com/OGRECave[**Ogre3D**]  graphics library, working with boost:filesystem[] for asset control and boost:asio[] for networking.
+
+. *What games systems are well matched with Boost libraries?*
++
+Here's how Boost might slot into a 3D game engine:
++
+[cols="1,2,2",stripes=even,options="header",frame=none]
+|===
+| *System*  | *Boost Library*  | *Purpose* 
+| Asset Loading  | boost:filesystem[], boost:iostreams[]         | Cross-platform file handling  
+| Entity Updates | boost:signals2[], boost:variant2[]| Event-driven game logic       
+| Network Multiplayer        | boost:asio[]           | Async client/server or peer/peer communication         
+| Configuration  | boost:program_options[], boost:property_tree[]| Game settings, config files   
+| Logging        | boost:log[], boost:stacktrace[]   | Diagnostics and crash reporting           
+| Physics or AI Math         | boost:numeric/ublas[] , boost:geometry[], boost:random[] | Physics, spatial logic        
+| Texture/Image Manipulation | boost:gil[]| Procedural textures, screenshots          
+| Multithreading | boost:thread[], boost:lockfree[], boost:fiber[]          | Game loop or rendering pipeline parallelism
+|===
+
+. *Are there any graphics libraries that are problematic when combined with Boost libraries?*
++
+Both https://www.learnqt.guide/qt-graphics-view-framework[*Qt*] and https://www.unrealengine.com/en-US[*Unreal Engine*] are heavy frameworks that conflict with Boost's philosophy  - they replace parts of the STL and introduce their own type systems, both of which can cause serious compatibility issues. Also, https://www.thewindowsclub.com/directx-11-download-update-install[*DirectX*] libraries might limit your portability and don't align well with Boost's cross-platform goals.
+
+
+
+
+
 
 [[isocommitteemeetings]]
 == ISO C++ Committee Meetings
