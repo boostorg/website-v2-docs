@@ -23,6 +23,9 @@ boost_at:/doc/libs/1_90_0/[Documentation]
 // ** Framework for incremental calculation, and collection of statistical
 // accumulators, from Eric Niebler.
 
+* boost_phrase:library[OpenMethod,/libs/openmethod]:
+** Open-(multi-)methods in C++17 and above, from Jean-Louis Leroy.
+
 == Updated Libraries
 
 // Example:
