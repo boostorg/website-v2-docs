@@ -41,6 +41,16 @@ boost_at:/doc/libs/1_90_0/[Documentation]
 and `fast_multiblock64`, which results in some performance gains,
 particularly for mixed successful/unsuccessful queries.
 
+* boost_phrase:library[Core,/libs/core/]:
+** The implementation of `BOOST_TEST_THROWS` and `BOOST_TEST_NO_THROW` macros defined in
+   `boost/core/lightweight_test.hpp` has been changed to avoid
+   compiler warnings on some compilers, when the macros are used in `if`/`else` blocks. As
+   a side effect of this change, the semicolon after the macro is now necessary. (boost_gh:pr[core,205])
+** `boost::data` and `boost::size` are now aliases for `std::data` and `std::size`,
+   respectively, when the latter are provided by compiler. This resolves potential ambiguities
+   when both `boost::` and `std::` alternatives are found by the compiler, e.g. as a result
+   of ADL. (boost_gh:pr[core,206])
+
 * boost_phrase:library[DynamicBitset,/libs/dynamic_bitset/]:
 ** Removed max_size_workaround().
 ** Added some missing const qualifiers.
@@ -169,8 +179,15 @@ particularly for mixed successful/unsuccessful queries.
 ** Removed all support for pre-standard iostreams.
 ** Removed a flawed "example" (timing_tests.cpp).
 
+* boost_phrase:library[Filesystem,/libs/filesystem/]:
+** Clear passed `error_code` argument on successful completion of the `permissions` operation.
+   (boost_gh:pr[filesystem,338])
+
 * boost_phrase:library[Flyweight,/libs/flyweight/]:
 ** Fixed compile errors in Clang 19 and later due to https://wg21.link/p0522r0[P0522R0] support.
+
+* boost_phrase:library[Log,/libs/log/]:
+** Fixed a missed optimization in `value_ref` visitation.
 
 == Compilers Tested
 
