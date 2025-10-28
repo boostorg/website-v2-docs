@@ -53,7 +53,7 @@ In order for a review to proceed, a Boost member must volunteer to manage the re
 
 | *Boost 1.87.0 Released* |  - |   Marshall Clow |  December 11, 2024 | https://www.boost.org/users/history/version_1_87_0.html[Notes] 
 
-| SQLite | Klemens Morgenstern | Richard Hodgesn | November 13, 2024 - November 22, 2024 | https://lists.boost.org/Archives/boost/2025/02/259197.php[Indeterminate]
+| SQLite | Klemens Morgenstern | Richard Hodges | November 13, 2024 - November 22, 2024 | https://lists.boost.org/Archives/boost/2025/02/259197.php[Indeterminate]
 
 | MQTT5 | Ivica Siladic | Klemens Morgenstern | October 16, 2024 - October 25, 2024 | https://lists.boost.org/Archives/boost//2024/10/258197.php[Conditionally Accepted] Added in 1.88.0
 
