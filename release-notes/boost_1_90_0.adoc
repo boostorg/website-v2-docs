@@ -41,6 +41,134 @@ boost_at:/doc/libs/1_90_0/[Documentation]
 and `fast_multiblock64`, which results in some performance gains,
 particularly for mixed successful/unsuccessful queries.
 
+* boost_phrase:library[DynamicBitset,/libs/dynamic_bitset/]:
+** Removed max_size_workaround().
+** Added some missing const qualifiers.
+** Increased the test coverage.
+** Also tested std::hash with bitsets having equal underlying vectors.
+** Made the implementation of find_next() consistent with that of find_next_off().
+** Used the typename keyword for the template parameter of minimal_allocator.
+** Assumed locales and std::use_facet() are always available.
+** Copy edited a comment.
+** Parenthesized a macro parameter.
+** Reused nth_bit() in bitset_test::append_block().
+** Improved the resize() tests.
+** Shortened a condition in the tests of max_size().
+** Removed checks on BOOST_HAS_LONG_LONG.
+** Removed two useless comments.
+** Removed some erroneous comments.
+** Improved the tests of operator!=().
+** Improved the flip() tests.
+** Deleted the copy constructor and the copy assignment operator of bit_appender.
+** Added constexpr support when compiling as C++20 or later.
+** Made push_back() more efficient.
+** Updated the description of bit_appender.
+** Added a missing #include directive.
+** Marked pre-C++11 compilers as unusable for the regression tests.
+** Fixed two typos in two comments.
+** Updated a comment about library issue 303.
+** Added two missing const qualifiers.
+** Avoided a redundant first != last check for append< BlockInputIterator >() with input iterators.
+** Simplified the implementation of all().
+** Removed a reference to a removed comment.
+** Fixed a few documentation glitches.
+** Made the constructor from basic_string explicit.
+** Fixed an error in the documentation of operator==().
+** Removed the dependency on core/allocator_access.hpp.
+** Made the max_size() tests a bit more meaningful.
+** Added a missing comment.
+** Added push_front() and pop_front().
+** Removed all uses of BOOST_NO_CXX11_RVALUE_REFERENCES.
+** Made the descriptions of the preconditions of the three "from string" constructors more precise.
+** Added a constructor from basic_string_view in C++17 or later.
+** Added a constructor from const CharT * (pointer to C-style string).
+** Removed a duplicated Tr::eq( c, one ) test in init_from_string().
+** Replaced all uses of boost::move().
+** Actually tested the move constructor in the move constructor tests.
+** Replaced a #include of a deprecated include file.
+** Added missing const qualifiers.
+** Made lowest_bit() more efficient.
+** Fixed a misleading variable name.
+** Removed BOOST_STATIC_ASSERT() and BOOST_STATIC_CONSTANT().
+** Asserted that Block is the same type as AllocatorOrContainer::value_type.
+** Made pop_back() more efficient.
+** Added C++20 iterators.
+** Allowed choosing the underlying container type.
+** Added find_first_off( size_type ) and find_next_off( size_type ).
+** Removed repetition of the condition to specialize std::hash.
+** Supported CMake root mode.
+** Ensured all #includes are at the top of the source file.
+** Documented our support for std::hash.
+** Reworded a comment using singular they.
+** Documented that max_size() doesn't emit exceptions.
+** Used `noexcept` instead of `BOOST_NOEXCEPT`.
+** Fixed a typo ("slighly") in a documentation comment.
+** Removed a spurious comma in a documentation comment.
+** Used the same parameter name for the two overloads of at().
+** Added a missing const qualifier.
+** Fixed an error in the documentation of resize().
+** Worked around some glitches from the MrDocs parser.
+** Documented our overload of hash_value().
+** Fixed two typos in the documentation comments.
+** Documented many function parameters and some return values.
+** Used the same parameter names in the two declarations of boost::swap().
+** Simplified a redundant assert condition.
+** Changed for-statements to always use braces, as well.
+** Left `inline` to the compiler.
+** Changed the stream inserter to set badbit if an exception is thrown during output.
+** Removed two erroneous references to the standard.
+** Moved a few includes to where they are actually used.
+** Changed if-statements to always use braces.
+** Fixed a typo in the documentation of operator>>=().
+** Added a few links to the reference in the documentation index.
+** Added doc/package.json and doc/package-lock.json.
+** Excluded old, failing versions of Clang and GCC from CI.
+** Added documentation build in the CI workflow.
+** Implemented Boost.CI 2025.07 reusable workflow.
+** Made the stream extractor rethrow any exception coming from the underlying vector.
+** Deleted unary operator&() for dynamic_bitset::reference.
+** Removed semicolons after "BOOST_RETHROW".
+** Removed an unnecessary constructor definition.
+** Removed an unnecessary implementation detail.
+** Added a definition for the copy constructor of dynamic_bitset::reference.
+** Made scoped_temp_file non-copyable, as it should.
+** Removed a nonsensical typedef.
+** Removed use of lowerCamelCase for template type parameters.
+** Copy edited a comment.
+** Removed a few unneeded permission notices.
+** Ported the documentation to MrDocs and Antora.
+** Reformatted all the C++ code (with ClangFormat).
+** Added a ClangFormat configuration file.
+** Moved all the function definitions to a separate file.
+** Leveraged core::popcount() in the implementation of count().
+** Fixed some inconsistent placement of const qualifiers.
+** Added an assert on the precondition to pop_back().
+** Made the swap() functions noexcept.
+** Removed a misleading comment.
+** Removed a redundant assertion.
+** Removed a top-level const qualifier for a function parameter.
+** Added a missing const qualifier in a test function.
+** Used BOOST_TEST(), not assert(), for test cases.
+** Removed misuse of the term "precondition" in the documentation.
+** Removed a naive comment.
+** Replaced the references to the SGI documentation.
+** Removed inconsistent uses of title case.
+** Removed trailing whitespace.
+** Removed a tab character in a test file.
+** Copy edited the readme.
+** Removed an unused, junk function template.
+** Consistently used BOOST_ASSERT() in the implementation.
+** Removed a spurious #undef directive.
+** Declared some internal details as private.
+** Removed some redundant access specifiers.
+** Removed outdated workarounds.
+** Removed a nonsensical usage of boost::addressof().
+** Fixed the initial description in the documentation.
+** Fixed the metadata in libraries.json.
+** Cleaned up all the #include sections.
+** Removed all support for pre-standard iostreams.
+** Removed a flawed "example" (timing_tests.cpp).
+
 * boost_phrase:library[Flyweight,/libs/flyweight/]:
 ** Fixed compile errors in Clang 19 and later due to https://wg21.link/p0522r0[P0522R0] support.
 
