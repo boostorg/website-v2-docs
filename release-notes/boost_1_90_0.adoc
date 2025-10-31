@@ -81,6 +81,32 @@ particularly for mixed successful/unsuccessful queries.
 ** Added tests to guarantee compatibility with Clang versions up to 20,
    and GCC versions up to 15.
 
+* boost_phrase:library[Parser,/libs/parser/]:
+** Fixed ill-formedness when using move-only callables with closures
+   (boost_gh:pr[parser,284])
+** Fix wonky `const`-incompatibility in `GlobalState` parser template params
+   (boost_gh:issue[parser,250]).
+** Fix ill-formedness in some cases when using the permutation parser
+   (boost_gh:issue[parser,268]).
+** Fixed an error in sequence parsing that could cause some attributes to be
+   overwritten by later parsers in a sequence (boost_gh:issue[parser,279]).
+** Fix the handling of opt-parsers that could leave a `std::optional`
+   attribute containing a value even though the parser that produced it
+   failed (boost_gh:issue[parser,279] and boost_gh:issue[parser,285]).
+** Multiple runtime optimizations (boost_gh:issue[parser,245],
+   boost_gh:pr[parser,254], boost_gh:pr[parser,255], boost_gh:pr[parser,256]).
+** A modest compile-time and code size optimization
+   (boost_gh:issue[parser,250]).
+** Make `transform` `constexpr` (boost_gh:pr[parser,275]).      
+** Move-versus-forward warning mitigation (boost_gh:issue[parser,272]).
+** Correct the documentation for the attribute type of the `if_` directive
+   (boost_gh:issue[parser,278]).
+** Correct many, many typos in the docs (boost_gh:pr[parser,271]).
+
+* boost_phrase:library[STLInterfaces,/libs/stl_interfaces/]:
+** Fixed ill-formedness with GCC 14 (boost_gh:pr[stl_interfaces,80]).
+** Fixed ill-formedness when using move-only callables with closures.
+
 == Compilers Tested
 
 // Edit this section as appropriate
