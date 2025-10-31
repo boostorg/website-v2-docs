@@ -74,6 +74,13 @@ particularly for mixed successful/unsuccessful queries.
 * boost_phrase:library[Log,/libs/log/]:
 ** Fixed a missed optimization in `value_ref` visitation.
 
+* boost_phrase:library[MySQL,/libs/mysql/]:
+** Deprecated support for Clang versions older than 4.0. These compilers might still work,
+   but they won't be actively tested in CI.
+** Added tests to guarantee compatibility with MySQL 9.x.
+** Added tests to guarantee compatibility with Clang versions up to 20,
+   and GCC versions up to 15.
+
 == Compilers Tested
 
 // Edit this section as appropriate
