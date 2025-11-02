@@ -142,6 +142,11 @@ particularly for mixed successful/unsuccessful queries.
 ** Fixed ill-formedness with GCC 14 (boost_gh:pr[stl_interfaces,80]).
 ** Fixed ill-formedness when using move-only callables with closures.
 
+* boost_phrase:library[Uuid,/libs/uuid/]:
+** `string_generator` is now `constexpr` on {cpp}14 and higher.
+** Added header `boost/uuid/constants.hpp`.
+** Renamed `boost/uuid/uuid_generators.hpp` to `boost/uuid/generators.hpp`. The old name is retained for compatibility.
+
 == Compilers Tested
 
 // Edit this section as appropriate
