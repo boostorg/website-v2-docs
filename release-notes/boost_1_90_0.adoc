@@ -88,6 +88,9 @@ particularly for mixed successful/unsuccessful queries.
 * boost_phrase:library[Log,/libs/log/]:
 ** Fixed a missed optimization in `value_ref` visitation.
 
+* boost_phrase:library[Mp11,/libs/mp11/]:
+** Updated `mp_reverse_fold` to work on fixed size lists
+
 * boost_phrase:library[MySQL,/libs/mysql/]:
 ** Deprecated support for Clang versions older than 4.0. These compilers might still work,
    but they won't be actively tested in CI.
