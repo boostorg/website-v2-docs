@@ -147,6 +147,10 @@ particularly for mixed successful/unsuccessful queries.
 ** Added header `boost/uuid/constants.hpp`.
 ** Renamed `boost/uuid/uuid_generators.hpp` to `boost/uuid/generators.hpp`. The old name is retained for compatibility.
 
+* boost_phrase:library[Variant2,/libs/variant2/]:
+** More functions have been marked as `constexpr`, including `~variant`.
+   This didn't matter before {cpp}20, but does now.
+
 == Compilers Tested
 
 // Edit this section as appropriate
