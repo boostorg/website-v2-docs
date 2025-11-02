@@ -35,6 +35,16 @@ boost_at:/doc/libs/1_90_0/[Documentation]
 // ** Conform to `std::pointer_traits` requirements (boost_gh:pr[interprocess,32]).
 // ** Fixed `named_condition_any` fails to notify (boost_gh:issue[interprocess,62]).
 
+* boost_phrase:library[Beast,/libs/beast/]:
+** `http::parser` rejects non-standard trailer fields by default.
+** `http::basic_parser` uses a dedicated callback for trailer fields.
+** `http::field` constants are updated.
+** Fixed allocator move/copy assignment in `flat_buffer` and `multi_buffer`.
+** Fixed websocket permessage-deflate error on partial message consumption.
+** `http::buffer_body` ignores empty chunks.
+** Added `http::basic_fields::contains` member function.
+** Removed dependency on Boost.Preprocessor and Boost.StaticAssert.
+
 * boost_phrase:library[Bloom,/libs/bloom/]:
 ** Added bulk-mode insertion and lookup for increased performance.
 ** Made lookup implementation branchless for `block`, `fast_multiblock32`
