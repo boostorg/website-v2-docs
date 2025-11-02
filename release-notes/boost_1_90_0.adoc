@@ -51,6 +51,10 @@ boost_at:/doc/libs/1_90_0/[Documentation]
 and `fast_multiblock64`, which results in some performance gains,
 particularly for mixed successful/unsuccessful queries.
 
+* boost_phrase:library[Compat,/libs/compat/]:
+** Added `to_underlying.hpp` (contributed by Braden Ganetsky.)
+** Extracted `nontype_t` to its own public header `nontype.hpp` and added `nontype`.
+
 * boost_phrase:library[Core,/libs/core/]:
 ** The implementation of `BOOST_TEST_THROWS` and `BOOST_TEST_NO_THROW` macros defined in
    `boost/core/lightweight_test.hpp` has been changed to avoid
