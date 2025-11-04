@@ -55,6 +55,32 @@ particularly for mixed successful/unsuccessful queries.
 ** Added `to_underlying.hpp` (contributed by Braden Ganetsky.)
 ** Extracted `nontype_t` to its own public header `nontype.hpp` and added `nontype`.
 
+* boost_phrase:library[Container,/libs/container/]:
+** Reimplemented `deque`. The original implementation was based on
+   the SGI's original data structure (similar to libstdc++). Main changes:
+*** `sizeof(deque)` was 10 words, now is 4 words. Probably the lightest implementation around.
+*** `sizeof(deque::iterator)` was 4 words, now is is 2 words (similar to libc++ and MSVC).)
+*** Several internal algorithms were reimplemented to speed up the segmented nature of deque.
+*** Defaults were slightly changed, 64 bit platforms now use 1024 byte blocks by default instead of classic SGI 512 byte blocks.
+*** The new implementation eases further deque-like variations and optimizations in the future.
+
+** Fixed bugs/issues:
+*** https://github.com/boostorg/container/issues/248[GitHub #248: "flat_map slow insertion introduced in boost-1.80.0"].
+*** https://github.com/boostorg/container/issues/254[GitHub #254: "C++20 std::erase_if"].
+*** https://github.com/boostorg/container/issues/293/[GitHub #293: "UBSAN reports unaligned access error"].
+*** https://github.com/boostorg/container/pull/294[GitHub #294: "CMake: Add option to use header-only Boost::container"].
+*** https://github.com/boostorg/container/issues/300[GitHub #300: "Warnings when building with Clang 20"].
+*** https://github.com/boostorg/container/issues/304[GitHub #304: "Usage of boost::container::small_vector with custom allocator"].
+*** https://github.com/boostorg/container/pull/305[GitHub #305: "Warnings with -Wstrict-prototypes"].
+*** https://github.com/boostorg/container/pull/307[GitHub #307: "Fix all instances of MSVC warning C4146 (unsigned negation)"].
+*** https://github.com/boostorg/container/issues/309[GitHub #309: "Performance regression of boost::container::static_vector introduced in boost v1.86"].
+*** https://github.com/boostorg/container/issues/306[GitHub #306: "new_allocator.hpp error: '__cpp_sized_deallocation' is not defined, evaluates to 0 [-Werror,-Wundef]"].
+*** https://github.com/boostorg/container/issues/310[GitHub #310: "flat_map: Mention correct type in documentation of emplace and emplace_hint"].
+*** https://github.com/boostorg/container/issues/312[GitHub #312: "flat_map std::allocator::is_always_equal is deprecated"].
+*** https://github.com/boostorg/container/pull/317/[GitHub #317: "Partial revert of changes for Issue #209 - compiler warnings"].
+*** https://github.com/boostorg/container/pull/321/[GitHub #321: "devector does not work with pmr allocators"].
+
+
 * boost_phrase:library[Core,/libs/core/]:
 ** The implementation of `BOOST_TEST_THROWS` and `BOOST_TEST_NO_THROW` macros defined in
    `boost/core/lightweight_test.hpp` has been changed to avoid
@@ -84,6 +110,12 @@ particularly for mixed successful/unsuccessful queries.
 
 * boost_phrase:library[Flyweight,/libs/flyweight/]:
 ** Fixed compile errors in Clang 19 and later due to https://wg21.link/p0522r0[P0522R0] support.
+
+* boost_phrase:library[Interprocess,/libs/interprocess/]:
+** Minor documentation fixes.
+**  Fixed bugs:
+*** https://github.com/boostorg/interprocess/pull/245[GitHub #245: "Fix UBSan runtime error (load of 'boost::interprocess::mode_t')"].
+*** https://github.com/boostorg/interprocess/pull/269[GitHub #269: "Minor documentation fixes and template parameter renames"].
 
 * boost_phrase:library[JSON,/libs/json/]:
 ** Removed dependencies on Boost.Align and Boost.StaticAssert.
