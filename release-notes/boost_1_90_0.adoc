@@ -120,6 +120,63 @@ particularly for mixed successful/unsuccessful queries.
    (boost_gh:issue[parser,278]).
 ** Correct many, many typos in the docs (boost_gh:pr[parser,271]).
 
+* boost_phrase:library[Redis,/libs/redis/]:
+** Important changes to *cancellation*:
+*** Improved the per-operation support in `async_exec()`, and added
+    support for `asio::cancel_after`. Requests can now
+    be cancelled at any point, and cancellations don't interfere with other
+    requests anyhow.
+    Pull requests boost_gh:pr[redis,310] and boost_gh:issue[redis,226].
+*** Deprecated the `cancel_on_connection_lost` and `cancel_if_not_connected`
+    flags in `request::config`.
+    To limit the time span that `async_exec`
+    might take, use `asio::cancel_after`, instead.
+    `cancel_on_connection_lost` default has been changed to `false`.
+    Pull requests boost_gh:pr[redis,329] and boost_gh:pr[redis,334].
+*** Deprecated calling `cancel` with `operation::resolve`, `connect`,
+    `ssl_handshake`, `reconnection` and `health_check`.
+    Users should employ `cancel(operation::run)`, instead.
+    Pull request boost_gh:pr[redis,321].
+*** Added support for per-operation cancellation in `async_run()`.
+    Issue boost_gh:issue[redis,319].
+** Added support for *custom setup requests* using `config::setup`.
+   When setting these fields, users can
+   replace the library-generated `HELLO` request by any other arbitrary request.
+   Issue boost_gh:issue[redis,302] and pull request boost_gh:pr[redis,303]. +
+** Deprecated `request::config::hello_with_priority`.
+   If you need to execute a request before any other, use `config::setup`, instead.
+   Pull request boost_gh:pr[redis,305].
+** *Valkey* long-term support: we guarantee Valkey compatibility
+   starting with this release.
+   Issue boost_gh:issue[redis,296].
+** Added a `request::append()` function, to concatenate request objects.
+   Issue boost_gh:issue[redis,341].
+** The health checker algorithm has been redesigned to avoid
+   false positives under heavy loads. `PING` commands are now
+   only issued when the connection is idle, instead of periodically.
+   Issue boost_gh:issue[redis,104].
+** Added `config::read_buffer_append_size`, which allows to control
+   the expansion of the connection's read buffer.
+   Pull request boost_gh:pr[redis,283].
+** Added `usage::bytes_rotated`, which measures data copying when
+   reading and parsing data from the server.
+   Pull request boost_gh:pr[redis,311].
+** Bug fixes:
+*** Fixed a bug causing an exception to be thrown when parsing
+    a response that contains an intermediate error into a `generic_response`.
+    Issue boost_gh:issue[redis,287].
+*** Fixed a number of race conditions in the `cancel()` function
+    of `connection` and `basic_connection` that could cause
+    cancellations to be ignored.
+    Issue boost_gh:issue[redis,318].
+*** Users with an empty password but a non-default username are
+    now correctly authenticated. Issue boost_gh:issue[redis,298].
+*** Fixed a problem that could cause an error during `HELLO`
+    to make subsequent `HELLO` attempts during reconnection to fail.
+    Issue boost_gh:issue[redis,290].
+*** Errors during `HELLO` are now correctly logged.
+    Issue boost_gh:issue[redis,297].
+
 * boost_phrase:library[SmartPtr,/libs/smart_ptr/]:
 ** The functionality enabled by the deprecated macros
    `BOOST_SP_ENABLE_DEBUG_HOOKS`, `BOOST_SP_USE_STD_ALLOCATOR`,
