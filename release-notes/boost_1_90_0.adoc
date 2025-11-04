@@ -85,6 +85,10 @@ particularly for mixed successful/unsuccessful queries.
 * boost_phrase:library[Flyweight,/libs/flyweight/]:
 ** Fixed compile errors in Clang 19 and later due to https://wg21.link/p0522r0[P0522R0] support.
 
+* boost_phrase:library[JSON,/libs/json/]:
+** Removed dependencies on Boost.Align and Boost.StaticAssert.
+** Switched to a faster hashing algorithm.
+
 * boost_phrase:library[Log,/libs/log/]:
 ** Fixed a missed optimization in `value_ref` visitation.
 
