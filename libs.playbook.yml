@@ -72,6 +72,8 @@ asciidoc:
 # Libraries that support Antora should be included here
 content:
   sources:
+    - url: https://github.com/boostorg/msm
+      start_path: doc
     - url: https://github.com/boostorg/url
       start_path: doc
 
