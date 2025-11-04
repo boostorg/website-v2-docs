@@ -128,8 +128,10 @@ particularly for mixed successful/unsuccessful queries.
 ** Updated `mp_reverse_fold` to work on fixed size lists
 
 * boost_phrase:library[MSM,/libs/msm/]:
-** Added a new back-end `backmp11` offering heavily reduced compile times and more (requires {cpp}17)
-** Fixed bug: https://github.com/boostorg/msm/issues/87[GitHub #87: "boost::any stopped working as Kleene event in 1.86 in boost::msm"]
+** Refurbished and updated the documentation to use Antora.
+** Added a new back-end `backmp11` offering heavily reduced compile times, a refactored API and a couple of new features.
+   Requires {cpp}17, more details are available in the documentation.
+** Fixed bug https://github.com/boostorg/msm/issues/87[GitHub #87: "boost::any stopped working as Kleene event in 1.86 in boost::msm"].
 
 * boost_phrase:library[MySQL,/libs/mysql/]:
 ** Deprecated support for Clang versions older than 4.0. These compilers might still work,
