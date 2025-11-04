@@ -69,7 +69,7 @@ particularly for mixed successful/unsuccessful queries.
 *** https://github.com/boostorg/container/issues/254[GitHub #254: "C++20 std::erase_if"].
 *** https://github.com/boostorg/container/issues/293/[GitHub #293: "UBSAN reports unaligned access error"].
 *** https://github.com/boostorg/container/pull/294[GitHub #294: "CMake: Add option to use header-only Boost::container"].
-*** https://github.com/boostorg/container/issues/300[GitHub #300: "Warnings when building with clang-20"].
+*** https://github.com/boostorg/container/issues/300[GitHub #300: "Warnings when building with Clang 20"].
 *** https://github.com/boostorg/container/issues/304[GitHub #304: "Usage of boost::container::small_vector with custom allocator"].
 *** https://github.com/boostorg/container/pull/305[GitHub #305: "Warnings with -Wstrict-prototypes"].
 *** https://github.com/boostorg/container/pull/307[GitHub #307: "Fix all instances of MSVC warning C4146 (unsigned negation)"].
