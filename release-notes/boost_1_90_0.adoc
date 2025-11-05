@@ -241,6 +241,15 @@ particularly for mixed successful/unsuccessful queries.
 ** Fixed ill-formedness with GCC 14 (boost_gh:pr[stl_interfaces,80]).
 ** Fixed ill-formedness when using move-only callables with closures.
 
+* boost_phrase:library[URL,/libs/url/]:
+** `segments_view` and `segments_encoded_view` gained constant-time iterator-based subview constructors.
+** Added zone-id setters (e.g. for IPv6 link-local addresses).
+** Host setters now accept/propagate zone-id.
+** Fixed: `resolve` now replicates the reference fragment in all cases (boost_gh:issue[url,920]).
+** Fixed: `encoded_host_address` assertions account for zone-id.
+** Refactor: replaced `BOOST_STATIC_ASSERT` with `BOOST_CORE_STATIC_ASSERT` (boost_gh:issue[url,934]).
+** Refactor: preserved absolute semantics for segment subviews (boost_gh:issue[url,939]).
+
 * boost_phrase:library[Uuid,/libs/uuid/]:
 ** `string_generator` is now `constexpr` on {cpp}14 and higher.
 ** Added header `boost/uuid/constants.hpp`.
