@@ -195,6 +195,14 @@ Note:: The Bloom filter is named after its inventor, Burton Howard Bloom, who de
 [[h]]
 == H
 
+[[handlebars]]
+*Handlebars* : https://github.com/jbboehr/handlebars.c[Handlebars] is a templating language used to generate text (HTML, JSON, config files, source code, etc.) by combining a template with data.
+You write placeholders like `{{name}}` or conditionals like `{{#if active}}`, and the engine replaces them with values at runtime. The original Handlebars was a JavaScript project, though developers have found the pass:[C++] port useful for code generation, report and config file creation, embedding HTML or JSON templates, and web server frameworks that render dynamic pages.
+
+The Handlebars concept works well with boost:json[] as it integrates easily with data-driven templates, boost:property-tree[] to represent hierarchical data, boost:spirit[] to parse templates into an internal format, boost:filesystem[] to load and organize templates from disk, among many other use-cases. More advanced work might involve boost:beast[] to render dynamic web pages, boost:process[] to generate config files for subprocesses, and boost:program_options[] to feed runtime configuration into templates.
+
+<<mustache, Mustache>> is the lightweight, portable ancestor of Handlebars.
+
 [[hash-functions]]
 *Hash Functions* : A hash function takes a string and converts it into a number. Often used in fraud detection to store details such as: email addresses (normalized/lowered), credit card fingerprints (not full PANs as this might expose sensitive data, usually the last four digits or a _tokenized_ version of the numbers), device IDs, IP and user-agent strings, phone numbers (E.164 format), and usernames / login handles. Once hashed, these numbers can be stored in a database and searched for patterns to create <<bloom-filter,Bloom Filters>> (to detect fake accounts) as well as searched on a per-item basis. Commonly used hash algorithms include:
 
@@ -266,7 +274,7 @@ Note:: For uses of hash functions in Boost libraries, refer to boost:hash2[], an
 
 *IWBNI* : _It Would Be Nice If_ - a feature request is a dream
 
-*IWYU* : https://include-what-you-use.org/[include-what-you-use] - a tool for use with clang to analyze `#includes` in C and pass:[C++] source files.
+*IWYU* : https://include-what-you-use.org/[include-what-you-use] - a tool for use with Clang to analyze `#includes` in C and pass:[C++] source files.
 
 == J
 
@@ -336,6 +344,11 @@ Note:: For uses of hash functions in Boost libraries, refer to boost:hash2[], an
 * *Single Dispatch* is the most common form of dispatch in pass:[C++] and many languages — it means that the method or function to call is determined only by the type of the first (usually the calling) object at runtime, typically using virtual functions. For example, when you call `shape->draw()`, the `draw()` method selected depends only on the runtime type of shape, not on the types of any other arguments.
 
 * *Visitor Pattern* : a design pattern that lets you separate an algorithm from the objects it operates on — by letting you “visit” objects and perform operations on them without modifying their classes. It allows you to add new operations to a group of existing object types without changing those types, by defining a `Visitor` class that implements the operation for each type. It's commonly used to achieve double dispatch and to apply operations across complex object structures like trees or <<ast, ASTs>>.
+
+[[mustache]]
+*Mustache* : https://github.com/kainjow/Mustache[Mustache] is a logic-less templating language, originally designed for generating text files (like HTML, JSON, config files). It's called "logic-less" because it avoids embedded control structures or code. That makes it ideal for clean separation between code and output, template portability across languages (same Mustache template can work in pass:[C++], Python, or JavaScript), and easy embedding in low-level applications.
+
+Mustache is a similar but simpler alternative to <<handlebars, Handlebars>>.
 
 *MVP* : Model-View-Presenter
 
