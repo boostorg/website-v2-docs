@@ -81,6 +81,10 @@ particularly for mixed successful/unsuccessful queries.
 *** https://github.com/boostorg/container/pull/321/[GitHub #321: "devector does not work with pmr allocators"].
 
 
+* boost_phrase:library[Conversion,/libs/conversion/]:
+** Dropped dependency on Boost.SmartPtr.
+
+
 * boost_phrase:library[Core,/libs/core/]:
 ** The implementation of `BOOST_TEST_THROWS` and `BOOST_TEST_NO_THROW` macros defined in
    `boost/core/lightweight_test.hpp` has been changed to avoid
@@ -90,6 +94,12 @@ particularly for mixed successful/unsuccessful queries.
    respectively, when the latter are provided by compiler. This resolves potential ambiguities
    when both `boost::` and `std::` alternatives are found by the compiler, e.g. as a result
    of ADL. (boost_gh:pr[core,206])
+
+* boost_phrase:library[DLL,/libs/dll/]:
+** Fixed issues with `std::error_code` being passed to `boost::system::error_code&`. Many thanks
+   to https://github.com/0-wiz-0[Thomas Klausner] for the fix (boost_gh:pr[dll,106]).
+** Fixed install with CMake. Many thanks to https://github.com/yurybura[Yury Bura] for the fix (boost_gh:pr[dll,103]).
+** Fixed `size` variable shadowing.
 
 * boost_phrase:library[DynamicBitset,/libs/dynamic_bitset/]:
 ** Added C++20 iterators.
@@ -120,6 +130,18 @@ particularly for mixed successful/unsuccessful queries.
 * boost_phrase:library[JSON,/libs/json/]:
 ** Removed dependencies on Boost.Align and Boost.StaticAssert.
 ** Switched to a faster hashing algorithm.
+
+* boost_phrase:library[LexicalCast,/libs/lexical_cast/]:
+** More tests and fixes for floating-point special value conversions to integers and bool.
+   Fixes compiler warning C4804 when lexical casting from `float` to `bool`.
+** Dropped dependency to Boost.TypeTraits. Many thanks to https://github.com/Romain-Geissler-1A[Romain Geissler]
+   for implementing the major part of the work (boost_gh:pr[lexical_cast,87]).
+** Switch from implicit to explicit type conversion to avoid compiler warnings. Many thanks to
+   https://github.com/bmagistro[bmagistro] for the PR (boost_gh:pr[lexical_cast,85]).
+** Fixed mistakes in documentation. Many thanks to https://github.com/ivanpanch[ivanpanch]
+   for the PR (boost_gh:pr[lexical_cast,86]).
+** Fixed regression in `unsigned short` to `wstring` casting without `wchar_t` builtin type.
+
 
 * boost_phrase:library[Log,/libs/log/]:
 ** Fixed a missed optimization in `value_ref` visitation.
@@ -161,6 +183,17 @@ particularly for mixed successful/unsuccessful queries.
 ** Correct the documentation for the attribute type of the `if_` directive
    (boost_gh:issue[parser,278]).
 ** Correct many, many typos in the docs (boost_gh:pr[parser,271]).
+
+
+* boost_phrase:library[PFR,/libs/pfr/]:
+** Added an implementation based on C++26 destructuring into a pack, that
+   *fixes majority of known limitations* of the library and avoids excessive template
+   instantinations. The new implementation
+   can be explicitly enabled/disabled by a new `BOOST_PFR_USE_CPP26` macro. Many thanks to
+   https://github.com/jcelerier[Jean-Michaël Celerier] for the PR (boost_gh:pr[pfr,194]).
+** Multiple fixes to CMake. Many thanks to https://github.com/Flamefire[Alexander Grund]
+   for the PRs!
+
 
 * boost_phrase:library[Redis,/libs/redis/]:
 ** Important changes to *cancellation*:
@@ -237,9 +270,20 @@ particularly for mixed successful/unsuccessful queries.
    longer supported; a conforming {cpp}11 `<mutex>` is now required.
 ** Some unused headers in `boost/smart_ptr/detail/` have been removed.
 
+* boost_phrase:library[Stacktrace,/libs/stacktrace/]:
+** Fixed missing include. Thanks to https://github.com/orgads[Orgad Shaneh]
+   for the fix!
+** Fixed URL in `libbacktrace_impls.hpp`, thanks to
+   https://github.com/jwakely[Jonathan Wakely].
+
 * boost_phrase:library[STLInterfaces,/libs/stl_interfaces/]:
 ** Fixed ill-formedness with GCC 14 (boost_gh:pr[stl_interfaces,80]).
 ** Fixed ill-formedness when using move-only callables with closures.
+
+* boost_phrase:library[TypeIndex,/libs/type_index/]:
+** Dropped dependency on Boost.Core.
+** Run all the tests in CMake too, Many thanks to https://github.com/Flamefire[Alexander Grund]
+   for some fixes and help.
 
 * boost_phrase:library[URL,/libs/url/]:
 ** `segments_view` and `segments_encoded_view` gained constant-time iterator-based subview constructors.
