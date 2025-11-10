@@ -237,6 +237,11 @@ particularly for mixed successful/unsuccessful queries.
    longer supported; a conforming {cpp}11 `<mutex>` is now required.
 ** Some unused headers in `boost/smart_ptr/detail/` have been removed.
 
+* boost_phrase:library[StaticString,/libs/static_string/]:
+** Aligned `to_static_[w]string()` with `std::to_[w]string()` in C++26.
+** Removed usage of an additional buffer in `to_static_[w]string()`.
+** Added `resize_and_overwrite()`.
+
 * boost_phrase:library[STLInterfaces,/libs/stl_interfaces/]:
 ** Fixed ill-formedness with GCC 14 (boost_gh:pr[stl_interfaces,80]).
 ** Fixed ill-formedness when using move-only callables with closures.
