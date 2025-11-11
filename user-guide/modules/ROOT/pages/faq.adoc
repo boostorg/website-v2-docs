@@ -35,6 +35,7 @@ This section contains answers to the common questions that new developers to Boo
 * <<Smart Pointers>>
 * <<Standard Library>>
 * <<Templates>>
+* <<Types>>
 * <<See Also>>
 
 Note:: The code samples in these topics was written and tested using Microsoft Visual Studio (Visual C++ 2022, Console App project) with Boost version 1.88.0.
@@ -1799,6 +1800,109 @@ alexi alice bob charlie dave pete vanessa
 ----
 
 Note:: This use of templates is given as an example only, the `std::sort`, `std::stable_sort`, and `std::spreadsort` are super efficient and should be used whenever possible. However, if you have a special process you would like to apply to different types of ranges, this templated approach may work well for you. For specialized sorts, refer to boost:sort[].
+
+== Types
+
+. *The Boost Libraries have been criticized for using Boost-specific types, do all the libraries use Boost types or do some use standard integers, floats, and strings to name a few of the most-used types?*
++
+This question comes up often when people start using Boost seriously. The short answer is "no", not all Boost libraries use Boost-specific types. In fact, many Boost libraries rely primarily on standard types such as `int`, `double`, `std::string`, and `std::vector`. Boost types generally appear only where they add functionality the standard library didn't have at the time — or still doesn't.
++
+Most libraries use standard types, such as: boost:math[], boost:algorithm[], boost:random[], boost:accumulators[], boost:multiprecision[], boost:range[], boost:geometry[], https://www.boost.org/doc/libs/master/doc/html/boost_pfr.html[Boost.PFR], boost:describe[].
++
+A few libraries use minimal specific types, such as boost:system[], boost:program_options[].
++
+The following libraries were introducted _before_ Standard pass:[C++] introduced equivalents: boost:optional[], boost:variant[], boost:function[], boost:any[], boost:filesystem[], boost:smart_ptr[].
++
+In some libraries Boost-specfic types are needed for some issues like portability, allocator support, or async control. Such libraries inlude the popular boost:asio[], and others including boost:coroutine2[], boost:context[], boost:lockfree[].
++
+For the libraries that require meta-types at compile time, these do require mostly Boost-specific types: boost:mp11[], boost:hana[], boost:type-index[], boost:static-assert[].
+
+. *Can you give me some examples of types added to Boost libraries?*
++
+In boost:asio[] the type `boost::asio::context` was added to support a low-level async framework, though does use standard-compatible I/O buffers. In boost:system[], `boost::system::error_code` was added to support location metadata not available in the standard. In boost:optional[] there is the type `boost::optional<T>`, which is now available in the standard library as `std::optional` - but was not available at the time boost:optional[] was released.
+
+. *If I am updating an older version of a codebase, but am not updating the C++ Standard used for that codebase, does it make sense to use Boost libraries?*
++
+Boost libraries will provide you with some version independance. For example `std::shared_ptr` and `std::optional` are not available before the pass:[C++] 11 Standard, using boost:shared_ptr[] and boost:optional[] should provide a robust approach to an update of older code.
+
+. *What are the issues with `std::string` that are addressed by Boost libraries such as Static-String, String-Algo, or String-View?*
++
+The `std::string` is great for general-purpose English or programming string handling, but has limitations in several key areas: performance (it requires frequent heap allocations and copies), immutability/safety (it can be unintentionally modified or shared), internationization (foreign languages), and feature gaps (it lacks certain high-level string algorithms or fixed-capacity behavior). 
++
+For embedded systems, real-time applications, and performance-critical loops consider using boost:static-string[] as it provides a compile-time fixed-capacity string (`boost::static_string<N>`) that eliminates heap allocations.
++
+For multi-language software and UTF-8 processing, consider using boost:locale[] for locale-aware comparisons, formatting, and conversions.
++
+When working with configuration files, command-line tools, log or protocol parsing - or more advanced tasks such as data validation and pattern recognition - consider the https://www.boost.org/doc/libs/1_83_0/doc/html/string_algo.html[Boost.StringAlgo], boost:regex[], boost:xpressive[], or boost:lexical-cast[] libraries. These libraries offer hundreds of algorithms, views, conversions that will avoid the tedious task of reimplementing string utilities.
++
+The boost:utility/doc/html/utility/utilities[Boost.StringView] library has now been superceded by `std::string_view`, available from pass:[C++] 17.
+
+. *Can you show me example code where standard integers and Boost.Multiprecision code work well together?*
++
+The following code shows automatic promotion (`big_int += small_int`), arbitrary precision (`cpp_int` grows as large as is needed), high-precision floating point (`area = high_precision_pi * radius * radius`), and interoperability (`approx_area` conversion):
+
+[source,cpp]
+----
+#include <iostream>
+#include <boost/multiprecision/cpp_int.hpp>
+#include <boost/multiprecision/cpp_dec_float.hpp>
+
+namespace mp = boost::multiprecision;
+
+int main() {
+
+    // --- 1. Standard integer and multiprecision integer ---
+    std::int64_t small_int = 42;
+    mp::cpp_int big_int = 1;
+
+    // Multiply big_int by a large factor
+    for (int i = 0; i < 50; ++i)
+        big_int *= 10; // No overflow — arbitrary precision!
+
+    // Add standard integer directly — implicit promotion works
+    big_int += small_int;
+
+    std::cout << "Big integer (with 42 added): " << big_int << "\n\n";
+
+    // --- 2. Using multiprecision floats with standard numeric types ---
+    mp::cpp_dec_float_50 high_precision_pi = 3.14159265358979323846264338327950288419716939937510;
+    double radius = 2.5;
+
+    // You can mix standard and multiprecision floats seamlessly
+    mp::cpp_dec_float_50 area = high_precision_pi * radius * radius;
+
+    std::cout << std::setprecision(40);
+    std::cout << "Area of circle (high precision): " << area << "\n\n";
+
+    // --- 3. Conversion back to standard types ---
+    // Note: Narrowing conversions can lose precision
+    double approx_area = static_cast<double>(area);
+    std::cout << "Area (as double): " << std::setprecision(16) << approx_area << "\n";
+
+    // --- 4. Interoperation example: sum of large values ---
+    mp::cpp_int total = 0;
+    for (std::int64_t i = 1; i <= 1'000'000; ++i)
+        total += i; // summing using high-precision integer
+
+    std::cout << "\nSum of first 1,000,000 integers: " << total << "\n";
+}
+
+----
+
+Running this code should give you:
+
+[source,text]
+----
+Big integer (with 42 added): 100000000000000000000000000000000000000000000000042
+
+Area of circle (high precision): 19.63495408493620697498727167840115725994
+
+Area (as double): 19.63495408493621
+
+Sum of first 1,000,000 integers: 500000500000
+----
+
+boost:multiprecision[] is designed to seamlessly extend the built-in numeric types, so you can mix `std::int`, `std::uint64_t`, `double`, and multiprecision types freely — the library's operator overloads handle promotion automatically. Typically, in scientific computing (very large floating point numbers) `cpp_dec_float_50` is combined with `double`, and for working with very large integers (say boundary values), combine `cpp_int` with `std::int64_t` or `std::size_t`.
 
 == See Also
 
