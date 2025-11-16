@@ -117,6 +117,8 @@ particularly for mixed successful/unsuccessful queries.
 * boost_phrase:library[Filesystem,/libs/filesystem/]:
 ** Clear passed `error_code` argument on successful completion of the `permissions` operation.
    (boost_gh:pr[filesystem,338])
+** On Windows, added a workaround for `directory_iterator` constructor failing with an "Invalid
+   Signature" error for a Samba 3.0.2 share, when SMB signing is required. (boost_gh:issue[filesystem,334])
 
 * boost_phrase:library[Flyweight,/libs/flyweight/]:
 ** Fixed compile errors in Clang 19 and later due to https://wg21.link/p0522r0[P0522R0] support.
@@ -142,9 +144,13 @@ particularly for mixed successful/unsuccessful queries.
    for the PR (boost_gh:pr[lexical_cast,86]).
 ** Fixed regression in `unsigned short` to `wstring` casting without `wchar_t` builtin type.
 
-
 * boost_phrase:library[Log,/libs/log/]:
 ** Fixed a missed optimization in `value_ref` visitation.
+** Fixed a possible long and useless loop on log file rotation in `text_file_backend`. If the log
+   file name pattern did not include a file counter and the log file size exceeded the `rotation_size` limit,
+   then the sink backend would repeatedly try to open a new log file with a different counter value and end up
+   opening the same file every time. (boost_gh:issue[log,252])
+** Made file size checks more robust against integer overflows in `text_file_backend`.
 
 * boost_phrase:library[Mp11,/libs/mp11/]:
 ** Updated `mp_reverse_fold` to work on fixed size lists
