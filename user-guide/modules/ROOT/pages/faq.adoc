@@ -1840,7 +1840,7 @@ The boost:utility/doc/html/utility/utilities[Boost.StringView] library has now b
 . *Can you show me example code where standard integers and Boost.Multiprecision code work well together?*
 +
 The following code shows automatic promotion (`big_int += small_int`), arbitrary precision (`cpp_int` grows as large as is needed), high-precision floating point (`area = high_precision_pi * radius * radius`), and interoperability (`approx_area` conversion):
-
++
 [source,cpp]
 ----
 #include <iostream>
@@ -1888,9 +1888,9 @@ int main() {
 }
 
 ----
-
++
 Running this code should give you:
-
++
 [source,text]
 ----
 Big integer (with 42 added): 100000000000000000000000000000000000000000000000042
@@ -1901,8 +1901,13 @@ Area (as double): 19.63495408493621
 
 Sum of first 1,000,000 integers: 500000500000
 ----
-
++
 boost:multiprecision[] is designed to seamlessly extend the built-in numeric types, so you can mix `std::int`, `std::uint64_t`, `double`, and multiprecision types freely — the library's operator overloads handle promotion automatically. Typically, in scientific computing (very large floating point numbers) `cpp_dec_float_50` is combined with `double`, and for working with very large integers (say boundary values), combine `cpp_int` with `std::int64_t` or `std::size_t`.
+
+. *I am having trouble with a multi-platfrom project that requires strings in UTF-8 format, but with Windows APIs requiring UTF-16?*
++
+You should conside using boost:nowide[], a library that makes Windows Unicode handling sane! This library provides UTF-8 versions of `fopen`, `std::cout`, as well as file I/O and environmental variables. It also provides the crucial automatic conversion to UTF-16 when calling Windows APIs. You might also find boost:locale[] useful if internationalization is required, boost:static-string[], and the `small_vector` type of boost:container[] for efficient short-string handling.
+
 
 == See Also
 
