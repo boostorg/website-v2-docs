@@ -52,6 +52,9 @@ Where terms apply specifically to one technology, such as _Quantum Computing_ or
 
 *Bikeshedding* or *BS* : _Focusing on trivial issues_
 
+[[binding]]
+*Binding* : The process of associating identifiers (like variables or functions) with values, types, or memory locations — can be static or dynamic. _Static binding_ occurs at compile time (the compiler knows exactly which function to call). _Dynamic binding_ happens at runtime — the decision about which function to call is deferred until the program runs (often using <<vtable, virtual tables>> ).
+
 [[bloom-filter]]
 *Bloom Filter* : A space-efficient, fast, and probabilistic structure that can tell you if an item is _definitely not in a database_ or is _possibly in the database_. For example, say you have a database of bad actors that is used to help prevent fraudulent access to a financial web app. A bloom filter can be used to tell if a new transaction _definitely_ does not come from this set, so proceed normally, or _possibly comes from this set_ in which case a deeper investigation into its validity (a full search of the bad actors) should be carried out. The following diagram shows the flow of control:
 
@@ -189,6 +192,8 @@ Note:: The Bloom filter is named after its inventor, Burton Howard Bloom, who de
 *GHA* : Short for GitHub Actions.
 
 *GIL* : Generic Image Library - boost:gil[] is a library designed for image processing, offering a flexible way to manipulate and process images.
+
+*Grapheme Cluster* : The smallest unit of text that a user _perceives_ as a single character, even though it may actually consist of multiple Unicode code points. This is important to represent languages like Hindi, Thai, Korean, Japanese, and others.
 
 *gRPC* : A high-performance, open-source RPC (Remote Procedure Call) framework developed by Google that uses Protocol Buffers (protobuf) for defining service interfaces and message types. It enables efficient, strongly-typed communication between distributed systems over HTTP/2, supporting features like streaming, authentication, and load balancing. It is a competitor to a point of REST and OpenAPI.
 
@@ -350,6 +355,8 @@ Note:: For uses of hash functions in Boost libraries, refer to boost:hash2[], an
 
 Mustache is a similar but simpler alternative to <<handlebars, Handlebars>>.
 
+*Mutation* : Modifying the state of an object or variable in place (for example, altering a list rather than creating a new one). The opposite of mutation is _immutable_ - once created, the object's value cannot be changed — any modification produces a new object instead.
+
 *MVP* : Model-View-Presenter
 
 == N
@@ -359,6 +366,21 @@ Mustache is a similar but simpler alternative to <<handlebars, Handlebars>>.
 *NIMBY* : _Not In My Back Yard_ - when a programmer doesn't want to deal with a particular issue
 
 *NLL* : Non-Lexical Lifetimes - an NLL <<borrow-checking, borrow checker>> in the https://www.rust-lang.org/[Rust] language that uses a more precise, dataflow-based analysis to determine when a borrow starts and ends, based on the actual usage of the variables. This allows for more flexible and intuitive borrowing rules.
+
+[[normalize]]
+*Normalize* : 
+
+* When working with strings, transforming strings into a canonical form so comparisons work as expected. Used heavily in Unicode and filesystem paths, for example: "é" can be stored as one code point or two; normalization makes them match. There are several normalization strategies:
++
+** *NFC* : Normalized Form C (Canonical Composition) - characters are converted to canonical equivalents and then composed into pre-combined forms when possible. For example: e + ◌́ → é  
+(U+0065 U+0301 → U+00E9).
+** *NFD* : Normalized Form D (Canonical Decomposition) - characters are decomposed into base characters and combining marks. For example: é → e + ◌́  (U+00E9 → U+0065 U+0301)
+** *NFKC* : Normalization Form KC (Compatibility Composition) - converts characters to their compatibility equivalents, then composes them. For example, “①” → “1”.
+** *NFKD* : Normalization Form KD (Compatibility Decomposition) - converts compatibility characters to their equivalents and decomposes them. For example: “㍿” (Japanese corporate sign) → “株式会社”.
+
+Use NFC for most applications. Consider NFKC or NFKD for search engines, security checks, deduplication. Consider NFD for low-level linguistic processing.
+
+* In mathematics, adjusting values in a dataset to a common scale. Vectors are often normalized so that they represent a single unit in any direction.
 
 *NTTP* : Non-Type Template Parameter
 
@@ -396,15 +418,31 @@ An open-method library is currently in the Boost formal review process.
 
 * _Perception Is My Lasting Principle_ - the "Cheshire Cat" idiom where someone's perception of reality is subjective
 
+*Pinyin Order* : A common system of sorting written Chinese based on the romanized pronunciation of the characters. Sorts characters like English words A through Z based on the Pinyin spelling and tone. This compares with _Stroke Order_ - which sorts based on the number of strokes in the written character - and _Radical Order_ - a sorting system based on the traditional Kangxi radicals. Pinyin ordering is common in dictionaries aimed at learners, phone books, and computer input systems.
+
 *PITA* : _Pain In The Application_ or _Programmer In Trouble Again_ - difficult or frustrating code issue, such as when debugging AI-hallucinated functions.
 
 *POD* : _Plain Old Data_
+
+*Polymorphism* : In object-orientated programming, refers to having one common interface to an arbitrary set of specific types. 
 
 *POSIX* : Portable Operating System Interface
 
 *PPA* : Personal Package Archive - a repository on Launchpad (a platform for Ubuntu software collaboration) that allows developers and maintainers to distribute software or updates that are not yet included in the official Ubuntu repositories.
 
 *PR* : Pull Request - a request to include specified content into a GitHub repository. An administrator can accept or reject the PR.
+
+*Promotion* : A compiler _promotes_ a smaller type to a larger type so an operation can be done safely. For example:
+
+[source,cpp]
+----
+int a = 42;
+long long b = a; // promotion: int -> long long
+
+----
+
+The reverse ( `a = b;` ) is not a promotion, it would be an unsafe conversion. The key point is there is no danger of data loss in a promotion.
+
 
 [[q]]
 == Q
@@ -523,14 +561,18 @@ _This diagram shows the basic process of quantum teleportation, where the unknow
 * *Send and sync* : these are _type traits_ that ensure memory-safety between threads. The _send_ is enabled for a variable if it is safe to transfer ownership of its value to another thread. A _sync_ trait is enabled if it is safe to share a reference to a value with other threads. 
 * *The `safe` context* : operations in the `safe` context are guaranteed not to cause undefined behavior. 
 
+*SFINAE* or *SFINAED* : _Substitution Failure Is Not An Error_
+
 *SHA* : Secure Hash Algorithm, a function that will reliably give different hash values for different inputs.
 
-*SFINAE* or *SFINAED* : _Substitution Failure Is Not An Error_
+*Shadowing* : When a local variable or parameter hides another variable with the same name, where that second variable lives in an outer scope.
 
 *SIGILS* : refers to symbols or characters that precede a variable, literal, or keyword to indicate its type or purpose. For example, in "%hash" the "%" is a sigil. It is occasionally used with a tongue-in-cheek tone because of its mystical connotations, referring to how these symbols can seem "magical" in making the code work! 
 
 *SipHash* : A cryptographic hash for short messages (designed in 2012 by Jean-Philippe Aumasson and Daniel J. Bernstein). Specifically a pseudorandom function (PRF) keyed with a secret key to SipHash(k, message) to 64-bit hash.
 It is fast enough for hash table lookups, but unlike MurmurHash/FarmHash, it resists _hash-flooding attacks_.
+
+*Slice* : Extracting a contiguous subsequence of a string, for example "ring" is a slice of "string".
 
 *SMOP* : _Small Matter of Programming_ - sarcastically downplaying complex problems
 
@@ -538,6 +580,8 @@ It is fast enough for hash table lookups, but unlike MurmurHash/FarmHash, it res
 
 [[ssa]]
 *SSA* : Static Single Assignment - a property of intermediate representations (IRs) used in compilers. SSA is a popular technique in modern compilers to make optimizations and analysis simpler and more efficient. Each variable is assigned exactly once and is immutable after assignment. If a variable is updated, a new variable is created instead. Refer also to <<phi-function, Phi Functions>>.
+
+*Stitching* : Joining strings end-to-end.
 
 *STL* : Standard Template Library
 
@@ -559,7 +603,11 @@ It is fast enough for hash table lookups, but unlike MurmurHash/FarmHash, it res
 
 *TL;DW* : _Too Long; Didn't Watch_ - used when someone posts an overly long video or demo
 
+*Tokenize* : Breaking a string into meaningful syntactic units (words, symbols, numbers), often used by a compiler working with source code.
+
 *Top Posting* : The process of replying to an email, or other message, by adding your comments entirely to the top of the discussion, as opposed to inline posting where responses are written to the individual points made in the thread.
+
+*Trim* : Removing whitespace, or other specified characters, at the beginning or end of a string.
 
 *TTI* : Type Traits Introspection - refer to boost:tti[]
 
@@ -597,9 +645,12 @@ It is fast enough for hash table lookups, but unlike MurmurHash/FarmHash, it res
 
 *VoIP* : Voice over Internet Protocol - in networking libraries or real-time communication systems, VoIP is often discussed when implementing features for voice transmission over IP networks.
 
+*Vptr* : A hidden pointer within an object, pointing to the class's <<vtable, virtual table>>.
+
 *VR* : Virtual Reality - in game programming, simulations, or graphics-intensive applications, VR is often mentioned in discussions. pass:[C++] is commonly used for developing VR engines and related tools.
 
-*VTable* : Virtual Table - a mechanism used in pass:[C++] to support dynamic (runtime) polymorphism through virtual functions. Discussions involving inheritance and object-oriented programming often reference vtables.
+[[vtable]]
+*VTable* : Virtual Table - a mechanism used in pass:[C++] to support dynamic (runtime) polymorphism through virtual functions. Discussions involving inheritance and object-oriented programming often reference vtables. Virtual tables are used in <<binding, Dynamic Binding>>. Typically, if a class contains at least one virtual function, a compiler secretly creates a vtable for that class. The vtable stores addresses (pointers) to the actual implementations of that class's virtual functions. When you call a virtual function (for example, `ptr->speak()`), the program uses the `vptr → vtable → function pointer` chain to find and invoke the correct version.
 
 == W
 
