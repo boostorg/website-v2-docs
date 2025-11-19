@@ -1,6 +1,41 @@
 <link rel="dns-prefetch" href="https://cppalliance.org">
 <link rel="preconnect" href="https://cppalliance.org" crossorigin>
 <link rel="preload" href="https://cppalliance.org/fonts/NotoSansDisplay.ttf" as="font" type="font/ttf" crossorigin fetchpriority="high" />
-<link rel="preload" href="https://cppalliance.org/fonts/NotoSansDisplay-Italic.ttf" as="font" type="font/ttf"
-  crossorigin fetchpriority="high" />
+<link rel="preload" href="https://cppalliance.org/fonts/NotoSansDisplay-Italic.ttf" as="font" type="font/ttf" crossorigin fetchpriority="high" />
 <link rel="preload" href="https://cppalliance.org/fonts/NotoSansMono.ttf" as="font" type="font/ttf" crossorigin fetchpriority="high" />
+<script>
+(function() {
+  'use strict';
+  if (!('fonts' in document)) return;
+  
+  document.documentElement.style.visibility = 'hidden';
+  
+  var fontUrls = [
+    { family: 'Noto Sans', url: 'https://cppalliance.org/fonts/NotoSansDisplay.ttf', style: 'normal' },
+    { family: 'Noto Sans', url: 'https://cppalliance.org/fonts/NotoSansDisplay-Italic.ttf', style: 'italic' },
+    { family: 'Noto Sans Mono', url: 'https://cppalliance.org/fonts/NotoSansMono.ttf', style: 'normal' }
+  ];
+  
+  var fontPromises = fontUrls.map(function(fontConfig) {
+    var fontFace = new FontFace(fontConfig.family, 'url(' + fontConfig.url + ')', {
+      style: fontConfig.style
+    });
+    return fontFace.load().then(function(loadedFont) {
+      document.fonts.add(loadedFont);
+      return loadedFont;
+    }).catch(function() {
+      return null;
+    });
+  });
+  
+  var showContent = function() {
+    document.documentElement.style.visibility = '';
+  };
+  
+  Promise.all(fontPromises).then(function() {
+    document.fonts.ready.then(showContent);
+  }).catch(function() {
+    setTimeout(showContent, 100);
+  });
+})();
+</script>
