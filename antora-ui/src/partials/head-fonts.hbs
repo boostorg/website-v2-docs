@@ -1,8 +1,7 @@
-<link rel="dns-prefetch" href="https://cppalliance.org">
-<link rel="preconnect" href="https://cppalliance.org" crossorigin>
-<link rel="preload" href="https://cppalliance.org/fonts/NotoSansDisplay.ttf" as="font" type="font/ttf" crossorigin fetchpriority="high" />
-<link rel="preload" href="https://cppalliance.org/fonts/NotoSansDisplay-Italic.ttf" as="font" type="font/ttf" crossorigin fetchpriority="high" />
-<link rel="preload" href="https://cppalliance.org/fonts/NotoSansMono.ttf" as="font" type="font/ttf" crossorigin fetchpriority="high" />
+<link rel="preload" href="{{{uiRootPath}}}/font/NotoSansDisplay.ttf" as="font" type="font/ttf" fetchpriority="high" />
+<link rel="preload" href="{{{uiRootPath}}}/font/NotoSansDisplay-Italic.ttf" as="font" type="font/ttf"
+  fetchpriority="high" />
+<link rel="preload" href="{{{uiRootPath}}}/font/NotoSansMono.ttf" as="font" type="font/ttf" fetchpriority="high" />
 <script>
 (function() {
   'use strict';
@@ -11,14 +10,16 @@
   document.documentElement.style.visibility = 'hidden';
   
   var fontUrls = [
-    { family: 'Noto Sans', url: 'https://cppalliance.org/fonts/NotoSansDisplay.ttf', style: 'normal' },
-    { family: 'Noto Sans', url: 'https://cppalliance.org/fonts/NotoSansDisplay-Italic.ttf', style: 'italic' },
-    { family: 'Noto Sans Mono', url: 'https://cppalliance.org/fonts/NotoSansMono.ttf', style: 'normal' }
+    { family: 'Noto Sans', url: '{{{uiRootPath}}}/font/NotoSansDisplay.ttf', style: 'normal', weight: '400' },
+    { family: 'Noto Sans', url: '{{{uiRootPath}}}/font/NotoSansDisplay.ttf', style: 'normal', weight: '600' },
+    { family: 'Noto Sans', url: '{{{uiRootPath}}}/font/NotoSansDisplay-Italic.ttf', style: 'italic', weight: '400' },
+    { family: 'Noto Sans Mono', url: '{{{uiRootPath}}}/font/NotoSansMono.ttf', style: 'normal', weight: '400' }
   ];
   
   var fontPromises = fontUrls.map(function(fontConfig) {
     var fontFace = new FontFace(fontConfig.family, 'url(' + fontConfig.url + ')', {
-      style: fontConfig.style
+      style: fontConfig.style,
+      weight: fontConfig.weight
     });
     return fontFace.load().then(function(loadedFont) {
       document.fonts.add(loadedFont);
