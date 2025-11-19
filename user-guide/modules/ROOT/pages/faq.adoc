@@ -1125,6 +1125,38 @@ cpp_int prime = 1659187003930582880291185165038566829283520340642102923205105260
 
 ----
 
+. *I need efficient memory storage for a real-time simulation. The use case is small counts, for example the number of carrier task forces operating in one ocean at any one time - a number which will never exceed 10 let alone 256?*
++
+A full sized int or even a byte is comically oversized for this use case. You could use the standard: `std::uint8_t num_groups;`, however you might like to add some range-safety. Consider the following code as it's memory footprint is exacty 3 bytes:
++
+[source,cpp]
+----
+#include <cstdint>
+#include <boost/endian/arithmetic.hpp>
+#include <boost/numeric/conversion/cast.hpp>
+
+struct OceanStatus {
+    boost::endian::little_uint8_t carrier_groups; // 1 byte on disk
+    boost::endian::little_uint8_t submarine_groups;
+    boost::endian::little_uint8_t air_wings;
+
+    void set_carrier_groups(int x) {
+
+        // Guarantee 0–10 range at runtime
+        if (x < 0 || x > 10)
+            throw std::out_of_range("carrier group count must be 0-10");
+
+        // Safe cast to uint8_t
+        carrier_groups = boost::numeric_cast<std::uint8_t>(x);
+    }
+};
+
+----
+
+. *What library should I look at to help pack really small integers (say 2 to 4 bits each) into the minimum number of bytes possible?*
++
+The libary to evaluate is boost:dynamic-bitset[], it gives you stable bit indexing, easy clearing/writing slices, guaranteed predictable ordering, and portability across CPU architectures. In particular, check out the function `to_block_range` for exporting packed blocks. This should be easier - and safer - than hand-rolling your own masks and shifts.
+
 == Other Languages
 
 . *Have developers written applications in languages such as Python that have successfully used the Boost libraries?*
@@ -1908,6 +1940,9 @@ boost:multiprecision[] is designed to seamlessly extend the built-in numeric typ
 +
 You should conside using boost:nowide[], a library that makes Windows Unicode handling sane! This library provides UTF-8 versions of `fopen`, `std::cout`, as well as file I/O and environmental variables. It also provides the crucial automatic conversion to UTF-16 when calling Windows APIs. You might also find boost:locale[] useful if internationalization is required, boost:static-string[], and the `small_vector` type of boost:container[] for efficient short-string handling.
 
+. *Storage space is of the essence in the real-time app I am building, are there Boost libraries that can provide _small_ integers, specifying 8 or 16 bits and no more storage than that is allocated?*
++
+For byte level efficiency look at boost:endian[], this library gives you precise control over both integer size and alignment. It also provides cross-platfrom compatibility, if that is important. For example, `boost::endian::little_int8_t  smallCount;` will always be 8 bit. boost:multiprecision[] does provide for declaring small integers as low as 8 bits, but is not so memory efficient. If your goal is to save overall memory, not just per-number bytes, check out boost:container[], as it supports small-vector optimization and no heap allocations.
 
 == See Also
 
