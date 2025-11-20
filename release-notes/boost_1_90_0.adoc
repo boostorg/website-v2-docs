@@ -143,6 +143,13 @@ particularly for mixed successful/unsuccessful queries.
    for the PR (boost_gh:pr[lexical_cast,86]).
 ** Fixed regression in `unsigned short` to `wstring` casting without `wchar_t` builtin type.
 
+* boost_phrase:library[Locale,/libs/locale/]:
+** Fixed B2 build files to avoid building dynamic versions of various Boost libraries
+   when only static ones are requested (boost_gh:pr[locale,266]).
+** When ISO8859-1 or ISO8859-8 encoding is requested, allow using Windows codepages 1252 or 1255, respectively,
+   instead of using the "C" (classic) locale when the selected Windows locale doesn't support that ISO8859 encoding.
+** Enabled a workaround for an issue in Cygwins stdlib when converting some long UTF-8 sequences to UTF-16.
+
 * boost_phrase:library[Log,/libs/log/]:
 ** Fixed a missed optimization in `value_ref` visitation.
 ** Fixed a possible long and useless loop on log file rotation in `text_file_backend`. If the log
