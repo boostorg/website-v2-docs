@@ -44,21 +44,21 @@ Boost libraries are written by one, or a small team, of independent developers. 
 
 The current Boost libraries are categorized as follows - the count shows the number of current libraries in the category.
 
-[cols="2,1,5", options="header", grid=none, frame=none, stripes=even]
+[cols="4,1,10", options="header", grid=none, frame=none, stripes=even]
 |===
 |**Category** | **Count** | **Description**
 |https://www.boost.org/doc/libs/latest/libs/libraries.htm#Algorithms[Algorithms] | 13 | A range of libraries including several for 2D geometry, graphs, performance when iterating, sorting, string efficiency, and miscellaneous utility algorithms.
 |https://www.boost.org/doc/libs/latest/libs/libraries.htm#Workarounds[Broken compiler workarounds] | 1 | Addresses compiler idiosyncrasies, and help for non-conforming standard libraries.
-|https://www.boost.org/doc/libs/latest/libs/libraries.htm#Concurrent[Concurrent Programming] | 15 | Libraries that address concurrency, threads, networking, sockets, context switching, memory, and other multi-threading functions.
-|https://www.boost.org/doc/libs/latest/libs/libraries.htm#Containers[Containers] | 23 | Includes coverage of arrays, buffers, graphs, JSON, heaps, properties, stacks, and other storage constructs and issues.
+|https://www.boost.org/doc/libs/latest/libs/libraries.htm#Concurrent[Concurrent Programming] | 16 | Libraries that address concurrency, threads, networking, sockets, context switching, memory, and other multi-threading functions.
+|https://www.boost.org/doc/libs/latest/libs/libraries.htm#Containers[Containers] | 24 | Includes coverage of arrays, buffers, graphs, JSON, heaps, properties, stacks, and other storage constructs and issues.
 |https://www.boost.org/doc/libs/latest/libs/libraries.htm#Correctness[Correctness and testing] | 7 | Includes coverage of asserts, contracting, integer correctness, tracing, and unit testing.
 |https://www.boost.org/doc/libs/latest/libs/libraries.htm#Data[Data structures] | 22 | Supports a wide range of data structures, including maps, containers, heaps, JSON, optional objects, pointers, polygons, properties, and stacks.
 |https://www.boost.org/doc/libs/latest/libs/libraries.htm#Domain[Domain Specific] | 5 | Covers date and time utilities, cyclic redundancy code (CRC), unit analysis, and unique identifiers.
 |https://www.boost.org/doc/libs/latest/libs/libraries.htm#Error-handling[Error handling and recovery] | 5 | Covers asserts, error reporting and handling, and an infrastructure for throwing exceptions.
-|https://www.boost.org/doc/libs/latest/libs/libraries.htm#Function-objects[Function objects and higher-order programming] | 16 | Covers binding, function wrapping, function overloading, lambda functions, generic functions, and callback functions.
+|https://www.boost.org/doc/libs/latest/libs/libraries.htm#Function-objects[Function objects and higher-order programming] | 17 | Covers binding, function wrapping, function overloading, lambda functions, generic functions, and callback functions.
 |https://www.boost.org/doc/libs/latest/libs/libraries.htm#Generic[Generic Programming] | 15 | A range of generalized libraries, including for passing parameters, function template overloads, handling operators and iterators, generic types and templates, and parallel extensions.
 |https://www.boost.org/doc/libs/latest/libs/libraries.htm#Image-processing[Image processing] | 1 | A single library for generic image processing.
-|https://www.boost.org/doc/libs/latest/libs/libraries.htm#IO[Input/Output] | 13 | Features include portable networking, conversions for correct byte-ordering, formatting, streams, JSON, serialization, and URL parsing.
+|https://www.boost.org/doc/libs/latest/libs/libraries.htm#IO[Input/Output] | 14 | Features include portable networking, conversions for correct byte-ordering, formatting, streams, JSON, serialization, and URL parsing.
 |https://www.boost.org/doc/libs/latest/libs/libraries.htm#Inter-language[Inter-language support] | 1 | A single library providing a framework for interfacing Python with pass:[C++].
 |https://www.boost.org/doc/libs/latest/libs/libraries.htm#Iterators[Iterators] | 6 | Covers iterations in images, graphs, arithmetic classes, and tokens.
 |https://www.boost.org/doc/libs/latest/libs/libraries.htm#Emulation[Language Features Emulation] | 13 | Covers language features such as reflection, exceptions, semantics, deterministic failure, parameters, scope, types, and `typeof`.
