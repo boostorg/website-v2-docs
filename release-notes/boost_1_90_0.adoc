@@ -161,6 +161,11 @@ particularly for mixed successful/unsuccessful queries.
 * boost_phrase:library[Mp11,/libs/mp11/]:
 ** Updated `mp_reverse_fold` to work on fixed size lists
 
+* boost_phrase:library[MQTT5,/libs/mqtt5/]:
+** Removed dependency on Boost.Spirit.
+** Auto-reconnection now triggers on any transport-layer error instead of a limited whitelist (boost_gh:issue[mqtt5,38]).
+** Added `at_transport_error` callback to the Logger interface.
+
 * boost_phrase:library[MSM,/libs/msm/]:
 ** Refurbished and updated the documentation to use Antora.
 ** Added a new back-end `backmp11` offering heavily reduced compile times, a refactored API and a couple of new features.
