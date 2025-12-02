@@ -122,6 +122,17 @@ particularly for mixed successful/unsuccessful queries.
 * boost_phrase:library[Flyweight,/libs/flyweight/]:
 ** Fixed compile errors in Clang 19 and later due to https://wg21.link/p0522r0[P0522R0] support.
 
+* boost_phrase:library[Geometry,/libs/geometry/]:
+** Major improvements
+*** https://github.com/boostorg/geometry/pull/1409[GitHub #1409: "Implement is_valid algorithm for polyhedral surfaces"].
+** Improvements
+*** https://github.com/boostorg/geometry/pull/1413[GitHub #1413: "Add supported combinations for convert"].
+*** https://github.com/boostorg/geometry/pull/1417[GitHub #1417: "Improved documentation"].
+*** https://github.com/boostorg/geometry/pull/1423[GitHub #1423: "Avoid stack overflow in traverse"].
+** Solved issues
+*** https://github.com/boostorg/geometry/issues/1006[GitHub #1006: "bg::projections::detail::epsg_to_parameters causes excessive compile times"].
+*** Various fixes of errors and warnings
+
 * boost_phrase:library[Interprocess,/libs/interprocess/]:
 ** Minor documentation fixes.
 **  Fixed bugs:
