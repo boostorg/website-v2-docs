@@ -173,6 +173,12 @@ particularly for mixed successful/unsuccessful queries.
    opening the same file every time. (boost_gh:issue[log,252])
 ** Made file size checks more robust against integer overflows in `text_file_backend`.
 
+* boost_phrase:library[Math,/libs/math/]:
+** Added new library: Reverse-Mode Automatic Differentiation.
+** Added new constant: `log_pi`.
+** Added proper promotion policy support to `logit`, `logistic_sigmoid`, and `logistic` distributions.
+** Numerous fixes and edge case repairs to the special functions.
+
 * boost_phrase:library[Mp11,/libs/mp11/]:
 ** Updated `mp_reverse_fold` to work on fixed size lists
 
