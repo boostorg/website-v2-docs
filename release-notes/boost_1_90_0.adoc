@@ -235,6 +235,8 @@ particularly for mixed successful/unsuccessful queries.
 ** Multiple fixes to CMake. Many thanks to https://github.com/Flamefire[Alexander Grund]
    for the PRs!
 
+* boost_phrase:library[Random,/libs/random/]:
+** Fix for construction of xoshiro family of generators from SeedSeq.
 
 * boost_phrase:library[Redis,/libs/redis/]:
 ** Important changes to *cancellation*:
