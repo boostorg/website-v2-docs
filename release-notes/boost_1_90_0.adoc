@@ -137,6 +137,12 @@ particularly for mixed successful/unsuccessful queries.
 *** https://github.com/boostorg/geometry/issues/1006[GitHub #1006: "bg::projections::detail::epsg_to_parameters causes excessive compile times"].
 *** Various fixes of errors and warnings
 
+* boost_phrase:library[GIL,/libs/gil/]:
+** Improvements
+*** https://github.com/boostorg/gil/pull/773[GitHub #773: "Improved documentation (histogram and typos). Fixed the build for latest sphinx version."].
+** Solved issues
+*** https://github.com/boostorg/gil/pull/778[GitHub #778: "Fixed build with Clang"].
+
 * boost_phrase:library[Interprocess,/libs/interprocess/]:
 ** Minor documentation fixes.
 **  Fixed bugs:
