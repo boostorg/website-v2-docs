@@ -52,7 +52,7 @@ and `fast_multiblock64`, which results in some performance gains,
 particularly for mixed successful/unsuccessful queries.
 
 * boost_phrase:library[Charconv,/libs/charconv/]:
-** Fixed quadmath detection in Cmake for Cross-Compilation.
+** Fixed quadmath detection in CMake for cross-compilation.
 ** Fixed an issue where a sufficiently big buffer would error as not large enough in floating point `to_chars`.
 
 * boost_phrase:library[Compat,/libs/compat/]:
@@ -174,7 +174,7 @@ particularly for mixed successful/unsuccessful queries.
 ** Made file size checks more robust against integer overflows in `text_file_backend`.
 
 * boost_phrase:library[Math,/libs/math/]:
-** Added new library: Reverse-Mode Automatic Differentiation.
+** Added new sub-library: Reverse-Mode Automatic Differentiation.
 ** Added new constant: `log_pi`.
 ** Added proper promotion policy support to `logit`, `logistic_sigmoid`, and `logistic` distributions.
 ** Numerous fixes and edge case repairs to the special functions.
