@@ -51,6 +51,10 @@ boost_at:/doc/libs/1_90_0/[Documentation]
 and `fast_multiblock64`, which results in some performance gains,
 particularly for mixed successful/unsuccessful queries.
 
+* boost_phrase:library[Charconv,/libs/charconv/]:
+** Fixed quadmath detection in CMake for cross-compilation.
+** Fixed an issue where a sufficiently big buffer would error as not large enough in floating point `to_chars`.
+
 * boost_phrase:library[Compat,/libs/compat/]:
 ** Added `to_underlying.hpp` (contributed by Braden Ganetsky.)
 
@@ -169,6 +173,12 @@ particularly for mixed successful/unsuccessful queries.
    opening the same file every time. (boost_gh:issue[log,252])
 ** Made file size checks more robust against integer overflows in `text_file_backend`.
 
+* boost_phrase:library[Math,/libs/math/]:
+** Added new sub-library: Reverse-Mode Automatic Differentiation.
+** Added new constant: `log_pi`.
+** Added proper promotion policy support to `logit`, `logistic_sigmoid`, and `logistic` distributions.
+** Numerous fixes and edge case repairs to the special functions.
+
 * boost_phrase:library[Mp11,/libs/mp11/]:
 ** Updated `mp_reverse_fold` to work on fixed size lists
 
@@ -182,6 +192,9 @@ particularly for mixed successful/unsuccessful queries.
 ** Added a new back-end `backmp11` offering heavily reduced compile times, a refactored API and a couple of new features.
    Requires {cpp}17, more details are available in the documentation.
 ** Fixed bug https://github.com/boostorg/msm/issues/87[GitHub #87: "boost::any stopped working as Kleene event in 1.86 in boost::msm"].
+
+* boost_phrase:library[Multiprecision,/libs/multiprecision/]:
+** Significant improvements to testing and coverage of newer `cpp_double_fp_backend`.
 
 * boost_phrase:library[MySQL,/libs/mysql/]:
 ** Deprecated support for Clang versions older than 4.0. These compilers might still work,
@@ -222,6 +235,8 @@ particularly for mixed successful/unsuccessful queries.
 ** Multiple fixes to CMake. Many thanks to https://github.com/Flamefire[Alexander Grund]
    for the PRs!
 
+* boost_phrase:library[Random,/libs/random/]:
+** Fix for construction of xoshiro family of generators from SeedSeq.
 
 * boost_phrase:library[Redis,/libs/redis/]:
 ** Important changes to *cancellation*:
@@ -311,6 +326,9 @@ particularly for mixed successful/unsuccessful queries.
 * boost_phrase:library[STLInterfaces,/libs/stl_interfaces/]:
 ** Fixed ill-formedness with GCC 14 (boost_gh:pr[stl_interfaces,80]).
 ** Fixed ill-formedness when using move-only callables with closures.
+
+* boost_phrase:library[Test,/libs/test/]:
+** Fixed a few warnings on Windows Clang.
 
 * boost_phrase:library[TypeIndex,/libs/type_index/]:
 ** Dropped dependency on Boost.Core.
