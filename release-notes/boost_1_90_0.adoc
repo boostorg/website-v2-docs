@@ -35,6 +35,25 @@ boost_at:/doc/libs/1_90_0/[Documentation]
 // ** Conform to `std::pointer_traits` requirements (boost_gh:pr[interprocess,32]).
 // ** Fixed `named_condition_any` fails to notify (boost_gh:issue[interprocess,62]).
 
+* boost_phrase:library[Asio,/libs/asio/]:
+** Changed the macro-based coroutine implementation to ensure that case labels
+  are deterministic when `+++__+++COUNTER+++__+++` is used.
+** Fixed synchronous SSL stream `shutdown` to remap `error::eof` as
+  `async_shutdown` does.
+** Fixed a warning caused by the newly added `+++[[+++deprecated+++]]+++` attribute, when
+  compiling for C++11.
+** Changed `stream_file` and `random_access_file` on Windows to treat the
+  supplied file path as a UTF-8 encoded string.
+** Added checks to `experimental::parallel_group` and
+  `experimental::ranged_parallel_group` to detect when they are incorrectly
+  called with an empty set of asynchronous operations.
+** Removed the previously added workaround for `_FORTIFY_SOURCE`, and instead
+  added additional address length checking into `ip::basic_resolver_results`.
+** Fixed `experimental::coro` to add protection against `max` as a macro.
+** Updated the detection of `std::aligned_alloc` to work with newer versions of
+  libc++.
+** Various documentation fixes and improvements.
+
 * boost_phrase:library[Beast,/libs/beast/]:
 ** `http::parser` rejects non-standard trailer fields by default.
 ** `http::basic_parser` uses a dedicated callback for trailer fields.
