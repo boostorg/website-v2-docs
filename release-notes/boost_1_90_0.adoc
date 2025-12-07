@@ -35,6 +35,53 @@ boost_at:/doc/libs/1_90_0/[Documentation]
 // ** Conform to `std::pointer_traits` requirements (boost_gh:pr[interprocess,32]).
 // ** Fixed `named_condition_any` fails to notify (boost_gh:issue[interprocess,62]).
 
+* boost_phrase:library[Asio,/libs/asio/]
+** Added the `execution::inline_exception_handling` property to describe
+   what exception handling guarantees are made when execution occurs inline.
+** Added `inline_executor`, which always executes the submitted function
+   inline.
+** Changed the default candidate executor for `associated_executor` from
+   `system_executor` to `inline_executor`.
+** Added the `inline_or_executor<>` adapter and `inline_or()` helper, which
+   will execute inline if possible and otherwise delegate to another executor.
+** Added overloads of `dispatch`, `post` and `defer` that take a function
+   object to be run on the target executor, and deliver the result to the
+   completion handler.
+** Added the `redirect_disposition` completion token adapter, as a generic
+   counterpart for `redirect_error`.
+** Annotated deprecated items with the `+++[[+++deprecated+++]]+++` attribute.
+** Added a new configuration parameter "reactor" /
+   "reset_edge_on_partial_read", which determines whether a partial read
+   consumes the edge when using `epoll`.
+** Added new configuration parameters "reactor" / "use_eventfd" and "reactor"
+   / "use_timerfd" that are used to determine whether the `epoll` backend
+   uses `eventfd` and `timerfd` respectively.
+** Added the missing preprocessor check for `BOOST_ASIO_DISABLE_TIMERFD`.
+** Implemented a compile-time feature check for `std::source_location`
+   support, in addition to `std::experimental::source_location`.
+** Stopped using the deprecated `boost::array::c_array()` function.
+** Fixed a resource leak in `asio::awaitable` move assignment.
+** Fixed a memory leak in `ssl` stream move assignment.
+** Fixed a thread sanitizer issue in `kqueue` reactor.
+** Fixed handler tracking arguments in `io_uring` backend.
+** Fixed an unused parameter warning in `boost::asio::detail::null_thread`.
+** Changed the macro-based coroutine implementation to ensure deterministic case
+   labels when `+++__+++COUNTER+++__+++` is used.
+** Fixed synchronous SSL stream `shutdown` to remap `error::eof` as
+   `async_shutdown` does.
+** Changed `stream_file` and `random_access_file` on Windows to treat file
+   paths as UTF-8 encoded strings.
+** Added checks to `experimental::parallel_group` and
+   `experimental::ranged_parallel_group` to detect empty operation sets.
+** Removed workaround for `_FORTIFY_SOURCE`, added address length checking to
+   `ip::basic_resolver_results`.
+** Fixed `experimental::coro` to have protection against `max` as a macro.
+** Updated detection of `std::aligned_alloc` for newer `libc++` versions.
+** Various documentation fixes and improvements.
+** Consult the
+   boost_at:/doc/libs/1_90_0/doc/html/boost_asio/history.html[Revision
+   History] for further details.
+
 * boost_phrase:library[Beast,/libs/beast/]:
 ** `http::parser` rejects non-standard trailer fields by default.
 ** `http::basic_parser` uses a dedicated callback for trailer fields.
