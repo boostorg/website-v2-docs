@@ -1,0 +1,36 @@
+/**
+ * cpp-highlight.css - Custom C++ syntax highlighting styles
+ * This replaces highlight.js's C++ highlighting for consistent styling
+ */
+
+/* C++ Keywords - blue, bold */
+code.cpp-highlight .cpp-keyword,
+.doc pre.highlight code.cpp-highlight .cpp-keyword {
+  color: #00f;
+  font-weight: bold;
+}
+
+/* C++ Strings - dark red */
+code.cpp-highlight .cpp-string,
+.doc pre.highlight code.cpp-highlight .cpp-string {
+  color: #a31515;
+}
+
+/* C++ Preprocessor directives - purple */
+code.cpp-highlight .cpp-preprocessor,
+.doc pre.highlight code.cpp-highlight .cpp-preprocessor {
+  color: #6f008a;
+}
+
+/* C++ Comments - green, italic */
+code.cpp-highlight .cpp-comment,
+.doc pre.highlight code.cpp-highlight .cpp-comment {
+  color: #008000;
+  font-style: italic;
+}
+
+/* Base text in C++ blocks - plain black (identifiers, function names, etc.) */
+code.cpp-highlight,
+.doc pre.highlight code.cpp-highlight {
+  color: inherit;
+}
