@@ -3,33 +3,38 @@
  * This replaces highlight.js's C++ highlighting for consistent styling
  */
 
-/* C++ Keywords - blue, bold */
+/* C++ Keywords - blue */
 code.cpp-highlight .cpp-keyword,
 .doc pre.highlight code.cpp-highlight .cpp-keyword {
   color: #00f;
-  font-weight: bold;
 }
 
-/* C++ Strings - dark red */
-code.cpp-highlight .cpp-string,
-.doc pre.highlight code.cpp-highlight .cpp-string {
-  color: #a31515;
+/* C++ Literals (strings, characters, numbers) - green */
+code.cpp-highlight .cpp-literal,
+.doc pre.highlight code.cpp-highlight .cpp-literal {
+  color: #009912;
 }
 
 /* C++ Preprocessor directives - purple */
 code.cpp-highlight .cpp-preprocessor,
 .doc pre.highlight code.cpp-highlight .cpp-preprocessor {
-  color: #6f008a;
+  color: #bf00c2;
 }
 
-/* C++ Comments - green, italic */
+/* C++ Comments - gray */
 code.cpp-highlight .cpp-comment,
 .doc pre.highlight code.cpp-highlight .cpp-comment {
-  color: #008000;
+  color: #a8a8a8;
   font-style: italic;
 }
 
-/* Base text in C++ blocks - plain black (identifiers, function names, etc.) */
+/* C++ Attributes - gray */
+code.cpp-highlight .cpp-attribute,
+.doc pre.highlight code.cpp-highlight .cpp-attribute {
+  color: #9e9e9e;
+}
+
+/* Base text in C++ blocks - inherit (identifiers, function names, operators, etc.) */
 code.cpp-highlight,
 .doc pre.highlight code.cpp-highlight {
   color: inherit;

@@ -3,9 +3,10 @@
  *
  * Categories:
  *   - keyword     : Language keywords (const, while, if, etc.)
- *   - string      : String and character literals
+ *   - literal     : String, character, and numeric literals
  *   - preprocessor: Preprocessor directives (#include, #define, etc.)
  *   - comment     : C and C++ style comments
+ *   - attribute   : C++ attributes ([[nodiscard]], etc.)
  */
 
 const CppHighlight = (function () {
@@ -42,6 +43,8 @@ const CppHighlight = (function () {
     'true', 'false', 'nullptr', 'NULL',
   ])
 
+  const NUMBER = /^(?:0[xX][0-9a-fA-F']+|0[bB][01']+|0[0-7']*|[1-9][0-9']*(?:\.[0-9']*)?(?:[eE][+-]?[0-9]+)?)[uUlLfF]*/
+
   function escapeHtml (text) {
     return text
       .replace(/&/g, '&amp;')
@@ -59,6 +62,26 @@ const CppHighlight = (function () {
     const n = code.length
 
     while (i < n) {
+      // Whitespace
+      if (/\s/.test(code[i])) {
+        const start = i
+        while (i < n && /\s/.test(code[i])) i++
+        result.push(code.slice(start, i))
+        continue
+      }
+
+      // C++ attributes [[...]]
+      if (code.slice(i, i + 2) === '[[') {
+        const start = i
+        i += 2
+        let depth = 1
+        while (i < n && depth > 0) {
+          if (code.slice(i, i + 2) === '[[') { depth++; i += 2 } else if (code.slice(i, i + 2) === ']]') { depth--; i += 2 } else i++
+        }
+        result.push(span('attribute', code.slice(start, i)))
+        continue
+      }
+
       // Line comment
       if (code[i] === '/' && code[i + 1] === '/') {
         let end = i + 2
@@ -80,12 +103,10 @@ const CppHighlight = (function () {
 
       // Preprocessor directive (at start of line or after whitespace)
       if (code[i] === '#') {
-        // Check if # is at line start (allow leading whitespace)
         let checkPos = i - 1
         while (checkPos >= 0 && (code[checkPos] === ' ' || code[checkPos] === '\t')) checkPos--
         if (checkPos < 0 || code[checkPos] === '\n') {
           let end = i + 1
-          // Handle line continuation with backslash
           while (end < n) {
             if (code[end] === '\n') {
               if (code[end - 1] === '\\') {
@@ -116,7 +137,7 @@ const CppHighlight = (function () {
           }
           end++
         }
-        result.push(span('string', code.slice(i, end)))
+        result.push(span('literal', code.slice(i, end)))
         i = end
         continue
       }
@@ -128,13 +149,13 @@ const CppHighlight = (function () {
         const start = i
         if (code[i] === 'u' && code[i + 1] === '8') i += 2
         else if (code[i] !== '"') i++
-        i++ // skip opening quote
+        i++
         while (i < n && code[i] !== '"') {
           if (code[i] === '\\' && i + 1 < n) i += 2
           else i++
         }
-        i++ // skip closing quote
-        result.push(span('string', code.slice(start, i)))
+        i++
+        result.push(span('literal', code.slice(start, i)))
         continue
       }
 
@@ -145,13 +166,21 @@ const CppHighlight = (function () {
         const start = i
         if (code[i] === 'u' && code[i + 1] === '8') i += 2
         else if (code[i] !== '\'') i++
-        i++ // skip opening quote
+        i++
         while (i < n && code[i] !== '\'') {
           if (code[i] === '\\' && i + 1 < n) i += 2
           else i++
         }
-        i++ // skip closing quote
-        result.push(span('string', code.slice(start, i)))
+        i++
+        result.push(span('literal', code.slice(start, i)))
+        continue
+      }
+
+      // Number literals
+      const numMatch = code.slice(i).match(NUMBER)
+      if (numMatch && (i === 0 || !/[a-zA-Z_]/.test(code[i - 1]))) {
+        result.push(span('literal', numMatch[0]))
+        i += numMatch[0].length
         continue
       }
 
