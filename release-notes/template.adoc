@@ -6,9 +6,6 @@ Official repository: https://github.com/boostorg/website-v2-docs
 
 == Version X.XX.XX
 
-// Date of release
-Month Day, Year Hour::Minute GMT
-
 boost_at:/doc/libs/X_XX_X/[Documentation]
 
 // Formatting reference: https://docs.asciidoctor.org/asciidoc/latest/syntax-quick-reference/
