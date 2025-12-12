@@ -76,7 +76,15 @@ const CppHighlight = (function () {
         i += 2
         let depth = 1
         while (i < n && depth > 0) {
-          if (code.slice(i, i + 2) === '[[') { depth++; i += 2 } else if (code.slice(i, i + 2) === ']]') { depth--; i += 2 } else i++
+          if (code.slice(i, i + 2) === '[[') {
+            depth++
+            i += 2
+          } else if (code.slice(i, i + 2) === ']]') {
+            depth--
+            i += 2
+          } else {
+            i++
+          }
         }
         result.push(span('attribute', code.slice(start, i)))
         continue
