@@ -1,0 +1,42 @@
+<link rel="preload" href="{{{uiRootPath}}}/font/NotoSansDisplay.ttf" as="font" type="font/ttf" fetchpriority="high" />
+<link rel="preload" href="{{{uiRootPath}}}/font/NotoSansDisplay-Italic.ttf" as="font" type="font/ttf"
+  fetchpriority="high" />
+<link rel="preload" href="{{{uiRootPath}}}/font/NotoSansMono.ttf" as="font" type="font/ttf" fetchpriority="high" />
+<script>
+(function() {
+  'use strict';
+  if (!('fonts' in document)) return;
+  
+  document.documentElement.style.visibility = 'hidden';
+  
+  var fontUrls = [
+    { family: 'Noto Sans', url: '{{{uiRootPath}}}/font/NotoSansDisplay.ttf', style: 'normal', weight: '400' },
+    { family: 'Noto Sans', url: '{{{uiRootPath}}}/font/NotoSansDisplay.ttf', style: 'normal', weight: '600' },
+    { family: 'Noto Sans', url: '{{{uiRootPath}}}/font/NotoSansDisplay-Italic.ttf', style: 'italic', weight: '400' },
+    { family: 'Noto Sans Mono', url: '{{{uiRootPath}}}/font/NotoSansMono.ttf', style: 'normal', weight: '400' }
+  ];
+  
+  var fontPromises = fontUrls.map(function(fontConfig) {
+    var fontFace = new FontFace(fontConfig.family, 'url(' + fontConfig.url + ')', {
+      style: fontConfig.style,
+      weight: fontConfig.weight
+    });
+    return fontFace.load().then(function(loadedFont) {
+      document.fonts.add(loadedFont);
+      return loadedFont;
+    }).catch(function() {
+      return null;
+    });
+  });
+  
+  var showContent = function() {
+    document.documentElement.style.visibility = '';
+  };
+  
+  Promise.all(fontPromises).then(function() {
+    document.fonts.ready.then(showContent);
+  }).catch(function() {
+    setTimeout(showContent, 100);
+  });
+})();
+</script>
