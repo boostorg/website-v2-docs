@@ -6,6 +6,7 @@
  *   - string      : String and character literals
  *   - preprocessor: Preprocessor directives (#include, #define, etc.)
  *   - comment     : C and C++ style comments
+ *   - attribute   : C++ attributes ([[nodiscard]], [[noreturn]], etc.)
  */
 
 const CppHighlight = (function () {
@@ -59,6 +60,26 @@ const CppHighlight = (function () {
     const n = code.length
 
     while (i < n) {
+      // C++ attributes [[...]] with nesting support
+      if (code[i] === '[' && code[i + 1] === '[') {
+        const start = i
+        i += 2
+        let depth = 1
+        while (i < n && depth > 0) {
+          if (code[i] === '[' && code[i + 1] === '[') {
+            depth++
+            i += 2
+          } else if (code[i] === ']' && code[i + 1] === ']') {
+            depth--
+            i += 2
+          } else {
+            i++
+          }
+        }
+        result.push(span('attribute', code.slice(start, i)))
+        continue
+      }
+
       // Line comment
       if (code[i] === '/' && code[i + 1] === '/') {
         let end = i + 2
