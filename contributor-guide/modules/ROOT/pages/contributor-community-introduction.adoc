@@ -12,6 +12,11 @@ Official repository: https://github.com/boostorg/website-v2-docs
 The Boost Contributors Community is a dedicated group of developers and enthusiasts committed to advancing the Boost libraries.
 There are many different ways of xref:getting-involved.adoc[] with this community.
 
+* <<Communications>>
+* <<Documentation Style>>
+* <<Governance>>
+* <<See Also>>
+
 == Communications
 
 The https://lists.boost.org/mailman/listinfo.cgi/boost[Boost Developers Mailing List] is focused on the development and maintenance of the libraries.

@@ -11,6 +11,12 @@ Official repository: https://github.com/boostorg/website-v2-docs
 
 There are required and optional (though highly recommended) tests for libraries.
 
+* <<Required>>
+* <<Optional>>
+* <<Protocol for Fixing Bugs or Adding Features>>
+* <<Snapshots>>
+* <<See Also>>
+
 == Required
 
 Boost uses an automatic regression test suite which generates HTML compiler status tables. Boost also uses xref:testing/continuous-integration.adoc[] to ensure these tests are regularly run. Ensure your library testing includes the following:

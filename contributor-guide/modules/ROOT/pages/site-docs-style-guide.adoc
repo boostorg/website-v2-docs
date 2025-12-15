@@ -11,6 +11,12 @@ Official repository: https://github.com/boostorg/website-v2-docs
 
 This document outlines the style guidelines for the site-docs. Adhering to these guidelines will help ensure consistency and cohesion across all pages of the website.
 
+* <<Color Guidelines>>
+* <<Wording Guidelines>>
+* <<URL Display>>
+* <<Image Display>>
+* <<See Also>>
+
 == Color Guidelines
 
 * Boost Mustard

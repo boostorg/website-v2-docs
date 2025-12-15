@@ -14,7 +14,14 @@ The collection is represented on social media by the https://twitter.com/boostli
 X (formerly Twitter) account, where news and information about our libraries in particular and C++ in general are shared
 with the community.
 
-== What gets posted
+* <<What gets Posted>>
+* <<Topics of Interest>>
+* <<Post Structure>>
+* <<Post Submission>>
+* <<See Also>>
+
+
+== What gets Posted
 
 The account publishes two types of posts:
 
@@ -25,7 +32,7 @@ Official posts have a Boost brand imagery with watermark, and are produced by vo
 the former. Anyone from the community can propose a non-official post for publication; if you're interested in
 doing so, follow these simple guidelines:
 
-== Topics of interest
+== Topics of Interest
 
 * Upcoming C++ events, meetups, conferences, etc.
 * Talks about some particular library, or where such library is put to good effect.
@@ -35,7 +42,7 @@ doing so, follow these simple guidelines:
 The list is not exhaustive: if in doubt, just go with your submission or ask
 for guidance using the same submission channel.
 
-== Post structure
+== Post Structure
 
 image::tweet_structure.jpg[Structure of an X post]
 
@@ -72,7 +79,7 @@ Making the perfect post is not trivial: if you need inspiration,
 go to https://twitter.com/boostlibraries[@BoostLibraries,role=resource,window=_blank] for actual
 post examples.
 
-== Post submission
+== Post Submission
 
 Log into the https://cpplang.slack.com/[C++ Language Slack Workspace,role=resource,window=_blank]
 (or https://cppalliance.org/slack/[join it,role=resource,window=_blank] if you're not a member yet)
@@ -91,3 +98,8 @@ Also, they will schedule the publication date and time for
 maximum impact (typically, on weekday mornings with an eye to
 catching readers both sides of the Atlantic, but this may be adjusted
 for events specific to some country or geographical area).
+
+== See Also
+
+* xref:user-guide:ROOT:discussion-policy.adoc[]
+

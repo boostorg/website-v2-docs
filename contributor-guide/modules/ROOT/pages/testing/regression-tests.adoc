@@ -13,6 +13,11 @@ This section describes how to run regression tests on your local machine, by dow
 
 For information on the regression tests run on all libraries, refer to xref:testing/boost-test-matrix.adoc[].
 
+* <<Running Regression Tests Locally>>
+* <<The Run.py Tool>>
+* <<Feedback>>
+* <<See Also>>
+
 == Running Regression Tests Locally
 
 It's easy to run regression tests on your Boost clone.

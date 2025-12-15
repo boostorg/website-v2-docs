@@ -13,6 +13,10 @@ Consider using a code sanitizer to check for some of the more mundane, but never
 
 All the tools listed have different strengths and are useful in different scenarios, so you might want to use several of them in combination.
 
+* <<AddressSanitizer>>
+* <<Valgrind>>
+* <<See Also>>
+
 == AddressSanitizer
 
 https://clang.llvm.org/docs/AddressSanitizer.html[Clang AddressSanitizer (ASan)] is a fast memory error detector built into LLVM/Clang, gcc and other compilers. As such, it works on Windows, Linux, and MacOS. It can detect out-of-bounds accesses to heap, stack, and globals, use-after-free and use-after-return bugs, and other memory-related errors. AddressSanitizer is generally faster than <<Valgrind>> and can be used in continuous integration without significantly slowing down the test suite.
@@ -30,7 +34,7 @@ The sanitizer suite also includes:
 * *ThreadSanitizer* (TSan) detects data races. It's available in Clang and gcc. Set `-fsanitize=thread` in Clang, or `thread-sanitizer=on` in B2. Refer to https://clang.llvm.org/docs/ThreadSanitizer.html[Clang ThreadSanitizer].
 
 
-=== Valgrind
+== Valgrind
 
 For Linux based systems, https://valgrind.org/docs/manual/quick-start.html[Valgrind] is an open-source software tool suite that helps in debugging memory management and threading bugs, and profiling programs. It is often used to detect memory leaks and uninitialised memory blocks in pass:[C++] programs, among other things.
 
