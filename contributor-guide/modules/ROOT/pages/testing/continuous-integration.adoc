@@ -34,8 +34,6 @@ Notes:: It is a requirement for a new library submission to Boost to include an 
 +
 Currently, Boost _does not_ use Continuous Deployment(CD) - the release schedule is fixed and libraries are not continuously updated. This is to ensure complete testing and code reliability before any release for public use.
 
-toc::[]
-
 == New Library CI Framework
 
 A recommended process to start a new Boost library is to clone the contents of the https://github.com/boostorg/boost-ci/tree/master[boost-ci] repo. This repo contains the basic CI framework for a new library. Clone it, then adjust and edit it appropriately.
