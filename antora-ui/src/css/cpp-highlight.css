@@ -3,11 +3,10 @@
  * This replaces highlight.js's C++ highlighting for consistent styling
  */
 
-/* C++ Keywords - blue, bold */
+/* C++ Keywords - blue */
 code.cpp-highlight .cpp-keyword,
 .doc pre.highlight code.cpp-highlight .cpp-keyword {
   color: #00f;
-  font-weight: bold;
 }
 
 /* C++ Strings - dark red */
@@ -27,6 +26,12 @@ code.cpp-highlight .cpp-comment,
 .doc pre.highlight code.cpp-highlight .cpp-comment {
   color: #008000;
   font-style: italic;
+}
+
+/* C++ Attributes - gray */
+code.cpp-highlight .cpp-attribute,
+.doc pre.highlight code.cpp-highlight .cpp-attribute {
+  color: #9e9e9e;
 }
 
 /* Base text in C++ blocks - plain black (identifiers, function names, etc.) */
