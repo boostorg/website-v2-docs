@@ -21,6 +21,12 @@ The new library developer needs to consider all three, however the initial focus
 
 "_How did software get so reliable without proof?_"
 
+* <<Define a Test Matrix>>
+* <<Use Predefined Macros from Boost.Config>>
+* <<Regression Testing>>
+* <<Next Steps>>
+* <<See Also>>
+
 == Define a Test Matrix
 
 When you're looking to submit a library to the Boost collection, it's essential to ensure broad compatibility with various compilers, platforms, and configurations. Create a test matrix of what you intend to support, and document what you do not intend to support, and consider:

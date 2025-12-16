@@ -9,6 +9,18 @@ Official repository: https://github.com/boostorg/website-v2-docs
 = Fuzz Testing
 :navtitle: Fuzzing
 
+* <<Introduction>>
+* <<LibFuzzer Basics>>
+* <<Corpus>>
+* <<Verifying the Effectiveness of your Fuzzer>>
+* <<Corpus Minimization>>
+* <<Handling Crashes>>
+* <<Running the Fuzzer in CIs>>
+* <<Best Practices for Writing Fuzzers>>
+* <<See Also>>
+
+== Introduction
+
 *What is fuzz testing?* Fuzzing is a testing technique that injects random pieces of data to a software function to uncover crashes and vulnerabilities. It helps improving code security and reliability, since it can trigger edge cases that went unnoticed during unit testing.
 
 *How does it work?* Fuzz testing relies on a fuzzing engine, a library that runs your code in a loop, injecting different inputs at each iteration. The fuzzing engine will instrument your code to measure coverage, and use this information to drive the generation of samples. Most of the samples will contain malformed input, and will test your code's tolerance to ill-formed inputs.

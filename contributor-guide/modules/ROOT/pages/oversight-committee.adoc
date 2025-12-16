@@ -13,6 +13,11 @@ The _Fiscal Sponsorship Committee_ plays a custodial and oversight role rather t
 
 Boost operates with a decentralized and community-driven development model, where individual contributors and maintainers have the autonomy to drive their libraries' progress. The committee supports this by ensuring the ecosystem remains healthy and sustainable for current and future contributors.
 
+* <<Boost Assets>>
+* <<Contact Information>>
+* <<See Also>>
+
+
 == Boost Assets
 
 When referring to Boost "assets", these assets fall into five broad categories:

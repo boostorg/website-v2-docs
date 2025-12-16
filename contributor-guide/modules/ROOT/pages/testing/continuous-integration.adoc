@@ -7,7 +7,24 @@ file LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
 Official repository: https://github.com/boostorg/website-v2-docs
 ////
 = Continuous Integration
+:toc: macro
+:toclevels: 1
 
+* <<Introduction>>
+* <<New Library CI Framework>>
+* <<GitHub Actions>>
+* <<Drone>>
+* <<Travis CI>>
+* <<AppVeyor>>
+* <<CircleCI>>
+* <<Azure Pipelines>>
+* <<Coverage>>
+* <<Test with Popular Compilers>>
+* <<Docker Containers>>
+* <<See Also>>
+
+
+== Introduction
 
 The Boost project uses Continuous Integration(CI) to ensure the quality and integrity of its code. CI is the practice of merging all developers' working copies into a shared mainline several times a day. The main aim is to prevent integration issues, which can be identified and addressed as early as possible.
 

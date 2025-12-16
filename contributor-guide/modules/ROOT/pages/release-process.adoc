@@ -18,6 +18,12 @@ The Boost libraries are released publicly three times per year:
 
 Each release will contain updates to existing libraries, and some releases will contain new libraries. The release is built from the *master* branch of Boost's GitHub site: https://github.com/boostorg/boost.
 
+* <<Preparing for a Boost Release>>
+* <<Boost Regression Testing>>
+* <<Milestones in the Release Cycle>>
+* <<See Also>>
+
+
 == Preparing for a Boost Release
 
 The release managers set the release timeline, which involves planning deadlines for library submissions, reviews, and incorporation into the repository.

@@ -30,10 +30,6 @@ Official repository: https://github.com/boostorg/website-v2-docs
 ** xref:best-practices.adoc[]
 ** xref:debug-visualisers.adoc[]
 
-* Build Systems
-** xref:build-systems/cmake.adoc[]
-** xref:build-systems/b2.adoc[]
-
 * Testing
 ** xref:testing/intro.adoc[]
 ** xref:testing/test-policy.adoc[]
