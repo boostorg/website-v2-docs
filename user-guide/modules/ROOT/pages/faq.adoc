@@ -709,7 +709,7 @@ Refer to xref:task-simulation.adoc[].
 
 . *What is the license for Boost libraries?*
 +
-The Boost libraries are licensed under the Boost Software License, a permissive free software license that allows you to use, modify, and distribute the software under minimal restrictions. Refer to xref:bsl.adoc[].
+Most Boost libraries are licensed under the xref:bsl.adoc[] (BSL), a permissive free software license that allows you to use, modify, and distribute the software under minimal restrictions. It is not a _requirement_ for a library to be licensed under the BSL, but its license must meet the xref:contributor-guide:ROOT:requirements/license-requirements.adoc[License Requirements]. Refer to the documentation or source code of any specific library to determine which license applies.
 
 . *Can I use the Boost Logo, after I have built software using the Boost libraries, to help promote my product?*
 +
