@@ -36,6 +36,8 @@ In order for a review to proceed, a Boost member must volunteer to manage the re
 |===
 | *Submission* | *Submitter* | *Review Manager* | *Review/Release Dates* | *Result*
 
+| *Boost 1.90.0 Released* |  - |   Marshall Clow |  December 10, 2025 | https://www.boost.org/users/history/version_1_90_0.html[Notes] 
+
 | Decimal Re-Review  | Matt Borland and Chris Kormanyos | John Maddock | October 6, 2025 - October 15, 2025 | https://lists.boost.org/archives/list/boost@lists.boost.org/thread/F5FIMGM7CCC24OKQZEFMHHSUV64XX63I/[Accepted]
 
 | SQLite Re-Review | Klemens Morgenstern | Mohammad Nejati | August 22, 2025 - August 31, 2025 | https://lists.boost.org/archives/list/boost@lists.boost.org/message/J74OTT6TZ5W6ZHCBTPPBGM6WW54PBFNR/[Rejected]
