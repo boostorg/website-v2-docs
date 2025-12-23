@@ -92,7 +92,7 @@ Provide any specific instructions or recommendations for users upgrading from a 
 
 The following examples show some different approaches. Note how many rely on links to issues to provide the detailed information.
 
-* https://www.boost.org/doc/libs/latest/libs/json/doc/html/json/release_notes.html[JSON Release Notes]
+* https://www.boost.org/doc/libs/latest/libs/json/doc/html/release_notes.html[JSON Release Notes]
 * https://www.boost.org/doc/libs/latest/libs/nowide/doc/html/changelog_page.html[NoWide Change Log]
 * https://www.boost.org/doc/libs/latest/libs/type_traits/doc/html/boost_typetraits/history.html[Type Traits History]
 * https://www.boost.org/doc/libs/latest/libs/variant2/doc/html/variant2.html#changelog[Variant2 Revision History]
