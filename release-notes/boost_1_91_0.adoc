@@ -4,9 +4,9 @@ file LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
 Official repository: https://github.com/boostorg/website-v2-docs
 ////
 
-== Version X.XX.XX
+== Version 1.91.0
 
-boost_at:/doc/libs/X_XX_X/[Documentation]
+boost_at:/doc/libs/1_91_0/[Documentation]
 
 // Formatting reference: https://docs.asciidoctor.org/asciidoc/latest/syntax-quick-reference/
 // Boost-specific macros: https://github.com/cppalliance/asciidoctor-boost?tab=readme-ov-file#macros
