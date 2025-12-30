@@ -76,8 +76,7 @@ boost_at:/doc/libs/1_90_0/[Documentation]
 ** Updated detection of `std::aligned_alloc` for newer `libc++` versions.
 ** Various documentation fixes and improvements.
 ** Consult the
-   boost_at:/doc/libs/1_90_0/doc/html/boost_asio/history.html[Revision
-   History] for further details.
+   boost_at:/doc/libs/1_90_0/doc/html/boost_asio/history.html[Revision History] for further details.
 
 * boost_phrase:library[Beast,/libs/beast/]:
 ** `http::parser` rejects non-standard trailer fields by default.
