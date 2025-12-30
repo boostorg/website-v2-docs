@@ -20,7 +20,8 @@ For the latter, you will need to update a Boost history file with a succinct ver
 [square]
 * <<Checklist>>
 * <<Consistency and Formatting>>
-* <<Examples>>
+* <<Release Note Macros>>
+* <<Release Note Examples>>
 * <<Update Boost History>>
 * <<Best Practices>>
 * <<See Also>>
@@ -29,57 +30,57 @@ For the latter, you will need to update a Boost history file with a succinct ver
 
 When writing release notes for your library remember that the main goal is to effectively communicate the changes to the end-users. It's always a good practice to put yourself in the mind set of your developers, and think about what information they would need and appreciate. Be brief, but not so brief that only a seasoned user of your library will understand the context.
 
-=== Header Information
+=== 1. Header Information
 
 Make sure the version number, and date of release are mentioned.
 
-=== Summary
+=== 2. Summary
 
 If this release addresses particular topics, provide a brief overview of the main changes, enhancements, or the theme of this release if there's one.
 
-=== Breaking Changes
+=== 3. Breaking Changes
 
 Before detailing other updates, immediately inform users of any backward-incompatible changes. This is crucial as these changes can directly impact existing code. The process for breaking changes is covered in detail in  xref:version-control.adoc[].
 
-=== API Parameters
+=== 4. API Parameters
 
 If you have added additional parameters (or changed a return value, or similar API change) to a function that are not breaking changes, then list them separately. If an API change might break an existing application, then ensure to list it under <<_breaking_changes>>.
 
-=== New Features
+=== 5. New Features
 
 Describe any new features or major enhancements. For complex features, consider adding a brief example or pointing to updated documentation. If the feature is referenced in an *Issue*, then consider adding a link to that issue.
 
-=== Bug Fixes
+=== 6. Bug Fixes
 
 List the fixed bugs, ideally with a brief description. If you're using a bug tracking system (like GitHub issues), provide links to the bug reports described in the issues. Include the identifier or number of the bug if available.
 
-=== Deprecations
+=== 7. Deprecations
 
 Mention any functions, classes, or features that are deprecated and might be removed in future releases.
 
-=== Performance Improvements
+=== 8. Performance Improvements
 
 Detail any optimizations or performance-related changes, ideally with metrics or benchmarks if they are significant.
 
-=== Documentation Updates
+=== 9. Documentation Updates
 
 Highlight and link to any significant updates in documentation, new examples, or tutorials.
 
-=== Acknowledgements
+=== 10. Acknowledgements
 
 Credit contributors or those who reported crucial bugs. Recognize any person or organization that played a special role in this release.
 
-=== Known Issues
+=== 11. Known Issues
 
 Briefly describe any known limitations or issues that are still unresolved in the current release. Include known compatibility issues - including with compilers and tools, and other libraries.
 
-=== Upgrade Notes
+=== 12. Upgrade Notes
 
 Provide any specific instructions or recommendations for users upgrading from a previous version, especially if there are any manual steps involved.
 
 == Consistency and Formatting
 
-* Use clear and concise language. Experience has shown that short release notes are read, long files much less so. Do not add into release notes extensive text that should be in your main library documentation.
+Use clear and concise language. Experience has shown that short release notes are read, long files much less so. Do not add into release notes extensive text that should be in your main library documentation.
 
 * Be consistent in the formatting. If you're using bullet points for one section, maintain that for others.
 * Use headers and sub-headers to clearly differentiate sections.
@@ -88,14 +89,25 @@ Provide any specific instructions or recommendations for users upgrading from a 
     ** Your main library documentation, if there is updated text, examples or tutorials
     ** Relevant issues, discussions or threads
 
-== Examples
+== Release Note Macros
 
-The following examples show some different approaches. Note how many rely on links to issues to provide the detailed information.
+Various macros are available to library authors and maintainers to help keep release notes consistent between libraries, and easier to both write and read. Absolute links _can_ be added to release notes, if necessary, though use of the following macros is encouraged and recommended.
 
-* https://www.boost.org/doc/libs/latest/libs/json/doc/html/release_notes.html[JSON Release Notes]
-* https://www.boost.org/doc/libs/latest/libs/nowide/doc/html/changelog_page.html[NoWide Change Log]
-* https://www.boost.org/doc/libs/latest/libs/type_traits/doc/html/boost_typetraits/history.html[Type Traits History]
-* https://www.boost.org/doc/libs/latest/libs/variant2/doc/html/variant2.html#changelog[Variant2 Revision History]
+[cols="1,3,1",options="header",stripes=even,frame=none]
+|===
+| *Macro* | *Description* | *Examples* 
+| `boost_phrase:library[ <library name> , <library path>]` | Shows the library title in a consistent format, and links to the library on Git. | `boost_phrase:library[Asio,/libs/asio/]`, `boost_phrase:library[Beast,/libs/beast/]`, `boost_phrase:library[OpenMethod,/libs/openmethod]`
+| `boost_at:<path to file>[ <title>]` | The specified "title" becomes a link to the file. | `Consult the boost_at:/doc/libs/1_90_0/doc/html/boost_asio/history.html[Revision History] for further details.`, `boost_at:/doc/libs/1_90_0/[Documentation]`
+| `boost_gh:pr[ <library name>, <PR number]` | Provides a link to a GitHub PR for the specified library. | `Conform to std::pointer_traits requirements (boost_gh:pr[interprocess,32]).`, `boost_gh:pr[core,205]`
+| `boost_gh:issue[<library name>, <ISSUE number>]` | Provides a link to the GitHub Issue for the specified library. | `Fixed named_condition_any fails to notify (boost_gh:issue[interprocess,62]).`
+|===
+
+== Release Note Examples
+
+Checking out the release notes from fellow library authors and maintainers is good practice:
+
+* https://github.com/boostorg/website-v2-docs/blob/develop/release-notes/boost_1_90_0.adoc[Boost 1.90 Release Notes]
+
 
 == Update Boost History
 
@@ -137,6 +149,8 @@ The examples below come from the https://github.com/boostorg/website/blob/master
 
   [endsect]
 ----
+
+Note:: The macros used in Quickbook format for the history sections differ in detail from the macros available for the Release Notes.
 
 == Best Practices
 
