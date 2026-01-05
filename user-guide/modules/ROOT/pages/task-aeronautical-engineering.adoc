@@ -1,0 +1,39 @@
+////
+Copyright (c) 2024 The C++ Alliance, Inc. (https://cppalliance.org)
+
+Distributed under the Boost Software License, Version 1.0. (See accompanying
+file LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
+
+Official repository: https://github.com/boostorg/website-v2-docs
+////
+= Aeronautical Engineering
+:navtitle: Aeronautical Engineering
+
+There are some specific challenges in the design and building of aircraft, that are less pronounced in other engineering disciples. These challenges include the size of the development teams, all working on one project, the strong presence of regulation and certification, and the unglamorous but mission-critical need for numerical correctness, stability, and traceability. Aerospace software lives for decades, must behave identically across platforms, and is scrutinized by certification authorities who care far more about _bounded error_ than raw speed.
+
+This topic examines the pressure on software engineers when working in the aeronautical design space: a space where `sqrt(x*x + y*y)` might not be acceptable, whereas `boost::math::hypot(x, y);` works.
+
+image:aerospace-design.png[Aircraft design blueprint]
+
+[square]
+* <<Libraries>>
+* <<Next Steps>>
+* <<See Also>>
+
+== Libraries
+
+* boost:math[]: Provides carefully implemented, well-documented algorithms for elementary and special functions with known accuracy characteristics, correct handling of edge cases, and predictable behavior across compilers and architectures. Functions like `hypot`, robust inverse trig, stable polynomial evaluation, and well-behaved probability distributions eliminate entire classes of silent numerical failures that are notoriously hard to reproduce and even harder to certify. Equally important, this library supports a verification-first engineering culture. Its scale-aware comparisons, error bounds, and compatibility with multi-precision backends allow engineers to create reference implementations and numerical “gold standards” alongside high-performance code. This is exactly what certification demands: the ability to demonstrate not only that results are fast, but that they are correct _within defined tolerances_, repeatable years later, and defensible under audit. The library quietly delivers numerical trust.
+
+== Next Steps
+
+image:aerospace-gear.png[Aircraft gear blueprint]
+
+== See Also
+
+* https://www.boost.org/doc/libs/latest/libs/libraries.htm#Algorithms[Category: Algorithms]
+* https://www.boost.org/doc/libs/latest/libs/libraries.htm#Concurrent[Category: Concurrent Programming]
+* https://www.boost.org/doc/libs/latest/libs/libraries.htm#IO[Category: Input/Output]
+* https://www.boost.org/doc/libs/latest/libs/libraries.htm#Math[Category: Math and numerics]
+
+
+
