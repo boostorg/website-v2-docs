@@ -13,20 +13,146 @@ There are some specific challenges in the design and building of aircraft, that 
 
 This topic examines the pressure on software engineers when working in the aeronautical design space: a space where `sqrt(x*x + y*y)` might not be acceptable, whereas `boost::math::hypot(x, y);` works.
 
-image:aerospace-design.png[Aircraft design blueprint]
-
 [square]
+* <<Aeronautical Design Fundamentals>>
 * <<Libraries>>
 * <<Next Steps>>
 * <<See Also>>
 
+== Aeronautical Design Fundamentals
+
+Boost Libraries have a number of components that can play important roles in building a co-operative (distributed) design system. These libraries won't give you a full “collaboration system” out of the box, but they provide powerful building blocks for networking, concurrency, data exchange, task distribution, serialization, and scripting integration — all foundational pieces of a distributed CAD/PDM/PLM system.
+
+A cooperative aircraft design system must support:
+
+. Distributed teams (multiple time zones, intermittent connectivity)
+
+. Strong data integrity and traceability (certification pressure)
+
+. Concurrent edits on large models (geometry, constraints, metadata)
+
+. Heavy computation (FEA, CFD, optimization)
+
+. Modular extensibility (tools evolve over decades)
+
+image:aerospace-design.png[Aircraft design blueprint]
+
+The modelling service component owns the "truth" of geometry and constraints. Conflict resolution is a well known challenge - engineer A moves an aircraft rib, whilst engineer B instead, increases the rib thickness. Something like this may well need to be flagged for human resolution
+
+When building a system for use anywhere in the aerospace industry, it is a good idea to stick to these core principles:
+
+. Command determinism - No hidden randomness and no time-based logic without injected clocks.
+
+. Immutable inputs - Commands are value objects and model state is derived, not mutated ad hoc.
+
+. Controlled time - Simulated time replaces wall-clock time.
+
+. Replay-first mindset - Tests are replays and live execution is just “replay at real-time speed”.
+
+. Time-Travel Debugging - Step forward _and_ backward through events.
+
+. Section Cuts (an aerospace favorite) - Auto-generate spanwise cuts, diff cross-sections, and plot profiles.
+
+*A deterministic simulation of engineering intent is what exactly what certification bodies care about.*
+
+Design and simulation are a big part of the story. Then comes testing.
+
+In aerospace terms: _if you can't replay it, you can't certify it_. An aircraft test harness must answer questions like:
+
+* Can we replay every design change exactly?
+
+* Are distributed services deterministic?
+
+* Does concurrency produce identical results across runs?
+
+* Can we detect regressions in geometry, constraints, and analysis?
+
+* Can we reproduce a failure years later?
+
+This goes far beyond unit tests.
+
+One of Boost's quiet superpowers is numerical correctness without fanfare - the standard library often prioritizes _simplicity_ whereas Boost prioritizes _correctness_.
+Numerical errors are design flaws, not rounding accidents!
+
+Note:: Acronyms are super-common in aerospace. FEA is _Finite Element Analysis_ (essentially breaking complex structures into small elements for testing and behavior). CFD is _Computational Fluid Dynamics_  (for example, modelling turbulence). PLM is _Product Lifecycle Management_ (tracking changes, metadata, milestones) and answering "What exactly did we know when we signed off this design?". PDM is _Product Data Management_, managing exactly what data exists, which version is authoritative, who changed it, and what it affects. Get used to a sea of acronyms in this space.
+
 == Libraries
 
-* boost:math[]: Provides carefully implemented, well-documented algorithms for elementary and special functions with known accuracy characteristics, correct handling of edge cases, and predictable behavior across compilers and architectures. Functions like `hypot`, robust inverse trig, stable polynomial evaluation, and well-behaved probability distributions eliminate entire classes of silent numerical failures that are notoriously hard to reproduce and even harder to certify. Equally important, this library supports a verification-first engineering culture. Its scale-aware comparisons, error bounds, and compatibility with multi-precision backends allow engineers to create reference implementations and numerical “gold standards” alongside high-performance code. This is exactly what certification demands: the ability to demonstrate not only that results are fast, but that they are correct _within defined tolerances_, repeatable years later, and defensible under audit. The library quietly delivers numerical trust.
+* boost:math[] : Provides carefully implemented, well-documented algorithms for elementary and special functions with known accuracy characteristics, correct handling of edge cases, and predictable behavior across compilers and architectures. Functions like `hypot`, robust inverse trig, stable polynomial evaluation, and well-behaved probability distributions eliminate entire classes of silent numerical failures that are notoriously hard to reproduce and even harder to certify. Equally important, this library supports a verification-first engineering culture. Its scale-aware comparisons, error bounds, and compatibility with multi-precision backends allow engineers to create reference implementations and numerical “gold standards” alongside high-performance code. This is exactly what certification demands: the ability to demonstrate not only that results are fast, but that they are correct _within defined tolerances_, repeatable years later, and defensible under audit. The library quietly delivers numerical trust, and avoid such things as _floating-point drift_ and _order-dependent drift_.
+
+image:aerospace-gear.png[Aircraft gear blueprint]
+
+* boost:accumulators[] : This provides numerically stable statistics, preventing _summation_drift_ and an answer to _never sum large datasets naïvely_.
+
+* boost:asio[] : A distributed design system must support robust, scalable communication — real-time updates, distributed computation requests, and client-server synchronization.
+
+* boost:serialization[] and boost:interprocess[] :Save/load complex design models, and useful if modules on the same machine need fast shared data access.
+
+* boost:geometry[], boost:polygon[], and boost:graph[] : These libs work well with design and CAD-related math, 2D polygon manipulation, and representing complex relationships (dependency graphs, design hierarchies).
+
+* boost:thread[], boost:lockfree[], and boost:fiber[] : All to provide UI responsiveness with background computations.
+
+* boost:signals2[] : Useful for local publish/subscribe patterns within a module.
+
+* boost:program_options[] and boost:property_tree[] : Useful for server/service configuration and for storing structured metadata.
 
 == Next Steps
 
-image:aerospace-gear.png[Aircraft gear blueprint]
+Wrap your mind around the high level architecture, think federated services, not a monolith:
+
+[source,text]
+----
+┌────────────┐     ┌────────────┐
+│ CAD Client │     │ Analysis   │
+│            │     │ Client     │
+└─────┬──────┘     └─────┬──────┘
+      │                  │
+      ├───────┬──────────┤
+              ▼
+     ┌───────────────────────┐
+     │ Collaboration Gateway │
+     │(Boost.Asio/Beast/Json)│
+     └──────────┬────────────┘
+                │
+ ┌──────────────┼──────────────────┐
+ │              │                  │
+ ▼              ▼                  ▼
+Model Service  Compute Service   Metadata Service
+(Geometry)     (FEA/CFD)         (PLM / audit)
+
+----
+
+And consider your test harness/certification architecture right from the start:
+
+[source,text]
+----
+┌──────────────────────────────┐
+│ Test Runner (CLI)            │
+│ (Boost.ProgramOptions)       │
+└────────────┬─────────────────┘
+             ▼
+┌──────────────────────────────┐
+│ Scenario Loader              │
+│ (Boost.Filesystem)           │
+└────────────┬─────────────────┘
+             ▼
+┌──────────────────────────────┐
+│ Event Replayer               │
+│ (Boost.Serialization)        │
+└────────────┬─────────────────┘
+             ▼
+┌──────────────────────────────┐
+│ Virtual Services             │
+│ (Model / Compute / Metadata) │
+└────────────┬─────────────────┘
+             ▼
+┌──────────────────────────────┐
+│ Verifier                     │
+│ (Boost.Test / Geometry)      │
+└──────────────────────────────┘
+----
+
+Start with correctness in mind, and continue along that path.
 
 == See Also
 
