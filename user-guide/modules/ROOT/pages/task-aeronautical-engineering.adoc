@@ -74,7 +74,7 @@ This goes far beyond unit tests.
 One of Boost's quiet superpowers is numerical correctness without fanfare - the standard library often prioritizes _simplicity_ whereas Boost prioritizes _correctness_.
 Numerical errors are design flaws, not rounding accidents!
 
-Note:: Acronyms are super-common in aerospace. FEA is _Finite Element Analysis_ (essentially breaking complex structures into small elements for testing and behavior). CFD is _Computational Fluid Dynamics_  (for example, modelling turbulence). PLM is _Product Lifecycle Management_ (tracking changes, metadata, milestones) and answering "What exactly did we know when we signed off this design?". PDM is _Product Data Management_, managing exactly what data exists, which version is authoritative, who changed it, and what it affects. Get used to a sea of acronyms in this space.
+Note:: Acronyms are dense in aerospace. FEA is _Finite Element Analysis_ (essentially breaking complex structures into small elements for testing and behavior). CFD is _Computational Fluid Dynamics_  (for example, modelling turbulence). PLM is _Product Lifecycle Management_ (tracking changes, metadata, milestones) but can also mean _Part Load Management_. PDM is _Product Data Management_, managing exactly what data exists and which version is authoritative, but it can also mean _Power Distribution Module_. Context is mandatory - the unofficial rule is "if someone doesn't ask for clarification, they probably misunderstand"!
 
 == Libraries
 
