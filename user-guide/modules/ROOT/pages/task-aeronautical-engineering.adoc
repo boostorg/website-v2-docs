@@ -16,6 +16,7 @@ This topic examines the pressure on software engineers when working in the aeron
 [square]
 * <<Aeronautical Design Fundamentals>>
 * <<Libraries>>
+* <<Demonstrating Range Failure>>
 * <<Next Steps>>
 * <<See Also>>
 
@@ -95,6 +96,78 @@ image:aerospace-gear.png[Aircraft gear blueprint]
 * boost:signals2[] : Useful for local publish/subscribe patterns within a module.
 
 * boost:program_options[] and boost:property_tree[] : Useful for server/service configuration and for storing structured metadata.
+
+== Demonstrating Range Failure
+
+In order to show the effects of unmanaged numerical ranges, we'll calculate the hypotenuse of a simple right-angled triangle. The two sides of the triangle are of equal length, so the result _should be_ the square root of 2 (1.4142...) times the length of one of the sides. This is true if the sides of the triangle are both 1, or both 1 zillion.
+
+The naive version tries to calculate the hypotenuse using standard math.
+
+[source,cpp]
+----
+#include <cmath>
+#include <iostream>
+
+double naive_hypot(double x, double y)
+{
+    return std::sqrt(x * x + y * y);
+}
+
+int main()
+{
+    double x = 1e154;
+    double y = 1e154;
+
+    double result = naive_hypot(x, y);
+
+    std::cout << "Naive hypot result: " << result << "\n";
+
+    if (std::isinf(result))
+        std::cout << "Result overflowed to infinity\n";
+}
+
+----
+
+If you run this code, you will probably get:
+
+[source,text]
+----
+Naive hypot result: inf
+Result overflowed to infinity
+----
+
+You should also have noticed that you did not get an error, warning, or exception. So, what happened?
+
+The answer is the square of the huge values overflowed.
+
+Now try using boost::math[].
+
+[source,cpp]
+----
+#include <boost/math/special_functions/hypot.hpp>
+#include <iostream>
+
+int main()
+{
+    double x = 1e154;
+    double y = 1e154;
+
+    double result = boost::math::hypot(x, y);
+
+    std::cout << "Boost hypot result: " << result << "\n";
+} 
+----
+
+If you run this version, you should get the correct result:
+
+[source,text]
+----
+Boost hypot result: 1.41421e+154
+----
+
+boost:math[] uses scaling algorithms so that errors are avoided in the edge cases of handling very large values, or for that matter very tiny values.
+
+The difference between `sqrt(x*x + y*y)` and `boost::math::hypot(x, y)` is not performance or convenience — it is whether intermediate values are allowed to destroy correctness.
 
 == Next Steps
 
