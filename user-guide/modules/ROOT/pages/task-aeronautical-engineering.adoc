@@ -18,6 +18,7 @@ This topic examines the pressure on software engineers when working in the aeron
 * <<Libraries>>
 * <<Demonstrating Range Failure>>
 * <<Demonstrating Underflow>>
+* <<Demonstrating Order-Dependent Drift>>
 * <<Next Steps>>
 * <<See Also>>
 
@@ -81,6 +82,8 @@ Note:: Acronyms are dense in aerospace. FEA is _Finite Element Analysis_ (essent
 == Libraries
 
 * boost:math[] : Provides carefully implemented, well-documented algorithms for elementary and special functions with known accuracy characteristics, correct handling of edge cases, and predictable behavior across compilers and architectures. Functions like `hypot`, robust inverse trig, stable polynomial evaluation, and well-behaved probability distributions eliminate entire classes of silent numerical failures that are notoriously hard to reproduce and even harder to certify. Equally important, this library supports a verification-first engineering culture. Its scale-aware comparisons, error bounds, and compatibility with multi-precision backends allow engineers to create reference implementations and numerical “gold standards” alongside high-performance code. This is exactly what certification demands: the ability to demonstrate not only that results are fast, but that they are correct _within defined tolerances_, repeatable years later, and defensible under audit. The library quietly delivers numerical trust, and avoid such things as _floating-point drift_ and _order-dependent drift_.
+
+boost:multiprecision[] : For when extremely large or small numbers need to be calculated, with great precision.
 
 image:aerospace-gear.png[Aircraft gear blueprint]
 
@@ -303,6 +306,89 @@ Run this and you get the correct answer:
 In physical models, if motion exists, it should be represented. 
 
 For the aerospace engineer underflow is dangerous because it is so quiet that incorrect results can look plausible, zero is, after all, a valid number.
+
+== Demonstrating Order-Dependent Drift
+
+Order-dependent drift is one of the most misunderstood floating-point hazards, and it shows up constantly in aerospace (summations of forces, energies, residuals, loads).
+
+Order-dependent drift occurs because floating-point addition is not associative: `(a + b) + c` does not equal `a + (b + c)` when one, or more, value is very large and other values are very small. Physically, the small forces matter. Numerically, they may disappear.
+
+In the following example, the small forces are silently discarded:
+
+[source,cpp]
+----
+#include <vector>
+#include <iostream>
+#include <iomanip>
+
+double naive_sum(const std::vector<double>& values)
+{
+    double sum = 0.0;
+    for (double v : values)
+        sum += v;
+    return sum;
+}
+
+int main()
+{
+    std::vector<double> forces;
+
+    forces.push_back(1e20);          // Large load
+    for (int i = 0; i < 1'000'000; ++i)
+        forces.push_back(1.0);       // Small loads
+
+    double result = naive_sum(forces);
+
+    std::cout << std::setprecision(17);
+    std::cout << "Naive sum: " << result << "\n";
+}
+----
+
+Run this and you get the answer:
+
+[source,text]
+----
+Naive sum: 1e+20
+----
+
+Boost provides numerically stable accumulation algorithms via boost:accumulators[]. In the following example, small values are preserved and order no longer matters.
+
+_Kahan summation_ keeps a compensation term that tracks lost low-order bits.
+
+[source,cpp]
+----
+#include <boost/accumulators/accumulators.hpp>
+#include <boost/accumulators/statistics/sum_kahan.hpp>
+#include <iostream>
+#include <iomanip>
+
+
+using namespace boost::accumulators;
+
+int main()
+{
+    accumulator_set<double, features<tag::sum_kahan>> acc;
+
+    acc(1e20);
+    for (int i = 0; i < 1'000'000; ++i)
+        acc(1.0);
+
+    std::cout << std::setprecision(17);
+    std::cout << "Boost Kahan sum: " << sum(acc) << "\n";
+}
+----
+
+Run this and you get the correct answer:
+
+[source,text]
+----
+Boost Kahan sum: 1.00000000000001e+20
+----
+
+Order-dependent drift is not randomness — it is determinism you didn't control.
+
+Note:: boost:accumulators[] and boost:math[] are known for compiling cleanly _only_ once every required header is present and all parameters are present and correct. Otherwise these libs can generate a lot of errors.
+
 
 == Next Steps
 
