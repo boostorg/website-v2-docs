@@ -17,6 +17,8 @@ This topic examines the pressure on software engineers when working in the aeron
 * <<Aeronautical Design Fundamentals>>
 * <<Libraries>>
 * <<Demonstrating Range Failure>>
+* <<Demonstrating Underflow>>
+* <<Demonstrating Order-Dependent Drift>>
 * <<Next Steps>>
 * <<See Also>>
 
@@ -81,6 +83,8 @@ Note:: Acronyms are dense in aerospace. FEA is _Finite Element Analysis_ (essent
 
 * boost:math[] : Provides carefully implemented, well-documented algorithms for elementary and special functions with known accuracy characteristics, correct handling of edge cases, and predictable behavior across compilers and architectures. Functions like `hypot`, robust inverse trig, stable polynomial evaluation, and well-behaved probability distributions eliminate entire classes of silent numerical failures that are notoriously hard to reproduce and even harder to certify. Equally important, this library supports a verification-first engineering culture. Its scale-aware comparisons, error bounds, and compatibility with multi-precision backends allow engineers to create reference implementations and numerical “gold standards” alongside high-performance code. This is exactly what certification demands: the ability to demonstrate not only that results are fast, but that they are correct _within defined tolerances_, repeatable years later, and defensible under audit. The library quietly delivers numerical trust, and avoid such things as _floating-point drift_ and _order-dependent drift_.
 
+boost:multiprecision[] : For when extremely large or small numbers need to be calculated, with great precision.
+
 image:aerospace-gear.png[Aircraft gear blueprint]
 
 * boost:accumulators[] : This provides numerically stable statistics, preventing _summation_drift_ and an answer to _never sum large datasets naïvely_.
@@ -96,6 +100,8 @@ image:aerospace-gear.png[Aircraft gear blueprint]
 * boost:signals2[] : Useful for local publish/subscribe patterns within a module.
 
 * boost:program_options[] and boost:property_tree[] : Useful for server/service configuration and for storing structured metadata.
+
+Note:: The code in this tutorial was written and tested using Microsoft Visual Studio (Visual C++ 2022, Console App project) with Boost version 1.88.0.
 
 == Demonstrating Range Failure
 
@@ -168,6 +174,221 @@ Boost hypot result: 1.41421e+154
 boost:math[] uses scaling algorithms so that errors are avoided in the edge cases of handling very large values, or for that matter very tiny values.
 
 The difference between `sqrt(x*x + y*y)` and `boost::math::hypot(x, y)` is not performance or convenience — it is whether intermediate values are allowed to destroy correctness.
+
+== Demonstrating Underflow
+
+Underflow is the quiet sibling of overflow and much closer in spirit to _drift_. Underflow occurs when a result is too small to be represented as a normal floating-point number and is rounded to zero.
+
+The following code shows repeated division, eventually resulting in underflow:
+
+[source,cpp]
+----
+#include <iostream>
+#include <iomanip>
+
+int main()
+{
+    double x = 1.0;
+
+    std::cout << std::setprecision(17);
+
+    for (int i = 0; i < 1100; ++i)
+    {
+        x /= 2.0;
+
+        if (x == 0.0)
+        {
+            std::cout << "Underflow to zero at iteration " << i << "\n";
+            break;
+        }
+    }
+
+    std::cout << "Final value: " << x << "\n";
+}
+----
+
+Run this code:
+
+[source,text]
+----
+Underflow to zero at iteration 1074
+Final value: 0
+----
+
+The `double` does have around 308 bits of range (and 52 bits of mantissa), but eventually precision collapses. boost:math[] can improve numerical stability, but it cannot extend the representable range of a floating-point type. If the value is important, then we add boost:multiprecision[] to our toolset:
+
+[source,cpp]
+----
+#include <boost/multiprecision/cpp_bin_float.hpp>
+#include <iostream>
+#include <iomanip>
+
+using highp = boost::multiprecision::cpp_bin_float_100;
+
+int main()
+{
+    highp x = 1.0;
+
+    for (int i = 0; i < 1100; ++i)
+        x /= 2;
+
+    std::cout << std::scientific << std::setprecision(50);
+    std::cout << "Value after division: " << x << "\n";
+}
+----
+
+Run this:
+
+[source,text]
+----
+Value after division: 7.36215182902286267543686617714496511764913503250964e-332
+----
+
+Aeronautical models need to cope with situations like long-duration decay processes, residual convergence, damping terms, energy dissipation, and very small forces accumulated over time. The key concept here is that *zero is physically wrong!*
+
+For a second example, let's examine where underflow destroys a physical invariant. In the following code the super small but non-zero velocity value is lost:
+
+[source,cpp]
+----
+#include <iostream>
+#include <iomanip>
+
+int main()
+{
+    double velocity = 1e-300;   // Very small, but non-zero
+    double dt = 1e-300;         // Time step
+
+    double displacement = velocity * dt;
+
+    std::cout << std::setprecision(17);
+    std::cout << "Displacement: " << displacement << "\n";
+
+    if (displacement == 0.0)
+        std::cout << "Underflow: motion lost\n";
+}
+----
+
+Run the code:
+
+[source,text]
+----
+Displacement: 0
+Underflow: motion lost
+----
+
+Again we look to boost:multiprecision[] to maintain the significance of a tiny value:
+
+[source,cpp]
+----
+#include <boost/multiprecision/cpp_dec_float.hpp>
+#include <iostream>
+
+using highp = boost::multiprecision::cpp_dec_float_50;
+
+int main()
+{
+    highp velocity = highp("1e-300");
+    highp dt       = highp("1e-300");
+
+    highp displacement = velocity * dt;
+
+    std::cout << displacement << "\n";
+}
+----
+
+Run this and you get the correct answer:
+
+[source,text]
+----
+1e-600
+----
+
+In physical models, if motion exists, it should be represented. 
+
+For the aerospace engineer underflow is dangerous because it is so quiet that incorrect results can look plausible, zero is, after all, a valid number.
+
+== Demonstrating Order-Dependent Drift
+
+Order-dependent drift is one of the most misunderstood floating-point hazards, and it shows up constantly in aerospace (summations of forces, energies, residuals, loads).
+
+Order-dependent drift occurs because floating-point addition is not associative: `(a + b) + c` does not equal `a + (b + c)` when one, or more, value is very large and other values are very small. Physically, the small forces matter. Numerically, they may disappear.
+
+In the following example, the small forces are silently discarded:
+
+[source,cpp]
+----
+#include <vector>
+#include <iostream>
+#include <iomanip>
+
+double naive_sum(const std::vector<double>& values)
+{
+    double sum = 0.0;
+    for (double v : values)
+        sum += v;
+    return sum;
+}
+
+int main()
+{
+    std::vector<double> forces;
+
+    forces.push_back(1e20);          // Large load
+    for (int i = 0; i < 1'000'000; ++i)
+        forces.push_back(1.0);       // Small loads
+
+    double result = naive_sum(forces);
+
+    std::cout << std::setprecision(17);
+    std::cout << "Naive sum: " << result << "\n";
+}
+----
+
+Run this and you get the answer:
+
+[source,text]
+----
+Naive sum: 1e+20
+----
+
+Boost provides numerically stable accumulation algorithms via boost:accumulators[]. In the following example, small values are preserved and order no longer matters.
+
+_Kahan summation_ keeps a compensation term that tracks lost low-order bits.
+
+[source,cpp]
+----
+#include <boost/accumulators/accumulators.hpp>
+#include <boost/accumulators/statistics/sum_kahan.hpp>
+#include <iostream>
+#include <iomanip>
+
+
+using namespace boost::accumulators;
+
+int main()
+{
+    accumulator_set<double, features<tag::sum_kahan>> acc;
+
+    acc(1e20);
+    for (int i = 0; i < 1'000'000; ++i)
+        acc(1.0);
+
+    std::cout << std::setprecision(17);
+    std::cout << "Boost Kahan sum: " << sum(acc) << "\n";
+}
+----
+
+Run this and you get the correct answer:
+
+[source,text]
+----
+Boost Kahan sum: 1.00000000000001e+20
+----
+
+Order-dependent drift is not randomness — it is determinism you didn't control.
+
+Note:: boost:accumulators[] and boost:math[] are known for compiling cleanly _only_ once every required header is present and all parameters are present and correct. Otherwise these libs can generate a lot of errors.
+
 
 == Next Steps
 
