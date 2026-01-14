@@ -17,6 +17,7 @@ This topic examines the pressure on software engineers when working in the aeron
 * <<Aeronautical Design Fundamentals>>
 * <<Libraries>>
 * <<Demonstrating Range Failure>>
+* <<Demonstrating Underflow>>
 * <<Next Steps>>
 * <<See Also>>
 
@@ -97,6 +98,8 @@ image:aerospace-gear.png[Aircraft gear blueprint]
 
 * boost:program_options[] and boost:property_tree[] : Useful for server/service configuration and for storing structured metadata.
 
+Note:: The code in this tutorial was written and tested using Microsoft Visual Studio (Visual C++ 2022, Console App project) with Boost version 1.88.0.
+
 == Demonstrating Range Failure
 
 In order to show the effects of unmanaged numerical ranges, we'll calculate the hypotenuse of a simple right-angled triangle. The two sides of the triangle are of equal length, so the result _should be_ the square root of 2 (1.4142...) times the length of one of the sides. This is true if the sides of the triangle are both 1, or both 1 zillion.
@@ -168,6 +171,138 @@ Boost hypot result: 1.41421e+154
 boost:math[] uses scaling algorithms so that errors are avoided in the edge cases of handling very large values, or for that matter very tiny values.
 
 The difference between `sqrt(x*x + y*y)` and `boost::math::hypot(x, y)` is not performance or convenience — it is whether intermediate values are allowed to destroy correctness.
+
+== Demonstrating Underflow
+
+Underflow is the quiet sibling of overflow and much closer in spirit to _drift_. Underflow occurs when a result is too small to be represented as a normal floating-point number and is rounded to zero.
+
+The following code shows repeated division, eventually resulting in underflow:
+
+[source,cpp]
+----
+#include <iostream>
+#include <iomanip>
+
+int main()
+{
+    double x = 1.0;
+
+    std::cout << std::setprecision(17);
+
+    for (int i = 0; i < 1100; ++i)
+    {
+        x /= 2.0;
+
+        if (x == 0.0)
+        {
+            std::cout << "Underflow to zero at iteration " << i << "\n";
+            break;
+        }
+    }
+
+    std::cout << "Final value: " << x << "\n";
+}
+----
+
+Run this code:
+
+[source,text]
+----
+Underflow to zero at iteration 1074
+Final value: 0
+----
+
+The `double` does have around 308 bits of range (and 52 bits of mantissa), but eventually precision collapses. boost:math[] can improve numerical stability, but it cannot extend the representable range of a floating-point type. If the value is important, then we add boost:multiprecision[] to our toolset:
+
+[source,cpp]
+----
+#include <boost/multiprecision/cpp_bin_float.hpp>
+#include <iostream>
+#include <iomanip>
+
+using highp = boost::multiprecision::cpp_bin_float_100;
+
+int main()
+{
+    highp x = 1.0;
+
+    for (int i = 0; i < 1100; ++i)
+        x /= 2;
+
+    std::cout << std::scientific << std::setprecision(50);
+    std::cout << "Value after division: " << x << "\n";
+}
+----
+
+Run this:
+
+[source,text]
+----
+Value after division: 7.36215182902286267543686617714496511764913503250964e-332
+----
+
+Aeronautical models need to cope with situations like long-duration decay processes, residual convergence, damping terms, energy dissipation, and very small forces accumulated over time. The key concept here is that *zero is physically wrong!*
+
+For a second example, let's examine where underflow destroys a physical invariant. In the following code the super small but non-zero velocity value is lost:
+
+[source,cpp]
+----
+#include <iostream>
+#include <iomanip>
+
+int main()
+{
+    double velocity = 1e-300;   // Very small, but non-zero
+    double dt = 1e-300;         // Time step
+
+    double displacement = velocity * dt;
+
+    std::cout << std::setprecision(17);
+    std::cout << "Displacement: " << displacement << "\n";
+
+    if (displacement == 0.0)
+        std::cout << "Underflow: motion lost\n";
+}
+----
+
+Run the code:
+
+[source,text]
+----
+Displacement: 0
+Underflow: motion lost
+----
+
+Again we look to boost:multiprecision[] to maintain the significance of a tiny value:
+
+[source,cpp]
+----
+#include <boost/multiprecision/cpp_dec_float.hpp>
+#include <iostream>
+
+using highp = boost::multiprecision::cpp_dec_float_50;
+
+int main()
+{
+    highp velocity = highp("1e-300");
+    highp dt       = highp("1e-300");
+
+    highp displacement = velocity * dt;
+
+    std::cout << displacement << "\n";
+}
+----
+
+Run this and you get the correct answer:
+
+[source,text]
+----
+1e-600
+----
+
+In physical models, if motion exists, it should be represented. 
+
+For the aerospace engineer underflow is dangerous because it is so quiet that incorrect results can look plausible, zero is, after all, a valid number.
 
 == Next Steps
 
