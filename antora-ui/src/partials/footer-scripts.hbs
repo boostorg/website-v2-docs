@@ -1,3 +1,9 @@
 <script id="site-script" src="{{{uiRootPath}}}/js/site.js" data-ui-root-path="{{{uiRootPath}}}"></script>
 <script async src="{{{uiRootPath}}}/js/vendor/highlight.js"></script>
 <script async src="{{{uiRootPath}}}/js/vendor/tabs.js" data-sync-storage-key="preferred-tab"></script>
+{{#if env.SITE_SEARCH_PROVIDER}}
+<script async src="{{{uiRootPath}}}/js/vendor/lunr.js"></script>
+<script async src="{{{uiRootPath}}}/js/search-ui.js" id="search-ui-script" data-site-root-path="{{{siteRootPath}}}"
+  data-ui-root-path="{{{uiRootPath}}}"></script>
+<script async src="{{{siteRootPath}}}/search-index.js"></script>
+{{/if}}
