@@ -1,5 +1,12 @@
 <div class="toolbar" role="navigation">
 {{> nav-toggle}}
 {{> breadcrumbs}}
+{{#if env.SITE_SEARCH_PROVIDER}}
+  <div class="search-container">
+    <div id="search-field" class="field has-filter">
+      <input id="search-input" type="text" placeholder="Search the docs" {{#if page.home}} autofocus{{/if}}>
+    </div>
+  </div>
+{{/if}}
 {{> pagination-spirit}}
 </div>
