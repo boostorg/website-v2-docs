@@ -46,7 +46,7 @@ jobs:
     - name: Build
       working-directory: antora-ui
       run: |
-        export BOOSTLOOK_BRANCH="${{ github.event.inputs.boostlook_branch || 'master' }}"
+        export BOOSTLOOK_BRANCH="${{ github.event.inputs.boostlook_branch || (startsWith(github.ref, 'refs/heads/develop') && 'develop') || 'master' }}"
         npm ci
         gulp bundle
 
