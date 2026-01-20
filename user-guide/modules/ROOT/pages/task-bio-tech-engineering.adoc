@@ -47,7 +47,7 @@ Note:: The code in this tutorial was written and tested using Microsoft Visual S
 In biotechnology and molecular biology, _phylogenetic trees_ link:#footnote1[(1)] have become go-to data structures - researchers compare the DNA, RNA, or protein sequences of multiple organisms to infer evolutionary relationships and similarities. This is particularly important in drug discovery, where understanding conserved sequences across species can indicate potential targets for antibiotics, antivirals, or cancer therapies. Similarly, phylogenetic analysis aids scientists track how viruses like influenza or SARS-CoV-2 mutate over time, and predict which strains are most likely to dominate. 
 
 [#footnote2-location]
-Beyond genomics, phylogenetic trees are also widely used in synthetic biology and _metagenomics_ link:#footnote1[(2)]. In synthetic biology, phylotrees guide the design of engineered organisms or genetic circuits.
+Beyond genomics, phylogenetic trees are also widely used in synthetic biology and _metagenomics_ link:#footnote2[(2)]. In synthetic biology, phylotrees guide the design of engineered organisms or genetic circuits.
 
 Phylogenetic trees have also proven valuable in epidemiology and biotechnology safety monitoring. By mapping the evolutionary history of pathogens, scientists can trace the source of outbreaks, identify transmission patterns, and evaluate the emergence of drug resistance.
 

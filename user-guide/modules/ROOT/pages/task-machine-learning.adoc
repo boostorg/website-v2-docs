@@ -455,7 +455,7 @@ Note:: Due to the random element, running the code repeatedly can give slightly 
 == Predict Future Values of Time Series Data
 
 [#footnote5-location]
-The following code tries to predict the next value in a 1D time series, using a simplified _Transformer-style self-attention mechanism_ link:#footnote4[(5)].
+The following code tries to predict the next value in a 1D time series, using a simplified _Transformer-style self-attention mechanism_ link:#footnote5[(5)].
 
 [source,cpp]
 ----
