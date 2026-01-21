@@ -49,15 +49,15 @@ Boost uses an automatic regression test suite which generates HTML compiler stat
 
 == Snapshots
 
-Snapshots are used for quality control checks, and are posted to the JFrog platform. Because the snapshots represent work-in-process, they may not be suitable for production use.
+Snapshots are used for quality control checks, and are posted to https://archives.boost.io/[Archives]. Because the snapshots represent work-in-process, they may not be suitable for production use.
 
 The Unix tarballs and Windows zipballs are identical except for the line endings exported from Git.
 
 [cols="1,2",options="header",stripes=even,frame=none]
 |===
 | *Version* | *Download*
-| Master branch | https://boostorg.jfrog.io/artifactory/main/master/[JFrog Index of main/master] 
-| Develop branch | https://boostorg.jfrog.io/artifactory/main/develop/[JFrog Index of main/develop] 
+| Master branch |  https://archives.boost.io/master/[Index of /master/] 
+| Develop branch | https://archives.boost.io/develop/[Index of /develop/]
 |===
 
 The Git master branch can be checked out from https://github.com/boostorg/boost[boostorg/boost].
