@@ -16,9 +16,9 @@ on:
   workflow_dispatch:
     inputs:
       boostlook_branch:
-        description: 'Branch to use for boostlook.css'
-        required: true
-        default: 'master'
+        description: 'Branch to use for boostlook.css (leave empty to auto-detect from branch)'
+        required: false
+        default: ''
 
 concurrency:
   group: ${{format('ui-release-{0}:{1}', github.repository, github.ref)}}
@@ -27,7 +27,7 @@ concurrency:
 jobs:
   build:
     runs-on: ubuntu-latest
-    if: ${{ (github.ref == 'refs/heads/master' || github.ref == 'refs/heads/develop') && github.event_name == 'push' }}
+    if: ${{ (github.ref == 'refs/heads/master' || github.ref == 'refs/heads/develop') && (github.event_name == 'push' || github.event_name == 'workflow_dispatch') }}
     permissions:
       contents: write
 
@@ -46,7 +46,7 @@ jobs:
     - name: Build
       working-directory: antora-ui
       run: |
-        export BOOSTLOOK_BRANCH="${{ github.event.inputs.boostlook_branch || 'master' }}"
+        export BOOSTLOOK_BRANCH="${{ github.event.inputs.boostlook_branch || (startsWith(github.ref, 'refs/heads/develop') && 'develop') || 'master' }}"
         npm ci
         gulp bundle
 
