@@ -20,6 +20,7 @@ This topic examines the pressure on software engineers when working in the aeron
 * <<Demonstrating Underflow>>
 * <<Demonstrating Order-Dependent Drift>>
 * <<Next Steps>>
+* <<Footnotes>>
 * <<See Also>>
 
 == Aeronautical Design Fundamentals
@@ -44,6 +45,7 @@ The modelling service component owns the "truth" of geometry and constraints. Co
 
 When building a system for use anywhere in the aerospace industry, it is a good idea to stick to these core principles:
 
+[#footnote1-location]
 . Command determinism - No hidden randomness and no time-based logic without injected clocks.
 
 . Immutable inputs - Commands are value objects and model state is derived, not mutated ad hoc.
@@ -54,7 +56,7 @@ When building a system for use anywhere in the aerospace industry, it is a good 
 
 . Time-Travel Debugging - Step forward _and_ backward through events.
 
-. Section Cuts (an aerospace favorite) - Auto-generate spanwise cuts, diff cross-sections, and plot profiles.
+. Section Cuts (an aerospace favorite) - Auto-generate _spanwise cuts_ link:#footnote1[(1)], diff cross-sections, and plot profiles.
 
 *A deterministic simulation of engineering intent is what exactly what certification bodies care about.*
 
@@ -74,8 +76,7 @@ In aerospace terms: _if you can't replay it, you can't certify it_. An aircraft 
 
 This goes far beyond unit tests.
 
-One of Boost's quiet superpowers is numerical correctness without fanfare - the standard library often prioritizes _simplicity_ whereas Boost prioritizes _correctness_.
-Numerical errors are design flaws, not rounding accidents!
+One of Boost's quiet superpowers is numerical correctness without fanfare - the standard library often prioritizes _simplicity_ whereas Boost prioritizes _correctness_. Numerical errors are design flaws, not rounding accidents!
 
 Note:: Acronyms are dense in aerospace. FEA is _Finite Element Analysis_ (essentially breaking complex structures into small elements for testing and behavior). CFD is _Computational Fluid Dynamics_  (for example, modelling turbulence). PLM is _Product Lifecycle Management_ (tracking changes, metadata, milestones) but can also mean _Part Load Management_. PDM is _Product Data Management_, managing exactly what data exists and which version is authoritative, but it can also mean _Power Distribution Module_. Context is mandatory - the unofficial rule is "if someone doesn't ask for clarification, they probably misunderstand"!
 
@@ -244,7 +245,8 @@ Run this:
 Value after division: 7.36215182902286267543686617714496511764913503250964e-332
 ----
 
-Aeronautical models need to cope with situations like long-duration decay processes, residual convergence, damping terms, energy dissipation, and very small forces accumulated over time. The key concept here is that *zero is physically wrong!*
+[#footnote2-location]
+Aeronautical models need to cope with situations like long-duration decay processes, _residual convergence_ link:#footnote2[(2)], damping terms, energy dissipation, and very small forces accumulated over time. The key concept here is that *zero is physically wrong!*
 
 For a second example, let's examine where underflow destroys a physical invariant. In the following code the super small but non-zero velocity value is lost:
 
@@ -353,7 +355,8 @@ Naive sum: 1e+20
 
 Boost provides numerically stable accumulation algorithms via boost:accumulators[]. In the following example, small values are preserved and order no longer matters.
 
-_Kahan summation_ keeps a compensation term that tracks lost low-order bits.
+[#footnote3-location]
+_Kahan summation_ link:#footnote3[(3)] keeps a compensation term that tracks lost low-order bits:
 
 [source,cpp]
 ----
@@ -447,6 +450,20 @@ And consider your test harness/certification architecture right from the start:
 ----
 
 Start with correctness in mind, and continue along that path.
+
+== Footnotes
+
+[#footnote1]
+link:#footnote1-location[(1)]
+A spanwise cut is a cross-section taken along the span of a wing or lifting surface, from the wing root (near the fuselage) toward the wing tip. It is used to examine how  properties vary across the width of the wingspan, rather than along the flight direction. Nothing is even across the span of a wing, and spanwise cuts are used to measure pressure coefficients, bending stress, fatigue hot spots, baseline verses modified wing geometry, and loads of various sorts.
+
+[#footnote2]
+link:#footnote2-location[(2)]
+Residual convergence is about measuring how wrong your current solution still is, rather than how much the solution (the result) itself is changing. Residuals are a measure of the errors, and if the residuals flatten out or oscillate, something is wrong. Even if your solver converges, a non-shrinking residual means you might be converging to the wrong answer.
+
+[#footnote3]
+link:#footnote3-location[(3)]
+Kahan summation is a technique for adding lots of floating-point numbers while losing far less precision than `sum += x`. This technique keeps a small “error accumulator” that tracks the bits lost to rounding — and feeds them back in on the next addition. In simple terms, you don't get more precision than `double` allows, but you stop throwing it away. In aerospace, bio-tech, finance, and simulation code, it's one of those “once you see it, you never un-see it” techniques.
 
 == See Also
 
