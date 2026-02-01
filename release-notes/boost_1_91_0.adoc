@@ -29,6 +29,15 @@ boost_at:/doc/libs/1_91_0/[Documentation]
 // ** Conform to `std::pointer_traits` requirements (boost_gh:pr[interprocess,32]).
 // ** Fixed `named_condition_any` fails to notify (boost_gh:issue[interprocess,62]).
 
+* boost_phrase:library[Exception,/libs/exception/]:
+** Customizable serialization API, built-in support for Boost.JSON and nlohmann/json.
+* boost_phrase:library[LEAF,/libs/leaf/]:
+** Customizable serialization API, built-in support for Boost.JSON and nlohmann/json.
+** Support for using LEAF error objects across DLL boundaries on Windows (off by default).
+** Refinements in the internal TLS API (e.g. Win32, embedded).
+** Improvements in the diagnostics system and in the  `on_error` implementation.
+** Implementation quality improvements (e.g. more precise handling of `noexcept`).
+** Removed the deprecated `verbose_diagnostic_info` (replaced by `diagfnostic_details`).
 * boost_phrase:library[MultiIndex,/libs/multi_index/]:
 ** *Breaking change:* All type lists accepted or provided by the library (`indexed_by`,
 `tag`, nested typedefs `index_specifier_type_list`, `index_type_list`, `iterator_type_list`
