@@ -46,9 +46,9 @@ In order for a review to proceed, a Boost member must volunteer to manage the re
 
 | *Boost 1.89.0 Released* |  - |   Marshall Clow |  August 14, 2025 | https://www.boost.org/users/history/version_1_89_0.html[Notes] 
 
-| https://master.bloom.cpp.al/html/index.html[Bloom] | Joaquin M Lopez Munoz | Arnaud Becheler | May 13, 2025 - May 22, 2025 | https://lists.boost.org/Archives/boost/2025/05/259631.php[Accepted]
+| https://master.bloom.cpp.al/html/index.html[Bloom] | Joaquin M Lopez Munoz | Arnaud Becheler | May 13, 2025 - May 22, 2025 | https://lists.boost.org/Archives/boost/2025/05/259631.php[Accepted] Added in 1.89.0
 
-| https://jll63.github.io/Boost.OpenMethod/[OpenMethod] | Jean-Louis Leroy | Dmitry Arkhipov | April 28, 2025 - May 07, 2025 | https://lists.boost.org/Archives/boost/2025/05/259629.php[Accepted]
+| https://jll63.github.io/Boost.OpenMethod/[OpenMethod] | Jean-Louis Leroy | Dmitry Arkhipov | April 28, 2025 - May 07, 2025 | https://lists.boost.org/Archives/boost/2025/05/259629.php[Accepted] Added in 1.90.0
 
 | *Boost 1.88.0 Released* |  - |   Marshall Clow |  April 10, 2025 | https://www.boost.org/users/history/version_1_88_0.html[Notes] 
 
