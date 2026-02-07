@@ -24,8 +24,8 @@
   outline-offset: 2px;
 }
 
-.theme-toggle .material-symbols-outlined {
-  font-size: 20px;
+.theme-toggle .fas {
+  font-size: 16px;
   vertical-align: middle;
   color: var(--color-jet-70);
 }
@@ -47,7 +47,7 @@ html.dark .theme-icon-light {
   display: none;
 }
 
-html.dark .theme-toggle .material-symbols-outlined {
+html.dark .theme-toggle .fas {
   color: #f0f0ff;
 }
 
