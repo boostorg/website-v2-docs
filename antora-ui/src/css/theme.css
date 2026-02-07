@@ -6,17 +6,18 @@
   align-items: center;
   justify-content: center;
   background: transparent;
-  border: none;
+  border: 1px solid var(--border-border-primary, #e4e7ea);
   cursor: pointer;
   padding: 0.25rem;
-  margin-left: 0.5rem;
-  margin-right: 0.5rem;
-  border-radius: 4px;
+  margin-left: 1rem;
+  margin-right: 0;
+  margin-bottom: 0.25rem;
+  border-radius: var(--spacing-size-2xs, 0.5rem);
   transition: background-color 0.2s ease;
 }
 
-.theme-toggle:hover {
-  background-color: rgba(0, 0, 0, 0.1);
+.theme-toggle:hover .fas {
+  color: var(--colors-brand-orange-500, #ff9f00);
 }
 
 .theme-toggle:focus {
@@ -24,33 +25,37 @@
   outline-offset: 2px;
 }
 
-.theme-toggle .material-symbols-outlined {
-  font-size: 20px;
+.theme-toggle .fas {
+  font-size: 16px;
   vertical-align: middle;
   color: var(--color-jet-70);
 }
 
 /* Show/hide icons based on theme */
 .theme-icon-dark {
-  display: none;
+  display: inline;
 }
 
 .theme-icon-light {
-  display: inline;
-}
-
-html.dark .theme-icon-dark {
-  display: inline;
-}
-
-html.dark .theme-icon-light {
   display: none;
 }
 
-html.dark .theme-toggle .material-symbols-outlined {
+html.dark .theme-icon-dark {
+  display: none;
+}
+
+html.dark .theme-icon-light {
+  display: inline;
+}
+
+html.dark .theme-toggle {
+  border-color: var(--colors-neutral-850, #333);
+}
+
+html.dark .theme-toggle .fas {
   color: #f0f0ff;
 }
 
-html.dark .theme-toggle:hover {
-  background-color: rgba(255, 255, 255, 0.1);
+html.dark .theme-toggle:hover .fas {
+  color: var(--colors-brand-orange-500, #ff9f00);
 }
