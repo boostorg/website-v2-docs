@@ -1,0 +1,56 @@
+/* Dark Theme Styles */
+
+/* Theme toggle button */
+.theme-toggle {
+  display: none;
+  align-items: center;
+  justify-content: center;
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  padding: 0.25rem;
+  margin-left: 0.5rem;
+  margin-right: 0.5rem;
+  border-radius: 4px;
+  transition: background-color 0.2s ease;
+}
+
+.theme-toggle:hover {
+  background-color: rgba(0, 0, 0, 0.1);
+}
+
+.theme-toggle:focus {
+  outline: 2px solid var(--link-font-color);
+  outline-offset: 2px;
+}
+
+.theme-toggle .fas {
+  font-size: 16px;
+  vertical-align: middle;
+  color: var(--color-jet-70);
+}
+
+/* Show/hide icons based on theme */
+.theme-icon-dark {
+  display: none;
+}
+
+.theme-icon-light {
+  display: inline;
+}
+
+html.dark .theme-icon-dark {
+  display: inline;
+}
+
+html.dark .theme-icon-light {
+  display: none;
+}
+
+html.dark .theme-toggle .fas {
+  color: #f0f0ff;
+}
+
+html.dark .theme-toggle:hover {
+  background-color: rgba(255, 255, 255, 0.1);
+}

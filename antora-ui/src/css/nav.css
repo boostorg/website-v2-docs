@@ -90,6 +90,13 @@ html.is-clipped--nav {
   position: relative;
 }
 
+.nav-menu .title-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.5rem;
+}
+
 .nav-menu h3.title {
   color: var(--nav-heading-font-color);
   font-size: inherit;
