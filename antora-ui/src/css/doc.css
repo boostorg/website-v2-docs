@@ -449,6 +449,10 @@
   vertical-align: middle;
 }
 
+.doc .imageblock .mermaid.content {
+  width: 100%;
+}
+
 .doc .image:not(.left):not(.right) > img {
   margin-top: -0.2em;
 }
