@@ -21,8 +21,7 @@
 }
 
 .theme-toggle:focus {
-  outline: 2px solid var(--link-font-color);
-  outline-offset: 2px;
+  outline: none;
 }
 
 .theme-toggle .fas {
