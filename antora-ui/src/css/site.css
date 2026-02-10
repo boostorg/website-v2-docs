@@ -15,6 +15,7 @@
 @import "footer.css";
 @import "highlight.css";
 @import "cpp-highlight.css";
+@import "theme.css";
 @import "print.css";
 @import "tailwindcss/base";
 @import "tailwindcss/components";
