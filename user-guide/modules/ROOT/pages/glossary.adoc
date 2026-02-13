@@ -339,6 +339,28 @@ Note:: For uses of hash functions in Boost libraries, refer to boost:hash2[], an
 
 *MOC* : In the context of Qt and pass:[C++], this refers to the Meta-Object Compiler - a tool that processes Qt's extensions to pass:[C++], such as signals and slots (a mechanism for event-driven programming) and other meta-object features (like introspection and dynamic properties). The MOC generates additional pass:[C++] code that enables these features to work seamlessly.
 
+*Molecular Modeling* : the process of simulating the behavior of atoms and molecules. This domain is packed with terms that sound totally ordinary (or even friendly) but mean something extremely technical, counter-intuitive, or unintentionally hilarious once you know the truth:
+
+* *Coarse Graining* : Replacing groups of atoms with fake blobs to survive computationally, or "Physics was too expensive so we squinted".
+
+* *Docking* : Guessing how two molecules might awkwardly stick together. Cynically, "We tried 10 million wrong poses and picked the least bad one".
+
+* *Energy Minimization* : Nudging atoms until the molecule stops screaming numerically.
+
+* *Force Field* : A big pile of equations pretending to be physics.
+
+* *Free Energy* : A brutally hard quantity requiring weeks of simulation and graduate student suffering.
+
+* *MD* : _Molecular Dynamics_, or running Newton's laws on millions of atoms for weeks to watch them jiggle.
+
+* *RMSD* : _Root Mean Square Deviation_, or how different is this molecule from that molecule, really, or "Your protein folded wrong again".
+
+* *Sampling* : Exploring a near-infinite configuration space and praying you didn't miss the important parts, or perhaps "We simulated 2 microseconds and still learned nothing".
+
+* *Solvation* : Dumping your sim molecule into pretend water.
+
+* *Wet Lab, Dry Lab* : A _Wet lab_ is pipettes, cells, chemicals, spills, whereas a _Dry lab_ is probably a supercomputer melting GPUs.
+
 *MPI* : Message Parsing Interface - refer to boost:mpi[]
 
 *MPL* or *MP11* : Metaprogramming Libraries - refer to boost:mpl[] and the later boost:mp11[]
