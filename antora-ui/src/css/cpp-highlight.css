@@ -39,3 +39,42 @@ code.cpp-highlight,
 .doc pre.highlight code.cpp-highlight {
   color: inherit;
 }
+
+/* === Dark mode overrides === */
+
+/* C++ Keywords - purple */
+html.dark code.cpp-highlight .cpp-keyword,
+html.dark .doc pre.highlight code.cpp-highlight .cpp-keyword {
+  color: var(--atom-one-dark-keyword, #c678dd);
+}
+
+/* C++ Strings - green */
+html.dark code.cpp-highlight .cpp-string,
+html.dark .doc pre.highlight code.cpp-highlight .cpp-string {
+  color: var(--atom-one-dark-string, #98c379);
+}
+
+/* C++ Preprocessor directives - coral/red */
+html.dark code.cpp-highlight .cpp-preprocessor,
+html.dark .doc pre.highlight code.cpp-highlight .cpp-preprocessor {
+  color: var(--atom-one-dark-operator, #e06c75);
+}
+
+/* C++ Comments - muted gray, italic */
+html.dark code.cpp-highlight .cpp-comment,
+html.dark .doc pre.highlight code.cpp-highlight .cpp-comment {
+  color: var(--atom-one-dark-comment, #5c6370);
+  font-style: italic;
+}
+
+/* C++ Attributes - orange */
+html.dark code.cpp-highlight .cpp-attribute,
+html.dark .doc pre.highlight code.cpp-highlight .cpp-attribute {
+  color: var(--atom-one-dark-variable, #d19a66);
+}
+
+/* Base text in C++ blocks - light gray */
+html.dark code.cpp-highlight,
+html.dark .doc pre.highlight code.cpp-highlight {
+  color: var(--atom-one-dark-text, #abb2bf);
+}
