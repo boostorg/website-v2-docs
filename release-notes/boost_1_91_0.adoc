@@ -31,6 +31,7 @@ boost_at:/doc/libs/1_91_0/[Documentation]
 
 * boost_phrase:library[Exception,/libs/exception/]:
 ** Added customizable serialization API, built-in support for Boost.JSON and nlohmann/json.
+
 * boost_phrase:library[LEAF,/libs/leaf/]:
 ** Added customizable serialization API, built-in support for Boost.JSON and nlohmann/json.
 ** Added support for using LEAF error objects across DLL boundaries on Windows (off by default).
@@ -38,6 +39,7 @@ boost_at:/doc/libs/1_91_0/[Documentation]
 ** Improvements in the diagnostics system and in the  `on_error` implementation.
 ** Implementation quality improvements (e.g. more precise use of `noexcept`).
 ** Removed the deprecated `verbose_diagnostic_info` (replaced by `diagnostic_details`).
+
 * boost_phrase:library[MultiIndex,/libs/multi_index/]:
 ** *Breaking change:* All type lists accepted or provided by the library (`indexed_by`,
 `tag`, nested typedefs `index_specifier_type_list`, `index_type_list`, `iterator_type_list`
@@ -54,6 +56,9 @@ variadic (previously the maximum number of template arguments was limited by
 with the exception that `composite_key::key_extractors` returns a `std::tuple` instead of
 a `boost::tuple` (and similarly for the rest of affected class templates).
 ** Removed internal workarounds and fallbacks to support pre-C++11 compilers.
+
+* boost_phrase:library[Unordered,/libs/unordered/]:
+** Fixed the returned value of range insertion in concurrent containers (boost_gh:pr[interprocess,344]).
 
 == Compilers Tested
 
