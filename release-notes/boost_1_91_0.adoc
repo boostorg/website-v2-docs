@@ -58,7 +58,7 @@ a `boost::tuple` (and similarly for the rest of affected class templates).
 ** Removed internal workarounds and fallbacks to support pre-C++11 compilers.
 
 * boost_phrase:library[Unordered,/libs/unordered/]:
-** Fixed the returned value of range insertion in concurrent containers (boost_gh:pr[interprocess,344]).
+** Fixed the returned value of range insertion in concurrent containers (boost_gh:pr[unordered,344]).
 
 == Compilers Tested
 
