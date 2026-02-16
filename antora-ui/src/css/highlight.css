@@ -84,3 +84,114 @@
 .hljs-strong {
   font-weight: var(--monospace-font-weight-bold);
 }
+
+/* === Dark mode overrides (Atom One Dark) === */
+
+/* Base text color for all pre/code blocks in dark mode
+   (covers plain <pre> without hljs, e.g. "Expected Output" blocks) */
+html.dark pre,
+html.dark .hljs {
+  color: var(--atom-one-dark-text, #abb2bf);
+}
+
+/* Comments */
+html.dark .hljs-comment,
+html.dark .hljs-quote {
+  color: var(--atom-one-dark-comment, #5c6370);
+  font-style: italic;
+}
+
+/* Keywords */
+html.dark .hljs-keyword,
+html.dark .hljs-selector-tag,
+html.dark .hljs-subst {
+  color: var(--atom-one-dark-keyword, #c678dd);
+}
+
+/* Strings */
+html.dark .hljs-string,
+html.dark .hljs-doctag,
+html.dark .hljs-regexp {
+  color: var(--atom-one-dark-string, #98c379);
+}
+
+/* Numbers, literals, variables */
+html.dark .hljs-number,
+html.dark .hljs-literal,
+html.dark .hljs-variable,
+html.dark .hljs-template-variable,
+html.dark .hljs-tag .hljs-attr {
+  color: var(--atom-one-dark-variable, #d19a66);
+}
+
+/* Titles, sections */
+html.dark .hljs-title,
+html.dark .hljs-section,
+html.dark .hljs-selector-id {
+  color: var(--atom-one-dark-function, #61aeee);
+}
+
+/* Types */
+html.dark .hljs-type,
+html.dark .hljs-class .hljs-title {
+  color: var(--atom-one-dark-class, #e6c07b);
+}
+
+/* Tags, names, attributes (HTML/XML) */
+html.dark .hljs-tag,
+html.dark .hljs-name {
+  color: var(--atom-one-dark-operator, #e06c75);
+}
+
+html.dark .hljs-attribute {
+  color: var(--atom-one-dark-variable, #d19a66);
+}
+
+/* Regex, links */
+html.dark .hljs-link {
+  color: var(--atom-one-dark-function, #61aeee);
+}
+
+/* Symbols, bullets */
+html.dark .hljs-symbol,
+html.dark .hljs-bullet {
+  color: var(--atom-one-dark-variable, #d19a66);
+}
+
+/* Built-ins */
+html.dark .hljs-built_in,
+html.dark .hljs-builtin-name {
+  color: var(--atom-one-dark-constant, #56b6c2);
+}
+
+/* Meta/preprocessor */
+html.dark .hljs-meta {
+  color: var(--atom-one-dark-function, #61aeee);
+}
+
+/* Deletion */
+html.dark .hljs-deletion {
+  color: var(--atom-one-dark-operator, #e06c75);
+  background: rgba(224, 108, 117, 0.15);
+}
+
+/* Addition */
+html.dark .hljs-addition {
+  color: var(--atom-one-dark-string, #98c379);
+  background: rgba(152, 195, 121, 0.15);
+}
+
+/* Params (neutral text) */
+html.dark .hljs-params {
+  color: var(--atom-one-dark-text, #abb2bf);
+}
+
+/* Selector classes */
+html.dark .hljs-selector-class {
+  color: var(--atom-one-dark-variable, #d19a66);
+}
+
+/* Template tags */
+html.dark .hljs-template-tag {
+  color: var(--atom-one-dark-keyword, #c678dd);
+}
