@@ -29,6 +29,11 @@ boost_at:/doc/libs/1_91_0/[Documentation]
 // ** Conform to `std::pointer_traits` requirements (boost_gh:pr[interprocess,32]).
 // ** Fixed `named_condition_any` fails to notify (boost_gh:issue[interprocess,62]).
 
+* boost_phrase:library[DynamicBitset,/libs/dynamic_bitset/]:
+** Added a missing friend declaration for `operator-( const bit_iterator_base< Iter > & lhs, const bit_iterator_base< Iter > & rhs )`.
+** Fixed compilation with standard library implementations which use raw pointers as iterators.
+** Fixed `from_block_range()` to prevent it from setting any bit in the unused part of the bitset.
+
 * boost_phrase:library[Exception,/libs/exception/]:
 ** Added customizable serialization API, built-in support for Boost.JSON and nlohmann/json.
 
