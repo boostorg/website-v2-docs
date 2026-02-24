@@ -62,6 +62,21 @@ with the exception that `composite_key::key_extractors` returns a `std::tuple` i
 a `boost::tuple` (and similarly for the rest of affected class templates).
 ** Removed internal workarounds and fallbacks to support pre-C++11 compilers.
 
+* boost_phrase:library[MSM,/libs/msm/]:
+** New features (`backmp11`):
+*** Improve support for the `deferred_events` property in hierarchical state machines (https://github.com/boostorg/msm/issues/173[#173])
+*** Support conditional deferral with the `deferred_events` property (https://github.com/boostorg/msm/issues/155[#155])
+*** Simplified functor signatures (https://github.com/boostorg/msm/issues/175[#175])
+*** Merge queued and deferred events into a single event pool (https://github.com/boostorg/msm/issues/168[#168])
+*** Small object optimization for events in the event pool (https://github.com/boostorg/msm/issues/172[#172])
+*** Improve runtime performance with a `flat_fold` dispatch strategy (https://github.com/boostorg/msm/issues/180[#180])
+*** Further optimize compilation, with up to 25% faster compile times and lower RAM consumption compared to version 1.90
+** Bug fixes (`backmp11`):
+*** Incorrect `FSM` type in calls to `on_entry(...)` and `on_exit(...)` (https://github.com/boostorg/msm/issues/167[#167])
+*** Completion events fire too often (https://github.com/boostorg/msm/issues/166[#166])
+** **Breaking change (`backmp11`)**: Direct access to the event pool is changed from `public` to `protected`,
+because manipulating it outside of the library code can lead to undefined behavior.
+
 * boost_phrase:library[Unordered,/libs/unordered/]:
 ** Fixed the returned value of range insertion in concurrent containers (boost_gh:pr[unordered,344]).
 
