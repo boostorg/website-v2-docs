@@ -42,6 +42,14 @@ jobs:
       uses: actions/setup-node@v4
       with:
         node-version: ${{ matrix.node-version }}
+        cache: 'npm'
+        cache-dependency-path: antora-ui/package-lock.json
+
+    - name: Configure npm retry settings
+      run: |
+        npm config set fetch-retries 5
+        npm config set fetch-retry-mintimeout 5000
+        npm config set fetch-retry-maxtimeout 60000
 
     - name: Build
       working-directory: antora-ui
