@@ -60,6 +60,21 @@ jobs:
         with:
           fetch-depth: 10
 
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'npm'
+          cache-dependency-path: |
+            package-lock.json
+            antora-ui/package-lock.json
+
+      - name: Configure npm retry settings
+        run: |
+          npm config set fetch-retries 5
+          npm config set fetch-retry-mintimeout 5000
+          npm config set fetch-retry-maxtimeout 60000
+
       - name: Environment
         id: build
         shell: bash
