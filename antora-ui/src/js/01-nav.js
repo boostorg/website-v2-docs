@@ -32,11 +32,19 @@
     return NAV_STATE_KEY + ':' + (title ? title.textContent.trim() : 'default')
   }
 
+  function getItemLabel (item) {
+    var text = item.querySelector('.nav-text')
+    if (text) return text.textContent.trim()
+    var link = item.querySelector(':scope > .nav-link')
+    if (link) return link.textContent.trim()
+    return null
+  }
+
   function saveNavState () {
     var openItems = []
     find(menuPanel, '.nav-item.is-active').forEach(function (item) {
-      var text = item.querySelector('.nav-text')
-      if (text) openItems.push(text.textContent.trim())
+      var label = getItemLabel(item)
+      if (label) openItems.push(label)
     })
     try { window.localStorage.setItem(getNavStateKey(), JSON.stringify(openItems)) } catch (e) {}
   }
@@ -46,8 +54,8 @@
       var saved = JSON.parse(window.localStorage.getItem(getNavStateKey()))
       if (!saved) return
       find(menuPanel, '.nav-item').forEach(function (item) {
-        var text = item.querySelector('.nav-text')
-        if (text && saved.indexOf(text.textContent.trim()) !== -1) {
+        var label = getItemLabel(item)
+        if (label && saved.indexOf(label) !== -1) {
           item.classList.add('is-active')
         }
       })
