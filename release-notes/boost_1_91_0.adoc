@@ -140,7 +140,17 @@ This addresses issues https://github.com/boostorg/optional/issues/132[#132] and 
       serialize_as_value(v);
   }
 
-
+* boost_phrase:library[System,/libs/system/]:
+** The return type of `operator|(result<T&>, U)` has been changed to non-reference.
+** Pointers to members in `r & f` are now supported (by using `boost::compat::invoke`).
+** A CMake config file is now installed, even though the library is header-only. This
+   avoids breaking third-party `CMakeLists.txt` files that contain
+   `find_package(Boost COMPONENTS system ...)`.
+** `error_code` is now even more `constexpr` under {cpp}20 and later.
+** Added `unsafe_value` to `result`.
+** Changed `result<>::operator*` and `result<>::operator\->` to throw when `!has_value()`,
+   instead of having that as a precondition. The old behavior is now spelled `unsafe_value()`.
+** Added `boost/system/unwrap_and_invoke.hpp`.
 
 * boost_phrase:library[Unordered,/libs/unordered/]:
 ** Fixed the returned value of range insertion in concurrent containers (boost_gh:pr[unordered,344]).
