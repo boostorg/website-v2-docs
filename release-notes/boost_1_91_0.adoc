@@ -155,6 +155,9 @@ This addresses issues https://github.com/boostorg/optional/issues/132[#132] and 
 ** Added `uuid_from_string` to `boost/uuid/uuid_io.hpp`.
 ** Added a dedicated `invalid_uuid` exception class, derived from `std::runtime_error` for backward compatibility.
 
+* boost_phrase:library[Variant2,/libs/variant2/]:
+** `holds_alternative<T>` and `get<T>` have been relaxed to no longer require `T` to occur exactly once in the list of alternatives. It now must occur at least once.
+
 == Compilers Tested
 
 // Edit this section as appropriate
