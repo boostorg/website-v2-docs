@@ -35,6 +35,10 @@ boost_at:/doc/libs/1_91_0/[Documentation]
 * boost_phrase:library[Core,/libs/core/]:
 ** The header `boost/is_placeholder.hpp` has been moved from Bind to Core. (https://github.com/boostorg/core/issues/90[#90])
 
+* boost_phrase:library[Describe,/libs/describe/]:
+** Under {cpp}20, described nested enums now work when the enclosing class is still incomplete. (Thanks to Julien Blanc.)
+** Made `enum_to_string` constexpr. (Thanks to Julien Blanc.)
+
 * boost_phrase:library[DynamicBitset,/libs/dynamic_bitset/]:
 ** Added a missing friend declaration for `operator-( const bit_iterator_base< Iter > & lhs, const bit_iterator_base< Iter > & rhs )`.
 ** Fixed compilation with standard library implementations which use raw pointers as iterators.
