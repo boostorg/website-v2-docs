@@ -20,6 +20,9 @@ boost_at:/doc/libs/1_91_0/[Documentation]
 // ** Framework for incremental calculation, and collection of statistical
 // accumulators, from Eric Niebler.
 
+* boost_phrase:library[Decimal,/libs/decimal]:
+** An implementation of IEEE754 Decimal Floating Point Numbers, from Matt Borland and Christopher Kormanyos.
+
 == Updated Libraries
 
 // Example:
