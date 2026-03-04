@@ -85,7 +85,7 @@ because manipulating it outside of the library code can lead to undefined behavi
   `constexpr` support:
 
 *** In C++11, some constructors and `const`-qualified accessors become usable
-      in compile-time contexts (are ['core constant expressions]) for types
+      in compile-time contexts (are _core constant expressions_) for types
       satisfying certain constraints.
 *** In C++14 even some mutating operations become core constant expressions (those
       that do not require changing the state of `optional` from not having a value to
@@ -96,16 +96,16 @@ because manipulating it outside of the library code can lead to undefined behavi
 
 This addresses issues https://github.com/boostorg/optional/issues/132[#132] and https://github.com/boostorg/optional/issues/143[#143].
 
-** *Breaking change.* In the said implementation, abandoned the mechanism for customizing
+** *Breaking change.* Abandoned the mechanism for customizing
   `swap`. Hardly anyone knows about this mechanism and it was never documented.
 
-** In the said implementation, applied a couple of small changes to get closer to the interface of `std::optional`:
+** Applied a couple of small changes to get closer to the interface of `std::optional`:
   *** Enabled syntax `o = {}` for putting optional objects to no-value state.
   *** Enabled syntax `o.value_or({})`, which uses a default-constructed `T`.
   *** Construct `o = u`, where `o` is of type `optional<T>` and `u` is of type `U` convertible to `T`,
     does not create a temporary `T`.
 
-** In the said implementation, added a conversion from `optional<T>&` to `optional<T&>`. This addresses https://github.com/boostorg/optional/issues/142[#142].
+** Added a conversion from `optional<T>&` to `optional<T&>`. This addresses https://github.com/boostorg/optional/issues/142[#142].
 
 ** `none_t` is now `std::equality_comparable`, which means that `none_t` and `optional<T>`
   model concept `std::equality_comparable_with` (for `std::equality_comparable` `T`),
@@ -113,7 +113,7 @@ This addresses issues https://github.com/boostorg/optional/issues/132[#132] and 
 
 ** *Warning.* In the future releases we intend to introduce the range interface
   in `optional`, so that `std::ranges::range<optional<T>>` will be `true`.
-  This may affect the overload resolution in programs that make decisions based
+  This will affect the overload resolution in programs in certain cases that make decisions based
   on predicates such as `std::ranges::range`. For instance, the following code
   will start behaving differently:
 
