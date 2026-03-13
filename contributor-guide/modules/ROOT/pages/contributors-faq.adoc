@@ -17,6 +17,7 @@ This section contains answers to the common questions that new contributors to B
 * <<Adding New Libraries>>
 * <<Boost Software License>>
 * <<Development Environments>>
+* <<Documentation>>
 * <<Existing Boost Libraries>>
 * <<Generative Artificial Intelligence>>
 * <<Modular Boost>>
@@ -137,6 +138,45 @@ https://www.sublimetext.com/index2[Sublime Text] is a lightweight yet powerful t
 https://atom-editor.cc/[Atom] is an open-source text editor developed by GitHub. It's highly customizable and extensible through packages, and provides features like syntax highlighting, auto-completion, and project navigation.
 +
 There are many other tools, Microsoft's https://visualstudio.microsoft.com/[Visual Studio] provides a full IDE and is well respected as a professional development environment, and https://code.visualstudio.com/Download[Visual Studio Code] is a lighter weight but versatile code editor that can be extended and customized with various extensions.
+
+== Documentation
+
+. *What is a good overall structure for library documentation?*
++
+Consider the following as a guide to the headings and structure of good API documentation:
++
+* *Introduction* - a compelling set of paragraphs that draw developers in by mentioning use cases, what is unique about your library, and a mention of performance and storage. Sell your library to developers here, this section is all that many developers will ever read.
+* *Requirements* - a section mentioning the operating systems, pass:[C++] versions, Boost library versions, compilers, hardware, and anything else that is a _requirement_ to use your library. This is a good place to mention dependencies too, and a link to the license that the library falls under.
+* *Getting Started* - ideally a brief example walkthrough that gets the developer to the "hello world" stage - all components installed and a trivial example running.
+* *Design Guide* - go over the deeper design decisions and use cases and how your library addresses them. Good place to have diagrams and explanation.
+* *Tutorials* - work through onr or more basic yet functional examples, step by step, and showing the results.
+* *Advanced Tutorials* - address the code needed for more involved, or edge case, scenarios. Ideally tutorials are step-by-step. If the content is not step by step but more of a discussion, then "Usage" is a better title.
+* *Reference* - this section _must_ contain full descriptions of every element of your library - classes, interfaces, methods, functions, macros, constants, enums, structs. The reference should be designed so that a develop does not have to read it linearly, but can focus on the one construct they are interested in and get all the information on it they need, ideally with an example, or link to an example, of code showing the constructs use. Ultimately, the earlier material in your doc (before the Reference) will be read maybe just the once, whereas Reference material may well be revisited by developers many times.
+* *Acknowledgements* - make sure to credit anyone or any organization that has helped you get this up and running.
++
+For more detailed information, refer to xref:docs/layout.adoc[].
+
+. *What is the best way to document a library function, say one that takes a few parameters and returns a value?*
++
+Your reference entry should contain all the following information:
++
+*Title*: `foobar` - the name of the function and nothing more.
++
+*Intro*: An introductory sentence explaining the purpose of `foobar`.
++
+*Syntax*: A format description of the syntax of the call.
++
+*Parameters*: A table, or bulleted list, of all the input parameters, including their name, type, and description. The description should certainly include any edge case uses of the parameter (such as providing `NULL` or zero perhaps to initiate a slight variation on the purpose of the function).
++
+*Return Value*: The returned value, including its type and any nuances that might occur.
++
+*Errors and Exceptions*: A list of the errors and/or exceptions that can be thrown by the function. It might not be possible to list them all if your function calls other functions, but you should certainly list all those that your library explicitly throws or returns.
++
+*Remarks*: A fuller description of the function. For simple calls this may be empty, but for an involved call go into all the nitty-gritty here.
++
+*Example*: Great to have example code shown here, or a link to an example elsewhere in your documentation that shows the function withing working code.
++
+*See Also*: If a function has alternatives or opposites, then it is helpful to link to them. If the function is a member of a class, add a link to the reference entry for the class.
 
 
 == Existing Boost Libraries
