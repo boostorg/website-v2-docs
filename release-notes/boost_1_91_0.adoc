@@ -51,6 +51,9 @@ boost_at:/doc/libs/1_91_0/[Documentation]
 * boost_phrase:library[Exception,/libs/exception/]:
 ** Added customizable serialization API, built-in support for Boost.JSON and nlohmann/json.
 
+* boost_phrase:library[JSON,/libs/json/]:
+** Changed `value` construction from `std::initializer_list` to use `value_from`.
+
 * boost_phrase:library[LEAF,/libs/leaf/]:
 ** Added customizable serialization API, built-in support for Boost.JSON and nlohmann/json.
 ** Added support for using LEAF error objects across DLL boundaries on Windows (off by default).
