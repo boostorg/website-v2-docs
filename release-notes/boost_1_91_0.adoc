@@ -33,7 +33,7 @@ boost_at:/doc/libs/1_91_0/[Documentation]
 // ** Fixed `named_condition_any` fails to notify (boost_gh:issue[interprocess,62]).
 
 * boost_phrase:library[any,/libs/any/]:
-** Fix `import std` detection in CMake.
+** Fixed `import std` detection in CMake.
 ** Simplified implmentation of `boost::anys::basic_any`.
 
 * boost_phrase:library[Core,/libs/core/]:
@@ -154,13 +154,13 @@ This addresses issues https://github.com/boostorg/optional/issues/132[#132] and 
 ** `boost::pfr::for_each_field*()` functions now work well with stateful visitors.
 
 * boost_phrase:library[Stacktrace,/libs/stacktrace/]:
-** The library now does not check at compile time for a possibly incompatible runtime. As a result
-   the check now does not have false positives and the `from_exception` functionality
-   just works out-of-the-box. Rare cases of incompatible/leaking runtimes are now reported at runtime.
+** Removed the compile time check for a possibly incompatible runtime. As a result
+   there are no false positives and the `from_exception` functionality just works
+   out-of-the-box. Rare cases of incompatible/leaking runtimes are now reported at runtime.
 ** Disable `from_exception` on cygwin (boost_gh:pr[stacktrace,219]). Many thanks to David McFarland
    for the PR!
-** Simplified `has_addr2line` check to not link with C++ Standard Library to simplify builds with
-   non system-default libstdc++.so
+** Removed the `has_addr2line` link with C++ Standard Library to simplify builds with non
+   system-default `libstdc++.so`
 
 * boost_phrase:library[System,/libs/system/]:
 ** The return type of `operator|(result<T&>, U)` has been changed to non-reference.
@@ -177,7 +177,7 @@ This addresses issues https://github.com/boostorg/optional/issues/132[#132] and 
 * boost_phrase:library[TypeIndex,/libs/type_index/]:
 ** Optimized CTTI type comparisons starting from C++20.
 ** `ctti_type_index::name()` now returns pretty value by default in C\+\+14 and more modern C\+\+ standards.
-   Size of binaries that use the library become smaller.
+   Reduced the size of library binaries.
 
 * boost_phrase:library[Unordered,/libs/unordered/]:
 ** Fixed the returned value of range insertion in concurrent containers (boost_gh:pr[unordered,344]).
