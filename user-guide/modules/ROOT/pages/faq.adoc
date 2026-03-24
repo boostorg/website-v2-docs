@@ -15,6 +15,7 @@ This section contains answers to the common questions that new developers to Boo
 
 [square] 
 * <<C++ Library Programming>>
+* <<CMake>>
 * <<Combining Libraries>>
 * <<Compatibility>>
 * <<Conferences>>
@@ -294,6 +295,49 @@ A coding project becomes a beast when two or more of the following conditions ar
 ** Refactoring is a nightmare - a simple rename breaks hundreds of files, or "Let's rewrite it from scratch" starts sounding reasonable.
 ** Multi-minute CI/CD pipelines - your test suite takes longer to run than a lunch break.
 ** Contributors live in fear of merge conflicts.
+
+== CMake
+
+. *Can I build Boost libraries using the tool CMake and what documentation resources are available to help with this?*
++
+Yes, https://cmake.org/[CMake] is a popular tool to use in conjunction with the Boost libraries.
++
+In this User Guide, refer to the examples in xref:getting-started.adoc[] and in xref:building-with-cmake.adoc[].
++
+The https://github.com/boostorg/cmake[Boost CMake support infrastructure] has a lot of good information in it too.
+
+. *Am I right that the alternative to using CMake to build Boost is the B2 tool?*
++
+Correct. Refer to xref:getting-started.adoc[] for examples, and https://www.bfgroup.xyz/b2/[B2] for a full specification.
+
+. *Do I need to set BOOST_ROOT?*
++
+Usually not — CMake can often find Boost automatically. However, if Boost is installed in a non-standard location, call `cmake -DBOOST_ROOT=/<PATH-TO-BOOST>` or add `set(BOOST_ROOT "/PATH-TO-BOOST")` in your CMake file. This is especially useful when working with custom-built Boost versions.
+
+. *Any good advice if CMake fails to find Boost components?*
++
+Set the flag `-DBoost_DEBUG=ON` to print detailed search diagnostics.
+
+. *If I want to install and build all of Boost using CMake, what would the command be?*
++
+Try:
++
+[source,text]
+----
+cmake -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX=<target-dir> -DBOOST_INCLUDE_LIBRARIES=serialization <path-to-boost-root-folder> && cmake --build . --target install  --config Release
+----
+
+. *If I include a single library I want to use in my CMake build file, will dependent libraries automatically be built too, or do I have to include them explicitly?*
++
+You do not usually have to include dependent libraries in your CMake file if you use the `target_link_libraries` command. For example, if you just wanted to build boost:filesystem[], then add the following to your file:
++
+[source, text]
+----
+find_package(Boost REQUIRED COMPONENTS filesystem)
+target_link_libraries(my_app PRIVATE Boost::filesystem)
+----
++
+However, if you use the `add_subdirectory` option in CMake, you will need to specify individual dependent libraries. Use the https://www.boost.org/doc/libs/latest/tools/boostdep/doc/html/index.html[Boostdep] tool to provide a list of all dependencies. Refer to https://github.com/boostorg/cmake[Boost CMake support infrastructure] for details.
 
 == Combining Libraries
 
