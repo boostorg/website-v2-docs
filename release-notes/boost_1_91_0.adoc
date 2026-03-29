@@ -156,6 +156,41 @@ This addresses issues https://github.com/boostorg/optional/issues/132[#132] and 
    macro to `1` to enable.
 ** `boost::pfr::for_each_field*()` functions now work well with stateful visitors.
 
+* boost_phrase:library[Redis,/libs/redis/]:
+** Added built-in support for **Sentinel** deployments. Sentinel can be configured
+   by using `config::sentinel`. The library takes care of master/replica discovery,
+   error detection and reconnection.
+   PR 345, PR 391, issue 237
+** Added **generic_flat_response**. High performance flat_response replacement.
+   Contiguous memory, zero allocations in steady state. PR 340, PR 356, PR 358, PR 378, PR 383, issue 263
+   Thanks Nikolai Vladimirov.
+** General improvements to **server push handling**:
+*** Added support for subscription tracking, which restores
+    active subscriptions after each reconnection. Can be accessed using
+    request::{subscribe, psubscribe, unsubscribe, punsubscribe}.
+    Check the examples. PR 375, issue 367.
+*** Added push_parser, a view that facilitates parsing
+    PubSub-related messages. See examples.
+*** **connection::{async_receive, receive}** are now **deprecated**. Prefer using
+    async_receive2, which allows for faster batch processing.
+    PR 381, PR 340, issue 331.
+*** **consume_one** is now **deprecated**. Prefer using generic_flat_response::clear,
+    instead. Check the pubsub examples for more info.
+*** Improved the documentation and examples.
+** **config::{username, password, client_name, database_index}**
+   are now **deprecated**. Please use config::setup, instead.
+   Added request::{hello, hello_setname} to make composing
+   setup requests easier. PR 392.
+** Log message levels have been adjusted to be more relevant.
+   level::error is used for configuration and network errors,
+   level::info for successful connection attempts,
+   and level::debug for verbose output. PR 389, issue 395
+** Added request::append(), to concatenate request objects.
+** Fixed a problem causing request::push_range to generate invalid commands
+   when passed a range with std::tuple elements. PR 363, issue 360
+** Removed <ostream> from public headers to make them more lightweight.
+   PR 364, issue 361.
+
 * boost_phrase:library[Stacktrace,/libs/stacktrace/]:
 ** Removed the compile time check for a possibly incompatible runtime. As a result
    there are no false positives and the `from_exception` functionality just works
