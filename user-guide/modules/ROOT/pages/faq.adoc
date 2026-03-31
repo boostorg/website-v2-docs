@@ -442,7 +442,7 @@ Refer also to xref:boost-macros.adoc[] and xref:reduce-dependencies.adoc[].
 . *Can I use Boost with my existing pass:[C++] project?*
 
 +
-Yes, Boost is designed to work with your existing pass:[C++] code. You can add Boost libraries to any project that uses a compatible pass:[C++] compiler.
+Yes, Boost is designed to work with your existing pass:[C++] code. You can add Boost libraries to any project that uses a compatible pass:[C++] compiler. The big three compatible compilers are https://visualstudio.microsoft.com/downloads/[Microsoft Visual C++] on Windows, https://clang.llvm.org/[Clang] especially for the macOS, and https://gcc.gnu.org/[GCC, the GNU Compiler Collection], mostly on Linux. Other lesser used compilers that will work well include the https://www.intel.com/content/www/us/en/developer/articles/news/intel-c-compiler-classic-2021-2-1-release.html[Intel Compiler] and https://sourceforge.net/projects/mingw/[MinGW - Minimalist GNU for Windows].
 
 . *Can I use Boost libraries with the new pass:[C++] standards?*
 
@@ -458,11 +458,23 @@ Boost libraries are generally compatible with most Linux distributions, provided
 * Debian
 * CentOS
 * Red Hat Enterprise Linux
+* Rocky Linux / AlmaLinux
 * Arch Linux
 * openSUSE
+* SUSE Linux Enterprise
 * Slackware
 * Gentoo
+* Cray Linux
+* HPC cluster Linux
 * macOS
++
+Boost also works on embedded Linux, including:
++
+* Yocto Linux
+* Buildroot
+* Raspberry Pi OS (Debian based)
++
+Be aware with embedded systems there might be issues such as toolchain availability and available RAM during compilation.
 
 . *How can I be sure that a library I want to use is compatible with my OS?*
 +
