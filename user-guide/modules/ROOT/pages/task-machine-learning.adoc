@@ -49,6 +49,10 @@ Here are some Boost libraries that could be helpful for the supporting tasks:
 
 * boost:filesystem[] : This library provides a portable way of querying and manipulating paths, files, and directories.
 
+* boost:asio[]: Provides a consistent asynchronous model, supports a variety of network protocols, and it can manage other resources such as serial ports, file descriptors, and regular files.
+
+* boost:serialization[]: Saves state and communicates complex data structures over a network.
+
 Note:: The code in this tutorial was written and tested using Microsoft Visual Studio (Visual C++ 2022, Console App project) with Boost version 1.88.0.
 
 == Machine Learning Algorithms
@@ -588,5 +592,6 @@ The _Transformer-style_ part refers to the architecture introduced in the ground
 * https://www.boost.org/doc/libs/latest/libs/libraries.htm#Iterators[Category: Iterators]
 * https://www.boost.org/doc/libs/latest/libs/libraries.htm#Math[Category: Math and numerics]
 * https://www.boost.org/doc/libs/latest/libs/libraries.htm#Parsing[Category: Parsing]
+* https://www.boost.org/testimonials/sven_bilen_and_timothy_hackett/[Powering Cognitive Communications Engine for NASA with Boost]
 
 
