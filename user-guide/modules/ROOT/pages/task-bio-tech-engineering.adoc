@@ -18,6 +18,7 @@ This topic examines the libraries that should assist in building a bio-tech tool
 * <<Working with Phylogenetic Trees>>
 * <<Create a Phylogenetic Tree>>
 * <<Persist a Phylogenetic Tree>>
+* <<Extend the Phylogenetic Tree>>
 * <<Next Steps>>
 * <<Footnotes>>
 * <<See Also>>
@@ -257,13 +258,67 @@ Let's add efficient storing and retrieving of data to our program:
 #include <iostream>
 #include <fstream>
 
+// ============================================================
+// BIO-TECH OVERVIEW
+// ============================================================
+// This program models a phylogenetic tree.
+//
+// A phylogenetic tree is a core data structure in:
+//
+//  • evolutionary biology
+//  • genomics
+//  • bioinformatics
+//  • epidemiology
+//
+// It represents how species diverge from common ancestors.
+//
+// Nodes   = species / clades / ancestors
+// Edges   = evolutionary descent
+//
+// The tree is:
+//
+//          LUCA (Last Universal Common Ancestor)
+//               ├── Bacteria
+//               ├── Archaea
+//               └── Eukarya
+//                       ├── Animals
+//                       ├── Plants
+//                       └── Fungi
+//
+// This exact topology mirrors real biological taxonomy.
+//
+// ============================================================
+
+
+
 // ------------------------------
 // Vertex data
 // ------------------------------
+// Each vertex in the graph represents a biological taxon.
+//
+// In real bioinformatics this might contain:
+//
+//  • genome ID
+//  • DNA sequence hash
+//  • divergence time
+//  • taxonomy ID
+//  • protein markers
+//
+// For this demo we store only the species/clade name.
+//
 struct Species
 {
     std::string name;
 
+    // Boost.Serialization hook.
+    //
+    // This allows phylogenetic trees to be saved and restored.
+    // In real research this allows:
+    //
+    //  • persisting phylogenetic analyses
+    //  • checkpointing long computations
+    //  • sharing trees between labs
+    //
     template<class Archive>
     void serialize(Archive& ar, const unsigned int)
     {
@@ -271,21 +326,51 @@ struct Species
     }
 };
 
+
+
 // ------------------------------
 // Graph type
 // ------------------------------
+//
+// We use Boost.Graph adjacency_list to model evolution.
+//
+// Directed graph is critical:
+//
+// parent → child
+//
+// because evolution flows forward in time.
+//
+// vecS storage:
+//   • fast indexing
+//   • compact memory
+//   • ideal for trees built incrementally
+//
 using PhyloTree = boost::adjacency_list<
-    boost::vecS,
-    boost::vecS,
-    boost::directedS,
-    Species
+    boost::vecS,      // edge container
+    boost::vecS,      // vertex container
+    boost::directedS, // direction = ancestry flows forward
+    Species           // payload stored in each vertex
 >;
 
 using Vertex = boost::graph_traits<PhyloTree>::vertex_descriptor;
 
+
+
 // ------------------------------
 // ASCII tree printer
 // ------------------------------
+//
+// Recursively prints the phylogenetic tree.
+//
+// This is essentially a tiny tree visualization engine.
+// Bioinformatics tools normally output:
+//
+//  • Newick format
+//  • Nexus format
+//  • graphical dendrograms
+//
+// This prints a human-friendly dendrogram.
+//
 void print_tree(const PhyloTree& tree, Vertex v,
     const std::string& prefix = "",
     bool is_last = true)
@@ -294,6 +379,8 @@ void print_tree(const PhyloTree& tree, Vertex v,
         << (is_last ? "|_ " : "|__")
         << tree[v].name << "\n";
 
+    // In evolutionary terms:
+    // "children" are descendant clades.
     auto children = boost::make_iterator_range(out_edges(v, tree));
 
     for (auto it = children.begin(); it != children.end(); ++it)
@@ -301,6 +388,7 @@ void print_tree(const PhyloTree& tree, Vertex v,
         Vertex child = target(*it, tree);
         bool last = (std::next(it) == children.end());
 
+        // Recursively print descendants.
         print_tree(tree,
             child,
             prefix + (is_last ? "   " : "|  "),
@@ -308,9 +396,17 @@ void print_tree(const PhyloTree& tree, Vertex v,
     }
 }
 
+
+
 // ------------------------------
 // Animated display
 // ------------------------------
+//
+// Simulates evolution through time.
+//
+// Each call shows the tree at a later evolutionary stage.
+// Think of it as a time-lapse of diversification.
+//
 void animate(const PhyloTree& tree, Vertex root,
     const std::string& title,
     int delay_ms = 800)
@@ -320,9 +416,20 @@ void animate(const PhyloTree& tree, Vertex root,
     std::this_thread::sleep_for(std::chrono::milliseconds(delay_ms));
 }
 
+
+
 // ------------------------------
 // Save / load helpers using Boost.Filesystem
 // ------------------------------
+//
+// Real phylogenetics produces large trees that must be:
+//
+//  • stored
+//  • versioned
+//  • exchanged between research teams
+//
+// We serialize the entire evolutionary tree.
+//
 void save_tree(const PhyloTree& tree,
     const boost::filesystem::path& file)
 {
@@ -346,16 +453,39 @@ void load_tree(PhyloTree& tree,
     ia >> BOOST_SERIALIZATION_NVP(tree);
 }
 
-// ------------------------------
-// Main demo
-// ------------------------------
+
+
+// ============================================================
+// MAIN DEMO — SIMULATED EVOLUTION
+// ============================================================
 int main()
 {
     PhyloTree tree;
 
+    // --------------------------------------------------------
+    // Stage 1: LUCA appears
+    // --------------------------------------------------------
+    // LUCA = Last Universal Common Ancestor
+    //
+    // This is a real biological concept:
+    // the most recent organism from which all life descends.
+    //
     auto luca = add_vertex({ "LUCA" }, tree);
     animate(tree, luca, "Initial tree");
 
+
+
+    // --------------------------------------------------------
+    // Stage 2: The Three Domains of Life
+    // --------------------------------------------------------
+    // Real biology classification:
+    //
+    //  • Bacteria
+    //  • Archaea
+    //  • Eukarya
+    //
+    // This split happened ~3.5 billion years ago.
+    //
     auto bacteria = add_vertex({ "Bacteria" }, tree);
     auto archaea = add_vertex({ "Archaea" }, tree);
     auto eukarya = add_vertex({ "Eukarya" }, tree);
@@ -366,6 +496,13 @@ int main()
 
     animate(tree, luca, "Domains of life");
 
+
+
+    // --------------------------------------------------------
+    // Stage 3: Eukaryotic radiation
+    // --------------------------------------------------------
+    // Eukaryotes diversify into multicellular life.
+    //
     auto animals = add_vertex({ "Animals" }, tree);
     auto plants = add_vertex({ "Plants" }, tree);
     auto fungi = add_vertex({ "Fungi" }, tree);
@@ -376,6 +513,11 @@ int main()
 
     animate(tree, luca, "Eukaryotic diversification");
 
+
+
+    // --------------------------------------------------------
+    // Stage 4: Animal diversification
+    // --------------------------------------------------------
     auto mammals = add_vertex({ "Mammals" }, tree);
     auto reptiles = add_vertex({ "Reptiles" }, tree);
 
@@ -384,24 +526,43 @@ int main()
 
     animate(tree, luca, "Animal diversification");
 
+
+
+    // --------------------------------------------------------
     // Scientific correction: prune plants
+    // --------------------------------------------------------
+    // Simulates:
+    //  • new genomic evidence
+    //  • updated phylogenetic model
+    //
+    // clear_vertex removes all evolutionary relationships.
+    // remove_vertex deletes the taxon from the tree.
+    //
     clear_vertex(plants, tree);
     remove_vertex(plants, tree);
 
     animate(tree, luca, "After pruning Plants");
 
-    // ------------------------------
+
+
+    // --------------------------------------------------------
     // Persist tree to disk
-    // ------------------------------
+    // --------------------------------------------------------
     boost::filesystem::path data_dir = "data";
     boost::filesystem::path tree_file = data_dir / "phylo_tree.dat";
 
     save_tree(tree, tree_file);
     std::cout << "\nTree saved to " << tree_file << "\n";
 
-    // ------------------------------
+
+
+    // --------------------------------------------------------
     // Reload and verify
-    // ------------------------------
+    // --------------------------------------------------------
+    // Simulates:
+    //  • loading analysis results
+    //  • continuing research later
+    //
     PhyloTree loaded;
     load_tree(loaded, tree_file);
 
@@ -474,6 +635,278 @@ Locate the folder containing your program, then examine the contents of `data\ph
 [source,text]
 ----
 22 serialization::archive 20 0 0 8 7 0 0 4 LUCA 8 Bacteria 7 Archaea 7 Eukarya 7 Animals 5 Fungi 7 Mammals 8 Reptiles 0 1 0 0 0 2 0 3 3 4 3 5 4 6 4 7
+----
+
+== Extend the Phylogenetic Tree
+
+In this next example, we add some introductory code to some additional concepts prevalent with phylogenetic trees. 
+
+A molecular clock is introduced, which can help with divergence timestamps and estimates (refer to `divergence_mya`). Also related to time, branch lengths are introducted to help understand evolutionary time and the concept of mutation distance (refer to `mutate`). DNA markers aid in simplifying genome signatures, and the standard interchange format for these trees is https://en.wikipedia.org/wiki/Newick_format[Newick format].
+
+In the following example, we focus on the features of boost:graph[]:
+
+[source,cpp]
+----
+#include <boost/graph/adj_list_serialize.hpp>
+
+#include <random>
+#include <iostream>
+#include <fstream>
+
+//////////////////////////////////////////////////////////////////
+// BIOINFORMATICS UPGRADE OVERVIEW
+//////////////////////////////////////////////////////////////////
+//
+// This version models real phylogenetic concepts:
+//
+//   Vertex = taxon / species / clade
+//   Edge   = evolutionary divergence event
+//
+// Added biological properties:
+//
+//   • branch_length  → mutation distance
+//   • divergence_mya → million years ago
+//   • dna_marker     → simplified genome signature
+//   • bootstrap      → confidence of phylogenetic split
+//
+// Also exports to NEWICK format — the standard file format
+// used by tools like:
+//
+//   • MEGA
+//   • BEAST
+//   • MrBayes
+//   • PhyML
+//
+//////////////////////////////////////////////////////////////////
+
+
+// =============================================================
+// Utility: fake DNA generator
+// =============================================================
+// Generates a random DNA string (A/C/G/T).
+// Real tools would store real gene/protein sequences.
+//
+std::string random_dna(size_t length = 16)
+{
+    static const char bases[] = { 'A','C','G','T' };
+    static std::mt19937 rng((unsigned)time(nullptr));
+    static std::uniform_int_distribution<> dist(0, 3);
+
+    std::string s;
+    for (size_t i = 0; i < length; ++i)
+        s += bases[dist(rng)];
+    return s;
+}
+
+// =============================================================
+// Vertex data — Taxon
+// =============================================================
+struct Taxon
+{
+    std::string name;
+    std::string dna_marker;     // simplified genome fingerprint
+    double divergence_mya = 0;  // million years ago
+
+    template<class Archive>
+    void serialize(Archive& ar, const unsigned int)
+    {
+        ar& BOOST_SERIALIZATION_NVP(name);
+        ar& BOOST_SERIALIZATION_NVP(dna_marker);
+        ar& BOOST_SERIALIZATION_NVP(divergence_mya);
+    }
+};
+
+// =============================================================
+// Edge data — Evolutionary branch
+// =============================================================
+struct Branch
+{
+    double branch_length = 0.0; // mutation distance
+    double bootstrap = 1.0;     // confidence (0–1)
+
+    template<class Archive>
+    void serialize(Archive& ar, const unsigned int)
+    {
+        ar& BOOST_SERIALIZATION_NVP(branch_length);
+        ar& BOOST_SERIALIZATION_NVP(bootstrap);
+    }
+};
+
+// =============================================================
+// Graph definition
+// =============================================================
+using PhyloTree = boost::adjacency_list<
+    boost::vecS,
+    boost::vecS,
+    boost::directedS,
+    Taxon,
+    Branch
+>;
+
+using Vertex = boost::graph_traits<PhyloTree>::vertex_descriptor;
+using Edge = boost::graph_traits<PhyloTree>::edge_descriptor;
+
+// =============================================================
+// Mutation simulator
+// =============================================================
+// Slightly mutates DNA to simulate evolution.
+//
+std::string mutate(const std::string& dna, int changes = 2)
+{
+    static std::mt19937 rng((unsigned)time(nullptr));
+    static std::uniform_int_distribution<> pos_dist(0, 15);
+    static std::uniform_int_distribution<> base_dist(0, 3);
+    static const char bases[] = { 'A','C','G','T' };
+
+    std::string out = dna;
+
+    for (int i = 0; i < changes; ++i)
+        out[pos_dist(rng)] = bases[base_dist(rng)];
+
+    return out;
+}
+
+// =============================================================
+// Add child taxon helper
+// =============================================================
+Vertex evolve(PhyloTree& tree, Vertex parent,
+    std::string name,
+    double divergence_time,
+    double branch_len,
+    double bootstrap)
+{
+    Taxon t;
+    t.name = name;
+    t.dna_marker = mutate(tree[parent].dna_marker);
+    t.divergence_mya = divergence_time;
+
+    Vertex child = add_vertex(t, tree);
+
+    Branch b{ branch_len, bootstrap };
+    add_edge(parent, child, b, tree);
+
+    return child;
+}
+
+// =============================================================
+// NEWICK EXPORT (important!)
+// =============================================================
+// Newick format example:
+//
+//   (Human:0.2,Mouse:0.3)Mammals;
+//
+// This is the *universal exchange format* for phylogenetics.
+//
+std::string to_newick(const PhyloTree& tree, Vertex v)
+{
+    auto children = boost::make_iterator_range(out_edges(v, tree));
+
+    std::ostringstream out;
+
+    if (!children.empty())
+    {
+        out << "(";
+        bool first = true;
+
+        for (auto e : children)
+        {
+            if (!first) out << ",";
+            first = false;
+
+            Vertex child = target(e, tree);
+            out << to_newick(tree, child)
+                << ":" << tree[e].branch_length;
+        }
+        out << ")";
+    }
+
+    out << tree[v].name;
+    return out.str();
+}
+
+// =============================================================
+// Pretty tree printer with biological data
+// =============================================================
+void print_tree(const PhyloTree& tree, Vertex v, std::string indent = "")
+{
+    const auto& t = tree[v];
+
+    std::cout << indent
+        << t.name
+        << "  [DNA=" << t.dna_marker
+        << ", MYA=" << t.divergence_mya
+        << "]\n";
+
+    for (auto e : boost::make_iterator_range(out_edges(v, tree)))
+    {
+        std::cout << indent << "  |_ branch len="
+            << tree[e].branch_length
+            << " bootstrap=" << tree[e].bootstrap << "\n";
+
+        print_tree(tree, target(e, tree), indent + "     ");
+    }
+}
+
+// =============================================================
+// MAIN — SIMULATED EVOLUTIONARY HISTORY
+// =============================================================
+int main()
+{
+    PhyloTree tree;
+
+    // LUCA — Last Universal Common Ancestor
+    Taxon luca{ "LUCA", random_dna(), 4000 };
+    Vertex root = add_vertex(luca, tree);
+
+    // Domains of life (~3.5 billion years ago)
+    auto bacteria = evolve(tree, root, "Bacteria", 3500, 0.9, 0.98);
+    auto archaea = evolve(tree, root, "Archaea", 3500, 0.85, 0.97);
+    auto eukarya = evolve(tree, root, "Eukarya", 2100, 0.7, 0.95);
+
+    // Eukaryotic radiation
+    auto animals = evolve(tree, eukarya, "Animals", 800, 0.6, 0.92);
+    auto fungi = evolve(tree, eukarya, "Fungi", 1000, 0.65, 0.91);
+    auto plants = evolve(tree, eukarya, "Plants", 1200, 0.63, 0.90);
+
+    // Animal diversification
+    evolve(tree, animals, "Mammals", 200, 0.3, 0.99);
+    evolve(tree, animals, "Reptiles", 300, 0.35, 0.96);
+
+    // Print full annotated tree
+    std::cout << "\n===== Annotated Phylogenetic Tree =====\n";
+    print_tree(tree, root);
+
+    // Export Newick file
+    std::ofstream("phylo_tree.newick") << to_newick(tree, root) << ";";
+    std::cout << "\nNewick file written: phylo_tree.newick\n";
+
+    return 0;
+}
+----
+
+Run the code and examine the output:
+[source,text]
+----
+===== Annotated Phylogenetic Tree =====
+LUCA  [DNA=GTGTCCTACCCTGCAT, MYA=4000]
+  |_ branch len=0.9 bootstrap=0.98
+     Bacteria  [DNA=GTGTCCTACCCTGGAT, MYA=3500]
+  |_ branch len=0.85 bootstrap=0.97
+     Archaea  [DNA=GTGTCCTCCCCTGCAT, MYA=3500]
+  |_ branch len=0.7 bootstrap=0.95
+     Eukarya  [DNA=GTGTCCCACCCTCCAT, MYA=2100]
+       |_ branch len=0.6 bootstrap=0.92
+          Animals  [DNA=GTGTGCCACCCTACAT, MYA=800]
+            |_ branch len=0.3 bootstrap=0.99
+               Mammals  [DNA=ATGTGCAACCCTACAT, MYA=200]
+            |_ branch len=0.35 bootstrap=0.96
+               Reptiles  [DNA=GCGTGCCACCCTACCT, MYA=300]
+       |_ branch len=0.65 bootstrap=0.91
+          Fungi  [DNA=GTGTCCCATCCTCCAT, MYA=1000]
+       |_ branch len=0.63 bootstrap=0.9
+          Plants  [DNA=GTGTCCCACCCACCAT, MYA=1200]
+
+Newick file written: phylo_tree.newick
 ----
 
 == Next Steps
