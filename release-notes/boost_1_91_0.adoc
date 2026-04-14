@@ -36,6 +36,13 @@ boost_at:/doc/libs/1_91_0/[Documentation]
 ** Fixed `import std` detection in CMake.
 ** Simplified implmentation of `boost::anys::basic_any`.
 
+* boost_phrase:library[Beast,/libs/beast/]:
+** Fixed typecast warnings in `inflate_with_eb`.
+** Enforced 8KB sanity limit on chunk headers.
+** Made OpenSSL an optional dependency for tests.
+** Removed dependency on Boost.StaticAssert.
+** Added `HTTP2-Settings` to HTTP field enum.
+
 * boost_phrase:library[Core,/libs/core/]:
 ** The header `boost/is_placeholder.hpp` has been moved from Bind to Core. (https://github.com/boostorg/core/issues/90[#90])
 
