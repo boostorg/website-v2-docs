@@ -34,7 +34,7 @@ boost_at:/doc/libs/1_91_0/[Documentation]
 
 * boost_phrase:library[any,/libs/any/]:
 ** Fixed `import std` detection in CMake.
-** Simplified implmentation of `boost::anys::basic_any`.
+** Simplified implementation of `boost::anys::basic_any`.
 
 * boost_phrase:library[Beast,/libs/beast/]:
 ** Fixed typecast warnings in `inflate_with_eb`.
