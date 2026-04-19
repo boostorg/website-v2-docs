@@ -12,6 +12,10 @@ boost_at:/doc/libs/1_91_0/[Documentation]
 // Boost-specific macros: https://github.com/cppalliance/asciidoctor-boost?tab=readme-ov-file#macros
 // Please keep the list of libraries sorted in lexicographical order.
 
+== General Notes
+
+* boost_phrase:library[StaticAssert,/libs/static_assert/] has been merged into boost_phrase:library[Config,/libs/config/]. This includes code, tests and documentation. For backward compatibility git submodule, CMake and b2 targets of StaticAssert are still available; the targets simply introduce a dependency on Config. Eventually, the submodule and targets will be removed. Users are recommended to update their dependencies on StaticAssert to replace it with Config. No C++ code modifications are necessary. Most Boost libraries have been updated accordingly.
+
 == New Libraries
 
 // Example:
@@ -36,6 +40,9 @@ boost_at:/doc/libs/1_91_0/[Documentation]
 ** Fixed `import std` detection in CMake.
 ** Simplified implmentation of `boost::anys::basic_any`.
 
+* boost_phrase:library[Atomic,/libs/atomic/]:
+** Fixed compilation of `thread_pause` on PowerPC with Apple compilers. (boost_gh:issue[atomic,79])
+
 * boost_phrase:library[Beast,/libs/beast/]:
 ** Fixed typecast warnings in `inflate_with_eb`.
 ** Enforced 8KB sanity limit on chunk headers.
@@ -58,6 +65,18 @@ boost_at:/doc/libs/1_91_0/[Documentation]
 * boost_phrase:library[Exception,/libs/exception/]:
 ** Added customizable serialization API, built-in support for Boost.JSON and nlohmann/json.
 
+* boost_phrase:library[Filesystem,/libs/filesystem/]:
+** Boost.Filesystem now defines and uses its own platform macros `BOOST_FILESYSTEM_POSIX_API` and `BOOST_FILESYSTEM_WINDOWS_API`. The old `BOOST_POSIX_API` and `BOOST_WINDOWS_API` macros are still defined by Boost.System. Boost.Filesystem will check that the two sets of macros are in sync and by default will fail to compile if not. The compilation error can be reduced to a warning by defining `BOOST_FILESYSTEM_ALLOW_SYSTEM_API_MISMATCH` to 1 or disabled entirely by defining it to 2. Note that in this case the error code values reported by Boost.Filesystem will not match the error category.
+** On POSIX platforms not supporting `openat` and related APIs, fixed an error reported by `recursive_directory_iterator` increment when the iterator encounters a dangling symlink and following symlinks is disabled.
+** *Breaking change for Cygwin users.* The library now treats Cygwin as a POSIX platform. This has several user-facing consequences, in particular:
+*** The `path::value_type` type has changed from `wchar_t` to `char`. As on other POSIX platforms, wide character paths will be converted to the narrow character encoding using the locale set by `path::imbue`. Note that since Cygwin is running on top of Windows, it will also perform character code conversion internally. It is important that locale in the Cygwin environment is configured correctly.
+*** Path syntax now follows POSIX conventions, Windows-specific paths (e.g. UNC paths, drive names and path prefixes) are not supported.
+*** Certain Windows-specific parts of the API will become inaccessible. Since reparse points are a Windows-only feature, `file_type::reparse_file` will not be reported for files. Reparse point handling is dependent on Cygwin runtime behavior.
+*** Cygwin has its own implementation of symlinks that is incompatible with native Windows symlinks. Boost.Filesystem will now create and operate on Cygwin symlinks.
+*** Error codes reported by Boost.Filesystem will now use POSIX `errno` values.
+** On DragonFly BSD, NetBSD and Solaris, Boost.Filesystem default path locale now uses UTF-8 for path character encoding.
+** On Linux, use `read`/`write` loop implementation of `copy_file` and `copy` for configfs, securityfs, cgroup and cgroup2 filesystems, in addition to the previously blacklisted filesystems.
+
 * boost_phrase:library[JSON,/libs/json/]:
 ** Changed `value` construction from `std::initializer_list` to use `value_from`.
 
@@ -71,6 +90,9 @@ boost_at:/doc/libs/1_91_0/[Documentation]
 
 * boost_phrase:library[LexicalCast,/libs/lexical_cast/]:
 ** Implemented initial version of C++20 module `boost.lexical_cast`.
+
+* boost_phrase:library[Log,/libs/log/]:
+** Enabled building interprocess communication support on Cygwin by default.
 
 * boost_phrase:library[MultiIndex,/libs/multi_index/]:
 ** *Breaking change:* All type lists accepted or provided by the library (`indexed_by`,
