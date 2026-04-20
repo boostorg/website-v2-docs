@@ -97,6 +97,18 @@ boost_at:/doc/libs/1_91_0/[Documentation]
 * boost_phrase:library[Log,/libs/log/]:
 ** Enabled building interprocess communication support on Cygwin by default.
 
+* boost_phrase:library[Math,/libs/math/]:
+** Added `find_non_centrality` for `non_central_f_distribution`
+** Added parameter finding for `non_central_t_distribution`
+** Added function for the log of the incomplete gamma function, `lgamma_q`
+** Added function for the log of the lower incomplete gamma function, `lgamma_p`
+** Added `domain()` function for `pchip`
+** Fixed CUDA support in the logistic distribution
+** Fixed floating point traits for Windows on ARM64
+** Fixed `ibeta` for large arguments
+** Correct `ellint_2` for N * PI / 2 for phi argument.
+** Require user to explicitly enable CUDA rather than assuming based off presence of NVCC
+
 * boost_phrase:library[MultiIndex,/libs/multi_index/]:
 ** *Breaking change:* All type lists accepted or provided by the library (`indexed_by`,
 `tag`, nested typedefs `index_specifier_type_list`, `index_type_list`, `iterator_type_list`
