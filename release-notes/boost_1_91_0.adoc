@@ -202,6 +202,9 @@ This addresses issues https://github.com/boostorg/optional/issues/132[#132] and 
    macro to `1` to enable.
 ** `boost::pfr::for_each_field*()` functions now work well with stateful visitors.
 
+* boost_phrase:library[Random,/libs/random/]:
+** Fixed support for unsigned types in `binomial_distribution`
+
 * boost_phrase:library[Redis,/libs/redis/]:
 ** Added built-in support for **Sentinel** deployments, which can be configured
    using `config::sentinel`. The library handles master/replica discovery,
