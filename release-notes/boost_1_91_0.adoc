@@ -264,6 +264,9 @@ This addresses issues https://github.com/boostorg/optional/issues/132[#132] and 
    instead of having that as a precondition. The old behavior is now spelled `unsafe_value()`.
 ** Added `boost/system/unwrap_and_invoke.hpp`.
 
+* boost_phrase:library[Test,/libs/test/]:
+** Add friend operators for proper comparisons of `std::optional` with GCC < 10
+
 * boost_phrase:library[TypeIndex,/libs/type_index/]:
 ** Optimized CTTI type comparisons starting from C++20.
 ** `ctti_type_index::name()` now returns pretty value by default in C\+\+14 and more modern C\+\+ standards.
