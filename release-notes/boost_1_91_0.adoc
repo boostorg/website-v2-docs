@@ -51,7 +51,7 @@ boost_at:/doc/libs/1_91_0/[Documentation]
 ** Added `HTTP2-Settings` to HTTP field enum.
 
 * boost_phrase:library[Charconv,/libs/charconv/]:
-** Fixed `to_chars` of negative 128-bit integers whose absolute value is less than 2^64
+** Fixed overflow in `to_chars` of negative 128-bit integers whose absolute value is less than 2^64
 
 * boost_phrase:library[Core,/libs/core/]:
 ** The header `boost/is_placeholder.hpp` has been moved from Bind to Core. (https://github.com/boostorg/core/issues/90[#90])
@@ -98,15 +98,15 @@ boost_at:/doc/libs/1_91_0/[Documentation]
 ** Enabled building interprocess communication support on Cygwin by default.
 
 * boost_phrase:library[Math,/libs/math/]:
-** Added `find_non_centrality` for `non_central_f_distribution`
-** Added parameter finding for `non_central_t_distribution`
+** Added `find_non_centrality` finding function for `non_central_f_distribution`
+** Added parameter finding function for `non_central_t_distribution`
 ** Added function for the log of the incomplete gamma function, `lgamma_q`
 ** Added function for the log of the lower incomplete gamma function, `lgamma_p`
 ** Added `domain()` function for `pchip`
-** Fixed CUDA support in the logistic distribution
-** Fixed floating point traits for Windows on ARM64
-** Fixed `ibeta` for large arguments
-** Correct `ellint_2` for N * PI / 2 for phi argument.
+** Fixed broken CUDA support in the logistic distribution
+** Fixed incorrect floating point traits for Windows on ARM64
+** Fixed incorrect result `ibeta` for large arguments
+** Fixed incorrect `ellint_2` for N * PI / 2 for phi argument.
 ** Require user to explicitly enable CUDA rather than assuming based off presence of NVCC
 
 * boost_phrase:library[MultiIndex,/libs/multi_index/]:
@@ -203,7 +203,7 @@ This addresses issues https://github.com/boostorg/optional/issues/132[#132] and 
 ** `boost::pfr::for_each_field*()` functions now work well with stateful visitors.
 
 * boost_phrase:library[Random,/libs/random/]:
-** Fixed support for unsigned types in `binomial_distribution`
+** Fixed unsigned types in `binomial_distribution` being inadvertently unsupported.
 
 * boost_phrase:library[Redis,/libs/redis/]:
 ** Added built-in support for **Sentinel** deployments, which can be configured
