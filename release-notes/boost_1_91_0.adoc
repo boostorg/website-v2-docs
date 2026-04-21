@@ -40,6 +40,22 @@ boost_at:/doc/libs/1_91_0/[Documentation]
 ** Fixed `import std` detection in CMake.
 ** Simplified implmentation of `boost::anys::basic_any`.
 
+* boost_phrase:library[Asio,/libs/asio/]
+** Added optional binary versioning via an inline namespace, allowing multiple Asio versions to coexist in the same process without symbol conflicts.
+** Changed the default Windows mutex implementation from `CRITICAL_SECTION` to `SRWLOCK`.
+** Added a "slim" mutex implementation based on `std::atomic`, reducing state size for strands, sockets, and other descriptors.
+** Added support for compilation under Cygwin64, including without `__USE_W32_SOCKETS`.
+** Added the ability to override `BOOST_ASIO_DECL` before including Asio headers.
+** Fixed `MSG_NOSIGNAL` handling on NetBSD.
+** Fixed the build with recent Boost versions that no longer support linking against `boost_system`.
+** Fixed compatibility with musl libc on older Android.
+** Fixed detection of `std::aligned_alloc` on older Apple platforms.
+** Fixed a warning in `serial_port_base::character_size::store` with MSVC.
+** Clarified the IPv4 vs IPv6 semantics of `ip::multicast::outbound_interface` in the documentation.
+** Updated TLS v1.3 context initialisation to correctly detect LibreSSL support.
+** Fixed compatibility with recent OpenSSL API changes around `X509` constness.
+** Consult the boost_at:/doc/libs/1_91_0/doc/html/boost_asio/history.html[Revision History] for further details.
+
 * boost_phrase:library[Atomic,/libs/atomic/]:
 ** Fixed compilation of `thread_pause` on PowerPC with Apple compilers. (boost_gh:issue[atomic,79])
 
