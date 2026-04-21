@@ -38,7 +38,7 @@ boost_at:/doc/libs/1_91_0/[Documentation]
 
 * boost_phrase:library[any,/libs/any/]:
 ** Fixed `import std` detection in CMake.
-** Simplified implmentation of `boost::anys::basic_any`.
+** Simplified implementation of `boost::anys::basic_any`.
 
 * boost_phrase:library[Asio,/libs/asio/]
 ** Added optional binary versioning via an inline namespace, allowing multiple Asio versions to coexist in the same process without symbol conflicts.
