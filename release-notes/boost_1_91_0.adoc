@@ -36,7 +36,7 @@ boost_at:/doc/libs/1_91_0/[Documentation]
 // ** Conform to `std::pointer_traits` requirements (boost_gh:pr[interprocess,32]).
 // ** Fixed `named_condition_any` fails to notify (boost_gh:issue[interprocess,62]).
 
-* boost_phrase:library[any,/libs/any/]:
+* boost_phrase:library[Any,/libs/any/]:
 ** Fixed `import std` detection in CMake.
 ** Simplified implementation of `boost::anys::basic_any`.
 
