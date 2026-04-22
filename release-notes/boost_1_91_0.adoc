@@ -304,6 +304,31 @@ This addresses issues https://github.com/boostorg/optional/issues/132[#132] and 
 ** Added `uuid_from_string` to `boost/uuid/uuid_io.hpp`.
 ** Added a dedicated `invalid_uuid` exception class, derived from `std::runtime_error` for backward compatibility.
 
+* boost_phrase:library[URL,/libs/url/]:
+** Features:
+*** All parse functions are now `constexpr` under {cpp}20, enabling compile-time URL parsing and validation (boost_gh:pr[url,976]).
+*** Added `get_or` for query containers, returning a default value when a key is not present (boost_gh:pr[url,953]).
+*** Added standalone `decode` and `decoded_size` free functions (boost_gh:pr[url,952]).
+*** Added user-provided `RangeRule` support for `grammar::range`, allowing custom grammar rules (boost_gh:pr[url,950]).
+*** Specialized `std::ranges::enable_borrowed_range` for all view types (boost_gh:pr[url,966]).
+*** Added EBO and default construction for `token_rule_t` (boost_gh:pr[url,964]).
+*** Added natvis visualizers for segments (boost_gh:pr[url,962]).
+** Performance:
+*** Internal URL offsets changed from `size_t` to `uint32_t`, reducing object size on 64-bit platforms (boost_gh:pr[url,969]).
+** Fixes:
+*** `normalize_path` ambiguity from dot-dot cancellation (boost_gh:pr[url,986]).
+*** `parse_query` guard for empty `string_view` inputs (boost_gh:pr[url,949]).
+*** `params_iter_impl::decrement()` decoded size for values containing `=` (boost_gh:pr[url,978]).
+*** `decode_view::remove_prefix`/`remove_suffix` assertion (boost_gh:pr[url,978]).
+*** `decode_view` completeness for `pct_string_view::operator*()` (boost_gh:pr[url,963]).
+*** Example router is now move-only (boost_gh:pr[url,959]).
+*** GCC false-positive `-Wmaybe-uninitialized` in `tuple_rule` (boost_gh:pr[url,981]).
+*** Security review by Laurel Lye Systems Engineering: three rounds of assessment, 21 confirmed fixes, public interface boundary tests and fuzz tests added (boost_gh:pr[url,982], boost_gh:pr[url,988]).
+** Documentation:
+*** Added design rationale page (boost_gh:pr[url,987]).
+*** Documented plus scheme convention (boost_gh:pr[url,970]).
+*** Removed legacy QuickBook documentation.
+
 * boost_phrase:library[Variant2,/libs/variant2/]:
 ** `holds_alternative<T>` and `get<T>` have been relaxed to no longer require `T` to occur exactly once in the list of alternatives. It now must occur at least once.
 
