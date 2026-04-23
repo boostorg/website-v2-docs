@@ -93,6 +93,38 @@ Note:: The Bloom filter is named after its inventor, Burton Howard Bloom, who de
 
 *CML* : Can mean CMake Language, Conversion Markup Language, Configuration Menu Language, Concurrent ML (a high-level language for concurrent programming) - depending on context.
 
+*Coroutine* : A function that can pause and later resume execution while preserving its state. Coroutines enable asynchronous and non-blocking code to look and behave like normal sequential code. The attraction of coroutines is that if they are designed and implemented well they can greatly simplify  networking, I/O, and concurrency - avoiding the complexity and overhead of traditional callback or thread-based designs. Within the field of coroutines, there are many terms that you will see in pertinent discussions:
+
+* *Awaitable* : Any object that can be used with `co_await`. An awaitable defines how a coroutine suspends and how it is resumed when work is ready.
+
+* *co_await* : An operator that suspends a coroutine until an asynchronous operation completes. It lets the code wait without blocking the thread.
+
+* *co_return* : The coroutine equivalent of `return`. It signals that the coroutine has finished and provides the *final result* to its caller.
+
+* *co_yield* : Used by generator-style coroutines to produce a value - the *current result* - and suspend, allowing the coroutine to resume later and produce more values.
+
+* *Continuation* : The code that runs after an awaited coroutine completes. In practice, everything after a `co_await` becomes the continuation.
+
+* *Coroutine Frame* : A compiler-generated structure that stores the coroutine state, including local variables and where execution should resume. It acts like a persistent stack frame that survives suspension.
+
+* *Eager Coroutine* : A coroutine that begins executing immediately when called, before it is awaited.
+
+* *Fire-and-Forget* : Launching a coroutine without awaiting its result. Convenient but risky because errors and lifetime issues may be harder to detect.
+
+* *Generator* : A coroutine that produces a sequence of values over time rather than returning a single result. Useful for lazy evaluation and streaming data.A simple example would be a random number generator.
+
+* *Lazy Coroutine* : A coroutine that does not start executing until it is first awaited. Many task types in coroutine libraries use lazy execution by default.
+
+* *Promise Type* : A customization object that defines how a coroutine behaves, including how results are delivered, how errors are handled, and when suspension occurs. Called once when the coroutine is created. It acts as the control interface between the coroutine's internal execution and the object returned to the caller.
+
+* *Scheduler / Event Loop* : The runtime component responsible for resuming suspended coroutines when their awaited operations complete, such as after I/O or timers fire.
+
+* *Structured Concurrency* : A design principle where child coroutines must complete before their parent finishes. This helps manage lifetimes, cancellation, and error propagation safely.
+
+* *Suspension Point* : A place where a coroutine pauses and returns control to the caller or scheduler. Every `co_await`, `co_yield`, and `co_return` introduces a suspension point.
+
+* *Symmetric Transfer* : An optimization where one coroutine resumes another directly without returning to the scheduler first, reducing overhead and improving performance.
+
 *CoT* : Chain of Thought - a reasoning technique where an AI “thinks out loud,” useful for debugging or explaining coding decisions.
 
 *CppFront* : a project created by https://github.com/hsutter/cppfront[Herb Sutter], which is a _syntax experiment_ for pass:[C++]. It's designed as a front-end tool to make pass:[C++] more modern and easier to use by offering a simpler syntax that translates into standard pass:[C++] code. Essentially, it's a _transpiler_ for a modernized dialect of pass:[C++].
