@@ -12,6 +12,19 @@ boost_at:/doc/libs/1_92_0/[Documentation]
 // Boost-specific macros: https://github.com/cppalliance/asciidoctor-boost?tab=readme-ov-file#macros
 // Please keep the list of libraries sorted in lexicographical order.
 
+== General Notes
+
+In previous releases, Windows `.dll` files were installed by `b2 install`
+into the library directory (`<PREFIX>/lib` by default), except on Cygwin,
+where they were installed into the binary directory (`<PREFIX>/bin` by default.)
+
+This has been changed to consistently install `.dll` files into the binary
+directory, which is the behavior most users want.
+
+For compatibility, a new command line option, `--dlldir`, has been added
+to `b2 install` so that the directory can be overridden, and if needed,
+pointed to `<PREFIX>/lib`.
+
 == New Libraries
 
 // Example:
