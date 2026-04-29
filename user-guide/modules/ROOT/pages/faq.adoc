@@ -35,7 +35,7 @@ This section contains answers to the common questions that new developers to Boo
 * <<Releases>>
 * <<Safe C++>>
 * <<Smart Pointers>>
-* <<Standard Library>>
+* <<Standard C++ Library>>
 * <<Templates>>
 * <<Types>>
 * <<See Also>>
@@ -1811,7 +1811,7 @@ void foo() {
 ----
 
 
-== Standard Library
+== Standard C++ Library
 
 . *Where can I find the most complete documentation on the C++ Standard Library?*
 +
@@ -1838,8 +1838,57 @@ Yes, currently the functionality of two Boost libraries are being considered:
 
 . *What is the current status of the Standard Library and when is the next release?*
 +
-*C++ 2026* is slated as the next full release, for details refer to https://isocpp.org/std/status[Current Status].
+*C++ 2026* is slated as the next full release, for full details refer to https://isocpp.org/std/status[Current Status].
 
+. *What are the big ticket items that should appear in the C++26 Standard Library?*
++
+Here is a table of the most compelling:
++
+[cols="1,3",options="header",stripes=even,frame=none]
+|===
+| *Feature* | *Description* 
+| **Contracts**                                        | Language support for preconditions, postconditions, and assertions (`expects`, `ensures`). Major safety and correctness feature long awaited since C++20 removal. 
+| **Static Reflection**                        | Compile-time introspection of types, members, functions, attributes. Enables metaprogramming without template hacks.          
+| **Pattern Matching**                                 | Functional-style `match`/`inspect` syntax for variant-like types and structured branching. 
+| **`std::expected` Improvements & Monadic Utilities** | Functional chaining helpers (`and_then`, `transform`, etc.) across error-handling types. 
+| **Senders / Receivers (`std::execution`)**             | Modern async execution model replacing ad-hoc futures. Foundation for high-performance async C++. 
+| **`std::generator`**                                 | Coroutine-based lazy range generator for pipelines and streaming data.  
+| **`std::embed` (Binary Resource Embedding)**         | Embed files/resources directly into binaries at compile time. Great for games, ML, embedded, tooling.  
+| **Hazard Pointers / RCU**                            | Lock-free memory reclamation primitives for high-performance concurrency.
+| **Standard Units & Quantities Library**              | Type-safe physical units (meters, seconds, etc.). Prevents unit conversion bugs. 
+| **`std::flat_map` / `std::flat_set`**                | Cache-friendly associative containers (vector-based). 
+| **`std::inplace_vector`**                            | Fixed-capacity vector with no heap allocation. Important for real-time systems.
+| **Freestanding Library Expansion**                   | Makes C++ usable in kernels, embedded, GPUs without full runtime. 
+| **constexpr expansion (“constexpr everything”)**     | Many standard library components now usable at compile time.
+| **Improved Module Ecosystem**                        | Numerous refinements to make modules practical for large codebases. 
+| **Unicode improvements**                             | Better text encoding and Unicode handling across the standard library.
+|===
+
+. *What are the big ticket items that missed the C++26 Standard Library, but may appear in the 2029 release?*
++
+Several initiatives are likely candidates, but need more time:
++
+[cols="1,3,2",options="header",stripes=even,frame=none]
+|===
+| *Feature* | *Description* | *Why it missed 26*
+| **Pattern Matching v2 (full algebraic matching)**                 | Extends the accepted pattern matching to support destructuring, guards, exhaustive checking, and more functional-style power. | Initial version was accepted, but the full vision is large and still evolving. 
+| **Metaclasses / Compile-time Classes**                            | A revolutionary feature allowing user-defined “kinds of classes” (value types, interfaces, etc.) enforced by the compiler.    | Huge design space and tooling impact. Needs more experience from Reflection first. Perhaps more long-term than likely for C++29.     
+| **Unified Call Syntax (UFCS)**                                    | Allows `obj.func(x)` to call free functions as if they were members. Improves discoverability and pipeline style.             | Lots of bikeshedding over lookup rules and ambiguity.     
+| **Executor refinements & Networking TS integration**              | Completing the networking library on top of Senders/Receivers.                                                                | Senders/Receivers landed late; networking integration needs time to bake.  
+| **Trivial Relocation**                                            | Lets objects be safely moved with `memcpy` when possible, which should lead to a massive performance win for containers.                            | Deep ABI and library implications; needed more consensus.   
+| **`std::async_scope` and structured concurrency**                 | High-level lifetime management for async tasks (similar to modern languages).                                                 | Depends on ecosystem experience with Senders/Receivers first.               
+| **SIMD Everywhere (`std::simd` expansion)**                         | Making vectorization first-class and pervasive across the standard library.                                                   | Big scope and ongoing performance experimentation.
+| **Language support for contracts tooling modes**                  | The accepted Contracts feature is the “MVP”. Advanced tooling levels and build modes are still being designed.                | Needed to ship a minimal version first.                                         
+| **Compile-time Reflection v2 (code injection / metaprogramming)** | Extends reflection to allow generating new declarations.                                                                      | Committee intentionally staged reflection to reduce risk.   
+| **Pattern-based error handling (try expressions)**                | Expression-based error propagation similar to Rust.                                                                     | Interaction with exceptions and `expected` still debated.       
+| **`std::status_code` / modern error system**                      | A zero-overhead alternative to exceptions and `std::error_code`.                                                              | Competes with existing mechanisms; consensus not complete.              
+| **Heterogeneous lookup everywhere**                               | Transparent hashing/comparisons across more containers and algorithms.                                                        | Lots of small but invasive library changes.                               
+
+|===
+
+. *Are there _themes_ to a release of the Standard?*
++
+To an extent, pass:[C++20] was the "coroutines and ranges" release, then pass:[C++23] was a cleanup release. pass:[C++26] is shaping up to be the "Safety and Async and Metaprogramming" release. Perhaps pass:[C++29] will be the "Performance, Networking, and Compile-time Metaprogramming Superpowers" release.
 
 
 == Templates
