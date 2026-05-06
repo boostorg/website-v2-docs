@@ -19,6 +19,7 @@ This section contains answers to the common questions that new developers to Boo
 * <<Combining Libraries>>
 * <<Compatibility>>
 * <<Conferences>>
+* <<Constexpr>>
 * <<Debugging>>
 * <<Dependencies>>
 * <<Documentation>>
@@ -349,7 +350,7 @@ Many Boost libraries are designed to be modular, yet complementary, and over the
 +
 If the network supports financial systems, in particular high-frequency trading, then add boost:lockfree[] to support low-latency data structures, and boost:multiprecision[] for high-precision arithmetic.
 +
-* Say you are working on *Compile-Time Metaprogramming and Reflection*, then the following libraries enable expressive and powerful template code, with strong introspection and static analysis at compile time, reducing run-time cost: boost:hana[] or boost:mp11[] for high-level metaprogramming, boost:fusion[] provides sequence manipulation for structs and tuples at compile time, boost:type-traits[] for query and transform types, and boost:static-assert[] or boost:assert[] to validate assumptions during compile-time logic.
+* Say you are working on *Compile-Time Metaprogramming and Reflection*, then the following libraries enable expressive and powerful template code, with strong introspection and static analysis at compile time, reducing runtime cost: boost:hana[] or boost:mp11[] for high-level metaprogramming, boost:fusion[] provides sequence manipulation for structs and tuples at compile time, boost:type-traits[] for query and transform types, and boost:static-assert[] or boost:assert[] to validate assumptions during compile-time logic.
 +
 * A quite different field is *Simulation, Geographic Information Systems (GIS), Robotics, and CAD*. For this you need accurate, type-safe modeling of space, motion, and physical quantities, all interoperable in simulations or mathematical domains. The following provide this: boost:geometry[] for the algorithms in 2D/3D spatial operations, boost:units[] for strongly-typed physical units to prevent dimensional errors, boost:qvm[] for lightweight vector and matrix algebra, boost:math[] adds special functions, statistical distributions, numerical accuracy, and boost:numeric/interval[] can represent ranges of values that may contain uncertainty. In robotics in particular, you might need boost:thread[] to support parallel sensor processing. Also, boost:serialization[] might also help with state persistence.
 +
@@ -371,7 +372,7 @@ Not in a broad sense, Boost pass:[C++] libraries are designed with a high degree
 
 * boost:signals2[] internally uses boost:thread[] for managing asynchronous signal connections. However, there have been instances where thread safety issues arise when these two libraries are used in parallel. If not handled properly, it can lead to deadlocks or race conditions, especially in multithreaded environments. Always ensure that signals are disconnected properly and thread-safe operations are applied where needed.
 * Both boost:filesystem[] and boost:regex[] perform some filesystem operations and string manipulation that can lead to conflicts when used in combination, especially if Regex is processing filenames or paths that contain special characters (for example, slashes or backslashes in Windows paths). When working with filenames and regular expressions, it's best to sanitize the inputs carefully before passing them on.
-* boost:mp11[] and boost:hana[] both work with metaprogramming, often with overlapping functionality, but their usage patterns can conflict. MP11 uses a more classic, compile-time only, and more explicit metaprogramming model, while Hana includes both compile-time and run-time metaprogramming functions, which introduce ambiguity when mixing the two libraries. Best to choose one of these libraries, unless you can ensure clean separation between the two.
+* boost:mp11[] and boost:hana[] both work with metaprogramming, often with overlapping functionality, but their usage patterns can conflict. MP11 uses a more classic, compile-time only, and more explicit metaprogramming model, while Hana includes both compile-time and runtime metaprogramming functions, which introduce ambiguity when mixing the two libraries. Best to choose one of these libraries, unless you can ensure clean separation between the two.
 * The interaction between boost:serialization[] (for serializing and deserializing objects) and boost:python[] (for integrating pass:[C++] code with Python) can be tricky when serializing Python objects. Issues like memory management conflicts or incorrect serialization of Python objects can occur, especially with Python's dynamic typing system. Wrapping Python objects in pass:[C++] classes with explicit serialization mechanisms may be necessary.
 * When using asynchronous I/O with boost:asio[] and regular expressions with boost:regex[], conflicts can arise, particularly with blocking operations in `boost::asio::io_service` or `boost::asio::strand`. Regex can be CPU-intensive and might block the main event loop of Asio, leading to performance issues or deadlocks. Use non-blocking or asynchronous alternatives (separate threads) for Regex operations in the context of Asio.
 * boost:pool[] is a custom memory pool allocator that can cause issues when used with boost:smart_ptr[] (such as `boost::shared_ptr` or `boost::scoped_ptr`) since these smart pointers manage memory differently. The interaction between custom memory pools and reference-counted pointers can lead to memory leaks or double-free errors if not handled correctly. When using Pool with smart pointers, ensure that custom allocators are compatible with the reference-counting behavior of smart pointers. Consider using `boost::shared_ptr` with `boost::pool_allocator` if you're using custom memory pools.
@@ -507,6 +508,96 @@ If you attend several conferences, you may well find projects debut at one of th
 . *Is there such a thing as online C++ conferences?*
 +
 Yes, not free but there is https://cpponline.uk/[Cpp Online].
+
+== Constexpr
+
+. *Why is there so much online chat about the C++ term `constexpr`?*
++
+`constexpr` lets you run real C++ programs during compilation, not just when the program runs. By declaring functions as `constexpr` they are run at compile time, often to produce look-up tables that are blindingly fast to execute at runtime. For example:
++
+[source,cpp]
+----
+struct Entry
+{
+    uint64_t hash;
+    int id;
+};
+
+constexpr auto build_table()
+{
+    std::array<Entry, words.size()> table{};
+
+    for (size_t i = 0; i < words.size(); ++i)
+    {
+        table[i] = { hash_str(words[i]), static_cast<int>(i) };
+    }
+
+    // compile-time sort (yes, really)
+    std::ranges::sort(table, {}, &Entry::hash);
+
+    return table;
+}
+
+constexpr auto lookup_table = build_table();
+
+----
++
+At runtime the binary will contain something like the following:
++
+[source,cpp]
+----
+constexpr Entry lookup_table[] = {
+    {0x1234..., 0},
+    {0x2af3..., 1},
+    {0x88ab..., 2},
+    ...
+};
+
+----
++
+This means that at runtime there is no parsing, no hashing, no sorting, no allocations - just a table look-up. Simply, anything done at compile time costs zero runtime CPU. _It's one of the biggest long-term evolutions in the language._
+
+. *How does `constexpr` improve program safety?*
++
+By using `constexpr` your program will often fail at compilation if something is wrong, and not at runtime. For example, invalid configuration, out-of-range values, bad lookup tables, and broken assumptions will often appear as compile time errors.
+
+. *How does `constexpr` compare with `constevel`?*
++
+A `constexpr` function _can_ run at compile-time, or _can_ run at runtime. A `consteval` function _must_ run at compile-time. `consteval` is perfect for 
+compile-time string hashing, generating IDs, reflection helpers, and for building static lookup tables. `constexpr` is the more powerful as it gives you compile-time when possible, runtime when needed.
+
+. *What is the history of `constexpr`?*
++
+A table shows the developing nature of this concept:
++
+[cols="1,4",stripes=even,options="header",frame=none]
+|===
+| *Standard* | *What changed* 
+| C++11    | `constexpr` introduced (very limited)                
+| C++14    | Loops and more logic allowed                         
+| C++17    | More library support                                 
+| C++20    | Dynamic allocation, containers, algorithms           
+| C++23    | Ever more library functions become `constexpr`                  
+| C++26    | Huge expansion — reflection and "constexpr everywhere" 
+|===
+
+. *What applications typically use the `constexpr` approach?*
++
+Apps where performance is king: game engines, compilers, serialization libraries, networking protocols, embedded systems, to name a few.
+
+. *What Boost libraries take advantage of the power of `constexpr`?* 
++
+Over the last 5 to 10 years, many Boost libraries have been heavily modernized to exploit `constexpr`, it's sibling `consteval`, and compile-time metaprogramming. A modern Boost-heavy project can parse URLs, generate serializers, build type-safe APIs, and compute math tables - all at compile time. For example:
++
+* boost:hana[] : The flagship `constexpr` metaprogramming library, built around compile-time computation, type-level programming, and `constexpr` containers and algorithms - such as filters, transforms, folds, sorts.
+* boost:mp11[] : Ultra-fast constexpr template metaprogramming.
+* boost:describe[] : Provides `constexpr` reflection. You can iiterate fields at compile time, generate serializers, generate UI bindings, build ORM mapping, and auto-generate JSON - all via `constexpr` metadata.
+* boost:pfr[] : Provides `constexpr` reflection without macros, and iterate, serialize, and compare structs at compile time.
+* boost:static-string[] : Enables `constexpr` strings.
+* boost:url[] : Designed so some parsing can run at compile time.
+* boost:json[] : Uses `constexpr` for lookup tables, parsers, and optimized state machines.
+* boost:container[] : Steadily becoming more `constexpr`-capable.
+* boost:math[] : Huge portions now support compile-time evaluation of constants, special functions, numeric limits, and lookup tables.
 
 == Debugging
 
@@ -1888,7 +1979,7 @@ Several initiatives are likely candidates, but need more time:
 
 . *Are there _themes_ to a release of the Standard?*
 +
-To an extent, pass:[C++20] was the "coroutines and ranges" release, then pass:[C++23] was a cleanup release. pass:[C++26] is shaping up to be the "Safety and Async and Metaprogramming" release. Perhaps pass:[C++29] will be the "Performance, Networking, and Compile-time Metaprogramming Superpowers" release.
+To an extent, pass:[C++20] was the "Coroutines and Ranges" release, then pass:[C++23] was a cleanup release. pass:[C++26] is shaping up to be the "Safety and Async and Metaprogramming" release. Perhaps pass:[C++29] will be the "Performance, Networking, and Compile-time Metaprogramming Superpowers" release.
 
 
 == Templates
@@ -2091,6 +2182,7 @@ You should conside using boost:nowide[], a library that makes Windows Unicode ha
 . *Storage space is of the essence in the real-time app I am building, are there Boost libraries that can provide _small_ integers, specifying 8 or 16 bits and no more storage than that is allocated?*
 +
 For byte level efficiency look at boost:endian[], this library gives you precise control over both integer size and alignment. It also provides cross-platfrom compatibility, if that is important. For example, `boost::endian::little_int8_t  smallCount;` will always be 8 bit. boost:multiprecision[] does provide for declaring small integers as low as 8 bits, but is not so memory efficient. If your goal is to save overall memory, not just per-number bytes, check out boost:container[], as it supports small-vector optimization and no heap allocations.
+
 
 == See Also
 
