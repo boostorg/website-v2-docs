@@ -24,6 +24,7 @@ Note:: The review results include recent completed reviews - where the library m
 |===
 | *Submission* | *Submitter* | *Links* | *Review Manager* | *Review Dates* | *Result*
 | Capy and Corosio | Vinnie Falco | https://github.com/cppalliance/capy[Capy Repo] https://develop.capy.cpp.al/capy/index.html[Capy Docs] https://github.com/cppalliance/corosio[Corosio Repo] https://develop.corosio.cpp.al/corosio/index.html[Corosio Docs] | Jeff Garland | June 23 - July 7, 2026 | TBD
+| https://github.com/cppalliance/int128[Int128] | Matt Borland | https://develop.int128.cpp.al/overview.html[Docs] https://github.com/cppalliance/int128[Lib] | Arnaud Becheler | July 22, 2026 - August 2, 2026 | TBD
 |===
 
 === Review Managers
