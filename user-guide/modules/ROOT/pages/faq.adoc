@@ -20,6 +20,7 @@ This section contains answers to the common questions that new developers to Boo
 * <<Compatibility>>
 * <<Conferences>>
 * <<Constexpr>>
+* <<Coroutines>>
 * <<Debugging>>
 * <<Dependencies>>
 * <<Documentation>>
@@ -598,6 +599,75 @@ Over the last 5 to 10 years, many Boost libraries have been heavily modernized t
 * boost:json[] : Uses `constexpr` for lookup tables, parsers, and optimized state machines.
 * boost:container[] : Steadily becoming more `constexpr`-capable.
 * boost:math[] : Huge portions now support compile-time evaluation of constants, special functions, numeric limits, and lookup tables.
+
+== Coroutines
+
+. *When reading about coroutines, I often come across the term `task`. Within the context of C++, is a task a function or process?*
++
+A `task` is a coroutine object representing an asynchronous operation that will eventually produce a result. A normal function runs immediately and returns a value. A `task` is a coroutine that will produce a value later when awaited. In simple terms it is a lazy async function call that hasn't run yet (a paused function call). The name was chosen as it is the same concept as an `async task` in Rust, or an `asyncio Task` in Python. 
+
+. *How does a coroutine `task` compare with `std::future<T>`?*
++
+The concepts are similar in that they both represent a value that will exist later. However `std:future` is thread-based, and the result retrieved using `future.get()` - which will block other code until the value is retrieved. A `task` is event-loop/coroutine based, does not require its own thread, is retrieved using `co-await task` - and critically this is a non-blocking call - other code will keep running.
+
+. *When should I consider using coroutine tasks and when standard future constructs?*
++
+If the coding scenario you are building is heavily into CPU parallelism, or a simple background job, then `std::future` and a thread model is probably your best bet. If your scenario is high-scale networking, say involving millions of operations, then tasks and coroutines should provide a solid solution.
+
+. *What are the core constructs of Boost.Asio, I believe a super-popular networking library?*
++
+Yes boost:asio[] is a very popular networking library. It's core constructs are an event loop (an `io_context`), async operations, completion handlers, executors, strands, I/O objects, and buffers. It is certainly not based on futures and threads, though they are optional usage styles. 
++
+Note:: A strand _guarantees_ that handlers do not run concurrently.
+
+. *Is it true that coroutines can never block, or get caught up in race conditions?*
++
+No. A coroutine is a state machine that can suspend and resume. Nothing about it _automatically_ guarantees safety. Care has to be taken with coroutines not to be, for example, providing wrappers around blocking calls or wrappers around CPU-heavy work hidden inside the coroutine. And as for race conditions, coroutines do not imply mutual exclusion, atomicity, serialization, nor thread-safety.
++
+Coroutines are scheduling points - they guarantee that execution can be suspended and resumed, and that no thread is blocked whilst awaiting async I/O. Using coroutines still requires good practices around shared objects. Coroutines make asynchronous code _look_ sequential, but they do not remove concurrency — so all normal rules about blocking and race conditions still apply.
+
+. *Has anyone come up with a good design methodology for coroutines, such as graphs of state machines, or flow diagrams of some sort?*
++
+This has become an active design space, because once you move from “functions” to “suspended state machines”, you naturally start needing different mental models. There isn't one single universally accepted methodology, but there are strong, widely used approaches that map very well to coroutines. The most popular in practice are _Sequence Diagrams_, for example:
++
+[source,text]
+----
+Coroutine           io_context           Timer
+    |                   |                 |
+    |--- async_wait --->|                 |
+    |                   |--- register --->|
+    |     (suspend)     |                 |
+    |                   |                 |
+    |                   |   time passes   |
+    |                   |                 |
+    |<-- resume --------|<-- ready -------|
+    |                   |                 |
+
+----
++
+A sequence diagram answers the questions - who is doing what, who resumes me, what thread am I on?
++
+Another approach is a _Structured Concurrency Graph_, where you model coroutines as a task tree, for example:
++
+[source,text]
+----
+      Parent task
+        /    \
+       /      \
+   child A   child B
+      |          |
+   await      await
+      \        /
+       \      /
+      completion
+
+----
++
+This approach helps you reason on cancellation propagation, lifetime, error propagation, and task ownership.
++
+Other approaches that have proved helpful include _Control-Flow Graphs_ where nodes are execution blocks and edges are control flow or suspend/resume transitions. _State Machine_ diagrams may also help, in that almost every coroutine boils down to a state machine with suspension points as states. Something else to consider is _Actor-style models_ where coroutines are treated as message-driven state machines (actors). This actor-based approach has found success in game engines and high-concurrency servers.
++
+In the real world of coroutine programming - most bugs come from not modelling coroutines explicitly at all!
 
 == Debugging
 
