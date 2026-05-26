@@ -618,7 +618,7 @@ If the coding scenario you are building is heavily into CPU parallelism, or a si
 +
 Yes boost:asio[] is a very popular networking library. It's core constructs are an event loop (an `io_context`), async operations, completion handlers, executors, strands, I/O objects, and buffers. It is certainly not based on futures and threads, though they are optional usage styles. 
 +
-Note:: A strand _guarantees_ that handlers do not run concurrently.
+Note:: A `strand` _guarantees_ that handlers do not run concurrently.
 
 . *Is it true that coroutines can never block, or get caught up in race conditions?*
 +
@@ -668,6 +668,443 @@ This approach helps you reason on cancellation propagation, lifetime, error prop
 Other approaches that have proved helpful include _Control-Flow Graphs_ where nodes are execution blocks and edges are control flow or suspend/resume transitions. _State Machine_ diagrams may also help, in that almost every coroutine boils down to a state machine with suspension points as states. Something else to consider is _Actor-style models_ where coroutines are treated as message-driven state machines (actors). This actor-based approach has found success in game engines and high-concurrency servers.
 +
 In the real world of coroutine programming - most bugs come from not modelling coroutines explicitly at all!
+
+. *In the world of coroutines, what is meant by a "promise", and what would an example function look like?*
++
+There is confusion over the use of the word "promise", as a coroutine "promise object" is certainly not the same thing as a `std:promise` from `<future>`. The promise object is a compiler-generated control object that manages the coroutine's state, results, suspension, and lifetime. Here is a minimalistic but runnable example - noting that `promise_type` is a sub-struct of `Task`:
++
+[source,cpp]
+----
+#include <coroutine>
+#include <iostream>
+
+// --------------------------------------------------
+// Coroutine return object
+// --------------------------------------------------
+struct Task
+{
+    // =====================================================
+    // A minimal promise type contains the following 5 calls
+    // =====================================================
+    struct promise_type
+    {
+        // Called when the coroutine object is created, and returns the parent Task
+        Task get_return_object()
+        {
+            return {};
+        }
+
+        // Suspend immediately at start?
+        std::suspend_never initial_suspend()
+        {
+            return {};
+        }
+
+        // Suspend at end?
+        std::suspend_never final_suspend() noexcept
+        {
+            return {};
+        }
+
+        // Handles co_return;
+        void return_void()
+        {
+            std::cout << "co_return happened\n";
+        }
+
+        // Handles uncaught exceptions
+        void unhandled_exception()
+        {
+            std::terminate();
+        }
+    };
+};
+
+// --------------------------------------------------
+// Coroutine function
+// --------------------------------------------------
+Task example()
+{
+    std::cout << "Inside coroutine\n";
+
+    co_return; // Invokes promise.return_void()
+}
+
+int main()
+{
+    example();
+}
+----
++
+*Note:* When compiling this sample, a modern compiler is recommended (Visual Studio 2022, GCC 12, Clang 15, or later), and make sure to set the pass:[C++] compiler standard to pass:[C++20], or later. In Microsoft Visual Studio, for example, locate the project properties:
++
+image::cpp20.png[Set Language Standard]
++
+Don't confuse the promise type with `std::promise` - which ia a thread-to-thread value delivery mechanism.
+
+. *Am I right that the `co_await` function handles suspension and resumption?*
++
+Yes, `co_await` works by calling three methods (`await_ready`, `await_suspend`, `await_resume`) that together control whether and how a coroutine pauses and resumes, for example:
++
+[source,cpp]
+----
+#include <coroutine>
+#include <iostream>
+
+// --------------------------------------------------
+// A minimal awaiter
+// --------------------------------------------------
+struct SimpleAwaiter
+{
+    // Should we suspend?
+    bool await_ready() const noexcept
+    {
+        return false;
+    }
+
+    // Called when suspending
+    void await_suspend(std::coroutine_handle<> h) const
+    {
+        std::cout << "Coroutine suspended\n";
+
+        // Immediately resume for demo purposes
+        h.resume();
+    }
+
+    // Value returned from co_await
+    void await_resume() const noexcept
+    {
+        std::cout << "Coroutine resumed\n";
+    }
+};
+
+// --------------------------------------------------
+// Minimal coroutine return type
+// --------------------------------------------------
+struct Task
+{
+    struct promise_type
+    {
+        Task get_return_object()
+        {
+            return {};
+        }
+
+        std::suspend_never initial_suspend()
+        {
+            return {};
+        }
+
+        std::suspend_never final_suspend() noexcept
+        {
+            return {};
+        }
+
+        void return_void()
+        {
+        }
+
+        void unhandled_exception()
+        {
+            std::terminate();
+        }
+    };
+};
+
+// --------------------------------------------------
+// Coroutine function
+// --------------------------------------------------
+Task example()
+{
+    std::cout << "Before co_await\n";
+
+    co_await SimpleAwaiter{};
+
+    std::cout << "After co_await\n";
+}
+
+// --------------------------------------------------
+// main()
+// --------------------------------------------------
+int main()
+{
+    example();
+}
+----
+
+. *How do I code a coroutine to produce a single value in the future, then close down?*
++
+A `co_return` communicates with the coroutine's promise object to produce a single value. For example, the following code returns an integer:
++
+[source,cpp]
+----
+#include <coroutine>
+#include <iostream>
+
+// --------------------------------------------------
+// Coroutine return object
+// --------------------------------------------------
+struct Task
+{
+    struct promise_type
+    {
+        int value;
+
+        // Create return object
+        Task get_return_object()
+        {
+            return Task{
+                std::coroutine_handle<promise_type>::from_promise(*this)
+            };
+        }
+
+        // Start immediately
+        std::suspend_never initial_suspend()
+        {
+            return {};
+        }
+
+        // Suspend at end so result can be read
+        std::suspend_always final_suspend() noexcept
+        {
+            return {};
+        }
+
+        // Called by: co_return int;
+        void return_value(int v)
+        {
+            value = v;
+        }
+
+        void unhandled_exception()
+        {
+            std::terminate();
+        }
+    };
+
+    // Store coroutine handle
+    std::coroutine_handle<promise_type> handle;
+
+    // Constructor
+    Task(std::coroutine_handle<promise_type> h)
+        : handle(h)
+    {
+    }
+
+    // Destructor
+    ~Task()
+    {
+        handle.destroy();
+    }
+
+    // Access returned value
+    int result() const
+    {
+        return handle.promise().value;
+    }
+};
+
+// --------------------------------------------------
+// Coroutine function
+// --------------------------------------------------
+Task compute()
+{
+    std::cout << "Inside coroutine\n";
+
+    co_return 101;
+}
+
+// --------------------------------------------------
+// main()
+// --------------------------------------------------
+int main()
+{
+    Task task = compute();
+
+    std::cout << "Returned value: "
+              << task.result()
+              << "\n";
+}
+----
+
+. *How do I code a coroutine to produce a series of values, suspending after each value is released?*
++
+The key construct to continuous delivery is `co_yield`; this pauses the coroutine and returns a value to the caller, but keeps the coroutine alive for later resumption. For example:
++
+[source,cpp]
+----
+#include <coroutine>
+#include <iostream>
+
+// --------------------------------------------------
+// Generator type
+// --------------------------------------------------
+struct Generator
+{
+    struct promise_type
+    {
+        int current_value;
+
+        Generator get_return_object()
+        {
+            return Generator{
+                std::coroutine_handle<promise_type>::from_promise(*this)
+            };
+        }
+
+        std::suspend_always initial_suspend()
+        {
+            return {};
+        }
+
+        std::suspend_always final_suspend() noexcept
+        {
+            return {};
+        }
+
+        // Handles co_yield
+        std::suspend_always yield_value(int value)
+        {
+            current_value = value;
+            return {};
+        }
+
+        void return_void() {}
+        void unhandled_exception()
+        {
+            std::terminate();
+        }
+    };
+
+    std::coroutine_handle<promise_type> handle;
+
+    explicit Generator(std::coroutine_handle<promise_type> h)
+        : handle(h)
+    {}
+
+    ~Generator()
+    {
+        if (handle)
+            handle.destroy();
+    }
+
+    // Move to next value
+    bool next()
+    {
+        if (!handle || handle.done())
+            return false;
+
+        handle.resume();
+        return !handle.done();
+    }
+
+    // Get current value
+    int value() const
+    {
+        return handle.promise().current_value;
+    }
+};
+
+// --------------------------------------------------
+// Coroutine producing values
+// --------------------------------------------------
+Generator counter(int start, int end)
+{
+    for (int i = start; i <= end; ++i)
+    {
+        co_yield i;   // <-- THIS is the key point
+    }
+}
+
+// --------------------------------------------------
+// main()
+// --------------------------------------------------
+int main()
+{
+    auto gen = counter(1, 5);
+
+    while (gen.next())
+    {
+        std::cout << gen.value() << "\n";
+    }
+}
+----
++
+If you run this code, you should get:
++
+[source,txt]
+----
+1
+2
+3
+4
+5
+----
++
+It might help to think of `co_yield` as a lazy generator, only returning values when asked. They are useful when streaming data. parsing token streams, working with async data pipelines, and efficient generators of data in game engines.
+
+. *Is an `awaitable` object more efficient than a `std:future` object?*
++
+Depends on the use-case, but a coroutine awaitable object is non-blocking, does not require its own thread, there is no polling and no explicit shared state. 
++
+An `awaitable<T>` is a boost:asio[] coroutine-based asynchronous return type that allows functions to produce values later, delivered seamlessly via `co_await`. The following example uses a timer to simulate async work:
++
+[source,cpp]
+----
+#include <boost/asio.hpp>
+#include <iostream>
+
+using namespace boost::asio;
+using namespace std::chrono_literals;
+
+// --------------------------------------------------
+// Coroutine returning a value (awaitable<int>)
+// --------------------------------------------------
+awaitable<int> delayed_value(int v)
+{
+    auto executor = co_await this_coro::executor;
+
+    steady_timer timer(executor);
+
+    timer.expires_after(1s);
+    co_await timer.async_wait(use_awaitable);
+
+    co_return v * 3;   // <-- returns into awaitable<int>
+}
+
+// --------------------------------------------------
+// Caller coroutine
+// --------------------------------------------------
+awaitable<void> consumer()
+{
+    std::cout << "Requesting value...\n";
+
+    int result = co_await delayed_value(111);
+
+    std::cout << "Got result: " << result << "\n";
+}
+
+// --------------------------------------------------
+// main()
+// --------------------------------------------------
+int main()
+{
+    io_context io;
+
+    co_spawn(io, consumer(), detached);
+
+    io.run();
+}
+----
++
+If you run this code, you should get:
++
+[source,txt]
+----
+Requesting value...
+Got result: 333
+----
+
 
 == Debugging
 
