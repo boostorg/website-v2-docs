@@ -1105,6 +1105,29 @@ Requesting value...
 Got result: 333
 ----
 
+. *What is considered best practices for instrumenting a coroutine based program - what should be logged?*
++
+Instrumenting coroutine-based code is a little different from instrumenting traditional synchronous code because control flow becomes non-linear. For long-running or important coroutines, log "coroutine x started" and "coroutine x completed". And don't forget errors "coroutine x failed: timeout". The most valuable information in coroutine systems is often before and after `co_await`. Cancellation is frequently overlooked, make sure to log concellation requests, cancellation observed, and probably a cleanup complete message too. This is enormously helpful when investigating shutdown issues.
++
+For performance-based instrumentation, obviously add accurate timing to your logs, such as "Socket read completed in 2.1 ms". 
++
+Large coroutine systems become nearly impossible to diagnose without _corelation IDs_ - IDs that connect sockets, databases, timers and worker pools. A corelation ID should be generated and logged along with coroutine events such as requests, queueing or waiting, completion, response sent. Coroutine systems often hide queueing, so it will be helpful to have logs of "queued for 18 ms" and " exectured for 2 ms" - obviously to help you identify bottlenecks. Tracing resource ownership has also proved to be of value, as coroutines often make resource lifetimes less obvious because ownership spans suspension points.
++
+Consider _not_ logging every suspend/resume event, as this will very quickly become noise.
++
+For boost:asio[] applications specifically, a common best practice is to trace:
++
+.. Coroutine start/end
+.. Every significant `co_await` of I/O operations
+.. Executor transitions (post, dispatch, thread-pool hops)
+.. Exceptions and cancellations
+.. Timing information around each awaited operation
+.. A request/session correlation ID carried through the coroutine chain
++
+Those six categories typically provide most of the diagnostic value with relatively little logging overhead.
+
+
+
 
 == Debugging
 
