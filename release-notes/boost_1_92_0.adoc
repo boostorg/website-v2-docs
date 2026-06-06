@@ -42,6 +42,17 @@ pointed to `<PREFIX>/lib`.
 // ** Conform to `std::pointer_traits` requirements (boost_gh:pr[interprocess,32]).
 // ** Fixed `named_condition_any` fails to notify (boost_gh:issue[interprocess,62]).
 
+* boost_phrase:library[Lockfree,/libs/lockfree/]:
+** Added new `boost::lockfree::mpsc_weak_queue`, a multi-producer, single-consumer queue.
+   While `push` and `pop` are individually wait-free, the queue is not linearizable
+   and a producer that stalls between exchanging the tail and linking its node can
+   permanently break the queue, so it is not strictly lock-free.
+** Added new `boost::lockfree::bounded_ticket_queue`, a ringbuffer-based bounded MPMC
+   queue. The queue is linearizable and wait-free when configured with a single producer
+   and single consumer. In multi-producer or multi-consumer configurations, a stalled
+   thread that has claimed a slot can block progress, so the queue is not strictly
+   lock-free.
+
 == Compilers Tested
 
 // Edit this section as appropriate
