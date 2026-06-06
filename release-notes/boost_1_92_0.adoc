@@ -42,7 +42,11 @@ pointed to `<PREFIX>/lib`.
 // ** Conform to `std::pointer_traits` requirements (boost_gh:pr[interprocess,32]).
 // ** Fixed `named_condition_any` fails to notify (boost_gh:issue[interprocess,62]).
 
+* boost_phrase:library[Heap,/libs/heap/]:
+** This release is the last to support C++14. Future releases will require C++17.
+
 * boost_phrase:library[Lockfree,/libs/lockfree/]:
+** This release is the last to support C++14. Future releases will require C++17.
 ** Added new `boost::lockfree::mpsc_weak_queue`, a multi-producer, single-consumer queue.
    While `push` and `pop` are individually wait-free, the queue is not linearizable
    and a producer that stalls between exchanging the tail and linking its node can
