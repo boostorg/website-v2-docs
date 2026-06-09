@@ -151,7 +151,7 @@ Consider the following as a guide to the headings and structure of good API docu
 * *Design Guide* - go over the deeper design decisions and use cases and how your library addresses them. Good place to have diagrams and explanation.
 * *Tutorials* - work through onr or more basic yet functional examples, step by step, and showing the results.
 * *Advanced Tutorials* - address the code needed for more involved, or edge case, scenarios. Ideally tutorials are step-by-step. If the content is not step by step but more of a discussion, then "Usage" is a better title.
-* *Reference* - this section _must_ contain full descriptions of every element of your library - classes, interfaces, methods, functions, macros, constants, enums, structs. The reference should be designed so that a develop does not have to read it linearly, but can focus on the one construct they are interested in and get all the information on it they need, ideally with an example, or link to an example, of code showing the constructs use. Ultimately, the earlier material in your doc (before the Reference) will be read maybe just the once, whereas Reference material may well be revisited by developers many times.
+* *Reference* - this section _must_ contain full descriptions of _every_ element of your library - classes, interfaces, methods, functions, macros, constants, enums, structs. The reference should be designed so that a develop does not have to read it linearly, but can focus on the one construct they are interested in and get all the information on it they need, ideally with an example, or link to an example, of code showing the constructs use. Ultimately, the earlier material in your doc (before the Reference) will be read maybe just the once, whereas Reference material may well be revisited by developers many times.
 * *Acknowledgements* - make sure to credit anyone or any organization that has helped you get this up and running.
 +
 For more detailed information, refer to xref:docs/layout.adoc[].
@@ -876,6 +876,32 @@ There are several books that cover threat modeling principles, techniques, and a
 
 
 == Testing
+
+. *For my first Boost library, is there a recommended test harness or utility of some sort that is easy to get going with?*
++
+Yes, while benchmarking libraries is surprisingly difficult to do well, a lot of developers find https://github.com/google/benchmark/tree/main[Google benchmark] helpful.
+
+. *Is it considered necessary to have a clean-machine, or to turn off internet connection if it is not part of the test?*
++
+The answer is "no" in both cases. Yes most performance results are dominated by measurement noise, OS scheduling, CPU power management, or unrelated background activity. Try to minimize this background activity during testing, though building a clean-machine or disconnecting the internet is not considered necessary and can be quite impractical.
++
+To reduce the impact of noise, consider performing at least 100 iterations of any process, and often the _median_ (the middle value after sorting) can be more useful than a calculated average (total response times divided by number of tests). For example, if you run a test five times and get: 10, 10, 10, 11, 500 ms as results. The calculated average is over 100, yet the median is 10. The result of 500 ms is an _outlier_ and may need to be handled differently to get useful results. Basically, the median tells you _typical_ behavior. Reporting on the _standard deviation_ can also be valuable.
++
+Consider the effect of caching (often referred to as "warm up" in the field of testing). The first run of any program can produce a misleading result due to caches, branch predictors, turbo boost, frequency scaling, and so on. Perhaps even run for quite a few iterations before starting your timers. 
++
+Do consider running your tests on multiple machines, and remember you need a controlled and repeatable environment.
+
+. *If I am upgrading my library, does it make sense to compare performance with the previous version?*
++
+Yes, very much so, many Boost maintainers keep benchmark programs in the repository and run them before major changes. Often comparing your library against a previous version is more useful than comparing with another library. Some library to library comparison may be necessary, though a true comparison is fraught with difficulties.
+
+. *What should I consider benchmarking?*
++
+Before writing any benchmark, decide what you're measuring. A benchmark without a specific question often produces numbers that are hard to interpret. Consider asking specific questions at three levels:
++
+* Micro-benchmarks : individual functions, algorithms, data structures
+* Component benchmarks : a parser, serializer, scheduler, etc.
+* End-to-end benchmarks : realistic workloads
 
 . *What Boost libraries are useful examples of how to add Continuous Integration (CI) into the library testing process?*
 +
