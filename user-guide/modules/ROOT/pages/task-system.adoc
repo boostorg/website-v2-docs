@@ -16,6 +16,8 @@ Developing a system component for an operating system in pass:[C++] involves a w
 * <<Sample System File and Error Handling>>
 * <<Support Configuration Settings>>
 * <<Time the System Operations>>
+* <<Handle Atomic Operations and Racing Threads>>
+* <<Next Steps>>
 * <<See Also>>
 
 == Libraries
@@ -414,6 +416,272 @@ Directory deletion took: 386 microseconds
 ----
 
 Adding timing features to your system operations will help you maintain more robust and performance-aware code, so as code is updated you will have built in the checks and balances so that if something goes awry - you will be able to capture and correct it early in the development cycle.
+
+== Handle Atomic Operations and Racing Threads
+
+In systems programming, having _atomic_ variables can often be useful. A normal increment of a counter has to read a current value, add 1, then write the result back. If threads are accessing the variable at the same time, increments can be missed. The solution is for these three operations to be treated as one - an atomic (that is, indivisible) operation - and boost:atomic[] provides this feature.
+
+This first example shows multiple threads (managed by boost:thread[]) safely incrementing an atomic counter:
+
+[source,cpp]
+----
+#include <boost/thread.hpp>
+#include <boost/atomic.hpp>
+#include <iostream>
+
+boost::atomic<int> counter(0);
+
+void worker(int id)
+{
+    for (int i = 0; i < 5; ++i)
+    {
+        int value = ++counter;
+
+        std::cout
+            << "Thread "
+            << id
+            << " incremented counter to "
+            << value
+            << "\n";
+
+        boost::this_thread::sleep_for(
+            boost::chrono::milliseconds(100));
+    }
+}
+
+int main()
+{
+    boost::thread t1([] { worker(1); });
+    boost::thread t2([] { worker(2); });
+
+    t1.join();
+    t2.join();
+}
+----
+
+Run the program several times:
+
+[source,text]
+----
+Thread 1 incremented counter to 1
+Thread 2 incremented counter to 2
+Thread 1 incremented counter to 3
+Thread 2 incremented counter to 4
+Thread Thread 2 incremented counter to 6
+1 incremented counter to 5
+Thread 1 incremented counter to 7
+Thread 2 incremented counter to 8
+Thread 2 incremented counter to 9
+Thread 1 incremented counter to 10
+----
+
+You will notice that sometimes the text output interleaves "Thread Thread 2 incremented counter to 6 incremented counter to 5", which can look weird. The problem is not the atomic counter. The counter is working correctly. The problem is that `std::cout` is shared state too.
+
+The simplest solution to this is to protect output with a boost:thread[] mutex:
+
+
+[source,cpp]
+----
+#include <boost/thread.hpp>
+#include <boost/atomic.hpp>
+#include <iostream>
+
+boost::atomic<int> counter(0);
+boost::mutex cout_mutex;
+
+void worker(int id)
+{
+    for (int i = 0; i < 5; i++)
+    {
+        int value = ++counter;
+
+        {
+            boost::lock_guard<boost::mutex> lock(cout_mutex);
+
+            std::cout
+                << "Thread "
+                << id
+                << " incremented counter to "
+                << value
+                << "\n";
+        }
+    }
+}
+
+
+int main()
+{
+    boost::thread t1([] { worker(1); });
+    boost::thread t2([] { worker(2); });
+
+    t1.join();
+    t2.join();
+}
+----
+
+Run this program several times, and notice there will be no interleaving:
+
+[source,text]
+----
+Thread 2 incremented counter to 1
+Thread 1 incremented counter to 2
+Thread 2 incremented counter to 3
+Thread 2 incremented counter to 5
+Thread 2 incremented counter to 6
+Thread 2 incremented counter to 7
+Thread 1 incremented counter to 4
+Thread 1 incremented counter to 8
+Thread 1 incremented counter to 9
+Thread 1 incremented counter to 10
+----
+
+You will notice though that the increments are out of order. 
+
+The important point here is that _threads race naturally_, the increment order is nondeterministic. Best not to write code that assumes otherwise.
+
+A possible issue with the above code though is that a thread's output (`cout<<`) can block other threads working. To remove this burden, the following example does not write directly to `std::cout`, each worker creates a log message that goes into a boost:lockfree[] managed lock-free queue. A dedicated logger thread then removes messages and prints them safely:
+
+[source,cpp]
+----
+#include <boost/thread.hpp>
+#include <boost/atomic.hpp>
+#include <boost/lockfree/queue.hpp>
+#include <iostream>
+
+// --------------------------------------------------
+// Shared atomic counter
+// --------------------------------------------------
+
+boost::atomic<int> counter(0);
+
+// --------------------------------------------------
+// Log message object
+// (queue stores pointers, not std::string directly)
+// --------------------------------------------------
+
+struct LogMessage
+{
+    std::string text;
+
+    LogMessage(const std::string& s)
+        : text(s)
+    {
+    }
+};
+
+// Lock-free queue for messages
+boost::lockfree::queue<LogMessage*> log_queue(128);
+
+// Signal when workers are finished
+boost::atomic<bool> done(false);
+
+// --------------------------------------------------
+// Worker threads
+// --------------------------------------------------
+
+void worker(int id)
+{
+    for (int i = 0; i < 15; i++)
+    {
+        int value = ++counter;
+
+        std::string msg =
+            "Thread " +
+            std::to_string(id) +
+            " incremented counter to " +
+            std::to_string(value);
+
+        // Allocate message and push to queue
+        while (!log_queue.push(new LogMessage(msg)))
+        {
+            // queue full, retry
+        }
+
+        boost::this_thread::sleep_for(
+            boost::chrono::milliseconds(100));
+    }
+}
+
+// --------------------------------------------------
+// Logger thread
+// --------------------------------------------------
+
+void logger()
+{
+    while (!done || !log_queue.empty())
+    {
+        LogMessage* msg = nullptr;
+
+        if (log_queue.pop(msg))
+        {
+            std::cout << msg->text << "\n";
+
+            delete msg;
+        }
+        else
+        {
+            boost::this_thread::sleep_for(
+                boost::chrono::milliseconds(10));
+        }
+    }
+}
+
+// --------------------------------------------------
+// Main
+// --------------------------------------------------
+
+int main()
+{
+    boost::thread log_thread(logger);
+
+    boost::thread t1([] { worker(1); });
+    boost::thread t2([] { worker(2); });
+    boost::thread t3([] { worker(3); });
+
+    t1.join();
+    t2.join();
+    t3.join();
+
+    done = true;
+
+    log_thread.join();
+
+    std::cout
+        << "Final counter value: "
+        << counter.load()
+        << "\n";
+}
+----
+
+Notice that the `log_thread.join();` does not interfere with the other threads. Also notice the counter output is nondeterministic by nature (blank lines added for clarity):
+
+[source,text]
+----
+Thread 2 incremented counter to 1
+Thread 3 incremented counter to 2
+Thread 1 incremented counter to 3
+Thread 3 incremented counter to 4
+Thread 2 incremented counter to 5
+Thread 1 incremented counter to 6
+
+Thread 1 incremented counter to 8
+Thread 2 incremented counter to 7
+
+Thread 3 incremented counter to 9
+Thread 2 incremented counter to 10
+Thread 1 incremented counter to 11
+Thread 3 incremented counter to 12
+Thread 1 incremented counter to 14
+Thread 3 incremented counter to 13
+Thread 2 incremented counter to 15
+Final counter value: 15
+----
+
+== Next Steps
+
+The onus on a systems program is to work reliably, fast, and, critically, with minimal impact on resources.
+
+The line `new LogMessage(msg)` in the last sample typically would _not_ be used in a production system, because of its frequent heap allocations. For an industrial strength production system, consider using an object pool, or fixed-size buffers, or a ring buffer to handle message logging.
 
 == See Also
 
