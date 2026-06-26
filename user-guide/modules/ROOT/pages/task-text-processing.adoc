@@ -13,6 +13,7 @@ Developing a word processor, or other text based app, involves handling text, GU
 
 [square]
 * <<Libraries>>
+* <<Locate Strings Within Strings>>
 * <<Sample of Regular Expression Parsing>>
 * <<Add Robust Date and Time Parsing>>
 * <<Culturally Aware Date Formatting>>
@@ -47,6 +48,93 @@ Here are some Boost libraries that might assist you in processing text:
 * boost:thread[] : If your application is multithreaded (for example, if you want to save a document while the user continues to work), this library will be useful.
 
 Note:: The code in this tutorial was written and tested using Microsoft Visual Studio (Visual C++ 2022, Console App project) with Boost version 1.88.0.
+
+== Locate Strings Within Strings
+
+It is often helpful to have tools available to extract succinct text from within what can be a long message. Let's use the `contains` then `find_nth` functions of boost:algorithm[] to extract the salient text of an error message:
+
+[source,cpp]
+----
+#include <boost/algorithm/string.hpp>
+#include <iostream>
+
+int main()
+{
+    std::string line =
+        "2026-06-25,ERROR,database connection lost";
+
+    // Is this an error entry?
+    if (boost::contains(line, "ERROR"))
+    {
+        std::cout
+            << "Error detected\n";
+
+        // Find the second comma
+        auto pos =
+            boost::find_nth(line, ",", 1);
+
+        // Everything after the second comma is the message
+        std::string message(
+            pos.begin() + 1,
+            line.end());
+
+        std::cout
+            << "Message: "
+            << message
+            << "\n";
+    }
+}
+----
+
+Run this code:
+
+[source,text]
+----
+Error detected
+Message: database connection lost
+----
+
+The `find_nth` function is interesting, and can be used to find the text we are looking for buried in a long URL query:
+
+[source,cpp]
+----
+#include <boost/algorithm/string.hpp>
+#include <iostream>
+
+int main()
+{
+    std::string url =
+        "https://api.example.com/search?"
+        "category=books&sort=price&limit=25&currency=USD";
+
+    // Find the second '&' separator
+    auto second =
+        boost::find_nth(url, "&", 1);
+
+    // Find the third '&' separator
+    auto third =
+        boost::find_nth(url, "&", 2);
+
+    // Extract text between them
+    std::string parameter(
+        second.begin() + 1,
+        third.begin());
+
+    std::cout
+        << "Extracted parameter: "
+        << parameter
+        << "\n";
+}
+----
+
+Running this code extracts a brief and clear point:
+
+[source,text]
+----
+Extracted parameter: limit=25
+----
+
+This kind of extraction is a simple form of parsing. Now let's look at an issue a step up in complexity.
 
 == Sample of Regular Expression Parsing
 
