@@ -78,7 +78,7 @@ pointed to `<PREFIX>/lib`.
 
 * boost_phrase:library[MultiIndex,/libs/multi_index/]:
 ** Fixed a performance issue with hashed indices when rehashing at very large container
-  sizes (boost_gh:pr[unordered,94]). Contributed by Daniel Kr&aacute;l.
+  sizes (boost_gh:pr[multi_index,94]). Contributed by Daniel Kr&aacute;l.
 
 * boost_phrase:library[Unordered,/libs/unordered/]:
 ** Added interoperability with pass:[C++20] ranges to all the containers in the library:
