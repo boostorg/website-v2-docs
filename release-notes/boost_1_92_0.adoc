@@ -77,6 +77,10 @@ pointed to `<PREFIX>/lib`.
 ** fix(back, back11): Infinite recursion with event deferral in orthogonal regions (regression from 1.78) (https://github.com/boostorg/msm/issues/184[#184])
 
 * boost_phrase:library[MultiIndex,/libs/multi_index/]:
+** Fancy pointer support has been extended so that `multi_index_container` iterators now store
+  references to the elements through the allocator's pointer type. In particular, this means that
+  iterators can now be placed in shared memory using 
+  boost_at:/libs/interprocess[Boost.Interprocess] allocators. 
 ** Fixed a performance issue with hashed indices when rehashing at very large container
   sizes (boost_gh:pr[multi_index,94]). Contributed by Daniel Kr&aacute;l.
 
