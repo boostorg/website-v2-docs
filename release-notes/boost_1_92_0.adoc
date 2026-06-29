@@ -45,6 +45,16 @@ pointed to `<PREFIX>/lib`.
 * boost_phrase:library[Heap,/libs/heap/]:
 ** This release is the last to support pass:[C++14]. Future releases will require pass:[C++17].
 
+* boost_phrase:library[ICL,/libs/icl/]:
+** Starting with version 22, pass:[libc++] has changed some lookup algorithms of its associative containers
+in a way that breaks ICL's assumptions and behavior. The library internals
+have been refactored to solve the problem and make ICL robust against future decisions of
+the pass:[C++] committee regarding non-heteregeneous lookup for associative containers
+(boost_gh:pr[icl,54], https://cplusplus.github.io/LWG/issue4572[LWG4752]).
+** Fixed pass:[C++20]-related problems with `std::iter_value_t<element_iterator>` and GCC 10-12's
+handling of rewritten relational operators (boost_gh:pr[icl,54]).
+** Fixed a GCC 10-11 codegen bug (boost_gh:pr[icl,54]).
+
 * boost_phrase:library[Lockfree,/libs/lockfree/]:
 ** This release is the last to support pass:[C++14]. Future releases will require pass:[C++17].
 ** Added new `boost::lockfree::mpsc_weak_queue`, a multi-producer, single-consumer queue.
