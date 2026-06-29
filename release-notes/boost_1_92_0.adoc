@@ -42,6 +42,17 @@ pointed to `<PREFIX>/lib`.
 // ** Conform to `std::pointer_traits` requirements (boost_gh:pr[interprocess,32]).
 // ** Fixed `named_condition_any` fails to notify (boost_gh:issue[interprocess,62]).
 
+* boost_phrase:library[Geometry,/libs/geometry/]:
+** Improvements (`geometry`):
+*** Drop varray implementation in favor of Boost.Container static_vector (boost_gh:pr[geometry,1458]).
+*** Refactor/reduce misc boost dependencies (boost_gh:pr[geometry,1459]).
+*** Improve short-distance accuracy of Andoyer inverse (boost_gh:pr[geometry,1461]).
+** Solved issues (`geometry`):
+*** Unit test index_rtree_exceptions_rst fails (boost_gh:issue[geometry,1399]).
+*** Performance regression on GCC (boost_gh:issue[geometry,1452]).
+*** Missing citation guidelines (boost_gh:issue[geometry,714]).
+*** Various fixes of errors and warnings.
+
 * boost_phrase:library[Heap,/libs/heap/]:
 ** This release is the last to support pass:[C++14]. Future releases will require pass:[C++17].
 
