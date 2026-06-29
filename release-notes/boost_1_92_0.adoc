@@ -44,11 +44,11 @@ pointed to `<PREFIX>/lib`.
 
 * boost_phrase:library[Geometry,/libs/geometry/]:
 ** Improvements (`geometry`):
-*** Drop varray implementation in favor of Boost.Container static_vector (boost_gh:pr[geometry,1458]).
+*** Drop `varray` implementation in favor of Boost.Container `static_vector` (boost_gh:pr[geometry,1458]).
 *** Refactor/reduce misc boost dependencies (boost_gh:pr[geometry,1459]).
 *** Improve short-distance accuracy of Andoyer inverse (boost_gh:pr[geometry,1461]).
 ** Solved issues (`geometry`):
-*** Unit test index_rtree_exceptions_rst fails (boost_gh:issue[geometry,1399]).
+*** Unit test `index_rtree_exceptions_rst` fails (boost_gh:issue[geometry,1399]).
 *** Performance regression on GCC (boost_gh:issue[geometry,1452]).
 *** Missing citation guidelines (boost_gh:issue[geometry,714]).
 *** Various fixes of errors and warnings.
