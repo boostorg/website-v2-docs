@@ -68,6 +68,10 @@ build, and was never supported by `FindBoost`.
 *** Missing citation guidelines (boost_gh:issue[geometry,714]).
 *** Various fixes of errors and warnings.
 
+* boost_phrase:library[Hash2,/libs/hash2/]:
+** Added built-in support for `std::optional`
+** Added built-in support for `std::variant`, `std::monostate`
+
 * boost_phrase:library[Heap,/libs/heap/]:
 ** This release is the last to support pass:[C++14]. Future releases will require pass:[C++17].
 
