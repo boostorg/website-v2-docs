@@ -14,16 +14,31 @@ boost_at:/doc/libs/1_92_0/[Documentation]
 
 == General Notes
 
-In previous releases, Windows `.dll` files were installed by `b2 install`
+* In previous releases, Windows `.dll` files were installed by `b2 install`
 into the library directory (`<PREFIX>/lib` by default), except on Cygwin,
 where they were installed into the binary directory (`<PREFIX>/bin` by default.)
-
++
 This has been changed to consistently install `.dll` files into the binary
 directory, which is the behavior most users want.
-
++
 For compatibility, a new command line option, `--dlldir`, has been added
 to `b2 install` so that the directory can be overridden, and if needed,
 pointed to `<PREFIX>/lib`.
+
+* The CMake configuration file installed by `b2 install` has been updated
+to support requesting header-only libraries as `find_package` components.
++
+That is, something like `find_package(Boost REQUIRED COMPONENTS mp11)` works
+now (and defines the target `Boost::mp11`), whereas previously it did not
+(only compiled libraries were considered components).
++
+This matches the behavior of the CMake configuration files installed by
+building Boost with CMake, making it possible to consume Boost in the same
+way regardless of how it was built and installed.
++
+As part of this regularization, the little used feature of requesting
+`COMPONENTS ALL` has been removed. It's not supported by the CMake Boost
+build, and was never supported by `FindBoost`.
 
 == New Libraries
 
