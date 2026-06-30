@@ -57,6 +57,12 @@ build, and was never supported by `FindBoost`.
 // ** Conform to `std::pointer_traits` requirements (boost_gh:pr[interprocess,32]).
 // ** Fixed `named_condition_any` fails to notify (boost_gh:issue[interprocess,62]).
 
+* boost_phrase:library[Assert,/libs/assert/]:
+** Fix `BOOST_VERIFY` in the rare case of both `BOOST_ENABLE_ASSERT_HANDLER` and `BOOST_ENABLE_ASSERT_DEBUG_HANDLER` being defined.
+
+* boost_phrase:library[CointainerHash,/libs/container_hash/]:
+** Hashing a valueless `std::variant` instance no longer throws.
+
 * boost_phrase:library[Geometry,/libs/geometry/]:
 ** Improvements (`geometry`):
 *** Drop `varray` implementation in favor of Boost.Container `static_vector` (boost_gh:pr[geometry,1458]).
@@ -97,6 +103,9 @@ handling of rewritten relational operators (boost_gh:pr[icl,54]).
    thread that has claimed a slot can block progress, so the queue is not strictly
    lock-free.
 
+* boost_phrase:library[Mp11,/libs/mp11/]:
+** Improved the performance of a number of algorithms (contributed by Jonathan Poelen)
+
 * boost_phrase:library[MSM,/libs/msm/]:
 ** New features (`backmp11`):
 *** Provide an observer API for logging support (https://github.com/boostorg/msm/issues/220[#220])
@@ -123,6 +132,9 @@ handling of rewritten relational operators (boost_gh:pr[icl,54]).
   boost_at:/libs/interprocess[Boost.Interprocess] allocators. 
 ** Fixed a performance issue with hashed indices when rehashing at very large container
   sizes (boost_gh:pr[multi_index,94]). Contributed by Daniel Kr&aacute;l.
+
+* boost_phrase:library[System,/libs/system/]:
+** Fix `unwrap_and_invoke` for functions returning `void`.
 
 * boost_phrase:library[Unordered,/libs/unordered/]:
 ** Added interoperability with pass:[C++20] ranges to all the containers in the library:
