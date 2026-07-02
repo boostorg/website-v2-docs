@@ -72,6 +72,7 @@ build, and was never supported by `FindBoost`.
 *** Unit test `index_rtree_exceptions_rst` fails (boost_gh:issue[geometry,1399]).
 *** Performance regression on GCC (boost_gh:issue[geometry,1452]).
 *** Missing citation guidelines (boost_gh:issue[geometry,714]).
+*** Two almost idential rectangles has no interesection (boost_gh:issue[geometry,1471]).
 *** Various fixes of errors and warnings.
 
 * boost_phrase:library[Hash2,/libs/hash2/]:
