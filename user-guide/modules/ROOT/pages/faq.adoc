@@ -2518,17 +2518,139 @@ To an extent, pass:[C++20] was the "Coroutines and Ranges" release, then pass:[C
 +
 pass:[C++] templates are a powerful feature of the language that allows for generic programming. They enable the creation of functions or classes that can operate on different data types without having to duplicate code.
 
+. *What are the benefits and drawbacks of using templates in pass:[C++]?*
++
+The benefits of using templates include code reusability, type safety, and the ability to use generic programming paradigms. The drawbacks include more complex syntax, potentially increased compile times, difficult-to-understand error messages, and other complexities associated with template metaprogramming.
+
 . *What are function templates in pass:[C++]?*
 +
-Function templates are functions that can be used with any data type. You define them using the keyword template followed by the template parameters. Function templates allow you to create a single function that can operate on different data types.
+Function templates are functions that can be used with any data type. You define them using the keyword template followed by the template parameters. Function templates allow you to create a single function that can operate on different data types, for example:
++
+[source,cpp]
+----
+template<typename T>
+T add(T a, T b)
+{
+    return a + b;
+}
+----
++
+This will work if both types of the input are the same (ints, floats, chars even). If you want to add two different types together, then use:
++
+[source,cpp]
+----
+template<typename T, typename U>
+auto add(T a, U b)
+{
+    return a + b;
+}
+----
+This works, even with `add('A', 2);` - which gives `67` as a result.
+
+. *Apart from function templates, are there other types of templates?*
++
+Yes, there are many other types of template, including class templates that define generic object types or data structures. For example:
++
+[source,cpp]
+----
+template<typename T>
+class Box
+{
+    T value;
+};
+----
++
+Usage of this class template might be `Box<int>` or `Box<double>`. Class templates usually require explicit type declaration, whereas function templates usually let the compiler infer the type.
++
+Whereas function and class templates are the most used, the following table shows how many types of template there are now:
++
+[cols="1,1",stripes=even,options="header",frame=none]
+|===
+| *Template Type*               | *Purpose*              
+| Function Template           | Generic algorithms                
+| Class Template              | Generic objects/data structures   
+| Variable Template           | Generic constants/variables       
+| Alias Template              | Generic type aliases              
+| Member Function Template    | Generic methods inside classes    
+| Template Template Parameter | Templates that accept templates   
+| Non-Type Template           | Compile-time values as parameters 
+| Constrained Template        | Restrict allowed template types   
+| Lambda Template             | Generic anonymous functions       
+| Metaprogramming Template    | Compile-time computation          
+|===
++
+For more details on using these template types refer to the documentation for boost:mp11[] and boost:hana[].
 
 . *What is template specialization in pass:[C++]?*
 +
-Template specialization is a feature of pass:[C++] templates that allows you to define a different implementation of a template for a specific type or set of types. It can be used with both class and function templates.
-
-. *What are the benefits and drawbacks of using templates in pass:[C++]?*
+Template specialization is a feature of pass:[C++] templates that allows you to define a different implementation of a template for a specific type or set of types. It can be used with both class and function templates. For example, the following code shows a specialization template for `bool`, which we want to handle differently:
 +
-The benefits of using templates include code reusability, type safety, and the ability to use generic programming paradigms. The drawbacks include potentially increased compile times, difficult-to-understand error messages, and complexities associated with template metaprogramming.
+[source,cpp]
+----
+#include <iostream>
+
+// Primary template
+template<typename T>
+void print(T value)
+{
+    std::cout << "Generic: " << value << "\n";
+}
+
+// Specialization for bool
+template<>
+void print<bool>(bool value)
+{
+    std::cout
+        << "Boolean: "
+        << (value ? "true" : "false")
+        << "\n";
+}
+
+int main()
+{
+    print(42);
+    print(3.14);
+    print(true);
+    print(false);
+}
+----
++
+Run this code and you will see the difference:
++
+[source,text]
+----
+Generic: 42
+Generic: 3.14
+Boolean: true
+Boolean: false
+----
+
+. *What is considered good practice for naming template types - I see "T" and "U" often used for example - is this considered explicit enough?*
++
+`T`, `U` and `V` are traditional and perfectly acceptable for small, obvious templates, and usually used in that order for first, second and third template type. But for more complex code, descriptive names are usually better. For example the following code is not that helpful:
++
+[source,cpp]
+----
+template<typename T,
+         typename U,
+         typename V>
+void connect(T a, U b, V c);
+----
++
+This might be better:
++
+[source,cpp]
+----
+template<typename SocketType,
+         typename BufferType,
+         typename HandlerType>
+void connect(SocketType socket,
+             BufferType buffer,
+             HandlerType handler);
+----
++
+Notice how PascalCase and the word `Type` are used, by convention, in the type names.
+
 
 . *How can I use templates to implement a generic sort function in pass:[C++]?*
 +
@@ -2600,7 +2722,7 @@ alexi alice bob charlie dave pete vanessa
 
 ----
 
-Note:: This use of templates is given as an example only, the `std::sort`, `std::stable_sort`, and `std::spreadsort` are super efficient and should be used whenever possible. However, if you have a special process you would like to apply to different types of ranges, this templated approach may work well for you. For specialized sorts, refer to boost:sort[].
+Note:: The use of templates for sorting is given as an example only, the `std::sort`, `std::stable_sort`, and `std::spreadsort` are super efficient and should be used whenever possible. However, if you have a special process you would like to apply to different types of ranges, this templated approach may work well for you. For specialized sorts, refer to boost:sort[].
 
 == Types
 
