@@ -63,6 +63,17 @@ build, and was never supported by `FindBoost`.
 * boost_phrase:library[CointainerHash,/libs/container_hash/]:
 ** Hashing a valueless `std::variant` instance no longer throws.
 
+* boost_phrase:library[Container,/libs/container/]:
+** Added new `boost::container::hub` container designed by Joaquín M. López Muñoz.
++
+See the Hub Container chapter in the Container documentation for more information.
+** Fixed bugs/issues:
+*** Wrong overload resolution protection in implementation of P2363R5 (boost_gh:issue[container,334]).
+*** Compile error with `erase` and `small_vector<std::string>` (boost_gh:issue[container,336]).
+*** `uses_allocator_construction.hpp`: missing `#include .../config_end.hpp` (boost_gh:issue[container,338]).
+** Added `unchecked_emplace_back` and `unchecked_push_back` to `boost::container::vector`, `boost::container::static_vector`, and `boost::container::small_vector`.
+** Implemented pass:[C++23] https://wg21.link/P1518[P1518] change: modified allocator-extended constructors for all containers so that the deduction guides for containers are not overconstrained.
+
 * boost_phrase:library[Geometry,/libs/geometry/]:
 ** Improvements (`geometry`):
 *** Drop `varray` implementation in favor of Boost.Container `static_vector` (boost_gh:pr[geometry,1458]).
@@ -90,6 +101,11 @@ the pass:[C++] committee regarding non-heteregeneous lookup for associative cont
 ** Fixed pass:[C++20]-related problems with `std::iter_value_t<element_iterator>` and GCC 10-12's
 handling of rewritten relational operators (boost_gh:pr[icl,54]).
 ** Fixed a GCC 10-11 codegen bug (boost_gh:pr[icl,54]).
+
+* boost_phrase:library[Interprocess,/libs/interprocess/]:
+** Fixed bugs:
+*** AIX build fix: fix return type in `get_invalid_systemwide_thread_id` (boost_gh:pr[interprocess,280]).
+*** Locks in `message_queue_t` cover more code than intended (boost_gh:issue[interprocess,281]).
 
 * boost_phrase:library[Lockfree,/libs/lockfree/]:
 ** This release is the last to support pass:[C++14]. Future releases will require pass:[C++17].
@@ -174,5 +190,3 @@ Boost's primary test compilers are:
 == Acknowledgements
 
 // Edit this section as appropriate
-
-Marshall Clow, Glen Fernandes and Ion Gaztañaga managed this release.
