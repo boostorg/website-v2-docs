@@ -190,3 +190,5 @@ Boost's primary test compilers are:
 == Acknowledgements
 
 // Edit this section as appropriate
+
+Marshall Clow, Glen Fernandes and Ion Gaztañaga managed this release.
