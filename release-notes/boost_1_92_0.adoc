@@ -176,6 +176,13 @@ handling of rewritten relational operators (boost_gh:pr[icl,54]).
 ** Fixed a performance issue with closed-addressing containers when rehashing at very large
    container sizes (boost_gh:pr[unordered,348]). Contributed by Daniel Kr&aacute;l.
 
+* boost_phrase:library[URL,/libs/url/]:
+** Fixed a heap buffer overflow in `normalize_path` for authority-less URLs whose normalized path begins with `//` (boost_gh:pr[url,995]).
+** Fixed an uninitialized read in `ipv6_address_rule` when an embedded IPv4 address has no preceding `h16`, e.g. `https://[::.` (boost_gh:pr[url,994]).
+** Fixed unsigned-integer-overflow sanitizer findings in case-insensitive comparisons, hashing, and `format` (boost_gh:pr[url,994]).
+** Fixed decoded query-size tracking in `url_base::edit_params` (boost_gh:pr[url,990]).
+** Third-round security review fixes: `url_view` copy from a null source, two incorrect `noexcept` specifiers, and decoded-length tracking when iterating segments in reverse (boost_gh:pr[url,988]).
+
 == Updated Tools
 
 * boost_phrase:library[B2,/tools/build/]:
