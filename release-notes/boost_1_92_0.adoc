@@ -164,6 +164,36 @@ handling of rewritten relational operators (boost_gh:pr[icl,54]).
 ** Fixed a performance issue with hashed indices when rehashing at very large container
   sizes (boost_gh:pr[multi_index,94]). Contributed by Daniel Kr&aacute;l.
 
+* boost_phrase:library[MySQL,/libs/mysql/]:
+** Added a way to configure which character set the server uses by default,
+   to make tracking more intelligent. This can be used to avoid redundant `SET NAMES` statements.
+   See `pool_params::charset_strategy` and `connect_params::server_default_charset`
+   (boost_gh:pr[mysql,511]).
+** Reduces `pool_params::ping_interval`'s default from 1h to 10s.
+   This improves the detection of broken connections
+   (boost_gh:pr[mysql,512]).
+** The read buffer has been optimized by reducing the frequency of data rotations
+   when incomplete messages are received (boost_gh:pr[mysql,501]).
+   Contributed by `@vsoulgard`.
+** TLS certificates for CI testing are now generated dynamically, rather than
+   being committed into the repository. This cleans up reports raised by vulnerability scanners
+   (boost_gh:pr[mysql,505]).
+
+* boost_phrase:library[Redis,/libs/redis/]:
+** Fixed a case of undefined behavior within `connection`
+   when attempting to cancel a request that has completed, but whose handler
+   hasn't been called yet. This happened due to an incorrect erase-remove use
+   with a `std::deque` (boost_gh:pr[redis,428]). Contributed by `@L0rentz`.
+** Optimized buffer rotations to reduce CPU consumption
+   when many small messages arrive in a single network packet
+   (boost_gh:pr[redis,415]).
+** Added initializers to all members in the `config` struct.
+   This allows using designated initializers to create `config` objects
+   (boost_gh:pr[redis,424]).
+** Removed the standalone workflow from the CMake.
+   This was an undocumented way of consuming Boost.Redis with CMake aimed
+   to internal development (boost_gh:pr[redis,409]).
+
 * boost_phrase:library[System,/libs/system/]:
 ** Fix `unwrap_and_invoke` for functions returning `void`.
 
