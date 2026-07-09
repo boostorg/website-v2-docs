@@ -88,6 +88,20 @@ See the Hub Container chapter in the Container documentation for more informatio
 ** Added `unchecked_emplace_back` and `unchecked_push_back` to `boost::container::vector`, `boost::container::static_vector`, and `boost::container::small_vector`.
 ** Implemented pass:[C++23] https://wg21.link/P1518[P1518] change: modified allocator-extended constructors for all containers so that the deduction guides for containers are not overconstrained.
 
+* boost_phrase:library[Filesystem,/libs/filesystem/]:
+** Marked templated versions of `initial_path` as deprecated and removed from *v4*. Use the non-templated versions instead.
+** Use `readdir` instead of `readdir_r` on more POSIX platforms, specifically on Mac OS and other Apple operating systems,
+   FreeBSD, OpenBSD, DragonFly BSD, NetBSD, QNX 6.0 and later, Solaris 10 and later and Illumos-based systems. Solaris users
+   with gcc are recommended to define `__SunOS_5_x` macros according to their target Solaris version (e.g. `__SunOS_5_11`)
+   when building Boost. (boost_gh:issue[filesystem,349])
+** Support for platforms with non-thread-safe `readdir` is deprecated and will be removed in a future release. Although not
+   required until https://pubs.opengroup.org/onlinepubs/9799919799/functions/readdir.html[POSIX.1-2024], on modern systems
+   `readdir` is thread-safe when used with separate `DIR` objects in different threads and on some systems `readdir_r` is
+   marked as deprecated. POSIX.1-2024 has been updated accordingly and also marked `readdir_r` as obsolescent, with a planned
+   removal in a future version of the specification.
+** On POSIX platforms, handle `EINTR` error code returned from `opendir`, `readdir` and equivalents. Although not documented,
+   this error code, reportedly, may be returned on Apple operating systems and some BSD systems.
+
 * boost_phrase:library[Geometry,/libs/geometry/]:
 ** Improvements (`geometry`):
 *** Drop `varray` implementation in favor of Boost.Container `static_vector` (boost_gh:pr[geometry,1458]).
@@ -121,6 +135,12 @@ handling of rewritten relational operators (boost_gh:pr[icl,54]).
 ** Fixed bugs:
 *** AIX build fix: fix return type in `get_invalid_systemwide_thread_id` (boost_gh:pr[interprocess,280]).
 *** Locks in `message_queue_t` cover more code than intended (boost_gh:issue[interprocess,281]).
+
+* boost_phrase:library[Iterator,/libs/iterator/]:
+** Added `is_*_iterator_v` variable templates in pass:[C++14] and later, equivalent to the corresponding
+   iterator traits.
+** The `distance` and `advance` algorithms are now constrained by requiring `is_iterator` to return `true`
+   for the iterator arguments. (boost_gh:pr[iterator,96])
 
 * boost_phrase:library[Lockfree,/libs/lockfree/]:
 ** This release is the last to support pass:[C++14]. Future releases will require pass:[C++17].
