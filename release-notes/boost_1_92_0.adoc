@@ -88,6 +88,13 @@ See the Hub Container chapter in the Container documentation for more informatio
 ** Added `unchecked_emplace_back` and `unchecked_push_back` to `boost::container::vector`, `boost::container::static_vector`, and `boost::container::small_vector`.
 ** Implemented pass:[C++23] https://wg21.link/P1518[P1518] change: modified allocator-extended constructors for all containers so that the deduction guides for containers are not overconstrained.
 
+* boost_phrase:library[Conversion,/libs/conversion/]:
+** C++20 Module `boost.conversion` was implemented. Many thanks to https://github.com/fdr400[Fedor Osetrov] for the PR (boost_gh:pr[conversion,43])!
+
+* boost_phrase:library[DLL,/libs/dll/]:
+** Fixed smart_library constructors from shared_library (boost_gh:pr[dll,114). Many thanks to https://github.com/stima[R. Savchenko] for the PR!
+** C++20 Module `boost.dll` was implemented. Many thanks to https://github.com/fdr400[Fedor Osetrov] for the PRs (boost_gh:pr[dll,110], boost_gh:pr[dll,111], boost_gh:pr[dll,112])!
+
 * boost_phrase:library[Filesystem,/libs/filesystem/]:
 ** Marked templated versions of `initial_path` as deprecated and removed from *v4*. Use the non-templated versions instead.
 ** Use `readdir` instead of `readdir_r` on more POSIX platforms, specifically on Mac OS and other Apple operating systems,
@@ -141,6 +148,9 @@ handling of rewritten relational operators (boost_gh:pr[icl,54]).
    iterator traits.
 ** The `distance` and `advance` algorithms are now constrained by requiring `is_iterator` to return `true`
    for the iterator arguments. (boost_gh:pr[iterator,96])
+
+* boost_phrase:library[LexicalCast,/libs/lexical_cast/]:
+** C++20 Module `boost.lexical_cast` was implemented. Many thanks to https://github.com/fdr400[Fedor Osetrov] for the PR (boost_gh:pr[lexical_cast,96])!
 
 * boost_phrase:library[Lockfree,/libs/lockfree/]:
 ** This release is the last to support pass:[C++14]. Future releases will require pass:[C++17].
