@@ -16,6 +16,7 @@ Creating a real-time simulation of objects or processes involves various aspects
 * <<Simulate Movement in 3D Space>>
 * <<Add Collision Detection>>
 * <<Deformation on Impact>>
+* <<Blowing in the Wind>>
 * <<See Also>>
 
 == Libraries
@@ -569,6 +570,310 @@ Time: 8.03252 sec | Inc: 0.203922 sec | Box Position: Min(4.06626, 2.40976, -1.6
 Time: 8.25219 sec | Inc: 0.219674 sec | Box Position: Min(3.95642, 2.47566, -1.65044)  Max(4.85642, 3.47566, -0.650438)
 
 ----
+
+== Blowing in the Wind
+
+Let's look at something more natural and how it might be simulated. Say you have a real-time simulation that is out in the open, and you need to realistically model the effects of wind on your objects.
+
+This is one of those cases where a little mathematics goes a long way. Real wind is not random. It has structure across multiple time scales. Meteorologists often think of wind as having four components:
+
+. Mean wind (the forecast strength and direction)
+. Long-period variation (30 to 120 second changes)
+. Gusts (2 to 10 second bursts)
+. Turbulence (small, rapid fluctuations)
+
+Avoid the temptation of using a random number every frame, you can model each component separately.
+
+Say the weather forecast is for a 10 mile an hour wind, from the NNW, gusting to 20 mph. Let's look at the four components.
+
+. Mean wind : this should be converted to a vector (speed x direction), and direction is fixed at NNW (337.5 degrees).
+. Long-period variation : Real wind slowly strengthens and weakens. A sine wave works surprisingly well, something like:
++
+[source,cpp]
+----
+double long_period(double t)
+{
+    return 1.5 *
+        sin(2.0 * pi * t / 90.0);
+}
+----
+
+. Gusts : Gusting to 20 mph according to our forecast. We do not want sudden jumps, instead smoother pulses.
++
+[source,cpp]
+----
+double gust(double t)
+{
+    return exp(-x*x);
+}
+----
++
+To be natural, each gust might last 4 to 8 seconds.
+
+. Turbulence : We need to avoid obvious repetition, which we can manage with several sine waves, though the frequencies are unrelated:
++
+[source,cpp]
+----
+double turbulence(double t)
+{
+    return
+        0.4*sin(5.3*t)
+      + 0.3*sin(8.9*t)
+      + 0.2*sin(13.7*t);
+}
+----
+
+Total wind speed will now look something like this:
+
+[source,cpp]
+----
+double wind_speed(double t)
+{
+    return mean_wind + long_period(t) + gust_strength(t) + turbulence(t);
+}
+----
+
+Wind direction is of course not _fixed_, but will wander left and right, perhaps plus or minus 5 degrees:
+
+[source,cpp]
+----
+double wind_direction(double t)
+{
+    return mean_direction + 4*sin(t/40) + 2*sin(t/11) + 1*sin(7*t);
+}
+----
+
+Using the constants available in boost:math[], and the units from boost:units[], a first cut at a wind simulator might look like the following. Here we have three types of object - leaves, paper, tumbleweed - each with certain physical properties that determine how quickly the wind will move them. 
+
+[source,cpp]
+----
+#include <boost/math/constants/constants.hpp>
+
+#include <boost/units/systems/si.hpp>
+#include <boost/units/io.hpp>
+
+#include <cmath>
+#include <iomanip>
+#include <iostream>
+#include <vector>
+
+namespace si = boost::units::si;
+
+using boost::units::quantity;
+
+constexpr double pi =
+boost::math::constants::pi<double>();
+//------------------------------------------------------------
+// Small-scale turbulence.
+//
+// Combines several sine waves of different frequencies to
+// produce smooth, non-repeating fluctuations.
+//------------------------------------------------------------
+
+double turbulence(double t)
+{
+    return
+
+        0.30 * std::sin(7.3 * t)
+
+        + 0.20 * std::sin(11.7 * t + 0.8)
+
+        + 0.12 * std::sin(17.9 * t + 2.1)
+
+        + 0.08 * std::sin(29.4 * t);
+}
+//------------------------------------------------------------
+// Wind speed as a function of time.
+//
+// Returns metres per second.
+//------------------------------------------------------------
+
+quantity<si::velocity>
+wind_speed(quantity<si::time> t)
+{
+    // Mean wind = 4.47 m/s (≈10 mph)
+
+    quantity<si::velocity> mean =
+        4.47 * si::meters_per_second;
+
+    // Smooth variation
+
+    double variation =
+        0.9 *
+        std::sin(
+            2.0 * pi *
+            t.value() / 60.0);
+
+    // Gaussian gust
+
+    double x =
+        (t.value() - 30.0) / 5.0;
+
+    double gust =
+        4.5 * std::exp(-x * x);
+
+    double turbulent =
+        turbulence(t.value());
+
+    return
+        mean
+        + variation * si::meters_per_second
+        + gust * si::meters_per_second
+        + turbulent * si::meters_per_second;
+}
+
+struct Object
+{
+    std::string name;
+
+    quantity<si::mass> mass;
+
+    double drag;
+
+    double friction;
+
+    quantity<si::length> position;
+
+    quantity<si::velocity> velocity;
+};
+
+int main()
+{
+    std::vector<Object> objects =
+    {
+        {
+            "Leaf",
+
+            0.005 * si::kilograms,
+
+            0.90,
+
+            0.02,
+
+            0.0 * si::meters,
+
+            0.0 * si::meters_per_second
+        },
+
+        {
+            "Paper",
+
+            0.010 * si::kilograms,
+
+            0.80,
+
+            0.05,
+
+            0.0 * si::meters,
+
+            0.0 * si::meters_per_second
+        },
+
+        {
+            "Tumbleweed",
+
+            0.300 * si::kilograms,
+
+            0.60,
+
+            0.08,
+
+            0.0 * si::meters,
+
+            0.0 * si::meters_per_second
+        }
+    };
+
+    quantity<si::time> dt =
+        1.0 * si::seconds;
+
+    std::cout
+        << std::fixed
+        << std::setprecision(2);
+
+    for (quantity<si::time> t = 0.0 * si::seconds;
+        t <= 60.0 * si::seconds;
+        t += dt)
+    {
+        auto wind = wind_speed(t);
+
+        std::cout
+            << "\nTime = "
+            << t
+            << "   Wind = "
+            << wind
+            << "\n";
+
+        for (auto& o : objects)
+        {
+            //------------------------------------------------
+            // Very simple physics
+            //------------------------------------------------
+
+            quantity<si::force> force =
+                wind * o.drag *
+                o.mass /
+                (1.0 * si::seconds);
+
+            // Simple damping
+
+            force -=
+                o.friction *
+                o.velocity *
+                o.mass /
+                (1.0 * si::seconds);
+
+            quantity<si::acceleration>
+                acceleration =
+                force / o.mass;
+
+            o.velocity +=
+                acceleration * dt;
+
+            o.position +=
+                o.velocity * dt;
+
+            std::cout
+                << std::setw(12)
+                << o.name
+                << "   Position = "
+                << o.position
+                << "   Velocity = "
+                << o.velocity
+                << '\n';
+        }
+    }
+}
+
+----
+
+Run this program and you will get a lot of numbers!
+
+[source,text]
+----
+...
+
+Time = 58.00 s   Wind = 4.63 m s^-1
+        Leaf   Position = 6073.07 m   Velocity = 155.59 m s^-1
+       Paper   Position = 3533.71 m   Velocity = 70.33 m s^-1
+  Tumbleweed   Position = 1911.14 m   Velocity = 32.32 m s^-1
+
+Time = 59.00 s   Wind = 4.37 m s^-1
+        Leaf   Position = 6229.48 m   Velocity = 156.41 m s^-1
+       Paper   Position = 3604.02 m   Velocity = 70.31 m s^-1
+  Tumbleweed   Position = 1943.50 m   Velocity = 32.36 m s^-1
+
+Time = 60.00 s   Wind = 4.06 m s^-1
+        Leaf   Position = 6386.41 m   Velocity = 156.94 m s^-1
+       Paper   Position = 3674.07 m   Velocity = 70.04 m s^-1
+  Tumbleweed   Position = 1975.71 m   Velocity = 32.20 m s^-1
+----
+
+For extra realism, treat gusts like moving weather cells instead of global events. Imagine a gust as a "blob" of stronger wind drifting across the landscape. The gust has a position, radius, speed, and intensity. The result is that waves of motion travel naturally through your environment, much like you see when watching a real forest in a breeze or wind gusts crossing a lake. It looks dramatically more realistic than having every object receive the same gust at the same instant, and the underlying mathematics is still quite simple: each object samples the wind field at its own position.
+
+== Next Steps
+
+It is quite difficult to assess the "naturalness" of a physical process just by looking at numbers. To really assess how well our wind simulator works, we would need to have graphical output (not necessarily a full-featured 3D rendering) where we could visualize the different objects blowing across the terrain, answering the question "does it look right?".
 
 It is good practice when designing a simulation of real-world activity to clearly define what is to be simulated and what is not. All simulations are simplifications to an extent, though they do tend to be large and challenging programs to write. A complex simulation might have several processes running on different threads. For a sample of multi-threading code, refer to xref:task-parallel-computation.adoc[].
 
