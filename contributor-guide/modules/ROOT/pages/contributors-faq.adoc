@@ -61,7 +61,7 @@ Add a multi-line comment based on the following template, substituting appropria
 +
 [source,cpp]
 ----
-//          Copyright Joe Coder 2004 - 2006.
+//          Copyright (c) 2004-2006 Joe Coder
 // Distributed under the Boost Software License, Version 1.0.
 //    (See accompanying file LICENSE_1_0.txt or copy at
 //          https://www.boost.org/LICENSE_1_0.txt)
