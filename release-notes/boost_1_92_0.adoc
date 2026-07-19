@@ -236,7 +236,7 @@ handling of rewritten relational operators (boost_gh:pr[icl,54]).
 == Updated Tools
 
 * boost_phrase:library[B2,/tools/build/]:
-** Includes release of https://www.boost.org/tools/build/doc/html/#_version_5_5_1[B2 version 5.5.1].
+** Includes release of https://www.boost.org/tools/build/doc/html/#_version_5_5_3[B2 version 5.5.3].
 
 == Compilers Tested
 
