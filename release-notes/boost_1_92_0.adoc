@@ -234,10 +234,10 @@ handling of rewritten relational operators (boost_gh:pr[icl,54]).
 ** Third-round security review fixes: `url_view` copy from a null source, two incorrect `noexcept` specifiers, and decoded-length tracking when iterating segments in reverse (boost_gh:pr[url,988]).
 
 * boost_phrase:library[Wave,/libs/wave/]:
-** Introduce digit separators (C++14), module keyword (C++20), and size_t literals (C++23)
-** Fixed bugs
-*** find_include_file incorrectly accepts directories as include files (boost_gh:issue[wave,243])
-*** Predefined macros (__FILE__, __LINE__, __INCLUDE_LEVEL__) are expanded twice when expanding_object_like_macro returns true (boost_gh:issue[wave,246])
+** Introduce digit separators (pass:[C++14]), `module` keyword (pass:[C++20]), and `size_t` literals (pass:[C++23]).
+** Fixed bugs.
+*** `find_include_file` incorrectly accepts directories as include files (boost_gh:issue[wave,243]).
+*** Predefined macros (`+++__FILE__+++`, `+++__LINE__+++`, `+++__INCLUDE_LEVEL__+++`) are expanded twice when `expanding_object_like_macro` returns `true` (boost_gh:issue[wave,246]).
 
 == Updated Tools
 
