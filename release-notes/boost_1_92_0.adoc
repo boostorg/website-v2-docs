@@ -92,7 +92,7 @@ See the Hub Container chapter in the Container documentation for more informatio
 ** C++20 Module `boost.conversion` was implemented. Many thanks to https://github.com/fdr400[Fedor Osetrov] for the PR (boost_gh:pr[conversion,43])!
 
 * boost_phrase:library[DLL,/libs/dll/]:
-** Fixed smart_library constructors from shared_library (boost_gh:pr[dll,114). Many thanks to https://github.com/stima[R. Savchenko] for the PR!
+** Fixed `smart_library` constructors from `shared_library` (boost_gh:pr[dll,114). Many thanks to https://github.com/stima[R. Savchenko] for the PR!
 ** C++20 Module `boost.dll` was implemented. Many thanks to https://github.com/fdr400[Fedor Osetrov] for the PRs (boost_gh:pr[dll,110], boost_gh:pr[dll,111], boost_gh:pr[dll,112])!
 
 * boost_phrase:library[Filesystem,/libs/filesystem/]:
