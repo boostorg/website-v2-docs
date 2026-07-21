@@ -209,6 +209,9 @@ handling of rewritten relational operators (boost_gh:pr[icl,54]).
    being committed into the repository. This cleans up reports raised by vulnerability scanners
    (boost_gh:pr[mysql,505]).
 
+* boost_phrase:library[PFR,/libs/pfr/]:
+** C++20 Module `boost.pfr` is now also tested with and without `import std`. Many thanks to https://github.com/fdr400[Fedor Osetrov] for the PR (boost_gh:pr[pfr,233])!
+
 * boost_phrase:library[Redis,/libs/redis/]:
 ** Fixed a case of undefined behavior within `connection`
    when attempting to cancel a request that has completed, but whose handler
@@ -224,8 +227,20 @@ handling of rewritten relational operators (boost_gh:pr[icl,54]).
    This was an undocumented way of consuming Boost.Redis with CMake aimed
    to internal development (boost_gh:pr[redis,409]).
 
+* boost_phrase:library[Stacktrace,/libs/stacktrace/]:
+** C++20 Modules were implemented:
+*** `boost.stacktrace_dump` module for safe_dump interface
+*** `boost.stacktrace_<backend>` module for each unwind/collect implementation method
+*** `boost.stacktrace` module exposing best available backend implementation.
+   Many thanks to https://github.com/fdr400[Fedor Osetrov] for the PRs (boost_gh:pr[stacktrace,230], boost_gh:pr[stacktrace,227])!
+** C++20 Module `boost.stacktrace` is now also tested with and without `import std`. Many thanks to https://github.com/fdr400[Fedor Osetrov] for the PR (boost_gh:pr[stacktrace,231])!
+** Fixed `Boost::from_exception` link on MinGW.  Many thanks to https://github.com/orgads[Orgad Shaneh] for the PR (boost_gh:pr[stacktrace,225])!
+
 * boost_phrase:library[System,/libs/system/]:
 ** Fix `unwrap_and_invoke` for functions returning `void`.
+
+* boost_phrase:library[TypeIndex,/libs/type_index/]:
+** C++20 Module `boost.type_index` is now also tested with and without `import std`. Many thanks to https://github.com/fdr400[Fedor Osetrov] for the PR (boost_gh:pr[type_index,47])!
 
 * boost_phrase:library[Unordered,/libs/unordered/]:
 ** Added interoperability with pass:[C++20] ranges to all the containers in the library:
