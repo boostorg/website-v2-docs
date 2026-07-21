@@ -38,6 +38,7 @@ This section contains answers to the common questions that new developers to Boo
 * <<Safe C++>>
 * <<Smart Pointers>>
 * <<Standard C++ Library>>
+* <<Streaming and Buffering>>
 * <<Templates>>
 * <<Types>>
 * <<See Also>>
@@ -2511,6 +2512,86 @@ Several initiatives are likely candidates, but need more time:
 +
 To an extent, pass:[C++20] was the "Coroutines and Ranges" release, then pass:[C++23] was a cleanup release. pass:[C++26] is shaping up to be the "Safety and Async and Metaprogramming" release. Perhaps pass:[C++29] will be the "Performance, Networking, and Compile-time Metaprogramming Superpowers" release.
 
+== Streaming and Buffering
+
+. *Am I right that the most efficient form of buffering in a streaming scenario is to implement a circular (or ring) buffer?*
++
+For a continuous stream of data with one producer and one consumer, a circular (ring) buffer is almost always the most efficient and widely used buffering data structure. That's why you'll find it at the heart of audio engines, network stacks, serial drivers, video pipelines, operating system kernels, and many game engines.
++
+Note that the ring buffer is the data structure, not the buffering strategy. Buffering strategies or policies (usually one of: _BeforePlay_, _AfterWrite_, _MaintainLatency_, _Adaptive_) all work on top of the same ring buffer.
++
+A ring buffer typically has two cursors, a _write_ cursor where the next chunk of data is to be written to, and a _read_ cursor indicating where the next read (or play) should start from. Both cursors are incremented as writes and reads occur, and wrap around when they reach the end of the ring buffer. 
+
+. *Do ring buffers have any limitations or weaknesses?*
++
+Yes, several scenarios cause issues. A glitch of some sort will happen if the read cursor catches up with the write cursor - nothing to play. Another issue occurs if the write cursor catches up with the read cursor - so data might be lost or overwritten waiting for the read cursor to move forward. In this latter case perhaps expanding the buffer size is an option.
++
+Buffer sizes are traditionally powers of 2, such as 1024 bytes or maybe more like 64Mb, though modern processors and compilers can handle other buffer sizes pretty efficiently.
+
+. *What are the modern interpretations of the four significant buffer refilling policies?*
++
+[cols="1,4",options="header",stripes=even,frame=none]
+|===
+| Policy | Description
+| **BeforePlayPolicy**      | Continuously monitors the playback (or read) cursor and keeps a fixed amount of newly generated data immediately ahead of it. *This strategy minimizes latency because the producer always writes as close as safely possible to the point of consumption.* It is well suited to interactive applications such as games, voice communication, and software synthesizers, where responsiveness is more important than maintaining a large reserve of buffered data.        
+| **AfterWritePolicy**      | Treats the write cursor as the primary reference point, continually appending new data immediately after the last block written. Playback simply follows behind through the buffered stream. *This approach is straightforward to implement and provides smooth, sequential writes that are efficient for memory and cache usage.* It is commonly used for continuous streaming applications such as music or video playback, where uninterrupted output is generally more important than achieving the lowest possible latency.
+| **MaintainLatencyPolicy** | Continuously measures the distance between the playback cursor and the write cursor, maintaining a target amount of buffered data — for example, 50 milliseconds of audio or several frames of video. *Whenever the buffered amount falls below the target, additional data is produced until the desired safety margin is restored.* This strategy provides a predictable balance between low latency and robustness against temporary delays, making it a common choice for real-time multimedia systems.
+| **AdaptivePolicy**        | Dynamically adjusts its buffering strategy in response to changing runtime conditions such as CPU load, network congestion, disk performance, or observed buffer underruns. *During stable operation it may maintain a small buffer for low latency, but if the system detects increasing delays or frequent underruns it automatically increases the safety margin. Conversely, when conditions improve it gradually reduces buffering to improve responsiveness.* This adaptive approach is widely used in modern streaming systems because it balances smooth playback with the ability to cope gracefully with unpredictable workloads. 
+|===
+
+. *Are there any Boost libraries that implicitly use any of these buffer filling policies, or is it simply up to the programmer?*
++
+Boost generally provides the buffering _mechanisms_, but does not decide the  buffering _policy_ for you. The choice of whether to use before-play, after-write, maintain-a-safety-distance, or something entirely different is almost always left to the application.
++
+In boost:asio[] you create your own buffers, and decide whether to use them as ring buffers, queues, or any other purpose. The closest this library comes to buffering policies is with the `async_read()` call, which repeatedly issues lower-level `async_read_some()` operations until a completion condition is met. That is a policy about when to stop reading.
++
+boost:beast[] behaves similarly, often using a `beast::flat_buffer buffer;`. Your application determines when to read more, stop reading, consume data, and discard old data.
++
+Closer to the buffering policies is boost:circular_buffer[], this container does provide constant-time insertion, constant-time removal, and wrap-around indexing. Your app decides how far to stay ahead, when to refill and how much latency to allow.
++
+On a more distant note boost:lockfree[] provides queues that are ideal for producer/consumer pipelines, and boost:fiber[] has buffered channels where the synchronization and storage are managed, but the policy for keeping the channel comfortably full is up to you. Both of these libraries work well for audio and video decoders.
++
+Boost libraries consistently separate containers from algorithms and algorithms from policies.
+
+. *What kind of buffering policy would work best with a coroutine based library, such as the upcoming Boost Capy/Corosio, or is there no particular difference to buffering policies using coroutines or traditional async programming?*
++
+Coroutines don't fundamentally change the best buffering policy — they do change how intuitively that policy can be expressed. With callback based code your buffering might look like:
++
+[source,cpp]
+----
+void on_read(...)
+{
+    append_to_buffer();
+
+    if (buffer.size() < 64_KB)
+        async_read(...);
+
+    if (can_process())
+        process();
+}
+----
++
+Whereas a coroutine version might look like:
++
+[source,cpp]
+----
+awaitable<void> receiver()
+{
+    while (true)
+    {
+        co_await async_read(...);
+
+        append_to_buffer();
+
+        if (buffer.size() > HighWaterMark)
+            process_buffer();
+    }
+}
+----
++
+Nothing much about the buffering changed. However, coroutines do have an advantage in that they encourage you to think in terms of pipelines. One interesting effect is that callback systems often end up with large buffers simply because callbacks are awkward to coordinate. Coroutines can make it easy to write code that naturally suspends whenever it has nothing to do. You don't need enormous queues just to simplify control flow.
++
+Another area where coroutines excel is in handling _backpressure_, a situation where a network is producing data faster than you can consume it. The coroutine approach naturally pauses the producer. This makes policies like _MaintainLatency_ and _Adaptive_ much easier to express. *The one buffering strategy that benefits the most from coroutines is _MaintainLatency_ because suspension and resumption are built into the language rather than encoded manually in callback state.*
 
 == Templates
 
