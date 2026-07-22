@@ -49,6 +49,7 @@ antora:
         page-boost-branch: develop
         page-boost-ui-branch: develop
         page-commit-id: '000000'
+    - require: '@antora/collector-extension'
     - require: '@cppalliance/antora-cpp-tagfiles-extension'
       cpp-tagfiles:
         using-namespaces:
