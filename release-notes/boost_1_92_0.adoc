@@ -212,6 +212,12 @@ handling of rewritten relational operators (boost_gh:pr[icl,54]).
 * boost_phrase:library[PFR,/libs/pfr/]:
 ** C++20 Module `boost.pfr` is now also tested with and without `import std`. Many thanks to https://github.com/fdr400[Fedor Osetrov] for the PR (boost_gh:pr[pfr,233])!
 
+* boost_phrase:library[PolyCollection,/libs/poly_collection/]:
+** Made ``__variant_collection_value_type_impl__<Ts\...>``'s relational operators available only when
+   the corresponding relational operator is available for all ``Ts\...``, in accordance with WG21 paper
+   https://www.open-std.org/jtc1/sc22/wg21/docs/papers/2024/p2944r3.html[P2944R3].
+** Fixed incompatibility problem with libc++ v21 or higher (boost_gh:pr[poly_collection,34]). 
+
 * boost_phrase:library[Redis,/libs/redis/]:
 ** Fixed a case of undefined behavior within `connection`
    when attempting to cancel a request that has completed, but whose handler
