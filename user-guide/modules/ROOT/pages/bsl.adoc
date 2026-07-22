@@ -10,7 +10,16 @@ Official repository: https://github.com/boostorg/website-v2-docs
 
 This section contains the current Boost Software License verbatim, and is followed by a rationale on why using this license is recommended.
 
-== Boost Software License - Version 1.0 - August 17th, 2003
+[square]
+* <<Boost Software License>>
+* <<Rationale>>
+* <<See Also>>
+
+== Boost Software License
+
+The following is the current version of the license, unchanged since August 17th, 2003.
+
+=== BSL Version 1.0
 
 ______
 
@@ -71,3 +80,4 @@ Use it. The C++ community will appreciate your generosity.
 == See Also
 
 * xref:contributor-guide:ROOT:contributors-faq.adoc#boostsoftwarelicense[Contributors FAQ: Boost Software License]
+

@@ -11,6 +11,17 @@ Official repository: https://github.com/boostorg/website-v2-docs
 
 Email discussion is the tie that binds Boost members together into a community. If the discussion is stimulating and effective, the community thrives. If the discussion degenerates into name-calling and ill will, the community withers and dies.
 
+[square]
+* <<Acceptable Topics>>
+* <<Unacceptable Topics>>
+* <<Effective Posting>>
+* <<Prohibited Behavior>>
+* <<Culture>>
+* <<Guidelines for Effective Discussions>>
+* <<Library Names>>
+* <<See Also>>
+
+
 == Acceptable Topics
 
 Try to focus email discussion on the following:

@@ -11,6 +11,14 @@ Official repository: https://github.com/boostorg/website-v2-docs
 
 The user community is a vibrant and collaborative group dedicated to the use, development, and maintenance of Boost Libraries. Since its inception, Boost has grown to offer a wide range of libraries that address knarly programming tasks, from algorithms and data structures to system utilities and concurrent programming. Boost users are encouraged to chime in with their thoughts and experiences!
 
+[square]
+* <<Reporting Issues>>
+* <<Boost Mailing Lists>>
+* <<Boost Software License>>
+* <<Long History>>
+* <<See Also>>
+
+
 == Reporting Issues
 
 Users are encouraged to be active in xref:reporting-issues.adoc[] they encounter with Boost libraries. Users can submit issues directly, providing detailed descriptions, code snippets, and steps to reproduce the problem. This collaboration greatly aids the overall stability and reliability of Boost libraries.

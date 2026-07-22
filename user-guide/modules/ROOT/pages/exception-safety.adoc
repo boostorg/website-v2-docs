@@ -15,6 +15,19 @@ More formally, we can describe a component as minimally exception-safe if, when 
 
 In a generic component, we usually have an additional expectation of exception-neutrality, which means that exceptions thrown by a component's type parameters should be propagated, unchanged, to the component's caller.
 
+[square]
+* <<Myths and Superstitions>>
+* <<A Contractual Basis for Exception Safety>>
+* <<Legal Wrangling>>
+* <<What Level of Exception Safety should a Component Specify?>>
+* <<Should We Take Everything We Can Get?>>
+* <<Automated Testing for Exception Safety>>
+* <<Further Reading>>
+* <<Acknowledgements>>
+* <<See Also>>
+
+
+
 == Myths and Superstitions
 
 Exception-safety seems straightforward so far: it doesn't constitute anything more than we'd expect from code using more traditional error-handling techniques. It might be worthwhile, however, to examine the term from a psychological viewpoint. Nobody ever spoke of “error-safety” before pass:[C++] had exceptions.
@@ -67,7 +80,7 @@ For many programmers more familiar with exceptions, the second example is actual
 
 There is an even more important way in which exceptions can enhance correctness: by allowing simple class invariants. In the first example, if x's constructor should need to allocate resources, it has no way to report a failure: in pass:[C++], constructors have no return values. The usual result when exceptions are avoided is that classes requiring resources must include a separate initializer function which finishes the job of construction. The programmer can therefore never be sure, when an object of class X is used, whether he is handling a full-fledged X or some abortive attempt to construct one (or worse: someone simply forgot to call the initializer!).
 
-== A Contractual Basis for Exception-Safety
+== A Contractual Basis for Exception Safety
 
 A non-generic component can be described as exception-safe in isolation, but because of its configurability by client code, exception-safety in a generic component usually depends on a contract between the component and its clients. For example, the designer of a generic component might require that an operation that is used in the component's destructor not throw any exceptions. The generic component might, in return, provide one of the following guarantees:
 
@@ -116,7 +129,7 @@ Inevitably, the contract can get more complicated: a quid pro quo arrangement is
 
 Note:: Similar arrangements might have been made in the pass:[C++] standard for many of the mutating algorithms, but were never considered due to time constraints on the standardization process.
 
-== What Level of Exception-Safety should a Component Specify?
+== What Level of Exception Safety should a Component Specify?
 
 From a client's point-of-view, the strongest possible level of safety would be ideal. Of course, the no-throw guarantee is simply impossible for many operations, but what about the strong guarantee? For example, suppose we wanted atomic behavior for `vector<T>::insert`. Insertion into the middle of a vector requires copying elements after the insertion point into later positions, to make room for the new element. If copying an element can fail, rolling back the operation would require undoing the previous copies...which depends on copying again. If copying back should fail (as it likely would), we have failed to meet our guarantee.
 
@@ -193,7 +206,7 @@ I learned a great deal by approaching the question this way during standardizati
 
 Note:: The prevalent philosophy in the design of STL was that functionality that wasn't essential to all uses should be left out in favor of efficiency, as long as that functionality could be obtained when needed by adapting the base components. This departs from that philosophy, but it would be difficult or impossible to obtain even the basic guarantee by adapting a base component that doesn't already have it.
 
-== Automated Testing for Exception-Safety
+== Automated Testing for Exception Safety
 
 As part of the standardization process, I produced an exception-safe reference implementation of the STL. Error-handling code is seldom rigorously tested in real life, in part because it is difficult to cause error conditions to occur. It is very common to see error-handling code that crashes the first time it is executed ...in a shipping product! To bolster confidence that the implementation worked as advertised, I designed an automated test suite, based on an exhaustive technique due to my colleague Matt Arnold.
 

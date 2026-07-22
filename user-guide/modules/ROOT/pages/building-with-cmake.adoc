@@ -14,7 +14,17 @@ CMake is an alternative to using the Boost-specific https://www.bfgroup.xyz/b2/[
 
 In this section, the main concepts of CMake are described, then some examples of how to use the system with one or more Boost libraries.
 
-== The CMakeLists file
+[square]
+* <<The CMakeLists File>>
+* <<Handling External Dependencies>>
+* <<Separate Build and Source Locations>>
+* <<Handling Complex Projects>>
+* <<Using CMake with Boost>>
+* <<See Also>>
+
+
+
+== The CMakeLists File
 
 The core of any CMake project is the `CMakeLists.txt` file, which defines the structure of the project and the build rules. This file allows developers to specify the source files, include directories, compiler flags, and dependencies required to build the project. CMake's syntax is declarative and procedural, allowing developers to set options, define targets, and specify dependencies in a structured way. The build configuration is organized around “targets,” which can represent executables, libraries, or custom commands. This target-based approach makes CMake highly flexible, as it enables complex dependency management and configuration, all while keeping platform-specific details abstracted away.
 
@@ -57,7 +67,7 @@ target_include_directories(my_app PRIVATE ${Boost_INCLUDE_DIRS})
 
 Here, `find_package(Boost REQUIRED)` locates Boost, and `target_include_directories` adds the Boost headers to your project. This configuration is enough if you're using only header-only parts of Boost.
 
-== Compiled Library
+=== Compiled Library
 
 For Boost libraries that require linking, we need to specify the components and link them to the target:
 
@@ -76,7 +86,7 @@ In this example, `find_package(Boost REQUIRED COMPONENTS filesystem)` locates on
 
 By using `find_package` and CMake's `target`-based commands, you can effectively manage Boost dependencies in both simple and complex scenarios.
 
-== Multiple Compiled Libraries
+=== Multiple Compiled Libraries
 
 Assume we have this project structure:
 
@@ -172,7 +182,7 @@ target_link_libraries(main_app PRIVATE libA libB libC)
 
 . By using `add_subdirectory`, each library and executable has its own configuration, which keeps the project modular and organized.
 
-== Building the Project
+=== Building the Project
 
 From the top-level directory (`MyProject`), you can build the entire project with the following commands:
 

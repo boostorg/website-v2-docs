@@ -15,6 +15,15 @@ The interface specifications for boost.org library components (as well as for qu
 
 Dietmar Kühl, one of the original Boost contributors, comments _"The main contribution is the interface, which is augmented with an implementation, proving that it is possible to implement the corresponding class and providing a free implementation."_
 
+[square]
+* <<Implementation Variations>>
+* <<Boost Policy>>
+* <<Techniques for Providing Implementation Variations>>
+* <<Acknowledgements>>
+* <<See Also>>
+
+
+
 == Implementation Variations
 
 There may be a need for multiple implementations of an interface, to accommodate either platform dependencies or performance tradeoffs. Examples of platform dependencies include compiler shortcomings, file systems, thread mechanisms, and graphical user interfaces. The classic example of a performance tradeoff is a fast implementation that uses a lot of memory versus a slower implementation which uses less memory.
