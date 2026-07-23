@@ -11,6 +11,20 @@ Official repository: https://github.com/boostorg/website-v2-docs
 
 _Generic programming_ is about generalizing software components so that they can be reused in a wide variety of situations. In pass:[C++], class and function templates are particularly effective mechanisms for generic programming because they make the generalization possible without sacrificing efficiency.
 
+[square]
+* <<Introduction>>
+* <<Anatomy of a Concept>>
+* <<Traits>>
+* <<Tag Dispatching>>
+* <<Adaptors>>
+* <<Type Generators>>
+* <<Object Generators>>
+* <<Policy Classes>>
+* <<Acknowledgements>>
+* <<See Also>>
+
+== Introduction
+
 As a simple example of generic programming, we will look at how to generalize the `memcpy()` function of the C standard library. An implementation of `memcpy()` might look like the following:
 
 ```cpp

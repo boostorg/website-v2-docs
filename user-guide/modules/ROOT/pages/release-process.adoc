@@ -17,6 +17,14 @@ Boost libraries are released together and publicly three times per year:
 
 Each release will contain updates to existing libraries, and some releases will contain new libraries. The release is built from the Boost GitHub site: https://github.com/boostorg/boost.
 
+
+[square]
+* <<Preparing for a Boost Release>>
+* <<Beta and Final Release>>
+* <<See Also>>
+
+
+
 == Preparing for a Boost Release
 
 When a release approaches, there is a strict policy on how to merge additions or changes into the library repository. Library maintainers work to prepare their libraries for the release, which involves updating documentation, fixing bugs, and addressing any compatibility issues. Additionally, library maintainers ensure that their libraries pass the Boost regression tests, which help identify potential problems before the release.

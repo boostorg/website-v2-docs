@@ -15,6 +15,12 @@ Boost is a collection of high-quality and peer-reviewed libraries that aims to m
 
 Boost is publicly released three times per year (April, August, and December). Each release has updates to existing libraries, and any new libraries that have passed the rigorous acceptance process. Currently, there are over 180 libraries covering a myriad of programming tasks.
 
+[square]
+* <<Advantages of using Boost>>
+* <<Considerations when using Boost>>
+* <<Library Categories>>
+* <<Summary>>
+
 == Advantages of using Boost
 
 There are many advantages to using Boost in your pass:[C++] projects, the main one being using Boost avoids reinventing the wheel if there is a library that implements functions that you would otherwise have to write yourself. In addition:

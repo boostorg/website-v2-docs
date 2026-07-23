@@ -11,6 +11,18 @@ Official repository: https://github.com/boostorg/website-v2-docs
 
 This topic provides an overview of the origins, growth, and impact of Boost on the programming community.
 
+[square]
+* <<Introduction>>
+* <<Origins>>
+* <<Early Development>>
+* <<Peer Review Process>>
+* <<Influence on the Language and Community>>
+* <<Migration to Git>>
+* <<A Timeline of Boost Exclusivity>>
+* <<Current Status>>
+* <<References>>
+* <<See Also>>
+
 == Introduction
 
 Boost is a highly influential and widely used collection of libraries, designed to extend and complement the functionality provided by the pass:[C++] Standard Library. Since its original https://www.boost.org/users/proposal.pdf[Proposal] in 1998, Boost has played a significant role in shaping the evolution of the pass:[C++] language and its ecosystem.
@@ -33,7 +45,7 @@ Boost quickly gained traction and attracted more contributors who shared a commo
 
 One of the defining characteristics of Boost is its strict peer review process. Before a library is accepted into Boost, it must undergo a thorough review by other experienced pass:[C++] developers. This process ensures that only high-quality libraries, adhering to the best programming practices, are included in the collection. The peer review process not only maintains the quality of Boost but also fosters a sense of community and encourages collaboration among its contributors.
 
-== Influence on the pass:[C++] Language and Community
+== Influence on the Language and Community
 
 Boost has had a profound impact on the pass:[C++] language and its community. Many of the libraries and concepts introduced by Boost have been adopted into the pass:[C++] Standard Library, including smart pointers, regular expressions, and the boost:lambda[] function syntax. Boost has also been a fertile ground for experimenting with new ideas and techniques, which have later made their way into the pass:[C++] language itself, such as boost:type_traits[] and boost:mpl[].
 

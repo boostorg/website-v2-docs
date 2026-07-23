@@ -9,7 +9,23 @@ Official repository: https://github.com/boostorg/website-v2-docs
 = Customize Builds to Reduce Dependencies
 :navtitle: Reduce Dependencies
 
-There are many libraries that provide macros or configuration options to remove optional components and so reduce dependencies. Refer to the documentation, in particular the macros, for the individual libraries you intend to use. Here are some specific examples:
+There are many libraries that provide macros or configuration options to remove optional components and so reduce dependencies. Refer to the documentation, in particular the macros, for the individual libraries you intend to use. This section describes some specific examples.
+
+[square]
+* <<Boost.Asio>>
+* <<Boost.Filesystem>>
+* <<Boost.Locale>>
+* <<Boost.Log>>
+* <<Boost.ProgramOptions>>
+* <<Boost.Python>>
+* <<Boost.Regex>>
+* <<Boost.Serialization>>
+* <<Boost.System>>
+* <<Boost.Test>>
+* <<See Also>>
+
+
+
 
 == Boost.Asio
 

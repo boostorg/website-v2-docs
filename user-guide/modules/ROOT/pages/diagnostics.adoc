@@ -11,6 +11,17 @@ Official repository: https://github.com/boostorg/website-v2-docs
 
 Diagnostics in pass:[C++] programming refers to the set of tools, techniques, and facilities that help developers detect, report, and investigate errors and unexpected behavior in their code. While the pass:[C++] Standard Library provides a minimal set of mechanisms—most notably `assert`, `std::error_code`, and exception handling—these are intentionally simple. For serious application development, especially in large-scale or cross-platform projects, many developers turn to the Boost pass:[C++] Libraries.
 
+[square]
+* <<Introduction>>
+* <<Configurable Assertions>>
+* <<Release Mode Expression Checking>>
+* <<Exception Handling with Context>>
+* <<Richer Error Reporting>>
+* <<Conclusion>>
+* <<See Also>>
+
+== Introduction
+
 Boost offers a rich collection of utilities that significantly improve diagnostic capabilities, making it easier to identify the root causes of problems, provide better runtime feedback, and write robust, maintainable code. This introduction highlights some of the most important diagnostic facilities Boost provides, focusing on four pillars:
 
 . `BOOST_ASSERT` - a configurable replacement for `std::assert`. See <<Configurable Assertions>>.
@@ -136,7 +147,7 @@ numbers[1] = 20
 Caught exception: safe_at: Index out of range
 ----
 
-== Release-Mode Expression Checking
+== Release Mode Expression Checking
 
 The macro `BOOST_VERIFY` is another diagnostic tool unique to Boost, with no direct Standard Library equivalent. At first glance, it looks similar to `BOOST_ASSERT`, but it serves a different purpose.
 

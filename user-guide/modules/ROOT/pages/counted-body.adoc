@@ -11,7 +11,21 @@ Official repository: https://github.com/boostorg/website-v2-docs
 
 Reference counting techniques? Nothing new, you might think. Every good pass:[C++] text that takes you to an intermediate or advanced level will introduce the concept. It has been explored with such thoroughness in the past that you might be forgiven for thinking that everything that can be said has been said. Well, let's start from first principles and see if we can unearth something new....
 
-== And Then There Were None...
+[square]
+* <<And Then There Were None>>
+* <<Attached vs Detached>>
+* <<A Requirements Based Approach>>
+* <<Getting Smart>>
+* <<Public Accountability>>
+* <<Runtime Mixin>>
+* <<Getting Smarter>>
+* <<Conclusion>>
+* <<Acknowledgements>>
+* <<See Also>>
+
+
+
+== And Then There Were None
 
 The principle behind reference counting is to keep a running usage count of an object so that when it falls to zero we know the object is unused. This is normally used to simplify the memory management for dynamically allocated objects: keep a count of the number of references held to that object and, on zero, delete the object.
 
