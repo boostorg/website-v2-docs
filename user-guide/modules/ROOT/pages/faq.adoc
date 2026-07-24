@@ -1878,6 +1878,84 @@ struct OceanStatus {
 +
 The libary to evaluate is boost:dynamic-bitset[], it gives you stable bit indexing, easy clearing/writing slices, guaranteed predictable ordering, and portability across CPU architectures. In particular, check out the function `to_block_range` for exporting packed blocks. This should be easier - and safer - than hand-rolling your own masks and shifts.
 
+. *How does an enormous physical value, such as the number of atoms in the observable Universe, compare with the maximum value current integers can hold?*
++
+There are approximately 10 to the power of 80 hydrogen atoms in the observable Universe (hydrogen is by far the simplest and most common atom). Integers are rarely used in astronmical calculations (a `double` is most definitely the current unit of choice). However, it is interesting to imagine what type of integer would be needed for astronomical counting:
++
+[cols="1,1",stripes=even,options="header",frame=none]
+|===
+| Bits | Approx Maximum Value - 10 to the power of
+|   64 |  19 
+|  128 |  38 
+|  256 |  77 
+|  512 | 154 
+| 1024 | 308 
+|===
++
+That last row is remarkable because 10 to the power of 308 is roughly the same order of magnitude as the largest finite `double`. In other words, a 1024-bit integer can represent exact whole numbers all the way up to the largest magnitude that a `double` can represent, approximately. It's an illustration of the difference between _range_ and _precision_: floating-point numbers trade exactness for a huge dynamic range, while big integers remain precise at every value they can represent.
++
+The main reason to go larger isn't astronomy — it's mathematics and cryptography, where the size of the numbers is part of the problem itself, not just a way of representing physical quantities.
+
+. *What applications areas, realistically, will benefit from 128-bit integers?*
++
+It would benefit many engineering application areas that require the exactness of integers:
++
+* nanosecond timestamps spanning billions of years
+* globally unique identifiers
+* huge file offsets
+* hash values
+* financial calculations
+* astronomy metadata
+* simulation counters
++
+Both GCC and Clang already support __int128 on many 64-bit platforms as a compiler extension.
+
+. *Is there any realistic bounding limit to the size of numbers that mathematicians might be interested in?*
++
+It seems there is no limit. Projects searching for huge prime numbers (super valuable in crypotgraph) routinely use integers with millions or even hundreds of millions of bits. The largest known prime number currently has tens of millions of decimal digits, requiring roughly 136 million bits to store.
+
+. *Am I right that intermediate values often push the boundaries of size, rather than the results?*
++
+Yes, very much so. Take the calculation `(a * b)/ c` : the size required to store `a * b` can skyrocket, before the division reduces it.
+
+. *Are there any Boost libraries that might help me with my work on Feynman integrals?*
++
+Unlike the integrals encountered in introductory calculus, Feynman integrals are often multidimensional (typically 4, 8, 12, or more dimensions), highly oscillatory, divergent unless carefully regularized, and dependent on many physical parameters such as masses and energies.
++
+Accurate evaluation of Feynman integrals is essential for making precise predictions in particle physics. For example, the extraordinarily accurate theoretical prediction of the electron's magnetic moment (the g−2 value) required evaluating thousands of high-order Feynman diagrams, many containing extremely challenging integrals. The agreement between these calculations and experiment is among the most precise tests of any physical theory.
++
+boost:graph[] should help with the topology of the diagrams, then boost:multiprecision[] for high-precision arithmetic, boost:math[] for special functions, then perhaps boost:random[] and boost:accumulators[] for Monte Carlo integration and statistical error measurements. Your project architecture might look like:
++
+[source,text]
+----
+           Diagram Generator
+                  │
+                  ▼
+           Boost.Graph
+                  │
+                  ▼
+        Build Mathematical Model
+                  │
+                  ▼
+       Boost.Math / Multiprecision
+                  │
+        ┌─────────┴─────────┐
+        ▼                   ▼
+ Analytical Solver    Monte Carlo Solver
+                            │
+                            ▼
+                     Boost.Random
+                            │
+                            ▼
+                 Boost.Accumulators
+                            │
+                            ▼
+                  Numerical Results
+
+----
++
+And you might consider boost:numeric/ublas[] if solving systems of equations is in the mix.
+
 == Other Languages
 
 . *Have developers written applications in languages such as Python that have successfully used the Boost libraries?*
