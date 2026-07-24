@@ -3,17 +3,35 @@
   <ul class="nav-list">
     {{#each navigation}}
       {{#if ./content}}
-        <li class="{{#if (eq ./url @root.page.url)}} is-current-page{{/if}}" data-depth="{{or ../level 0}}">
-          {{#if ./url}}
-            <a class="nav-link" href="
-              {{~#if (eq ./urlType 'internal')}}{{{relativize ./url}}}
-              {{~else}}{{{./url}}}{{~/if}}">{{{./content}}}</a>
-          {{else}}
-            <span class="nav-text">{{{./content}}}</span>
-          {{/if}}
-        </li>
+        {{#if ./items}}
+          <li class="nav-item{{#if (eq ./url @root.page.url)}} is-current-page{{/if}}" data-depth="{{or ../level 0}}">
+            <button class="nav-item-toggle"></button>
+            {{#if ./url}}
+              <a class="nav-link" href="
+                {{~#if (eq ./urlType 'internal')}}{{{relativize ./url}}}
+                {{~else}}{{{./url}}}{{~/if}}">{{{./content}}}</a>
+            {{else}}
+              <span class="nav-text">{{{./content}}}</span>
+            {{/if}}
+            {{> nav-tree navigation=./items level=(increment ../level)}}
+          </li>
+        {{else}}
+          <li class="{{#if (eq ./url @root.page.url)}} is-current-page{{/if}}" data-depth="{{or ../level 0}}">
+            {{#if ./url}}
+              <a class="nav-link" href="
+                {{~#if (eq ./urlType 'internal')}}{{{relativize ./url}}}
+                {{~else}}{{{./url}}}{{~/if}}">{{{./content}}}</a>
+            {{else}}
+              <span class="nav-text">{{{./content}}}</span>
+            {{/if}}
+          </li>
+        {{/if}}
+      {{else}}
+        {{!-- No content but may have items (e.g. top-level nav tree wrapper) --}}
+        {{#if ./items}}
+          {{> nav-tree navigation=./items level=(increment ../level)}}
+        {{/if}}
       {{/if}}
-      {{> nav-tree navigation=./items level=(increment ../level)}}
     {{/each}}
   </ul>
 {{/if}}
