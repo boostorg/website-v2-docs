@@ -122,7 +122,7 @@ See the Hub Container chapter in the Container documentation for more informatio
 *** Various fixes of errors and warnings.
 
 * boost_phrase:library[Graph,/libs/graph/]:
-** Added a Louvain community detection algorithm for scalable modularity-based clustering (boost_gh:pr[graph,453]).
+** Added a Louvain community detection algorithm for modularity-based clustering (boost_gh:pr[graph,453]).
 ** Removed the dependency on Boost.StaticAssert (boost_gh:pr[graph,450]).
 ** Fixed bugs and correctness issues:
 *** Corrected the types used in `adjacency_list` serialization (boost_gh:pr[graph,443]).
@@ -134,7 +134,7 @@ See the Hub Container chapter in the Container documentation for more informatio
 *** Replaced deprecated `std::random_shuffle` with `std::shuffle` (boost_gh:pr[graph,513]).
 *** Silenced `-Wunused-*` warnings and removed dead test variables (boost_gh:pr[graph,510], boost_gh:pr[graph,511], boost_gh:pr[graph,512]).
 *** Cleared GCC `-Wsign-compare` warnings (boost_gh:pr[graph,514]).
-** Documentation: migrated and restructured pages to match the previous HTML layout, refreshed the landing and visitor pages, recovered the table of contents, and fixed the circle layout docs (boost_gh:pr[graph,469], boost_gh:pr[graph,491], boost_gh:pr[graph,509], boost_gh:pr[graph,517], boost_gh:pr[graph,519]).
+** Documentation: updated the entire documentation and migrated to a new visual design (boost_gh:pr[graph,469], boost_gh:pr[graph,491], boost_gh:pr[graph,509], boost_gh:pr[graph,517], boost_gh:pr[graph,519]).
 
 * boost_phrase:library[Hash2,/libs/hash2/]:
 ** Added built-in support for `std::optional`
