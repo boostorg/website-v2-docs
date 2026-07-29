@@ -33,6 +33,26 @@ Where terms apply specifically to one technology, such as _Quantum Computing_ or
 
 *AFAIK* : _As Far As I Know_
 
+*Annotation* : Interestingly, "annotation" is not a formally defined term in the pass:[C++] standard. It's a word that pass:[C++] programmers use informally to mean additional information attached to a declaration or piece of code that doesn't fundamentally change its syntax. Depending on the context, "annotation" can mean several different things:
+
+* Attributes : This is the most common usage, and refers to entries like:
++
+[source,cpp]
+----
+[[nodiscard]]           // Warn if a function's return value is ignored.
+[[deprecated]]          // Marks a function, class, or variable as deprecated.
+[[maybe_unused]]        // Suppresses warnings about unused variables, parameters, or functions.
+[[fallthrough]]         // Indicates that falling through to the next case in a switch is intentional.
+[[likely]]	            // Indicates that a branch is expected to be taken frequently.
+[[unlikely]]	        // Indicates that a branch is expected to be taken rarely.
+[[no_unique_address]]	// Allows an empty member to occupy no storage, enabling layout optimizations.
+[[assume(expr)]]	    // Tells the compiler to assume an expression is always true for optimization purposes.
+[[indeterminate]]	    // Indicates that an object's initial value may legitimately be indeterminate.
+[[nodiscard("reason")]] // A more informative version of [[nodiscard]] that supplies a custom diagnostic message.
+----
+* Static analysis : Some compilers provide annotations for tools. For example, Microsoft Visual pass:[C++] supports `_Check_return_` and `_In_` to help static analysis tools understand how functions should be used.
+* Documentation : In tools such as Doxygen and MrDocs you will see code comments such as `/// @param value` and `/// @return result`. These annotate the source code for automatic documentation generation.
+
 *Antora* : An open-source documentation site generator built around AsciiDoc, designed for managing and publishing large, multi-repository documentation collections. It produces modular, versioned, and navigation-rich websites, making it especially popular for technical docs and developer portals.
 
 *AppVeyor* : A cloud-based Continuous Integration (CI) and Continuous Delivery (CD) service. It's similar to GitHub Actions, Travis CI, or CircleCI, but with some unique strengths, such as it is a hosted service so you don't need to set up your own build servers, it has a Windows-first focus (originally designed to fill a gap when most CI services were Linux-only), and is great for testing MSVC builds, PowerShell scripts, and Windows installers. It does now also support Linux and macOS. It integrates well with GitHub and uses YAML configuration files.
@@ -336,6 +356,56 @@ Note:: For uses of hash functions in Boost libraries, refer to boost:hash2[], an
 *KVM* : Kernel-based Virtual Machine
 
 == L
+
+*Lambda* : A lambda is an anonymous function that can be defined directly within an expression, without first giving it a name. Lambdas are commonly used to pass small pieces of executable code to algorithms, callbacks, threads, and asynchronous operations. Unlike ordinary functions, a lambda can capture variables from its surrounding scope — either by value or by reference — allowing it to access local state where it is defined. This makes lambdas a convenient way to write short, self-contained functions close to the code that uses them, for example:
+
+[source,cpp]
+----
+#include <algorithm>
+#include <iostream>
+#include <vector>
+
+int main()
+{
+    std::vector<int> numbers = { 1, 2, 3, 4, 5 };
+
+    std::cout << "Quartics:\n";
+
+    std::for_each(
+        numbers.begin(),
+        numbers.end(),
+        [](int value)
+        {
+            std::cout << value
+                << " quartic = "
+                << value * value * value * value
+                << '\n';
+        });
+
+    return 0;
+}
+----
+
+*Lambda Capture* : Lambda functions capture values from the surrounding scope. How it captures them is determined by the following table:
+
+[cols="1,3",options="header",stripes=even,frame=none]
+|===
+| Capture         | Meaning                                       
+| `[]`            | Capture nothing                               
+| `[=]`           | Capture everything by value                   
+| `[&]`           | Capture everything by reference               
+| `[x]`           | Capture `x` by value                          
+| `[&x]`          | Capture `x` by reference                      
+| `[x, &y]`       | Mix value and reference                       
+| `[=, &x]`       | Default value, `x` by reference               
+| `[&, x]`        | Default reference, `x` by value               
+| `[name = expr]` | Init-capture (create a new captured variable) 
+| `[this]`        | Capture the `this` pointer                    
+| `[*this]`       | Capture a copy of the current object          
+|===
+
+Many experienced developers prefer explicit captures (`[x, &y]`) over blanket captures (`[=]` or `[&]`) in larger codebases. Explicit captures make it immediately clear which outside variables the lambda depends on, and they reduce the chance of accidentally capturing something you didn't intend.
+
 
 *LEAF* : Lightweight Error Augmentation Framework - refer to boost:leaf[]
 

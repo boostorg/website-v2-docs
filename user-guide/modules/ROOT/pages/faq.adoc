@@ -1425,6 +1425,24 @@ Projects to look at include:
 | https://manual.gromacs.org/current/index.html[GROMACS] | Industry-strength molecular dynamics library originally in C; now multiple pass:[C++] wrapper layers exist. Molecules and topology data can be wrapped into boost:geometry[] point types and distributed simulation can use boost:mpi[] (Message Passing Interface) for cooperative cluster jobs.
 |===
 
+. *What Boost libraries most use lambda functions effectively?*
++
+A lambda is an annonymous function that can be defined directly within an expression, without first giving it a name. Lambdas have become one of the defining features of modern pass:[C++] programming, and many Boost libraries were redesigned to take advantage of them:
++
+[cols="1,3",options="header",stripes=even,frame=none]
+|===
+| Boost Library   |  Typical Purpose  
+| boost:asio[]      | Completion handlers for asynchronous operations 
+| boost:thread[]    | Launching worker threads                        
+| boost:signals2[]  |  Connecting event handlers                      
+| boost:range[]     | Predicates and transformations                  
+| boost:algorithm[] | Comparison and search predicates                
+| boost:fiber[]     | Fiber entry points                              
+| boost:cobalt[]    | Coroutine-based asynchronous callbacks          
+| boost:process[]   | Process output handlers                         
+| boost:gil[]       |  Pixel processing operations                    
+| boost:graph[]     | Visitors and custom algorithms                  
+|===
 
 == Licensing 
 
