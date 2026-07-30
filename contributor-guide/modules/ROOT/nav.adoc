@@ -23,7 +23,6 @@ Official repository: https://github.com/boostorg/website-v2-docs
 ** xref:design-guide/backwards-compatibility.adoc[]
 ** xref:design-guide/separate-compilation.adoc[]
 ** xref:design-guide/dependencies.adoc[]
-** xref:design-guide/borland.adoc[]
 
 * Development
 ** xref:version-control.adoc[]
