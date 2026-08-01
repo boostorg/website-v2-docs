@@ -35,17 +35,15 @@ In order for a review to proceed, a Boost member must volunteer to manage the re
 [[pastreviewresults]]
 == Past Review Results and Milestones
 
-[width="80%",stripes=odd,frame=none]
+[width="75%",stripes=odd,frame=none]
 |===
-| | | | | <<Released 2026>> 
-| <<Released 2025>>| <<Released 2024>> |  <<Released 2023>> | <<Released 2022>> |  <<Released 2021>>
-| <<Released 2020>>| <<Released 2019>> |  <<Released 2018>> | <<Released 2017>> |  <<Released 2016>> 
-| <<Released 2015>>| <<Released 2014>> |  <<Released 2013>> | <<Released 2012>> |  <<Released 2011>> 
-| <<Released 2010>>| <<Released 2009>> |  <<Released 2008>> | <<Released 2007>> |  <<Released 2006>> 
-| <<Released 2005>>| <<Released 2004>> |  <<Released 2003>> | <<Released 2002>> |  <<Released 2001>>
+| | | | | <<year-2026>> | <<year-2025>> | <<year-2024>> |  <<year-2023>> | <<year-2022>> |  <<year-2021>>
+| <<year-2020>> | <<year-2019>> |  <<year-2018>> | <<year-2017>> |  <<year-2016>> | <<year-2015>> | <<year-2014>> |  <<year-2013>> | <<year-2012>> |  <<year-2011>> 
+| <<year-2010>> | <<year-2009>> |  <<year-2008>> | <<year-2007>> |  <<year-2006>> | <<year-2005>> | <<year-2004>> |  <<year-2003>> | <<year-2002>> |  <<year-2001>>
 |===
 
-=== Released 2026
+[[year-2026]]
+=== 2026
 
 [cols="1,1,1,2,2",stripes=even,options="header",frame=none]
 |===
@@ -59,7 +57,8 @@ In order for a review to proceed, a Boost member must volunteer to manage the re
 
 |===
 
-=== Released 2025
+[[year-2025]]
+=== 2025
 
 [cols="1,1,1,2,2",stripes=even,options="header",frame=none]
 |===
@@ -83,7 +82,8 @@ In order for a review to proceed, a Boost member must volunteer to manage the re
 
 |===
 
-=== Released 2024
+[[year-2024]]
+=== 2024
 
 [cols="1,1,1,2,2",stripes=even,options="header",frame=none]
 |===
@@ -107,7 +107,8 @@ In order for a review to proceed, a Boost member must volunteer to manage the re
 | CharConv | Matt Borland | Christopher Kormanyos | January 15, 2024 - January 25, 2024 | [.line-through]#https://lists.boost.org/Archives/boost/2024/01/255713.php[Pending]# https://lists.boost.org/Archives/boost/2024/02/255820.php[Accepted] Added in 1.85
 |===
 
-=== Released 2023
+[[year-2023]]
+=== 2023
 
 [cols="1,1,1,2,2",stripes=even,options="header",frame=none]
 |===
@@ -127,7 +128,8 @@ In order for a review to proceed, a Boost member must volunteer to manage the re
 | Redis (fka Aedis) | Marcelo Zimbres Silva | Klemens Morgenstern | January 15, 2023 - January 24, 2023 | [.line-through]#https://lists.boost.org/Archives/boost/2023/01/253871.php[Pending]# https://lists.boost.org/Archives/boost/2023/01/253944.php[Conditionally Accepted] -- Added in 1.84
 |===
 
-=== Released 2022
+[[year-2022]]
+=== 2022
 
 [cols="1,1,1,2,2",stripes=even,options="header",frame=none]
 |===
@@ -144,7 +146,8 @@ In order for a review to proceed, a Boost member must volunteer to manage the re
 
 |===
 
-=== Released 2021
+[[year-2021]]
+=== 2021
 
 [cols="1,1,1,2,2",stripes=even,options="header",frame=none]
 |===
@@ -160,7 +163,8 @@ In order for a review to proceed, a Boost member must volunteer to manage the re
 |  Describe | Peter Dimov | Richard Hodges | March 1, 2021 - March 10, 2021 | [.line-through]#https://lists.boost.org/Archives/boost/2021/02/250933.php[Pending]# https://lists.boost.org/Archives/boost/2021/03/251099.php[Accepted] Added in 1.77
 |===
 
-=== Released 2020
+[[year-2020]]
+=== 2020
 
 [cols="1,1,1,2,2",stripes=even,options="header",frame=none]
 |===
@@ -183,7 +187,8 @@ In order for a review to proceed, a Boost member must volunteer to manage the re
 | *Boost 1.73.0 Released* |  - |   Marshall Clow |  April 28, 2020 | https://www.boost.org/users/history/version_1_73_0.html[Notes] 
 |===
 
-=== Released 2019
+[[year-2019]]
+=== 2019
 
 [cols="1,1,1,2,2",stripes=even,options="header",frame=none]
 |===
@@ -218,7 +223,8 @@ In order for a review to proceed, a Boost member must volunteer to manage the re
 
 |===
 
-=== Released 2018
+[[year-2018]]
+=== 2018
 
 [cols="1,1,1,2,2",stripes=even,options="header",frame=none]
 |===
@@ -236,7 +242,8 @@ In order for a review to proceed, a Boost member must volunteer to manage the re
 | Outcome | Niall Douglas | Charley Bay | January 19, 2018 - January 28, 2018 |[.line-through]#https://lists.boost.org/boost-announce/2018/01/0533.php[Pending]# https://lists.boost.org/boost-announce/2018/02/0536.php[Accepted] -- Added in 1.70
 |===
 
-=== Released 2017
+[[year-2017]]
+=== 2017
 
 [cols="1,1,1,2,2",stripes=even,options="header",frame=none]
 |===
@@ -302,7 +309,8 @@ In order for a review to proceed, a Boost member must volunteer to manage the re
 		      https://lists.boost.org/boost-announce/2017/03/0494.php[Conditionally Accepted] -- Added in 1.69
 |===
 
-=== Released 2016
+[[year-2016]]
+=== 2016
 
 [cols="1,1,1,2,2",stripes=even,options="header",frame=none]
 |===
@@ -338,7 +346,8 @@ https://lists.boost.org/boost-announce/2016/12/0484.php[Rejected]
 		    
 |===
 
-=== Released 2015
+[[year-2015]]
+=== 2015
 
 [cols="1,1,1,2,2",stripes=even,options="header",frame=none]
 |===
@@ -375,7 +384,8 @@ https://lists.boost.org/boost-announce/2015/10/0456.php[Continuing Conditionally
 | Review Wizard Status Report| - |   Ronald Garcia |  January 22, 2015 | https://lists.boost.org/boost-announce/2015/01/0427.php[Report]
 |===
 
-=== Released 2014
+[[year-2014]]
+=== 2014
 
 [cols="1,1,1,2,2",stripes=even,options="header",frame=none]
 |===
@@ -401,7 +411,8 @@ https://lists.boost.org/boost-announce/2015/10/0456.php[Continuing Conditionally
 | Fiber |  Oliver Kowalke |  Nat Goodspeed |  January 6, 2014 - January 15, 2014 |  [.line-through]#https://lists.boost.org/boost-announce/2014/01/0392.php[Pending]# https://lists.boost.org/boost-announce/2014/01/0393.php[Conditionally Accepted]
 |===
 
-=== Released 2013
+[[year-2013]]
+===  2013
 
 [cols="1,1,1,2,2",stripes=even,options="header",frame=none]
 |===
@@ -418,7 +429,8 @@ https://lists.boost.org/boost-announce/2015/10/0456.php[Continuing Conditionally
 | *Boost 1.53.0 Released* |  - |   Marshall Clow |  February 4, 2013 | https://www.boost.org/users/news/version_1_53_0[Notes] 
 |===
 
-=== Released 2012
+[[year-2012]]
+=== 2012
 
 [cols="1,1,1,2,2",stripes=even,options="header",frame=none]
 |===
@@ -457,7 +469,8 @@ https://lists.boost.org/boost-announce/2015/10/0456.php[Continuing Conditionally
 | Context (mini-review) |  Oliver Kowalke |  Giovanni Deretta |  January 2, 2012 - January 11, 2012 |  [.line-through]#https://lists.boost.org/boost-announce/2012/01/0343.php[Pending]# https://lists.boost.org/boost-announce/2012/01/0348.php[Accepted] -- Added in 1.51.0
 |===
 
-=== Released 2011
+[[year-2011]]
+=== 2011
 
 [cols="1,1,1,2,2",stripes=even,options="header",frame=none]
 |===
@@ -517,7 +530,8 @@ https://lists.boost.org/boost-announce/2015/10/0456.php[Continuing Conditionally
 | Process |  Boris Schaeling |  Marshall Clow |  February 7. 2011 - February 16, 2011 | https://lists.boost.org/boost-announce/2011/03/0292.php[Rejected]
 |===
 
-=== Released 2010
+[[year-2010]]
+=== 2010
 
 [cols="1,1,1,2,2",stripes=even,options="header",frame=none]
 |===
@@ -549,7 +563,8 @@ https://lists.boost.org/boost-announce/2015/10/0456.php[Continuing Conditionally
 | *Boost 1.42 Released* |  - |   Beman Dawes |  February 2, 2010 | https://lists.boost.org/boost-announce/2010/02/0250.php[Notes] 
 |===
 
-=== Released 2009
+[[year-2009]]
+=== 2009
 
 [cols="1,1,1,2,2",stripes=even,options="header",frame=none]
 |===
@@ -580,7 +595,8 @@ https://lists.boost.org/boost-announce/2015/10/0456.php[Continuing Conditionally
 | Futures (2nd candidate) | Braddock Gaskill |  Tom Brinkman |  January 5, 2009 - January 20, 2009 |  Rejected
 |===
 
-=== Released 2008
+[[year-2008]]
+=== 2008
 
 [cols="1,1,1,2,2",stripes=even,options="header",frame=none]
 |===
@@ -624,7 +640,8 @@ https://lists.boost.org/boost-announce/2015/10/0456.php[Continuing Conditionally
 | Switch|  Steven Watanabe|  Stejpan Rajko|  January 5, 2008 - January 13, 2008|    [.line-through]#https://lists.boost.org/boost-announce/2008/01/0166.php[Accepted Provisionally]# Orphaned 
 |===
 
-=== Released 2007
+[[year-2007]]
+=== 2007
 
 [cols="1,1,1,2,2",stripes=even,options="header",frame=none]
 |===
@@ -662,7 +679,8 @@ https://lists.boost.org/boost-announce/2015/10/0456.php[Continuing Conditionally
 | Accumulators|  Eric Niebler|  John R. Phillips|  January 29, 2007 - February 7, 2007| https://lists.boost.org/boost-announce/2007/02/0114.php[Accepted] -- Added in 1.36 
 |===
 
-=== Released 2006
+[[year-2006]]
+=== 2006
 
 [cols="1,1,1,2,2",stripes=even,options="header",frame=none]
 |===
@@ -692,7 +710,8 @@ https://lists.boost.org/boost-announce/2015/10/0456.php[Continuing Conditionally
 | Review Wizard Status Report| - |  Ronald Garcia|  2006 January 19| https://www.boost.org/development/report-jan-2006.html[Report] 
 |===
 
-=== Released 2005
+[[year-2005]]
+=== 2005
 
 [cols="1,1,1,2,2",stripes=even,options="header",frame=none]
 |===
@@ -731,7 +750,8 @@ https://lists.boost.org/boost-announce/2015/10/0456.php[Continuing Conditionally
 | Wave|  Hartmut Kaiser|  Tom Brinkman|  2005 Feb 7 - 2005 Feb 20|  Accepted -- Added in 1.33
 |===
 
-=== Released 2004
+[[year-2004]]
+=== 2004
 
 [cols="1,1,1,2,2",stripes=even,options="header",frame=none]
 |===
@@ -764,7 +784,8 @@ https://lists.boost.org/boost-announce/2015/10/0456.php[Continuing Conditionally
 | FC++|  Brian McNamara & Yannis Smaragdakis|  Mat Marcus|  2004 Feb 14 - Mar 1|  Rejected
 |===
 
-=== Released 2003
+[[year-2003]]
+=== 2003
 
 [cols="1,1,1,2,2",stripes=even,options="header",frame=none]
 |===
@@ -786,7 +807,8 @@ https://lists.boost.org/boost-announce/2015/10/0456.php[Continuing Conditionally
 | Variant|  Eric Friedman & Itay Maman|  Jeff Garland|  16 - 25 Feb 2003|  Accepted -- added in 1.31
 |===
 
-=== Released 2002
+[[year-2002]]
+=== 2002
 
 [cols="1,1,1,2,2",stripes=even,options="header",frame=none]
 |===
@@ -820,11 +842,10 @@ https://lists.boost.org/boost-announce/2015/10/0456.php[Continuing Conditionally
 | printf-like formatting for iostreams|  Samuel Krempp|  Jens Maurer|  13 - 23 Jan 2002|  Accepted -- added in 1.29
 
 | Multi-array|  Ron Garcia|  John Maddock|  02 - 12 Jan 2002|  Accepted -- added in 1.29
-
-
 |===
 
-=== Released 2001
+[[year-2001]]
+=== 2001
 
 [cols="1,1,1,2,2",stripes=even,options="header",frame=none]
 |===
