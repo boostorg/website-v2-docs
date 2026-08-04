@@ -1,0 +1,107 @@
+////
+Copyright (c) 2024 The C++ Alliance, Inc. (https://cppalliance.org)
+
+Distributed under the Boost Software License, Version 1.0. (See accompanying
+file LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
+
+Official repository: https://github.com/boostorg/website-v2-docs
+////
+= Constexpr
+:navtitle: Constexpr
+
+== FAQ
+
+
+
+. *Why is there so much online chat about the C++ term `constexpr`?*
++
+`constexpr` lets you run real C++ programs during compilation, not just when the program runs. By declaring functions as `constexpr` they are run at compile time, often to produce look-up tables that are blindingly fast to execute at runtime. For example:
++
+[source,cpp]
+----
+struct Entry
+{
+    uint64_t hash;
+    int id;
+};
+
+constexpr auto build_table()
+{
+    std::array<Entry, words.size()> table{};
+
+    for (size_t i = 0; i < words.size(); ++i)
+    {
+        table[i] = { hash_str(words[i]), static_cast<int>(i) };
+    }
+
+    // compile-time sort (yes, really)
+    std::ranges::sort(table, {}, &Entry::hash);
+
+    return table;
+}
+
+constexpr auto lookup_table = build_table();
+
+----
++
+At runtime the binary will contain something like the following:
++
+[source,cpp]
+----
+constexpr Entry lookup_table[] = {
+    {0x1234..., 0},
+    {0x2af3..., 1},
+    {0x88ab..., 2},
+    ...
+};
+
+----
++
+This means that at runtime there is no parsing, no hashing, no sorting, no allocations - just a table look-up. Simply, anything done at compile time costs zero runtime CPU. _It's one of the biggest long-term evolutions in the language._
+
+. *How does `constexpr` improve program safety?*
++
+By using `constexpr` your program will often fail at compilation if something is wrong, and not at runtime. For example, invalid configuration, out-of-range values, bad lookup tables, and broken assumptions will often appear as compile time errors.
+
+. *How does `constexpr` compare with `constevel`?*
++
+A `constexpr` function _can_ run at compile-time, or _can_ run at runtime. A `consteval` function _must_ run at compile-time. `consteval` is perfect for 
+compile-time string hashing, generating IDs, reflection helpers, and for building static lookup tables. `constexpr` is the more powerful as it gives you compile-time when possible, runtime when needed.
+
+. *What is the history of `constexpr`?*
++
+A table shows the developing nature of this concept:
++
+[cols="1,4",stripes=even,options="header",frame=none]
+|===
+| *Standard* | *What changed* 
+| C++11    | `constexpr` introduced (very limited)                
+| C++14    | Loops and more logic allowed                         
+| C++17    | More library support                                 
+| C++20    | Dynamic allocation, containers, algorithms           
+| C++23    | Ever more library functions become `constexpr`                  
+| C++26    | Huge expansion — reflection and "constexpr everywhere" 
+|===
+
+. *What applications typically use the `constexpr` approach?*
++
+Apps where performance is king: game engines, compilers, serialization libraries, networking protocols, embedded systems, to name a few.
+
+. *What Boost libraries take advantage of the power of `constexpr`?* 
++
+Over the last 5 to 10 years, many Boost libraries have been heavily modernized to exploit `constexpr`, it's sibling `consteval`, and compile-time metaprogramming. A modern Boost-heavy project can parse URLs, generate serializers, build type-safe APIs, and compute math tables - all at compile time. For example:
++
+* boost:hana[] : The flagship `constexpr` metaprogramming library, built around compile-time computation, type-level programming, and `constexpr` containers and algorithms - such as filters, transforms, folds, sorts.
+* boost:mp11[] : Ultra-fast constexpr template metaprogramming.
+* boost:describe[] : Provides `constexpr` reflection. You can iiterate fields at compile time, generate serializers, generate UI bindings, build ORM mapping, and auto-generate JSON - all via `constexpr` metadata.
+* boost:pfr[] : Provides `constexpr` reflection without macros, and iterate, serialize, and compare structs at compile time.
+* boost:static-string[] : Enables `constexpr` strings.
+* boost:url[] : Designed so some parsing can run at compile time.
+* boost:json[] : Uses `constexpr` for lookup tables, parsers, and optimized state machines.
+* boost:container[] : Steadily becoming more `constexpr`-capable.
+* boost:math[] : Huge portions now support compile-time evaluation of constants, special functions, numeric limits, and lookup tables.
+
+
+== See Also
+
+* xref:faq.adoc[]

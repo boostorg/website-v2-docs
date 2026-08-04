@@ -1,0 +1,46 @@
+////
+Copyright (c) 2024 The C++ Alliance, Inc. (https://cppalliance.org)
+
+Distributed under the Boost Software License, Version 1.0. (See accompanying
+file LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
+
+Official repository: https://github.com/boostorg/website-v2-docs
+////
+= Conferences
+:navtitle: Conferences
+
+== FAQ
+
+
+
+
+. *What are the main C++ conferences where I will learn the most about the language and libraries?*
++
+The largest conference each year is https://cppcon.org/[CppCon], currently held in September in Aurora, Colorado. Talks typically include library authors and standards contributors.
++
+Smaller, deeply technical, and perhaps with more hallway style conversations is https://cppnow.org/[Cpp Now]. Held in May, in Aspen, Colorado. This conference started as BoostCon. A good event for meeting Boost library authors.
++
+In Berlin, Germany, typically in early November, there is https://meetingcpp.com/[Meeting C++], one of Europe's largest with a practical approach to modern programming and tooling.
++
+Also in Europe, there is the https://accu.org/conf-main/main/[ACCU Conference], recently held in Folkestone, UK, in June. The focus here is on best practices of software engineering.
++
+These are the big four conferences each year. The https://isocpp.org/std/meetings-and-participation/[ISO Cpp Working Group] meetings occur three times per year (typically March, June, November), and the location rotates around the globe. This event is where the language standard is defined and updated. Refer to the FAQ on <<ISO C++ Committee Meetings>>.
++
+There are also some regional events that might work well.
++
+The https://eventos.uc3m.es/[using std::cpp] conference in Spain in March has a strong technical focus and is popular amount European developers.
++
+Also in Europe and in March, there is the https://becpp.org/blog/[BeCPP Symposium] in Belgium.
++
+In Asia, the https://cpp-summit.org/[C++ Summit] is held in Shanghai, typically in November though the times can vary.
++
+If you attend several conferences, you may well find projects debut at one of the smaller conferences before a more polished presentation is given at https://cppcon.org/[CppCon].
+
+. *Is there such a thing as online C++ conferences?*
++
+Yes, not free but there is https://cpponline.uk/[Cpp Online].
+
+
+== See Also
+
+* xref:faq.adoc[]

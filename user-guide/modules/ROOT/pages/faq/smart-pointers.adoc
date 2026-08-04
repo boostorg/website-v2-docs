@@ -1,0 +1,99 @@
+////
+Copyright (c) 2024 The C++ Alliance, Inc. (https://cppalliance.org)
+
+Distributed under the Boost Software License, Version 1.0. (See accompanying
+file LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
+
+Official repository: https://github.com/boostorg/website-v2-docs
+////
+= Smart Pointers
+:navtitle: Smart Pointers
+
+== FAQ
+
+
+. *What different types of smart pointers are there?*
++
+The boost:smart_ptr[] library provides a set of smart pointers that helps in automatic and appropriate resource management. They are particularly useful for managing memory and provide a safer and more efficient way of handling dynamically allocated memory. The library provides the following types of smart pointers:
++
+[disc]
+* `boost::scoped_ptr`: A simple smart pointer for sole ownership of single objects that must be deleted. It's neither copyable nor movable. Deletion occurs automatically when the `scoped_ptr` goes out of scope.
+
+* `boost::scoped_array`: Similar to `scoped_ptr`, but for arrays instead of single objects. Deletion occurs automatically when the `scoped_array` goes out of scope.
+
+* `boost::shared_ptr`: A reference-counted smart pointer for single objects or arrays, which automatically deletes the object when the reference count reaches zero. Multiple `shared_ptr` can point to the same object, and the object is deleted when the last `shared_ptr` referencing it is destroyed.
+
+* `boost::shared_array`: Similar to `shared_ptr`, but for arrays instead of single objects.
+
+* `boost::weak_ptr`: A companion to `shared_ptr` that holds a non-owning ("weak") reference to an object that is managed by `shared_ptr`. It must be converted to `shared_ptr` in order to access the referenced object.
+
+* `boost::intrusive_ptr`: A smart pointer that uses intrusive reference counting. Intrusive reference counting relies on the object to maintain the reference count, rather than the smart pointer. This can provide performance benefits in certain situations, but it requires additional support from the referenced objects.
+
+* `boost::enable_shared_from_this`: Provides member function `shared_from_this`, which enables an object that's already managed by a `shared_ptr` to safely generate more `shared_ptr` instances that all share ownership of the same object.
+
+* `boost::unique_ptr`: A smart pointer that retains exclusive ownership of an object through a pointer. It's similar to `std::unique_ptr` in the pass:[C++] Standard Library.
+
+. *Can you give me a brief coding overview of how to use smart pointers efficiently?*
++
+There are several types of smart pointers with different characteristics and use cases, so use them appropriately according to your program's requirements. Here are some common examples:
+
++
+A `shared_ptr` is a reference-counting smart pointer, meaning it retains shared ownership of an object through a pointer. When the last `shared_ptr` to an object is destroyed, the pointed-to object is automatically deleted. For example:
++
+[source,cpp]
+----
+#include <boost/shared_ptr.hpp>
+
+void foo() {
+    boost::shared_ptr<int> sp(new int(10));
+    // Now 'sp' owns the 'int'.
+    // When 'sp' is destroyed, the 'int' will be deleted.
+}
+----
++
+Note that `shared_ptr` objects can be copied, meaning ownership of the memory can be shared among multiple pointers. The memory will be freed when the last remaining `shared_ptr` is destroyed. For example:
++
+[source,cpp]
+----
+#include <boost/shared_ptr.hpp>
+
+void foo() {
+    boost::shared_ptr<int> sp1(new int(10));
+    // Now 'sp1' owns the 'int'.
+    boost::shared_ptr<int> sp2 = sp1;
+    // Now 'sp1' and 'sp2' both own the same 'int'.
+    // The 'int' will not be deleted until both 'sp1' and 'sp2' are destroyed.
+}
+----
++
+A `weak_ptr` is a smart pointer that holds a non-owning ("weak") reference to an object managed by a `shared_ptr`. It must be converted to `shared_ptr` in order to access the object. For example:
++
+[source,cpp]
+----
+#include <boost/shared_ptr.hpp>
+#include <boost/weak_ptr.hpp>
+
+void foo() {
+    boost::shared_ptr<int> sp(new int(10));
+    boost::weak_ptr<int> wp = sp;
+    // 'wp' is a weak pointer to the 'int'.
+    // If 'sp' is destroyed, 'wp' will be able to detect it.
+}
+----
++
+A `unique_ptr` is a smart pointer that retains exclusive ownership of an object through a pointer. It's similar to `std::unique_ptr` in the pass:[C++] Standard Library. For example:
++
+[source,cpp]
+----
+#include <boost/interprocess/smart_ptr/unique_ptr.hpp>
+
+void foo() {
+    boost::movelib::unique_ptr<int> up(new int(10));
+    // Now 'up' owns the 'int'.
+    // When 'up' is destroyed, the 'int' will be deleted.
+}
+----
+
+== See Also
+
+* xref:faq.adoc[]

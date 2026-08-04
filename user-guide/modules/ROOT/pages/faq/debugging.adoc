@@ -1,0 +1,67 @@
+////
+Copyright (c) 2024 The C++ Alliance, Inc. (https://cppalliance.org)
+
+Distributed under the Boost Software License, Version 1.0. (See accompanying
+file LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
+
+Official repository: https://github.com/boostorg/website-v2-docs
+////
+= Debugging
+:navtitle: Debugging
+
+== FAQ
+
+
+
+. *What support does Boost provide for debugging and testing?*
++
+Boost provides boost:test[] for unit testing, which can be an integral part of the debugging process. It also provides the boost:stacktrace[] library that can be used to produce useful debug information during a crash or from a running application. Refer also to https://www.boost.org/doc/libs/latest/libs/libraries.htm#Correctness[Category: Correctness and testing].
+
+. *How do I enable assertions in Boost?*
++
+Boost uses its own set of assertion macros. By default, `BOOST_ASSERT` is enabled, but if it fails, it only calls `abort()`. If you define `BOOST_ENABLE_ASSERT_HANDLER` before including any Boost header, then you need to supply `boost::assertion_failed(msg, code, file, line)` and `boost::assertion_failed_msg(msg, code, file, line)` functions to handle failed assertions.
+
+. *How can I get a stack trace when my program crashes?*
++
+You can use the boost:stacktrace[] library to obtain a stack trace in your application. You can capture and print stack traces in your catch blocks, in signal handlers, or anywhere in your program where you need to trace the execution path.
+
+. *Can I use Boost with a debugger like GDB or Visual Studio?*
++
+Yes, Boost libraries can be used with common debuggers like https://sourceware.org/gdb/[GDB] or https://visualstudio.microsoft.com/downloads/[Visual Studio]. You can set breakpoints in your code, inspect variables, and execute code step by step. Boost doesn't interfere with these debugging tools.
+
+. *Are there any debugging tools specifically provided by Boost?*
++
+Boost doesn't provide a debugger itself. The libraries tend to make heavy use of assertions to catch programming errors, and they often provide clear and detailed error messages when something goes wrong.
+
+. *What are best practices when using Boost Asserts?*
++
+Boost provides the assertion `boost::assert`. Best practices when using this are:
+
++
+[disc]
+* _Use Assertions for Debugging and Development_: Boost assertions should primarily be used during the debugging and development phase of your application. Assertions are designed to catch programming errors, not user errors.
+
+* _Assert Conditions That Should Never Occur_: You should only assert conditions that you believe can never occur during normal operation of your application. If there's a chance that a condition may occur, handle it as an exception or error rather than asserting.
+
+* _Provide Meaningful Assert Messages_: Boost assertions allow you to provide a message alongside your assertion. Use this feature to provide meaningful context about why an assertion failed.
+
+* _Consider Performance Impact_: Boost assertions can slow down your application. In performance-critical code, consider disabling them in the production version of your application.
+
+. *What is the recommended approach to logging, using `boost::log`?*
++
+[disc]
+* _Use Severity Levels_: boost:log[] supports severity levels, which you can use to categorize and filter your log messages. This can help you control the amount of log output and focus on what's important.
+
+* _Provide Context_: boost:log[] allows you to attach arbitrary data to your log messages, such as thread IDs, timestamps, or file and line information. Use this feature to provide context that can help you understand the state of your application when the log message was generated.
+
+* _Use Asynchronous Logging_: If logging performance is a concern, consider using the asynchronous logging feature. This allows your application to continue executing while log messages are processed in a separate thread.
+
+* _Format Your Log Output_: boost:log[] supports customizable log formatting. Use this feature to ensure that your log output is easy to read and contains all the information you need.
+
+* _Handle Log Rotation_: If your application produces a lot of log output, consider setting up log rotation, which is supported. This ensures that your log files don't grow indefinitely.
+
+
+
+== See Also
+
+* xref:faq.adoc[]
