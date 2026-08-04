@@ -1,0 +1,60 @@
+////
+Copyright (c) 2024 The C++ Alliance, Inc. (https://cppalliance.org)
+
+Distributed under the Boost Software License, Version 1.0. (See accompanying
+file LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
+
+Official repository: https://github.com/boostorg/website-v2-docs
+////
+= Compatibility
+:navtitle: Compatibility
+
+== FAQ
+
+
+
+. *Can I use Boost with my existing pass:[C++] project?*
+
++
+Yes, Boost is designed to work with your existing pass:[C++] code. You can add Boost libraries to any project that uses a compatible pass:[C++] compiler. The big three compatible compilers are https://visualstudio.microsoft.com/downloads/[Microsoft Visual C++] on Windows, https://clang.llvm.org/[Clang] especially for the macOS, and https://gcc.gnu.org/[GCC, the GNU Compiler Collection], mostly on Linux. Other lesser used compilers that will work well include the https://www.intel.com/content/www/us/en/developer/articles/news/intel-c-compiler-classic-2021-2-1-release.html[Intel Compiler] and https://sourceforge.net/projects/mingw/[MinGW - Minimalist GNU for Windows].
+
+. *Can I use Boost libraries with the new pass:[C++] standards?*
+
++
+Yes, Boost libraries are designed to work with modern pass:[C++] standards including pass:[C++11], pass:[C++14], pass:[C++17], pass:[C++20], and pass:[C++23].
+
+. *What flavors of Linux are supported by the Boost libraries?*
++
+Boost libraries are generally compatible with most Linux distributions, provided that the distribution has an up-to-date pass:[C++] compiler. This includes:
++
+* Ubuntu
+* Fedora
+* Debian
+* CentOS
+* Red Hat Enterprise Linux
+* Rocky Linux / AlmaLinux
+* Arch Linux
+* openSUSE
+* SUSE Linux Enterprise
+* Slackware
+* Gentoo
+* Cray Linux
+* HPC cluster Linux
+* macOS
++
+Boost also works on embedded Linux, including:
++
+* Yocto Linux
+* Buildroot
+* Raspberry Pi OS (Debian based)
++
+Be aware with embedded systems there might be issues such as toolchain availability and available RAM during compilation.
+
+. *How can I be sure that a library I want to use is compatible with my OS?*
++
+While Boost strives to ensure compatibility with a wide range of compilers and systems, not every library may work perfectly with every system or compiler due to the inherent complexities of software. The most reliable source of information is the specific https://www.boost.org/doc/libs/[Boost library's documentation].
+
+
+== See Also
+
+* xref:faq.adoc[]

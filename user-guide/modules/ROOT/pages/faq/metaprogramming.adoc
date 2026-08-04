@@ -1,0 +1,78 @@
+////
+Copyright (c) 2024 The C++ Alliance, Inc. (https://cppalliance.org)
+
+Distributed under the Boost Software License, Version 1.0. (See accompanying
+file LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
+
+Official repository: https://github.com/boostorg/website-v2-docs
+////
+= Metaprogramming
+:navtitle: Metaprogramming
+
+
+== FAQ
+
+
+
+. *What is metaprogramming in the context of Boost pass:[C++]?*
++
+Metaprogramming is a technique of programming that involves generating and manipulating programs. In the context of Boost and pass:[C++], metaprogramming often refers to _template metaprogramming_, which uses templates to perform computations at compile-time.
+
+. *What is Boost.MP11?*
++
+boost:mp11[] is a Boost library designed for metaprogramming using pass:[C++]11. It provides a set of templates and types for compile-time computations and manipulations, effectively extending the pass:[C++] template mechanism.
+
+. *What can I achieve with Boost.MP11?*
++
+With boost:mp11[], you can perform computations and logic at compile-time, thus reducing runtime overhead. For example, you can manipulate types, perform iterations, make decisions, and do other computations during the compilation phase.
+
+. *What is a `typelist` and how can I use it with Boost.MP11?*
++
+A `typelist` is a compile-time container of types. It's a fundamental concept in pass:[C++] template metaprogramming where operations are done at compile time rather than runtime, and types are manipulated in the same way that values are manipulated in regular programming.
++
+In the context of the boost:mp11[] library, a `typelist` is a template class that takes a variadic list of type parameters. Here's an example:
++
+[source,cpp]
+----
+#include <boost/mp11/list.hpp>
+
+using my_typelist = boost::mp11::mp_list<int, float, double>;
+----
++
+In this example, `my_typelist` is a `typelist` containing the types `int`, `float`, and `double`. Once you have a `typelist`, you can manipulate it using the metaprogramming functions provided by the library. For example:
++
+[source,cpp]
+----
+#include <boost/mp11/list.hpp>
+#include <boost/mp11/algorithm.hpp>
+
+using my_typelist = boost::mp11::mp_list<int, float, double>;
+
+// Get the number of types in the list
+constexpr std::size_t size = boost::mp11::mp_size<my_typelist>::value;
+
+// Check if a type is in the list
+constexpr bool contains_double = boost::mp11::mp_contains<my_typelist, double>::value;
+
+// Add a type to the list
+using extended_typelist = boost::mp11::mp_push_back<my_typelist, char>;
+
+// Get the second type in the list
+using second_type = boost::mp11::mp_at_c<my_typelist, 1>;
+----
++
+In these examples, `mp_size` is used to get the number of types in the list, `mp_contains` checks if a type is in the list, `mp_push_back` adds a type to the list, and `mp_at_c` retrieves a type at a specific index in the list. All these operations are done at compile time.
+
+. *What are some limitations or challenges of metaprogramming with Boost.MP11?*
++
+Metaprogramming with boost:mp11[] can lead to complex and difficult-to-understand code, especially for programmers unfamiliar with the technique. Compile errors can be particularly cryptic due to the way templates are processed. Additionally, heavy use of templates can lead to longer compile times.
++
+Other challenges include lack of runtime flexibility, as decisions are made at compile time. And perhaps issues with portability can occur (say, between compilers) as metaprogramming pushes the boundaries of a computer language to its limits.
+
+NOTE: boost:mp11[] supersedes the earlier boost:mpl[] and boost:preprocessor[] libraries.
+
+
+
+== See Also
+
+* xref:faq.adoc[]

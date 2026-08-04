@@ -1,0 +1,41 @@
+////
+Copyright (c) 2024 The C++ Alliance, Inc. (https://cppalliance.org)
+
+Distributed under the Boost Software License, Version 1.0. (See accompanying
+file LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
+
+Official repository: https://github.com/boostorg/website-v2-docs
+////
+= Documentation
+:navtitle: Documentation
+
+== FAQ
+
+
+
+
+. *Who writes the documentation for a Boost library?*
++
+The library authors are responsible for all the documentation specific to their library. The authors are clearly the most knowledgeable on the design decisions, architecture, API calls, inner workings, and potential limitations of their library. Contributor guidelines on documentation help maintain consistency in styling and content across the library collection. Refer to xref:contributor-guide:ROOT:docs/layout.adoc[].
+
+. *If I find an issue with the documentation, or would like to suggest an improvement, can I make a formal request?*
++
+Yes you can, file an issue on the library. Typically library authors welcome feedback that enhances the useability of their work - refer to xref:reporting-issues.adoc[].
+
+. *Has any Boost library documentation been translated into languages other than English?*
++
+There is no formal localization of library documentation. However, translation efforts have existed at various times for Japanese, Chinese and Russian. Most current effort is into Japanese - refer to https://boostjp.github.io/[boostjp].
+
+. *If I wanted to translate my favorite library documentation into my native language, who do contact to get started?*
++
+The copyright ownership of library documentation remains with the documentation authors. Contact the authors via the https://lists.boost.org/mailman/listinfo.cgi/boost[Boost Developers Mailing List] if you are inspired to take on this task.
+
+. *Have there ever been efforts to localize not just the documentation but the API calls themselves?*
++
+Not for the Boost libraries. Microsoft did experiment with localized API calls many years ago, though the project was abandoned as way too complicated, unmaintainable, and not particularly useful.
+
+
+
+== See Also
+
+* xref:faq.adoc[]

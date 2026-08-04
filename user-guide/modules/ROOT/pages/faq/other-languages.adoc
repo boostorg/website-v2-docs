@@ -1,0 +1,217 @@
+////
+Copyright (c) 2024 The C++ Alliance, Inc. (https://cppalliance.org)
+
+Distributed under the Boost Software License, Version 1.0. (See accompanying
+file LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
+
+Official repository: https://github.com/boostorg/website-v2-docs
+////
+= Other Languages
+:navtitle: Other Languages
+
+== FAQ
+
+. *Have developers written applications in languages such as Python that have successfully used the Boost libraries?*
++
+Yes, developers have successfully used Boost libraries in applications written in languages other than pass:[C++] by leveraging language interoperability features and creating bindings or wrappers.
++
+The most notable example is the use of boost:python[], a library specifically designed to enable seamless interoperability between pass:[C++] and Python. boost:python[] allows developers to expose pass:[C++] classes, functions, and objects to Python, enabling the use of the libraries from Python code. This has been used extensively in scientific computing, game development, and other fields where the performance of pass:[C++] is combined with the ease of Python.
+
+. *What real world applications have combined Python with the Boost libraries?*
++
+Here are some examples:
++
+* https://www.blender.org/[Blender] is a widely-used open-source 3D creation suite. It supports the entirety of the 3D pipeline, including modeling, rigging, animation, simulation, rendering, compositing, and motion tracking. Blender uses Boost libraries for various purposes, including memory management, string manipulation, and other utility functions. Blender's Python API, which allows users to script and automate tasks, integrates with pass:[C++] code using boost:python[].
++
+* https://pytorch.org/[PyTorch] is an open-source machine learning library based on the Torch library. It is used for applications such as natural language processing and computer vision. PyTorch uses several Boost libraries to handle low-level operations efficiently. boost:python[] is used to create bindings between pass:[C++] and Python, allowing PyTorch to provide a seamless interface for Python developers.
++
+* https://opencv.org/[OpenCV] (Open Source Computer Vision Library) is an open-source computer vision and machine learning software library. OpenCV's Python bindings use boost:python[] to interface between the pass:[C++] core and Python. This allows Python developers to use OpenCV's powerful pass:[C++] functions with Python syntax.
++
+* https://docs.enthought.com/canopy/2.1/index.html[Enthought Canopy] is a comprehensive Python analysis environment and distribution for scientific and analytic computing. It includes a Python distribution, an integrated development environment (IDE), and many additional tools and libraries.
+
+. *Are there some solid examples of real world applications that have combined C# with the Boost libraries?*
++
+Here are some great examples:
++ 
+* In the world of game development, several projects use pass:[C++] for performance-critical components and C# for scripting and higher-level logic. The Boost libraries are often used in the pass:[C++] components, in particular to leverage their algorithms, and data structures. https://unity.com/[Unity] allows the use of native plugins written in pass[C++]. These plugins can use Boost libraries for various functionalities, such as pathfinding algorithms or custom data structures, and then be called from C# scripts within Unity.
++
+* Financial applications often require high performance and reliability. They may use pass:[C++] for core processing and Boost libraries for tasks like date-time calculations, serialization, and multithreading. C# is used for GUI and integration with other enterprise systems. Trading platforms and risk management systems sometimes use Boost libraries for backend processing and interoperate with C# components for the user interface and data reporting.
++
+* Scientific computing applications that need high-performance computation often use pass:[C++] for core algorithms. C# is great for visualization, user interaction, and orchestration. Computational chemistry and physics applications sometimes use Boost for numerical computations and data handling, while C# provides the tools for managing simulations and visualizing results.
+
+. *Can I see some sample code of how to wrap Boost functions to be available for use in a C# app?*
++
+The following code shows how to create a wrapper for a pass:[C++] class that uses Boost, and then calls this class from a C# application. The handling of return values and exceptions are shown too. All the class does is convert a string to upper case.
++ 
+_The following code was written and tested using Visual Studio 2022, with Boost version 1.88. Visual Studio has been installed with tools to create both native pass:[C++] and .NET C# apps._
++
+In Visual Studio, create a pass:[C++] *Dynamic Link Library (DLL)* project, `MyDLL`, and in the project properties make sure the *Additional Include Directories* has the path to your Boost `include` files, and *Additional Library Directories* has the path to your Boost `lib` files. Most importantly in the *Configuration Properties/Advanced* section, make sure the *Common Language Runtime Support* setting is *.NET Framework Runtime Support (/clr)*. Delete the default `dllmain.cpp` file.
++
+Create a header file, `MyClass.h`, and copy in the following code:
++
+[source,cpp]
+----
+#pragma once
+#include <string>
+
+class MyClass {
+public:
+    std::string to_upper(const std::string& input);
+};
+
+----
++
+Create a second header file, `MyClassWrapper.h`, and copy in:
++
+[source,cpp]
+----
+#pragma once
+
+#include "MyClass.h"
+
+using namespace System;
+
+public ref class MyClassWrapper {
+private:
+    MyClass* instance;
+
+public:
+    MyClassWrapper();
+    ~MyClassWrapper();
+    !MyClassWrapper();
+
+    String^ ToUpper(String^ input);
+};
+
+----
++
+Create a new source file, `MyClass.cpp`, and copy in:
++
+[source,cpp]
+----
+#include "pch.h"
+#include "MyClass.h"
+#include <boost/algorithm/string.hpp>
+#include <stdexcept>
+
+std::string MyClass::to_upper(const std::string& input) {
+    if (input.empty()) {
+        throw std::runtime_error("Input string is empty");
+    }
+    return boost::to_upper_copy(input);
+}
+
+----
++
+We use boost:algorithm[] here, to show how to engage our libraries.
++
+Next, create a second source file, `MyClassWrapper.cpp`, to expose the class to .NET:
++
+[source,cpp]
+----
+#include "pch.h"
+#include "MyClassWrapper.h"
+#include <msclr/marshal_cppstd.h>
+#include <stdexcept>
+
+using namespace msclr::interop;
+using namespace System::Runtime::InteropServices;
+
+MyClassWrapper::MyClassWrapper() {
+    instance = new MyClass();
+}
+
+MyClassWrapper::~MyClassWrapper() {
+    this->!MyClassWrapper();
+}
+
+MyClassWrapper::!MyClassWrapper() {
+    delete instance;
+}
+
+String^ MyClassWrapper::ToUpper(String^ input) {
+    try {
+        std::string nativeInput = marshal_as<std::string>(input);
+        std::string result = instance->to_upper(nativeInput);
+        return gcnew String(result.c_str());
+    }
+    catch (const std::exception& e) {
+        throw gcnew ExternalException(gcnew String(e.what()));
+    }
+}
+----
++
+Now, build your DLL, and hopefully it will build correctly. If it does, close that solution. Errors are usually because of missing components, rather than faulty code.
++
+Now create the C# application that uses the wrapper. In Visual Studio, create a C# Console app, `CppCsharp`, noting that a .NET framework is part of the project, and overwrite the default with the following code.
++
+[source,csharp]
+----
+using System;
+
+class Program
+{
+    static void Main()
+    {
+        MyClassWrapper myClass = new MyClassWrapper();
+
+        try
+        {
+            string result = myClass.ToUpper("hello world");
+            Console.WriteLine("Result: " + result);
+
+            // Test with an empty string to trigger the exception
+            result = myClass.ToUpper("");
+            Console.WriteLine("Result: " + result);
+
+        }
+        catch (System.Runtime.InteropServices.ExternalException e)
+        {
+            Console.WriteLine("Caught an exception: " + e.Message);
+        }
+    }
+}
+----
++
+You will notice that the `MyClassWrapper` declaration is marked as erroneous.
++
+In Visual Studio, in the *Project* menu, select *Add Project Reference*, and then use the *Browse* option to locate your `MyDLL.dll`. You should notice the error marks disappear.
++
+Run the program, noting the initial string is converted to upper case, and the second call correctly returns the exception:
++
+----
+Result: HELLO WORLD
+Caught an exception: Input string is empty
+----
+
+. *Does the Java Native Interface (JNI) work with the Boost libraries?*
++
+Through the use of the Java Native Interface (JNI) or Java Native Access (JNA), developers can call Boost libraries from Java applications. It involves creating native methods in Java that are implemented in pass:[C++] and using Boost libraries as part of those implementations.
+
+Note:: Similar techniques can be applied to other languages, such as R, Ruby, Perl, and Lua, using their respective foreign function interfaces (FFI) or binding libraries. 
+
+. *What is the industry consensus for the expected remaining lifespan for pass:[C++], and does any other language look like it might become the replacement for it?*
++
+The expected remaining lifespan of the pass:[C++] programming language is generally considered to be long, probably spanning several decades. While it's difficult to assign a precise number of years, here's an overview of the factors contributing to this consensus:
++
+* pass:[C++] is deeply embedded in many critical systems, including operating systems, game engines, real-time systems, financial systems, and large-scale infrastructure projects. The massive amount of existing code ensures that the language will be relevant for a long time as maintaining, updating, and interacting with this codebase will remain necessary.
+* The Boost libraries and the pass:[C++] Standard place a strong emphasis on backward compatibility, which helps ensure that older code continues to work with new versions of the language.
+* The pass:[C++] language continues to evolve, with regular updates to the standard (for example, pass:[C++]11, pass:[C++]14, pass:[C++]17, pass:[C++]20, and pass:[C++]23). These updates introduce new features and improvements that keep the language modern and competitive.
+* The pass:[C++] community, including the ISO pass:[C++] committee and Boost users, are highly active, ensuring that the language adapts to new programming paradigms, hardware architectures, and developer needs.
+* High Performance - pass:[C++] remains one of the go-to languages for applications where performance is critical, such as gaming, high-frequency trading, and embedded systems. Its ability to provide low-level memory and hardware control while still supporting high-level abstractions makes it difficult to replace.
+* For system-level programming and scenarios where fine-grained control over system resources is necessary, pass:[C++] is still unmatched.
+* pass:[C++] is still widely taught in universities, especially in courses related to systems programming, algorithms, and data structures. As a teaching language, it instills principles of memory management, performance optimization, and object-oriented programming, which are valuable across many programming domains.
+* pass:[C++] has a strong presence in specialized domains such as aerospace, robotics, telecommunications, and automotive software, where reliability, real-time performance, and low-level hardware access are critical. For example, some current EV manufacturers are using pass:[C++] and Unreal Engine to develop their in-car infotainment and control systems.
+* While newer languages may rise in popularity for certain use cases, no other language currently offers the same combination of performance, control, and ecosystem that pass:[C++] provides, making it unlikely to be replaced any time soon.
++
+Future technological shifts, such as advances in quantum computing or entirely new programming paradigms, could influence (increase or decrease) the lifespan of pass:[C++]. However, given its adaptability and entrenched role in many industries, pass:[C++] is expected to evolve alongside these changes rather than be replaced by them.
+
+. *If I was to learn one other language, in addition to pass:[C++], what should it be to best prepare myself for an uncertain future?*
++
+Python is often the top recommendation due to its versatility, simplicity, and wide application in growing fields like artificial intelligence (AI), machine learning (ML), rapid prototyping, and data science. And boost:python[] is there to help you integrate with the Boost libraries. Rust is another strong contender, especially if you are interested in systems programming and are looking for reliability and security. If you see the future as more cloud computing, then Go makes a strong case for itself.  And let's not forget that so much computing is now web based, so JavaScript deserves a mention here too. All of these languages offer valuable resources that complement pass:[C++] and prepare you for an uncertain future.
+
+
+
+== See Also
+
+* xref:faq.adoc[]

@@ -1,0 +1,47 @@
+////
+Copyright (c) 2024 The C++ Alliance, Inc. (https://cppalliance.org)
+
+Distributed under the Boost Software License, Version 1.0. (See accompanying
+file LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
+
+Official repository: https://github.com/boostorg/website-v2-docs
+////
+= Releases
+:navtitle: Releases
+
+== FAQ
+
+
+
+. *How do I download the latest libraries?*
++
+Go to https://www.boost.org/users/download/[Boost Downloads].
+
+. *What do the Boost version numbers mean?*
++
+The scheme is x.y.z, where x is incremented only for massive changes, such as a reorganization of many libraries, y is incremented whenever a new library is added, and z is incremented for maintenance releases. y and z are reset to 0 if the value to the left changes
+
+. *Is there a formal relationship between Boost.org and the pass:[C++] Standards Committee?*
++
+No, although there is a strong informal relationship in that many members of the committee participate in Boost, and the people who started Boost were all committee members.
+
+. *Will the Boost.org libraries become part of the next pass:[C++] Standard?*
++
+Some might, but that is up to the standards committee. Committee members who also participate in Boost will definitely be proposing at least some Boost libraries for standardization. Libraries which are "existing practice" are most likely to be accepted by the C++ committee for future standardization. Having a library accepted by Boost is one way to establish existing practice.
+
+. *Is the Boost web site a commercial business?*
++
+No. It is a non-profit.
+
+. *Why do Boost headers have a .hpp suffix rather than .h or none at all?*
++
+File extensions communicate the "type" of the file, both to humans and to computer programs. The '.h' extension is used for C header files, and therefore communicates the wrong thing about pass:[C++] header files. Using no extension communicates nothing and forces inspection of file contents to determine type. Using `.hpp` unambiguously identifies it as pass:[C++] header file, and works well in practice.
+
+. *How do I contribute a library?*
++
+Refer to the xref:contributor-guide:ROOT:index.adoc[]. Note that shareware libraries, commercial libraries, or libraries requiring restrictive licensing are all not acceptable. Your library must be provided free, with full source code, and have an acceptable license. There are other ways of contributing too, providing feedback, testing, submitting suggestions for new features and bug fixes, for example. There are no fees for submitting a library.
+
+
+== See Also
+
+* xref:faq.adoc[]

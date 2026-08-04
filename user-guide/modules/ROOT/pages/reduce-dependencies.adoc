@@ -105,4 +105,4 @@ boost:test[] allows stripping optional components to make it more lightweight:
 
 == See Also
 
-* xref:faq.adoc#dependencies[FAQ on Dependencies]
+* xref:faq/dependencies.adoc[Dependencies FAQ]

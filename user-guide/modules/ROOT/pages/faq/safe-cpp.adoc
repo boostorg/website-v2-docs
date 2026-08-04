@@ -1,0 +1,24 @@
+////
+Copyright (c) 2024 The C++ Alliance, Inc. (https://cppalliance.org)
+
+Distributed under the Boost Software License, Version 1.0. (See accompanying
+file LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
+
+Official repository: https://github.com/boostorg/website-v2-docs
+////
+= Safe C++
+:navtitle: Safe C++
+
+
+== FAQ
+
+
+. *I use Boost Libraries in my current projects. What do I need to know about Safe pass:[C++]?*
++
+Retrofitting the pass:[C++] language with memory-safe constructs has proven to be daunting. The https://safecpp.org/P3390R0.html[Safe pass:[C++]] proposal for a memory-safe set of operations is currently in a state of indefinite hiatus. For more information, including current safe coding practices, refer to xref:contributor-guide:ROOT:contributors-faq#safecpp[Contributors FAQ: Safe pass:[C++]]. For terminology - refer to xref:glossary.adoc#s[Glossary: S].
+
+
+
+== See Also
+
+* xref:faq.adoc[]

@@ -1,0 +1,28 @@
+////
+Copyright (c) 2024 The C++ Alliance, Inc. (https://cppalliance.org)
+
+Distributed under the Boost Software License, Version 1.0. (See accompanying
+file LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
+
+Official repository: https://github.com/boostorg/website-v2-docs
+////
+= Licensing
+:navtitle: Licensing
+
+== FAQ
+
+
+
+. *What is the license for Boost libraries?*
++
+Most Boost libraries are licensed under the xref:bsl.adoc[] (BSL), a permissive free software license that allows you to use, modify, and distribute the software under minimal restrictions. It is not a _requirement_ for a library to be licensed under the BSL, but its license must meet the xref:contributor-guide:ROOT:requirements/license-requirements.adoc[License Requirements]. Refer to the documentation or source code of any specific library to determine which license applies.
+
+. *Can I use the Boost Logo, after I have built software using the Boost libraries, to help promote my product?*
++
+Only with written permission from xref:contributor-guide:ROOT:oversight-committee.adoc[]. For full details refer to xref:contributor-guide:ROOT:docs/logo-policy-media-guide.adoc[].
+
+
+
+== See Also
+
+* xref:faq.adoc[]

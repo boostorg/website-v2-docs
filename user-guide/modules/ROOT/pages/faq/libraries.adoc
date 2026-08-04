@@ -1,0 +1,100 @@
+////
+Copyright (c) 2024 The C++ Alliance, Inc. (https://cppalliance.org)
+
+Distributed under the Boost Software License, Version 1.0. (See accompanying
+file LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
+
+Official repository: https://github.com/boostorg/website-v2-docs
+////
+= Libraries
+:navtitle: Libraries
+
+== FAQ
+
+. *What are smart pointers in Boost?*
++
+Smart pointers are a feature of pass:[C++] that Boost provides in its boost:smart_ptr[] library. They are objects that manage the lifetime of other objects, automatically deleting the managed object when it is no longer needed. See the <<Smart Pointers>> section.
+
+. *Does Boost provide a testing framework?*
++
+Yes, boost:test[] is the unit testing framework provided by Boost. It includes tools for creating test cases, test suites, and for handling expected and unexpected exceptions. Refer to xref:testing-debugging.adoc[].
+
+. *What is Boost.Asio?*
++
+boost:asio[] is a library that provides support for _asynchronous_ input/output (I/O), a programming concept that allows operations to be executed without blocking the execution of the rest of the program.
+
+. *What is Boost.MP11?*
++
+boost:mp11[] (MetaProgramming Library for pass:[C++]11) is a Boost library designed to bring powerful metaprogramming capabilities to pass:[C++] programs. It includes a variety of templates that can be used to perform compile-time computations and manipulations. Refer to <<Metaprogramming>>.
+
+. *Does Boost provide a library for threading?*
++
+Yes, boost:thread[] provides a pass:[C++] interface for creating and managing threads, as well as primitives for synchronization and inter-thread communication. In addition, boost:atomic[] provides atomic operations and memory ordering primitives for working with shared data in multi-threaded environments. boost:lockfree[] provides lock-free data structures and algorithms for concurrent programming, allowing multiple threads to access shared data concurrently without explicit synchronization using locks or mutexes. For a lighter approach to multi-threading, consider boost:fiber[]. Fibers offer a high-level threading abstraction that allows developers to write asynchronous, non-blocking code with minimal overhead compared to traditional kernel threads. 
+
+. *What is the Boost Spirit library?*
++
+boost:spirit[] is a library for building recursive-descent parsers directly in pass:[C++]. It uses template metaprogramming techniques to generate parsing code at compile time. Refer to <<Metaprogramming>>.
+
+. *I like algorithms, can you pique my interest with some Boost libraries that support complex algorithms?* 
++
+Boost libraries offer a wide range of algorithmic and data structure support. Here are five libraries that you might find interesting:
+
++
+* boost:graph[]: This library provides a way to represent and manipulate graphs. It includes algorithms for breadth-first search, depth-first search, https://en.wikipedia.org/wiki/Dijkstra%27s_algorithm[Dijkstra's shortest paths], https://en.wikipedia.org/wiki/Kruskal%27s_algorithm[Kruskal's minimum spanning tree], and much more.
+
+* boost:geometry[]: This library includes algorithms and data structures for working with geometric objects. It includes support for spatial indexing, geometric algorithms (like area calculation, distance calculation, intersections, etc.), and data structures to represent points, polygons, and other geometric objects.
+
+* boost:multiprecision[]: If you need to perform computations with large or precise numbers, this library can help. It provides classes for arbitrary precision arithmetic, which can be much larger or more precise than the built-in types.
+
+* boost:compute[]: This library provides a pass:[C++] interface to multi-core CPU and GPGPU (General Purpose GPU) computing platforms based on OpenCL. It includes algorithms for sorting, searching, and other operations, as well as containers like vectors and deques.
+
+* boost:spirit[]: If you're interested in parsing or generating text, this library includes powerful tools based on formal grammar rules. It's great for building compilers, interpreters, or other tools that need to understand complex text formats.
+
+. *I am tasked with building a real-time simulation of vehicles in pass:[C++]. What Boost libraries might give me the performance I need for real-time work, and support a simulation?*
++
+Refer to xref:task-simulation.adoc[].
+
+. *Which of the open source molecular modelling libraries work well with the Boost C++ libraries, for adding additional functionality such as cooperative design or persistent storage?*
++
+There are several high-quality open source projects whose designs and APIs play well with Boost — especially when you want to add capabilities such as:
++
+* cooperative design / coroutine-oriented workflows
+* persistent storage and versioning
+* extensible geometry and topology
+* strong numerics and precision
+* interoperability with other C++ systems
++
+Projects to look at include:
++
+[cols="1,3",options="header",stripes=even,frame=none]
+|===
+| *Name* | *Description*
+| http://openbabel.org/[OpenBabel] | A general-purpose cheminformatics toolkit for reading, writing, and converting molecular formats, handling atom pairs, fingerprints, properties, etc. It has a header-only friendly designs that is easy to combine with boost:geometry[] and boost:serialization[].
+| https://www.rdkit.org/[RDKit] | A mature pass:[C++] cheminformatics and modeling library widely used in computational chemistry and machine learning workflows. RDKit has a pure pass:[C++] core with Python bindings, so Boost can extend it without Python. Should work well with boost:property-tree[] and boost:accumulators[].
+| https://openmm.org/[OpenMM] | A GPU-accelerated library for molecular dynamics (part of SimTK). Uses POD (plain old data) structures, making them easy to adapt to boost:container[]. Workflows built around tasks can be coroutine-ified for cooperative pipelines, and its data analysis map nicely to boost:math[].
+| https://manual.gromacs.org/current/index.html[GROMACS] | Industry-strength molecular dynamics library originally in C; now multiple pass:[C++] wrapper layers exist. Molecules and topology data can be wrapped into boost:geometry[] point types and distributed simulation can use boost:mpi[] (Message Passing Interface) for cooperative cluster jobs.
+|===
+
+. *What Boost libraries most use lambda functions effectively?*
++
+A lambda is an annonymous function that can be defined directly within an expression, without first giving it a name. Lambdas have become one of the defining features of modern pass:[C++] programming, and many Boost libraries were redesigned to take advantage of them:
++
+[cols="1,3",options="header",stripes=even,frame=none]
+|===
+| Boost Library   |  Typical Purpose  
+| boost:asio[]      | Completion handlers for asynchronous operations 
+| boost:thread[]    | Launching worker threads                        
+| boost:signals2[]  |  Connecting event handlers                      
+| boost:range[]     | Predicates and transformations                  
+| boost:algorithm[] | Comparison and search predicates                
+| boost:fiber[]     | Fiber entry points                              
+| boost:cobalt[]    | Coroutine-based asynchronous callbacks          
+| boost:process[]   | Process output handlers                         
+| boost:gil[]       |  Pixel processing operations                    
+| boost:graph[]     | Visitors and custom algorithms                  
+|===
+
+
+== See Also
+
+* xref:faq.adoc[]
