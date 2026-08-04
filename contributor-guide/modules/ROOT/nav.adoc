@@ -9,6 +9,17 @@ Official repository: https://github.com/boostorg/website-v2-docs
 
 * xref:getting-involved.adoc[]
 * xref:contributors-faq.adoc[]
+** xref:cfaq/adding-new-libraries.adoc[]
+** xref:cfaq/boost-software-license.adoc[]
+** xref:cfaq/development-environments.adoc[]
+** xref:cfaq/documentation.adoc[]
+** xref:cfaq/existing-boost-libraries.adoc[]
+** xref:cfaq/generative-ai.adoc[]
+** xref:cfaq/modular-boost.adoc[]
+** xref:cfaq/post-release-engagement.adoc[]
+** xref:cfaq/safecpp.adoc[]
+** xref:cfaq/security.adoc[]
+** xref:cfaq/testing.adoc[]
 
 * Requirements
 ** xref:requirements/library-requirements.adoc[]

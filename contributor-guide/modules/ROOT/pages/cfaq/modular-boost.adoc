@@ -1,0 +1,45 @@
+////
+Copyright (c) 2024 The C++ Alliance, Inc. (https://cppalliance.org)
+
+Distributed under the Boost Software License, Version 1.0. (See accompanying
+file LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
+
+Official repository: https://github.com/boostorg/website-v2-docs
+////
+= Modular Boost
+:navtitle: Modular Boost
+
+== FAQ
+
+. *What is meant by "Modular Boost"?*
++
+Technically, Modular Boost consists of the Boost super-project and separate projects for each individual library in Boost. In terms of Git, the Boost super-project treats the individual libraries as submodules. Currently (early 2024) when the Boost libraries are downloaded and installed, the build organization does _not_ match the modular arrangement of the Git super-project. This is largely a legacy issue, and there are advantages to the build layout matching the super-project layout. This concept, and the effort behind it, is now known as "Modular Boost".
++
+In the past, the term has been used more broadly to refer simply to libraries in different repositories. This definition has now been tightened to mean a flat layout where each library is in its own sub-module, and there are no sub-libraries as there have been in the past (for example, the `numeric` libraries).
++
+Refer to xref:superproject/overview.adoc[] for a full description of the super-project.
+
+. *What exactly is a "modular arrangement"?*
++
+It's when the libraries can be used, and hence built, without creating the monolithic headers, without needing the root build files, and without needing the libraries to be arranged in the usual `root/libs/<name>` format.
+
+. *Will the move to Modular Boost change testing?*
++
+No, unless you want to. You will still be able to test with the current non-modular way. But you could also test the modular way.
+
+. *How will modular Boost work if there is no `root/libs/<name>` structure? Or is the structure still required?*
++
+The structure is still required for things like testing and documentation building.
+
+. *What happens to the numeric libraries that are currently sub-libraries, when sub-libraries are no longer supported?*
++
+The numeric libraries have been divided into four packages: libboost-numeric-conversion/, libboost-numeric-interval/, libboost-numeric-odeint/, libboost-numeric-ublas/.
+
+
+
+
+== See Also
+
+
+* xref:contributors-faq.adoc[]
+

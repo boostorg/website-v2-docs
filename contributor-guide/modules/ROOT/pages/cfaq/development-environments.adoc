@@ -1,0 +1,33 @@
+////
+Copyright (c) 2024 The C++ Alliance, Inc. (https://cppalliance.org)
+
+Distributed under the Boost Software License, Version 1.0. (See accompanying
+file LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
+
+Official repository: https://github.com/boostorg/website-v2-docs
+////
+= Development Environments
+:navtitle: Development Environments
+
+== FAQ
+
+. *Many developers opt for lightweight integrated developer environments (IDEs), rather than the full-fledged IDE. What lightweight IDEs are popular for pass:[C++] development?*
++
+There are several popular options for both Windows and Linux. https://www.jetbrains.com/clion/[CLion], developed by JetBrains, is a cross-platform IDE that offers advanced code analysis, refactoring tools, and integration with the CMake build system, which is commonly used in pass:[C++] projects.
++
+https://www.gnu.org/software/emacs/[GNU Emacs] and https://www.vim.org/[Vim] are highly configurable and popular among developers who prefer a more minimalistic environment. They offer powerful features for editing code, and many plugins are available to enhance development workflows.
++
+https://www.qt.io/product/development-tools[Qt Creator] provides features like code completion, syntax highlighting, and debugging support for pass:[C++] and Qt (projects that use the Qt framework).
++
+https://www.sublimetext.com/index2[Sublime Text] is a lightweight yet powerful text editor known for its speed and simplicity. It offers features like syntax highlighting, multiple selections, and a wide range of plugins for enhancing functionality, including support for pass:[C++] development.
++
+https://atom-editor.cc/[Atom] is an open-source text editor developed by GitHub. It's highly customizable and extensible through packages, and provides features like syntax highlighting, auto-completion, and project navigation.
++
+There are many other tools, Microsoft's https://visualstudio.microsoft.com/[Visual Studio] provides a full IDE and is well respected as a professional development environment, and https://code.visualstudio.com/Download[Visual Studio Code] is a lighter weight but versatile code editor that can be extended and customized with various extensions.
+
+
+== See Also
+
+
+* xref:contributors-faq.adoc[]
+
