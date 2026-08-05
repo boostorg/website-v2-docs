@@ -79,5 +79,5 @@ Use it. The C++ community will appreciate your generosity.
 
 == See Also
 
-* xref:contributor-guide:ROOT:contributors-faq.adoc#boostsoftwarelicense[Contributors FAQ: Boost Software License]
+* xref:contributor-guide:ROOT:cfaq/boost-software-license.adoc[Contributors FAQ: Boost Software License]
 

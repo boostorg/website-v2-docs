@@ -161,7 +161,7 @@ A comprehensive review of the adaptors in the standard can be found in https://d
 
 == Type Generators
 
-Note:: The _type generator_ concept has largely been superseded by the more refined notion of a _metafunction_. Refer to xref:faq.adoc#templates[Templates] and the documentation for boost:mp11[].
+Note:: The _type generator_ concept has largely been superseded by the more refined notion of a _metafunction_. Refer to xref:faq/templates.adoc[] and the documentation for boost:mp11[].
 
 A type generator is a template whose only purpose is to synthesize a new type or types based on its template arguments. The generated type is usually expressed as a nested `typedef` named, appropriately `type`. A type generator is usually used to consolidate a complicated type expression into a simple one.
 

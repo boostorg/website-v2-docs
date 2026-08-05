@@ -28,4 +28,4 @@ The license requirements:
 
 == See Also
 
-* xref:contributors-faq.adoc#boostsoftwarelicense[Contributors FAQ: Boost Software License]
+* xref:cfaq/boost-software-license.adoc[Contributors FAQ: Boost Software License]

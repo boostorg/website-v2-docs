@@ -73,5 +73,5 @@ Permission to use the Boost Logo is granted for as long as the usage is consiste
 
 == See Also
 
-* xref:contributors-faq.adoc#boostsoftwarelicense[Contributors FAQ: Boost Software License]
+* xref:cfaq/boost-software-license.adoc[Contributors FAQ: Boost Software License]
 
