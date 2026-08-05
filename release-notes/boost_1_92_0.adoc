@@ -74,6 +74,10 @@ build, and was never supported by `FindBoost`.
 ** The `server-flex-awaitable` example dispatches cancellation to the task's strand.
 ** Removed dependency on Boost.Functional.
 
+* boost_phrase:library[Charconv,/libs/charconv/]:
+** Added CUDA support allowing both `to_chars` and `from_chars` for integers to be used in CUDA kernels
+** Fixed support for Clang on PPC64LE as it keeps `long double` and `__float128` as distinct types which was previously considered invalid via `static_assert`
+
 * boost_phrase:library[CointainerHash,/libs/container_hash/]:
 ** Hashing a valueless `std::variant` instance no longer throws.
 
@@ -90,6 +94,10 @@ See the Hub Container chapter in the Container documentation for more informatio
 
 * boost_phrase:library[Conversion,/libs/conversion/]:
 ** C++20 Module `boost.conversion` was implemented. Many thanks to https://github.com/fdr400[Fedor Osetrov] for the PR (boost_gh:pr[conversion,43])!
+
+* boost_phrase:library[Decimal,/libs/decimal/]:
+** Added initial CUDA support allowing `decimal32_t`, `decimal64_t`, and `decimal128_t` to be used in CUDA kernels
+** Added `decompose` function which returns the significand, exponent, and sign without normalization (i.e. in their current cohort)
 
 * boost_phrase:library[DLL,/libs/dll/]:
 ** Fixed `smart_library` constructors from `shared_library` (boost_gh:pr[dll,114). Many thanks to https://github.com/stima[R. Savchenko] for the PR!
@@ -179,6 +187,11 @@ handling of rewritten relational operators (boost_gh:pr[icl,54]).
    thread that has claimed a slot can block progress, so the queue is not strictly
    lock-free.
 
+* boost_phrase:library[Math,/libs/math/]:
+** Added a degree of freedom finder to the Student's T and Non-centeral F disributions
+** Fixed CUDA compilation where host functions were invalidly being marked as device during compilation
+** Increased testing coverage of distributions leading to several overflow fixes
+
 * boost_phrase:library[Mp11,/libs/mp11/]:
 ** Improved the performance of a number of algorithms (contributed by Jonathan Poelen)
 
@@ -208,6 +221,10 @@ handling of rewritten relational operators (boost_gh:pr[icl,54]).
   boost_at:/libs/interprocess[Boost.Interprocess] allocators. 
 ** Fixed a performance issue with hashed indices when rehashing at very large container
   sizes (boost_gh:pr[multi_index,94]). Contributed by Daniel Kr&aacute;l.
+
+* boost_phrase:library[Multiprecision,/libs/multiprecision/]:
+** Added `data()` member function to float128 to match the rest of the library
+** Fixed issue blocking compilation of constexpr expression templates with Clang
 
 * boost_phrase:library[MySQL,/libs/mysql/]:
 ** Added a way to configure which character set the server uses by default,
