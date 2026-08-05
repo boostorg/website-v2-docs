@@ -1,0 +1,58 @@
+////
+Copyright (c) 2024 The C++ Alliance, Inc. (https://cppalliance.org)
+
+Distributed under the Boost Software License, Version 1.0. (See accompanying
+file LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
+
+Official repository: https://github.com/boostorg/website-v2-docs
+////
+= Testing
+:navtitle: Testing
+
+== FAQ
+
+. *For my first Boost library, is there a recommended test harness or utility of some sort that is easy to get going with?*
++
+Yes, while benchmarking libraries is surprisingly difficult to do well, a lot of developers find https://github.com/google/benchmark/tree/main[Google benchmark] helpful.
+
+. *Is it considered necessary to have a clean-machine, or to turn off internet connection if it is not part of the test?*
++
+The answer is "no" in both cases. Yes most performance results are dominated by measurement noise, OS scheduling, CPU power management, or unrelated background activity. Try to minimize this background activity during testing, though building a clean-machine or disconnecting the internet is not considered necessary and can be quite impractical.
++
+To reduce the impact of noise, consider performing at least 100 iterations of any process, and often the _median_ (the middle value after sorting) can be more useful than a calculated average (total response times divided by number of tests). For example, if you run a test five times and get: 10, 10, 10, 11, 500 ms as results. The calculated average is over 100, yet the median is 10. The result of 500 ms is an _outlier_ and may need to be handled differently to get useful results. Basically, the median tells you _typical_ behavior. Reporting on the _standard deviation_ can also be valuable.
++
+Consider the effect of caching (often referred to as "warm up" in the field of testing). The first run of any program can produce a misleading result due to caches, branch predictors, turbo boost, frequency scaling, and so on. Perhaps even run for quite a few iterations before starting your timers. 
++
+Do consider running your tests on multiple machines, and remember you need a controlled and repeatable environment.
+
+. *If I am upgrading my library, does it make sense to compare performance with the previous version?*
++
+Yes, very much so, many Boost maintainers keep benchmark programs in the repository and run them before major changes. Often comparing your library against a previous version is more useful than comparing with another library. Some library to library comparison may be necessary, though a true comparison is fraught with difficulties.
+
+. *What should I consider benchmarking?*
++
+Before writing any benchmark, decide what you're measuring. A benchmark without a specific question often produces numbers that are hard to interpret. Consider asking specific questions at three levels:
++
+* Micro-benchmarks : individual functions, algorithms, data structures
+* Component benchmarks : a parser, serializer, scheduler, etc.
+* End-to-end benchmarks : realistic workloads
+
+. *What Boost libraries are useful examples of how to add Continuous Integration (CI) into the library testing process?*
++
+The following libraries are solid examples of how Continuous Integration (CI) is integrated into the testing process:
++
+* boost:asio[] is a cross-platform library for network and low-level I/O programming that relies heavily on CI systems for testing and validation. 
+* boost:test[] supports unit testing in pass:[C++] and provides a framework for writing and running test cases, as well as utilities for organizing and reporting test results. boost:test[] leverages CI to ensure the correctness and reliability of its functionality across different platforms, compilers, and network configurations.
+* boost:thread[], a set of classes and functions for multithreading, is tested rigorously using CI systems to verify its correctness, performance, and portability across various platforms and environments. CI helps identify threading-related issues, including feared and difficult-to-debug race conditions.
+* boost:property-tree[] reads, manipulates and writes structured data. CI is used to validate the correctness and robustness of the parsing, serialization and manipulation features across diverse use cases and data sources.
+* boost:filesystem[] relies on CI systems to validate its functionality across different operating systems, file systems, and compiler environments, from basic file I/O operations to more complex file management tasks.
++
+By studying how these libraries implement CI into their testing processes, newcomers can gain valuable insights into best practices for ensuring the quality and reliability of their own library contributions.
++
+Refer also to xref:testing/continuous-integration.adoc[].
+
+
+== See Also
+
+* xref:contributors-faq.adoc[]
+
