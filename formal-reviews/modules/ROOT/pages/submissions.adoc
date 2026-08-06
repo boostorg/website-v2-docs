@@ -159,6 +159,6 @@ Libraries which have been abandoned will be put in care of a maintenance team.
 
 == See Also
 
-* xref:contributor-guide:ROOT:contributors-faq.adoc#security[Contributor Guide FAQ: Security]
+* xref:contributor-guide:ROOT:cfaq/security.adoc[Contributor Guide FAQ: Security]
 * xref:contributor-guide:ROOT:requirements/library-requirements.adoc[]
 
