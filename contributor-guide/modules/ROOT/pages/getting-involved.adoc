@@ -100,6 +100,8 @@ NOTE: All libraries in Boost are tested when the super-project is tested, so eve
 
 This is the big dog of contributions. There are developers who have contributed several libraries to Boost. Start by reading the xref:requirements/library-requirements.adoc[] section, and make sure to engage the Boost community _before_ getting too deep into a massive coding project.
 
+For what to expect _after_ you have released a library, refer to xref:cfaq/post-release-engagement.adoc[].
+
 == See Also
 
 * xref:contributor-community-introduction.adoc[]
