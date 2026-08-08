@@ -78,7 +78,7 @@ build, and was never supported by `FindBoost`.
 ** Added CUDA support allowing both `to_chars` and `from_chars` for integers to be used in CUDA kernels
 ** Fixed support for Clang on PPC64LE as it keeps `long double` and `__float128` as distinct types which was previously considered invalid via `static_assert`
 
-* boost_phrase:library[CointainerHash,/libs/container_hash/]:
+* boost_phrase:library[ContainerHash,/libs/container_hash/]:
 ** Hashing a valueless `std::variant` instance no longer throws.
 
 * boost_phrase:library[Container,/libs/container/]:
