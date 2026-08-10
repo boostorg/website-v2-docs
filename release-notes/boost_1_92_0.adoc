@@ -57,6 +57,32 @@ build, and was never supported by `FindBoost`.
 // ** Conform to `std::pointer_traits` requirements (boost_gh:pr[interprocess,32]).
 // ** Fixed `named_condition_any` fails to notify (boost_gh:issue[interprocess,62]).
 
+* boost_phrase:library[Asio,/libs/asio/]
+** Added a `"scheduler"` / `"assume_continuation"` configuration parameter, which allows posted handlers to be added to a fast thread-local queue.
+** Added `"reactor"` configuration parameters for tuning the io_uring backend: `io_uring_ring_count`, `io_uring_ring_size`, `io_uring_submit_batch_size` and `io_uring_iowait`.
+** Added the ability to configure `ssl::stream<>`'s internal buffer sizes.
+** Added a forward declarations header `boost/asio/fwd.hpp` to safely forward declare Asio class names when using the versioned namespace.
+** Added an example for using `cancel_after` with coroutines.
+** Added support for `co_composed` under `BOOST_ASIO_NO_EXCEPTIONS`.
+** Added a missing optimisation for `concurrency_hint == 1` in `io_context::poll_one()`.
+** Changed all exception classes to use inline implementations, to fix an undefined symbol error on some platforms when using separate compilation.
+** Changed constants and CPOs to use external linkage for C++17 and later.
+** Changed "slim" mutexes to use futexes on Linux.
+** Changed the reactor to use `MSG_DONTWAIT`, if supported, rather than setting the socket to be non-blocking.
+** Fixed two `co_composed` crashes on MSVC, one when using multiple completion signatures, and one due to insufficient alignment.
+** Fixed the return type on one `cancel_after` overload.
+** Fixed an integer truncation issue in `basic_streambuf::commit`/`consume`.
+** Fixed a buffer invalidation error triggered when SSL streams are moved, and clarified the buffer invalidation semantics.
+** Fixed a compilation error, seen on some compilers, that occurs when using `post`, `dispatch` or `defer` with a completion handler.
+** Fixed `parallel_group` handling of non-terminal cancellation requests.
+** Fixed some thread sanitizer warnings due to atomic thread fences, and added extra thread sanitizer instrumentation.
+** Fixed a signed/unsigned warning in `basic_resolver_results`, and suppressed some case fall-through warnings.
+** Fixed `experimental::channel` compilation with older versions of MSVC.
+** Fixed the `multicast::enable_loopback` socket option size on NetBSD and OpenBSD.
+** Fixed standard library coroutine detection when using `clang-cl`.
+** Improved cross-referencing within the documentation.
+** Consult the boost_at:/doc/libs/1_92_0/doc/html/boost_asio/history.html[Revision History] for further details.
+
 * boost_phrase:library[Assert,/libs/assert/]:
 ** Fix `BOOST_VERIFY` in the rare case of both `BOOST_ENABLE_ASSERT_HANDLER` and `BOOST_ENABLE_ASSERT_DEBUG_HANDLER` being defined.
 
