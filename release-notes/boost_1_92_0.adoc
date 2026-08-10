@@ -195,6 +195,10 @@ handling of rewritten relational operators (boost_gh:pr[icl,54]).
 * boost_phrase:library[Mp11,/libs/mp11/]:
 ** Improved the performance of a number of algorithms (contributed by Jonathan Poelen)
 
+* boost_phrase:library[MQTT5,/libs/mqtt5/]:
+** `mqtt_client::async_run` now completes immediately with `client::error::already_running` when the client is already running (boost_gh:issue[mqtt5,54]).
+** Fixed several missing length checks when decoding packets received from the broker. Malformed packets could previously cause out-of-bounds reads or excessive memory allocation. Many thanks to https://github.com/Team-Atlanta[Team-Atlanta] for reporting these issues.
+
 * boost_phrase:library[MSM,/libs/msm/]:
 ** New features (`backmp11`):
 *** Provide an observer API for logging support (https://github.com/boostorg/msm/issues/220[#220])
