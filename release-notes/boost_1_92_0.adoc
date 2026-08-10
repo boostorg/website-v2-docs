@@ -60,7 +60,7 @@ build, and was never supported by `FindBoost`.
 * boost_phrase:library[Asio,/libs/asio/]
 ** Added a `"scheduler"` / `"assume_continuation"` configuration parameter, which allows posted handlers to be added to a fast thread-local queue.
 ** Added `"reactor"` configuration parameters for tuning the io_uring backend: `io_uring_ring_count`, `io_uring_ring_size`, `io_uring_submit_batch_size` and `io_uring_iowait`.
-** Added the ability to configure `ssl::stream<>`'s internal buffer sizes.
+** Added the ability to configure `ssl::stream<>`pass:['s] internal buffer sizes.
 ** Added a forward declarations header `boost/asio/fwd.hpp` to safely forward declare Asio class names when using the versioned namespace.
 ** Added an example for using `cancel_after` with coroutines.
 ** Added support for `co_composed` under `BOOST_ASIO_NO_EXCEPTIONS`.
