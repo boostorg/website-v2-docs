@@ -1,0 +1,69 @@
+////
+Copyright (c) 2024 The C++ Alliance, Inc. (https://cppalliance.org)
+
+Distributed under the Boost Software License, Version 1.0. (See accompanying
+file LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
+
+Official repository: https://github.com/boostorg/website-v2-docs
+////
+= Continuous Integration (CI) 
+:navtitle: Continuous Integration
+ 
+== FAQ
+
+. *What exactly is CI, and why do I need it?*
++
+Continuous Integration (CI) automatically builds and tests your library whenever changes are submitted to the repository. Instead of relying on your own machine to catch problems, CI tests the library in a clean, repeatable environment. For a Boost library, this is particularly valuable because your code will need to work with different compilers, operating systems, pass:[C++] standards, architectures, and possibly Boost dependencies.
++
+The important mindset shift is that CI isn't just a way of testing whether your code works. It's a way of discovering whether your code works in environments you don't have available locally.
+
+. *What should my CI actually test?*
++
+At minimum, your CI should answer three questions:
++
+** Does the library compile on a range of compilers?
+** Do the tests pass?
+** Does it work with the supported pass:[C++] standards and configurations?
++
+You don't need to test every possible combination yourself; the Boost infrastructure and community CI can provide broader coverage. Don't make your first CI configuration enormously complicated. Get one reliable build working first, then expand the matrix.
+
+. *Which CI service should I use?*
++
+This is probably the most confusing question for a new developer because there are many CI systems: GitHub Actions, Azure Pipelines, CircleCI, and others. Refer to xref:testing/continuous-integration.adoc[Testing: Continuous Integration] for all the systems currently in use. For a new library today, GitHub Actions is a sensible place to start, particularly as your development is already hosted on GitHub.
++
+Your library's own CI and Boost's broader CI infrastructure are not the same thing. Your own CI can provide fast feedback on every pull request. Boost's wider testing infrastructure can subsequently provide much broader testing across compilers and platforms. You do not have to recreate the entire test matrix yourself.
+
+. *What should I do when CI fails on a machine I don't have?*
++
+This is probably the most important practical lesson for a first-time CI user. Suppose you get:
++
+* Linux / GCC     PASS
+* Windows / MSVC PASS
+* macOS / Clang   FAIL
++
+Don't immediately start changing your code to make the error disappear. First determine whether this a library problem, a test problem, a build configuration problem, or an environment problem. A useful debugging sequence is:
++
+[digits]
+* CI failure
+* Read the actual compiler/test error
+* Can I reproduce it locally?
+* Is the failing configuration supported?
+* Is the failure caused by my library?
+* Fix, commit, and CI runs again
++
+This is where CI's clean environment is particularly useful. A failure can reveal assumptions your development machine has been silently satisfying — for example, an accidentally included header, an unsupported compiler feature, or reliance on a particular compiler extension.
+
+. *When should CI run, and what should I do with the results?*
++
+For a Boost library, run CI tests when:
++
+** A pull request is opened or updated
+** Changes are pushed to the main branch
+** Significant dependency or build changes are made
++
+Ideally, a pull request shouldn't be considered ready to merge while required CI checks are failing. Though a green CI build doesn't prove that your library is correct. It proves that your selected tests passed in your selected environments.
+
+
+== See Also
+
+* xref:contributors-faq.adoc[]

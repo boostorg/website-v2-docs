@@ -321,6 +321,7 @@ https://docs.docker.com/get-docker/[Docker] can be used to provide isolation, wh
 == See Also
 
 * https://github.com/boostorg/cmake[CMake Support]
+* xref:cfaq/continuous-integration.adoc[Contributors FAQ: Continuous Integration]
 * xref:testing/sanitizers.adoc[]
 * xref:version-control.adoc[]
 
