@@ -14,7 +14,10 @@ Before a library can be scheduled for formal review, an active Boost member (not
 Before submitting a library, it will help to understand the role of the review manager.
 
 * <<The Role of Review Manager>>
+* <<Reality Check>>
+* <<Rejecting a Library>>
 * <<Becoming a Review Manager>>
+* <<Review Wizards>>
 * <<See Also>>
 
 == The Role of Review Manager
@@ -48,7 +51,7 @@ The review manager works through the following process:
 Ideally, the review summary should contain all the information the manager has taken into account when coming to a decision. If there were discussions out of band, they need to be summarized. If there were discussions _on the list_ that haven't made their way into the formal reviews, they should be summarized too. Refer to the xref:writing-reviews.adoc#bestpractices[Best Practices] section on Writing Reviews for some issues to look out for. 
 
 [[realitycheck]]
-=== Reality Check
+== Reality Check
 
 The review manager is _not_ supposed to impartially reflect the community opinion, as expressed in the form of formal reviews. Instead, the review manager's role is to decide whether the library should be accepted, and the reviews help them with this, rather than decide for them. Simply put, the review manager does not impartially tally votes - reviews are not votes.
 
@@ -62,7 +65,7 @@ The review manager is _not_ supposed to impartially reflect the community opinio
 
 * If, years from now, someone would like to know why a library was accepted or rejected, they _only_ needs to read the court documents (the review posts and the review summary), and should come away with the correct understanding of what happened and why.
 
-=== Rejecting a Library
+== Rejecting a Library
 
 One of the challenging tasks a review manager might have to take on is to write rejection rationale for a submitted library. For reference, here are links to the rationale of several libraries that were rejected in recent years.
 
@@ -88,9 +91,9 @@ For links to all available acceptance and rejection rationales, refer to xref:re
 To manage a review, you should have experience with the review process and ideally expert knowledge of the library's domain. To volunteer to become a review manager, contact the current <<Review Wizards>>.
 
 [[reviewwizards]]
-=== Review Wizards
+== Review Wizards
 
-Currently the review wizards are: Matt Borland (matt@mattborland.com), Mateusz Łoskot (mateusz@loskot.net) and John Phillips (johnphillipsithaca@gmail.com). 
+Currently the only review wizard is Matt Borland (matt@mattborland.com). 
 
 == See Also
 
