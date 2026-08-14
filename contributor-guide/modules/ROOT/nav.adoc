@@ -11,6 +11,7 @@ Official repository: https://github.com/boostorg/website-v2-docs
 * xref:contributors-faq.adoc[]
 ** xref:cfaq/adding-new-libraries.adoc[]
 ** xref:cfaq/boost-software-license.adoc[]
+** xref:cfaq/continuous-integration.adoc[]
 ** xref:cfaq/development-environments.adoc[]
 ** xref:cfaq/documentation.adoc[]
 ** xref:cfaq/existing-boost-libraries.adoc[]
