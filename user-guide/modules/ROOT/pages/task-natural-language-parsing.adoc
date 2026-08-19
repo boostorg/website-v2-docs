@@ -81,17 +81,22 @@ namespace qi = boost::spirit::qi;
 
 bool parseSentence(const std::string& input) {
 
-    // Grammar: The <adjective> <noun> <verb>.
+    // Define the basic grammar elements. 'word' matches one or more alphabetic
+    // characters, while the other rules give those words grammatical meaning.
     qi::rule<std::string::const_iterator, std::string()> word = +qi::alpha;
     qi::rule<std::string::const_iterator, std::string()> article = qi::lit("The");
     qi::rule<std::string::const_iterator, std::string()> adjective = word;
     qi::rule<std::string::const_iterator, std::string()> noun = word;
     qi::rule<std::string::const_iterator, std::string()> verb = word;
 
-    // Full sentence rule
+    // Combine the individual parsers into the complete grammar:
+    // "The" followed by an adjective, noun, and verb, ending with a period.
+    // '>>' means that each parser must match in the specified sequence.
     qi::rule<std::string::const_iterator, std::string()> sentence =
         article >> qi::lit(' ') >> adjective >> qi::lit(' ') >> noun >> qi::lit(' ') >> verb >> qi::lit('.');
 
+    // Spirit advances 'begin' as characters are successfully consumed, so
+    // begin == end afterwards confirms that the entire input was parsed.
     auto begin = input.begin(), end = input.end();
     bool success = qi::parse(begin, end, sentence);
 
@@ -99,6 +104,8 @@ bool parseSentence(const std::string& input) {
 }
 
 int main() {
+    
+    // Read and validate sentences repeatedly until the user enters "exit".
     std::string input = "";
     while (input != "exit")
     {
@@ -108,6 +115,8 @@ int main() {
         if (input == "exit")
             break;
 
+        // parseSentence() returns true only when the input conforms completely
+        // to the grammar defined above.
         if (parseSentence(input)) {
             std::cout << "Valid sentence!\n";
         }
@@ -118,7 +127,6 @@ int main() {
 
     return 0;
 }
-
 ----
 
 Note:: In this code spaces have to be explicitly entered in the grammar rule. The next example shows how to skip spaces.
@@ -161,7 +169,8 @@ namespace qi = boost::spirit::qi;
 namespace ascii = boost::spirit::ascii;
 namespace phoenix = boost::phoenix;
 
-// Helper to populate symbol tables
+// Populate a qi::symbols parser from a list of words. Each word is stored
+// as both the recognized symbol and its associated string value.
 template <typename SymbolTable>
 void add_words(SymbolTable& symbols, const std::vector<std::string>& words) {
     for (const auto& word : words) {
@@ -171,14 +180,16 @@ void add_words(SymbolTable& symbols, const std::vector<std::string>& words) {
 
 int main() {
 
-    // Word categories
+    // Define the vocabulary understood by our grammar. A word must appear in
+    // the appropriate category to be recognized as that part of speech.
     std::vector<std::string> determiners = { "The", "A", "My" };
     std::vector<std::string> nouns = { "fox", "dog", "cat", "squirrel" };
     std::vector<std::string> verbs = { "jumps", "chased", "caught", "scared" };
     std::vector<std::string> adjectives = { "quick", "lazy", "sneaky", "clever" };
     std::vector<std::string> adverbs = { "loudly", "quickly", "angrily", "silently" };
 
-    // Symbol tables for parsing
+    // qi::symbols represents a set of recognized words, making it useful for
+    // vocabulary-based parsing such as nouns, verbs, adjectives, and so on.
     qi::symbols<char, std::string> dets, noun_syms, verb_syms, adj_syms, adv_syms;
     add_words(dets, determiners);
     add_words(noun_syms, nouns);
@@ -186,7 +197,7 @@ int main() {
     add_words(adj_syms, adjectives);
     add_words(adv_syms, adverbs);
 
-    // Input
+    // Read sentences repeatedly until the user enters "exit".
     std::string input = "";
 
     while (input != "exit")
@@ -196,14 +207,17 @@ int main() {
 
         if (input != "exit")
         {
-            // Iterators
+            // Spirit advances 'begin' as it consumes input; checking begin == end
+            // after parsing therefore verifies that the entire sentence was used.
             auto begin = input.begin();
             auto end = input.end();
 
-            // Output fields
+            // Variables populated by the grammar's semantic actions.
             std::string det1, adj1, noun1, adv, verb, adj2, noun2;
 
             // Grammar: Determiner [adjective] noun [adverb] verb [adjective] noun.
+            // '>>' means sequence, '-' makes a parser optional, and qi::lit('.')
+            // requires a literal period at the end of the sentence.
             bool success = qi::phrase_parse(
                 begin, end,
                 (
@@ -216,10 +230,14 @@ int main() {
                     noun_syms[phoenix::ref(noun2) = qi::_1] >>
                     qi::lit('.')
                     ),
+
+                // The skipper tells Spirit to ignore whitespace between grammar
+                // elements, so spaces need not be explicitly included in the grammar.
                 ascii::space
             );
 
-            // Result
+            // phrase_parse() must succeed AND consume the entire input; otherwise
+            // a valid prefix followed by unexpected text would still be accepted.
             if (success && begin == end) {
                 std::cout << "\nParsed successfully!\n";
                 if (!det1.empty())  std::cout << "  Determiner:  " << det1 << "\n";
