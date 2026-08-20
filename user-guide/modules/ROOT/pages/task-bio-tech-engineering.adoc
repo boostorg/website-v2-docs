@@ -19,6 +19,7 @@ This topic examines the libraries that should assist in building a bio-tech tool
 * <<Create a Phylogenetic Tree>>
 * <<Persist a Phylogenetic Tree>>
 * <<Extend the Phylogenetic Tree>>
+* <<Find Overlaps with Genomic Interval Trees>>
 * <<Next Steps>>
 * <<Footnotes>>
 * <<See Also>>
@@ -38,6 +39,8 @@ This topic examines the libraries that should assist in building a bio-tech tool
 * boost:math[], boost:multiprecision[], boost:random[] : Provide the numerical and simulation support for such processes as energy accumulation, long simulations, validation, protein folding, molecular dynamics, docking simulations, energy minimalization, among so many others.
 
 * boost:container[] : Useful for memory-stable storage of works-in-progress, notable scenarios include particles/atoms, cache-friendly structures, deterministic memory layout.
+
+* boost:icl[] : An interval container library, useful for locating overlapping sequences when examining interval trees and similar data structures.
 
 Note:: The code in this tutorial was written and tested using Microsoft Visual Studio (Visual C++ 2022, Console App project) with Boost version 1.88.0.
 
@@ -909,9 +912,249 @@ LUCA  [DNA=GTGTCCTACCCTGCAT, MYA=4000]
 Newick file written: phylo_tree.newick
 ----
 
+== Find Overlaps with Genomic Interval Trees
+
+Let's change to a different sort of tree. Let's say we have thousands or millions of genomic features, and given a genomic region, we need to find every feature that overlaps it efficiently.
+
+A trivial solution to this would be to check each feature against the region indivicually. A far more efficient approach is to build an interval tree.
+
+Say we have the following data:
+
+[cols="1,1,1,1",stripes=even,options="header",frame=none]
+|===
+| Name | Type | Lower Bound | Upper Bound
+|  BRCA1 | gene | 100 | 300
+|  BRCA1_exon2 | exon |    180 |220
+| TP53 | gene | 350 | 600
+| SNP_42 | variant | 420 | 425
+| MYC | gene |700 | 900
+|===
+
+
+An interval tree for this data can be graphically represented (for ease of our understanding):
+
+[source,text]
+----
+Chromosome Coordinates
+
+100       200       300       400       500       600       700       800       900
+ |---------|---------|---------|---------|---------|---------|---------|---------|
+ 
+ BRCA1
+ █████████████████████
+ 100               300
+ gene
+
+     BRCA1_exon2
+     █████████
+     180   220
+     exon
+                          TP53
+                           █████████████████████████
+                           350                   600
+                           gene
+
+                                  SNP_42
+                                  ██
+                                  420-425
+                                  variant
+
+                                                              MYC
+                                                              █████████████████████
+                                                              700                 900
+                                                              gene
+
+                                █████
+                                400 450
+                                QUERY
+----
+
+Looking at this graph, with the query added, it is obvious where the overlaps occur. Let's now come up with a code sample that reproduces this, and so will work with any data we provide. We'll use the interval features of boost:icl[] to help out:
+
+[source,cpp]
+----
+#include <boost/icl/interval.hpp>
+#include <iostream>
+#include <vector>
+
+namespace icl = boost::icl;
+
+// A genomic feature has a name, a biological type, and a location.
+// The location is represented by a Boost.ICL closed interval.
+struct GenomicFeature {
+    std::string name;
+    std::string type;
+    icl::closed_interval<int> location;
+};
+
+// One node in our interval tree.
+//
+// max_end records the largest endpoint anywhere in this node's
+// subtree. It allows the search algorithm to skip subtrees that
+// cannot possibly overlap the query interval.
+struct IntervalNode {
+    GenomicFeature feature;
+    int max_end;
+
+    std::unique_ptr<IntervalNode> left;
+    std::unique_ptr<IntervalNode> right;
+
+    IntervalNode(const GenomicFeature& feature)
+        : feature(feature),
+        max_end(icl::upper(feature.location)) {
+    }
+};
+
+// Insert a genomic feature into the interval tree.
+//
+// The tree is ordered by the starting position of each interval.
+void insert(std::unique_ptr<IntervalNode>& node,
+    const GenomicFeature& feature)
+{
+    if (!node) {
+        node = std::make_unique<IntervalNode>(feature);
+        return;
+    }
+
+    if (icl::lower(feature.location) <
+        icl::lower(node->feature.location))
+    {
+        insert(node->left, feature);
+    }
+    else {
+        insert(node->right, feature);
+    }
+
+    // Update the maximum endpoint for this subtree.
+    node->max_end = std::max(
+        node->max_end,
+        icl::upper(feature.location));
+}
+
+// Search the tree for features overlapping the query interval.
+//
+// The important optimization is that max_end allows us to avoid
+// searching an entire subtree when none of its intervals can reach the query.
+void search(const IntervalNode* node,
+    const icl::closed_interval<int>& query,
+    std::vector<const GenomicFeature*>& results)
+{
+    if (!node)
+        return;
+
+    // Let Boost.ICL determine whether these two intervals overlap.
+    if (icl::intersects(node->feature.location, query))
+        results.push_back(&node->feature);
+
+    // If the largest endpoint in the left subtree is before the
+    // beginning of the query, nothing in that subtree can overlap it.
+    if (node->left &&
+        node->left->max_end >= icl::lower(query))
+    {
+        search(node->left.get(), query, results);
+    }
+
+    // The right subtree is worth searching when its intervals could
+    // potentially begin before the end of the query.
+    if (node->right &&
+        icl::lower(node->feature.location) <= icl::upper(query))
+    {
+        search(node->right.get(), query, results);
+    }
+}
+
+int main()
+{
+    // A small collection of genomic features.
+    //
+    // Because we use closed intervals, both endpoints are included:
+    std::vector<GenomicFeature> features = {
+        { "BRCA1",       "gene",    icl::closed_interval<int>(100, 300) },
+        { "BRCA1_exon2", "exon",    icl::closed_interval<int>(180, 220) },
+        { "TP53",        "gene",    icl::closed_interval<int>(350, 600) },
+        { "SNP_42",      "variant", icl::closed_interval<int>(420, 425) },
+        { "MYC",         "gene",    icl::closed_interval<int>(700, 900) }
+    };
+
+    // Build the interval tree.
+    std::unique_ptr<IntervalNode> tree;
+
+    for (const auto& feature : features)
+        insert(tree, feature);
+
+    // Search for every feature overlapping chromosome positions 400 through 450.
+    auto query = icl::closed_interval<int>(400, 450);
+
+    std::vector<const GenomicFeature*> results;
+
+    search(tree.get(), query, results);
+
+    std::cout << "Features overlapping "
+        << icl::lower(query)
+        << "-"
+        << icl::upper(query)
+        << ":\n\n";
+
+    // Display the features found by the interval-tree search.
+    for (const auto* feature : results) {
+        std::cout << "  "
+            << feature->name
+            << " ("
+            << feature->type
+            << ") "
+            << icl::lower(feature->location)
+            << "-"
+            << icl::upper(feature->location)
+            << "\n";
+    }
+
+    return 0;
+}
+----
+
+Run your code:
+
+[source,text]
+----
+Features overlapping 400-450:
+
+  TP53 (gene) 350-600
+  SNP_42 (variant) 420-425
+----  
+
+Perhaps try changing, or adding to, the data and query to verify this code is robust.
+
 == Next Steps
 
 If manipulating trees, which are a form of graph, is part of your bio-tech projects, consider examining the full range of structures and methods available in boost:graph[].
+
+There are many data structures used in the bio-tech sphere, consider investigating any one of the following:
+
+[cols="1,3",stripes=even,options="header",frame=none]
+|===
+| Data Structure  | Typical Biotech Use
+| Sequences / strings                | DNA, RNA, protein sequences 
+| Graphs                             | Metabolic pathways, protein interactions, gene regulatory networks
+| De Bruijn graphs                   | Genome assembly from sequencing reads 
+| Overlap graphs                     | Genome assembly and sequence reconstruction  
+| Suffix trees / suffix arrays       | Fast DNA/RNA sequence searching and pattern matching 
+| Tries / prefix trees               | Searching collections of DNA or protein sequences 
+| Hash tables / k-mer tables         | Counting and indexing short DNA sequences   
+| Matrices / multidimensional arrays | Gene-expression data, variant data, experimental measurements  
+| Interval trees                     | Genomic regions, genes, exons, mutations, regulatory regions  
+| Phylogenetic trees                 | Evolutionary relationships
+| Directed acyclic graphs (DAGs)     | Gene Ontology and biological dependencies   
+| Bipartite graphs                   | Gene-disease, gene-protein, drug=target relationships   
+| Hypergraphs                        | Biological systems where relationships involve groups of entities 
+| Linked structures / lists          | Some sequence and graph representations  
+| Priority queues / heaps            | Genome assembly, sequence alignment, optimization  
+| Probabilistic models               | Hidden Markov Models for gene/sequence annotation  
+| Sparse matrices                    | Large biological datasets where most entries are zero 
+| Spatial indexes                    | 3-D molecular structures and spatial relationships 
+|===
+
+
+
 
 == Footnotes
 
