@@ -25,14 +25,53 @@
     menuPanel.scrollTop = 0
   }
 
+  var NAV_STATE_KEY = 'nav-open-sections'
+
+  function getNavStateKey () {
+    var title = document.querySelector('.nav-menu .title')
+    return NAV_STATE_KEY + ':' + (title ? title.textContent.trim() : 'default')
+  }
+
+  function getItemLabel (item) {
+    var text = item.querySelector('.nav-text')
+    if (text) return text.textContent.trim()
+    var link = item.querySelector(':scope > .nav-link')
+    if (link) return link.textContent.trim()
+    return null
+  }
+
+  function saveNavState () {
+    var openItems = []
+    find(menuPanel, '.nav-item.is-active').forEach(function (item) {
+      var label = getItemLabel(item)
+      if (label) openItems.push(label)
+    })
+    try { window.localStorage.setItem(getNavStateKey(), JSON.stringify(openItems)) } catch (e) {}
+  }
+
+  function restoreNavState () {
+    try {
+      var saved = JSON.parse(window.localStorage.getItem(getNavStateKey()))
+      if (!saved) return
+      find(menuPanel, '.nav-item').forEach(function (item) {
+        var label = getItemLabel(item)
+        if (label && saved.indexOf(label) !== -1) {
+          item.classList.add('is-active')
+        }
+      })
+    } catch (e) {}
+  }
+
+  restoreNavState()
+
   find(menuPanel, '.nav-item-toggle').forEach(function (btn) {
     var li = btn.parentElement
-    btn.addEventListener('click', toggleActive.bind(li))
-    var navItemSpan = findNextElement(btn, '.nav-text')
-    if (navItemSpan) {
-      navItemSpan.style.cursor = 'pointer'
-      navItemSpan.addEventListener('click', toggleActive.bind(li))
-    }
+    var childList = li.querySelector(':scope > .nav-list')
+    li.style.cursor = 'pointer'
+    li.addEventListener('click', function (e) {
+      if (e.target.closest('.nav-link') || (childList && childList.contains(e.target))) return
+      toggleActive.call(li)
+    })
   })
 
   if (explorePanel) {
@@ -123,6 +162,7 @@
       var overflowY = (rect.bottom - menuPanelRect.top - menuPanelRect.height + padding).toFixed()
       if (overflowY > 0) menuPanel.scrollTop += Math.min((rect.top - menuPanelRect.top - padding).toFixed(), overflowY)
     }
+    saveNavState()
   }
 
   function showNav (e) {
@@ -158,10 +198,5 @@
 
   function find (from, selector) {
     return [].slice.call(from.querySelectorAll(selector))
-  }
-
-  function findNextElement (from, selector) {
-    var el = from.nextElementSibling
-    return el && selector ? el[el.matches ? 'matches' : 'msMatchesSelector'](selector) && el : el
   }
 })()
