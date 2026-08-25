@@ -227,5 +227,6 @@ The libraries marked as *Optional* for Header-only add some functionality if the
 
 * xref:faq/standard-library.adoc[FAQ: Standard Library]
 * xref:formal-reviews:ROOT:review-results.adoc[]
+* https://www.boost.org/doc/libs/latest/libs/libraries.htm[Latest Boost Libraries]
 * xref:resources.adoc[]
 
