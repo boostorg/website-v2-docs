@@ -184,4 +184,6 @@ On Windows, append a version number even if you only have one version installed 
 == See Also
 
 [square]
+* xref:library-table.adoc[]
 * xref:library-naming.adoc[Library Names and Organization]
+

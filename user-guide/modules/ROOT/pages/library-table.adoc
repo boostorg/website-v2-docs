@@ -1,0 +1,198 @@
+////
+Copyright (c) 2024 The C++ Alliance |  Inc. (https://cppalliance.org)
+
+Distributed under the Boost Software License |  Version 1.0. (See accompanying
+file LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
+
+Official repository: https://github.com/boostorg/website-v2-docs
+////
+= Boost Libraries Reference
+:navtitle: Boost Libraries Reference
+
+The tables in this section should help you determine whether to use a Boost library, or whether the functionality is now available in the pass:[C++] Standard.
+
+[square]
+* <<Libraries Unique to Boost>>
+* <<Libraries Consumed into the Standard>>
+* <<See Also>>
+
+== Libraries Unique to Boost
+
+The following libraries are not included in the pass:[C++] Standard.
+
+[cols="1,1,1,2,2",stripes=even,options="header",frame=none]
+|===
+| Library | Minimum pass:[C++] | Header-only | Status | Status Notes
+| Accumulators | pass:[C++]03 | Yes | Active / Maintained | Mature statistical accumulator framework
+| Asio | pass:[C++]11 | Yes | Active | Networking and low-level I/O
+| Assert | pass:[C++]03 | Yes | Active | Core Boost utility
+| Assign | pass:[C++]11 | Yes | Maintained | Convenience initialization utilities
+| Beast | pass:[C++]11 | Yes | Active | HTTP/WebSocket; built on Asio
+| Bimap | pass:[C++]03 | Yes | Maintained | Bidirectional associative containers
+| Bloom | pass:[C++]11 | Yes | Active | Bloom filters
+| CallableTraits | pass:[C++]11 | Yes | Active | Callable type introspection
+| Call Traits | pass:[C++]03 | Yes | Maintained | Legacy type traits
+| Circular Buffer | pass:[C++]03 | Yes | Maintained | Circular buffer container
+| Cobalt | pass:[C++]20 | Yes | Active | Modern coroutine framework
+| Compute | pass:[C++]03 | *No* | Legacy / Maintained | GPU/parallel computing
+| Concept Check | pass:[C++]03 | Yes | Legacy / Maintained | Older concept-checking facilities
+| Config | pass:[C++]03 | Yes | Active | Boost infrastructure
+| Context | pass:[C++]11 | *No* | Active | Low-level context switching
+| Contract | pass:[C++]11 | *No* | Active | Contracts framework
+| Conversion | pass:[C++]11 | Yes | Maintained | Polymorphic conversion utilities
+| Convert | pass:[C++]11 | Yes | Active | Conversion framework
+| Coroutine | pass:[C++]03 | *No* | Legacy | Superseded for most new work by pass:[C++]20 coroutines
+| Coroutine2 | pass:[C++]11 | *No* | Maintained | Stackful coroutine model
+| CRC | pass:[C++]11 | Yes | Maintained | CRC algorithms
+| Describe | pass:[C++]14 | Yes | Active | Compile-time reflection-like metadata
+| DLL | pass:[C++]11 | *No* | Active | Dynamic library loading
+| Dynamic Bitset | pass:[C++]11 | Yes | Maintained | Dynamic-size bitsets
+| Exception | pass:[C++]03 | *Optional* | Maintained | Exception helpers
+| Fiber | pass:[C++]11 | *No* | Active | User-space cooperative threads
+| Flyweight | pass:[C++]03 | Yes | Maintained | Flyweight pattern implementation
+| Fusion | pass:[C++]03 | Yes | Maintained / Legacy | Heterogeneous sequence framework
+| Geometry | pass:[C++]14 | *No* | Active | Computational geometry
+| GIL | pass:[C++]14 | Yes | Active | Generic image library
+| Graph | pass:[C++]14 | *Optional* | Active | Graph algorithms and data structures
+| GraphParallel | pass:[C++]03 | *No* | Maintained | Parallel graph algorithms
+| Hana | pass:[C++]14 | Yes | Active | Modern metaprogramming
+| Hash2 | pass:[C++]11 | Yes | Active | Modern hash framework
+| Histogram | pass:[C++]14 | Yes | Active | Multidimensional histograms
+| HOF | pass:[C++]11 | Yes | Maintained | Higher-order functions
+| ICL | pass:[C++]03 | Yes | Maintained | Interval containers and interval operations
+| Interprocess | pass:[C++]03 | *No* | Active | Shared memory and process synchronization
+| Interval | pass:[C++]03 | Yes | Maintained | Numeric intervals
+| Intrusive | pass:[C++]03 | Yes | Active | Intrusive containers
+| Iostreams | pass:[C++]03 | *No* | Maintained | Stream filtering and devices
+| JSON | pass:[C++]11 | *No* | Active | JSON parsing and serialization
+| LEAF | pass:[C++]11 | Yes | Active | Lightweight error handling
+| Lexical Cast | pass:[C++]11 | Yes | Maintained | String/type conversion
+| Locale | pass:[C++]11 | *No* | Active / Maintained | Localization and Unicode support
+| Local Function | pass:[C++]03 | Yes | Legacy | Lambdas supersede principal use
+| Lockfree | pass:[C++]14 | Yes | Active | Lock-free data structures
+| Log | pass:[C++]11 | *No* | Active / Maintained | Logging framework
+| Math | pass:[C++]14 | *Optional* | Active | Numerical and special functions
+| Member Function | pass:[C++]11 | Yes | Legacy / Maintained | Member-function utilities
+| Metaparse | pass:[C++]03 | Yes | Maintained / Legacy | Compile-time parser framework
+| Meta State Machine | pass:[C++]03 | Yes | Maintained / Legacy | Compile-time state machines
+| MPI | pass:[C++]03 | *No* | Maintained | Message passing interface
+| MPL | pass:[C++]03 | Yes | Maintained / Legacy | Classic metaprogramming; Mp11 is modern alternative
+| MQTT5 | pass:[C++]17 | *No* | Active | MQTT 5 client
+| Multi-Array | pass:[C++]03 | Yes | Maintained | Multidimensional arrays
+| Multi-Index | pass:[C++]03 | *No* | Active / Maintained | Multi-index containers
+| Multiprecision | pass:[C++]14 | *No* | Active | Arbitrary precision arithmetic
+| MySQL | pass:[C++]11 | *No* | Active | MySQL client library
+| Nowide | pass:[C++]11 | *No* | Active | Portable Unicode-aware Windows interfaces
+| Numeric Conversion | pass:[C++]03 | Yes | Maintained | Checked numeric conversions
+| Odeint | pass:[C++]11 | Yes | Active / Maintained | Ordinary differential equations
+| OpenMethod | pass:[C++]17 | Yes | Active | Open multi-method dispatch
+| Operators | pass:[C++]03 | Yes | Maintained / Legacy | Operator generation utilities
+| Outcome | pass:[C++]14 | Yes | Active | Outcome/result-style error handling
+| Parameter | pass:[C++]03 | Yes | Maintained / Legacy | Function parameter framework
+| Parser | pass:[C++]17 | Yes | Active | Parser combinators
+| PFR | pass:[C++]14 | Yes | Active | Precise function reflection-like aggregate utilities
+| Phoenix | pass:[C++]03 | Yes | Maintained / Legacy | Expression templates - especially for Spirit
+| PolyCollection | pass:[C++]11 | Yes | Active / Maintained | Polymorphic collections
+| Pool | pass:[C++]03 | Yes | Maintained | Memory pools
+| Predef | pass:[C++]98 | Yes | Active | Platform/compiler detection infrastructure
+| Preprocessor | pass:[C++]03 | Yes | Active | Preprocessor metaprogramming
+| Process | pass:[C++]11 | *No* | Active | Process management
+| Program Options | pass:[C++]11 | *No* | Maintenance | Essentially done; stability is primary goal
+| Property Map | pass:[C++]11 | Yes | Maintained | BGL property-map abstraction
+| Property Tree | pass:[C++]11 | Yes | Maintained | Hierarchical configuration data
+| Proto | pass:[C++]03 | Yes | Legacy / Maintained | Expression-template framework
+| Python | pass:[C++]03 | *No* | Active / Maintained | pass:[Python/pass:[C++]] interoperability
+| QVM | pass:[C++]03 | Yes | Active | Quaternions, vectors and matrices
+| Rational | pass:[C++]11 | Yes | Maintained | Rational arithmetic
+| Redis | pass:[C++]17 | *No* | Active | Redis client
+| Ref | pass:[C++]03 | Yes | Legacy / Maintained | Reference wrappers
+| Safe Numerics | pass:[C++]14 | Yes | Active | Checked numeric operations
+| Serialization | pass:[C++]03 | *No* | Active / Maintained | Serialization framework
+| Signals2 | pass:[C++]03 | Yes | Maintained | Type-safe signals and slots
+| Sort | pass:[C++]03 | Yes | Active | High-performance sorting
+| Spirit | pass:[C++]03 | Yes | Maintained / Active | Parser framework
+| Stacktrace | pass:[C++]11 | *No* | Active | Stack trace capture
+| Statechart | pass:[C++]03 | Yes | Maintained / Legacy | State machine framework
+| Static String | pass:[C++]11 | Yes | Active | Fixed-capacity strings
+| Stl Interfaces | pass:[C++]14 | Yes | Active | Reusable STL/range interfaces
+| String Algo | pass:[C++]03 | Yes | Maintained | String algorithms
+| Test | pass:[C++]11 | *Optional* | Active | Unit testing framework
+| Tokenizer | pass:[C++]03 | Yes | Maintained | Tokenization utilities
+| Tribool | pass:[C++]03 | Yes | Maintained / Legacy | Three-state boolean
+| TTI | pass:[C++]03 | Yes | Maintained / Legacy | Type trait introspection
+| Type Erasure | pass:[C++]03 | *No* | Active / Maintained | Runtime type erasure
+| Type Index | pass:[C++]11 | Yes | Active / Maintained | Portable runtime type information
+| uBLAS | pass:[C++]03 | Yes | Active / Maintained | Linear algebra
+| Units | pass:[C++]03 | Yes | Active / Maintained | Dimensional analysis
+| URL | pass:[C++]11 | *No* | Active | URL parsing/manipulation
+| Uuid | pass:[C++]11 | Yes | Active | UUID generation/manipulation
+| VMD | pass:[C++]03 | Yes | Maintained | Variadic macro data
+| Wave | pass:[C++]11 | *No* | Maintained / Active | Preprocessor implementation
+| WinAPI | pass:[C++]03 | Yes | Maintained | Windows API wrappers
+| YAP | pass:[C++]14 | Yes | Active / Maintained | Yet Another Parser framework
+|===
+
+== Libraries Consumed into the Standard
+
+The following libraries, in whole or in a significant part, are now part of the pass:[C++] Standard. If you are considering using any one of these libraries, it would be good practice to investigate the Standard equivalents before deciding whether to include any of these, as the functionality you are looking for may already be available.
+
+[cols="1,1,1,1,1,2,2",stripes=even,options="header",frame=none]
+|===
+| Library | Minimum pass:[C++] | Consumed by Standard | Standard version | Header-only | Status | Status Notes
+| Algorithm | pass:[C++]03 | Partly | pass:[C++]20+ | Yes | Active | Generic algorithms; some overlap with standard algorithms
+| Align | pass:[C++]03 | Partly | pass:[C++]11+ | Yes | Maintained | Alignment facilities largely standardized
+| Any | pass:[C++]11 | Yes | pass:[C++]17 | *No* | Maintained | std::any is standard; Boost version remains useful for compatibility
+| Array | pass:[C++]03 | Yes | pass:[C++]11 | Yes | Maintained | std::array supersedes principal use
+| Atomic | pass:[C++]11 | Partly | pass:[C++]11 | *No* | Active | Boost adds capabilities beyond std::atomic
+| Bind | pass:[C++]11 | Yes | pass:[C++]11 | Yes | Legacy / Maintained | Largely superseded by lambdas and std::bind
+| CharConv | pass:[C++]11 | Yes | pass:[C++]17 | Yes | Active | Character conversion; compatibility and extensions
+| Chrono | pass:[C++]11 | Partly | pass:[C++]11 | *No* | Maintained | std::chrono covers core functionality, Chrono adds clocks and utilities
+| Compat | pass:[C++]11 | Yes | Various | Yes | Active | Compatibility implementations for newer standard facilities
+| Compressed Pair | pass:[C++]03 | Partly | pass:[C++]20 | Yes | Maintained | Optimization utility; standard equivalents cover parts
+| Container | pass:[C++]03 | Partly | pass:[C++]11+ | *No* | Active | Containers and extensions beyond standard containers
+| Container Hash | pass:[C++]11 | Yes | pass:[C++]11+ | Yes | Maintained | Hashing support largely standardized
+| Core | pass:[C++]03 | Partly | pass:[C++]11+ | Yes | Active | Small utilities used throughout Boost
+| Date Time | pass:[C++]03 | Partly | pass:[C++]11 | *No* | Maintained / Legacy | std::chrono covers much modern use
+| Enable If | pass:[C++]03 | Yes | pass:[C++]11 | Yes | Legacy | std::enable_if
+| Endian | pass:[C++]11 | Partly | pass:[C++]20+ | Yes | Maintained | Byte-order utilities
+| Filesystem | pass:[C++]11 | Yes | pass:[C++]17 | *No* | Legacy / Maintained | std::filesystem supersedes core use
+| Foreach | pass:[C++]03 | Yes | pass:[C++]11 | Yes | Legacy | Range-based for supersedes principal use
+| Format | pass:[C++]11 | Partly | pass:[C++]20 | *No* | Active | Formatting beyond std::format in some areas
+| Function | pass:[C++]11 | Yes | pass:[C++]11 | Yes | Maintained | std::function
+| Functional | pass:[C++]03 | Partly | pass:[C++]11+ | Yes | Legacy / Maintained | Functional utilities largely standardized
+| Heap | pass:[C++]14 | Partly | pass:[C++]11 | Yes | Active | Heap and priority-queue structures
+| Integer | pass:[C++]03 | Partly | pass:[C++]11 | Yes | Maintained | Integer types and constants
+| Iterator | pass:[C++]11 | Partly | pass:[C++]20 | Yes | Maintained | Iterator utilities; ranges supersede some use
+| Lambda | pass:[C++]03 | Yes | pass:[C++]11 | Yes | Legacy | pass:[C++]11 lambdas supersede principal use
+| Lambda2 | pass:[C++]14 | Yes | pass:[C++]11 | Yes | Legacy / compatibility | Lambda-related compatibility facility
+| Move | pass:[C++]03 | Partly | pass:[C++]11 | Yes | Maintained | Move semantics compatibility
+| Optional | pass:[C++]11 | Yes | pass:[C++]17 | Yes | Maintained | std::optional
+| Random | pass:[C++]11 | Partly | pass:[C++]11 | *Optional* | Active / Maintained | Random distributions and engines
+| Range | pass:[C++]03 | Partly | pass:[C++]20 | Yes | Legacy / Maintained | Ranges supersede much of original role
+| Ratio | pass:[C++]11 | Yes | pass:[C++]11 | Yes | Maintained | std::ratio
+| Regex | pass:[C++]11 | Yes | pass:[C++]11 | *No* | Maintained | std::regex covers standard regex facilities
+| Scope | pass:[C++]11 | Partly | pass:[C++]26 | Yes | Active | Scope guards and related facilities
+| Smart Ptr | pass:[C++]11 | Yes | pass:[C++]11 | Yes | Maintained | std::shared_ptr/unique_ptr and related facilities
+| Static Assert | pass:[C++]03 | Yes | pass:[C++]11 | Yes | Deprecated / merged | static_assert standardized; functionality merged into Config
+| String View | pass:[C++]03 | Yes | pass:[C++]17 | Yes | Legacy / compatibility | std::string_view
+| Swap | pass:[C++]03 | Partly | pass:[C++]11 | Yes | Maintained | Swap customization utilities
+| System | pass:[C++]11 | Partly | pass:[C++]11 | *Optional* | Active | Boost.System extends std::error_code facilities
+| Thread | pass:[C++]11 | Partly | pass:[C++]11 | *No* | Active / Maintained | Threading facilities beyond the standard set
+| Timer | pass:[C++03] | Partly | pass:[C++]11 | *No* |  Maintained / Legacy | The newer CPU timers provide functionality beyond std::chrono
+| Tuple | pass:[C++]03 | Yes | pass:[C++]11 | Yes | Maintained / Legacy | std::tuple
+| Type Traits | pass:[C++]03 | Yes | pass:[C++]11 | Yes | Maintained | std::type_traits
+| Unordered | pass:[C++]11 | Yes | pass:[C++]11 | Yes | Active | Unordered containers and extensions
+| Utility | pass:[C++]03 | Partly | pass:[C++]11+ | Yes | Maintained | Collection of small utilities
+| Variant | pass:[C++]11 | Yes | pass:[C++]17 | Yes | Maintained / Legacy | std::variant
+| Variant2 | pass:[C++]11 | Yes, conceptually | pass:[C++]17 | Yes | Active | Alternative variant implementation
+| Xpressive | pass:[C++]03 | Partly | pass:[C++]11 | Yes | Legacy | Regex DSL - generally superseded by standard regex
+|===
+
+
+Note:: The libraries marked as *Optional* for Header Only add some functionality if the linked-binary version of the library is selected. For more details refer to xref:header-organization-compilation.adoc#optionalcompiledbinaries[Optional Compiled Binaries], and to the libraries specific documentation on how to enable either version.
+
+== See Also
+
+* xref:faq/standard-library.adoc[FAQ: Standard Library]
+* xref:resources.adoc[]
+

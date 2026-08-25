@@ -97,4 +97,5 @@ A lambda is an annonymous function that can be defined directly within an expres
 
 == See Also
 
+* xref:library-table.adoc[]
 * xref:faq.adoc[]
