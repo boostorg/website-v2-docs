@@ -22,6 +22,7 @@ Most Boost libraries provide useful and advanced functionality unavailable in th
 +
 Note:: When a Boost library is included in the Standard Library, not _all_ of the functionality provided is necessarily standardized. For example, boost:system[] has been standardized but still contains additional functionality not available in the standard. Although standardization might include all of the functionality of a Boost library, performance is not always identical and it can be of value to use the Boost version for higher performance (for example, boost:regex[]). In a few cases, the whole of the Boost library is standardized and the Boost version does not improve on performance (for example, boost:thread[]). 
 +
+.. Refer to xref:library-table.adoc[].
 .. Check the Boost library documentation, as their relationship to the Standard Library is sometimes documented. Both the Overview and the Release Notes are good sources of information for mentions of standardization.
 .. The https://en.cppreference.com/w/cpp/standard_library[C++ Standard Library] is also well documented. Check to see if the functionality you are looking for is now part of the standard. If you have specific features in mind, comparing the Boost and Standard library functions and classes should provide you with a definitive answer on which to use.
 .. If you are less certain of the specific features you need, developers often discuss the status and relevance of Boost libraries in comparison to the standard. Browse, or ask a question in, https://stackoverflow.com/search?q=Boost&s=f447efbc-2ea3-4846-a5d3-0f8676b3f65c[Stack Overflow], https://www.reddit.com/search/?q=Boost+libraries&type=link&cId=28644139-c8b3-48a5-87b6-0c9822188ed4&iId=7f450c5d-6180-4538-a39f-7df7876df4e9&onetap_auto=true&one_tap=true[Reddit], or the https://lists.boost.org/mailman/listinfo.cgi/boost[Boost Developers Mailing List].
@@ -93,4 +94,5 @@ To an extent, pass:[C++20] was the "Coroutines and Ranges" release, then pass:[C
 
 == See Also
 
+* xref:library-table.adoc[]
 * xref:faq.adoc[]

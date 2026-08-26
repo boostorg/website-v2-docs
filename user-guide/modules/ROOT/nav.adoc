@@ -84,5 +84,6 @@ Official repository: https://github.com/boostorg/website-v2-docs
 ** xref:glossary.adoc[]
 
 * Reference
+** xref:library-table.adoc[]
 ** xref:library-naming.adoc[]
 ** xref:header-organization-compilation.adoc[]

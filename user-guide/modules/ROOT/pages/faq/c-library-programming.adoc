@@ -270,3 +270,4 @@ A coding project becomes a beast when two or more of the following conditions ar
 == See Also
 
 * xref:faq.adoc[]
+* xref:library-table.adoc[]
