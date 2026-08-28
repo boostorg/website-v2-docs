@@ -58,74 +58,165 @@ For examples of networking and threading code, refer to xref:task-networking.ado
 [source,cpp]
 ----
 #include <boost/filesystem.hpp>
-#include <boost/system/error_code.hpp>
 #include <iostream>
 #include <fstream>
 
+// Give the Boost namespaces shorter names to make the example easier to read.
+// "fs" is for Boost.Filesystem and "sys" is for Boost.System.
 namespace fs = boost::filesystem;
 namespace sys = boost::system;
 
-//  Check and report system-specific errors
-void handle_error(const sys::error_code& ec, const std::string& action) {
-    if (ec) {
-        std::cerr << "Error while " << action << ": " << ec.message()
-            << " (Code: " << ec.value() << ")\n";
+
+// Report the result of a filesystem operation that uses a Boost.System error_code.
+//
+// Many Boost.Filesystem functions have overloads that accept an error_code.
+// Instead of throwing an exception when something goes wrong, these overloads
+// store the error information in the supplied error_code object.
+//
+// This function demonstrates how that error information can be inspected.
+void report_status(const sys::error_code& error_code, const std::string& operation)
+{
+    if (error_code)
+    {
+        // error_code::message() converts the platform-specific error into
+        // a human-readable description, while value() provides the numeric code.
+        std::cerr << "Error while " << operation << ": "
+            << error_code.message()
+            << " (Code: " << error_code.value() << ")\n";
     }
     else
     {
-        std::cout << "All OK while " << action << '\n';
+        // A default-constructed or successfully cleared error_code evaluates
+        // to false, meaning that the operation did not report an error.
+        std::cout << "All OK while " << operation << '\n';
     }
 }
 
-int main() {
-    fs::path dir = "example_directory";
-    fs::path file = dir / "example_file.txt";
-    sys::error_code ec;
 
-    // Create directory if it doesn't exist
-    if (!fs::exists(dir)) {
-        fs::create_directory(dir, ec);
-        handle_error(ec, "creating directory");
+int main()
+{
+    // A boost::filesystem::path represents a filesystem path.
+    // Using path rather than a plain string makes it possible for
+    // Boost.Filesystem to handle paths in a platform-independent way.
+    fs::path directory_path = "example_directory";
+
+    // The / operator combines paths. This avoids manually inserting
+    // platform-specific path separators such as '\' or '/'.
+    fs::path text_file_path = directory_path / "example_file.txt";
+
+    // This error_code object will be reused for filesystem operations.
+    // Operations that accept an error_code generally leave it unchanged
+    // unless they encounter an error, so it is good practice to clear it
+    // before reusing it when the distinction matters.
+    sys::error_code filesystem_error;
+
+
+    // -------------------------------------------------------------------------
+    // Create the directory if it does not already exist.
+    // -------------------------------------------------------------------------
+
+    if (!fs::exists(directory_path))
+    {
+        // The error_code overload reports an error without throwing an
+        // exception. The result can then be examined by report_status().
+        fs::create_directory(directory_path, filesystem_error);
+
+        report_status(filesystem_error, "creating directory " + directory_path.string());
     }
 
-    // Write to the file
+
+    // -------------------------------------------------------------------------
+    // Create the file and write some text to it.
+    // -------------------------------------------------------------------------
+
     {
-        std::ofstream ofs(file.string());
-        if (!ofs) {
+        // std::ofstream is part of the C++ Standard Library, rather than
+        // Boost.Filesystem. Boost.Filesystem is being used here to construct
+        // the path; the actual file I/O is performed by the standard stream.
+        //
+        // path::string() converts the Boost path to a std::string suitable
+        // for this stream constructor.
+        std::ofstream output_file(text_file_path.string());
+
+        if (!output_file)
+        {
             std::cerr << "Failed to open file for writing!\n";
             return 1;
         }
-        ofs << "Hello, Boost.Filesystem!\n";
+
+        output_file << "Hello, Boost.Filesystem!\n";
+
+        // The output_file object is automatically closed when it goes out
+        // of scope. The extra braces above ensure this happens before we
+        // subsequently try to read and remove the file.
     }
 
-    // Read from the file
+
+    // -------------------------------------------------------------------------
+    // Open the file again and read the text back.
+    // -------------------------------------------------------------------------
+
     {
-        std::ifstream ifs(file.string());
-        if (!ifs) {
+        // Use a descriptive name such as input_file rather than "ifs".
+        // "ifs" is technically a common abbreviation for ifstream, but it
+        // can be confusing when reading code because "if" is also a C++
+        // language keyword.
+        std::ifstream input_file(text_file_path.string());
+
+        if (!input_file)
+        {
             std::cerr << "Failed to open file for reading!\n";
             return 1;
         }
-        std::string content;
-        std::getline(ifs, content);
-        std::cout << "File content: " << content << '\n';
+
+        std::string file_content;
+        std::getline(input_file, file_content);
+
+        std::cout << "File content: " << file_content << '\n';
+
+        // As with the output stream, input_file is automatically closed
+        // when it goes out of scope.
     }
 
-    // Remove file
-    fs::remove(file, ec);
-    handle_error(ec, "removing file");
 
-    // Remove directory
-    fs::remove(dir, ec);
-    handle_error(ec, "removing directory");
+    // -------------------------------------------------------------------------
+    // Remove the file.
+    // -------------------------------------------------------------------------
+
+    // Boost.Filesystem::remove() removes a file or an empty directory.
+    // The error_code overload lets us handle an error explicitly rather
+    // than having Boost.Filesystem throw an exception.
+    fs::remove(text_file_path, filesystem_error);
+
+    report_status(filesystem_error, "removing file " + text_file_path.string());
+
+
+    // -------------------------------------------------------------------------
+    // Finally, remove the now-empty directory.
+    // -------------------------------------------------------------------------
+
+    fs::remove(directory_path, filesystem_error);
+
+    report_status(filesystem_error, "removing directory " + directory_path.string());
+
 
     return 0;
 }
-
 ----
 
 Note:: boost:filesystem[] ensures directory and file management is platform-independent.
 
-Tip:: The first time you run this code, comment out the code to remove the file and directory at the end. After running the code, locate `example_directory`, then you can both verify the content of `example_file.txt` and record the parent directory of `example_directory` - which you will need in later examples.
+Running this sample should give you:
+
+[source,text]
+----
+All OK while creating directory example_directory
+File content: Hello, Boost.Filesystem!
+All OK while removing file example_directory\example_file.txt
+All OK while removing directory example_directory
+----
+
+Tip:: The next time you run this code, comment out the code to remove the file and directory at the end. After running the code, locate `example_directory`, then you can both verify the content of `example_file.txt` and record the parent directory of `example_directory` - which you will need in later examples.
 
 == Support Configuration Settings
 
@@ -136,7 +227,6 @@ The code now allows users to specify directory and file names, reads settings fr
 [source,cpp]
 ----
 #include <boost/filesystem.hpp>
-#include <boost/system/error_code.hpp>
 #include <boost/program_options.hpp>
 #include <iostream>
 #include <fstream>
@@ -146,9 +236,9 @@ namespace sys = boost::system;
 namespace po = boost::program_options;
 
 //  Check and report system-specific errors
-void handle_error(const sys::error_code& ec, const std::string& action) {
+void report_status(const sys::error_code& ec, const std::string& action) {
     if (ec) {
-        std::cerr << "Error while " << action << ": " << ec.message()
+        std::cerr << "Error while " << action << " : " << ec.message()
             << " (Code: " << ec.value() << ")\n";
     }
     else
@@ -158,6 +248,7 @@ void handle_error(const sys::error_code& ec, const std::string& action) {
 }
 
 int main(int argc, char* argv[]) {
+
     // Default configuration values
     std::string dir = "default_directory";
     std::string filename = "default_file.txt";
@@ -195,7 +286,7 @@ int main(int argc, char* argv[]) {
     // Create directory if it doesn't exist
     if (!fs::exists(directory)) {
         fs::create_directory(directory, ec);
-        handle_error(ec, "creating directory");
+        report_status(ec, "creating directory " + dir);
     }
 
     // Write to the file
@@ -222,15 +313,14 @@ int main(int argc, char* argv[]) {
 
     // Remove file
     fs::remove(file, ec);
-    handle_error(ec, "removing file");
+    report_status(ec, "removing file " + filename);
 
     // Remove directory
     fs::remove(directory, ec);
-    handle_error(ec, "removing directory");
+    report_status(ec, "removing directory " + dir);
 
     return 0;
 }
-
 ----
 
 The command line options accepted by the sample are:
@@ -238,31 +328,42 @@ The command line options accepted by the sample are:
 [width="100%",cols="1,3",options="header",stripes=even,frame=none]
 |===
 | Option | Description
-| `--dir` or `-d`| Specify the directory.
+| `--dir` or `-d` | Specify the directory.
 | `--file` or `-f` | Specify the filename.
 | `--config` or `-c`  | Specify the configuration file.
 | `--help` or `-h` | Display available options.
 |===
 
-The following is an example `config.ini` file, create it and store it to the parent directory you recorded in the previous example.
+Build the sample, and navigate (in a Command Window) to the directory containing the executable file (.exe) for it.
+
+The following is an example `config.ini` file, create it and store it to the directory containing the executable. And say you have called the executable `cpp-system.exe`.
 
 [source,text]
 ----
 dir = my_directory
 file = my_file.txt
-
 ----
 
 The following command lines show how to run with defaults, run with options specified manually, and then run with a config file:
 
 [source,text]
 ----
-./program
+cpp-system
 
-./program --dir=my_data --file=data.txt
+cpp-system --dir=my_data --file=data.txt
 
-./program --config=my_config.ini
+cpp-system --config=config.ini
 
+----
+
+Run these three commands, and verify you get the expected output - something like:
+
+[source,text]
+----
+All OK while creating directory peters_directory
+File content: Hello, Boost.Program_Options and Boost.Filesystem!
+All OK while removing file peters_file.txt
+All OK while removing directory peters_directory
 ----
 
 == Time the System Operations
@@ -274,7 +375,6 @@ image::system-timing.png[]
 [source,cpp]
 ----
 #include <boost/filesystem.hpp>
-#include <boost/system/error_code.hpp>
 #include <boost/program_options.hpp>
 #include <boost/chrono.hpp>
 #include <iostream>
@@ -286,10 +386,10 @@ namespace po = boost::program_options;
 namespace chrono = boost::chrono;
 
 //  Check and report system-specific errors
-void handle_error(const sys::error_code& ec, const std::string& action) {
+void report_status(const sys::error_code& ec, const std::string& action) {
     if (ec) {
         std::cerr << "Error while " << action << ": " << ec.message()
-                  << " (Code: " << ec.value() << ")\n";
+            << " (Code: " << ec.value() << ")\n";
     }
     else
     {
@@ -337,12 +437,12 @@ int main(int argc, char* argv[]) {
     auto start = chrono::steady_clock::now();
     if (!fs::exists(directory)) {
         fs::create_directory(directory, ec);
-        handle_error(ec, "creating directory");
+        report_status(ec, "creating directory " + dir);
     }
     auto end = chrono::steady_clock::now();
-    std::cout << "Directory creation took: " 
-              << chrono::duration_cast<chrono::microseconds>(end - start).count() 
-              << " microseconds\n";
+    std::cout << "Directory creation took: "
+        << chrono::duration_cast<chrono::microseconds>(end - start).count()
+        << " microseconds\n";
 
     // Measure time for writing to file
     start = chrono::steady_clock::now();
@@ -355,9 +455,9 @@ int main(int argc, char* argv[]) {
         ofs << "Hello, Boost.Program_Options, Boost.Filesystem, and Boost.Chrono!\n";
     }
     end = chrono::steady_clock::now();
-    std::cout << "File writing took: " 
-              << chrono::duration_cast<chrono::microseconds>(end - start).count() 
-              << " microseconds\n";
+    std::cout << "File writing took: "
+        << chrono::duration_cast<chrono::microseconds>(end - start).count()
+        << " microseconds\n";
 
     // Measure time for reading from file
     start = chrono::steady_clock::now();
@@ -372,27 +472,27 @@ int main(int argc, char* argv[]) {
         std::cout << "File content: " << content << '\n';
     }
     end = chrono::steady_clock::now();
-    std::cout << "File reading took: " 
-              << chrono::duration_cast<chrono::microseconds>(end - start).count() 
-              << " microseconds\n";
+    std::cout << "File reading took: "
+        << chrono::duration_cast<chrono::microseconds>(end - start).count()
+        << " microseconds\n";
 
     // Measure time for file deletion
     start = chrono::steady_clock::now();
     fs::remove(file, ec);
-    handle_error(ec, "removing file");
+    report_status(ec, "removing file " + filename);
     end = chrono::steady_clock::now();
-    std::cout << "File deletion took: " 
-              << chrono::duration_cast<chrono::microseconds>(end - start).count() 
-              << " microseconds\n";
+    std::cout << "File deletion took: "
+        << chrono::duration_cast<chrono::microseconds>(end - start).count()
+        << " microseconds\n";
 
     // Measure time for directory deletion
     start = chrono::steady_clock::now();
     fs::remove(directory, ec);
-    handle_error(ec, "removing directory");
+    report_status(ec, "removing directory " + dir);
     end = chrono::steady_clock::now();
-    std::cout << "Directory deletion took: " 
-              << chrono::duration_cast<chrono::microseconds>(end - start).count() 
-              << " microseconds\n";
+    std::cout << "Directory deletion took: "
+        << chrono::duration_cast<chrono::microseconds>(end - start).count()
+        << " microseconds\n";
 
     return 0;
 }
@@ -403,15 +503,15 @@ The following is example output from running the sample:
 
 [source,text]
 ----
-All OK while creating directory
-Directory creation took: 459 microseconds
-File writing took: 631 microseconds
+All OK while creating directory peters_directory
+Directory creation took: 769 microseconds
+File writing took: 672 microseconds
 File content: Hello, Boost.Program_Options, Boost.Filesystem, and Boost.Chrono!
-File reading took: 1385 microseconds
-All OK while removing file
-File deletion took: 339 microseconds
-All OK while removing directory
-Directory deletion took: 386 microseconds
+File reading took: 2302 microseconds
+All OK while removing file peters_file.txt
+File deletion took: 1162 microseconds
+All OK while removing directory peters_directory
+Directory deletion took: 586 microseconds
 
 ----
 
