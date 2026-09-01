@@ -111,43 +111,76 @@ Checking out the release notes from fellow library authors and maintainers is go
 
 == Update Boost History
 
-When you have completed the library release notes, add the required information to the `[section New Libraries]` or `[section Updated Libraries]` of the https://github.com/boostorg/website/tree/master/feed/history[Boostorg History]. Copy the formatting of the examples below, which for reference is https://www.boost.org/doc/libs/latest/doc/html/quickbook.html[Quickbook format].
+When you have completed the library release notes, add the required information to the `[section New Libraries]` or `[section Updated Libraries]` of the https://github.com/boostorg/website-v2-docs/blob/develop/release-notes/[Boostorg History]. Copy the formatting of the examples below, which for reference is https://docs.asciidoctor.org/asciidoc/latest/syntax-quick-reference/[AciiDoc format].
 
-The examples below come from the https://github.com/boostorg/website/blob/master/feed/history/boost_1_83_0.qbk[boost_1_83_0.qbk] file:
+The examples below come from the https://github.com/boostorg/website-v2-docs/blob/develop/release-notes/template.adoc[template.adoc] file:
 
 [source,bash]
 ----
-[section New Libraries]
 
-[/ Example:
-* [phrase library..[@/libs/accumulators/ Accumulators]:] Framework for
-  incremental calculation, and collection of statistical accumulators, from Eric Niebler.
-]
+  ////
+  Distributed under the Boost Software License, Version 1.0. (See accompanying
+  file LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
+  Official repository: https://github.com/boostorg/website-v2-docs
+  ////
 
-* [phrase library..[@/libs/compat/ Compat]:] A repository of C++11 implementations of
-  standard components added in later C++ standards, from Peter Dimov and contributors.
+  == Version X.XX.XX
 
-[endsect]
+  boost_at:/doc/libs/X_XX_X/[Documentation]
 
-[section Updated Libraries]
+  // Formatting reference: https://docs.asciidoctor.org/asciidoc/latest/syntax-quick-reference/
+  // Boost-specific macros: https://github.com/cppalliance/asciidoctor-boost?tab=readme-ov-file#macros
+  // Please keep the list of libraries sorted in lexicographical order.
 
-[/ Example:
-* [phrase library..[@/libs/interprocess/ Interprocess]:]
-  * Added anonymous shared memory for UNIX systems.
-  * Move semantics for shared objects ([ticket 1932]).
-  * Conform to `std::pointer_traits` requirements ([github_pr interprocess 32])
-  * Fixed `named_condition_any` fails to notify ([github interprocess 62])
-]
+  == New Libraries
 
-* [phrase library..[@/libs/any/ Any]:]
-  * New `boost::anys::unique_any` C++11 class - an alternative to
-    `boost::any` (or to `std::any`) that does not require copy
-    or move construction from the held type.
-  * Ported documentation to Quickbook, Doxygen comments now used in code.
+  // Example:
+  // 
+  // * boost_phrase:library[Accumulators,/libs/accumulators]:
+  // ** Framework for incremental calculation, and collection of statistical
+  // accumulators, from Eric Niebler.
 
-  ....
+  == Updated Libraries
 
-  [endsect]
+  // Example:
+  //  
+  // * boost_phrase:library[Interprocess,/libs/interprocess/]:
+  // ** Added anonymous shared memory for UNIX systems.
+  // ** Conform to `std::pointer_traits` requirements (boost_gh:pr[interprocess,32]).
+  // ** Fixed `named_condition_any` fails to notify (boost_gh:issue[interprocess,62]).
+
+  == Compilers Tested
+
+  // Edit this section as appropriate
+
+  Boost's primary test compilers are:
+
+  * Linux:
+  ** Clang, C++03: 3.4, 3.5, 3.6, 3.7, 3.8, 3.9, 12.0.0, 13.0.0, 14.0.0, 15.0.0
+  ** Clang, C++11: 3.4, 11.0.0, 13.0.0, 14.0.0, 15.0.0
+  ** Clang, C++14: 3.5, 3.6, 3.7, 3.8, 3.9, 4.0, 5.0, 12.0.0, 13.0.0, 14.0.0, 15.0.0
+  ** Clang, C++17: 6.0.1, 7.0.0, 8.0.0, 9.0.0, 10.0.0, 11.0.0, 12.0.0, 13.0.0, 14.0.0, 15.0.0
+  ** Clang, C++20: 11.0.0, 12.0.0, 13.0.0, 14.0.0, 15.0.0
+  ** GCC, C++03: 4.6.3, 11, 12
+  ** GCC, C++11: 4.7.3, 4.8.5, 11, 12
+  ** GCC, C++14: 5.4.0, 6.4.0, 7.3.0, 8.0.1, 9.1.0, 11, 12
+  ** GCC, C++17: 7.3.0, 8.0.1, 9.1.0, 11, 12
+  ** GCC, C++20: 8.0.1, 9.1.0, 10, 11, 12
+  * OS X:
+  ** Apple Clang, C++03: 11.0.3
+  ** Apple Clang, C++11: 11.0.3
+  ** Apple Clang, C++14: 11.0.3
+  ** Apple Clang, C++17: 11.0.3
+  ** Apple Clang, C++20: 11.0.3
+  * Windows:
+  ** Visual C++: 10.0, 11.0, 12.0, 14.0, 14.1, 14.2, 14.3
+
+  == Acknowledgements
+
+  // Edit this section as appropriate
+
+  Marshall Clow, Glen Fernandes and Ion Gaztañaga managed this release.
+
 ----
 
 Note:: The macros used in Quickbook format for the history sections differ in detail from the macros available for the Release Notes.
