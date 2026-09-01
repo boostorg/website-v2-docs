@@ -29,6 +29,19 @@ boost_at:/doc/libs/1_93_0/[Documentation]
 // ** Conform to `std::pointer_traits` requirements (boost_gh:pr[interprocess,32]).
 // ** Fixed `named_condition_any` fails to notify (boost_gh:issue[interprocess,62]).
 
+* boost_phrase:library[GIL,/libs/gil/]:
+ ** Refactor from Boost.Iterator to Boost.STLInterface, thereby removing the dependency on pre-C++11 libraries.
+ ** Fixed `copy_n` algorithm when `n < 0`
+ ** Fixed conversion warning in `convolve_2d` test
+ ** Fixed wrong return type of copy_fn and missing typedef in destruct_range
+ ** Fixed integer overflow in channel_converter_unsigned_integral_nondivisible
+ ** Fixed UB std::floating_point specialization
+ ** Switch documentation tooling to Asciidoc/Antora/MrDocs
+ ** Added `distance_transform` algorithm
+ ** Added `image_sharpening` algorithm
+ ** Added missing documentation for Adaptive Histogram Equalization (AHE)
+ ** Added documentation for convolution, morphology and thresholding
+ 
 == Compilers Tested
 
 // Edit this section as appropriate
