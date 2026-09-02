@@ -65,7 +65,6 @@ The Boost libraries that _must_ be built separately are:
 [disc]
 * boost:atomic[]
 * boost:chrono[]
-* boost:container[]
 * boost:context[]
 * boost:contract[]
 * boost:coroutine[]
@@ -74,7 +73,6 @@ The Boost libraries that _must_ be built separately are:
 * boost:filesystem[]
 * boost:graph_parallel[]
 * boost:iostreams[]
-* boost:json[]
 * boost:locale[]
 * boost:log[]
 * boost:mpi[]
@@ -100,10 +98,12 @@ A few libraries have optional separately-compiled binaries:
 [cols="1,4",stripes=even,options="header",frame=none]
 |===
 | Library | Binary Version Notes
+| boost:container[] | Binary version is needed for _Extended Allocators_ and some _Polymorphic Memory Resource_ classes
 | boost:exception[] | Provides non-intrusive implementation of exception_ptr for 32-bit `_MSC_VER==1310`
 and `_MSC_VER==1400` which requires a separately-compiled binary.
 This is enabled by `#define BOOST_ENABLE_NON_INTRUSIVE_EXCEPTION_PTR`.
 | boost:graph[] | as a binary component that is only needed if you intend to parse GraphViz files.
+| boost:json[] | Including the header file in your code removes the need to link to the compiled binary
 | boost:math[] | Has binary components for the TR1 and C99 cmath functions.
 | boost:random[] | Has a binary component which is only needed if you're using `random_device`.
 | boost:system[] | Is header-only since Boost 1.69. A stub library is still built for compatibility, but linking to it is no longer necessary.
