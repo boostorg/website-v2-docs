@@ -51,7 +51,7 @@ The following libraries are actively updated and equivalent functionality is not
 | IO | pass:[C++]03 | Yes | Active / Maintained | Stream-state savers, quoted manipulators, ostream joiners, null streams and related utilities.
 | Interprocess | pass:[C++]03 | Yes | Active | Shared memory and process synchronization
 | Intrusive | pass:[C++]03 | Yes | Active | Intrusive containers
-| JSON | pass:[C++]11 | *No* | Active | JSON parsing and serialization
+| JSON | pass:[C++]11 | *Optional* | Active | JSON parsing and serialization
 | LEAF | pass:[C++]11 | Yes | Active | Lightweight error handling
 | Locale | pass:[C++]11 | *No* | Active / Maintained | Localization and Unicode support
 | Lockfree | pass:[C++]14 | Yes | Active | Lock-free data structures
@@ -171,7 +171,7 @@ The following libraries, in whole or in a significant part, are now part of the 
 | Chrono | pass:[C++]11 | Partly | pass:[C++]11 | *No* | Maintained | `std::chrono` covers core functionality, Boost.Chrono adds clocks and utilities
 | Compat | pass:[C++]11 | Yes | Various | Yes | Active | Compatibility implementations for newer standard facilities
 | Compressed Pair | pass:[C++]03 | Partly | pass:[C++]20 | Yes | Maintained | Optimization utility; standard equivalents cover parts
-| Container | pass:[C++]03 | Partly | pass:[C++]11+ | *No* | Active | Containers and extensions beyond standard containers
+| Container | pass:[C++]03 | Partly | pass:[C++]11+ | *Optional* | Active | Containers and extensions beyond standard containers
 | Container Hash | pass:[C++]11 | Yes | pass:[C++]11+ | Yes | Maintained | Hashing support largely standardized
 | Core | pass:[C++]03 | Partly | pass:[C++]11+ | Yes | Active | Small utilities used throughout Boost
 | Date Time | pass:[C++]03 | Partly | pass:[C++]11 | *No* | Maintained / Legacy | `std::chrono` covers much modern use
