@@ -112,49 +112,39 @@ This is enabled by `#define BOOST_ENABLE_NON_INTRUSIVE_EXCEPTION_PTR`.
 
 == Identify Your Toolset
 
-In order to build binaries from source, find the toolset corresponding to your compiler in the following table (an up-to-date list is also available in https://www.boost.org/build/doc/html/bbv2/reference/tools.html[Builtin tools]).
-
-Note::
-If you previously chose a toolset for the purposes of building b2, you should assume it won't work and instead choose newly from the table below.
+In order to build binaries from source, find the toolset corresponding to your compiler in the following table:
 
 [#toolset]
-[width="100%",cols="12%,22%,66%",options="header",stripes=even]
+[width="100%",cols="1,2,2,3",options="header",stripes=even,frame=none]
 |===
-|Toolset Name |Vendor |Notes
-|`acc` |Hewlett Packard |Only very recent versions are known to work
-well with Boost
-
-|`borland` |Borland |
-
-|`como` |Comeau Computing |Using this toolset may require configuring another toolset to act as its backend.
-
-|`darwin` |Apple Computer |Apple's version of the GCC toolchain with support for Darwin and MacOS X features such as frameworks.
-
-|`gcc` |The Gnu Project |Includes support for Cygwin and MinGW compilers.
-
-|`hp_cxx` |Hewlett Packard |Targeted at the Tru64 operating system.
-
-|`intel` |Intel |
-
-|`msvc` |Microsoft |
-
-|`sun` |Oracle | Only very recent versions are known to work well with
-Boost. Note that the Oracle/Sun compiler has a large number of options
-which effect binary compatibility. It is vital that the libraries are
-built with the same options that your application will use. In particular
-be aware that the default standard library may not work well with Boost,
-unless you are building for Cpp11.
-
-The particular compiler options you need can be injected with the b2 command line options `cxxflags=` and `linkflags=`. For example to build with the Apache standard library in Cpp03 mode use:
-
-`b2 cxxflags=-library=stdcxx4 linkflags=-library=stdcxx4`.
-
-|`vacpp` |IBM |The VisualAge C++ compiler.
+| Toolset  | Vendor / project | Status   | Primary use 
+| `gcc`  | GNU Project  | **Current**  | GCC-based pass:[C++] development 
+| `clang`  | LLVM   | **Current**  | Clang/LLVM development  
+| `msvc`  | Microsoft  | **Current**  | Microsoft Visual pass:[C++] on Windows
+| `clang-win` | LLVM   | **Current**  | Clang targeting Windows  
+| `darwin`  | Apple   | **Current**  | Apple/Xcode development  
+| `emscripten` | Emscripten  | **Current / Specialized** | WebAssembly   
+| `intel-linux` | Intel   | **Specialized**  | Intel pass:[C++] on Linux  
+| `qcc`  | QNX   | **Specialized**  | QNX development   
+| `xlcpp`  | IBM   | **Specialized**  | IBM pass:[C++] environments  
+| `pgi`  | NVIDIA / Portland Group | **Legacy / Specialized** | HPC environments  
+| `borland` | Embarcadero  | **Legacy**  | Older Windows environments 
+| `sun` / `sunpro` | Oracle   | **Legacy**  | Older Solaris environments 
+| `vacpp`  | IBM   | **Legacy**  | Older IBM environments  
+| `gcc-nocygwin` | GNU   | **Legacy**  | Historical Windows GCC 
+| `como`  | Comeau   | **Obsolete**  | Historical compiler  
+| `acc`  | Hewlett-Packard  | **Obsolete**  | Historical HP compiler  
+| `hp_cxx`  | Hewlett-Packard  | **Obsolete**  | Historical Tru64 compiler 
+| `mipspro` | SGI   | **Obsolete**  | Historical IRIX compiler 
+| `pathscale` | PathScale  | **Obsolete**  | Historical HPC compiler 
+| `kcc`  | KAI   | **Obsolete**  | Historical Unix compiler 
+| `kylix`  | Borland   | **Obsolete**  | Historical Linux compiler 
+| `metrowerks` | Metrowerks  | **Obsolete**  | Historical CodeWarrior 
+| `tru64cxx` | HP/Compaq  | **Obsolete**  | Historical Tru64  
+| `vmsdecc` | DEC/VSI   | **Specialized / Legacy** | OpenVMS   
 |===
 
-If you have multiple versions of a particular compiler installed, you can append the version number to the toolset name, preceded by a hyphen, e.g. `intel-9.0`  or `borland-5.4.3`.
-
-On Windows, append a version number even if you only have one version installed (unless you are using the msvc or gcc toolsets, which have special version detection code) or auto-linking will fail.
+Selecting a compiler version: If multiple versions of a compiler are installed, B2 can be configured to use a specific version. The syntax varies somewhat between toolsets - though is often simply a hyphen; for example, gcc-13 will select GCC version 13. Consult the documentation for the particular toolset when selecting a specific compiler version.
 
 == See Also
 
