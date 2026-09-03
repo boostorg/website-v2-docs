@@ -29,6 +29,11 @@ boost_at:/doc/libs/1_93_0/[Documentation]
 // ** Conform to `std::pointer_traits` requirements (boost_gh:pr[interprocess,32]).
 // ** Fixed `named_condition_any` fails to notify (boost_gh:issue[interprocess,62]).
 
+* boost_phrase:library[GIL,/libs/gil/]:
+ ** Refactor from Boost.Iterator to Boost.STLInterface thus removeing dependency to pre-C++11 libraries
+ ** Fixed `copy_n` algorithm when `n < 0`
+ ** Fixed conversion warning in `convolve_2d` test
+ 
 == Compilers Tested
 
 // Edit this section as appropriate
