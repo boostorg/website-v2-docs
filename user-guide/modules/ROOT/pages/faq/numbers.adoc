@@ -238,6 +238,53 @@ int main() {
 
 Note:: Using rational numbers there is a risk of integer overflow, so consider using large integers for inputs (`boost::multiprecision::cpp_int` or similar), and this approach is not ideal for numbers known to be irrational (square root of 2, and the scientific constants listed above).
 
+. *Can you educate me on why prime numbers are so important in cryptography?*
++
+The key idea is surprisingly simple - prime numbers are useful in cryptography because multiplying primes together is easy, while recovering the primes from their product can be extremely difficult when the numbers are very large.
++
+For a computer, multiplying two 1024-bit numbers together is easy (if you have a library capable of storing such huge numbers). But factoring the resulting number (up to 2048 bits) back into those two primes is extremely difficult using the best known general-purpose classical algorithms.
++
+So, where `n` and `m` are prime numbers, `n * m = r` is easy, but recovering `m` or `n` when you just know `r` is a computational monster. RSA keys (public/private keys) are in fact even larger, typically 2048 or 3072 bits.
++
+In addition to multiplication, more complex equations such as the discrete logarithm problem (`g^x mod p = y`) could be used as the basis, as if `p` is a suitably large prime, then calculating the variables knowing only `y` is extremely difficult.
++
+Quantum computing, though currently theoretical, has thrown confusion in the works as it may be able to come up with the factors in a reasonable length of time - hence the term _post-quantum cryptography_.
++
+So, prime numbers aren't valuable because they're wonderfully mysterious - they're valuable because they give us mathematical structures with enormous computational asymmetries.
+
+. *What does a 1024-bit prime number look like?*
++
+Here is one:
++
+[source,cpp]
+----
+cpp_int prime = 165918700393058288029118516503856682928352034064210292320510526037152431960844672521054555721941412725769027652540094762345484278576411078143188748708281181119556988860248537167684663864334811189453410905241474311369868568296877192226227785240656833746573473244854528133231976802973699288063056142727481235873
+----
+
+. *Is it not possible to use intelligent guessing to greatly reduce the number of possible factors to a reasonable number?*
++
+An attacker wouldn't normally brute-force all possible 1024-bit factors. They use sophisticated integer-factorization algorithms, with the _General Number Field Sieve_ (GNFS) being the best known classical algorithm for factoring a general large RSA modulus.
++
+There is a concept called the _security level_ measured in bits. Two 1024-bit primes gives a security level of about 80 bits, two 2048-bit primes result in a security level of about 112 bits. This means that the number of possible factors to work through for 1024-bit primes is 2 to the power of 80, and for 2048 bit primes, 2 to the power of 112. Current thinking is that a security level of 80 is not strong enough, though has yet to be publicly factored, and the 112 level is considered secure. Interestingly, 3072-bit primes gives a security level of around 128, and 4096-bit primes a security level of around 150 - very secure and an alternative interpretation of "safety in numbers".
+
+. *What is the largest reported successful RSA factorization?*
++
+As a caution, this is a secretive business, who knows what has been achieved in private. However a 829-bit number was publicly factored in 2020 using a large distributed computing effort. The jump to 2048-bit numbers is formidable.
+
+. *So I have created a wonderfully enormous public key from multiplying two primes, how does a colleague working elsewhere use that number to encrypt a message back to me?*
++
+The first step is to convert the message into a suitable sequence of bytes, which is then encoded as a number. In real RSA encryption, this involves an appropriate padding scheme, such as *OAEP*, which also provides important security properties beyond simply disguising the message.
++
+You publish your *RSA public key*, which consists of two numbers: `n`, the enormous number formed by multiplying two secret primes, and `e`, the *public exponent*, which is typically `65537`.
++
+The RSA encryption operation can then be represented mathematically as:
++
+`c = m^e mod n`
++
+where `m` is the padded message represented as a number, `n` is the modulus from your public key, `e` is your public exponent, and `c` is the resulting cipher-text.
++
+Your colleague sends you `c`. Now, how to decrypt this message!
+
 . *Can I use Boost.Multiprecision or Boost.Math to help with my project on RSA public-key encryption?*
 +
 Yes. Starting with the basic algorithm for RSA (Rivest-Shamir-Adleman - the authors of the algorithm) which follows these steps:
@@ -309,17 +356,8 @@ int main() {
 
 ----
 
-Note:: Consider using `independent_bits_engine` from boost:random[] for a clean way to get large random integers of fixed bit-width, and then consider very large prime numbers of perhaps 1024 bits.
+Note:: Consider using `independent_bits_engine` from boost:random[] for a clean way to get large random integers of fixed bit-width, and then consider very large prime numbers of perhaps 2048 bits for really secure messaging.
 
-. *What does a 1024-bit prime number look like?*
-+
-Here is one:
-+
-[source,cpp]
-----
-cpp_int prime = 165918700393058288029118516503856682928352034064210292320510526037152431960844672521054555721941412725769027652540094762345484278576411078143188748708281181119556988860248537167684663864334811189453410905241474311369868568296877192226227785240656833746573473244854528133231976802973699288063056142727481235873
-
-----
 
 . *I need efficient memory storage for a real-time simulation. The use case is small counts, for example the number of carrier task forces operating in one ocean at any one time - a number which will never exceed 10 let alone 256?*
 +
@@ -430,6 +468,7 @@ boost:graph[] should help with the topology of the diagrams, then boost:multipre
 ----
 +
 And you might consider boost:numeric/ublas[] if solving systems of equations is in the mix.
+
 
 
 == See Also
