@@ -355,13 +355,24 @@ int main() {
 }
 
 ----
++
+Run this code:
++
+[source,text]
+----
+Public Key (e, n): (17, 3233)
+Private Key (d, n): (2753, 3233)
+Initial message: 65
+Encrypted message: 2790
+Decrypted message: 65
+----
 
 Note:: Consider using `independent_bits_engine` from boost:random[] for a clean way to get large random integers of fixed bit-width, and then consider very large prime numbers of perhaps 2048 bits for really secure messaging.
 
 
 . *I need efficient memory storage for a real-time simulation. The use case is small counts, for example the number of carrier task forces operating in one ocean at any one time - a number which will never exceed 10 let alone 256?*
 +
-A full sized int or even a byte is comically oversized for this use case. You could use the standard: `std::uint8_t num_groups;`, however you might like to add some range-safety. Consider the following code as it's memory footprint is exacty 3 bytes:
+A full sized `int` or even a `byte` is comically oversized for this use case. You could use the standard: `std::uint8_t num_groups;`, however you might like to add some range-safety. Consider the following code as it's memory footprint is exactly 3 bytes:
 +
 [source,cpp]
 ----
@@ -389,11 +400,11 @@ struct OceanStatus {
 
 . *What library should I look at to help pack really small integers (say 2 to 4 bits each) into the minimum number of bytes possible?*
 +
-The libary to evaluate is boost:dynamic-bitset[], it gives you stable bit indexing, easy clearing/writing slices, guaranteed predictable ordering, and portability across CPU architectures. In particular, check out the function `to_block_range` for exporting packed blocks. This should be easier - and safer - than hand-rolling your own masks and shifts.
+The library to evaluate is boost:dynamic-bitset[], it gives you stable bit indexing, easy clearing/writing slices, guaranteed predictable ordering, and portability across CPU architectures. In particular, check out the function `to_block_range` for exporting packed blocks. This should be easier - and safer - than hand-rolling your own masks and shifts.
 
 . *How does an enormous physical value, such as the number of atoms in the observable Universe, compare with the maximum value current integers can hold?*
 +
-There are approximately 10 to the power of 80 hydrogen atoms in the observable Universe (hydrogen is by far the simplest and most common atom). Integers are rarely used in astronmical calculations (a `double` is most definitely the current unit of choice). However, it is interesting to imagine what type of integer would be needed for astronomical counting:
+There are approximately 10 to the power of 80 hydrogen atoms in the observable Universe (hydrogen is by far the simplest and most common atom). Integers are rarely used in astronomical calculations (a `double` is most definitely the current unit of choice). However, it is interesting to imagine what type of integer would be needed for astronomical counting:
 +
 [cols="1,1",stripes=even,options="header",frame=none]
 |===
@@ -425,7 +436,7 @@ Both GCC and Clang already support __int128 on many 64-bit platforms as a compil
 
 . *Is there any realistic bounding limit to the size of numbers that mathematicians might be interested in?*
 +
-It seems there is no limit. Projects searching for huge prime numbers (super valuable in crypotgraph) routinely use integers with millions or even hundreds of millions of bits. The largest known prime number currently has tens of millions of decimal digits, requiring roughly 136 million bits to store.
+It seems there is no limit. Projects searching for huge prime numbers (super valuable in cryptograph) routinely use integers with millions or even hundreds of millions of bits. The largest known prime number currently has tens of millions of decimal digits, requiring roughly 136 million bits to store.
 
 . *Am I right that intermediate values often push the boundaries of size, rather than the results?*
 +
