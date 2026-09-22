@@ -21,6 +21,7 @@ Official repository: https://github.com/boostorg/website-v2-docs
 ** xref:faq/debugging.adoc[]
 ** xref:faq/dependencies.adoc[]
 ** xref:faq/documentation.adoc[]
+** xref:faq/employment.adoc[]
 ** xref:faq/graphics-games.adoc[]
 ** xref:faq/iso-committee-meetings.adoc[]
 ** xref:faq/libraries.adoc[]

@@ -1,0 +1,30 @@
+////
+Copyright (c) 2024 The C++ Alliance, Inc. (https://cppalliance.org)
+
+Distributed under the Boost Software License, Version 1.0. (See accompanying
+file LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
+
+Official repository: https://github.com/boostorg/website-v2-docs
+////
+= Employment
+:navtitle: Employment
+
+== FAQ
+
+. *What companies are currently looking to hire pass:[C++] developers, and with what skills?*
++
+Two sectors of the job marketplace seem to be pushing their hiring a bit harder at the moment - banking and vehicle control systems. In the banking sector such tasks as high-frequency trading (HFT) and absolute accuracy with decimal numbers stand out. High-frequency trading obviously requires great networking and processing performance - both to give an edge in trading and ensure financial accuracy. In the latter case rounding errors can propagate to the extend there are vulnerabilities in the system. Security of course remains a never-ending priority in this field.
++
+As far as vehicle control systems go there is both a need for good infotainment systems with approachable graphics and controls (for example, the Unreal Game engine is used in some EV infotainment systems to render the user interface), and a need for low level robustness and performance in, for example, the reading and response to sensors. This case is similar to IOT, where the signals from remote sensors need to be analyzed and prioritized, and responded to. In this case obviously a "remote sensor" is a sensor within the vehicle itself. 
+
+. *Are there any Boost libraries that I should have experience with that might improve my employment prospects?*
++
+Yes, very much so. Refer to the *Libraries* section of xref:task-finance.adoc[Finance] and xref:task-system.adoc[System] for some high priority library suggestions. For financial accounting there is also the new boost:decimal[] library, which should eliminate financial rounding errors completely. For vehicle systems also look at xref:faq/graphics-games.adoc[], as graphics is an important part of the user-interface.
+
+. *What role do you see AI playing in the near future as it affects pass:[C++] employment and prospects?*
++
+This is a much-discussed topic with few certainties. Given the high-performance requirements of so much pass:[C++] programming, it seems doubtful that this would be entrusted to current AI language models. Focusing on performance seems like a robust approach to weathering AI uncertainty in the near future.
+
+== See Also
+
+* xref:faq.adoc[]

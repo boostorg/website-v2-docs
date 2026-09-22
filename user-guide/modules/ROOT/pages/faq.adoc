@@ -25,6 +25,7 @@ This section contains answers to the common questions that new developers to Boo
 * xref:faq/debugging.adoc[]
 * xref:faq/dependencies.adoc[]
 * xref:faq/documentation.adoc[]
+* xref:faq/employment.adoc[]
 * xref:faq/graphics-games.adoc[]
 * xref:faq/iso-committee-meetings.adoc[]
 * xref:faq/libraries.adoc[]
