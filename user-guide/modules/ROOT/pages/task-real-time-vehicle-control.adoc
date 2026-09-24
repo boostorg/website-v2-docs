@@ -1,0 +1,121 @@
+////
+Copyright (c) 2024 The C++ Alliance, Inc. (https://cppalliance.org)
+
+Distributed under the Boost Software License, Version 1.0. (See accompanying
+file LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
+
+Official repository: https://github.com/boostorg/website-v2-docs
+////
+= Real-Time Vehicle Control Systems
+:navtitle: Real-Time Vehicle Control
+
+Our vehicles are becoming more and more computer systems, computer systems with wheels, wings, propellors, and many variations such as caterpillar tracks.
+
+Real-time vehicle control and monitoring is an important and complex scenario for advanced pass:[C++] development. In this scenario software has to be developed that can be entrusted with the well-being of the vehicle's crew and passengers. In this scenario, we examine what libraries might prove to be valuable building blocks, what kind of architecture and control flow might be involved, and best-practices for safe systems.
+
+As an example, we will look at a work-horse vehicle, the caterpillar tractor. The following image shows how much a modern interface might influence the design of the interior of the cab:
+
+image::caterpillar-tractor-controls.png[Caterpillar Tractor Controls]
+
+With this high-tech control system in mind, let's examine the role individual Boost libraries might play.
+
+[square]
+* <<Libraries>>
+* <<Architecture>>
+* <<Footnotes>>
+* <<See Also>>
+
+
+== Libraries
+
+[cols="1,1",stripes=even,options="header",frame=none]
+|===
+| Lbrary       | Possible role in the tractor                                      
+| boost:asio[]            | Real-time-ish I/O, CAN adapters, Ethernet, serial devices, timers 
+| boost:atomic[]          | Lock-free/shared state between control threads                    
+| boost:lockfree[]        | Sensor/command queues between acquisition and control threads     
+| boost:thread[]          | Worker threads and synchronization                                
+| boost:chrono[]          | Precise timing and control-loop periods                           
+| boost:units[]           | Prevent mixing meters, feet, radians, PSI, kPa, etc.              
+| boost:numeric/odeint[]  | Simulating vehicle dynamics and hydraulic/engine systems          
+| boost:math[]            | Filters, interpolation, statistics, numerical functions           
+| boost:geometry[]        | Vehicle position, heading, paths and spatial calculations         
+| boost:circular_buffer[] | Recent sensor history / moving windows                            
+| boost:multi-index[]     | Efficiently indexing large collections of sensor/device data      
+| boost:log[]             | Diagnostics and event logging                                     
+| boost:stacktrace[]      | Diagnostic information after failures                             
+| boost:system[]          | Portable error handling                                           
+| boost:program_options[] | Configuration/calibration parameters                              
+| boost:json[]            | Configuration and diagnostic interfaces                           
+| boost:serialization[]   | Saving/restoring configuration or state                           
+| boost:statechart[]      | Vehicle operating modes and state machines                        
+| boost:msm[]             | High-performance state-machine implementation, if appropriate          
+| boost:safe-numerics[]   | Detecting arithmetic errors in safety-sensitive calculations      
+| boost:test[]            | Automated testing of control algorithms                           
+|===
+
+== Architecture
+
+The basic architecture of a vehicle control app could be as simple as:
+
+[source,txt]
+----
+              every 10 ms
+
+                  ┌───────────────┐
+                  │ Read sensors  │
+                  └───────┬───────┘
+                          │
+                          ▼
+                  ┌───────────────┐
+                  │ Validate data │
+                  └───────┬───────┘
+                          │
+                          ▼
+                  ┌───────────────┐
+                  │ Update state  │
+                  └───────┬───────┘
+                          │
+                          ▼
+                  ┌───────────────┐
+                  │ Control law   │
+                  │ PID / model   │
+                  └───────┬───────┘
+                          │
+                          ▼
+                  ┌───────────────┐
+                  │ Send commands │
+                  └───────┬───────┘
+                          │
+                          ▼
+            wait until next 10 ms starts
+----
+
+[#footnote1-location]
+PID stands for Proportional-Integral-Derivative. It is one of the most common feedback-control algorithms used in engineering. link:#footnote1[(1)] 
+
+
+
+== Footnotes
+
+[#footnote1]
+link:#footnote1-location[(1)]
+In the tractor example, “Control law — PID/model” means that the software controlling things such as hydraulic valves, blade position, engine speed, or vehicle speed could use either a PID controller, a model-based controller, or a combination of the two. Suppose the tractor's blade is supposed to be at a particular height. The controller continuously compares 
+desired blade height against actual blade height, the delta being treated as an error. A PID controller uses that error in three ways:
+
+[cols="1,1,2",stripes=even,options="header",frame=none]
+|===
+| Part  | Meaning      | Intuition                                  
+| **P** | Proportional | “How far away am I right now?”             
+| **I** | Integral     | “How long have I been wrong?”              
+| **D** | Derivative   | “How quickly am I approaching the target?” 
+|===
+
+The P component might say: "We're 10 cm low, so raise the blade substantially" and as the blade gets closer: "We're only 2 cm low, so raise it much more gently". The I component notices if, for example, the blade consistently stays 1 cm below the target because of hydraulic leakage or load. The D component notices that the blade is moving rapidly toward the target and reduces the command - to help prevent overshooting.
+
+== See Also
+
+* https://www.boost.org/doc/libs/latest/libs/libraries.htm#Algorithms[Category: Algorithms]
+* https://www.boost.org/doc/libs/latest/libs/libraries.htm#Image-processing[Category: Image processing]
+* https://www.boost.org/doc/libs/latest/libs/libraries.htm#Math[Category: Math and numerics]
+* https://www.boost.org/doc/libs/latest/libs/libraries.htm#State[Category: State Machines]
