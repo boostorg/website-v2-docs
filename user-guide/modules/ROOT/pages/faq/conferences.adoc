@@ -11,9 +11,6 @@ Official repository: https://github.com/boostorg/website-v2-docs
 
 == FAQ
 
-
-
-
 . *What are the main C++ conferences where I will learn the most about the language and libraries?*
 +
 The largest conference each year is https://cppcon.org/[CppCon], currently held in September in Aurora, Colorado. Talks typically include library authors and standards contributors.
@@ -40,6 +37,56 @@ If you attend several conferences, you may well find projects debut at one of th
 +
 Yes, not free but there is https://cpponline.uk/[Cpp Online].
 
+. *What were the overall themes of the recent Cppcon 2026?*
++
+In a single sentence: pass:[C++] is trying to retain its traditional strengths — control, performance, deterministic behavior and zero-overhead abstraction — while systematically attacking its traditional weaknesses: memory safety, undefined behavior, difficult metaprogramming, asynchronous programming and lack of introspection.
++
+Five themes particularly dominated:
++
+* Safety without giving up the pass:[C++] performance model
+* Reflection and compile-time programming becoming dramatically more powerful
+* A major rethink of asynchronous/concurrent programming
+* pass:[C++] becoming increasingly important for specialized, maybe embedded, resource-constrained areas of high-performance computing
+* AI is changing what "being a pass:[C++] programmer" means, rather than simply making pass:[C++] programming disappear
++
+Perhaps the following diagram broadly shows current thinking:
++
+[source,txt]
+----
+                           C++ 2026
+                               │
+          ┌────────────────────┼────────────────────┐
+          │                    │                    │
+       SAFETY            EXPRESSIVENESS        PERFORMANCE
+          │                    │                    │
+    ┌─────┼─────┐          ┌───┼────┐           ┌───┼────┐
+    │     │     │          │   │    │           │   │    │
+ profiles contracts  reflection  constexpr    SIMD    locality
+    │     │     │          │   │    │           │   │    │
+    └─────┴─────┘          └───┴────┘           └───┴────┘
+          │                    │                    │
+          └────────────────────┼────────────────────┘
+                               │
+                           Modern C++
+                               │
+          ┌────────────────────┼────────────────────┐
+          │                    │                    │
+      EXECUTION             HARDWARE             AI ERA
+          │                    │                    │
+    senders/receivers       memory tiers         complexity
+    coroutines              embedded             verification
+    parallelism             SIMD                 architecture
+    scheduling              determinism          system design
+----
+
+. *What are conference talks focusing on when it comes to embedded pass:[C++]?*
++
+Talks on using modern pass:[C++] in embedded systems (such as microcontrollers) tend to address such code functions as `std::start_lifetime_as`, and issues such as byte representation, endianness, padding, reflection, and undefined behavior. Indeed talks on memory safety on microcontrollers cover topics including compiler warnings, the tools _AddressSanitizer_ and _UndefinedBehaviorSanitizer_. `std::span`, `std::expected`, strongly typed wrappers, hardened containers, contracts, and
+safety profiles. The modern attitude seems increasingly to be "Resource constrained" does not automatically mean "use ancient C."
+
+. *Was there any talk at Cppcon 2026 that AI might be creating a new set of problems in addition to super-fast code generation?*
++
+Certainly. Andrei Alexandrescu's keynote was explicitly about the consequences of AI systems generating large amounts of code while human inspection and validation remain difficult. His central theme was that managing complexity and understanding system structure become increasingly important. This is an extremely important observation for pass:[C++]: AI can produce code in seconds, but that does not mean a human systems integrator, for example, would understand the code's lifetime guarantees, exception behavior, concurrency assumptions, ABI consequences, memory layout, performance characteristics, template instantiation costs, or where there is potential for undefined behavior.
 
 == See Also
 
