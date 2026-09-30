@@ -88,6 +88,37 @@ safety profiles. The modern attitude seems increasingly to be "Resource constrai
 +
 Certainly. Andrei Alexandrescu's keynote was explicitly about the consequences of AI systems generating large amounts of code while human inspection and validation remain difficult. His central theme was that managing complexity and understanding system structure become increasingly important. This is an extremely important observation for pass:[C++]: AI can produce code in seconds, but that does not mean a human systems integrator, for example, would understand the code's lifetime guarantees, exception behavior, concurrency assumptions, ABI consequences, memory layout, performance characteristics, template instantiation costs, or where there is potential for undefined behavior.
 
+. *Is there humor at all at these conferences, perhaps in the "hallway track"?*
++
+There is little humor in the presentations and questions and answers that follow in the formal presentations. You are right that the "hallway track" is where humor does come out, and can be quite entertaining. Here are some quotes or near-quotes from hallway conversations:
++
+* "A developer is a device that turns caffeine into algorithms."
+* "A pass:[C++] programmer is a device that turns undefined behavior into compiler errors."
+* "Modern pass:[C++] should make the right thing easier — and the dangerous thing harder."
+* "The future of embedded pass:[C++] isn't smaller pass:[C++]; it's modern pass:[C++] with smaller footprints."
+* "Don't optimize the average case when the worst case is what breaks the machine."
+* "Replace the pointer you hope is valid with the type that proves what you mean."
+* "Zero overhead doesn't mean zero abstraction."
+* "The hard part isn't writing the code; it's making the system's assumptions visible."
+* "pass:[C++] in 2026 isn't trying to become less powerful; it's trying to make that power easier to control."
++
+And some (paraphrazed) quotes on the current difficulty in guesstimating the impact of AI on developers:
++
+* "AI can write the code. pass:[C++] still has to explain why it crashed."
+* "Artificial intelligence is very good at finding patterns; pass:[C++] is very good at finding semicolons."
+* "AI promises to eliminate programmers. pass:[C++] promises to eliminate their weekends."
+* "The ultimate pass:[C++] optimization: ask the AI to generate the code, then ask the compiler whether it was any good."
+* "An AI model has parameters. A pass:[C++] programmer has templates. Nobody understands either one completely."
+* "AI wants more compute. Embedded pass:[C++] wants fewer bytes. Welcome to the negotiation."
+* "AI handles the uncertainty; pass:[C++] handles everything that isn't allowed to be uncertain."
++
+Certainly the Boost hospitality booth, the exhibitor stands, field trips, free coffee stands, all encourage a healthy hallway discourse on many questions attendees have that might not be appropriate for a formal question and answer session.
+
+
+
+
+
+
 == See Also
 
 * xref:faq.adoc[]
