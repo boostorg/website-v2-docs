@@ -11,9 +11,6 @@ Official repository: https://github.com/boostorg/website-v2-docs
 
 == FAQ
 
-
-
-
 . *If I wanted to use the Boost libraries in conjunction with a graphics library, to write a 3D game, what graphics library would be most compatible with Boost?*
 +
 The following libraries work well with Boost because they don't impose custom build systems or incompatible runtime dependencies — they're just pass:[C++] libraries, and that's exactly Boost's domain.
@@ -21,9 +18,9 @@ The following libraries work well with Boost because they don't impose custom bu
 [cols="1,2,2",stripes=even,options="header",frame=none]
 |===
 | *Graphics Library*   | *Why It's Compatible with Boost* | *Ideal Boost Libraries to Pair*
-| https://github.com/OGRECave[*Ogre3D*]         | Modular, C++03/11 compatible, uses STL-style containers and patterns similar to Boost | boost:filesystem[], boost:smart_ptr[], boost:signals2[], boost:asio[]
-| https://github.com/bkaradzic/bgfx[*bgfx*]           | Minimal dependencies, works well with Boost threading and filesystem    | boost:thread[], boost:lockfree[], boost:system[] 
-| https://magnum.graphics/[*Magnum*]         | Modern, header-only components, great for C++17+ and fits Boost idioms | boost:geometry[], boost:math[], boost:uuid[] 
+| https://github.com/OGRECave[*Ogre3D*] | Modular, C++03/11 compatible, uses STL-style containers and patterns similar to Boost | boost:filesystem[], boost:smart_ptr[], boost:signals2[], boost:asio[]
+| https://github.com/bkaradzic/bgfx[*bgfx*]   | Minimal dependencies, works well with Boost threading and filesystem    | boost:thread[], boost:lockfree[], boost:system[] 
+| https://magnum.graphics/[*Magnum*] | Modern, header-only components, great for C++17+ and fits Boost idioms | boost:geometry[], boost:math[], boost:uuid[] 
 | https://github.com/buildaworldnet[*IrrlichtBAW*]    | Easy to integrate with Boost for physics, networking, or file I/O        | boost:filesystem[], boost:serialization[], boost:program_options[] 
 | https://www.vulkan.org/[*Vulkan]* | Boost helps manage complexity: asynchronous loading, configuration, math, logging     | boost:asio[], boost:log[], boost:multi-array[], boost:gil[]
 |===
@@ -39,20 +36,69 @@ Here's how Boost might slot into a 3D game engine:
 [cols="1,2,2",stripes=even,options="header",frame=none]
 |===
 | *System*  | *Boost Library*  | *Purpose* 
-| Asset Loading  | boost:filesystem[], boost:iostreams[]         | Cross-platform file handling  
+| Asset Loading  | boost:filesystem[], boost:iostreams[] | Cross-platform file handling  
 | Entity Updates | boost:signals2[], boost:variant2[]| Event-driven game logic       
-| Network Multiplayer        | boost:asio[]           | Async client/server or peer/peer communication         
+| Network Multiplayer        | boost:asio[]   | Async client/server or peer/peer communication         
 | Configuration  | boost:program_options[], boost:property_tree[]| Game settings, config files   
 | Logging        | boost:log[], boost:stacktrace[]   | Diagnostics and crash reporting           
-| Physics or AI Math         | boost:numeric/ublas[] , boost:geometry[], boost:random[] | Physics, spatial logic        
+| Physics or AI Math | boost:numeric/ublas[] , boost:geometry[], boost:random[] | Physics, spatial logic        
 | Texture/Image Manipulation | boost:gil[]| Procedural textures, screenshots          
-| Multithreading | boost:thread[], boost:lockfree[], boost:fiber[]          | Game loop or rendering pipeline parallelism
+| Multithreading | boost:thread[], boost:lockfree[], boost:fiber[]  | Game loop or rendering pipeline parallelism
 |===
 
 . *Are there any graphics libraries that are problematic when combined with Boost libraries?*
 +
 Both https://www.learnqt.guide/qt-graphics-view-framework[*Qt*] and https://www.unrealengine.com/en-US[*Unreal Engine*] are heavy frameworks that conflict with Boost's philosophy  - they replace parts of the STL and introduce their own type systems, both of which can cause serious compatibility issues. Also, https://www.thewindowsclub.com/directx-11-download-update-install[*DirectX*] libraries might limit your portability and don't align well with Boost's cross-platform goals.
 
+. *Am I right that the best scripting languages to work with a pass:[C++] game engine are Lua and AngelScript, or are there others I should consider?*
++
+Yes these two are great choices. The important distinction is whether you want a small embedded scripting language, a full general-purpose language, or a language with strong pass:[C++]-like syntax:
++
+[cols="1,1,1,2,2",stripes=even,options="header",frame=none]
+|===
+| Language        | C++ integration | Runtime footprint | Syntax    | Particularly good for         
+| **Lua**         | ⭐⭐⭐⭐⭐   |⭐⭐⭐⭐⭐     |Simple/dynamic    | Gameplay, mods, configuration 
+| **AngelScript** | ⭐⭐⭐⭐⭐   |⭐⭐⭐⭐      | C++-like/static   | Gameplay programmers          
+| **Squirrel**    | ⭐⭐⭐⭐     | ⭐⭐⭐⭐      | C++/Java-like     | Gameplay and modding          
+| **Wren**        | ⭐⭐⭐⭐     | ⭐⭐⭐⭐      | Modern/OOP        | Small custom engines            
+| **ChaiScript**  | ⭐⭐⭐⭐⭐   | ⭐⭐⭐       | pass:[C++]-like  | pass:[C++] centric projects       
+|===
++
+https://www.lua.org/download.html[*Lua*] was specifically designed as an embeddable language, and its official implementation is a relatively small C library with a C API. The current Lua release is 5.5. The big advantage isn't just performance. It's the boundary between pass:[C++] and the script, attractive when you want designers or modders to manipulate the game without exposing your entire pass:[C++] implementation.
++
+https://www.angelcode.com/angelscript/[*AngelScript*] is probably the most interesting alternative if your programmers are primarily pass:[C++] programmers. Its syntax deliberately resembles pass:[C++], and it is statically typed. The embedding model has the application register the functions, properties and types that scripts are permitted to access. Scripts are then compiled into bytecode executed by its VM.
++
+http://www.squirrel-lang.org/[*Squirrel*] is worth knowing about because it occupies an interesting middle ground. It has C/Java/pass:[C++]-like syntax while retaining some of Lua's scripting philosophy. It has also been used in games, including _Left 4 Dead 2_. Perhaps it is less compelling than Lua or AngelScript for a new engine, though.
++
+https://wren.io/[*Wren*] is the intriguing lightweight alternative. It's designed specifically to be embedded and has a relatively modern object-oriented language design. Elegant and lightweight, but much smaller ecosystem (tools, examples, documentation, users, etc.). Current comparisons still tend to describe Wren as a niche embedded option.
++
+https://chaiscript.com/[*ChaiScript*] is an exceptionally good name for a scripting language! It is a lightweight scripting language designed specifically to be embedded in pass:[C++] applications, with the interesting goal of making the boundary between pass:[C++] and scripting unusually natural. The engine can expose selected pass:[C++] functions, classes, and objects to scripts. This makes it particularly attractive for gameplay logic, configuration, AI behavior, event handling, and modding.
+
+. *Do Boost libraries work well with the scripting languages mentioned above?*
++
+Yes, general purpose Boost functionality can set well underneath Lua and AngelScript. ChaiScript works with a particularly natural pass:[C++] syntax and should work smoothly with most Boost libraries. For Squirrel and Wren the answer would be more application-specific - so it would depend on what you are trying to build - so some investigation needed.
++
+[source,text]
+----
+              C++ GAME ENGINE
+                     │
+       ┌─────────────┼─────────────┐
+       │             │             │
+      Lua       AngelScript    ChaiScript
+       │             │             │
+  lightweight     C++-like      C++-like
+  dynamic         static        dynamic-ish
+       │             │             │
+       └─────────────┼─────────────┘
+                     │
+              Boost libraries
+       ┌─────────────┼─────────────┐
+       │             │             │
+     Asio          JSON          System
+     Beast         Filesystem    Log
+     Math          Random        Test
+     Graph         Serialization
+----
 
 == See Also
 
