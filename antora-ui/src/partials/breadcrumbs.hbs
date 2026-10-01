@@ -11,7 +11,7 @@
     {{/if}}
     {{/with}}
     {{#each page.breadcrumbs}}
-    <li>
+    <li{{#if @last}} aria-current="page"{{/if}}>
     {{~#if (and ./url (eq ./urlType 'internal'))~}}
     <a href="{{{relativize ./url}}}">{{{./content}}}</a>
     {{~else~}}
