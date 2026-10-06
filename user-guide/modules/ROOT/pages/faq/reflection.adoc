@@ -19,10 +19,6 @@ Reflection in .NET is the ability of a program to inspect and manipulate its own
 +
 Other libraries that you might find value in include boost:pfr[] (_Precise Function Reflection_), which lets you reflect on structure fields without macros or metadata, using clever template magic. For richer type information there is boost:type_index[] and boost:callable_traits[], and for metaprogramming there is boost:mp11[], boost:fusion[], and boost:hana[].
 
-. *Are there plans to extend Reflection further into Boost or the Standard C++ Library?*
-+
-The short answer is yes, into the Standard, but not yet. There are some niggling downsides to enabling full reflection, including slower than normal code, more difficult code maintenance and debugging, and string related issues (as string names are relied on). The standard work is known as the Reflection TS (_Technical Specification_).
-
 . *Can you show me example code demonstrating how to use Boost.Describe for Reflection?*
 +
 The following example shows how boost:describe[] and boost:mp11[] work together to achieve something close to automatic runtime reflection:
@@ -79,6 +75,70 @@ int main() {
     std::cout << "As tuple: " << boost::pfr::io(u) << "\n";
 }
 ----
+
+. *Are there plans to extend Reflection further into the Standard C++ Library?*
++
+Yes, in pass:[C++] 2026, though as pass:[C++] is a complicated language, the answer has to be complicated too. It is not just a case of making names and values available to the compiler, there are lots of different components that might make up a class or structure. The following table should help you identify what components will be fully reflectable, _partly_ reflectable, and those that will not be:
++
+[cols="2,1,4",stripes=even,options="header",frame=none]
+|===
+| pass:[C++] construct                                | pass:[C++]26 reflection? | Comments                                                                                    
+| *Class / struct*                           | ✅                 | Can reflect the type itself                                                                 
+| *Member names*                             | ✅                 | Names can be obtained                                                                       
+| *Member types*                             | ✅                 | Types can be queried                                                                        
+| *Data members*                             | ✅                 | `members_of()` etc.                                                                         
+| *Base classes*                             | ✅                 | `bases_of()` exposes direct base-class relationships                                        
+| *Inherited members*                        | 🟡                | Can be reached through the reflected base classes; not simply flattened into `members_of()` 
+| *Member functions*                         | ✅                 | Functions are reflectable                                                                   
+| *Function names/signatures*                | ✅                 | Various properties can be queried                                                           
+| *Static member functions*                  | ✅                 |                                                                                             
+| *Special member functions*                 | ✅                 | Reflection can identify special member functions                                            
+| *Function templates*                       | ✅                 | Explicitly representable                                                                    
+| *Class templates*                          | ✅                 | Explicitly representable                                                                    
+| *Variable templates*                       | ✅                 | Explicitly representable                                                                    
+| *Concepts*                                 | ✅                 | Explicitly representable                                                                    
+| *Free functions*                           | ✅                 | Functions themselves can be reflected                                                       
+| *Friend functions*                         | 🟡                | Reflectable as functions, but friendship/access relationships are more nuanced              
+| *Namespaces*                               | ✅                 | Namespaces and namespace aliases are representable                                         
+| *Enums*                                    | ✅                 | Enumerators can be reflected                                                               
+| *Type aliases*                             | ✅                 |                                                                                            
+| *Lambda expressions*                       | 🟡                | Closure types have special restrictions                                                     
+| *Attributes*                               | 🟡                | This has been evolving separately                                                           
+| *Statements / expressions / arbitrary AST* | ❌                 | Not intended to be a general AST reflection system                                         
+| *Source code itself*                       | ❌                 | A pass:[C++] parser is not exposed to the program                                             
+|===
++
+In short, pass:[C++]26 reflection is not simply exposing every relationship in the compiler's internal representation. There is also a security aspect too, passwords for example should not be made publicly available through reflection. For this case, there is the concept of _access context_, a pretty sophisticated aspect of the design.
++
+Note:: AST = Abstract Syntax Tree: the compiler's structured representation of the program's syntax and meaning.
+
+. *How does the "access context" of the Reflection design work?*
++
+The access context is essentially reflection's way of preserving pass:[C++]'s normal `public`/`protected`/`private` rules. A reflection operation doesn't automatically give you a magical back door into everything a class contains. Instead, the reflection machinery can be evaluated with a particular context representing who is asking. For example, if reflection is performed from within a class, it can have the access privileges that code inside that class normally has; if it is performed from unrelated code, `private` members remain inaccessible. The design includes facilities such as `std::meta::access_context` and `is_accessible()` to query whether a reflected entity is accessible from a particular context.
+
+. *How might Reflection in pass:[C++] 26 impact Boost libraries such as Describe and PFR?*
++
+Clearly there will be an impact — and there is a very interesting answer: pass:[C++]26 reflection does not simply make boost:describe[] and boost:pfr[] obsolete. In fact, the current boost:pfr[] implementation already has a switch to use pass:[C++]26 reflection when available. Over time, boost:pfr[] may become a thin abstraction over standard reflection when available. And boost:describe[] could become a compatibility/adaptation layer, particularly useful for existing Boost libraries and pre-pass:[C++]26 code.
++
+The following tables shows a likely comparison of features:
++
+[cols="2,3,3,3",stripes=even,options="header",frame=none]
+|===
+|                          | Boost.PFR                                     | Boost.Describe                       | pass:[C++]26 Reflection           
+| Main idea                | Discover aggregate fields without annotations | Explicitly describe selected members | Standard language facility 
+| Macros required          | *No*                                        | *Yes*                              | *No*                     
+| pass:[C++]14+                   | ✅                                             | ✅                                    | ❌ C++26                    
+| Member data              | ✅                                             | ✅                                    | ✅                          
+| Member names             | ✅                                             | ✅                                    | ✅                          
+| Member types             | ✅                                             | ✅                                    | ✅                          
+| Base classes             | Limited                                       | ✅                                    | ✅                          
+| Member functions         | ❌/very limited                                | ✅                                    | ✅                         
+| Enums                    | Limited                                       | ✅                                    | ✅                          
+| Templates                | ❌                                             | Some support                         | ✅                          
+| General program entities | ❌                                             | Limited                              | *Much broader*           
+| Standard facility        | ❌                                             | ❌                                    | ✅               
+|===
+
 
 == See Also
 
