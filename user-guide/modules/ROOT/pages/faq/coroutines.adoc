@@ -11,7 +11,11 @@ Official repository: https://github.com/boostorg/website-v2-docs
 
 == FAQ
 
-
+. *What is the motivation for coroutines, when asynchronous callbacks seem to be working well?*
++
+Yes, traditionally networking, IoT, GUI systems, and sensor-based control systems have often been built around asynchronous callbacks. This works well for relatively simple operations, but as an application grows, chains of callbacks can make the overall control flow difficult to see and reason about. State has to be preserved between callbacks, error handling can become fragmented, and coordinating several asynchronous operations can become surprisingly complicated. In larger systems such as autonomous vehicles, robotics, or complex network services, cancellation, timeouts, synchronization, and ensuring that resources are released correctly can also become difficult to manage.
++
+Coroutines provide an alternative way of expressing the same asynchronous operations. Instead of breaking an operation into a series of callbacks, a coroutine can be written in a style that looks much more like ordinary sequential code: _start operation → wait → process result → wait for next operation → continue_. When it reaches an asynchronous operation, the coroutine can suspend without blocking the underlying thread, and later resume when the operation completes. This gives the programmer a much clearer representation of the logical control flow while retaining the scalability of asynchronous execution. Coroutines therefore don't replace asynchronous programming; rather, they provide a structured way of expressing it. They can make state management, error propagation, composition, and cancellation easier to reason about, although robust cancellation still has to be designed into the coroutine framework and application.
 
 . *When reading about coroutines, I often come across the term `task`. Within the context of C++, is a task a function or process?*
 +
