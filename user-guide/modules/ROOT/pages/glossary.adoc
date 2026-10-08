@@ -790,8 +790,6 @@ It is fast enough for hash table lookups, but unlike MurmurHash/FarmHash, it res
 
 *Vibe coding* : An informal term for writing software primarily by describing what you want to an AI coding assistant and accepting or iteratively refining the generated code, rather than personally designing and implementing the details. The programmer is often steering the AI rather than directly writing the implementation. If you provide preferred functions to the AI (for example, giving the AI a command to use `std:unordered_map`) that's better described as _AI-assisted coding_ than vibe coding.
 
-Vibe coding is characterized more by:
-
 *VLA* : Variable Length Array - although pass:[C++] does not officially support VLAs in the standard, some compilers provide support as an extension. VLAs allow the length of an array to be determined at runtime.
 
 *VMD* : Variadic Macro Data - refer to boost:vmd[]
