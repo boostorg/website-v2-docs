@@ -29,6 +29,40 @@ boost_at:/doc/libs/1_93_0/[Documentation]
 // ** Conform to `std::pointer_traits` requirements (boost_gh:pr[interprocess,32]).
 // ** Fixed `named_condition_any` fails to notify (boost_gh:issue[interprocess,62]).
 
+* boost_phrase:library[DynamicBitset,/libs/dynamic_bitset/]:
+** Added `extract( pos, len )`, which returns the bits in a range as a new bitset, as
+   `std::basic_string::substr()` does for strings.
+** Made the constructor from a size and a value take the value as an `unsigned long long`, as
+   `std::bitset` does (where `unsigned long` has 32 bits, the result changes for wider values),
+   and made it non-`explicit`, adding an `explicit` constructor from a size alone.
+** Added the allocator-extended copy and move constructors, and a constructor from a size and an
+   allocator, to support uses-allocator construction (e.g. in `std::pmr` containers).
+** Made the string constructors and `to_string()` independent of the global locale, which fixes
+   them for `char8_t`, `char16_t` and `char32_t`, and made the constructor from a `const CharT *`
+   accept only character types and read at most `n` characters.
+** Made the constructor from a range of blocks take two unscoped enumerators as a size and a
+   value, and the functions which take a range of blocks accept a `value_type` which converts
+   implicitly to `Block`, other than `bool` and the floating-point types.
+** Improved the iterators: they are default-constructible, `iterator` converts to
+   `const_iterator`, their difference type is `std::intmax_t`, and the `std::ranges` algorithms,
+   `std::sort()` and `std::reverse()` work on a `dynamic_bitset`. Also added the member types
+   `value_type` and `difference_type`.
+** Declared `noexcept` the functions which have no precondition and can't throw, and the move
+   operations when those of the underlying container are (boost_gh:issue[dynamic_bitset,85]).
+** In {cpp}20, made `to_string()`, the string constructors and the `find_*()` functions usable in
+   constant expressions, and documented the `constexpr` support.
+** Fixed several issues with user-supplied containers and allocators (e.g. `std::deque` and
+   `std::pmr::polymorphic_allocator`), and documented the requirements on a container.
+** Made `append()` of a range of blocks give the strong exception guarantee, and made a
+   moved-from bitset, and one whose copy or move assignment throws, always empty.
+** Made loading from a Boost.Serialization archive check the data, and throw
+   `std::invalid_argument` if it is invalid.
+** Fixed link errors with `npos` and `bits_per_block` in {cpp}11 and {cpp}14, a regression of
+   Boost 1.90.
+** Made faster the bitwise and shift operators, `set()`, `reset()` and `flip()` of a range, the
+   `find_*()` functions and `to_string()`.
+** Moved undocumented implementation details, such as `bit_iterator`, out of namespace `boost`.
+
 * boost_phrase:library[PolyCollection,/libs/poly_collection/]:
 ** Added unordered, stable collections `boost::base_unordered_collection`, 
 `boost::function_unordered_collection`, `boost::any_unordered_collection` and
