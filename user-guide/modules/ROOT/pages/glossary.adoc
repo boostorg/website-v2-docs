@@ -33,6 +33,14 @@ Where terms apply specifically to one technology, such as _Quantum Computing_ or
 
 *AFAIK* : _As Far As I Know_
 
+*Agentic coding* : This is one of the more important newer terms, best explained by an example. Instead of giving an AI a command such as _Write this function_, you give an AI coding agent something more like: _Add OAuth authentication to this application. Run the tests, find anything that breaks, and fix it._
+
+*AI code archaeology* : A useful phrase for the situation where an AI is asked to explain or modify an existing, poorly understood codebase. The AI effectively becomes an archaeologist, digging through classes, call graphs, configuration files, comments, tests, and historical conventions. And, amusingly, this can be exactly where AI is more useful than generating greenfield code.
+
+*AI pair programming* : You and an AI collaborate interactively. You design and reason, AI suggests and implements.
+
+*AI slop* : Code produced quickly by AI that looks plausible but is poorly designed, unnecessarily complicated, buggy, or difficult to maintain.
+
 *Annotation* : Interestingly, "annotation" is not a formally defined term in the pass:[C++] standard. It's a word that pass:[C++] programmers use informally to mean additional information attached to a declaration or piece of code that doesn't fundamentally change its syntax. Depending on the context, "annotation" can mean several different things:
 
 * Attributes : This is the most common usage, and refers to entries like:
@@ -112,6 +120,12 @@ Note:: The Bloom filter is named after its inventor, Burton Howard Bloom, who de
 *CHAOS* : _Code Helped Along, Obviously Shaky_ - AI suggestions that compile but crash spectacularly.
 
 *CML* : Can mean CMake Language, Conversion Markup Language, Configuration Menu Language, Concurrent ML (a high-level language for concurrent programming) - depending on context.
+
+*Code whispering* : Giving an AI increasingly specific hints or instructions until it produces the desired code.
+
+*Code zombie* : Not exclusively an AI term, but it has become particularly relevant to AI-generated code. A code zombie is code that compiles, appears to work, nobody really understands, nobody wants to touch, and somehow survives indefinitely.
+
+*Copypasta coding* : Copying generated code into a project with little understanding or verification.
 
 *Coroutine* : A function that can pause and later resume execution while preserving its state. Coroutines enable asynchronous and non-blocking code to look and behave like normal sequential code. The attraction of coroutines is that if they are designed and implemented well they can greatly simplify  networking, I/O, and concurrency - avoiding the complexity and overhead of traditional callback or thread-based designs. Within the field of coroutines, there are many terms that you will see in pertinent discussions:
 
@@ -567,6 +581,9 @@ long long b = a; // promotion: int -> long long
 
 The reverse ( `a = b;` ) is not a promotion, it would be an unsafe conversion. The key point is there is no danger of data loss in a promotion.
 
+*Prompt-driven development* : Development where natural-language prompts are a major mechanism for specifying and changing the software.
+
+*Prompt engineering* : Crafting prompts specifically to get better, more reliable results from an AI.
 
 [[q]]
 == Q
@@ -663,6 +680,10 @@ _This diagram shows the basic process of quantum teleportation, where the unknow
 
 *RTTI* : Run-Time Type Information
 
+*Rubber-ducking with AI* : Explaining a programming problem to an AI in order to discover the problem yourself — or get the AI to spot it.
+
+*Runtime navel-gazing* : A deliberately silly description of reflection.
+
 *RUST* : https://www.rust-lang.org/[Rust] is a relatively new programming language incorporating memory-safety, thread-safety and type-safety constructs. This language provides many of the concepts proposed for <<safecpp, Safe pass:[C++]>>.
 
 *Rustaceans* : Aficionados of the https://www.rust-lang.org/[Rust] programming language
@@ -684,6 +705,8 @@ _This diagram shows the basic process of quantum teleportation, where the unknow
 * *Relocation object model* : a memory model that supports relocation/destruction of local objects, in order to satisfy type-safety.
 * *Send and sync* : these are _type traits_ that ensure memory-safety between threads. The _send_ is enabled for a variable if it is safe to transfer ownership of its value to another thread. A _sync_ trait is enabled if it is safe to share a reference to a value with other threads. 
 * *The `safe` context* : operations in the `safe` context are guaranteed not to cause undefined behavior. 
+
+*Self-reflective code* : Psychological: _My program doesn't have bugs. It has unresolved issues discovered through self-reflection._
 
 *SFINAE* or *SFINAED* : _Substitution Failure Is Not An Error_
 
@@ -718,6 +741,8 @@ It is fast enough for hash table lookups, but unlike MurmurHash/FarmHash, it res
 *TCP* : Transmission Control Protocol
 
 *TDD* : Test-Driven Development - sometimes reframed as AI-TDD, where developers rely on AI to generate tests first, then code.
+
+*Ten x developer* : The (sometimes) mythical programmer who is vastly more productive than average. With AI coding, you'll sometimes hear the joke that the new superpower is being a _10x prompt engineer_ — someone who can consistently get an AI to produce exactly the code they need.
 
 *Test Matrix* : A test matrix is a table used to define and track test cases, inputs, and environments, such as various operating systems, compilers, and hardware platforms. Each row represents a test scenario or feature, while the columns represent variations like software versions or hardware setups - refer to xref:contributor-guide:ROOT:testing/boost-test-matrix.adoc[Contributor Guide: Test Matrix].
 
@@ -762,6 +787,8 @@ It is fast enough for hash table lookups, but unlike MurmurHash/FarmHash, it res
 *VCPKG* : https://vcpkg.io/en/[Microsoft's open source package manager] for acquiring and managing libraries
 
 *VFS* : Virtual File System - abstract file system operations across multiple platforms might implement or make use of a VFS layer. This allows consistent file I/O behavior regardless of the underlying file system.
+
+*Vibe coding* : An informal term for writing software primarily by describing what you want to an AI coding assistant and accepting or iteratively refining the generated code, rather than personally designing and implementing the details. The programmer is often steering the AI rather than directly writing the implementation. If you provide preferred functions to the AI (for example, giving the AI a command to use `std:unordered_map`) that's better described as _AI-assisted coding_ than vibe coding.
 
 *VLA* : Variable Length Array - although pass:[C++] does not officially support VLAs in the standard, some compilers provide support as an extension. VLAs allow the length of an array to be determined at runtime.
 
