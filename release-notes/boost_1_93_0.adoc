@@ -69,6 +69,84 @@ boost_at:/doc/libs/1_93_0/[Documentation]
 `boost::variant_unordered_collection`, internally based on
 https://www.boost.org/doc/html/container/non_standard_containers.html#container.non_standard_containers.hub[`boost::container::hub`]. 
 
+* boost_phrase:library[Serialization,/libs/serialization/]:
+** Fixed CVE-2023-34399: a pointer loaded with a negative class id other than -1 read the class
+   table out of bounds. Every negative id now loads as a null pointer
+   (boost_gh:pr[serialization,332]).
+** Raised the archive library version to 21, so earlier versions of the library reject text and
+   binary archives written by this one; archives written by earlier versions still load. The
+   change stores at full width the enumerations whose underlying type is wider than `int`, which
+   used to be truncated (boost_gh:issue[serialization,353]).
+** Fixed the termination of the program when an XML input archive is destroyed at the end of its
+   input, e.g. after a failed read, a regression of Boost 1.66 (boost_gh:issue[serialization,82],
+   boost_gh:issue[serialization,99], boost_gh:issue[serialization,109]).
+** Deprecated `<boost/serialization/std_variant.hpp>`, as `<boost/serialization/variant.hpp>`
+   handles `std::variant` too, and removed `<boost/serialization/variant2.hpp>`, which was
+   ill-formed and so could not be used (boost_gh:pr[serialization,379]).
+** Added support for `std::filesystem::path`, except with GCC before 9, whose `<filesystem>` is
+   unreliable (boost_gh:issue[serialization,337]).
+** Added `BOOST_CLASS_TEMPLATE_VERSION`, which sets the version of a class template, as
+   `BOOST_CLASS_VERSION` does for a class (boost_gh:issue[serialization,179]).
+** Made `optional<T>` serializable when `T` has no default constructor, or only a private one, by
+   loading its value as a container element is loaded; archives of other `optional` types are
+   unchanged (boost_gh:issue[serialization,121], boost_gh:issue[serialization,165]).
+** Made `optional<T>` serializable when `T` is move-only (boost_gh:pr[serialization,330]).
+** Made the alternatives of a `variant` load as container elements do, so that they no longer
+   need a public default constructor (boost_gh:issue[serialization,338]).
+** Made a `std::basic_string` with an allocator of its own, such as `std::pmr::string`,
+   serializable with no declaration, in the same form as `std::string`
+   (boost_gh:issue[serialization,267]).
+** Added move operations to the types defined by `BOOST_STRONG_TYPEDEF`
+   (boost_gh:issue[serialization,341]).
+** Made public the `base_type` typedef of `version_type`, `class_id_type`, `object_id_type`,
+   `collection_size_type`, `item_version_type`, `library_version_type` and `tracking_type`,
+   naming the type each of them wraps (boost_gh:issue[serialization,326]).
+** Added constructors which take the end of the input to `transform_width` and
+   `remove_whitespace`. With them, a base64 decoder no longer reads past the end of an input whose
+   length leaves a remainder of one when divided by four, nor `remove_whitespace` past one which
+   ends in whitespace (boost_gh:issue[serialization,324], boost_gh:issue[serialization,254]).
+** Made `archive_exception` give the offset at which an input stream error occurred
+   (boost_gh:pr[serialization,380]).
+** Made infinities and NaNs written to text and XML archives read back. They are now written as
+   `inf`, `-inf` and `nan` with any standard library, and the forms earlier versions wrote load
+   too (boost_gh:issue[serialization,386]).
+** Fixed an object saved through a pointer to its base class, across shared libraries, loading
+   with its base part empty, a regression of Boost 1.85 (boost_gh:issue[serialization,329]).
+** Fixed silent data loss when the same `variant` is serialized by value more than once
+   (boost_gh:issue[serialization,203]).
+** Made the XML output archive write the closing tag of a complete document even when it is
+   destroyed during stack unwinding (boost_gh:issue[serialization,188]).
+** Fixed the loading from XML archives of a `std::wstring` with characters outside ASCII, which
+   was decoded according to the locale rather than as UTF-8 (boost_gh:issue[serialization,298]).
+** Fixed malformed escapes in wide XML archives, and the archive iterators `xml_escape`,
+   `xml_unescape`, `transform_width` and `remove_whitespace` losing their state when copied
+   (boost_gh:issue[serialization,229]).
+** Fixed a leak and double frees in the cleanup after an exception interrupts a load: the object
+   being loaded leaked, and objects an owning smart pointer had taken over were freed again. Note
+   that objects which used to leak are now freed, so a handler which deleted them must stop doing
+   so (boost_gh:issue[serialization,260]).
+** Fixed undefined references from a `version` trait written by hand whose `value` has no
+   out-of-class definition (boost_gh:issue[serialization,311]).
+** Fixed `BOOST_SERIALIZATION_FACTORY_1` to `BOOST_SERIALIZATION_FACTORY_4`, which didn't compile
+   (boost_gh:issue[serialization,215]).
+** Fixed a GCC error when serializing a `std::optional` with
+   `<boost/serialization/shared_ptr.hpp>` included (boost_gh:issue[serialization,319]).
+** Fixed a link error when a program built with clang-cl uses the library built with MSVC, by no
+   longer deriving the archive exceptions virtually (boost_gh:issue[serialization,321]).
+** Fixed a multiply defined symbol error from MSVC when both a DLL and an executable use a wide
+   archive with static linking (boost_gh:issue[serialization,232]).
+** Fixed the loss of a type's registration in every shared library when one of the libraries
+   registering it is unloaded (boost_gh:issue[serialization,325]).
+** Silenced a GCC `-Wuninitialized` warning (boost_gh:issue[serialization,333]).
+** Declared {cpp}11 as the minimum standard, which the library had in fact required for some
+   time (boost_gh:pr[serialization,367]).
+** Replaced the frames of the documentation with ordinary pages
+   (boost_gh:issue[serialization,300]).
+** Documented that a derived archive must call `init()` itself (boost_gh:issue[serialization,182]),
+   that the file using `BOOST_CLASS_EXPORT_IMPLEMENT` must include the archive headers
+   (boost_gh:issue[serialization,327]), and that a value written through a polymorphic archive
+   needs a name (boost_gh:issue[serialization,189]).
+
 == Compilers Tested
 
 // Edit this section as appropriate
