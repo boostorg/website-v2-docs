@@ -618,6 +618,25 @@ An open-method library is currently in the Boost formal review process.
 
 *Pinyin Order* : A common system of sorting written Chinese based on the romanized pronunciation of the characters. Sorts characters like English words A through Z based on the Pinyin spelling and tone. This compares with _Stroke Order_ - which sorts based on the number of strokes in the written character - and _Radical Order_ - a sorting system based on the traditional Kangxi radicals. Pinyin ordering is common in dictionaries aimed at learners, phone books, and computer input systems.
 
+[[pipeline]]
+*Pipeline* : Chains multiple operations together, with the output of one operation becoming the input to the next. <<view, Views>> and pipelines are closely related. For example, suppose you want to select even numbers, square them, but keep only the first three results. You could express all three operations in one pipeline:
+[source,cpp]
+----
+auto result = numbers
+    | std::views::filter([](int n) { return n % 2 == 0; })
+    | std::views::transform([](int n) { return n * n; })
+    | std::views::take(3);
+----
+
+Note:: The vertical pipe (`|`) in the code snippet - this is the syntax for a pipeline.
+
+The obvious analogy of a pipeline is an assembly line. This way of looking at a task has a few useful properties:
+
+* Less temporary storage, filtering and transforming don't normally require intermediate vectors
+* Composition: each operation can be written independently and connected using the pipe `|`.
+* Lazy evaluation: the program generally performs the work needed as elements are requested, rather than engage in unnecessary processing.
+
+
 *PITA* : _Pain In The Application_ or _Programmer In Trouble Again_ - difficult or frustrating code issue, such as when debugging AI-hallucinated functions.
 
 *POD* : _Plain Old Data_
@@ -849,6 +868,34 @@ It is fast enough for hash table lookups, but unlike MurmurHash/FarmHash, it res
 *VFS* : Virtual File System - abstract file system operations across multiple platforms might implement or make use of a VFS layer. This allows consistent file I/O behavior regardless of the underlying file system.
 
 *Vibe coding* : An informal term for writing software primarily by describing what you want to an AI coding assistant and accepting or iteratively refining the generated code, rather than personally designing and implementing the details. The programmer is often steering the AI rather than directly writing the implementation. If you provide preferred functions to the AI (for example, giving the AI a command to use `std:unordered_map`) that's better described as _AI-assisted coding_ than vibe coding.
+
+[[view]]
+*View* : A lightweight way of looking at a sequence of elements, while a <<pipeline, Pipeline>> is a series of operations chained together to filter, transform, or otherwise process that sequence. The two are closely related: a pipeline is usually built by connecting views together.
+
+As a simple example of a view, imagine you have a `std::vector` containing numbers from 1 to 10, but you only want to look at the even numbers.
+Traditionally, you might create a second vector and copy the selected elements into it. A view lets you describe which elements you want to see without creating a new container of those elements:
+
+[source,cpp]
+----
+#include <iostream>
+#include <ranges>
+#include <vector>
+
+int main()
+{
+    std::vector<int> numbers{1, 2, 3, 4, 5, 6, 7, 8, 9, 10};
+
+    auto evens = numbers | std::views::filter(
+        [](int n) { return n % 2 == 0; });
+
+    for (int n : evens)
+        std::cout << n << ' ';
+}
+----
+
+Care does have to be taken when using views in complex situations, such as the issues with caching views, using `const` with views, and the consequences of reference semantics. In particular, be wary of how `filter_view` behaves - modifying an element through a filter view so that it no longer satisfies the predicate can result in undefined behavior.
+
+*View Adaptor* : An operation such as `filter`, `transform`, or `take` that creates an adapted <<view, View>>. Essentially a preparation step when working with views. `std::views::filter(...)` in the snippet code above is an example of a view adaptor.
 
 *VLA* : Variable Length Array - although pass:[C++] does not officially support VLAs in the standard, some compilers provide support as an extension. VLAs allow the length of an array to be determined at runtime.
 
