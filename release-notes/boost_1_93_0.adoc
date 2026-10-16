@@ -29,6 +29,11 @@ boost_at:/doc/libs/1_93_0/[Documentation]
 // ** Conform to `std::pointer_traits` requirements (boost_gh:pr[interprocess,32]).
 // ** Fixed `named_condition_any` fails to notify (boost_gh:issue[interprocess,62]).
 
+* boost_phrase:library[Bimap,/libs/bimap/]:
+** Added `std::initializer_list` constructor (boost_gh:pr[bimap,31]).
+** Following standard library conventions since C++11, all modifier functions taking 
+`iterator` arguments now accept `const_iterator` arguments instead (boost_gh:pr[bimap,56]).
+
 * boost_phrase:library[DynamicBitset,/libs/dynamic_bitset/]:
 ** Added `extract( pos, len )`, which returns the bits in a range as a new bitset, as
    `std::basic_string::substr()` does for strings.
