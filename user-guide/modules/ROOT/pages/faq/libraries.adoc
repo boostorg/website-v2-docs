@@ -81,7 +81,7 @@ A lambda is an annonymous function that can be defined directly within an expres
 +
 [cols="1,3",options="header",stripes=even,frame=none]
 |===
-| Boost Library   |  Typical Purpose  
+| Library   |  Typical Purpose  
 | boost:asio[]      | Completion handlers for asynchronous operations 
 | boost:thread[]    | Launching worker threads                        
 | boost:signals2[]  |  Connecting event handlers                      
@@ -94,6 +94,23 @@ A lambda is an annonymous function that can be defined directly within an expres
 | boost:graph[]     | Visitors and custom algorithms                  
 |===
 
+. *Are there any Boost libraries that work well with Views and Pipelines architecture?*
++
+There are several libraries you could investigate:
++
+[cols="1,3",options="header",stripes=even,frame=none]
+|===
+| Library	| How it can complement views and pipelines
+| boost:stl_interfaces[] | Helps you implement custom view types and view adaptors, including adaptors that compose using the vertical-pipe pipeline syntax. It provides facilities such as `view_interface` and `range_adaptor_closure`, helping reduce boilerplate and improve compatibility across language modes and compilers.
+| boost:range[] | Provides range-based algorithms, range utilities and its own range adaptors. It's useful for existing codebases, particularly when supporting older pass:[C++] standards. It predates pass:[C++]20 ranges, so its adaptors are not automatically interchangeable with every `std::views` adaptor.
+| boost:container[] | Provides containers that can be traversed by standard views when their iterators and range interfaces meet the requirements.
+| boost:multi-index[] | Provides multiple ways to index and access a collection. Standard views can be useful for filtering or transforming the resulting ranges.
+| boost:iterator[] | Helps implement custom iterators. Useful when building range-like abstractions, although it is not a replacement for modern view adaptors.
+|===
++
+The general approach is to use standard `std::views` for ordinary pipelines, and bring in Boost where it provides a capability you need.
++
+Note:: Refer to the https://www.boost.org/doc/libs/latest/doc/html/boost_stlinterfaces/tutorial__view_adaptors.html?utm_source=chatgpt.com[View Adaptors] tutorial for boost:stl_interfaces[] for some well commented examples.
 
 == See Also
 
