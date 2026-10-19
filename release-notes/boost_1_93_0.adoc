@@ -63,6 +63,13 @@ boost_at:/doc/libs/1_93_0/[Documentation]
    `find_*()` functions and `to_string()`.
 ** Moved undocumented implementation details, such as `bit_iterator`, out of namespace `boost`.
 
+* boost_phrase:library[MSM,/libs/msm/]:
+** The `backmp11` back-end is no longer experimental. Its API is considered stable from this release on, after the cleanup listed below.
+** **Breaking changes (`backmp11`)**:
+*** The active state switch policy can no longer be configured; the active state is now always set after source exit, in compliance with the UML specification (https://github.com/boostorg/msm/issues/222[#222]).
+*** The deprecated `HANDLED_`-prefixed values are removed from the `process_result` enum, use `discarded`, `consumed`, `rejected` and `deferred` instead (https://github.com/boostorg/msm/issues/242[#242]).
+** Fixed a bug in the `back11` back-end where a matching transition could be ignored depending on the order of rows in the transition table (https://github.com/boostorg/msm/issues/252[#252])
+
 * boost_phrase:library[PolyCollection,/libs/poly_collection/]:
 ** Added unordered, stable collections `boost::base_unordered_collection`, 
 `boost::function_unordered_collection`, `boost::any_unordered_collection` and
