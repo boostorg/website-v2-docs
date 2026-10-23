@@ -100,6 +100,73 @@ Yes, general purpose Boost functionality can set well underneath Lua and AngelSc
      Graph         Serialization
 ----
 
+. *Are there any Boost libraries that implement, or assist with, Voronoi diagrams?*
++
+Yes. boost:polygon[] provides Voronoi diagram construction, graph traversal, and some supporting polygon operations, such as polygon intersection, union, difference, resizing and related operations useful for clipping or processing geometric regions.
++
+The following example code constructs a Voronoi diagram from five points and reports how many cells, edges and vertices were created.
++
+[source,cpp]
+----
+
+#include <boost/polygon/voronoi.hpp>
+#include <iostream>
+
+
+namespace bp = boost::polygon;
+
+int main()
+{
+    using Point = bp::point_data<int>;
+
+    // Five input sites, using integer coordinates.
+    std::vector<Point> points{
+        {0, 0},
+        {10, 0},
+        {5, 8},
+        {2, 5},
+        {8, 5}
+    };
+
+    // Construct the Voronoi diagram.
+    bp::voronoi_diagram<double> diagram;
+
+    bp::construct_voronoi(
+        points.begin(), points.end(), &diagram);
+
+    std::cout << "Input points: " << points.size() << '\n';
+    std::cout << "Voronoi cells: " << diagram.num_cells() << '\n';
+    std::cout << "Voronoi edges: " << diagram.num_edges() << '\n';
+    std::cout << "Voronoi vertices: "
+        << diagram.num_vertices() << '\n';
+}
+
+----
++
+Run this code and you should get:
++
+[source,txt]
+----
+Input points: 5
+Voronoi cells: 5
+Voronoi edges: 12
+Voronoi vertices: 2
+----
+
+Note:: boost:polygon[]'s Voronoi implementation is two-dimensional. Its default interface expects integer input coordinates, which helps the algorithm maintain robust geometric predicates. If your original coordinates are floating-point values, you may need to scale and map them onto an integer grid, considering the precision trade-offs.
+
+. *Can I see an image of a Voronoi diagram?*
++
+image::voronoi-diagram.png[Voronoi diagram]
+
+. *How easy is it to extend a 2-D Voronoi implementation to 3-D?*
++
+In 2D, Voronoi boundaries are edges, and vertices are points where three or more cells meet. In 3D, boundaries are polygonal faces, edges are where faces meet, and vertices are where multiple faces meet. The construction algorithm must handle this richer topology, including degeneracies such as five or more sites lying on a common sphere.
++
+Best to start with boost:polygon[]'s 2D implementation and study the relationship between Voronoi diagrams and _Delaunay triangulations_ (a way of connecting a set of points into triangles so that no point lies inside the circumcircle of any triangle). If you need production-quality 3D geometry, investigate https://www.cgal.org/[CGAL - The Computational Geometry Algorithms Library] first and use Boost for the supporting infrastructure.
+
+
+
 == See Also
 
 * xref:faq.adoc[]

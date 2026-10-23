@@ -230,7 +230,7 @@ The libraries marked as *Optional* for Header-only add some functionality if the
 
 [#footnote1]
 link:#footnote1-location[(1)]
-A Voronoi diagram is a geometric structure that partitions a space into regions based on the proximity of a set of defined points, called _sites_ or _generators_. Each region contains all locations that are closer to its associated site than to any other site. The boundaries between regions consist of points that are equidistant from two or more sites. Voronoi diagrams have applications in computational geometry, geographic information systems (GIS), robotics, biology, and telecommunications, where they are used for tasks such as determining nearest service locations, analyzing spatial distributions, and partitioning areas for efficient resource allocation.
+A Voronoi diagram is a geometric structure that partitions a space into regions based on the proximity of a set of defined points, called _sites_ or _generators_. Each region contains all locations that are closer to its associated site than to any other site. The boundaries between regions consist of points that are equidistant from two or more sites. Voronoi diagrams have applications in computational geometry, geographic information systems (GIS), robotics, biology, and telecommunications, where they are used for tasks such as determining nearest service locations, analyzing spatial distributions, and partitioning areas for efficient resource allocation. boost:polygon[] has a dedicated Voronoi diagram implementation.
 
 [#footnote2]
 link:#footnote2-location[(2)]
