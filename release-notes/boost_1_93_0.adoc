@@ -35,6 +35,10 @@ boost_at:/doc/libs/1_93_0/[Documentation]
 `iterator` arguments now accept `const_iterator` arguments instead (boost_gh:pr[bimap,56]).
 
 * boost_phrase:library[DynamicBitset,/libs/dynamic_bitset/]:
+** Added a `to_string()` member which, like that of `std::bitset`, returns a string and can take
+   the characters for zero and one, and deprecated the namespace-scope `to_string()`. Also added
+   constructors from a `basic_string`, a `basic_string_view` or a `const CharT *` which, like
+   those of `std::bitset`, take those characters.
 ** Added `extract( pos, len )`, which returns the bits in a range as a new bitset, as
    `std::basic_string::substr()` does for strings.
 ** Made the constructor from a size and a value take the value as an `unsigned long long`, as
