@@ -75,6 +75,16 @@ boost_at:/doc/libs/1_93_0/[Documentation]
 *** The deprecated `HANDLED_`-prefixed values are removed from the `process_result` enum, use `discarded`, `consumed`, `rejected` and `deferred` instead (https://github.com/boostorg/msm/issues/242[#242]).
 ** Fixed a bug in the `back11` back-end where a matching transition could be ignored depending on the order of rows in the transition table (https://github.com/boostorg/msm/issues/252[#252])
 
+* boost_phrase:library[OpenMethod,/libs/openmethod/]:
+** Full support for Windows Dynamic Libraries (DLLs) and POSIX shared objects (DSOs) with `visibility=hidden`.
+** Interoperability with various `any` (std, Boost.Any and TypeErasure).
+** Interoperability with `std::weak_ptr`.
+** Fine-grained registry defaults via tags and ADL customization points.
+** Automatic class registration via reflection (requires C++26).
+** New hash policies: `minimal_perfect_hash`, `minimal_cover_hash` and `two_level_hash`.
+** Better compile-time diagnostics and new troubleshooting page.
+** A `virtual_ptr` to a class can be a member of that class.
+
 * boost_phrase:library[PolyCollection,/libs/poly_collection/]:
 ** Added unordered, stable collections `boost::base_unordered_collection`, 
 `boost::function_unordered_collection`, `boost::any_unordered_collection` and
