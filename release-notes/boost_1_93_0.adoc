@@ -159,6 +159,20 @@ https://www.boost.org/doc/html/container/non_standard_containers.html#container.
    (boost_gh:issue[serialization,327]), and that a value written through a polymorphic archive
    needs a name (boost_gh:issue[serialization,189]).
 
+* boost_phrase:library[Predef,/libs/predef/]:
+** 1.18.0
+*** Fix version calculation for LLVM `libc++` to support the changed format of
+    LLVM versions 16 and above.
+*** Detect `alpha` as an architecture in the B2 help utilities. (from Matt Turner)
+** 1.17.0
+*** Fix warnings at high levels current {CPP} compilers / standards.
+** 1.16.0
+*** Add detection for Tiny C Compiler (TCC). (from Kornel Ponikwicki)
+** 1.15.1
+*** Guard against using the obsolete `predef/check/predef.jam` B2 module.
+    Instead of using the current `predef/tools/check/predef.jam` module.
+*** Fix `architecture` tool check rule returning `ppc` instead of `power`.
+
 == Compilers Tested
 
 // Edit this section as appropriate
