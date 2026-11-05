@@ -29,6 +29,24 @@ boost_at:/doc/libs/1_93_0/[Documentation]
 // ** Conform to `std::pointer_traits` requirements (boost_gh:pr[interprocess,32]).
 // ** Fixed `named_condition_any` fails to notify (boost_gh:issue[interprocess,62]).
 
+* boost_phrase:library[Beast,/libs/beast/]:
+** `zlib::deflate_stream` and `zlib::inflate_stream` are ported from zlib 1.3.2.
+** HTTP and WebSocket operations honor cancellation between intermediate operations.
+** `http::async_read_some` does not complete inside the initiating function on `error::buffer_overflow`.
+** `http::basic_parser` rejects a `Transfer-Encoding` value that is not a valid token list.
+** `http::message::chunked` reports the framing of the last `Transfer-Encoding` field, matching the parser.
+** `http::message::chunked` combines repeated `Transfer-Encoding` fields when setting or clearing the chunked encoding.
+** `websocket::stream` fails the client handshake with `error::bad_sec_extensions` when the permessage-deflate response is malformed, was not offered, or exceeds the offered `server_max_window_bits`.
+** `websocket::stream` answers a permessage-deflate `server_max_window_bits=8` offer with 8 instead of 9.
+** `websocket::stream` compresses with the offered `client_max_window_bits` when the permessage-deflate response omits it or returns a larger value.
+** `websocket::stream` omits `server_max_window_bits` from the permessage-deflate offer and offers `client_max_window_bits` without a value when they are the default of 15.
+** `http::ext_list` does not carry parameters from the previous extension into one that has none.
+** `zlib::inflate_stream::write` errors from corrupt input are sticky until the stream is reset.
+** `zlib::deflate_stream::reset` rejects `windowBits` 8.
+** `zlib::deflate_stream::write` and `zlib::inflate_stream::write` return `error::stream_error` for null buffer pointers.
+** `zlib::deflate_stream` uses `memLevel` 8 by default.
+** The example root certificates are regenerated from NSS 3.132 and exclude the eMudhra emSign roots.
+
 * boost_phrase:library[Bimap,/libs/bimap/]:
 ** Added `std::initializer_list` constructor (boost_gh:pr[bimap,31]).
 ** Following standard library conventions since C++11, all modifier functions taking 
