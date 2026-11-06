@@ -123,7 +123,7 @@ https://www.boost.org/doc/html/container/non_standard_containers.html#container.
    `inf`, `-inf` and `nan` with any standard library, and the forms earlier versions wrote load
    too (boost_gh:issue[serialization,386]).
 ** Fixed an object saved through a pointer to its base class, across shared libraries, loading
-   with its base part empty, a regression of Boost 1.85 (boost_gh:issue[serialization,329]).
+   with its base part empty, a regression of Boost 1.84 (boost_gh:issue[serialization,329]).
 ** Fixed silent data loss when the same `variant` is serialized by value more than once
    (boost_gh:issue[serialization,203]).
 ** Made the XML output archive write the closing tag of a complete document even when it is
