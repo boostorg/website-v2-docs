@@ -90,6 +90,19 @@ boost_at:/doc/libs/1_93_0/[Documentation]
    `find_*()` functions and `to_string()`.
 ** Moved undocumented implementation details, such as `bit_iterator`, out of namespace `boost`.
 
+* boost_phrase:library[GIL,/libs/gil/]:
+ ** Refactor from Boost.Iterator to Boost.STLInterface, thereby removing the dependency on pre-C++11 libraries.
+ ** Fixed `copy_n` algorithm when `n < 0`
+ ** Fixed conversion warning in `convolve_2d` test
+ ** Fixed wrong return type of copy_fn and missing typedef in destruct_range
+ ** Fixed integer overflow in channel_converter_unsigned_integral_nondivisible
+ ** Fixed UB std::floating_point specialization
+ ** Switch documentation tooling to Asciidoc/Antora/MrDocs
+ ** Added `distance_transform` algorithm
+ ** Added `image_sharpening` algorithm
+ ** Added missing documentation for Adaptive Histogram Equalization (AHE)
+ ** Added documentation for convolution, morphology and thresholding
+
 * boost_phrase:library[MSM,/libs/msm/]:
 ** The `backmp11` back-end is no longer experimental. Its API is considered stable from this release on, after the cleanup listed below.
 ** **Breaking changes (`backmp11`)**:
@@ -181,19 +194,6 @@ https://www.boost.org/doc/html/container/non_standard_containers.html#container.
    (boost_gh:issue[serialization,327]), and that a value written through a polymorphic archive
    needs a name (boost_gh:issue[serialization,189]).
 
-* boost_phrase:library[GIL,/libs/gil/]:
- ** Refactor from Boost.Iterator to Boost.STLInterface, thereby removing the dependency on pre-C++11 libraries.
- ** Fixed `copy_n` algorithm when `n < 0`
- ** Fixed conversion warning in `convolve_2d` test
- ** Fixed wrong return type of copy_fn and missing typedef in destruct_range
- ** Fixed integer overflow in channel_converter_unsigned_integral_nondivisible
- ** Fixed UB std::floating_point specialization
- ** Switch documentation tooling to Asciidoc/Antora/MrDocs
- ** Added `distance_transform` algorithm
- ** Added `image_sharpening` algorithm
- ** Added missing documentation for Adaptive Histogram Equalization (AHE)
- ** Added documentation for convolution, morphology and thresholding
- 
 == Compilers Tested
 
 // Edit this section as appropriate
