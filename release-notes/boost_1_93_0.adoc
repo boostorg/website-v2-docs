@@ -29,6 +29,42 @@ boost_at:/doc/libs/1_93_0/[Documentation]
 // ** Conform to `std::pointer_traits` requirements (boost_gh:pr[interprocess,32]).
 // ** Fixed `named_condition_any` fails to notify (boost_gh:issue[interprocess,62]).
 
+* boost_phrase:library[Asio,/libs/asio/]
+** Added `eager`, a completion token that starts an asynchronous operation immediately and allows its result to be waited on later.
+** Added `trampoline<>` and `make_trampoline()`, an executor adapter that runs nested submissions in a bounded thread-local queue, rather than resubmitting them to the target executor.
+** Added `execution::staging_executor` and `execution::stage()`, to reduce the cost of `require`/`prefer` chains on polymorphic executors.
+** Added overloads of `cancel_after` that cancel an operation when a "trigger" asynchronous operation completes.
+** Added support for sending and receiving multiple datagrams in a single call.
+** Promoted `channel` and `concurrent_channel` from the `experimental` namespace, added `can_send` and `can_receive` to the channel
+classes, and added `try_peek` to `basic_channel`.
+** Added an optional "spin" reactor backend that avoids demultiplexing system calls such as `epoll_wait` by polling descriptors directly.
+** Added the `descriptor_name` I/O control command, for per-descriptor configuration.
+** Added a Perfetto-format handler tracking backend.
+** Added a dependency-free `spawn()` implementation for Linux and macOS on x86-64 and AArch64, which may be explicitly enabled.
+** Added `awaitable` to the forward declarations in `boost/asio/fwd.hpp`.
+** Added support for `final` allocator types to the `io_context` executor.
+** Added an associated executor to `experimental::promise`pass:['s] wait operation.
+** Changed custom handler tracking so that `BOOST_ASIO_HANDLER_CREATION` may be called without the execution context argument.
+** Changed `poll()` to bound the amount of work performed per call.
+** Optimised the scheduler, coroutines, completion handling, polymorphic executors, the reactor and the recycling allocator, and reduced the size of the `thread_pool` executor.
+** Optimised `read_until` and `async_read_until` when used with a character delimiter.
+** Fixed a potential deadlock in the reactor when completing operations during shutdown or after a descriptor error.
+** Fixed a use-after-free when destroying a nested `any_completion_handler`.
+** Fixed `cancel_after` and `cancel_at` with reentrant cancellation.
+** Fixed `spawn()` when the coroutine completes immediately.
+** Fixed pending channel sends being lost on close, and `try_send*` when used with multiple signatures.
+** Fixed the associator binder and work dispatcher move constructors.
+** Fixed duplicate work counting with a polymorphic I/O executor.
+** Fixed the `async_connect` continuation hooks.
+** Fixed `experimental::ranged_parallel_group` with operations that have no associated executor.
+** Fixed IOCP wake-up packet accumulation, `stream_file` position accounting, and 4 GiB buffer truncation on Windows.
+** Fixed iteration over empty resolver results.
+** Fixed `multicast::enable_loopback` for IPv6 on Solaris and illumos.
+** Fixed thread sanitizer support on older toolchains.
+** Fixed compilation without `SA_RESTART` or with bounds safety attributes enabled.
+** Fixed warnings on clang-cl, OpenBSD and illumos.
+** Consult the boost_at:/doc/libs/1_93_0/doc/html/boost_asio/history.html[Revision History] for further details.
+
 * boost_phrase:library[Beast,/libs/beast/]:
 ** `zlib::deflate_stream` and `zlib::inflate_stream` are ported from zlib 1.3.2.
 ** HTTP and WebSocket operations honor cancellation between intermediate operations.
