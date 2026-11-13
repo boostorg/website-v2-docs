@@ -146,6 +146,14 @@ classes, and added `try_peek` to `basic_channel`.
 *** The deprecated `HANDLED_`-prefixed values are removed from the `process_result` enum, use `discarded`, `consumed`, `rejected` and `deferred` instead (https://github.com/boostorg/msm/issues/242[#242]).
 ** Fixed a bug in the `back11` back-end where a matching transition could be ignored depending on the order of rows in the transition table (https://github.com/boostorg/msm/issues/252[#252])
 
+* boost_phrase:library[MySQL,/libs/mysql/]:
+** Fixed a race condition in `connection_pool::async_get_connection()` where, in the
+   presence of per-operation cancellation, the notification that a connection had
+   become available could be lost. Other pending `async_get_connection` operations
+   would then ignore the available connection and wait until another one became
+   available. After this change, `async_get_connection` completes successfully in
+   this case, even after cancellation has been requested (boost_gh:pr[mysql,536]).
+
 * boost_phrase:library[OpenMethod,/libs/openmethod/]:
 ** Full support for Windows Dynamic Libraries (DLLs) and POSIX shared objects (DSOs) with `visibility=hidden`.
 ** Interoperability with various `any` (std, Boost.Any and TypeErasure).
@@ -253,6 +261,22 @@ https://www.boost.org/doc/html/container/non_standard_containers.html#container.
 *** Guard against using the obsolete `predef/check/predef.jam` B2 module.
     Instead of using the current `predef/tools/check/predef.jam` module.
 *** Fix `architecture` tool check rule returning `ppc` instead of `power`.
+
+* boost_phrase:library[Redis,/libs/redis/]:
+** Added subscription tracking support for `UNSUBSCRIBE` and `PUNSUBSCRIBE`
+   without arguments (boost_gh:pr[redis,436]).
+** Added support for storing RESP3 maps in `std::vector<std::pair<T, U>>`
+   objects (boost_gh:pr[redis,434]).
+** Added a documentation page and an example on multi-threaded scenarios
+   (boost_gh:pr[redis,438]).
+** Fixed several cases of undefined behavior in `flat_tree` operations on
+   moved-from objects (boost_gh:pr[redis,441]). Many thanks
+   to https://github.com/aouxwoux[aouxwoux] for the PR!
+** Fixed a bug that caused `flat_tree::data_size()` to report an incorrect
+   value after calling `flat_tree::clear()` (boost_gh:pr[redis,441]). Many thanks
+   to https://github.com/aouxwoux[aouxwoux] for the PR!
+
+
 
 == Compilers Tested
 
