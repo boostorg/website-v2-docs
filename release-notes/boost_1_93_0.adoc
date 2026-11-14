@@ -286,6 +286,13 @@ https://www.boost.org/doc/html/container/non_standard_containers.html#container.
 * boost_phrase:library[System,/libs/system/]:
 ** Add `std::format` support for `error_code` and `error_condition`.
 
+* boost_phrase:library[UUID,/libs/uuid/]:
+** Added an overload of `time_generator_v7::operator()` taking the time point. (Sebastian Goth)
+** Added a RISC-V implementation of `from_chars`. (contributed by Dan Kahyan)
+** Handled `std::uppercase` correctly in `operator<<`.
+** Fixed a compilation issue under ARM64EC.
+** Added `std::format` support for `uuid`.
+
 == Compilers Tested
 
 // Edit this section as appropriate
