@@ -255,6 +255,9 @@ https://www.boost.org/doc/html/container/non_standard_containers.html#container.
    (boost_gh:issue[serialization,327]), and that a value written through a polymorphic archive
    needs a name (boost_gh:issue[serialization,189]).
 
+* boost_phrase:library[System,/libs/system/]:
+** Add `std::format` support for `error_code` and `error_condition`.
+
 * boost_phrase:library[Predef,/libs/predef/]:
 ** 1.18.0
 *** Fix version calculation for LLVM `libc++` to support the changed format of
