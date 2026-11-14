@@ -239,6 +239,10 @@ classes, and added `try_peek` to `basic_channel`.
 *** The deprecated `HANDLED_`-prefixed values are removed from the `process_result` enum, use `discarded`, `consumed`, `rejected` and `deferred` instead (https://github.com/boostorg/msm/issues/242[#242]).
 ** Fixed a bug in the `back11` back-end where a matching transition could be ignored depending on the order of rows in the transition table (https://github.com/boostorg/msm/issues/252[#252])
 
+* boost_phrase:library[Multiprecision,/libs/multiprecision/]:
+** Fixed `fmod` returning incorrect results for negative remainders with `cpp_bin_float` and other backends using the default implementation, a regression of Boost 1.90 (boost_gh:issue[multiprecision,764]).
+** Fixed `cpp_int` user-defined literals producing unnormalized limbs, which could cause a value to compare unequal to itself after masking (boost_gh:issue[multiprecision,766]).
+
 * boost_phrase:library[MySQL,/libs/mysql/]:
 ** Fixed a race condition in `connection_pool::async_get_connection()` where, in the
    presence of per-operation cancellation, the notification that a connection had
