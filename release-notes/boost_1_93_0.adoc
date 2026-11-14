@@ -182,6 +182,56 @@ classes, and added `try_peek` to `basic_channel`.
  ** Added missing documentation for Adaptive Histogram Equalization (AHE)
  ** Added documentation for convolution, morphology and thresholding
 
+* boost_phrase:library[Math,/libs/math/]:
+** Breaking changes:
+*** `double` arguments are no longer promoted to `long double` internally by default, as `BOOST_MATH_PROMOTE_DOUBLE_POLICY` now defaults to `false` on all platforms.
+    This is much faster where `long double` is x87 or software emulated (e.g. AArch64 Linux), but results for `double` may differ in the last few bits.
+    To restore the old behavior define `BOOST_MATH_PROMOTE_DOUBLE_POLICY` as `true`, or pass `promote_double<true>` in a policy (boost_gh:issue[math,1211]).
+*** The quantiles of discrete distributions now default to `integer_round_up` instead of `integer_round_outwards`, matching R, SciPy, Julia and Mathematica,
+    so lower quantiles are often one larger than before. The geometric distribution now also rounds its quantile as the policy asks.
+    To restore the old behavior define `BOOST_MATH_DISCRETE_QUANTILE_POLICY` as `integer_round_outwards`, or pass `discrete_quantile<integer_round_outwards>` in a policy (boost_gh:issue[math,1203]).
+*** `hypergeometric_pFq` now raises an evaluation error when most of the digits of the result are lost to cancellation, instead of silently returning an inaccurate value.
+*** `newton_raphson_iterate`, `halley_iterate` and `schroder_iterate` now raise an evaluation error when they walk onto a bound that is not a root, instead of returning the bound.
+** New features:
+*** Added support for consuming the library as a {cpp}20 module with `import boost.math;`.
+*** Added a user configurable top-level namespace with `BOOST_MATH_NAMESPACE_COMPONENTS`, so that libraries embedding their own copy of Boost.Math can avoid conflicts.
+*** Added prime number functions `prime_sieve`, `prime_range` and `prime_count`, backed by a segmented sieve with optional multithreaded and CUDA execution.
+*** Added the von Mises and generalized extreme value distributions.
+*** Added Gauss-Hermite quadrature, Van den Bos quadrature over the unit square, and symplectic integrators for Hamiltonian systems (`integrate_hamiltonian`, with adaptive step size and cubic Hermite interpolation variants).
+*** Added a fast Fourier transform (`tools::fft` and `tools::real_fft`) for any complex type.
+    `cardinal_trigonometric` and `chebyshev_transform` now use it and no longer require FFTW.
+*** Added polynomial root finders `polynomial_roots` and `polynomial_roots_companion_matrix`.
+*** Added `lbeta`, `libeta` and `libetac` (the logarithms of `beta`, `ibeta` and `ibetac`), and `ligamma` and `ligamma_lower` (the logarithms of `tgamma(a, x)` and `tgamma_lower(a, x)`).
+    `logcdf` and its complement now use the logarithmic incomplete beta and gamma functions, so they stay finite and accurate in the tails for many distributions.
+*** Added `pow1p`, and a three argument overload of `ccmath::hypot`.
+*** Added `entropy` for the remaining distributions, except the non-central ones.
+*** Added degrees of freedom finders `find_v1` and `find_v2` to the Fisher F distribution, and improved the robustness of the non-central F finders.
+*** Added the M nearest neighbour Chatterjee correlation, `chatterjee_correlation_mnn`.
+*** Added `ulps_heatmap` for plotting the accuracy of functions of two variables.
+*** Added support for vector and matrix valued integrands (e.g. Eigen types) to the quadrature routines, via overloads taking an explicit zero and norm.
+*** Added policy based error handling to the interpolators.
+*** Added hexfloat support to `__float128` stream I/O.
+*** Improved the speed of `float_distance` for IEEE `float`, `double` and binary128, and made `ellint_rj` about 1.7 times faster.
+*** Improved the accuracy and speed of the Kolmogorov-Smirnov distribution.
+*** Deprecated the `polynomial` constructor taking a pointer and an order.
+** Bug fixes:
+*** Improved the accuracy of `ibeta` and `ibeta_inv` for small parameters, near the mean, and when the binomial sum underflows, fixed the arcsine special case, and kept `ibeta` monotonic when the compiler contracts to FMA.
+*** Fixed `lgamma_p` where P underflows, the accuracy of `gamma_p` for small `a` with `x < a`, and the accuracy of `tgamma1pm1` for multiprecision types.
+*** Fixed the non-central t distribution: cancellation in the left tail and for small degrees of freedom, and its degrees of freedom domain checking.
+*** Fixed the non-central F and beta CDFs for huge denominator degrees of freedom, and the non-central beta CDF and its complement not summing to one.
+*** Fixed the Student's t quantile for very small probabilities and its accuracy for non-integer degrees of freedom between 2 and 3.
+*** Fixed overflow and cancellation in the inverse Gaussian CDFs, cancellation in the skew normal tails, cancellation in the Poisson `logpdf` for large arguments, and swapped location and scale in the Laplace `logpdf`.
+*** Fixed the hypergeometric PDF for non-integer `x`, and its accuracy for population sizes above 170.
+*** Fixed discrete quantiles to round trip with the CDF, and a hang for values beyond 1/epsilon.
+*** Fixed the Airy functions near zero, `heuman_lambda`, `jacobi_dn`, the incomplete `ellint_2`, `expint`, Laguerre polynomials, `cyl_bessel_j` for integer orders, underflow in `cyl_bessel_k`, and hangs and precision loss in the Jacobi theta functions.
+*** Fixed a hang in `hypergeometric_1F1`, and accuracy issues in `hypergeometric_1F1`, `hypergeometric_0F1` and `hypergeometric_2F0`.
+*** Fixed `logcdf` and its complement to send an exact negative infinity to the overflow error policy.
+*** Fixed `std::complex<__float128>` `pow` for a negative real and zero imaginary part, and the root finders accepting NaN as a bound.
+*** Fixed `mode` assertions and sorting, `mean` silently giving the wrong answer for input iterators (now a `static_assert`), and the second variance accumulator in the parallel correlation.
+*** Fixed `polynomial<int> % scalar` returning zero, `simple_continued_fraction` printing, assignment and canonical form, `fvar` being implicitly convertible from any type, and Bezier async evaluation.
+*** Fixed pchip integration with a circular buffer, Daubechies wavelet derivative scaling, and the Whittaker-Shannon interpolant at higher precision.
+*** Fixed uninitialized reads in complex range checks and `evaluation_condition_number`, and made implicit integer to `Real` conversions explicit.
+
 * boost_phrase:library[MSM,/libs/msm/]:
 ** The `backmp11` back-end is no longer experimental. Its API is considered stable from this release on, after the cleanup listed below.
 ** **Breaking changes (`backmp11`)**:
