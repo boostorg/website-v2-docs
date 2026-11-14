@@ -91,6 +91,13 @@ classes, and added `try_peek` to `basic_channel`.
 ** Following standard library conventions since C++11, all modifier functions taking 
 `iterator` arguments now accept `const_iterator` arguments instead (boost_gh:pr[bimap,56]).
 
+* boost_phrase:library[Charconv,/libs/charconv/]:
+** Added opt-in SYCL support (`BOOST_CHARCONV_ENABLE_SYCL`) allowing both `to_chars` and `from_chars` for integers to be used in SYCL kernels.
+** Fixed several cases where `to_chars` wrote outside of the provided range: a minus sign or zero into an empty range, negative zero past the end of the range, negative 128-bit integers when the range had no room for the sign, and a stack buffer overflow in general format with a precision.
+** Fixed floating point `to_chars` rounding exact halfway values up instead of to even, dropping a zero in fixed format when rounding up reaches a power of ten, and missing digits with a large precision.
+** Fixed `to_chars` printing the wrong exponent for some subnormal doubles.
+** Fixed a compilation error from conflicting declarations in the vendored fast_float tables with GCC 15 on uClibc-ng.
+
 * boost_phrase:library[ContainerHash,/libs/container_hash/]:
 ** `is_described_class<T>::value` now defaults to `false` when `is_range<T>::value` is `true` or `is_tuple_like<T>::value` is `true`.
    (A lot more classes become described when {cpp}26 reflection support is enabled in Boost.Describe, which causes ambiguities with the range and tuple-like overloads.)
