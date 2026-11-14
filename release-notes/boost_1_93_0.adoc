@@ -177,6 +177,34 @@ classes, and added `try_peek` to `basic_channel`.
 `boost::variant_unordered_collection`, internally based on
 https://www.boost.org/doc/html/container/non_standard_containers.html#container.non_standard_containers.hub[`boost::container::hub`]. 
 
+* boost_phrase:library[Predef,/libs/predef/]:
+** 1.18.0
+*** Fix version calculation for LLVM `libc++` to support the changed format of
+    LLVM versions 16 and above.
+*** Detect `alpha` as an architecture in the B2 help utilities. (from Matt Turner)
+** 1.17.0
+*** Fix warnings at high levels current {CPP} compilers / standards.
+** 1.16.0
+*** Add detection for Tiny C Compiler (TCC). (from Kornel Ponikwicki)
+** 1.15.1
+*** Guard against using the obsolete `predef/check/predef.jam` B2 module.
+    Instead of using the current `predef/tools/check/predef.jam` module.
+*** Fix `architecture` tool check rule returning `ppc` instead of `power`.
+
+* boost_phrase:library[Redis,/libs/redis/]:
+** Added subscription tracking support for `UNSUBSCRIBE` and `PUNSUBSCRIBE`
+   without arguments (boost_gh:pr[redis,436]).
+** Added support for storing RESP3 maps in `std::vector<std::pair<T, U>>`
+   objects (boost_gh:pr[redis,434]).
+** Added a documentation page and an example on multi-threaded scenarios
+   (boost_gh:pr[redis,438]).
+** Fixed several cases of undefined behavior in `flat_tree` operations on
+   moved-from objects (boost_gh:pr[redis,441]). Many thanks
+   to https://github.com/aouxwoux[aouxwoux] for the PR!
+** Fixed a bug that caused `flat_tree::data_size()` to report an incorrect
+   value after calling `flat_tree::clear()` (boost_gh:pr[redis,441]). Many thanks
+   to https://github.com/aouxwoux[aouxwoux] for the PR!
+
 * boost_phrase:library[Serialization,/libs/serialization/]:
 ** Fixed CVE-2023-34399: a pointer loaded with a negative class id other than -1 read the class
    table out of bounds. Every negative id now loads as a null pointer
@@ -257,36 +285,6 @@ https://www.boost.org/doc/html/container/non_standard_containers.html#container.
 
 * boost_phrase:library[System,/libs/system/]:
 ** Add `std::format` support for `error_code` and `error_condition`.
-
-* boost_phrase:library[Predef,/libs/predef/]:
-** 1.18.0
-*** Fix version calculation for LLVM `libc++` to support the changed format of
-    LLVM versions 16 and above.
-*** Detect `alpha` as an architecture in the B2 help utilities. (from Matt Turner)
-** 1.17.0
-*** Fix warnings at high levels current {CPP} compilers / standards.
-** 1.16.0
-*** Add detection for Tiny C Compiler (TCC). (from Kornel Ponikwicki)
-** 1.15.1
-*** Guard against using the obsolete `predef/check/predef.jam` B2 module.
-    Instead of using the current `predef/tools/check/predef.jam` module.
-*** Fix `architecture` tool check rule returning `ppc` instead of `power`.
-
-* boost_phrase:library[Redis,/libs/redis/]:
-** Added subscription tracking support for `UNSUBSCRIBE` and `PUNSUBSCRIBE`
-   without arguments (boost_gh:pr[redis,436]).
-** Added support for storing RESP3 maps in `std::vector<std::pair<T, U>>`
-   objects (boost_gh:pr[redis,434]).
-** Added a documentation page and an example on multi-threaded scenarios
-   (boost_gh:pr[redis,438]).
-** Fixed several cases of undefined behavior in `flat_tree` operations on
-   moved-from objects (boost_gh:pr[redis,441]). Many thanks
-   to https://github.com/aouxwoux[aouxwoux] for the PR!
-** Fixed a bug that caused `flat_tree::data_size()` to report an incorrect
-   value after calling `flat_tree::clear()` (boost_gh:pr[redis,441]). Many thanks
-   to https://github.com/aouxwoux[aouxwoux] for the PR!
-
-
 
 == Compilers Tested
 
