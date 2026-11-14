@@ -20,6 +20,9 @@ boost_at:/doc/libs/1_93_0/[Documentation]
 // ** Framework for incremental calculation, and collection of statistical
 // accumulators, from Eric Niebler.
 
+* boost_phrase:library[Int128,/libs/int128/]:
+** Portable and performant 128-bit signed and unsigned integers, from Matt Borland.
+
 == Updated Libraries
 
 // Example:
