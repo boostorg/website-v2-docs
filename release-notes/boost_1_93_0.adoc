@@ -102,6 +102,32 @@ classes, and added `try_peek` to `basic_channel`.
 ** `is_described_class<T>::value` now defaults to `false` when `is_range<T>::value` is `true` or `is_tuple_like<T>::value` is `true`.
    (A lot more classes become described when {cpp}26 reflection support is enabled in Boost.Describe, which causes ambiguities with the range and tuple-like overloads.)
 
+* boost_phrase:library[Decimal,/libs/decimal/]:
+** Breaking changes:
+*** `rescale(val, precision)` now rounds `val` to `precision` digits after the decimal point using the current rounding mode, and a negative `precision` rounds to the corresponding power of ten. With the default `precision` of 0 it now rounds to an integer instead of matching `trunc`.
+*** The quantum operations `quantexp`, `samequantum`, and `quantize` are now a compile error for the fast types, since they normalize on construction and have no cohorts. Use `rescale` to round any type to a fixed number of fractional digits.
+*** `logb` and `ilogb` now return the unbiased exponent as IEEE 754 requires (e.g. `logb(1E-3)` is now `-3`).
+** New features:
+*** Added `from_binary`, which rounds the exact value of a `float` or `double` to a decimal type in the current rounding mode (IEEE 754 convertFormat). The constructors keep the shortest representation instead.
+*** Added `chars_format::cohort_preserving_fixed` to `to_chars` and `from_chars`. In both cohort preserving modes, `from_chars` now rejects input whose exact cohort cannot be stored instead of silently underflowing to zero or overflowing to infinity.
+*** Added `roundeven`.
+*** Added NATVIS support for the MSVC debugger, and made the LLDB and GDB pretty printers display values the same way.
+*** Converting `float` and `double` to a decimal type now uses Dragonbox, which is about 17 times faster for `double` and 12 times faster for `float`, and fixes the last digit for some values.
+*** Sped up addition, multiplication, and division.
+** Bug fixes:
+*** Fixed and modernized the {cpp}20 module (`import boost.decimal;`) to match the other Boost libraries, and added module testing with Clang, GCC, and MSVC.
+*** Fixed incorrect rounding in many edge cases, several found by greatly expanded decTest coverage: subnormal products and quotients, sums of operands with very different exponents, quotients and exact cancellations in non-default rounding modes, overflow in modes that round to the largest finite value, and values below the smallest subnormal.
+*** Fixed `fma` losing the addend for `decimal32_t` and `decimal64_t` when the product's exponent is much smaller than the addend's, and made `fma` for the 128-bit types round only once.
+*** Fixed `operator==` returning `false` for zeros with different exponents, hashing so that all zeros hash equally, and hashing on 32-bit platforms.
+*** Fixed construction of subnormals and of values whose exponent is out of range but whose significand has room to absorb it.
+*** Fixed the sign of the infinity from dividing a negative value by zero, and `decimal32_t` comparison of two positive infinities.
+*** Fixed `quantexp` returning the wrong value, and `comparetotal` between fast and non-fast types.
+*** Fixed `remainder` with non-finite values, `fdim` for an infinite `x` and for a signaling NaN, and `acosh` and `atanh` to return NaN outside of their domains.
+*** Fixed parsing to round using all the input digits rather than only the first 19 (38 for `decimal128_t`), and to keep the zeros after the decimal point when the exponent is zero.
+*** Fixed conversion to binary floating point dropping the sign of zero and infinity.
+*** Improved the accuracy and monotonicity of `log`, `log10`, `log2`, `log1p`, `sin`, `cos`, `tan`, `asin`, `acos`, `atan`, `atan2`, and the inverse hyperbolic functions, made `sqrt` correctly rounded in the current rounding mode, and made `cbrt` round only once.
+*** `ceil`, `floor`, `round`, `roundeven`, `trunc`, `rint`, `lrint`, `lround`, `llround`, `frexp`, `ldexp`, `scalbn`, `scalbln`, `fmod`, `remainder`, and `remquo` now operate directly on the integer significand and exponent, so their results are exact.
+
 * boost_phrase:library[Describe,/libs/describe/]:
 ** Added experimental support for reflection (requires GCC 16.2 and `-freflection`.)
 
