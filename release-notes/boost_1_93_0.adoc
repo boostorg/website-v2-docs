@@ -88,6 +88,56 @@ classes, and added `try_peek` to `basic_channel`.
 ** Following standard library conventions since C++11, all modifier functions taking 
 `iterator` arguments now accept `const_iterator` arguments instead (boost_gh:pr[bimap,56]).
 
+* boost_phrase:library[Container,/libs/container/]:
+** Containers now accept allocators whose `value_type` is `void`; such allocators are rebound to
+   the container's element type via `real_allocator`.
+** Added overaligned support for `pmr::monotonic_buffer_resource`.
+** The library is again fully header-only. Global variables and functions that were moved to the
+   separately compiled library now live in an intermodule utility that can share them across DLLs.
+** Dlmalloc's heap now always uses an improved, spin lock and small allocation layout, with faster
+   allocation for small requests (240-512 bytes are ~15-25% faster on 64-bit).
+** Counted `basic_string` constructors and member functions accept a null pointer when the count is
+   zero (LWG 2235 and the {cpp}20 "valid range" wording).
+** Iterators, stateless allocators, `pmr::polymorphic_allocator`, `scoped_allocator_adaptor` and
+   internal utilities are trivially copyable when their members are. This allows some compilers to
+   pass and return them in registers.
+** Allocator-extended move constructors are now `noexcept` when
+   `allocator_traits<Allocator>::is_always_equal` is true (as an extension to the standard) in
+   `vector`, `devector`, `deque`, `segtor`, `list`, `slist`, `stable_vector`, `basic_string` and
+   `hub`. `map`, `multimap`, `set` and `multiset` also need a comparator with a non-throwing copy
+   constructor and swap.
+** `devector`: the `relocate_never` option, documented in previous releases, is now implemented.
+   The elements are never relocated inside the buffer: an insertion at a full end always allocates
+   a new buffer. With this option `push_back`, `push_front`, `emplace_back` and `emplace_front` give
+   the strong exception guarantee.
+** Fixed bugs/issues/enhancements:
+*** Error on instantiating an incomplete type (boost_gh:issue[container,335]).
+*** Optimized range insertion for `boost::container::hub` (boost_gh:pr[container,339]).
+*** Using unqualified `swap()` on two `small_vector`pass:[s] calls an incorrect swap function
+    (boost_gh:issue[container,342]).
+*** `default_init` results in a `memset` with GCC16 (boost_gh:issue[container,333]) (documented,
+    see the note in "Default initialization" in the documentation).
+*** Build break on Windows ARM64EC near the definition of the `BOOST_CONTAINER_PREFETCH` macro
+    (boost_gh:issue[container,344]).
+*** Regression: invalid assertion in string assign (and probably other functions)
+    (boost_gh:issue[container,346]).
+*** `vector<X>::erase()`-from-middle leaks for `X` in `basic_string`, `deque` and `stable_vector`
+    (boost_gh:issue[container,351]).
+** A systematic, AI-assisted review of the library found and fixed many bugs that users did not
+   report. The main types of bugs are:
+*** Exception safety: memory leaks and lost nodes when a comparator, a constructor or an allocation
+    throws or incorrect rollback on insertions.
+*** `noexcept` specifications: incorrect conditions in move constructors and move assignments of
+    `vector`, `small_vector`, `static_vector`, `devector`, `set` and `map`, and functions that can
+    throw but were marked `noexcept`.
+*** Allocator propagation: `small_vector` move and swap with unequal allocators, `vector` move
+    assignment.
+*** Integer overflow and size limits.
+*** Class template argument deduction for `stable_vector`, `deque`, `list`, `slist`, `basic_string`
+    and `nest`.
+*** Complexity: quadratic insertion in `stable_vector` and `deque`, and a non-linear `erase_if` in
+    flat containers.
+
 * boost_phrase:library[ContainerHash,/libs/container_hash/]:
 ** `is_described_class<T>::value` now defaults to `false` when `is_range<T>::value` is `true` or `is_tuple_like<T>::value` is `true`.
    (A lot more classes become described when {cpp}26 reflection support is enabled in Boost.Describe, which causes ambiguities with the range and tuple-like overloads.)
@@ -145,6 +195,153 @@ classes, and added `try_peek` to `basic_channel`.
  ** Added `image_sharpening` algorithm
  ** Added missing documentation for Adaptive Histogram Equalization (AHE)
  ** Added documentation for convolution, morphology and thresholding
+
+* boost_phrase:library[Interprocess,/libs/interprocess/]:
+** Use of `FILE_DISPOSITION_POSIX_SEMANTICS` semantics on Windows for unlink operations, with a
+   fallback to the optimized classic approach for older Windows versions and filesystems.
+** Optimized spin-based synchronization utilities using acquire/release semantics instead of
+   classic strong semantics.
+** Improved the performance of several `offset_ptr`pass:['s] operations.
+** Documented that `BOOST_INTERPROCESS_FORCE_NATIVE_EMULATION` is experimental and not ABI stable
+   (see "Native synchronization primitives (experimental)" in the documentation). The Windows
+   native implementation now uses the process id and the address of the object, in addition to a
+   performance counter value, to name its kernel objects. Before, two processes could read the same
+   counter value and share the same kernel object by error. **This is an ABI break** for code that
+   defines this macro.
+** Fixed bugs:
+*** Crash in `ipcdetail::get_bootstamp` when multi thread racing and
+    `winapi::get_last_bootup_time` failed on Windows (boost_gh:issue[interprocess,144]).
+*** Remove exception from normal execution path (boost_gh:issue[interprocess,159]).
+*** Document platform specific limitations with shared memory (boost_gh:issue[interprocess,186]).
+*** There is a bug in `boost/interprocess/detail/os_thread_function.hpp`
+    (boost_gh:issue[interprocess,209]).
+*** POSIX named semaphores are broken for sandboxed Mac apps (boost_gh:issue[interprocess,232]).
+*** `managed_shared_memory` can't allocate a chunk of more than half its allocation any more
+    (boost_gh:issue[interprocess,250]).
+*** Improvements on `rbtree_best_fit::check_sanity` (boost_gh:pr[interprocess,282]).
+*** Regression on macOS: `pthread_threadid_np` was not declared
+    (boost_gh:issue[interprocess,283]).
+** A systematic, AI-assisted review of the library found and fixed bugs that users did not report.
+   The main types of bugs are:
+*** Resource ownership: a file descriptor leak, `managed_xsi_shared_memory` move and swap that did
+    not transfer the XSI device, and a shallow copy and unsafe self-assignment in the internal
+    `char`/`wchar_t` name holder.
+*** Synchronization: kernel object name collisions in the Windows native synchronization
+    primitives, incorrect mutex state detection, unlimited retries in the POSIX `open_or_create`
+    create/unlink race, incorrect SMT pause instructions on ARM and name errors for macOS.
+*** Missing includes that were only included indirectly.
+
+* boost_phrase:library[Intrusive,/libs/intrusive/]:
+** Added `unordered_bucket_manager` utility.
+** `get_parent_from_member` and member hooks now support parents with virtual bases (as long as the
+   member is not located in a virtual base) and the `/vmg` (full generality pointer to member
+   representation) compiler option in MSVC ABI compatible compilers.
+** Iterators and comparator holders no longer declare user-provided copy operations, so they are
+   trivially copyable when their members are. This way, compilers can pass and return them in
+   registers instead of by hidden reference.
+** Fixed functions calling predicates and/or hashes that were incorrectly marked as `noexcept`.
+** Move constructors now copy the predicates (comparison, priority, hash and equality) instead of
+   moving or swapping them, as standard containers do
+   (https://cplusplus.github.io/LWG/issue2227[LWG 2227]), so the moved-from container keeps valid
+   predicates. They are `noexcept` when those copies (and the copies or moves of the value and
+   bucket traits) are `noexcept`.
+** **Potentially breaking change**: move assignments no longer swap the containers. As in standard
+   containers, the elements of the target are unlinked (as `clear()`), the predicates of the source
+   are copied, its nodes are linked to the target and the source is left empty. In unordered
+   containers the target takes the bucket array of the source, which is left without one, and no
+   longer uses its own. The move assignments are `noexcept` when the copies of the predicates and
+   the moves of the value and bucket traits are `noexcept`. Define
+   `BOOST_INTRUSIVE_MOVE_ASSIGNMENT_SWAPS` to get the old behavior during a transition period: the
+   macro will be removed in a future release. See "Moving and Swapping Boost.Intrusive containers"
+   in the documentation for more information.
+** Move constructors and move assignments of all containers now move the value traits. Before, the
+   behavior was not specified and it was not consistent: unordered containers moved them, tree
+   containers copied them, and `list` and `slist` swapped them in the move assignment. As for
+   allocators in standard containers, a move of the value traits must leave the source equal to the
+   result, so a moved-from container keeps valid value traits. The `noexcept` conditions of the
+   move operations check these moves. See "Stateful value traits" in the documentation.
+** **Potentially breaking change**: treap containers no longer accept `auto_unlink` hooks (a static
+   assertion is raised), as unlinking a node through the hook broke the heap order of the
+   priorities, so it was a bug.
+** **Potentially breaking change**: `suggested_lower_bucket_count(n)` now returns the biggest
+   supported bucket count that is smaller than or equal to `n` (previously it returned the smallest
+   one bigger than or equal to `n`) and `suggested_upper_bucket_count(n)` now returns `n` if `n` is
+   a supported bucket count (previously it returned the next one), as documented. If the value does
+   not fit in `size_type`, both functions now return the biggest supported bucket count that
+   `size_type` can represent, instead of a truncated or saturated value that was not valid for
+   `fastmod_buckets`.
+** Optimized:
+*** `reverse` operations for lists.
+*** splay tree algorithms/containers, taking advantage of splaying operations to reduce
+    comparisons for unique keys and insertions with hints.
+*** tree iteration primitives and some other operations like `is_header`.
+*** `clear_and_dispose` for tree containers, as nodes are no longer initialized twice in safe and
+    auto-unlink modes.
+*** `merge_unique` and `merge_equal` for tree containers when both containers use the same
+    comparison type and this type is an empty class.
+** A systematic, AI-assisted review of the library found and fixed many bugs that users did not
+   report. The main types of bugs are:
+*** Exception safety: `clone_from` rollback when the cloner throws, a `linear_buckets` hash table
+    left without its sentinel when a rehash throws, and `noexcept` specifications and documented
+    exception guarantees of functions that call user predicates, hashers or comparators.
+*** Stateful value traits and predicates: swap and move assignment did not swap or propagate the
+    value traits, and cloning did not transfer the predicates, comparators and hashers correctly.
+*** Container invariants: `slist::splice_after` with `cache_last`, `slist::incorporate_after` with
+    `constant_time_size`, `slist::dispose_and_assign`, linear `slist::sort`, `swap_nodes` of
+    circular slist algorithms, leftmost and rightmost nodes in `clone_subtree`, cloning from empty
+    trees, self merge, and `rebalance()` of red-black, AVL and treap trees (removed, as it broke the
+    invariants).
+*** Unordered containers: the cached begin after a rehash, `erase(first, last)` and full rehash
+    with `optimize_multikey`, `clone_from` with `fastmod_buckets`, `operator==`, moved-from
+    containers that were not usable, and `floor_log2` on MSVC ARM64.
+*** Lookups: `count(key, comp)` in unique key containers with a coarser comparison, `splay_down`
+    that ignored the comparator, and extra comparisons in `list::merge` and `slist::merge`.
+*** Compilation errors with function pointer predicates, smart pointers, `last()` and `clone_from`
+    with rvalues.
+
+* boost_phrase:library[Move,/libs/move/]:
+** Fixed stability bugs both in `adaptive_merge` and `adaptive_sort`.
+** Significantly improved performance of adaptive algorithms. Up to 4x faster in some corner cases.
+** Fixed bugs in internal traits and compiler-intrinsic detection.
+** `move_iterator` now correctly handles proxy and const reference types.
+** Implemented {cpp}23 `forward_like` utility.
+** **Deprecated** `BOOST_MOVE_USE_STANDARD_LIBRARY_MOVE`, it will be removed in a future release.
+   It has no effect in {cpp}03, and the `boost::move(first, last, result)` algorithm is not
+   available unless `<algorithm>` is included before the Boost.Move headers. A message is printed
+   when the macro is defined (define `BOOST_ALLOW_DEPRECATED` or `BOOST_ALLOW_DEPRECATED_SYMBOLS`
+   to remove it).
+** `unique_ptr` changes:
+*** `unique_ptr` is now marked with the `trivial_abi` attribute when the compiler supports it
+    (Clang targeting Itanium ABI), so it is passed and returned in registers. This changes the
+    calling convention so it must be consistent when passing across translation units. Define
+    `BOOST_MOVE_DISABLE_TRIVIAL_ABI` to keep the old calling convention.
+*** Fixed `unique_ptr` bugs that were non-standard.
+*** Added full constexpr support to `unique_ptr` in {cpp}20 mode.
+*** `unique_ptr` constructors and operators that are not valid for the deleter or element type do
+    not participate in overload resolution in {cpp}11 and later ({cpp}17's LWG 2801 and LWG 2905),
+    so type traits give correct results.
+*** Added a documentation chapter for `unique_ptr` ("Smart pointer unique_ptr" in the
+    documentation).
+*** `has_trivial_destructor_after_move` is now true for `unique_ptr` when the pointer type is
+    trivially destructible and the deleter is a reference or has a trivial destructor after move.
+    Containers such as `boost::container::vector` then do not destroy moved-from `unique_ptr`
+    elements.
+*** Added limited `hash_value` support for `unique_ptr`, so that it can be used with `boost::hash`
+    and **Boost.Unordered**.
+*** Added `make_unique_for_overwrite`, the {cpp}20 name of `make_unique_definit`.
+*** Added the stream output operator (`operator<<`) for `unique_ptr`, without including `<iosfwd>`.
+** A systematic, AI-assisted review of the library found and fixed many bugs that users did not
+   report. The main types of bugs are:
+*** Type traits: incorrect results of `is_convertible`, `is_constructible`,
+    `is_copy_constructible`, `is_move_constructible`, `alignment_of`, `is_unsigned`,
+    `is_nothrow_swappable` and the trivial and nothrow traits for abstract classes, arrays,
+    functions, over-aligned types, POD types with deleted special members.
+*** Exception safety: leaks in algorithms when a move assignment throws.
+*** Sort and merge algorithms: stability bugs in `adaptive_sort` and `adaptive_merge`.
+*** Iterators and swap: proxy iterators in `move_iterator`, `adl_move_iter_swap` and
+    `adl_move_swap_ranges`.
+*** `unique_ptr`: deleter checks, `get_deleter()` with reference deleters, `noexcept` conditions,
+    and comparisons with `nullptr`.
 
 * boost_phrase:library[MSM,/libs/msm/]:
 ** The `backmp11` back-end is no longer experimental. Its API is considered stable from this release on, after the cleanup listed below.
