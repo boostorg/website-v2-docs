@@ -92,6 +92,9 @@ classes, and added `try_peek` to `basic_channel`.
 ** `is_described_class<T>::value` now defaults to `false` when `is_range<T>::value` is `true` or `is_tuple_like<T>::value` is `true`.
    (A lot more classes become described when {cpp}26 reflection support is enabled in Boost.Describe, which causes ambiguities with the range and tuple-like overloads.)
 
+* boost_phrase:library[Describe,/libs/describe/]:
+** Added experimental support for reflection (requires GCC 16.2 and `-freflection`.)
+
 * boost_phrase:library[DynamicBitset,/libs/dynamic_bitset/]:
 ** Added a `to_string()` member which, like that of `std::bitset`, returns a string and can take
    the characters for zero and one, and deprecated the namespace-scope `to_string()`. Also added
