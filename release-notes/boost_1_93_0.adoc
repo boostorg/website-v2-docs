@@ -380,6 +380,11 @@ https://www.boost.org/doc/html/container/non_standard_containers.html#container.
 * boost_phrase:library[System,/libs/system/]:
 ** Add `std::format` support for `error_code` and `error_condition`.
 
+* boost_phrase:library[Test,/libs/test/]:
+** Added support for printing `std::optional` and `std::nullopt_t` values in test assertions, matching `boost::optional` and `boost::none_t` (boost_gh:pr[test,489]).
+** Fixed test programs aborting before running any tests when the kernel's minimum signal stack size exceeds `SIGSTKSZ` (e.g. musl on CPUs with AMX), and restored a user installed alternate signal stack instead of disabling it (boost_gh:pr[test,496]).
+** Changed the failure context message to read "occurred in the following context" (boost_gh:pr[test,498]).
+
 * boost_phrase:library[UUID,/libs/uuid/]:
 ** Added an overload of `time_generator_v7::operator()` taking the time point. (Sebastian Goth)
 ** Added a RISC-V implementation of `from_chars`. (contributed by Dan Kahyan)
