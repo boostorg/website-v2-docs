@@ -281,6 +281,10 @@ https://www.boost.org/doc/html/container/non_standard_containers.html#container.
     Instead of using the current `predef/tools/check/predef.jam` module.
 *** Fix `architecture` tool check rule returning `ppc` instead of `power`.
 
+* boost_phrase:library[Random,/libs/random/]:
+** Fixed the stream operators of `mersenne_twister_engine`, the lagged Fibonacci engines, `mixmax` and `splitmix64` so that the stream state correctly reports whether saving or restoring the engine state succeeded (boost_gh:pr[random,156]).
+** Fixed `-Wdeprecated-copy` and conversion warnings.
+
 * boost_phrase:library[Redis,/libs/redis/]:
 ** Added subscription tracking support for `UNSUBSCRIBE` and `PUNSUBSCRIBE`
    without arguments (boost_gh:pr[redis,436]).
