@@ -146,6 +146,19 @@ classes, and added `try_peek` to `basic_channel`.
  ** Added missing documentation for Adaptive Histogram Equalization (AHE)
  ** Added documentation for convolution, morphology and thresholding
 
+* boost_phrase:library[Interval,/libs/numeric/interval/]:
+** Fixed several cases where an interval did not contain the true result:
+*** `nth_root` did not set and restore the rounding mode, and could return an upper bound below the true root (boost_gh:issue[interval,54]).
+*** With GCC and Clang at `-O2` and above, the lower and upper bounds of the same operation could be computed once and shared across the rounding-mode change. Affected: `sqrt` of a point interval, arithmetic and conversions in `rounded_arith_std`, `int_down`/`int_up`, and x87 `long double` arithmetic (boost_gh:pr[interval,61], boost_gh:pr[interval,65]).
+*** On 32-bit x86, GCC could move x87 arithmetic across the instruction that changes the rounding mode (boost_gh:issue[interval,41]).
+*** `to_int`, and through it `int_down`, `int_up` and `fmod`, rounded `long double` values to `double` first, giving wrong results above 2^53 where `long double` is wider than `double` (boost_gh:issue[interval,67]).
+*** An interval built from an integer could miss it or be far too wide: unsigned values, the minimum of a signed type, and integers not exactly representable in the base type (boost_gh:issue[interval,72]).
+** PowerPC: fixed compilation in {cpp}11 and later (boost_gh:issue[interval,29]), wrong rounding in optimized builds (boost_gh:pr[interval,53]), and a GCC error for `interval<long double>` with constant operands (boost_gh:issue[interval,66]).
+** 32-bit Windows (MSVC and clang-cl): the runtime's `sqrt` rounds to nearest whatever the rounding mode, so `sqrt` of a point interval could miss the true root. The square root now uses the x87 or SSE instruction, depending on `/arch` (boost_gh:pr[interval,64]).
+** The converting constructors and `operator=` of `interval` now take part in overload resolution only when the argument is implicitly convertible to the base type. `is_convertible<std::string, interval<double>>` is now false, and overloads such as `f(interval<double> const&)` and `f(std::string const&)` are no longer ambiguous. A type that is only explicitly convertible must now be converted first: `interval<T>(static_cast<T>(x))` (boost_gh:issue[interval,47], boost_gh:issue[interval,56]).
+** The `compare/*.hpp` headers can now be included on their own; `comparison_error` moved to its own header and can be caught across shared-library boundaries (boost_gh:pr[interval,51]).
+** Fixed errors in the documentation and comments (boost_gh:pr[interval,46]).
+
 * boost_phrase:library[Locale,/libs/locale/]:
 ** Fix configure error in `source_group` call with CMake 4.5
 
