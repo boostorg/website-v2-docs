@@ -146,6 +146,9 @@ classes, and added `try_peek` to `basic_channel`.
  ** Added missing documentation for Adaptive Histogram Equalization (AHE)
  ** Added documentation for convolution, morphology and thresholding
 
+* boost_phrase:library[Locale,/libs/locale/]:
+** Fix configure error in `source_group` call with CMake 4.5
+
 * boost_phrase:library[MSM,/libs/msm/]:
 ** The `backmp11` back-end is no longer experimental. Its API is considered stable from this release on, after the cleanup listed below.
 ** **Breaking changes (`backmp11`)**:
