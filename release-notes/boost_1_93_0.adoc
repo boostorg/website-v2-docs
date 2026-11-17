@@ -461,6 +461,18 @@ https://www.boost.org/doc/html/container/non_standard_containers.html#container.
 ** Fixed test programs aborting before running any tests when the kernel's minimum signal stack size exceeds `SIGSTKSZ` (e.g. musl on CPUs with AMX), and restored a user installed alternate signal stack instead of disabling it (boost_gh:pr[test,496]).
 ** Changed the failure context message to read "occurred in the following context" (boost_gh:pr[test,498]).
 
+* boost_phrase:library[URL,/libs/url/]:
+** Fixed `params_ref::set` ignoring the view's `space_as_plus` option, so setting `C++` on an existing key wrote `name=C++`, which read back as `C  ` (boost_gh:pr[url,1012]).
+** Fixed error categories exported from a shared library built as C++20 when the application uses an earlier standard (boost_gh:pr[url,1009]).
+** Fixed `url_view::compare` hanging on relative paths whose segments all cancel out, e.g. `a/..` (boost_gh:pr[url,1009]).
+** Fixed `url_view::compare` to agree with `normalize` on a trailing slash after dot segments (`/a/b/..` vs `/a/`) and on the `./` prefix that shields a leading `//` (boost_gh:pr[url,1009]).
+** Fixed `std::hash<url_view>` so URLs that compare equal hash equal, e.g. `/.` and `/` (boost_gh:pr[url,1009]).
+** Fixed the segment count after `url::normalize` on paths with a shield, e.g. `/.//b` (boost_gh:pr[url,1009]).
+** Fixed decoded path size tracking in `url::set_scheme`, `url::remove_authority` and when adding an authority (boost_gh:pr[url,1009]).
+** Fixed `url::remove_scheme` leaving stray characters in paths with a `./` prefix, e.g. `sc:./a:b` became `././a:b` instead of `./a:b` (boost_gh:pr[url,1009]).
+** Fixed the decoded host size for IPv6 literals with zone IDs, which made decoded host accessors return trailing garbage (boost_gh:pr[url,1005]).
+** Updated the QR code example to use the goQR API (boost_gh:pr[url,1014]).
+
 * boost_phrase:library[UUID,/libs/uuid/]:
 ** Added an overload of `time_generator_v7::operator()` taking the time point. (Sebastian Goth)
 ** Added a RISC-V implementation of `from_chars`. (contributed by Dan Kahyan)
