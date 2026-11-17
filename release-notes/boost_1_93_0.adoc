@@ -20,6 +20,9 @@ boost_at:/doc/libs/1_93_0/[Documentation]
 // ** Framework for incremental calculation, and collection of statistical
 // accumulators, from Eric Niebler.
 
+* boost_phrase:library[Int128,/libs/int128/]:
+** Portable and performant 128-bit signed and unsigned integers, from Matt Borland.
+
 == Updated Libraries
 
 // Example:
@@ -88,6 +91,13 @@ classes, and added `try_peek` to `basic_channel`.
 ** Following standard library conventions since C++11, all modifier functions taking 
 `iterator` arguments now accept `const_iterator` arguments instead (boost_gh:pr[bimap,56]).
 
+* boost_phrase:library[Charconv,/libs/charconv/]:
+** Added opt-in SYCL support (`BOOST_CHARCONV_ENABLE_SYCL`) allowing both `to_chars` and `from_chars` for integers to be used in SYCL kernels.
+** Fixed several cases where `to_chars` wrote outside of the provided range: a minus sign or zero into an empty range, negative zero past the end of the range, negative 128-bit integers when the range had no room for the sign, and a stack buffer overflow in general format with a precision.
+** Fixed floating point `to_chars` rounding exact halfway values up instead of to even, dropping a zero in fixed format when rounding up reaches a power of ten, and missing digits with a large precision.
+** Fixed `to_chars` printing the wrong exponent for some subnormal doubles.
+** Fixed a compilation error from conflicting declarations in the vendored fast_float tables with GCC 15 on uClibc-ng.
+
 * boost_phrase:library[Container,/libs/container/]:
 ** The library is header-only again. Global variables and functions that were in the separately
    compiled library are now in an intermodule utility that can share them across DLLs.
@@ -106,6 +116,32 @@ classes, and added `try_peek` to `basic_channel`.
 * boost_phrase:library[ContainerHash,/libs/container_hash/]:
 ** `is_described_class<T>::value` now defaults to `false` when `is_range<T>::value` is `true` or `is_tuple_like<T>::value` is `true`.
    (A lot more classes become described when {cpp}26 reflection support is enabled in Boost.Describe, which causes ambiguities with the range and tuple-like overloads.)
+
+* boost_phrase:library[Decimal,/libs/decimal/]:
+** Breaking changes:
+*** `rescale(val, precision)` now rounds `val` to `precision` digits after the decimal point using the current rounding mode, and a negative `precision` rounds to the corresponding power of ten. With the default `precision` of 0 it now rounds to an integer instead of matching `trunc`.
+*** The quantum operations `quantexp`, `samequantum`, and `quantize` are now a compile error for the fast types, since they normalize on construction and have no cohorts. Use `rescale` to round any type to a fixed number of fractional digits.
+*** `logb` and `ilogb` now return the unbiased exponent as IEEE 754 requires (e.g. `logb(1E-3)` is now `-3`).
+** New features:
+*** Added `from_binary`, which rounds the exact value of a `float` or `double` to a decimal type in the current rounding mode (IEEE 754 convertFormat). The constructors keep the shortest representation instead.
+*** Added `chars_format::cohort_preserving_fixed` to `to_chars` and `from_chars`. In both cohort preserving modes, `from_chars` now rejects input whose exact cohort cannot be stored instead of silently underflowing to zero or overflowing to infinity.
+*** Added `roundeven`.
+*** Added NATVIS support for the MSVC debugger, and made the LLDB and GDB pretty printers display values the same way.
+*** Converting `float` and `double` to a decimal type now uses Dragonbox, which is about 17 times faster for `double` and 12 times faster for `float`, and fixes the last digit for some values.
+*** Sped up addition, multiplication, and division.
+** Bug fixes:
+*** Fixed and modernized the {cpp}20 module (`import boost.decimal;`) to match the other Boost libraries, and added module testing with Clang, GCC, and MSVC.
+*** Fixed incorrect rounding in many edge cases, several found by greatly expanded decTest coverage: subnormal products and quotients, sums of operands with very different exponents, quotients and exact cancellations in non-default rounding modes, overflow in modes that round to the largest finite value, and values below the smallest subnormal.
+*** Fixed `fma` losing the addend for `decimal32_t` and `decimal64_t` when the product's exponent is much smaller than the addend's, and made `fma` for the 128-bit types round only once.
+*** Fixed `operator==` returning `false` for zeros with different exponents, hashing so that all zeros hash equally, and hashing on 32-bit platforms.
+*** Fixed construction of subnormals and of values whose exponent is out of range but whose significand has room to absorb it.
+*** Fixed the sign of the infinity from dividing a negative value by zero, and `decimal32_t` comparison of two positive infinities.
+*** Fixed `quantexp` returning the wrong value, and `comparetotal` between fast and non-fast types.
+*** Fixed `remainder` with non-finite values, `fdim` for an infinite `x` and for a signaling NaN, and `acosh` and `atanh` to return NaN outside of their domains.
+*** Fixed parsing to round using all the input digits rather than only the first 19 (38 for `decimal128_t`), and to keep the zeros after the decimal point when the exponent is zero.
+*** Fixed conversion to binary floating point dropping the sign of zero and infinity.
+*** Improved the accuracy and monotonicity of `log`, `log10`, `log2`, `log1p`, `sin`, `cos`, `tan`, `asin`, `acos`, `atan`, `atan2`, and the inverse hyperbolic functions, made `sqrt` correctly rounded in the current rounding mode, and made `cbrt` round only once.
+*** `ceil`, `floor`, `round`, `roundeven`, `trunc`, `rint`, `lrint`, `lround`, `llround`, `frexp`, `ldexp`, `scalbn`, `scalbln`, `fmod`, `remainder`, and `remquo` now operate directly on the integer significand and exponent, so their results are exact.
 
 * boost_phrase:library[Describe,/libs/describe/]:
 ** Added experimental support for reflection (requires GCC 16.2 and `-freflection`.)
@@ -210,6 +246,56 @@ classes, and added `try_peek` to `basic_channel`.
 * boost_phrase:library[Locale,/libs/locale/]:
 ** Fix configure error in `source_group` call with CMake 4.5
 
+* boost_phrase:library[Math,/libs/math/]:
+** Breaking changes:
+*** `double` arguments are no longer promoted to `long double` internally by default, as `BOOST_MATH_PROMOTE_DOUBLE_POLICY` now defaults to `false` on all platforms.
+    This is much faster where `long double` is x87 or software emulated (e.g. AArch64 Linux), but results for `double` may differ in the last few bits.
+    To restore the old behavior define `BOOST_MATH_PROMOTE_DOUBLE_POLICY` as `true`, or pass `promote_double<true>` in a policy (boost_gh:issue[math,1211]).
+*** The quantiles of discrete distributions now default to `integer_round_up` instead of `integer_round_outwards`, matching R, SciPy, Julia and Mathematica,
+    so lower quantiles are often one larger than before. The geometric distribution now also rounds its quantile as the policy asks.
+    To restore the old behavior define `BOOST_MATH_DISCRETE_QUANTILE_POLICY` as `integer_round_outwards`, or pass `discrete_quantile<integer_round_outwards>` in a policy (boost_gh:issue[math,1203]).
+*** `hypergeometric_pFq` now raises an evaluation error when most of the digits of the result are lost to cancellation, instead of silently returning an inaccurate value.
+*** `newton_raphson_iterate`, `halley_iterate` and `schroder_iterate` now raise an evaluation error when they walk onto a bound that is not a root, instead of returning the bound.
+** New features:
+*** Added support for consuming the library as a {cpp}20 module with `import boost.math;`.
+*** Added a user configurable top-level namespace with `BOOST_MATH_NAMESPACE_COMPONENTS`, so that libraries embedding their own copy of Boost.Math can avoid conflicts.
+*** Added prime number functions `prime_sieve`, `prime_range` and `prime_count`, backed by a segmented sieve with optional multithreaded and CUDA execution.
+*** Added the von Mises and generalized extreme value distributions.
+*** Added Gauss-Hermite quadrature, Van den Bos quadrature over the unit square, and symplectic integrators for Hamiltonian systems (`integrate_hamiltonian`, with adaptive step size and cubic Hermite interpolation variants).
+*** Added a fast Fourier transform (`tools::fft` and `tools::real_fft`) for any complex type.
+    `cardinal_trigonometric` and `chebyshev_transform` now use it and no longer require FFTW.
+*** Added polynomial root finders `polynomial_roots` and `polynomial_roots_companion_matrix`.
+*** Added `lbeta`, `libeta` and `libetac` (the logarithms of `beta`, `ibeta` and `ibetac`), and `ligamma` and `ligamma_lower` (the logarithms of `tgamma(a, x)` and `tgamma_lower(a, x)`).
+    `logcdf` and its complement now use the logarithmic incomplete beta and gamma functions, so they stay finite and accurate in the tails for many distributions.
+*** Added `pow1p`, and a three argument overload of `ccmath::hypot`.
+*** Added `entropy` for the remaining distributions, except the non-central ones.
+*** Added degrees of freedom finders `find_v1` and `find_v2` to the Fisher F distribution, and improved the robustness of the non-central F finders.
+*** Added the M nearest neighbour Chatterjee correlation, `chatterjee_correlation_mnn`.
+*** Added `ulps_heatmap` for plotting the accuracy of functions of two variables.
+*** Added support for vector and matrix valued integrands (e.g. Eigen types) to the quadrature routines, via overloads taking an explicit zero and norm.
+*** Added policy based error handling to the interpolators.
+*** Added hexfloat support to `__float128` stream I/O.
+*** Improved the speed of `float_distance` for IEEE `float`, `double` and binary128, and made `ellint_rj` about 1.7 times faster.
+*** Improved the accuracy and speed of the Kolmogorov-Smirnov distribution.
+*** Deprecated the `polynomial` constructor taking a pointer and an order.
+** Bug fixes:
+*** Improved the accuracy of `ibeta` and `ibeta_inv` for small parameters, near the mean, and when the binomial sum underflows, fixed the arcsine special case, and kept `ibeta` monotonic when the compiler contracts to FMA.
+*** Fixed `lgamma_p` where P underflows, the accuracy of `gamma_p` for small `a` with `x < a`, and the accuracy of `tgamma1pm1` for multiprecision types.
+*** Fixed the non-central t distribution: cancellation in the left tail and for small degrees of freedom, and its degrees of freedom domain checking.
+*** Fixed the non-central F and beta CDFs for huge denominator degrees of freedom, and the non-central beta CDF and its complement not summing to one.
+*** Fixed the Student's t quantile for very small probabilities and its accuracy for non-integer degrees of freedom between 2 and 3.
+*** Fixed overflow and cancellation in the inverse Gaussian CDFs, cancellation in the skew normal tails, cancellation in the Poisson `logpdf` for large arguments, and swapped location and scale in the Laplace `logpdf`.
+*** Fixed the hypergeometric PDF for non-integer `x`, and its accuracy for population sizes above 170.
+*** Fixed discrete quantiles to round trip with the CDF, and a hang for values beyond 1/epsilon.
+*** Fixed the Airy functions near zero, `heuman_lambda`, `jacobi_dn`, the incomplete `ellint_2`, `expint`, Laguerre polynomials, `cyl_bessel_j` for integer orders, underflow in `cyl_bessel_k`, and hangs and precision loss in the Jacobi theta functions.
+*** Fixed a hang in `hypergeometric_1F1`, and accuracy issues in `hypergeometric_1F1`, `hypergeometric_0F1` and `hypergeometric_2F0`.
+*** Fixed `logcdf` and its complement to send an exact negative infinity to the overflow error policy.
+*** Fixed `std::complex<__float128>` `pow` for a negative real and zero imaginary part, and the root finders accepting NaN as a bound.
+*** Fixed `mode` assertions and sorting, `mean` silently giving the wrong answer for input iterators (now a `static_assert`), and the second variance accumulator in the parallel correlation.
+*** Fixed `polynomial<int> % scalar` returning zero, `simple_continued_fraction` printing, assignment and canonical form, `fvar` being implicitly convertible from any type, and Bezier async evaluation.
+*** Fixed pchip integration with a circular buffer, Daubechies wavelet derivative scaling, and the Whittaker-Shannon interpolant at higher precision.
+*** Fixed uninitialized reads in complex range checks and `evaluation_condition_number`, and made implicit integer to `Real` conversions explicit.
+
 * boost_phrase:library[Move,/libs/move/]:
 ** `unique_ptr` has the `trivial_abi` attribute when the compiler supports it (Clang on the Itanium
    ABI), so it is passed and returned in registers. **This changes the calling convention.** Define
@@ -228,6 +314,10 @@ classes, and added `try_peek` to `basic_channel`.
 *** The active state switch policy can no longer be configured; the active state is now always set after source exit, in compliance with the UML specification (https://github.com/boostorg/msm/issues/222[#222]).
 *** The deprecated `HANDLED_`-prefixed values are removed from the `process_result` enum, use `discarded`, `consumed`, `rejected` and `deferred` instead (https://github.com/boostorg/msm/issues/242[#242]).
 ** Fixed a bug in the `back11` back-end where a matching transition could be ignored depending on the order of rows in the transition table (https://github.com/boostorg/msm/issues/252[#252])
+
+* boost_phrase:library[Multiprecision,/libs/multiprecision/]:
+** Fixed `fmod` returning incorrect results for negative remainders with `cpp_bin_float` and other backends using the default implementation, a regression of Boost 1.90 (boost_gh:issue[multiprecision,764]).
+** Fixed `cpp_int` user-defined literals producing unnormalized limbs, which could cause a value to compare unequal to itself after masking (boost_gh:issue[multiprecision,766]).
 
 * boost_phrase:library[MySQL,/libs/mysql/]:
 ** Fixed a race condition in `connection_pool::async_get_connection()` where, in the
@@ -266,6 +356,10 @@ https://www.boost.org/doc/html/container/non_standard_containers.html#container.
 *** Guard against using the obsolete `predef/check/predef.jam` B2 module.
     Instead of using the current `predef/tools/check/predef.jam` module.
 *** Fix `architecture` tool check rule returning `ppc` instead of `power`.
+
+* boost_phrase:library[Random,/libs/random/]:
+** Fixed the stream operators of `mersenne_twister_engine`, the lagged Fibonacci engines, `mixmax` and `splitmix64` so that the stream state correctly reports whether saving or restoring the engine state succeeded (boost_gh:pr[random,156]).
+** Fixed `-Wdeprecated-copy` and conversion warnings.
 
 * boost_phrase:library[Redis,/libs/redis/]:
 ** Added subscription tracking support for `UNSUBSCRIBE` and `PUNSUBSCRIBE`
@@ -361,6 +455,11 @@ https://www.boost.org/doc/html/container/non_standard_containers.html#container.
 
 * boost_phrase:library[System,/libs/system/]:
 ** Add `std::format` support for `error_code` and `error_condition`.
+
+* boost_phrase:library[Test,/libs/test/]:
+** Added support for printing `std::optional` and `std::nullopt_t` values in test assertions, matching `boost::optional` and `boost::none_t` (boost_gh:pr[test,489]).
+** Fixed test programs aborting before running any tests when the kernel's minimum signal stack size exceeds `SIGSTKSZ` (e.g. musl on CPUs with AMX), and restored a user installed alternate signal stack instead of disabling it (boost_gh:pr[test,496]).
+** Changed the failure context message to read "occurred in the following context" (boost_gh:pr[test,498]).
 
 * boost_phrase:library[UUID,/libs/uuid/]:
 ** Added an overload of `time_generator_v7::operator()` taking the time point. (Sebastian Goth)
