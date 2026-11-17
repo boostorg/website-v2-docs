@@ -93,10 +93,15 @@ classes, and added `try_peek` to `basic_channel`.
    compiled library are now in an intermodule utility that can share them across DLLs.
 ** Faster small allocations in the dlmalloc-based allocators (240-512 bytes are ~15-25% faster on
    64-bit).
+** Allocator-extended move constructors are now `noexcept` when
+   `allocator_traits<Allocator>::is_always_equal` is true (as an extension to the standard).
+** `devector`: the `relocate_never` option is now implemented. An insertion at a full end always
+   allocates a new buffer, and `push_back`, `push_front`, `emplace_back` and `emplace_front` give
+   the strong exception guarantee.
 ** Fixed many bugs, including bugs found by a systematic, AI-assisted review (exception safety,
-   `noexcept` specifications, allocator propagation and complexity guarantees).
+   `noexcept` specifications, allocator propagation, integer overflow and complexity guarantees).
 ** Consult the boost_at:/doc/libs/1_93_0/doc/html/container/release_notes.html[Release Notes]
-   for further details.
+   for further details and the list of fixed bugs.
 
 * boost_phrase:library[ContainerHash,/libs/container_hash/]:
 ** `is_described_class<T>::value` now defaults to `false` when `is_range<T>::value` is `true` or `is_tuple_like<T>::value` is `true`.
@@ -162,7 +167,13 @@ classes, and added `try_peek` to `basic_channel`.
    prevent name collisions between processes.
 ** On Windows, unlink operations use `FILE_DISPOSITION_POSIX_SEMANTICS`, with a fallback for older
    Windows versions and filesystems.
-** Faster spin-based synchronization utilities and `offset_ptr` operations.
+** Spin-based synchronization utilities use acquire/release semantics instead of sequentially
+   consistent semantics, and they are faster.
+** Improved the performance of several `offset_ptr` operations.
+** Fixed bugs reported by users, for example `managed_shared_memory` that could not allocate more
+   than half of its memory (boost_gh:issue[interprocess,250]) and POSIX named semaphores in
+   sandboxed macOS apps (boost_gh:issue[interprocess,232]). A systematic, AI-assisted review found
+   and fixed other bugs in resource ownership and synchronization.
 ** Consult the boost_at:/doc/libs/1_93_0/doc/html/interprocess/release_notes.html[Release Notes]
    for further details and the list of fixed bugs.
 
@@ -181,16 +192,20 @@ classes, and added `try_peek` to `basic_channel`.
 
 * boost_phrase:library[Intrusive,/libs/intrusive/]:
 ** **Potentially breaking change**: move assignments no longer swap the containers. As in standard
-   containers, the target is cleared and takes the nodes of the source, which is left empty. Move
-   operations copy the predicates and move the value traits. Define
+   containers, the target is cleared and takes the nodes of the source, which is left empty. Define
    `BOOST_INTRUSIVE_MOVE_ASSIGNMENT_SWAPS` to get the old behavior during a transition period.
+** Move constructors and move assignments copy the predicates (comparison, priority, hash and
+   equality), as standard containers do (https://cplusplus.github.io/LWG/issue2227[LWG 2227]), and
+   move the value traits. A moved-from container keeps valid predicates and value traits.
 ** **Potentially breaking changes**: treap containers no longer accept `auto_unlink` hooks, and
    `suggested_lower_bucket_count` and `suggested_upper_bucket_count` now return the values that
    the documentation specifies.
 ** Added the `unordered_bucket_manager` utility, and support for parents with virtual bases in
    `get_parent_from_member` and member hooks.
+** Optimized `reverse` for lists, splay tree algorithms, tree iteration, `clear_and_dispose` for
+   tree containers, and `merge_unique` and `merge_equal` for tree containers.
 ** Consult the boost_at:/doc/libs/1_93_0/doc/html/intrusive/release_notes.html[Release Notes]
-   for further details, optimizations and the list of fixed bugs.
+   for further details and the list of fixed bugs.
 
 * boost_phrase:library[Locale,/libs/locale/]:
 ** Fix configure error in `source_group` call with CMake 4.5
@@ -201,8 +216,11 @@ classes, and added `try_peek` to `basic_channel`.
    `BOOST_MOVE_DISABLE_TRIVIAL_ABI` to keep the old one.
 ** **Deprecated** `BOOST_MOVE_USE_STANDARD_LIBRARY_MOVE`. It will be removed in a future release.
 ** Fixed stability bugs in `adaptive_merge` and `adaptive_sort`, which are also up to 4x faster.
+** New `unique_ptr` features: full `constexpr` support in {cpp}20, `make_unique_for_overwrite`,
+   `operator<<`, `hash_value` for `boost::hash`, and a new documentation chapter.
+** Added the {cpp}23 `forward_like` utility.
 ** Consult the boost_at:/doc/libs/1_93_0/doc/html/move/release_notes.html[Release Notes]
-   for further details, new `unique_ptr` features and the list of fixed bugs.
+   for further details and the list of fixed bugs.
 
 * boost_phrase:library[MSM,/libs/msm/]:
 ** The `backmp11` back-end is no longer experimental. Its API is considered stable from this release on, after the cleanup listed below.
