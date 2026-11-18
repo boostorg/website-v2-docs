@@ -243,6 +243,38 @@ classes, and added `try_peek` to `basic_channel`.
 ** Consult the boost_at:/doc/libs/1_93_0/doc/html/intrusive/release_notes.html[Release Notes]
    for further details and the list of fixed bugs.
 
+* boost_phrase:library[JSON,/libs/json/]:
+** Added `use_category` for conversion category selection. The old conversion
+   customization mechanism that relied on specialization of `is_` traits is
+   **deprecated and will stop working in Boost 1.94.0**.
+** Added dependency on Boost.Charconv.
+** Described classes category is now ranked lowest.
+** Fixed use of incorrect memory resource in `array::insert`.
+** Fixed string corruption in `string::shrink_to_fit`.
+** Fixed unnecessary allocation in `basic_parser`.
+** Fixed undefined behavior caused by self-assign with `string::assign`.
+** Fixed incorrect overflow check in JSON Pointer functions.
+** Fixed incorrect deallocate size in `monotonic_resource::release`.
+** Use correct memory resource in `value::value`.
+** Use correct alignment value in the destructor of `string`.
+** Fix size check in JSON string parsing algorithm.
+** Forward mapped value in `object::insert_or_assign`.
+** Fix required member check for described structs in `parse_into`.
+** Fix cleanup on failed insert into `object`.
+** Fix undefined behaviour caused by self-insert in `array::insert`.
+** Fix array index overflow in `set_at_pointer`.
+** Fix compilation error on some platforms.
+** Clear accumulated name in `parse_into` enum handler.
+** Fix array end handling for first variant alternative in `parse_into`.
+** Fix string to enum conversion in `value_to`.
+** Fix parsing JSON numbers with large exponent and zero mantissa.
+** Align caller-supplied buffer in `value_stack` constructor.
+** Fix undefined behavior caused by self-insert in `set_at_pointer`.
+** Fix undefined behavior for some sequences in `parse_into`.
+** Disabled usage of `clang::no_destroy` in clang-cl.
+** Fixed ``value::to_number``'s incorrect lower bound when converting from double to `std::int64_t`.
+** Fixed treatment of overaligned types by `monotonic_resource`.
+
 * boost_phrase:library[Locale,/libs/locale/]:
 ** Fix configure error in `source_group` call with CMake 4.5
 
