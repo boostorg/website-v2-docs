@@ -99,7 +99,10 @@ Where terms apply specifically to one technology, such as _Quantum Computing_ or
 [[binding]]
 *Binding* : The process of associating identifiers (like variables or functions) with values, types, or memory locations — can be static or dynamic. _Static binding_ occurs at compile time (the compiler knows exactly which function to call). _Dynamic binding_ happens at runtime — the decision about which function to call is deferred until the program runs (often using <<vtable, virtual tables>> ).
 
+*Bitrotting* : The slow, silent corruption of data or unmaintained software.
+
 [[bloom-filter]]
+
 *Bloom Filter* : A space-efficient, fast, and probabilistic structure that can tell you if an item is _definitely not in a database_ or is _possibly in the database_. For example, say you have a database of bad actors that is used to help prevent fraudulent access to a financial web app. A bloom filter can be used to tell if a new transaction _definitely_ does not come from this set, so proceed normally, or _possibly comes from this set_ in which case a deeper investigation into its validity (a full search of the bad actors) should be carried out. The following diagram shows the flow of control:
 
 image::bloom-filter.png[Bloom filter]
@@ -649,6 +652,35 @@ The obvious analogy of a pipeline is an assembly line. This way of looking at a 
 
 *PR* : Pull Request - a request to include specified content into a GitHub repository. An administrator can accept or reject the PR.
 
+*PRNG* : Psuedo-random number - a number that looks random, usually in a sequence of PRNGs, but isn't really (examples in boost:random[]). Valuable in testing as the same seed will always give the same sequence of numbers: for example:
+
+[source,cpp]
+----
+#include <iostream>
+#include <vector>
+
+// Linear Congruential Generator (LCG) Psuedo-random (PRNG) with prime seed and parameters
+std::vector<int> generate_pseudo_random(int seed, int count) {
+    const int m = 107;        // prime modulus
+    const int a = 1103515245; // multiplier (prime, good for LCG)
+    const int c = 12345;      // increment
+    unsigned int state = static_cast<unsigned int>(seed);
+
+    std::vector<int> result(count);
+    for (int i = 0; i < count; ++i) {
+        state = (a * state + c) % m; // LCG recurrence
+        result[i] = static_cast<int>(state);
+    }
+    return result;
+}
+
+int main() {
+    int prime_seed = 17; // example prime seed
+    auto nums = generate_pseudo_random(prime_seed, 10);
+    for (int x : nums) std::cout << x << "\n";
+}
+----
+
 *Promotion* : A compiler _promotes_ a smaller type to a larger type so an operation can be done safely. For example:
 
 [source,cpp]
@@ -663,6 +695,8 @@ The reverse ( `a = b;` ) is not a promotion, it would be an unsafe conversion. T
 *Prompt-driven development* : Development where natural-language prompts are a major mechanism for specifying and changing the software.
 
 *Prompt engineering* : Crafting prompts specifically to get better, more reliable results from an AI.
+
+*PSA* : Outside of the medical world, _Public Service Announcement_.
 
 [[q]]
 == Q
