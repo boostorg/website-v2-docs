@@ -184,6 +184,21 @@ classes, and added `try_peek` to `basic_channel`.
    `find_*()` functions and `to_string()`.
 ** Moved undocumented implementation details, such as `bit_iterator`, out of namespace `boost`.
 
+* boost_phrase:library[Filesystem,/libs/filesystem/]:
+** Reworked documentation, converted to QuickBook and Doxygen.
+** `directory_entry::symlink_status` and dependent APIs no longer indicate failure if updating status (i.e. dereferencing the symlink) fails. (boost_gh:pr[filesystem,353])
+** Added support for building the library with unresolved symbols on POSIX systems. This can be useful when compiling the library with sanitizers enabled, if
+   the sanitizer symbols are meant to be resolved at library load time. This build mode can be enabled by defining `BOOST_FILESYSTEM_ALLOW_UNDEFINED_SYMBOLS`
+   at Boost.Filesystem build time. (boost_gh:issue[filesystem,350])
+** Added support for setting UTF-8 codecvt facet as the default codecvt facet for path character code conversions. This can be useful if the system locale
+   is non-functional (e.g. with Musl C library), if the user knows that filesystem paths are always encoded as UTF-8 on the target platform. This can be
+   enabled by defining `BOOST_FILESYSTEM_USE_UTF8_CODECVT_FACET` at Boost.Filesystem build time. (boost_gh:issue[filesystem,351])
+** **Breaking change** in UNC path support. Boost.Filesystem now treats share name as part of the path root name, whereas previously only the hostname was
+   included in the root name. This affects path iteration, path observers and relative path resolution. For example,
+   `path("//host/share1/file.txt").lexically_relative("//host/share2/")` now returns an empty path, whereas previously it returned "../share1/file.txt",
+   which was not a valid path. (boost_gh:issue[filesystem,347])
+** On Windows, `filesystem::path` now recognizes the global session object namespace prefix "\Global??\".
+
 * boost_phrase:library[GIL,/libs/gil/]:
  ** Refactor from Boost.Iterator to Boost.STLInterface, thereby removing the dependency on pre-C++11 libraries.
  ** Fixed `copy_n` algorithm when `n < 0`
@@ -196,6 +211,11 @@ classes, and added `try_peek` to `basic_channel`.
  ** Added `image_sharpening` algorithm
  ** Added missing documentation for Adaptive Histogram Equalization (AHE)
  ** Added documentation for convolution, morphology and thresholding
+
+* boost_phrase:library[Integer,/libs/integer/]:
+** Avoid signed integer overflow in `gcd(INT_MIN, -1)` and similar cases. (boost_gh:pr[integer,40])
+** Add an assert to trigger in cases when the result of `gcd` is not representable in the integer type,
+   e.g. `gcd(INT_MIN, INT_MIN)` with two's complement `int` representation. (boost_gh:issue[integer,33])
 
 * boost_phrase:library[Interprocess,/libs/interprocess/]:
 ** **ABI break** for code that defines `BOOST_INTERPROCESS_FORCE_NATIVE_EMULATION` (now documented
@@ -277,6 +297,31 @@ classes, and added `try_peek` to `basic_channel`.
 
 * boost_phrase:library[Locale,/libs/locale/]:
 ** Fix configure error in `source_group` call with CMake 4.5
+
+* boost_phrase:library[Log,/libs/log/]:
+** Fixed a possible infinite wait in `asynchronous_sink::flush()` and `asynchronous_sink::stop()`, when
+   `unbounded_fifo_queue` policy is used. The infinite wait was more likely to happen when the affected
+   methods were called concurrently with feeding log records to the sink. (boost_gh:issue[log,255])
+** Enforced proper memory ordering for log records passed to `asynchronous_sink` with `unbounded_fifo_queue`
+   policy. Previously, the thread that consumed log records in the sink backend could observe inconsistent
+   view of the record due to missing synchronizes-with relation with the publisher thread. (boost_gh:pr[log,258])
+** Added missing memory ordering on the fast path of once-blocks (see `BOOST_LOG_ONCE_BLOCK_FLAG` macro).
+   Previously, on weak memory order architectures, it was possible for the thread skipping the once-block on
+   the fast path to observe stale data that should have been initialized by the once-block body. (boost_gh:pr[log,261])
+** Fixed a possible log record loss in `asynchronous_sink` with a bounded blocking queueing strategy, if one
+   or more log records are blocked due to queue capacity and a flush is invoked. The blocked log records could
+   have been lost instead of being enqueued. (boost_gh:pr[log,260])
+** Fixed that `asynchronous_sink::flush` could sometimes not flush non-ready log records with an ordering queueing
+   strategy. (boost_gh:pr[log,259])
+** Fixed that `asynchronous_sink::flush` could remain blocked if a feeding operation fails with an exception before
+   the feeding thread starts flushing log records. (boost_gh:pr[log,259])
+** Fixed that `asynchronous_sink::consume` could remain blocked and `asynchronous_sink::try_consume` would
+   continuously return `false` if `asynchronous_sink::flush` failed with an exception during log message processing.
+   (boost_gh:pr[log,259])
+** Improved support for obtaining current process executable name on OpenBSD 5.7 and later. This affects the
+   `current_process_name` attribute. (boost_gh:pr[log,257])
+** On Windows, fixed a possible use of prematurely closed semaphore handle in inter-process message queue
+   implementation. (boost_gh:pr[log,262])
 
 * boost_phrase:library[Math,/libs/math/]:
 ** Breaking changes:
@@ -407,6 +452,9 @@ https://www.boost.org/doc/html/container/non_standard_containers.html#container.
    value after calling `flat_tree::clear()` (boost_gh:pr[redis,441]). Many thanks
    to https://github.com/aouxwoux[aouxwoux] for the PR!
 
+* boost_phrase:library[Scope,/libs/scope/]:
+** Use C++26 placeholder variables in `BOOST_SCOPE_DEFER` implementation, when possible.
+
 * boost_phrase:library[Serialization,/libs/serialization/]:
 ** Fixed CVE-2023-34399: a pointer loaded with a negative class id other than -1 read the class
    table out of bounds. Every negative id now loads as a null pointer
@@ -493,6 +541,11 @@ https://www.boost.org/doc/html/container/non_standard_containers.html#container.
 ** Fixed test programs aborting before running any tests when the kernel's minimum signal stack size exceeds `SIGSTKSZ` (e.g. musl on CPUs with AMX), and restored a user installed alternate signal stack instead of disabling it (boost_gh:pr[test,496]).
 ** Changed the failure context message to read "occurred in the following context" (boost_gh:pr[test,498]).
 
+* boost_phrase:library[Thread,/libs/thread/]:
+** Support the PE TLS callback in Windows ARM64X images. When building the Boost.Thread library for ARM64X, users
+   should define the `BOOST_THREAD_ARM64X` macro to generate a special thunk to dispatch TLS cleanup callback
+   between ARM64 and ARM64EC views of the library. (boost_gh:pr[thread,421])
+
 * boost_phrase:library[URL,/libs/url/]:
 ** Fixed `params_ref::set` ignoring the view's `space_as_plus` option, so setting `C++` on an existing key wrote `name=C++`, which read back as `C  ` (boost_gh:pr[url,1012]).
 ** Fixed error categories exported from a shared library built as C++20 when the application uses an earlier standard (boost_gh:pr[url,1009]).
@@ -511,6 +564,8 @@ https://www.boost.org/doc/html/container/non_standard_containers.html#container.
 ** Handled `std::uppercase` correctly in `operator<<`.
 ** Fixed a compilation issue under ARM64EC.
 ** Added `std::format` support for `uuid`.
+** Fixed that SIMD implementation of `from_chars` accepted illegal characters `:`-`?` (0x3A–0x3F) as
+   `a`-`f` instead of rejecting them. (boost_gh:issue[uuid,202])
 
 == Compilers Tested
 
