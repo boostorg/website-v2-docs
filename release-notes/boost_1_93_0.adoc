@@ -185,7 +185,10 @@ classes, and added `try_peek` to `basic_channel`.
 ** Moved undocumented implementation details, such as `bit_iterator`, out of namespace `boost`.
 
 * boost_phrase:library[Filesystem,/libs/filesystem/]:
-** Reworked documentation, converted to QuickBook and Doxygen.
+** **Breaking change** in UNC path support. Boost.Filesystem now treats share name as part of the path root name, whereas previously only the hostname was
+   included in the root name. This affects path iteration, path observers and relative path resolution. For example,
+   `path("//host/share1/file.txt").lexically_relative("//host/share2/")` now returns an empty path, whereas previously it returned "../share1/file.txt",
+   which was not a valid path. (boost_gh:issue[filesystem,347])
 ** `directory_entry::symlink_status` and dependent APIs no longer indicate failure if updating status (i.e. dereferencing the symlink) fails. (boost_gh:pr[filesystem,353])
 ** Added support for building the library with unresolved symbols on POSIX systems. This can be useful when compiling the library with sanitizers enabled, if
    the sanitizer symbols are meant to be resolved at library load time. This build mode can be enabled by defining `BOOST_FILESYSTEM_ALLOW_UNDEFINED_SYMBOLS`
@@ -193,11 +196,8 @@ classes, and added `try_peek` to `basic_channel`.
 ** Added support for setting UTF-8 codecvt facet as the default codecvt facet for path character code conversions. This can be useful if the system locale
    is non-functional (e.g. with Musl C library), if the user knows that filesystem paths are always encoded as UTF-8 on the target platform. This can be
    enabled by defining `BOOST_FILESYSTEM_USE_UTF8_CODECVT_FACET` at Boost.Filesystem build time. (boost_gh:issue[filesystem,351])
-** **Breaking change** in UNC path support. Boost.Filesystem now treats share name as part of the path root name, whereas previously only the hostname was
-   included in the root name. This affects path iteration, path observers and relative path resolution. For example,
-   `path("//host/share1/file.txt").lexically_relative("//host/share2/")` now returns an empty path, whereas previously it returned "../share1/file.txt",
-   which was not a valid path. (boost_gh:issue[filesystem,347])
 ** On Windows, `filesystem::path` now recognizes the global session object namespace prefix "\Global??\".
+** Reworked documentation, converted to QuickBook and Doxygen.
 
 * boost_phrase:library[GIL,/libs/gil/]:
  ** Refactor from Boost.Iterator to Boost.STLInterface, thereby removing the dependency on pre-C++11 libraries.
@@ -299,15 +299,15 @@ classes, and added `try_peek` to `basic_channel`.
 ** Fix configure error in `source_group` call with CMake 4.5
 
 * boost_phrase:library[Log,/libs/log/]:
+** Added missing memory ordering on the fast path of once-blocks (see `BOOST_LOG_ONCE_BLOCK_FLAG` macro).
+   Previously, on weak memory order architectures, it was possible for the thread skipping the once-block on
+   the fast path to observe stale data that should have been initialized by the once-block body. (boost_gh:pr[log,261])
 ** Fixed a possible infinite wait in `asynchronous_sink::flush()` and `asynchronous_sink::stop()`, when
    `unbounded_fifo_queue` policy is used. The infinite wait was more likely to happen when the affected
    methods were called concurrently with feeding log records to the sink. (boost_gh:issue[log,255])
 ** Enforced proper memory ordering for log records passed to `asynchronous_sink` with `unbounded_fifo_queue`
    policy. Previously, the thread that consumed log records in the sink backend could observe inconsistent
    view of the record due to missing synchronizes-with relation with the publisher thread. (boost_gh:pr[log,258])
-** Added missing memory ordering on the fast path of once-blocks (see `BOOST_LOG_ONCE_BLOCK_FLAG` macro).
-   Previously, on weak memory order architectures, it was possible for the thread skipping the once-block on
-   the fast path to observe stale data that should have been initialized by the once-block body. (boost_gh:pr[log,261])
 ** Fixed a possible log record loss in `asynchronous_sink` with a bounded blocking queueing strategy, if one
    or more log records are blocked due to queue capacity and a flush is invoked. The blocked log records could
    have been lost instead of being enqueued. (boost_gh:pr[log,260])
