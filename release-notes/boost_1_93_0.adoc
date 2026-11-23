@@ -420,6 +420,20 @@ classes, and added `try_peek` to `basic_channel`.
 `boost::variant_unordered_collection`, internally based on
 https://www.boost.org/doc/html/container/non_standard_containers.html#container.non_standard_containers.hub[`boost::container::hub`]. 
 
+* boost_phrase:library[Parser,/libs/parser/]:
+** `operator||` produces a different attribute then `operator>>` (boost_gh:issue[parser,268])
+** Optional is set even though `optional_parser` fails (boost_gh:issue[parser,279])
+** Sequence parser overwrites `std::u32string` (boost_gh:issue[parser,328])
+** `BOOST_PARSER_NO_RUNTIME_ASSERTIONS` fails compilation (boost_gh:issue[parser,236])
+** Warnings about `std::move` vs. `std::forward` (boost_gh:issue[parser,272])
+** Attribute of a parser made with an `if_` directive doesn't match documentation (boost_gh:issue[parser,278])
+** Remove unused object (boost_gh:pr[parser,316])
+** Workaround for compiler bug in MSVC 17.10 (boost_gh:pr[parser,319])
+** Performance optimization for `or_parser` (boost_gh:pr[parser,325])
+** Use concepts for `push_back` detection (boost_gh:pr[parser,331])
+** Preserve sequence elements in Unicode string attributes (boost_gh:pr[parser,334])
+** Performance optimization for `case_fold`, second edition (boost_gh:pr[parser,335])
+
 * boost_phrase:library[Predef,/libs/predef/]:
 ** 1.18.0
 *** Fix version calculation for LLVM `libc++` to support the changed format of
