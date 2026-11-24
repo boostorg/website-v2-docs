@@ -32,6 +32,11 @@ boost_at:/doc/libs/1_93_0/[Documentation]
 // ** Conform to `std::pointer_traits` requirements (boost_gh:pr[interprocess,32]).
 // ** Fixed `named_condition_any` fails to notify (boost_gh:issue[interprocess,62]).
 
+
+* boost_phrase:library[Any,/libs/any/]
+** Implemented `constexpr` `boost::any` and `boost::anys::unique_any`.
+** `BASE_DIRS` is now used to properly install modules. Many thanks to https://github.com/ClausKlein[Claus Klein] for the PR (boost_gh:pr[any,44]).
+
 * boost_phrase:library[Asio,/libs/asio/]
 ** Added `eager`, a completion token that starts an asynchronous operation immediately and allows its result to be waited on later.
 ** Added `trampoline<>` and `make_trampoline()`, an executor adapter that runs nested submissions in a bounded thread-local queue, rather than resubmitting them to the target executor.
@@ -117,6 +122,9 @@ classes, and added `try_peek` to `basic_channel`.
 ** `is_described_class<T>::value` now defaults to `false` when `is_range<T>::value` is `true` or `is_tuple_like<T>::value` is `true`.
    (A lot more classes become described when {cpp}26 reflection support is enabled in Boost.Describe, which causes ambiguities with the range and tuple-like overloads.)
 
+* boost_phrase:library[Conversion,/libs/conversion/]
+** `BASE_DIRS` is now used to properly install modules. Many thanks to https://github.com/ClausKlein[Claus Klein] for the PR (boost_gh:pr[conversion,37]).
+
 * boost_phrase:library[Decimal,/libs/decimal/]:
 ** Breaking changes:
 *** `rescale(val, precision)` now rounds `val` to `precision` digits after the decimal point using the current rounding mode, and a negative `precision` rounds to the corresponding power of ten. With the default `precision` of 0 it now rounds to an integer instead of matching `trunc`.
@@ -145,6 +153,9 @@ classes, and added `try_peek` to `basic_channel`.
 
 * boost_phrase:library[Describe,/libs/describe/]:
 ** Added experimental support for reflection (requires GCC 16.2 and `-freflection`.)
+
+* boost_phrase:library[DLL,/libs/dll/]
+** Replaced deprecated `BOOST_OS_ANDROID` with `BOOST_PLAT_ANDROID`. Fixes boost_gh:issue[dll,115].
 
 * boost_phrase:library[DynamicBitset,/libs/dynamic_bitset/]:
 ** Added a `to_string()` member which, like that of `std::bitset`, returns a string and can take
@@ -295,6 +306,10 @@ classes, and added `try_peek` to `basic_channel`.
 ** Fixed ``value::to_number``'s incorrect lower bound when converting from double to `std::int64_t`.
 ** Fixed treatment of overaligned types by `monotonic_resource`.
 
+* boost_phrase:library[LexicalCast,/libs/lexical_cast/]
+** Fixed customized array streaming (boost_gh:issue[lexical_cast,101]).
+** `BASE_DIRS` is now used to properly install modules. Many thanks to https://github.com/ClausKlein[Claus Klein] for the PR (boost_gh:pr[lexical_cast,103]).
+
 * boost_phrase:library[Locale,/libs/locale/]:
 ** Fix configure error in `source_group` call with CMake 4.5
 
@@ -434,6 +449,12 @@ https://www.boost.org/doc/html/container/non_standard_containers.html#container.
 ** Preserve sequence elements in Unicode string attributes (boost_gh:pr[parser,334])
 ** Performance optimization for `case_fold`, second edition (boost_gh:pr[parser,335])
 
+* boost_phrase:library[PFR,/libs/pfr/]
+** `BASE_DIRS` is now used to properly install modules. Many thanks to https://github.com/ClausKlein[Claus Klein] for the PR (boost_gh:pr[pfr,238]).
+** Fixed `boost::pfr::hash_value()` compilation (boost_gh:issue[pfr,156]).
+** Fixed clang-22 warning
+** Restored CMake's minimum version to 3.8 in non-module builds. Many thanks to https://github.com/anarthal[Anarthal (Rubén Pérez)] for the PR (boost_gh:pr[pfr,242]).
+
 * boost_phrase:library[Predef,/libs/predef/]:
 ** 1.18.0
 *** Fix version calculation for LLVM `libc++` to support the changed format of
@@ -547,6 +568,12 @@ https://www.boost.org/doc/html/container/non_standard_containers.html#container.
    (boost_gh:issue[serialization,327]), and that a value written through a polymorphic archive
    needs a name (boost_gh:issue[serialization,189]).
 
+* boost_phrase:library[Stacktrace,/libs/stacktrace/]
+** Fixed fallback logic for `name()` in `libbacktrace` backend. Do not use `backtrace_syminfo` if filename or function name are available. Many thanks to https://github.com/prbegd[prbegd] for the PR (boost_gh:pr[stacktrace,234]).
+** `BASE_DIRS` is now used to properly install modules. Many thanks to https://github.com/ClausKlein[Claus Klein] for the PR (boost_gh:pr[stacktrace,235]).
+** Lowercased `Dbgeng` dependency. Many thanks to https://github.com/computerquip-work[Zachary Lund] for the PR (boost_gh:pr[stacktrace,236]).
+** Fixed `backtrace` feature probe includes. Many thanks to https://github.com/computerquip-work[Zachary Lund] for the PR (boost_gh:pr[stacktrace,238]).
+
 * boost_phrase:library[System,/libs/system/]:
 ** Add `std::format` support for `error_code` and `error_condition`.
 
@@ -559,6 +586,10 @@ https://www.boost.org/doc/html/container/non_standard_containers.html#container.
 ** Support the PE TLS callback in Windows ARM64X images. When building the Boost.Thread library for ARM64X, users
    should define the `BOOST_THREAD_ARM64X` macro to generate a special thunk to dispatch TLS cleanup callback
    between ARM64 and ARM64EC views of the library. (boost_gh:pr[thread,421])
+
+* boost_phrase:library[TypeIndex,/libs/type_index/]
+** Implemented `constexpr` comparison of type indexes and type infos.
+** `BASE_DIRS` is now used to properly install modules. Many thanks to https://github.com/ClausKlein[Claus Klein] for the PR (boost_gh:pr[type_index,49]).
 
 * boost_phrase:library[URL,/libs/url/]:
 ** Fixed `params_ref::set` ignoring the view's `space_as_plus` option, so setting `C++` on an existing key wrote `name=C++`, which read back as `C  ` (boost_gh:pr[url,1012]).
