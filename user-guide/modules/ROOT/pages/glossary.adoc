@@ -163,7 +163,10 @@ Cache-friendly versus cache-unfriendly structures:
 
 *Cache Miss* : Usually refers to the situation where a data element is expected to be in one of the caches - but is not and the next level of cache, or main memory, needs to be referenced.
 
-*Cargo-cult Synchronization& :  Adding memory-ordering operations, fences, or atomic instructions because they look like they should make a multithreaded program safer, without understanding what ordering guarantees the program actually requires. The phrase _cargo cult_ comes from imitating the outward appearance of something successful without understanding why it works. Applied to pass:[C++], it describes programmers who sprinkle `memory_order_seq_cst,` memory fences, or `volatile` around their code in the hope of preventing race conditions.
+[[capy]]
+*Capy* : a library project providing buffers, streams, and sources/sinks to support coroutine based programming. It is not a networking library on its own. Refer to <<corosio,Corosio>>.
+
+*Cargo-cult Synchronization* :  Adding memory-ordering operations, fences, or atomic instructions because they look like they should make a multithreaded program safer, without understanding what ordering guarantees the program actually requires. The phrase _cargo cult_ comes from imitating the outward appearance of something successful without understanding why it works. Applied to pass:[C++], it describes programmers who sprinkle `memory_order_seq_cst,` memory fences, or `volatile` around their code in the hope of preventing race conditions.
 
 
 *CICD (CI/CD)* : Continuous Integration and Continuous Deployment (or Delivery). CI refers to the practice of automatically integrating code changes into a shared repository, where each change is verified by automated builds and tests. CD extends this process to automatically deploy or deliver new code to production environments. Refer to xref:contributor-guide:ROOT:testing/continuous-integration.adoc[Contributor Guide: Continuous Integration].
@@ -185,6 +188,11 @@ Cache-friendly versus cache-unfriendly structures:
 * *Precondition* : What must be true before the function executes. For example, a divisor must not be zero.
 
 *Copypasta coding* : Copying generated code into a project with little understanding or verification.
+
+[[corosio]]
+*Corosio* : Coroutine Input/Output - the name of a coroutine based library project, managed by the Cpp Alliance, with goals including providing higher-performance networking than the existing and popular boost:asio[]. Corosio was _conditionally_ accepted for inclusion in the Boost libraries in 2026. Currently, the dev team is working through the conditions raised during the review.
+
+The sister project to Corosio is <<capy,Capy>> - which provides a supporting framework for coroutine programming.
 
 *Coroutine* : A function that can pause and later resume execution while preserving its state. Coroutines enable asynchronous and non-blocking code to look and behave like normal sequential code. The attraction of coroutines is that if they are designed and implemented well they can greatly simplify  networking, I/O, and concurrency - avoiding the complexity and overhead of traditional callback or thread-based designs. Within the field of coroutines, there are many terms that you will see in pertinent discussions:
 
@@ -963,6 +971,18 @@ Care does have to be taken when using views in complex situations, such as the i
 *WTF* : _What The ...._ or _Wrong Type Found_ - the latter when an AI autocompletes everything except the right type.
 
 == X
+
+*X-ecutable* : A program that compiles, links, and starts successfully. Unfortunately, nobody has established that it actually does anything useful.
+
+*X-factor* : The mysterious property that makes a pass:[C++] program work perfectly on the developer's machine but fail everywhere else.
+
+*X-macro* : A macro so complicated that even the programmer who wrote it needs a macro to explain it.
+
+*X-mas build* : A build that succeeds once a year, usually just before the project deadline, and nobody dares touch it afterwards.
+
+*X-treme optimization* : Replacing a perfectly readable 10-line function with 50 lines of template metaprogramming to save three CPU cycles.
+
+*Xception* : A particularly exotic exception that occurs when your exception-handling code itself throws an exception.
 
 *XFS* : Extended File System - a high-performance file system in Linux
 
