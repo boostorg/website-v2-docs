@@ -452,7 +452,7 @@ https://www.boost.org/doc/html/container/non_standard_containers.html#container.
 * boost_phrase:library[PFR,/libs/pfr/]
 ** `BASE_DIRS` is now used to properly install modules. Many thanks to https://github.com/ClausKlein[Claus Klein] for the PR (boost_gh:pr[pfr,238]).
 ** Fixed `boost::pfr::hash_value()` compilation (boost_gh:issue[pfr,156]).
-** Fixed clang-22 warning
+** Fixed structured binding pack usage before C++26 that was causing a warning.
 ** Restored CMake's minimum version to 3.8 in non-module builds. Many thanks to https://github.com/anarthal[Anarthal (Rubén Pérez)] for the PR (boost_gh:pr[pfr,242]).
 
 * boost_phrase:library[Predef,/libs/predef/]:
