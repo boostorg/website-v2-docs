@@ -494,6 +494,11 @@ https://www.boost.org/doc/html/container/non_standard_containers.html#container.
 ** Fixed CVE-2023-34399: a pointer loaded with a negative class id other than -1 read the class
    table out of bounds. Every negative id now loads as a null pointer
    (boost_gh:pr[serialization,332]).
+** Worked around an MSVC 14.52 (Visual Studio 2026) bug which made any serialization crash when
+   the library and the program were built by different MSVC versions and linked statically
+   (boost_gh:issue[serialization,389]).
+** Fixed an out-of-bounds read in the check of the signature of an XML archive, which also
+   accepted any prefix of the signature (boost_gh:issue[serialization,392]).
 ** Raised the archive library version to 21, so earlier versions of the library reject text and
    binary archives written by this one; archives written by earlier versions still load. The
    change stores at full width the enumerations whose underlying type is wider than `int`, which
