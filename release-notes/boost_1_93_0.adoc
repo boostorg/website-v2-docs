@@ -333,6 +333,8 @@ classes, and added `try_peek` to `basic_channel`.
 ** Fixed that `asynchronous_sink::consume` could remain blocked and `asynchronous_sink::try_consume` would
    continuously return `false` if `asynchronous_sink::flush` failed with an exception during log message processing.
    (boost_gh:pr[log,259])
+** When calling `file_collector::scan_for_files` with `scan_method::scan_matching`, skip non-matching files early,
+   avoiding the potentially expensive check if the file was already tracked by the collector. (boost_gh:pr[log,263])
 ** Improved support for obtaining current process executable name on OpenBSD 5.7 and later. This affects the
    `current_process_name` attribute. (boost_gh:pr[log,257])
 ** On Windows, fixed a possible use of prematurely closed semaphore handle in inter-process message queue
