@@ -223,6 +223,11 @@ classes, and added `try_peek` to `basic_channel`.
  ** Added missing documentation for Adaptive Histogram Equalization (AHE)
  ** Added documentation for convolution, morphology and thresholding
 
+* boost_phrase:library[ICL,/libs/icl/]:
+** Intervals containing numeric limits on domain type endpoints caused overflow in computation
+   of `cardinality` and `length` functions. The offending increments have been refactored to 
+   make computations safe against overflow. Cases of overflow have been thoroughly tested.
+
 * boost_phrase:library[Integer,/libs/integer/]:
 ** Avoid signed integer overflow in `gcd(INT_MIN, -1)` and similar cases. (boost_gh:pr[integer,40])
 ** Add an assert to trigger in cases when the result of `gcd` is not representable in the integer type,
